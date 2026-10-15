@@ -9,6 +9,7 @@
 #include <stdexcept>
 #ifndef __EMSCRIPTEN__
 #include <thread>
+#include <type_traits>
 #endif
 
 #include "rng.hpp"
@@ -188,8 +189,51 @@ ChampionKit loadChampion(const json::Value& c, const Rules& rules) {
 
 }  // namespace
 
-Library Library::load(const std::string& rulesPath) {
+const std::vector<std::pair<std::string, std::string>>& Library::settingKeys() {
+    static const std::vector<std::pair<std::string, std::string>> keys = {
+        // fight
+        {"level", "champion level (1-18)"},
+        {"fight_mean", "average fight length, seconds"},
+        {"fight_sd", "spread of fight length, seconds"},
+        {"fight_min", "shortest fight, seconds"},
+        {"fight_max", "longest fight, seconds"},
+        {"engage_min", "earliest time enemies start hitting you, seconds"},
+        {"engage_max", "latest time enemies start hitting you, seconds"},
+        {"enemy_damage_scale", "multiplies the damage enemies deal to you"},
+        {"cc_scale", "multiplies how often you get crowd controlled"},
+        {"cc_min", "shortest crowd control, seconds"},
+        {"cc_max", "longest crowd control, seconds"},
+        {"clump_max", "most extra enemies standing near your target"},
+        {"clump_chance", "chance each extra enemy is near your target"},
+        {"r_ready_chance", "chance your ultimate is up when the fight starts"},
+        {"retarget_delay", "seconds to reach the next target after a kill"},
+        {"fixed_target", "1: fight dummies with the HP and resists below instead of real champions"},
+        {"target_hp", "dummy HP"},
+        {"target_armor", "dummy armor"},
+        {"target_mr", "dummy magic resist"},
+        // model rules
+        {"skillshot_hit_chance", "chance a skillshot hits its main target"},
+        {"aoe_secondary_hit_chance", "chance an area ability also hits each nearby enemy"},
+        {"line_secondary_hit_chance", "chance a line ability also hits each nearby enemy"},
+        {"attack_uptime_melee", "share of time melee champions can attack"},
+        {"attack_uptime_short_range", "share of time short-range champions can attack"},
+        {"attack_uptime_long_range", "share of time long-range champions can attack"},
+    };
+    return keys;
+}
+
+static bool isModelKey(const std::string& k) {
+    return k.find("hit_chance") != std::string::npos || k.rfind("attack_uptime", 0) == 0;
+}
+
+Library Library::load(const std::string& rulesPath, const Settings& settings) {
     Library lib;
+    for (const auto& [k, v] : settings) {
+        bool known = false;
+        for (const auto& kv : settingKeys()) known |= kv.first == k;
+        if (!known) throw std::runtime_error("unknown setting '" + k + "'");
+        if (!isModelKey(k)) lib.fight[k] = v;
+    }
     const std::string dir = dirOf(rulesPath);
     const json::Value root = json::parse(readFile(rulesPath));
     const json::Value& r = root["rules"];
@@ -209,6 +253,16 @@ Library Library::load(const std::string& rulesPath) {
     lib.rules.uptimeMelee = m["attack_uptime_melee"].asNumber(lib.rules.uptimeMelee);
     lib.rules.uptimeShort = m["attack_uptime_short_range"].asNumber(lib.rules.uptimeShort);
     lib.rules.uptimeLong = m["attack_uptime_long_range"].asNumber(lib.rules.uptimeLong);
+    auto setRule = [&](const char* key, double& field) {
+        auto it = settings.find(key);
+        if (it != settings.end()) field = std::clamp(it->second, 0.0, 1.0);
+    };
+    setRule("skillshot_hit_chance", lib.rules.skillshotHit);
+    setRule("aoe_secondary_hit_chance", lib.rules.aoeSecondaryHit);
+    setRule("line_secondary_hit_chance", lib.rules.lineSecondaryHit);
+    setRule("attack_uptime_melee", lib.rules.uptimeMelee);
+    setRule("attack_uptime_short_range", lib.rules.uptimeShort);
+    setRule("attack_uptime_long_range", lib.rules.uptimeLong);
     const json::Value& o = root["optimizer"];
     OptimizerSettings& os = lib.optimizer;
     os.legendarySlots = static_cast<int>(o["legendary_slots"].asNumber(os.legendarySlots));
@@ -250,6 +304,78 @@ Scenario Library::scenarioFor(const ChampionKit& c) const {
     }
     // Everyone's share of their team's damage taken averages 0.2 (1 of 5).
     sc.damageTakenFactor = (c.hasCn ? c.cnTakenShare / 0.2 : 1.0) * c.damageTaken;
+
+    if (!enemyTeam.empty() && enemyPool.isObject()) {
+        std::vector<EnemyProfile> picked;
+        for (const auto& entry : enemyTeam) {
+            // "Malphite" or "Malphite:hp=5000:armor=250" to change that enemy's stats.
+            std::vector<std::string> parts;
+            std::stringstream ss(entry);
+            for (std::string part; std::getline(ss, part, ':');) parts.push_back(part);
+            const std::string want = parts.empty() ? entry : parts[0];
+            bool found = false;
+            for (const auto& e : sc.enemies)
+                if (lower(e.id) == lower(want) || lower(e.name) == lower(want)) {
+                    picked.push_back(e);
+                    found = true;
+                    break;
+                }
+            if (!found) throw std::runtime_error("'" + want + "' is not in the enemy pool (or is the champion itself)");
+            EnemyProfile& p = picked.back();
+            p.weight = 1.0;
+            for (size_t i = 1; i < parts.size(); ++i) {
+                const auto eq = parts[i].find('=');
+                if (eq == std::string::npos) throw std::runtime_error("enemy stat '" + parts[i] + "' needs key=value");
+                const std::string key = parts[i].substr(0, eq);
+                const double v = std::stod(parts[i].substr(eq + 1));
+                if (key == "hp") p.hp = std::max(1.0, v);
+                else if (key == "armor") p.armor = std::max(0.0, v);
+                else if (key == "mr") p.mr = std::max(0.0, v);
+                else if (key == "damage_share") p.damageShare = std::max(0.0, v);
+                else if (key == "phys_share") p.physShare = std::clamp(v, 0.0, 1.0);
+                else if (key == "cc") p.cc = std::max(0.0, v);
+                else if (key == "damage_taken") p.damageTaken = std::max(0.0, v);
+                else throw std::runtime_error("unknown enemy stat '" + key +
+                                              "' (use hp, armor, mr, damage_share, phys_share, cc, damage_taken)");
+            }
+        }
+        sc.enemies = picked;
+        sc.teamSize = static_cast<int>(picked.size());
+    }
+    auto set = [&](const char* key, auto& field) {
+        auto it = fight.find(key);
+        if (it != fight.end()) field = static_cast<std::decay_t<decltype(field)>>(it->second);
+    };
+    set("level", sc.level);
+    sc.level = std::clamp(sc.level, 1, 18);
+    set("fight_mean", sc.fightMean);
+    set("fight_sd", sc.fightSd);
+    set("fight_min", sc.fightMin);
+    set("fight_max", sc.fightMax);
+    sc.fightMax = std::max(sc.fightMax, sc.fightMin + 0.5);
+    set("engage_min", sc.engageMin);
+    set("engage_max", sc.engageMax);
+    sc.engageMax = std::max(sc.engageMax, sc.engageMin);
+    set("cc_min", sc.ccMin);
+    set("cc_max", sc.ccMax);
+    sc.ccMax = std::max(sc.ccMax, sc.ccMin);
+    set("clump_max", sc.clumpMax);
+    set("clump_chance", sc.clumpChance);
+    set("r_ready_chance", sc.rReadyChance);
+    set("retarget_delay", sc.retargetDelay);
+    if (auto it = fight.find("enemy_damage_scale"); it != fight.end()) sc.damageTakenFactor *= std::max(0.0, it->second);
+    if (auto it = fight.find("cc_scale"); it != fight.end()) {
+        const double k = std::max(0.0, it->second);
+        sc.ccRatePerPoint *= k; sc.ccRateMin *= k; sc.ccRateMax *= k;
+    }
+    if (auto it = fight.find("fixed_target"); it != fight.end() && it->second > 0) {
+        sc.fixedTarget = true;
+        sc.enemies.clear();
+        sc.teamDrivenDamage = false;
+        set("target_hp", sc.targetHp);
+        set("target_armor", sc.targetArmor);
+        set("target_mr", sc.targetMr);
+    }
     return sc;
 }
 

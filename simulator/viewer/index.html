@@ -91,7 +91,40 @@ button:hover, select:hover { border-color: var(--ice); }
 .bar b { text-align: right; font: 600 13px var(--display); font-variant-numeric: tabular-nums; }
 .note { color: var(--muted); font-size: 12px; max-width: 75ch; }
 .note a { color: var(--ice); }
-@media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto; } }
+/* Simulation settings */
+.sim { display: grid; gap: 14px; }
+.sim-head { display: flex; flex-wrap: wrap; gap: 8px 12px; align-items: center; }
+.sim-head h2 { margin: 0 auto 0 0; }
+.sim-status { color: var(--muted); font-size: 13px; min-height: 20px; }
+.sim-status.err { color: var(--hp-low); }
+.sim-status.busy::before { content: ""; display: inline-block; width: 10px; height: 10px; margin-right: 8px; border-radius: 50%;
+  border: 2px solid var(--ice); border-right-color: transparent; animation: spin .8s linear infinite; vertical-align: -1px; }
+@keyframes spin { to { transform: rotate(1turn); } }
+button.primary { background: var(--ice); color: #071017; border-color: var(--ice); font-weight: 600; }
+button:disabled { opacity: .5; cursor: progress; }
+.sim-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+@media (max-width: 980px) { .sim-grid { grid-template-columns: minmax(0, 1fr); } }
+fieldset { border: 1px solid var(--line); border-radius: 8px; padding: 10px 12px 12px; margin: 0; min-width: 0; display: grid; gap: 8px; align-content: start; }
+legend { font: 600 12px var(--display); letter-spacing: .1em; text-transform: uppercase; color: var(--ice); padding: 0 6px; }
+.field { display: grid; grid-template-columns: minmax(0, 1fr) 96px; gap: 8px; align-items: center; font-size: 13px; }
+.field label { color: var(--frost); min-width: 0; }
+.field small { display: block; color: var(--muted); font-size: 11px; line-height: 1.3; }
+.field.changed label::after { content: " •"; color: var(--e); }
+input[type=number] { width: 100%; font: 500 13px var(--display); font-variant-numeric: tabular-nums; color: var(--frost);
+  background: var(--panel-2); border: 1px solid var(--line); border-radius: 6px; padding: 6px 8px; }
+fieldset select { width: 100%; min-width: 0; font-size: 13px; padding: 6px 8px; }
+.slot-row { display: grid; grid-template-columns: 22px minmax(0, 1fr); gap: 8px; align-items: center; font: 600 11px var(--display); color: var(--muted); }
+.modes { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: 13px; }
+.modes label { display: flex; gap: 6px; align-items: center; cursor: pointer; }
+.enemy { display: grid; gap: 6px; padding: 8px; border: 1px solid var(--line); border-radius: 6px; background: var(--abyss); }
+.enemy-stats { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px; }
+.enemy-stats label { display: grid; gap: 2px; font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; }
+.enemy-stats input.changed { border-color: var(--e); }
+.sub { font: 600 11px var(--display); letter-spacing: .1em; text-transform: uppercase; color: var(--muted); margin-top: 4px; }
+.alts { display: grid; gap: 6px; }
+.alts button { text-align: left; display: grid; grid-template-columns: 64px minmax(0, 1fr); gap: 10px; font-size: 12px; }
+.alts button b { font: 600 14px var(--display); font-variant-numeric: tabular-nums; }
+@media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto; } .sim-status.busy::before { animation: none; } }
 </style>
 <!-- replay-page-head-end -->
 </head>
@@ -147,9 +180,32 @@ button:hover, select:hover { border-color: var(--ice); }
     </div>
   </section>
 
+  <section class="card sim" id="sim">
+    <div class="sim-head">
+      <h2>Change the simulation</h2>
+      <button id="runBuild" class="primary" type="button" disabled>Simulate this build</button>
+      <button id="findBest" type="button" disabled>Find the best build</button>
+      <button id="resetAll" type="button" disabled>Reset to defaults</button>
+    </div>
+    <div class="sim-status" id="simStatus">Loading the simulator…</div>
+    <div class="sim-grid">
+      <fieldset id="buildBox"><legend>Build</legend></fieldset>
+      <fieldset id="enemyBox"><legend>Enemies</legend>
+        <div class="modes" role="radiogroup" aria-label="Enemy team">
+          <label><input type="radio" name="emode" id="emodePool" value="pool" checked> Random mix (China-server data)</label>
+          <label><input type="radio" name="emode" id="emodePick" value="pick"> Pick five</label>
+          <label><input type="radio" name="emode" id="emodeDummy" value="dummy"> Training dummies</label>
+        </div>
+        <div id="enemyDetail"></div>
+      </fieldset>
+      <fieldset id="fightBox"><legend>Fight</legend></fieldset>
+    </div>
+    <div class="alts" id="alts" hidden></div>
+  </section>
+
   <section class="lower">
     <div class="card">
-      <h2>Simulated best build</h2>
+      <h2 id="buildTitle">Simulated best build</h2>
       <div class="build" id="build"></div>
       <div class="stats" id="stats"></div>
     </div>
@@ -163,6 +219,7 @@ button:hover, select:hover { border-color: var(--ice); }
   The ability clips and icons belong to Riot Games. This project isn't endorsed by Riot Games and doesn't reflect the views or opinions of Riot Games or anyone officially involved in producing or managing League of Legends.</p>
 </div>
 <script src="replay.js"></script>
+<script src="sim-panel.js"></script>
 <!-- replay-page-end -->
 </body>
 </html>

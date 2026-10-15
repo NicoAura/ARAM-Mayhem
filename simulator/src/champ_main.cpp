@@ -43,6 +43,12 @@ Usage: mayhem_sim [options]
   --trace FILE        with --champ: also write one typical fight (the median-DPS
                       one of 200) of the best or given build, for the animated replay
   --trace-dir DIR     with --all: write a replay trace for every champion's best build
+  --set k=v,k=v       change fight or model settings (--list --json shows them all),
+                      e.g. --set level=13,fight_mean=12,enemy_damage_scale=1.5
+  --team a,b,...      fight exactly these enemy champions; change one's stats with
+                      Name:hp=5000:armor=250 (hp, armor, mr, damage_share, phys_share,
+                      cc, damage_taken)
+  --list --json       champions, items, augments, settings and the enemy pool as JSON
   --help              show this help
 )";
 }
@@ -248,6 +254,8 @@ int main(int argc, char** argv) {
     std::vector<std::string> items, augs;
     bool all = false, asJson = false, list = false, customBuild = false, anyItems = false;
     std::string tracePath, traceDir;
+    Library::Settings settings;
+    std::vector<std::string> team;
     int trials = 0;
     long long seed = -1;
 #ifdef __EMSCRIPTEN__
@@ -273,6 +281,16 @@ int main(int argc, char** argv) {
         else if (a == "--json") asJson = true;
         else if (a == "--trace") tracePath = next();
         else if (a == "--trace-dir") traceDir = next();
+        else if (a == "--team") team = splitList(next());
+        else if (a == "--set") {
+            for (const auto& kv : splitList(next())) {
+                const auto eq = kv.find('=');
+                if (eq == std::string::npos) { std::cerr << "--set needs key=value, got " << kv << "\n"; return 2; }
+                try {
+                    settings[kv.substr(0, eq)] = std::stod(kv.substr(eq + 1));
+                } catch (...) { std::cerr << "--set " << kv << ": not a number\n"; return 2; }
+            }
+        }
         else if (a == "--trials") trials = std::stoi(next());
         else if (a == "--seed") seed = std::stoll(next());
         else if (a == "--threads") threads = std::max(1, std::stoi(next()));
@@ -281,7 +299,8 @@ int main(int argc, char** argv) {
 
     Library lib;
     try {
-        lib = Library::load(rulesPath);
+        lib = Library::load(rulesPath, settings);
+        lib.enemyTeam = team;
     } catch (const std::exception& e) {
         std::cerr << "error: " << e.what() << "\n";
         return 1;
@@ -290,6 +309,63 @@ int main(int argc, char** argv) {
     if (anyItems) lib.optimizer.fittingItemsOnly = false;
     if (seed >= 0) lib.scenario.seed = static_cast<uint64_t>(seed);
 
+    if (list && asJson) {
+        std::printf("{\"champions\": [");
+        for (size_t i = 0; i < lib.champions.size(); ++i) {
+            const auto& c = lib.champions[i];
+            std::printf("%s{\"id\": %s, \"name\": %s, \"role\": %s, \"ranged\": %s}", i ? ", " : "", jsonStr(c.id).c_str(),
+                        jsonStr(c.name).c_str(), jsonStr(c.role).c_str(), c.ranged ? "true" : "false");
+        }
+        auto effects = [&](const std::map<std::string, Effect>& m) {
+            bool first = true;
+            for (const auto& [k, e] : m) {
+                std::string roles;
+                for (size_t i = 0; i < e.roles.size(); ++i) roles += (i ? ", " : "") + jsonStr(e.roles[i]);
+                std::printf("%s{\"key\": %s, \"name\": %s, \"slot\": %s, \"rarity\": %s, \"roles\": [%s]}",
+                            first ? "" : ", ", jsonStr(k).c_str(), jsonStr(e.name).c_str(), jsonStr(e.slot).c_str(),
+                            jsonStr(e.rarity).c_str(), roles.c_str());
+                first = false;
+            }
+        };
+        std::printf("],\n \"items\": [");
+        effects(lib.items);
+        std::printf("],\n \"augments\": [");
+        effects(lib.augments);
+        const Scenario& sc = lib.scenario;
+        const Rules& r = lib.rules;
+        const std::map<std::string, double> defaults = {
+            {"level", sc.level}, {"fight_mean", sc.fightMean}, {"fight_sd", sc.fightSd}, {"fight_min", sc.fightMin},
+            {"fight_max", sc.fightMax}, {"engage_min", sc.engageMin}, {"engage_max", sc.engageMax},
+            {"enemy_damage_scale", 1}, {"cc_scale", 1}, {"cc_min", sc.ccMin}, {"cc_max", sc.ccMax},
+            {"clump_max", sc.clumpMax}, {"clump_chance", sc.clumpChance}, {"r_ready_chance", sc.rReadyChance},
+            {"retarget_delay", sc.retargetDelay}, {"fixed_target", 0}, {"target_hp", sc.targetHp},
+            {"target_armor", sc.targetArmor}, {"target_mr", sc.targetMr}, {"skillshot_hit_chance", r.skillshotHit},
+            {"aoe_secondary_hit_chance", r.aoeSecondaryHit}, {"line_secondary_hit_chance", r.lineSecondaryHit},
+            {"attack_uptime_melee", r.uptimeMelee}, {"attack_uptime_short_range", r.uptimeShort},
+            {"attack_uptime_long_range", r.uptimeLong}};
+        std::printf("],\n \"settings\": [");
+        bool first = true;
+        for (const auto& [k, desc] : Library::settingKeys()) {
+            std::printf("%s{\"key\": %s, \"default\": %s, \"description\": %s}", first ? "" : ", ", jsonStr(k).c_str(),
+                        num(defaults.at(k)).c_str(), jsonStr(desc).c_str());
+            first = false;
+        }
+        std::printf("],\n \"enemies\": [");
+        Scenario pool = lib.scenario;
+        if (lib.enemyPool.isObject()) pool.applyEnemyPool(lib.enemyPool);
+        for (size_t i = 0; i < pool.enemies.size(); ++i) {
+            const auto& e = pool.enemies[i];
+            const auto it = lib.mayhemDamageTaken.find(e.championId);
+            std::printf("%s{\"id\": %s, \"name\": %s, \"weight\": %s, \"hp\": %s, \"armor\": %s, \"mr\": %s, "
+                        "\"damage_share\": %s, \"phys_share\": %s, \"cc\": %s, \"damage_taken\": %s}",
+                        i ? ", " : "", jsonStr(e.id).c_str(), jsonStr(e.name).c_str(), num(e.weight).c_str(),
+                        num(e.hp).c_str(), num(e.armor).c_str(), num(e.mr).c_str(), num(e.damageShare).c_str(),
+                        num(e.physShare).c_str(), num(e.cc).c_str(),
+                        num(it != lib.mayhemDamageTaken.end() ? it->second : e.damageTaken).c_str());
+        }
+        std::printf("]}\n");
+        return 0;
+    }
     if (list) {
         std::printf("Champions (%zu):\n", lib.champions.size());
         for (const auto& c : lib.champions) std::printf("  %-14s %-9s parse %s\n", c.id.c_str(), c.role.c_str(), c.parseQuality.c_str());
@@ -316,6 +392,10 @@ int main(int argc, char** argv) {
                 Build b{items, augs};
                 lib.validate(b);
                 const int n = lib.optimizer.finalTrials;
+#ifdef __EMSCRIPTEN__
+                // No threads in the browser build: the page runs the simulator in a Web Worker.
+                const std::vector<Result> res = runTrials(lib, *c, b, sc, 0, n);
+#else
                 std::vector<Result> res(static_cast<size_t>(n));
                 std::vector<std::thread> pool;
                 const int t = std::max(1, std::min(threads, n));
@@ -326,6 +406,7 @@ int main(int argc, char** argv) {
                         std::copy(part.begin(), part.end(), res.begin() + from);
                     });
                 for (auto& th : pool) th.join();
+#endif
                 ranked.push_back({b, summarize(res)});
             } else {
                 ranked = optimize(lib, *c, sc, threads);

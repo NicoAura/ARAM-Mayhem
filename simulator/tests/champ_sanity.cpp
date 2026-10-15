@@ -107,6 +107,22 @@ int main(int argc, char** argv) {
           "a recorded fight matches the same fight unrecorded, and its damage events add up");
     CHECK(ordered && cast && !tr.events.empty() && tr.events.back().kind == "end", "fight recordings are in time order");
 
+    {
+        Library harsh = Library::load(argc > 1 ? argv[1] : "data/mayhem_rules.json", {{"enemy_damage_scale", 3.0}});
+        CHECK(summarize(runTrials(harsh, *harsh.find("Ahri"), cap, harsh.scenarioFor(*harsh.find("Ahri")), 0, 800)).survivalRate <
+                  summarize(runTrials(lib, *ahri, cap, sc, 0, 800)).survivalRate,
+              "tripling enemy damage lowers survival");
+        Library picked = lib;
+        picked.enemyTeam = {"Malphite:hp=6000:armor=300", "Brand"};
+        const Scenario psc = picked.scenarioFor(*ahri);
+        bool ok = psc.enemies.size() == 2 && psc.teamSize == 2;
+        for (const auto& e : psc.enemies) if (e.id == "Malphite") ok &= e.hp == 6000 && e.armor == 300;
+        CHECK(ok, "a picked enemy team uses exactly those champions with their changed stats");
+        bool rejected = false;
+        try { Library::load(argc > 1 ? argv[1] : "data/mayhem_rules.json", {{"not_a_setting", 1}}); } catch (...) { rejected = true; }
+        CHECK(rejected, "unknown settings are rejected");
+    }
+
     bool threw = false;
     try { runTrials(lib, *ahri, Build{{"not_an_item"}, {}}, sc, 0, 1); } catch (...) { threw = true; }
     CHECK(threw, "unknown item ids are rejected");

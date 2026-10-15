@@ -135,3 +135,13 @@ cd viewer && python3 -m http.server  # then open http://localhost:8000/#Ahri
 ```
 
 The replay shown is the median-DPS fight out of the first 200 for the best build, so it is a typical fight rather than a lucky one. `--trace` records the same fight the simulator scores (recording never changes the random draws; `make test` checks this). The generated `viewer/replay-data/` is not committed: the icons and clips belong to Riot Games.
+
+### Changing the simulation in the page
+
+Under the replay, **Change the simulation** edits the build (boots, five items, four augments), the enemies and the fight settings, then re-runs the simulator in the browser (`make wasm-mayhem`, run in a Web Worker) and replays a typical fight with the new setup. Enemies default to the China-server mix; you can instead pick five champions and change each one's HP, armor, MR and share of their team's damage, or fight training dummies. The same settings work on the command line:
+
+```sh
+./mayhem_sim --list --json                       # every setting with its default and the enemy pool
+./mayhem_sim --champ Yunara --set level=13,enemy_damage_scale=1.5 \
+             --team "Malphite:hp=6000:armor=300,Brand,Sivir,Nami,Trundle"
+```

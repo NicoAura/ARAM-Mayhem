@@ -15,6 +15,7 @@
   let champ = null, trace = null, fight = null;
   let t = 0, playing = true, speed = 1, lastFrame = 0;
   const shown = new Map(); // enemy uid -> displayed {x, y, hp}
+  const custom = {};       // champion id -> trace the user simulated with their own settings
 
   // ---------- loading ----------
   Promise.all([
@@ -32,6 +33,7 @@
     sel.value = start.id;
     load(start.id);
     requestAnimationFrame(frame);
+    if (window.onReplayData) window.onReplayData(index);
   }).catch((err) => {
     $("title").textContent = "Replays could not be loaded";
     $("clipNote").textContent = "Build them with tools/build_replay_assets.py, then serve this folder over HTTP. (" + err + ")";
@@ -40,7 +42,7 @@
   // ---------- one champion's fight ----------
   function load(id) {
     champ = byId.get(id.toLowerCase());
-    trace = traces[champ.id];
+    trace = custom[champ.id] || traces[champ.id];
     fight = prepare(trace);
     t = 0; playing = true; shown.clear(); clipState.slot = null;
     $("play").textContent = "Pause";
@@ -51,7 +53,16 @@
     renderAbilities();
     setupClip();
     drawTrack();
+    if (window.onReplayLoad) window.onReplayLoad(champ, trace, !!custom[champ.id]);
   }
+
+  // Hooks for the simulation settings panel (sim-panel.js).
+  window.ReplayViewer = {
+    champion: () => champ,
+    defaultTrace: () => traces[champ.id],
+    showTrace(tr) { custom[champ.id] = tr; load(champ.id); },
+    resetTrace() { delete custom[champ.id]; load(champ.id); },
+  };
 
   // Turns the event list into lookups the renderer needs at any time t.
   function prepare(tr) {

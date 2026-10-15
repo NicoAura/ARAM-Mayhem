@@ -98,8 +98,17 @@ struct Library {
     OptimizerSettings optimizer;
     std::map<int, double> mayhemDamageTaken;  // champion id -> Mayhem damage-taken modifier
 
+    // Settings a user can change (the viewer's controls, or --set key=value), by name:
+    // model rules, which shape every champion's kit, and fight settings, applied on top
+    // of the enemy pool in scenarioFor. settingKeys() lists them with descriptions.
+    using Settings = std::map<std::string, double>;
+    Settings fight;                    // fight settings in effect
+    std::vector<std::string> enemyTeam;  // when set, every fight is against exactly these champions
+    static const std::vector<std::pair<std::string, std::string>>& settingKeys();
+
     // rulesPath: data/mayhem_rules.json; the other files are found next to it.
-    static Library load(const std::string& rulesPath);
+    // Unknown setting names throw.
+    static Library load(const std::string& rulesPath, const Settings& settings = {});
     const ChampionKit* find(const std::string& nameOrId) const;
     // The fight scenario for one champion: enemy pool without that champion and its
     // real share of team damage taken.
