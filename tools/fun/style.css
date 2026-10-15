@@ -44,6 +44,7 @@ h1 { font-size: 2rem; letter-spacing: -0.02em; line-height: 1.15; }
 h2 { font-size: 0.95rem; font-weight: 600; }
 .muted { color: var(--muted); }
 .small { font-size: 0.85rem; }
+.eyebrow a { color: inherit; }
 .eyebrow { color: var(--accent); font-size: 0.8rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; }
 
 .intro { display: flex; gap: 1rem; align-items: flex-start; }

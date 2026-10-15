@@ -21,7 +21,8 @@ Picked items and augments live in the URL, so **Copy link** shares a build.
 | --- | --- |
 | `build_data.py` | Pulls Ryze, item and Mayhem augment numbers from CommunityDragon into `data.js` (ARAM/Mayhem item overrides applied). Run it after a patch: `python3 build_data.py` (or `--channel pbe`). |
 | `calc.js` | The math, with no DOM, usable from Node (`require("./calc.js")`). |
-| `app.js`, `index.html`, `style.css` | The page. |
+| `app.js`, `index.html` | The page (styles are shared in `../style.css`). |
+| `../cdragon.py` | CommunityDragon helpers shared by the Fun Tools data builders. |
 
 ## Assumptions
 
