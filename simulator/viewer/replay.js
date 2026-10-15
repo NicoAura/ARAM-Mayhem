@@ -1,7 +1,7 @@
 // Fight replay for the ARAM Mayhem simulator. Plays a traced fight (mayhem_sim --trace)
-// on a canvas. Fighters are animated 3D models (models3d.js) posed from the timeline, with
-// a close-up of your champion beside the arena; Riot's ability clips are the fallback
-// when a champion has no model.
+// on a canvas. Fighters are animated 3D models (models3d.js) posed from the timeline, and
+// enemies cast their own abilities; Riot's ability clips are the fallback when your
+// champion has no model.
 // Data comes from replay-data/, built by tools/build_replay_assets.py.
 (() => {
   "use strict";
@@ -99,12 +99,55 @@
     for (const c of f.casts) (bySlot[c.s] = bySlot[c.s] || []).push(c);
     for (const list of Object.values(bySlot))
       list.forEach((c, i) => { c.next = i + 1 < list.length ? list[i + 1].t : f.duration; c.land = c.t + (c.a || 0); });
+    f.enemyCasts = enemyCasts(f);
     // Crits on attacks: tag the matching damage number.
     for (const a of f.attacks) if (a.f) {
       const n = f.numbers.find((n) => n.u === a.u && Math.abs(n.t - a.t) < 1e-6 && n.src === 0);
       if (n) n.crit = true;
     }
     return f;
+  }
+
+  // Enemies cast their own Q, W and E every few seconds once they engage, and their R
+  // once. Each crowd control on you is an enemy's ability landing, so a living enemy
+  // casts one just before it (their R if it comes before the engage). The simulator
+  // models enemy damage as a steady rate, so these casts set the animations only.
+  function enemyCasts(f) {
+    const life = new Map();
+    for (const e of f.events) {
+      if (e.k === "spawn") life.set(e.u, { born: e.t, died: f.duration });
+      else if (e.k === "kill" && life.has(e.u)) life.get(e.u).died = e.t;
+    }
+    const out = new Map();
+    for (const [u, L] of life) out.set(u, []);
+    for (const c of f.cc) {
+      const alive = [...life].filter(([, L]) => L.born <= c.t && c.t < L.died);
+      if (!alive.length) continue;
+      const [u] = alive[Math.floor(c.t * 7) % alive.length];
+      out.get(u).push({ t: Math.max(0, c.t - 0.3), s: c.t < f.engage ? "R" : "E", cc: true });
+    }
+    for (const [u, L] of life) {
+      const list = out.get(u);
+      const start = Math.max(L.born, f.engage) + 0.3 + ((u * 0.73) % 1.2);
+      let k = u % 3;
+      for (let t = start; t < L.died - 0.2; t += 2.4 + ((u * 1.37 + k) % 1.5)) list.push({ t, s: "QWE"[k++ % 3] });
+      if (!list.some((c) => c.s === "R") && L.died - start > 3) list.push({ t: start + 1.7 + (u % 3) * 0.8, s: "R" });
+      list.sort((a, b) => a.t - b.t);
+      // Keep casts apart so each animation can play out; crowd control wins a clash.
+      const kept = [];
+      for (const c of list) {
+        const last = kept[kept.length - 1];
+        if (!last || c.t - last.t >= 1) kept.push(c);
+        else if (c.cc && !last.cc) kept[kept.length - 1] = c;
+      }
+      out.set(u, kept);
+    }
+    return out;
+  }
+  function enemyCastAt(uid, time) {
+    let cast = null;
+    for (const c of fight.enemyCasts.get(uid) || []) { if (c.t > time) break; cast = c; }
+    return cast && time - cast.t < 1.1 ? cast : null;
   }
 
   // ---------- state at time t ----------
@@ -195,6 +238,8 @@
   }
   function enemyAnim(time, en) {
     if (en.died !== null) return { role: "death", t: time - en.died, loop: false };
+    const cast = enemyCastAt(en.uid, time);
+    if (cast) return { role: cast.s, t: time - cast.t, loop: false };
     if (time < fight.engage) return { role: "idle", t: time + en.uid * 0.7, loop: true };
     return { role: "attack", t: time + en.uid * 0.37, loop: true };
   }
@@ -322,6 +367,26 @@
       const d = shown.get(en.uid);
       d.hp = d.hp === undefined || dt <= 0 || dt > 0.5 ? en.hp : d.hp + (en.hp - d.hp) * (1 - Math.exp(-dt * 12));
       const head = heads["e" + en.uid];
+      const cast = en.died === null ? enemyCastAt(en.uid, time) : null;
+      if (cast) {
+        const age = time - cast.t, ic = 44 * u;
+        const top = head ? head.y - 14 * u : p.y - rr - 18 * u;
+        og.globalAlpha = Math.max(0, Math.min(1, (1.1 - age) / 0.3));
+        drawIcon(og, iconRow(en.champ), SLOT_COL[cast.s], (head ? head.x : p.x) - ic / 2, top - ic, ic, false);
+        og.strokeStyle = SLOT_COLORS[cast.s]; og.lineWidth = 2 * u;
+        og.strokeRect((head ? head.x : p.x) - ic / 2, top - ic, ic, ic);
+        og.globalAlpha = 1;
+        // The ability flying at you.
+        const fly = (age - 0.15) / 0.35;
+        if (fly > 0 && fly < 1.4) {
+          const tx = meX, ty = st.me.y - R * 0.6, k = Math.min(1, fly);
+          const x0 = p.x, y0 = p.y - rr * 0.6, x1 = x0 + (tx - x0) * k, y1 = y0 + (ty - y0) * k;
+          g.globalAlpha = Math.max(0, 1 - Math.max(0, fly - 1) / 0.4) * 0.9;
+          g.strokeStyle = SLOT_COLORS[cast.s]; g.lineWidth = (cast.s === "R" ? 7 : 4) * u; g.lineCap = "round";
+          g.beginPath(); g.moveTo(x0 + (x1 - x0) * Math.max(0, k - 0.35) / k, y0 + (y1 - y0) * Math.max(0, k - 0.35) / k); g.lineTo(x1, y1); g.stroke();
+          g.lineCap = "butt"; g.globalAlpha = 1;
+        }
+      }
       if (head) {
         // Model: a ring at its feet, portrait and HP bar above its head.
         g.globalAlpha = Math.max(0, fade);
@@ -466,7 +531,7 @@
   let modelMode = false;
   function attachModels() {
     const M = window.Models3D;
-    if (!M || M.arena || !M.attach($("arena3d"), $("closeup"))) return;
+    if (!M || M.arena || !M.attach($("arena3d"))) return;
     if (champ) setupModels();
   }
   window.addEventListener("models3d-ready", attachModels);
@@ -479,13 +544,11 @@
       if (!champ || champ.id !== id) return;
       modelMode = ok;
       video.pause();
-      video.hidden = ok;
-      $("closeup").hidden = !ok;
+      $("clipVideo").hidden = ok;
       $("sound").hidden = ok;
       $("clipNote").textContent = ok
-        ? "Your champion plays each cast as it happens. Click an ability (or press Q, W, E, R) to see its animation."
+        ? "Click an ability (or press Q, W, E, R) and your champion casts it in the arena."
         : "No model for this champion yet, so casts play Riot's ability preview instead.";
-      if (!ok) video.hidden = false;
     });
   }
   // Ability button or key: the model's animation, or the clip without a model.

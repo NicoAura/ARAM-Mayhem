@@ -125,7 +125,7 @@ Boots, five legendaries and four augments. Items are searched greedily to pick a
 
 ## Fight replays
 
-`viewer/` animates one simulated fight per champion: you, the enemy you are hitting and the rest of their team, with every cast, attack, damage number, kill and stun drawn as it happens. Every fighter is the champion's animated 3D model (three.js), posed from the simulated timeline: each cast plays that ability's animation, attacks and crits play theirs, and stuns and deaths show too. Beside the arena is a close-up of your champion; clicking an ability, or pressing Q/W/E/R, plays its animation there. A missing animation falls back to the basic attack (Garen has no separate W, for example). Champions without a model fall back to Riot's ability preview clips.
+`viewer/` animates one simulated fight per champion: you, the enemy you are hitting and the rest of their team, with every cast, attack, damage number, kill and stun drawn as it happens. Every fighter is the champion's animated 3D model (three.js), posed from the simulated timeline: each cast plays that ability's animation, attacks and crits play theirs, and stuns and deaths show too. Clicking an ability, or pressing Q/W/E/R, makes your champion cast it. Enemies cast their own Q, W and E every few seconds and their R once, with the ability's icon above them; each stun on you is shown as an enemy's ability landing. The simulator models enemy damage as a steady rate, so enemy casts are for show and don't change the numbers. A missing animation falls back to the basic attack (Garen has no separate W, for example). Champions without a model fall back to Riot's ability preview clips.
 
 ```sh
 make replay                          # traces for all champions + icons; clips stream from Riot

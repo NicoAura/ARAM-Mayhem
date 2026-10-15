@@ -1,6 +1,5 @@
 // 3D champion models for the fight replay (three.js). Each fighter in the arena is an
-// animated model posed from the simulated timeline (cast, attack, stunned, death, idle),
-// and the side panel shows a close-up of your champion. Models come from
+// animated model posed from the simulated timeline (cast, attack, stunned, death, idle). Models come from
 // replay-data/models/, built by tools/build_models.mjs. If WebGL or a model is missing,
 // replay.js keeps drawing the 2D portraits.
 import * as THREE from "three";
@@ -127,19 +126,17 @@ function makeRenderer(canvas) {
 
 const api = {
   ok: false,
-  arena: null, closeup: null,
+  arena: null,
   actors: new Map(),             // key -> {actor, champ}
   pendingKeys: new Set(),
-  myChamp: null, closeActor: null, preview: null,
+  preview: null,
 
-  attach(arenaCanvas, closeupCanvas) {
+  attach(arenaCanvas) {
     try {
       this.arena = { renderer: makeRenderer(arenaCanvas), scene: new THREE.Scene(),
         camera: new THREE.OrthographicCamera(-8, 8, 4.5, -4.5, 0.1, 100) };
       this.arena.camera.position.set(0, 11, 11);
       this.arena.camera.lookAt(0, 0, 0);
-      this.closeup = { renderer: makeRenderer(closeupCanvas), scene: new THREE.Scene(),
-        camera: new THREE.PerspectiveCamera(30, 360 / 246, 0.1, 100) };
       this.ok = true;
     } catch (e) {
       this.ok = false;
@@ -147,31 +144,18 @@ const api = {
     return this.ok;
   },
 
-  // Starts loading a fight's models. Returns a promise for when your champion is ready.
+  // Starts loading a fight's models. Resolves to whether your champion has a model.
   setFight(champId, enemyIds) {
     for (const [, a] of this.actors) this.arena.scene.remove(a.actor.group);
     this.actors.clear();
     this.pendingKeys.clear();
-    if (this.closeActor) this.closeup.scene.remove(this.closeActor.group);
-    this.closeActor = null;
     this.preview = null;
-    this.myChamp = champId;
     for (const id of new Set(enemyIds)) loadChampion(id);
-    return loadChampion(champId).then((g) => {
-      if (!g || this.myChamp !== champId) return !!g;
-      this.closeActor = new Actor(g);
-      this.closeActor.group.rotation.y = Math.PI * 0.1;
-      this.closeup.scene.add(this.closeActor.group);
-      // Frame the close-up on this champion's height.
-      const k = Math.max(0.6, this.closeActor.height) / 2.2;
-      this.closeup.camera.position.set(2.2 * k, 2.0 * k, 5.2 * k);
-      this.closeup.camera.lookAt(0, 1.05 * k, 0);
-      return true;
-    });
+    return loadChampion(champId).then((g) => !!g);
   },
   hasModel(champId) { return !!(manifest && manifest[String(champId).toLowerCase()]); },
 
-  // Click on an ability: play it once in the close-up.
+  // Click on an ability: your champion plays it once in the arena.
   previewRole(role) { this.preview = { role, start: performance.now() }; },
 
   // Converts canvas pixels (device px) to a point on the arena floor.
@@ -224,31 +208,19 @@ const api = {
       a.group.position.copy(this.toWorld(f.x, f.y, W, H));
       a.group.rotation.y = f.face > 0 ? Math.PI / 2 : -Math.PI / 2;
       a.group.scale.setScalar(f.scale || 1);
-      a.pose(f.role, f.t, f.loop);
+      let { role, t, loop } = f;
+      if (f.key === "me" && this.preview) {
+        const pt = (performance.now() - this.preview.start) / 1000;
+        if (pt < a.duration(this.preview.role) + 0.2) { role = this.preview.role; t = pt; loop = false; }
+        else this.preview = null;
+      }
+      a.pose(role, t, loop);
       const head = this.toScreen(a.group.position.clone().add(new THREE.Vector3(0, a.height * (f.scale || 1) * 1.12, 0)), W, H);
       out[f.key] = head;
     }
     for (const [key, entry] of this.actors) if (!seen.has(key)) { scene.remove(entry.actor.group); this.actors.delete(key); }
     renderer.render(scene, camera);
 
-    // Close-up: mirrors you in the arena unless an ability preview is playing.
-    const me = fighters.find((f) => f.key === "me");
-    if (this.closeActor) {
-      const c = this.closeup;
-      const el = c.renderer.domElement;
-      const r = el.getBoundingClientRect();
-      const dpr = Math.min(2, window.devicePixelRatio || 1);
-      const w = Math.max(1, Math.round(r.width * dpr)), h = Math.max(1, Math.round(r.height * dpr));
-      if (el.width !== w || el.height !== h) { c.renderer.setSize(w, h, false); c.camera.aspect = w / h; c.camera.updateProjectionMatrix(); }
-      let role = me ? me.role : "idle", t = me ? me.t : 0, loop = me ? me.loop : true;
-      if (this.preview) {
-        const pt = (performance.now() - this.preview.start) / 1000;
-        if (pt < this.closeActor.duration(this.preview.role) + 0.3) { role = this.preview.role; t = pt; loop = false; }
-        else this.preview = null;
-      }
-      this.closeActor.pose(role, t, loop);
-      c.renderer.render(c.scene, c.camera);
-    }
     return out;
   },
 };
