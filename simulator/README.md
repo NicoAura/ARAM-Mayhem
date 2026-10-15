@@ -39,11 +39,11 @@ The biggest estimates right now are Yunara's W damage, Q active duration and spr
 - **Mayhem rules:** 200% base crit damage, crit above 100% turning into AD, the 5.0 attack speed cap (10 with full Lethal Tempo) and the 80/70/60 s ultimate.
 - **Items and augments:** stat items plus Rageblade Seething and Phantom Hit, BotRK (with its ARAM on-hit override), Kraken, Runaan's, Stormrazor, Atma's Reckoning and Yun Tal Flurry. Augments: Dual Wield, Critical Missile, Soul Siphon, Deft, Upgrade Infinity Edge, Double Tap, Critical Rhythm, Jeweled Gauntlet, Symphony of War, Mystic Punch and Typhoon.
 
+Not modeled: mana, Yunara taking damage, lifesteal, and positioning-dependent augments (Scopiest Weapons, Tap Dancer).
+
 ## Augment availability
 
 Each augment in the data file has `offered_to_yunara`. It is `confirmed` when the augment shows up in Yunara's ARAM Mayhem augment stats on current stat sites, which means players actually get offered it on her. Preset builds only use confirmed augments, and `make test` checks that. A custom build that uses an unconfirmed augment (currently Stats on Stats and Goliath) still runs but prints a warning.
-
-Not modeled: mana, Yunara taking damage, lifesteal, and positioning-dependent augments.
 
 ## Reproducibility and the website
 
