@@ -168,6 +168,19 @@ def main():
     write_csv(os.path.join(OUT, "augments.csv"), sorted(augments, key=lambda a: a["win_rank"]),
               ["win_rank", "augment_id", "key", "name_cn", "tier", "win_rate", "pick_rate", "pick_rank"])
 
+    # Augments and duos have no history in the API, so keep one file per day here.
+    stamp = aug_payload.get("dtstatdate") or dt.date.today().strftime("%Y%m%d")
+    stamp = f"{stamp[:4]}-{stamp[4:6]}-{stamp[6:]}"
+    for name, rows, cols in (
+            ("augments", [{**a, "best_champions": " ".join(map(str, a["best_champions"]))}
+                          for a in augments], ["augment_id", "key", "name_cn", "tier", "win_rate",
+                                    "win_rank", "pick_rate", "pick_rank", "best_champions"]),
+            ("duos", [{**d, "champion_ids": " ".join(map(str, d["champion_ids"])),
+                       "names": " ".join(d["names"])} for d in duos],
+             ["rank", "champion_ids", "names", "win_rate", "pick_rate"])):
+        os.makedirs(os.path.join(OUT, "history", name), exist_ok=True)
+        write_csv(os.path.join(OUT, "history", name, f"{stamp}.csv"), rows, cols)
+
     print(f"champions: {len(champions)} (date {date})  augments: {len(augments)}  duos: {len(duos)}")
 
 

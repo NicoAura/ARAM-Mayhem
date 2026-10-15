@@ -35,12 +35,13 @@ date the API returns, and builds patch and all-time tables in `history/`:
 | `patches.csv` | Each patch's data window (15.21 to now) |
 | `by_patch.csv` | Each champion's whole-patch numbers |
 | `all_time.csv` | Each champion across every patch |
+| `augments/`, `duos/` | One file per day, written by `fetch_cn.py`; starts 2026-10-15 |
 
 Each day's numbers are cumulative since the current patch's window opened, and they
 reset when the next patch's window opens. The script finds those resets as jumps near
 each release date from Tencent's `versionlist`. The last day of each window is used as
-that patch's full sample. Augments and duos have no history: those endpoints only
-return the current window.
+that patch's full sample. Augments and duos have no history in the API, so `fetch_cn.py` saves one file per day
+from now on.
 
 `all_time.csv` combines patches by estimated games. Pick rate is a share of games, so a
 champion's games in a patch are estimated as pick rate × window days, which assumes
