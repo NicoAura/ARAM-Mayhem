@@ -39,6 +39,7 @@
       "ad": 55, "ad_growth": 3,
       "attack_speed": 0.65, "attack_speed_ratio": 0.65, "attack_speed_growth": 0.02,
       "hp": 590, "hp_growth": 110,
+      "armor": 25, "armor_growth": 4.4, "mr": 33, "mr_growth": 1.1,
       "confidence": "verified", "source": "metabot_yunara"
     },
     "passive": {
@@ -118,7 +119,7 @@
     },
     "botrk": {
       "name": "Blade of the Ruined King",
-      "stats": { "ad": 40, "attack_speed": 0.25, "onhit_cur_hp_phys": 0.10 },
+      "stats": { "ad": 40, "attack_speed": 0.25, "onhit_cur_hp_phys": 0.10, "lifesteal": 0.08 },
       "confidence": "likely", "source": "aram_balance", "note": "ARAM override: ranged on-hit 10% current health (6% on Summoner's Rift). One source still shows 6%"
     },
     "kraken": {
@@ -128,7 +129,7 @@
       "confidence": "approx"
     },
     "nashor": { "name": "Nashor's Tooth", "stats": { "ap": 80, "attack_speed": 0.50, "onhit_magic": 15, "onhit_magic_ap": 0.20 }, "confidence": "likely" },
-    "wits": { "name": "Wit's End", "stats": { "attack_speed": 0.40, "onhit_magic": 45 }, "confidence": "likely" },
+    "wits": { "name": "Wit's End", "stats": { "attack_speed": 0.40, "mr": 45, "onhit_magic": 45 }, "confidence": "likely" },
     "rabadon": { "name": "Rabadon's Deathcap", "stats": { "ap": 130, "ap_amp": 0.30 }, "confidence": "likely" },
     "stormrazor": {
       "name": "Stormrazor",
@@ -165,8 +166,9 @@
     "soul_siphon": {
       "name": "Soul Siphon", "rarity": "gold", "offered_to_yunara": "confirmed",
       "stats": { "crit": 0.25 },
+      "special": "soul_siphon", "params": { "crit_heal": 0.12 },
       "confidence": "likely", "source": "augment_text",
-      "note": "+25% crit; crits heal 12% of damage (healing not modeled)"
+      "note": "+25% crit; crits heal 12% of the damage dealt"
     },
     "deft": {
       "name": "Deft", "rarity": "silver", "offered_to_yunara": "confirmed",
@@ -276,11 +278,22 @@
     "trials": 20000,
     "seed": 20261015,
     "fight_mean": 18.0, "fight_sd": 6.0, "fight_min": 6.0, "fight_max": 40.0,
-    "cc_rate": 0.12, "cc_min": 0.75, "cc_max": 1.75,
+    "cc_rate_min": 0.05, "cc_rate_max": 0.20, "cc_min": 0.75, "cc_max": 1.75,
     "clump_max": 4, "clump_chance": 0.45,
     "w_hit_chance": 0.75,
     "r_ready_chance": 0.85,
     "retarget_delay": 1.5,
-    "target_hp": 3800, "target_armor": 120, "target_mr": 80
+    "target_hp": 3800, "target_armor": 120, "target_mr": 80,
+
+    "enemy_team_note": "Each fight draws every enemy from these profiles by weight. Level 18 base stats average about 2400 HP / 100 armor / 55 MR for squishies and 2430 HP / 115 armor / 66 MR for tanks (metabot.gg 26.19); the rest is a typical late ARAM Mayhem build with stat augments. damage_taken is the champion's ARAM modifier, which Mayhem inherits; 1.0 is the norm. All approx. Passing --target replaces this with one fixed target.",
+    "enemy_team": [
+      { "id": "squishy", "name": "Squishy (marksman/mage)", "weight": 0.45, "hp": 3000, "hp_sd": 0.12, "armor": 95, "mr": 60, "damage_taken": 1.0 },
+      { "id": "bruiser", "name": "Bruiser", "weight": 0.35, "hp": 4300, "hp_sd": 0.12, "armor": 160, "mr": 95, "damage_taken": 1.0 },
+      { "id": "tank", "name": "Tank", "weight": 0.20, "hp": 5800, "hp_sd": 0.12, "armor": 260, "mr": 160, "damage_taken": 1.0 }
+    ],
+
+    "enemy_damage_note": "Damage the enemy team aims at Yunara per second, before her armor and MR, starting a random moment after the fight begins. Varies by fight. If it kills her, she deals no more damage that fight. Estimates.",
+    "enemy_dps_mean": 500, "enemy_dps_sd": 200, "enemy_phys_share": 0.55,
+    "engage_min": 2.0, "engage_max": 6.0
   }
 }

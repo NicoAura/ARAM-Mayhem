@@ -63,6 +63,7 @@ int main(int argc, char** argv) {
     CHECK(meanDps(d, ie, sc) > meanDps(d, naked, sc), "an item adds damage");
 
     Scenario tanky = sc;
+    tanky.fixedTarget = true;
     tanky.targetArmor = 300;
     tanky.targetMr = 300;
     CHECK(meanDps(d, crit, tanky) < meanDps(d, crit, sc), "more resists means less damage");
@@ -75,6 +76,27 @@ int main(int argc, char** argv) {
     Scenario noW = sc;
     noW.wHitChance = 0.0;
     CHECK(meanDps(d, crit, noW) < meanDps(d, crit, sc), "missing every W lowers damage");
+
+    Scenario brutal = sc, peaceful = sc;
+    brutal.enemyDpsMean = 2000;
+    peaceful.enemyDpsMean = 0; peaceful.enemyDpsSd = 0;
+    const Summary sb = summarize(runTrials(d, crit, brutal, 0, sc.trials));
+    const Summary sp = summarize(runTrials(d, crit, peaceful, 0, sc.trials));
+    CHECK(sb.meanDps < sp.meanDps, "heavy enemy damage lowers DPS");
+    CHECK(sp.survivalRate == 1.0 && sb.survivalRate < 0.5, "she survives without enemy damage and dies under heavy damage");
+
+    Build tanky_build{"tb", "IE + HP", {"ie", "heartsteel_hp"}, {}};
+    CHECK(summarize(runTrials(d, tanky_build, sc, 0, sc.trials)).meanTimeAlive >
+              summarize(runTrials(d, ie, sc, 0, sc.trials)).meanTimeAlive,
+          "health items keep her alive longer");
+
+    Scenario fixedTank = sc, fixedSquishy = sc;
+    fixedTank.fixedTarget = fixedSquishy.fixedTarget = true;
+    fixedTank.targetHp = 5800; fixedTank.targetArmor = 260; fixedTank.targetMr = 160;
+    fixedSquishy.targetHp = 3000; fixedSquishy.targetArmor = 95; fixedSquishy.targetMr = 60;
+    CHECK(summarize(runTrials(d, crit, fixedTank, 0, sc.trials)).killsPerMinute <
+              summarize(runTrials(d, crit, fixedSquishy, 0, sc.trials)).killsPerMinute,
+          "tanks die slower than squishies");
 
     Build bad{"bad", "Bad", {"not_an_item"}, {}};
     bool threw = false;

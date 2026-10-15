@@ -33,9 +33,10 @@ Usage: yunara_sim [options]
   --trials N           trials per build (default from data file)
   --seed N             RNG seed
   --level N            champion level (1-18)
-  --target HP,AR,MR    target health, armor and magic resist
+  --target HP,AR,MR    one fixed target instead of the mixed enemy team
   --fight MEAN,SD      teamfight length in seconds
-  --cc-rate R          interrupts per second (0 disables)
+  --cc-rate R          interrupts per second (0 disables; default varies per fight)
+  --enemy-dps MEAN,SD  damage per second aimed at Yunara, before her resists (0,0 = she never dies)
   --clump MAX,CHANCE   max grouped enemies and the chance each is in range
   --w-hit P            W hit chance (0-1)
   --r-ready P          chance R is up when the fight starts (0-1)
@@ -149,7 +150,7 @@ int main(int argc, char** argv) {
         else if (a == "--json") asJson = true;
         else if (a == "--list") doList = true;
         else if (a == "--trials" || a == "--seed" || a == "--level" || a == "--target" || a == "--fight" ||
-                 a == "--cc-rate" || a == "--clump" || a == "--w-hit" || a == "--r-ready")
+                 a == "--cc-rate" || a == "--clump" || a == "--w-hit" || a == "--r-ready" || a == "--enemy-dps")
             overrides.push_back({a, next()});
         else { std::cerr << "unknown option " << a << " (see --help)\n"; return 2; }
     }
@@ -172,9 +173,10 @@ int main(int argc, char** argv) {
         if (flag == "--trials") sc.trials = std::max(1, std::stoi(v));
         else if (flag == "--seed") sc.seed = std::stoull(v);
         else if (flag == "--level") sc.level = std::clamp(std::stoi(v), 1, 18);
-        else if (flag == "--target") { auto x = splitNumbers(v, 3, "--target"); sc.targetHp = x[0]; sc.targetArmor = x[1]; sc.targetMr = x[2]; }
+        else if (flag == "--target") { auto x = splitNumbers(v, 3, "--target"); sc.targetHp = x[0]; sc.targetArmor = x[1]; sc.targetMr = x[2]; sc.fixedTarget = true; }
+        else if (flag == "--enemy-dps") { auto x = splitNumbers(v, 2, "--enemy-dps"); sc.enemyDpsMean = x[0]; sc.enemyDpsSd = x[1]; }
         else if (flag == "--fight") { auto x = splitNumbers(v, 2, "--fight"); sc.fightMean = x[0]; sc.fightSd = x[1]; }
-        else if (flag == "--cc-rate") sc.ccRate = std::stod(v);
+        else if (flag == "--cc-rate") sc.ccRateMin = sc.ccRateMax = std::stod(v);
         else if (flag == "--clump") { auto x = splitNumbers(v, 2, "--clump"); sc.clumpMax = static_cast<int>(x[0]); sc.clumpChance = x[1]; }
         else if (flag == "--w-hit") sc.wHitChance = std::stod(v);
         else if (flag == "--r-ready") sc.rReadyChance = std::stod(v);
@@ -212,15 +214,32 @@ int main(int argc, char** argv) {
     std::sort(results.begin(), results.end(),
               [](const auto& a, const auto& b) { return a.second.meanDps > b.second.meanDps; });
 
+    std::string targetDesc;
+    if (sc.fixedTarget) {
+        char buf[128];
+        std::snprintf(buf, sizeof buf, "fixed target %g HP / %g armor / %g MR", sc.targetHp, sc.targetArmor, sc.targetMr);
+        targetDesc = buf;
+    } else {
+        targetDesc = "mixed enemy team (";
+        for (size_t i = 0; i < sc.enemies.size(); ++i) {
+            char buf[96];
+            std::snprintf(buf, sizeof buf, "%s%s %.0f%%", i ? ", " : "", sc.enemies[i].id.c_str(), sc.enemies[i].weight * 100.0);
+            targetDesc += buf;
+        }
+        targetDesc += ")";
+    }
+
     if (asJson) {
-        std::printf("{\"level\":%d,\"trials\":%d,\"seed\":%llu,\"target\":{\"hp\":%g,\"armor\":%g,\"mr\":%g},\"builds\":[",
-                    sc.level, sc.trials, static_cast<unsigned long long>(sc.seed), sc.targetHp, sc.targetArmor, sc.targetMr);
+        std::printf("{\"level\":%d,\"trials\":%d,\"seed\":%llu,\"targets\":\"%s\",\"enemy_dps\":[%g,%g],\"builds\":[",
+                    sc.level, sc.trials, static_cast<unsigned long long>(sc.seed), jsonEscape(targetDesc).c_str(),
+                    sc.enemyDpsMean, sc.enemyDpsSd);
         for (size_t i = 0; i < results.size(); ++i) {
             const auto& [b, s] = results[i];
             std::printf("%s{\"id\":\"%s\",\"name\":\"%s\",\"dps\":%.1f,\"ci95\":%.1f,\"p5\":%.1f,\"median\":%.1f,"
-                        "\"p95\":%.1f,\"single_target_dps\":%.1f,\"kills_per_minute\":%.2f,\"share\":{",
+                        "\"p95\":%.1f,\"single_target_dps\":%.1f,\"kills_per_minute\":%.2f,"
+                        "\"survival_rate\":%.4f,\"time_alive\":%.2f,\"share\":{",
                         i ? "," : "", jsonEscape(b.id).c_str(), jsonEscape(b.name).c_str(), s.meanDps, s.ci95, s.p5,
-                        s.median, s.p95, s.singleTargetDps, s.killsPerMinute);
+                        s.median, s.p95, s.singleTargetDps, s.killsPerMinute, s.survivalRate, s.meanTimeAlive);
             for (int k = 0; k < SrcCount; ++k)
                 std::printf("%s\"%s\":%.4f", k ? "," : "", kSourceNames[k], s.shareBySource[k]);
             std::printf("}}");
@@ -229,12 +248,15 @@ int main(int argc, char** argv) {
         return 0;
     }
 
-    std::printf("Yunara ARAM Mayhem DPS: level %d, %d trials per build, target %g HP / %g armor / %g MR\n\n",
-                sc.level, sc.trials, sc.targetHp, sc.targetArmor, sc.targetMr);
-    std::printf("%-22s %8s %7s %15s %8s %10s\n", "Build", "DPS", "+/-95%", "5th-95th pct", "1-target", "Kills/min");
+    std::printf("Yunara ARAM Mayhem DPS: level %d, %d trials per build\n", sc.level, sc.trials);
+    std::printf("Targets: %s\n", targetDesc.c_str());
+    std::printf("Enemy damage on Yunara: %g +/- %g per second before resists\n\n", sc.enemyDpsMean, sc.enemyDpsSd);
+    std::printf("%-22s %7s %6s %13s %8s %9s %8s %7s\n", "Build", "DPS", "+/-95%", "5th-95th pct", "1-target",
+                "Kills/min", "Survives", "Alive s");
     for (const auto& [b, s] : results)
-        std::printf("%-22s %8.0f %7.0f %7.0f-%-7.0f %8.0f %10.2f\n", b.name.c_str(), s.meanDps, s.ci95, s.p5, s.p95,
-                    s.singleTargetDps, s.killsPerMinute);
+        std::printf("%-22s %7.0f %6.0f %6.0f-%-6.0f %8.0f %9.2f %7.0f%% %7.1f\n", b.name.c_str(), s.meanDps, s.ci95,
+                    s.p5, s.p95, s.singleTargetDps, s.killsPerMinute, s.survivalRate * 100.0, s.meanTimeAlive);
+    std::printf("\nDPS is averaged over the whole fight, so dying early lowers it.\n");
     std::printf("\nWhere the damage comes from:\n%-22s", "");
     const char* shortNames[SrcCount] = {"Attack", "Passive", "Q hit", "Q sprd", "W", "Items", "Bolts"};
     for (const char* n : shortNames) std::printf(" %7s", n);

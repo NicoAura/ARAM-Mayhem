@@ -18,7 +18,7 @@ namespace yunara {
 
 // Flat stat bonuses an item, augment or anvil roll can grant.
 struct StatBlock {
-    double ad = 0, ap = 0, attackSpeed = 0, crit = 0, hp = 0;
+    double ad = 0, ap = 0, attackSpeed = 0, crit = 0, hp = 0, armor = 0, mr = 0, lifesteal = 0;
     double armorPenPct = 0, lethality = 0, magicPenFlat = 0, magicPenPct = 0;
     double critDamage = 0, apAmp = 0;
     double onhitPhys = 0, onhitMagic = 0, onhitMagicAp = 0, onhitCurHpPhys = 0;
@@ -42,24 +42,39 @@ struct Build {
     std::vector<std::string> items, augments;
 };
 
+// One kind of enemy Yunara might be hitting. A fight's enemies are drawn from
+// these by weight, with health varied per enemy.
+struct EnemyProfile {
+    std::string id, name;
+    double weight = 1, hp = 3800, hpSd = 0, armor = 120, mr = 80;
+    double damageTaken = 1.0;  // the champion's ARAM damage-taken modifier
+};
+
 struct Scenario {
     int level = 18;
     int trials = 20000;
     uint64_t seed = 1;
     double fightMean = 18, fightSd = 6, fightMin = 6, fightMax = 40;
-    double ccRate = 0.12, ccMin = 0.75, ccMax = 1.75;
+    double ccRateMin = 0.05, ccRateMax = 0.20, ccMin = 0.75, ccMax = 1.75;
     int clumpMax = 4;
     double clumpChance = 0.45;
     double wHitChance = 0.75;
     double rReadyChance = 0.85;
     double retargetDelay = 1.5;
+    // Enemy team to draw targets from. With fixedTarget every enemy uses targetHp/Armor/Mr.
+    std::vector<EnemyProfile> enemies;
+    bool fixedTarget = false;
     double targetHp = 3800, targetArmor = 120, targetMr = 80;
+    // Damage aimed at Yunara (before her armor and MR), and when it starts.
+    double enemyDpsMean = 500, enemyDpsSd = 200, enemyPhysShare = 0.55;
+    double engageMin = 2, engageMax = 6;
 };
 
 struct Champion {
     double baseAd = 55, adGrowth = 3;
     double baseAs = 0.65, asRatio = 0.65, asGrowth = 0.02;
     double baseHp = 590, hpGrowth = 110;
+    double baseArmor = 25, armorGrowth = 4.4, baseMr = 33, mrGrowth = 1.1;
     double passiveRatio = 0.10, passivePer100Ap = 0.10;
     // Q
     int qRank = 5;
@@ -115,6 +130,8 @@ struct TrialResult {
     double totalDamage = 0;
     double primaryDamage = 0;
     int kills = 0;
+    bool died = false;
+    double timeAlive = 0;
     std::array<double, SrcCount> bySource{};
 };
 
@@ -128,6 +145,7 @@ struct Summary {
     int trials = 0;
     double meanDps = 0, ci95 = 0, p5 = 0, median = 0, p95 = 0;
     double singleTargetDps = 0, killsPerMinute = 0;
+    double survivalRate = 0, meanTimeAlive = 0;
     std::array<double, SrcCount> shareBySource{};
 };
 Summary summarize(const std::vector<TrialResult>& results);

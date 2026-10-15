@@ -14,7 +14,7 @@ Example custom build:
 ```sh
 ./yunara_sim --items berserkers,yuntal,ie,pd,ldr,runaan \
              --augs symphony_of_war,critical_rhythm,upgrade_ie,double_tap \
-             --target 4200,150,90 --clump 4,0.6
+             --enemy-dps 700,250 --clump 4,0.6
 ```
 
 `./yunara_sim --list` shows every item, augment and preset build id. `--json` prints machine-readable results for the website.
@@ -33,10 +33,12 @@ The biggest estimates right now are Yunara's W damage, Q active duration and spr
 
 ## What a trial models
 
-- **Fight:** length drawn from a normal distribution (default 18 ± 6 s), random interrupts during which Yunara can't act, and 0 to 4 grouped enemies near her target.
-- **Targets:** each enemy has the scenario's HP, armor and MR. Overkill is wasted. When the target dies she switches to a grouped enemy, or waits for a new one if none is near.
+- **Fight:** length drawn from a normal distribution (default 18 ± 6 s) and 0 to 4 grouped enemies near her target.
+- **Targets:** every enemy is drawn from a mixed late-game team: squishies (45%, about 3000 HP / 95 armor / 60 MR), bruisers (35%, 4300 / 160 / 95) and tanks (20%, 5800 / 260 / 160), with health varied ±12%. Overkill is wasted. When the target dies she switches to a grouped enemy, or waits for a new one if none is near. `--target HP,AR,MR` swaps in one fixed target instead.
+- **Crowd control:** each fight picks how much CC the enemy team brings (0.05 to 0.2 interrupts per second, each 0.75 to 1.75 s). Yunara can't act while interrupted.
+- **Enemy damage:** the enemy team starts hitting Yunara 2 to 6 s in, at a damage rate drawn per fight (default 500 ± 200 per second before her armor and MR). Health items, lifesteal and Soul Siphon healing keep her alive longer. If she dies she deals no more damage, and DPS is still averaged over the whole fight, so fragile builds pay for it. The report shows how often she survives and how long she stays alive. `--enemy-dps 0,0` turns this off.
 - **Kit:** passive crit magic damage; Q on-hit, stacks, and the active's attack speed, extra on-hit and spread; W impact plus lingering zone, cast time shortening with bonus attack speed; R with Arc of Ruin and E attack resets.
-- **Mayhem rules:** 200% base crit damage, crit above 100% turning into AD, the 5.0 attack speed cap (10 with full Lethal Tempo) and the 80/70/60 s ultimate.
+- **Mayhem rules:** Mayhem inherits all regular ARAM balance changes and adds its own on top, so both are applied (Yunara's ARAM damage dealt and taken are both unchanged; BotRK's ARAM on-hit buff is in). Also 200% base crit damage, crit above 100% turning into AD, the 5.0 attack speed cap (10 with full Lethal Tempo) and the 80/70/60 s ultimate.
 - **Items and augments:** stat items plus Rageblade Seething and Phantom Hit, BotRK (with its ARAM on-hit override), Kraken, Runaan's, Stormrazor, Atma's Reckoning and Yun Tal Flurry. Augments: Dual Wield, Critical Missile, Soul Siphon, Deft, Upgrade Infinity Edge, Double Tap, Critical Rhythm, Jeweled Gauntlet, Symphony of War, Mystic Punch and Typhoon.
 
 Not modeled: mana, Yunara taking damage, lifesteal, and positioning-dependent augments (Scopiest Weapons, Tap Dancer).

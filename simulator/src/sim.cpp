@@ -17,6 +17,7 @@ const char* const kSourceNames[SrcCount] = {
 
 void StatBlock::add(const StatBlock& o) {
     ad += o.ad; ap += o.ap; attackSpeed += o.attackSpeed; crit += o.crit; hp += o.hp;
+    armor += o.armor; mr += o.mr; lifesteal += o.lifesteal;
     armorPenPct = 1.0 - (1.0 - armorPenPct) * (1.0 - o.armorPenPct);
     lethality += o.lethality; magicPenFlat += o.magicPenFlat;
     magicPenPct = 1.0 - (1.0 - magicPenPct) * (1.0 - o.magicPenPct);
@@ -32,6 +33,9 @@ StatBlock StatBlock::fromJson(const json::Value& v) {
     s.attackSpeed = v["attack_speed"].asNumber();
     s.crit = v["crit"].asNumber();
     s.hp = v["hp"].asNumber();
+    s.armor = v["armor"].asNumber();
+    s.mr = v["mr"].asNumber();
+    s.lifesteal = v["lifesteal"].asNumber();
     s.armorPenPct = v["armor_pen_pct"].asNumber();
     s.lethality = v["lethality"].asNumber();
     s.magicPenFlat = v["magic_pen_flat"].asNumber();
@@ -104,6 +108,10 @@ GameData GameData::fromJson(const json::Value& root) {
     ch.asGrowth = base["attack_speed_growth"].asNumber(ch.asGrowth);
     ch.baseHp = base["hp"].asNumber(ch.baseHp);
     ch.hpGrowth = base["hp_growth"].asNumber(ch.hpGrowth);
+    ch.baseArmor = base["armor"].asNumber(ch.baseArmor);
+    ch.armorGrowth = base["armor_growth"].asNumber(ch.armorGrowth);
+    ch.baseMr = base["mr"].asNumber(ch.baseMr);
+    ch.mrGrowth = base["mr_growth"].asNumber(ch.mrGrowth);
     ch.passiveRatio = c["passive"]["crit_bonus_magic_ratio"].asNumber(ch.passiveRatio);
     ch.passivePer100Ap = c["passive"]["crit_bonus_magic_per_100ap"].asNumber(ch.passivePer100Ap);
 
@@ -173,7 +181,8 @@ GameData GameData::fromJson(const json::Value& root) {
     sc.fightSd = s["fight_sd"].asNumber(sc.fightSd);
     sc.fightMin = s["fight_min"].asNumber(sc.fightMin);
     sc.fightMax = s["fight_max"].asNumber(sc.fightMax);
-    sc.ccRate = s["cc_rate"].asNumber(sc.ccRate);
+    sc.ccRateMin = s["cc_rate_min"].asNumber(sc.ccRateMin);
+    sc.ccRateMax = s["cc_rate_max"].asNumber(sc.ccRateMax);
     sc.ccMin = s["cc_min"].asNumber(sc.ccMin);
     sc.ccMax = s["cc_max"].asNumber(sc.ccMax);
     sc.clumpMax = static_cast<int>(s["clump_max"].asNumber(sc.clumpMax));
@@ -184,6 +193,24 @@ GameData GameData::fromJson(const json::Value& root) {
     sc.targetHp = s["target_hp"].asNumber(sc.targetHp);
     sc.targetArmor = s["target_armor"].asNumber(sc.targetArmor);
     sc.targetMr = s["target_mr"].asNumber(sc.targetMr);
+    sc.enemyDpsMean = s["enemy_dps_mean"].asNumber(sc.enemyDpsMean);
+    sc.enemyDpsSd = s["enemy_dps_sd"].asNumber(sc.enemyDpsSd);
+    sc.enemyPhysShare = s["enemy_phys_share"].asNumber(sc.enemyPhysShare);
+    sc.engageMin = s["engage_min"].asNumber(sc.engageMin);
+    sc.engageMax = s["engage_max"].asNumber(sc.engageMax);
+    for (const auto& e : s["enemy_team"].arr) {
+        EnemyProfile p;
+        p.id = e["id"].asString();
+        p.name = e["name"].asString(p.id);
+        p.weight = e["weight"].asNumber(1.0);
+        p.hp = e["hp"].asNumber(p.hp);
+        p.hpSd = e["hp_sd"].asNumber(0.0);
+        p.armor = e["armor"].asNumber(p.armor);
+        p.mr = e["mr"].asNumber(p.mr);
+        p.damageTaken = e["damage_taken"].asNumber(1.0);
+        sc.enemies.push_back(p);
+    }
+    sc.fixedTarget = sc.enemies.empty();
     return d;
 }
 
@@ -256,7 +283,8 @@ private:
 // ---------------------------------------------------------------------------
 
 struct Enemy {
-    double hp = 0;
+    double hp = 0, maxHp = 0;
+    double physMult = 1, magicMult = 1;  // damage multipliers after resists and modifiers
     bool alive = true;
     double respawnAt = 0;
 };
@@ -281,7 +309,12 @@ private:
     // Build-derived values
     StatBlock bonus_;
     double baseAd_ = 0, staticAd_ = 0, ap_ = 0, crit_ = 0, critMult_ = 2.0, staticBonusAs_ = 0;
-    double physMult_ = 1, magicMult_ = 1;
+    double totalWeight_ = 0;
+    // Yunara's own survival
+    double myHp_ = 0, myMaxHp_ = 0, incomingDps_ = 0, engageAt_ = 0, damageClock_ = 0;
+    bool dead_ = false;
+    bool hasSoulSiphon_ = false;
+    const Effect* soulSiphon_ = nullptr;
     bool hasRunaan_ = false, hasRageblade_ = false, hasKraken_ = false, hasStorm_ = false, hasYuntal_ = false;
     bool hasSymphony_ = false, hasRhythm_ = false, hasDoubleTap_ = false, hasGauntlet_ = false;
     bool hasMysticPunch_ = false, hasTyphoon_ = false, hasDualWield_ = false, hasCritMissile_ = false;
@@ -356,10 +389,53 @@ private:
         critMult_ = d_.rules.baseCritMult + bonus_.critDamage;
         staticBonusAs_ = ch_.asGrowth * g + bonus_.attackSpeed;
 
-        const double armor = std::max(0.0, sc_.targetArmor * (1.0 - bonus_.armorPenPct) - bonus_.lethality);
-        const double mr = std::max(0.0, sc_.targetMr * (1.0 - bonus_.magicPenPct) - bonus_.magicPenFlat);
-        physMult_ = 100.0 / (100.0 + armor) * d_.rules.damageDealt;
-        magicMult_ = 100.0 / (100.0 + mr) * d_.rules.damageDealt;
+        myMaxHp_ = ch_.baseHp + ch_.hpGrowth * g + bonus_.hp;
+        myHp_ = myMaxHp_;
+    }
+
+    Enemy spawnEnemy() {
+        EnemyProfile p;
+        if (sc_.fixedTarget) {
+            p.hp = sc_.targetHp; p.armor = sc_.targetArmor; p.mr = sc_.targetMr;
+        } else {
+            double r = rng_.uniform() * totalWeight_;
+            p = sc_.enemies.back();
+            for (const auto& e : sc_.enemies) {
+                if (r < e.weight) { p = e; break; }
+                r -= e.weight;
+            }
+        }
+        Enemy e;
+        e.maxHp = p.hpSd > 0 ? std::max(0.5 * p.hp, rng_.normal(p.hp, p.hp * p.hpSd)) : p.hp;
+        e.hp = e.maxHp;
+        const double armor = std::max(0.0, p.armor * (1.0 - bonus_.armorPenPct) - bonus_.lethality);
+        const double mr = std::max(0.0, p.mr * (1.0 - bonus_.magicPenPct) - bonus_.magicPenFlat);
+        e.physMult = 100.0 / (100.0 + armor) * d_.rules.damageDealt * p.damageTaken;
+        e.magicMult = 100.0 / (100.0 + mr) * d_.rules.damageDealt * p.damageTaken;
+        return e;
+    }
+
+    // Applies incoming damage up to time t. Returns true once Yunara is dead.
+    bool takeDamageUntil(double t) {
+        if (dead_) return true;
+        const double from = std::max(damageClock_, engageAt_);
+        if (t > from && incomingDps_ > 0) {
+            const double lost = incomingDps_ * (t - from);
+            if (lost >= myHp_) {
+                dead_ = true;
+                res_.died = true;
+                res_.timeAlive = from + myHp_ / incomingDps_;
+                myHp_ = 0;
+                return true;
+            }
+            myHp_ -= lost;
+        }
+        damageClock_ = std::max(damageClock_, t);
+        return false;
+    }
+
+    void heal(double amount) {
+        if (!dead_) myHp_ = std::min(myMaxHp_, myHp_ + amount);
     }
 
     void noteSpecial(const Effect& e) {
@@ -376,20 +452,32 @@ private:
         else if (s == "jeweled_gauntlet") hasGauntlet_ = true;
         else if (s == "mystic_punch") { hasMysticPunch_ = true; mystic_ = &e; }
         else if (s == "typhoon") { hasTyphoon_ = true; typhoon_ = &e; }
+        else if (s == "soul_siphon") { hasSoulSiphon_ = true; soulSiphon_ = &e; }
         else if (s == "dual_wield") { hasDualWield_ = true; dualWield_ = &e; }
         else if (s == "critical_missile") { hasCritMissile_ = true; critMissile_ = &e; }
     }
 
     void setupScenario() {
         duration_ = std::clamp(rng_.normal(sc_.fightMean, sc_.fightSd), sc_.fightMin, sc_.fightMax);
-        if (sc_.ccRate > 0) {
-            for (double t = rng_.exponential(sc_.ccRate); t < duration_; t += rng_.exponential(sc_.ccRate))
+        // Some enemy teams bring far more crowd control than others.
+        const double ccRate = rng_.uniform(sc_.ccRateMin, sc_.ccRateMax);
+        if (ccRate > 0) {
+            for (double t = rng_.exponential(ccRate); t < duration_; t += rng_.exponential(ccRate))
                 cc_.push_back({t, t + rng_.uniform(sc_.ccMin, sc_.ccMax)});
         }
         rAvailable_ = rng_.chance(sc_.rReadyChance);
-        primary_.hp = sc_.targetHp;
+        for (const auto& e : sc_.enemies) totalWeight_ += e.weight;
+        primary_ = spawnEnemy();
         secondaries_.resize(static_cast<size_t>(rng_.binomial(sc_.clumpMax, sc_.clumpChance)));
-        for (auto& e : secondaries_) e.hp = sc_.targetHp;
+        for (auto& e : secondaries_) e = spawnEnemy();
+
+        const double g = levelScale();
+        const double armor = ch_.baseArmor + ch_.armorGrowth * g + bonus_.armor;
+        const double mr = ch_.baseMr + ch_.mrGrowth * g + bonus_.mr;
+        const double mitigation = sc_.enemyPhysShare * 100.0 / (100.0 + armor) +
+                                  (1.0 - sc_.enemyPhysShare) * 100.0 / (100.0 + mr);
+        incomingDps_ = std::max(0.0, rng_.normal(sc_.enemyDpsMean, sc_.enemyDpsSd)) * mitigation;
+        engageAt_ = rng_.uniform(sc_.engageMin, sc_.engageMax);
         if (hasYuntal_) flurryUntil_ = yuntal_->param("flurry_duration", 6.0);
     }
 
@@ -445,7 +533,7 @@ private:
 
     Enemy* secondaryAlive(size_t i) {
         Enemy& e = secondaries_[i];
-        if (!e.alive && t_ >= e.respawnAt) { e.alive = true; e.hp = sc_.targetHp; }
+        if (!e.alive && t_ >= e.respawnAt) e = spawnEnemy();
         return e.alive ? &e : nullptr;
     }
 
@@ -461,7 +549,7 @@ private:
         // Retarget the nearest grouped enemy if one is up; otherwise wait for a new one.
         for (size_t i = 0; i < secondaries_.size(); ++i) {
             if (Enemy* e = secondaryAlive(i)) {
-                primary_.hp = e->hp;
+                primary_ = *e;
                 e->alive = false;
                 e->respawnAt = t_ + sc_.retargetDelay;
                 return;
@@ -472,15 +560,17 @@ private:
     }
 
     // Deals raw (pre-mitigation) damage; overkill is wasted.
-    void deal(Enemy* target, double raw, Kind kind, Source src) {
-        if (!target || !target->alive || raw <= 0) return;
-        double dmg = std::min(target->hp, raw * (kind == Kind::Phys ? physMult_ : magicMult_));
+    // Returns the damage actually dealt.
+    double deal(Enemy* target, double raw, Kind kind, Source src) {
+        if (!target || !target->alive || raw <= 0) return 0.0;
+        double dmg = std::min(target->hp, raw * (kind == Kind::Phys ? target->physMult : target->magicMult));
+        if (kind == Kind::Phys && bonus_.lifesteal > 0) heal(dmg * bonus_.lifesteal);
         target->hp -= dmg;
         res_.bySource[src] += dmg;
         res_.totalDamage += dmg;
         const bool isPrimary = target == &primary_;
         if (isPrimary) res_.primaryDamage += dmg;
-        if (executeThreshold_ > 0 && target->hp > 0 && target->hp < executeThreshold_ * sc_.targetHp) {
+        if (executeThreshold_ > 0 && target->hp > 0 && target->hp < executeThreshold_ * target->maxHp) {
             res_.bySource[src] += target->hp;
             res_.totalDamage += target->hp;
             if (isPrimary) res_.primaryDamage += target->hp;
@@ -495,6 +585,7 @@ private:
                 target->respawnAt = t_ + sc_.retargetDelay;
             }
         }
+        return dmg;
     }
 
     void applyOnHit(Enemy* target, int times, double scale = 1.0) {
@@ -513,7 +604,8 @@ private:
     bool physicalHit(Enemy* target, double raw, Source src) {
         const bool crit = rng_.chance(crit_);
         const double dmg = raw * (crit ? critMult_ : 1.0);
-        deal(target, dmg, Kind::Phys, src);
+        const double dealt = deal(target, dmg, Kind::Phys, src);
+        if (crit && hasSoulSiphon_) heal(dealt * soulSiphon_->param("crit_heal", 0.12));
         if (crit) deal(target, dmg * (ch_.passiveRatio + ch_.passivePer100Ap * ap_ / 100.0), Kind::Magic, SrcPassive);
         return crit;
     }
@@ -536,7 +628,7 @@ private:
 
         if (hasKraken_ && ++krakenCount_ >= static_cast<int>(kraken_->param("every", 3))) {
             krakenCount_ = 0;
-            const double missing = primary_.alive ? 1.0 - primary_.hp / sc_.targetHp : 0.0;
+            const double missing = primary_.alive ? 1.0 - primary_.hp / primary_.maxHp : 0.0;
             deal(&primary_, kraken_->param("damage", 200) * (1.0 + kraken_->param("missing_hp_amp", 0.75) * missing),
                  Kind::Phys, SrcItemOnhit);
         }
@@ -627,6 +719,7 @@ TrialResult Fight::run() {
     res_.duration = duration_;
     while (true) {
         t_ = freeTime(t_);
+        if (takeDamageUntil(std::min(t_, duration_))) break;
         if (t_ >= duration_) break;
 
         if (rActive_ && t_ >= rEnd_) { rActive_ = false; refundW(); }
@@ -639,7 +732,7 @@ TrialResult Fight::run() {
 
         if (!primary_.alive) {
             t_ = std::max(t_, primaryRespawnAt_);
-            primary_ = Enemy{sc_.targetHp, true, 0};
+            primary_ = spawnEnemy();
             nextAttack_ = std::max(nextAttack_, t_);
             continue;
         }
@@ -674,6 +767,10 @@ TrialResult Fight::run() {
             eReadyAt_ = t_ + ch_.eCooldown;
         }
     }
+    if (!dead_) {
+        takeDamageUntil(duration_);
+        if (!dead_) res_.timeAlive = duration_;
+    }
     return res_;
 }
 
@@ -699,6 +796,8 @@ Summary summarize(const std::vector<TrialResult>& results) {
         dps.push_back(r.totalDamage / r.duration);
         single += r.primaryDamage / r.duration;
         kpm += r.kills / r.duration * 60.0;
+        s.survivalRate += r.died ? 0.0 : 1.0;
+        s.meanTimeAlive += r.timeAlive;
         total += r.totalDamage;
         for (int i = 0; i < SrcCount; ++i) s.shareBySource[i] += r.bySource[i];
     }
@@ -715,6 +814,8 @@ Summary summarize(const std::vector<TrialResult>& results) {
     s.p95 = pct(0.95);
     s.singleTargetDps = single / n;
     s.killsPerMinute = kpm / n;
+    s.survivalRate /= n;
+    s.meanTimeAlive /= n;
     if (total > 0)
         for (auto& x : s.shareBySource) x /= total;
     return s;
