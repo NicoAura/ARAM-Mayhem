@@ -1,0 +1,246 @@
+{
+  "meta": {
+    "patch": "26.20",
+    "checked": "2026-10-15",
+    "note": "Every number the simulator uses lives in this file. 'confidence' is 'verified' (two or more current sources agree), 'likely' (one current source) or 'approx' (estimate; please correct from in-game tooltips)."
+  },
+
+  "sources": {
+    "wiki_yunara": "https://wiki.leagueoflegends.com/en-us/Yunara",
+    "metabot_yunara": "https://metabot.gg/en/league/champion/Yunara/stats",
+    "mayhem_rules": "https://wiki.leagueoflegends.com/en-us/ARAM:_Mayhem",
+    "mayhem_26_1": "https://arammayhem.com/patch/26-1/",
+    "mayhem_yunara": "https://www.aramnerfs.com/mayhem",
+    "patch_26_18": "https://wiki.leagueoflegends.com/en-us/V26.18",
+    "yuntal": "https://metabot.gg/en/league/item/3032/stats",
+    "stormrazor": "https://seemeta.com/en/lol/items/stormrazor",
+    "atma": "https://wiki.leagueoflegends.com/en-us/Atma's_Reckoning",
+    "mayhem_26_4": "https://esports.gg/news/league-of-legends/aram-mayhem-26-4/",
+    "augments": "https://www.metasrc.com/lol/mayhem/tier-list/augments"
+  },
+
+  "mayhem_rules": {
+    "base_crit_multiplier": { "value": 2.0, "confidence": "likely", "source": "mayhem_26_1", "note": "Mayhem raised base crit damage 175% -> 200% in 26.1" },
+    "crit_overflow_ad_per_percent": { "value": 0.45, "confidence": "approx", "source": "mayhem_26_1", "note": "Crit chance above 100% converts to bonus AD" },
+    "attack_speed_cap": { "value": 5.0, "confidence": "verified", "source": "mayhem_rules" },
+    "attack_speed_cap_lethal_tempo": { "value": 10.0, "confidence": "approx", "source": "mayhem_rules" },
+    "yunara_damage_dealt": { "value": 1.0, "confidence": "likely", "source": "mayhem_yunara", "note": "No Mayhem damage modifier for Yunara" }
+  },
+
+  "champion": {
+    "name": "Yunara",
+    "base": {
+      "ad": 55, "ad_growth": 3,
+      "attack_speed": 0.65, "attack_speed_ratio": 0.65, "attack_speed_growth": 0.02,
+      "hp": 590, "hp_growth": 110,
+      "confidence": "verified", "source": "metabot_yunara"
+    },
+    "passive": {
+      "crit_bonus_magic_ratio": 0.10, "crit_bonus_magic_per_100ap": 0.10,
+      "confidence": "likely", "source": "wiki_yunara",
+      "note": "Crits deal bonus magic damage equal to 10% (+10% per 100 AP) of the crit's damage"
+    },
+    "q": {
+      "rank": 5,
+      "onhit_magic": [3, 8, 13, 18, 23], "onhit_ap_ratio": 0.20,
+      "stacks_needed": 8,
+      "active_duration": 5.0,
+      "active_attack_speed": [0.25, 0.35, 0.45, 0.55, 0.65],
+      "active_onhit_magic": [3, 8, 13, 18, 23], "active_onhit_ap_ratio": 0.10,
+      "spread_ad_ratio": 0.30,
+      "confidence": "approx", "source": "wiki_yunara",
+      "note": "On-hit and attack speed from the wiki; active duration and spread ratio are estimates"
+    },
+    "w": {
+      "rank": 5,
+      "cooldown": 10.0,
+      "impact_magic": [50, 90, 130, 170, 210], "impact_ad_ratio": 1.1, "impact_ap_ratio": 0.5,
+      "linger_ratio": 0.60,
+      "linger_secondary_hit_chance": 0.6,
+      "cast_time_max": 0.45, "cast_time_min": 0.225,
+      "ruin_cast_time_max": 0.60, "ruin_cast_time_min": 0.45,
+      "ruin_damage_multiplier": 1.5,
+      "ruin_cooldown_multiplier": 0.5,
+      "confidence": "approx", "source": "wiki_yunara",
+      "note": "Cooldown and cast times from the wiki; damage numbers are estimates"
+    },
+    "e": {
+      "cooldown": 9.0, "dash_time": 0.25,
+      "confidence": "likely", "source": "wiki_yunara"
+    },
+    "r": {
+      "rank": 3,
+      "duration": 15.0,
+      "cooldown_mayhem": [80, 70, 60],
+      "w_cooldown_refund_on_toggle": 0.8,
+      "confidence": "approx", "source": "mayhem_yunara",
+      "note": "Mayhem cooldown is listed as 80/70/60; the W refund on cast and end is an estimate"
+    }
+  },
+
+  "items": {
+    "berserkers": { "name": "Berserker's Greaves", "stats": { "attack_speed": 0.25 }, "confidence": "verified" },
+    "yuntal": {
+      "name": "Yun Tal Wildarrows",
+      "stats": { "ad": 50, "attack_speed": 0.45, "crit": 0.25 },
+      "special": "yuntal", "params": { "flurry_attack_speed": 0.30, "flurry_duration": 6.0 },
+      "confidence": "verified", "source": "yuntal",
+      "note": "Crit is the fully stacked 25% (0.2% per attack for ranged, 125 stacks)"
+    },
+    "ie": { "name": "Infinity Edge", "stats": { "ad": 70, "crit": 0.25, "crit_damage": 0.30 }, "confidence": "likely", "source": "mayhem_26_1", "note": "200% -> 230% crit damage in Mayhem; AD is an estimate" },
+    "pd": { "name": "Phantom Dancer", "stats": { "ad": 20, "attack_speed": 0.60, "crit": 0.25 }, "confidence": "likely" },
+    "ldr": { "name": "Lord Dominik's Regards", "stats": { "ad": 35, "crit": 0.25, "armor_pen_pct": 0.35 }, "confidence": "likely" },
+    "runaan": {
+      "name": "Runaan's Hurricane",
+      "stats": { "attack_speed": 0.40, "crit": 0.25 },
+      "special": "runaan", "params": { "bolts": 2, "ad_ratio": 0.55 },
+      "confidence": "likely"
+    },
+    "collector": {
+      "name": "The Collector",
+      "stats": { "ad": 50, "crit": 0.25, "lethality": 10 },
+      "special": "execute", "params": { "threshold": 0.05 },
+      "confidence": "likely"
+    },
+    "rageblade": {
+      "name": "Guinsoo's Rageblade",
+      "stats": { "ad": 30, "ap": 30, "attack_speed": 0.25, "onhit_magic": 30 },
+      "special": "rageblade",
+      "params": { "seething_attack_speed": 0.08, "seething_max": 4, "seething_duration": 4.0, "phantom_every": 3 },
+      "confidence": "likely", "source": "patch_26_18",
+      "note": "26.18: Seething lasts 4s. 26.14: phantom stacks only build at 4 Seething, so the first phantom hit is the 7th attack"
+    },
+    "botrk": {
+      "name": "Blade of the Ruined King",
+      "stats": { "ad": 40, "attack_speed": 0.25, "onhit_cur_hp_phys": 0.06 },
+      "confidence": "approx", "note": "Ranged current-health on-hit; the Mayhem stat changes are not confirmed"
+    },
+    "kraken": {
+      "name": "Kraken Slayer",
+      "stats": { "ad": 45, "attack_speed": 0.40 },
+      "special": "kraken", "params": { "every": 3, "damage": 200, "missing_hp_amp": 0.75 },
+      "confidence": "approx"
+    },
+    "nashor": { "name": "Nashor's Tooth", "stats": { "ap": 80, "attack_speed": 0.50, "onhit_magic": 15, "onhit_magic_ap": 0.20 }, "confidence": "likely" },
+    "wits": { "name": "Wit's End", "stats": { "attack_speed": 0.40, "onhit_magic": 45 }, "confidence": "likely" },
+    "rabadon": { "name": "Rabadon's Deathcap", "stats": { "ap": 130, "ap_amp": 0.30 }, "confidence": "likely" },
+    "stormrazor": {
+      "name": "Stormrazor",
+      "stats": { "ad": 50, "attack_speed": 0.25, "crit": 0.25 },
+      "special": "stormrazor", "params": { "bolt_magic": 100, "attacks_to_energize": 6 },
+      "confidence": "approx", "source": "stormrazor",
+      "note": "Mayhem item. Stats and bolt damage from 26.17+ sources; Energized also charges from movement, so the attacks-per-proc value is an estimate"
+    },
+    "atma": {
+      "name": "Atma's Reckoning",
+      "stats": { "hp": 500, "crit": 0.20 },
+      "special": "atma", "params": { "crit_per_100_bonus_hp": 0.01, "max_crit": 0.30 },
+      "confidence": "likely", "source": "atma",
+      "note": "Mayhem item. 1% crit per 100 bonus HP up to 30%; base health is 500 or 700 depending on source"
+    },
+    "heartsteel_hp": { "name": "Warmog's-style health item (filler)", "stats": { "hp": 1000 }, "confidence": "approx" }
+  },
+
+  "augments": {
+    "symphony_of_war": {
+      "name": "Symphony of War",
+      "special": "symphony",
+      "params": {
+        "lt_attack_speed_per_stack": 0.06, "lt_max_stacks": 6, "lt_duration": 6.0,
+        "conq_ad_per_stack": 4.0, "conq_max_stacks": 12, "conq_stacks_per_attack": 1, "conq_duration": 5.0
+      },
+      "confidence": "approx", "note": "Grants Lethal Tempo and Conqueror; rune values are estimates"
+    },
+    "critical_rhythm": {
+      "name": "Critical Rhythm",
+      "stats": { "crit": 0.10 },
+      "special": "critical_rhythm", "params": { "attack_speed_per_crit": 0.05, "max_stacks": 10, "duration": 3.0 },
+      "confidence": "approx"
+    },
+    "double_tap": {
+      "name": "Double Tap",
+      "stats": { "crit": 0.10 },
+      "special": "double_tap",
+      "confidence": "approx", "note": "Crits apply on-hit effects a second time"
+    },
+    "jeweled_gauntlet": {
+      "name": "Jeweled Gauntlet",
+      "stats": { "crit": 0.10 },
+      "special": "jeweled_gauntlet",
+      "confidence": "approx", "note": "W can crit, which also triggers Yunara's passive"
+    },
+    "mystic_punch": {
+      "name": "Mystic Punch",
+      "special": "mystic_punch", "params": { "cdr_per_hit": 1.5 },
+      "confidence": "approx"
+    },
+    "typhoon": {
+      "name": "Typhoon",
+      "special": "typhoon", "params": { "ad_ratio": 0.50 },
+      "confidence": "approx", "note": "Attacks fire an extra bolt at a nearby champion that applies on-hit"
+    },
+    "upgrade_ie": {
+      "name": "Upgrade Infinity Edge",
+      "stats": { "crit": 0.10, "crit_damage": 0.20 },
+      "requires_item": "ie",
+      "confidence": "approx"
+    },
+    "stats_on_stats": {
+      "name": "Stats on Stats",
+      "special": "stats_on_stats",
+      "params": { "anvils": 3 },
+      "anvil_options": [
+        { "ad": 12 },
+        { "attack_speed": 0.15 },
+        { "crit": 0.10 },
+        { "ap": 20 },
+        { "hp": 200 }
+      ],
+      "confidence": "approx", "source": "mayhem_26_4",
+      "note": "3 anvils since 26.4; what each anvil can roll is an estimate. Rolled fresh every trial."
+    },
+    "deft": { "name": "Deft", "stats": { "attack_speed": 0.25 }, "confidence": "approx" },
+    "goliath_hp": { "name": "Goliath", "stats": { "hp": 600 }, "confidence": "approx" }
+  },
+
+  "builds": {
+    "crit_classic": {
+      "name": "Crit Classic",
+      "items": ["berserkers", "yuntal", "ie", "pd", "ldr", "runaan"],
+      "augments": ["symphony_of_war", "critical_rhythm", "upgrade_ie", "double_tap"]
+    },
+    "onhit_rageblade": {
+      "name": "On-Hit Rageblade",
+      "items": ["berserkers", "rageblade", "botrk", "kraken", "wits", "runaan"],
+      "augments": ["typhoon", "symphony_of_war", "mystic_punch", "deft"]
+    },
+    "stormrazor_crit": {
+      "name": "Stormrazor Crit",
+      "items": ["berserkers", "stormrazor", "ie", "pd", "ldr", "runaan"],
+      "augments": ["symphony_of_war", "critical_rhythm", "upgrade_ie", "stats_on_stats"]
+    },
+    "atma_bruiser": {
+      "name": "Atma Bruiser",
+      "items": ["berserkers", "yuntal", "atma", "ie", "heartsteel_hp", "ldr"],
+      "augments": ["goliath_hp", "critical_rhythm", "upgrade_ie", "symphony_of_war"]
+    },
+    "ap_gauntlet": {
+      "name": "AP Jeweled Gauntlet",
+      "items": ["berserkers", "rageblade", "nashor", "rabadon", "yuntal", "ie"],
+      "augments": ["jeweled_gauntlet", "mystic_punch", "double_tap", "typhoon"]
+    }
+  },
+
+  "scenario": {
+    "level": 18,
+    "trials": 20000,
+    "seed": 20261015,
+    "fight_mean": 18.0, "fight_sd": 6.0, "fight_min": 6.0, "fight_max": 40.0,
+    "cc_rate": 0.12, "cc_min": 0.75, "cc_max": 1.75,
+    "clump_max": 4, "clump_chance": 0.45,
+    "w_hit_chance": 0.75,
+    "r_ready_chance": 0.85,
+    "retarget_delay": 1.5,
+    "target_hp": 3800, "target_armor": 120, "target_mr": 80
+  }
+}
