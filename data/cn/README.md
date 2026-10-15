@@ -35,6 +35,7 @@ date the API returns, and builds patch and all-time tables in `history/`:
 | `patches.csv` | Each patch's data window (15.21 to now) |
 | `by_patch.csv` | Each champion's whole-patch numbers |
 | `all_time.csv` | Each champion across every patch |
+| `by_month.csv` | Each champion per calendar month |
 | `augments/`, `duos/` | One file per day, written by `fetch_cn.py`; starts 2026-10-15 |
 
 Each day's numbers are cumulative since the current patch's window opened, and they
@@ -47,6 +48,26 @@ from now on.
 champion's games in a patch are estimated as pick rate × window days, which assumes
 about the same number of games each day. `est_game_share` is the champion's share of all
 champion slots.
+
+## Filtering by patch, month or dates
+
+`history/by_patch.csv` and `history/by_month.csv` are ready-made splits. For anything
+else, `query.py` works offline from `history/`:
+
+```
+python3 data/cn/query.py --patch 16.19                  # one patch
+python3 data/cn/query.py --patch 16.18 --patch 16.19    # several patches combined
+python3 data/cn/query.py --month 2026-09
+python3 data/cn/query.py --from 2026-09-01 --to 2026-09-14
+python3 data/cn/query.py --out sept.csv --month 2026-09
+```
+
+A whole patch is exactly Tencent's own final numbers. A date range that cuts through a
+patch is the difference between the running totals at its end and the day before its
+start, using the same games estimate as above, so short ranges (a day or two) are rougher
+than whole patches. 15.21 started before the API's first day (2025-11-02), so a range
+that starts in early November 2025 counts from 15.21's release on 2025-10-23. That's why
+November 2025 shows 39 days in `by_month.csv`.
 
 The `China Mayhem stats` GitHub Action runs both scripts daily and commits new data.
 

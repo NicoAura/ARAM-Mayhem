@@ -11,6 +11,7 @@ Writes under data/cn/history/:
   patches.csv        each patch's data window
   by_patch.csv       each champion's full-patch numbers (last day of each window)
   all_time.csv       each champion across all patches, weighted by estimated games
+  by_month.csv       each champion per calendar month (see query.py for any range)
 
 Usage: python3 data/cn/history.py [--rebuild]   (--rebuild re-downloads every day)
 Standard library only.
@@ -26,6 +27,7 @@ import statistics
 from collections import defaultdict
 from concurrent.futures import ThreadPoolExecutor
 
+import query
 from fetch_cn import HERO_LIST, OUT, get, odp
 
 FIRST_DAY = dt.date(2025, 11, 2)  # earliest date the API returns
@@ -188,6 +190,17 @@ def main():
     write("all_time.csv", all_time, ["win_rate_rank", "champion_id", "name", "name_cn",
                                      "win_rate", "pick_rate", "est_game_share", "patches",
                                      *STATS[2:]])
+    # Calendar months cut across patch windows, so they use query.py's range math.
+    q_days, q_windows, q_names = query.load()
+    by_month = []
+    for month in sorted({d.strftime("%Y-%m") for d in q_days}):
+        y, m = map(int, month.split("-"))
+        start = dt.date(y, m, 1)
+        end = (start + dt.timedelta(days=32)).replace(day=1) - dt.timedelta(1)
+        month_rows, n_days = query.stats(q_days, q_windows, q_names, start, end)
+        by_month += [{"month": month, "days": n_days, **r} for r in month_rows]
+    write("by_month.csv", by_month, ["month", "days", *query.COLS])
+
     print(f"patches: {len(patch_rows)} ({patch_rows[0]['patch']} to {patch_rows[-1]['patch']}), "
           f"champions: {len(all_time)}")
 
