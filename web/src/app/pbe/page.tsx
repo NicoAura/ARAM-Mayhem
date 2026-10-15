@@ -6,8 +6,10 @@ export const metadata: Metadata = { title: "PBE · ARAM Mayhem" };
 export default function PbePage() {
   return (
     <>
-      <h1>PBE changes</h1>
-      <p className="muted">Mayhem changes currently on the test server.</p>
+      <section className="intro">
+        <p className="eyebrow">PBE</p>
+        <h1>Mayhem changes currently on the test server.</h1>
+      </section>
       <Placeholder>PBE changes will appear here.</Placeholder>
     </>
   );

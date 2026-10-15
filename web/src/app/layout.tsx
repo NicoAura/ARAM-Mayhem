@@ -1,17 +1,16 @@
 import type { Metadata } from "next";
+import { Geist, Geist_Mono } from "next/font/google";
 import Link from "next/link";
+import NavLinks from "@/components/NavLinks";
 import "./globals.css";
+
+const sans = Geist({ subsets: ["latin"], variable: "--font-sans" });
+const mono = Geist_Mono({ subsets: ["latin"], variable: "--font-mono" });
 
 export const metadata: Metadata = {
   title: "ARAM Mayhem",
   description: "ARAM Mayhem stats, damage simulator and PBE changes",
 };
-
-const sections = [
-  { href: "/stats", label: "Stats" },
-  { href: "/simulator", label: "Simulator" },
-  { href: "/pbe", label: "PBE" },
-];
 
 export default function RootLayout({
   children,
@@ -19,21 +18,19 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" className={`${sans.variable} ${mono.variable}`}>
       <body>
         <header className="site-header">
           <Link href="/" className="brand">
             ARAM Mayhem
           </Link>
-          <nav>
-            {sections.map((s) => (
-              <Link key={s.href} href={s.href}>
-                {s.label}
-              </Link>
-            ))}
-          </nav>
+          <NavLinks />
         </header>
         <main>{children}</main>
+        <footer className="site-footer">
+          ARAM Mayhem isn&apos;t endorsed by Riot Games and doesn&apos;t reflect the views or opinions of Riot
+          Games or anyone officially involved in producing or managing Riot Games properties.
+        </footer>
       </body>
     </html>
   );
