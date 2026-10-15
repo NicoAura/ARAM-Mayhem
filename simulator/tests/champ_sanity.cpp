@@ -1,5 +1,6 @@
 // Sanity checks for the all-champion simulator. Exits non-zero on any failure.
 #include <algorithm>
+#include <cmath>
 #include <cstdio>
 #include <string>
 
@@ -91,6 +92,20 @@ int main(int argc, char** argv) {
           "optimizer returns boots, five legendaries and four augments");
     CHECK(!ranked.empty() && ranked.front().summary.meanDps >= manualDps,
           "optimized build beats a hand-picked AP build without augments");
+
+    const FightTrace tr = traceFight(lib, *ahri, cap, sc, 7);
+    const Result plain = runTrials(lib, *ahri, cap, sc, 7, 1).front();
+    double traced = 0;
+    bool ordered = true, cast = false;
+    for (size_t i = 0; i < tr.events.size(); ++i) {
+        const auto& e = tr.events[i];
+        if (e.kind == "damage") traced += e.amount;
+        cast |= e.kind == "cast";
+        if (i) ordered &= e.t >= tr.events[i - 1].t;
+    }
+    CHECK(tr.result.totalDamage == plain.totalDamage && std::abs(traced - plain.totalDamage) < 1e-6 * plain.totalDamage,
+          "a recorded fight matches the same fight unrecorded, and its damage events add up");
+    CHECK(ordered && cast && !tr.events.empty() && tr.events.back().kind == "end", "fight recordings are in time order");
 
     bool threw = false;
     try { runTrials(lib, *ahri, Build{{"not_an_item"}, {}}, sc, 0, 1); } catch (...) { threw = true; }

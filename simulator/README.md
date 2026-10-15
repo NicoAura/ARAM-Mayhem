@@ -122,3 +122,16 @@ Boots, five legendaries and four augments. Items are searched greedily to pick a
 - Across all champions, simulated DPS correlates only weakly with real CN damage share (Spearman 0.17). Use it to compare builds for one champion, not to rank champions.
 - Mystic Punch is picked very often; its value may be too generous.
 - For Yunara, `yunara_sim` is the better model.
+
+## Fight replays
+
+`viewer/` animates one simulated fight per champion: you, the enemy you are hitting and the rest of their team, with every cast, attack, damage number, kill and stun drawn as it happens. Each cast also plays Riot's official preview clip of that ability (the videos on the champion pages of leagueoflegends.com), so you see the real animation next to the simulated one. Clicking an ability, or pressing Q/W/E/R, replays its clip.
+
+```sh
+make replay                          # traces for all champions + icons; clips stream from Riot
+make replay CLIPS=--clips            # also store shrunk clips locally (about 50 MB, needs ffmpeg)
+cd viewer && python3 -m http.server  # then open http://localhost:8000/#Ahri
+./mayhem_sim --champ Jinx --trace jinx.json   # one champion's trace
+```
+
+The replay shown is the median-DPS fight out of the first 200 for the best build, so it is a typical fight rather than a lucky one. `--trace` records the same fight the simulator scores (recording never changes the random draws; `make test` checks this). The generated `viewer/replay-data/` is not committed: the icons and clips belong to Riot Games.

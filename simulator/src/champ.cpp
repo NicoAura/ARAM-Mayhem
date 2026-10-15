@@ -273,6 +273,7 @@ struct Enemy {
     double physMult = 1, magicMult = 1, trueMult = 1;
     bool alive = true;
     double respawnAt = 0, burnUntil = -1, conduitAt = -1;
+    int uid = -1;
 };
 
 // An item or augment effect with its own cooldown or counter.
@@ -284,8 +285,9 @@ struct Proc {
 
 class Fight {
 public:
-    Fight(const Library& lib, const ChampionKit& ch, const Build& build, const Scenario& sc, uint64_t trial)
-        : lib_(lib), ch_(ch), sc_(sc), rules_(lib.rules), rng_(sc.seed, trial) {
+    Fight(const Library& lib, const ChampionKit& ch, const Build& build, const Scenario& sc, uint64_t trial,
+          FightTrace* trace = nullptr)
+        : lib_(lib), ch_(ch), sc_(sc), rules_(lib.rules), rng_(sc.seed, trial), trace_(trace) {
         setupScenario();  // draw the fight first so every build sees the same fights
         setupBuild(build);
         setupDefences();
@@ -300,6 +302,26 @@ private:
     const Rules& rules_;
     Rng rng_;
     Result res_;
+    FightTrace* trace_ = nullptr;  // recording never draws random numbers, so traced fights match untraced ones
+    int nextUid_ = 0;
+    double lastSelfAt_ = -1;
+
+    void record(TraceEvent e) {
+        if (trace_) trace_->events.push_back(std::move(e));
+    }
+    void recordSelf(double t, const char* kind = "self") {
+        if (!trace_ || (t - lastSelfAt_ < 0.1 && kind[0] == 's')) return;
+        lastSelfAt_ = t;
+        TraceEvent e;
+        e.t = t; e.kind = kind; e.hp = myHp_; e.maxHp = maxHp_;
+        record(e);
+    }
+    void recordFocus() {
+        if (!trace_ || !primary_.alive) return;
+        TraceEvent e;
+        e.t = t_; e.kind = "focus"; e.target = primary_.uid;
+        record(e);
+    }
 
     // build
     Bag fx_;  // summed effects
@@ -513,6 +535,7 @@ private:
             p = *team_[targetRng_.pick(team_.size())];
         }
         Enemy e;
+        e.uid = nextUid_++;
         e.maxHp = p.hpSd > 0 ? std::max(0.5 * p.hp, targetRng_.normal(p.hp, p.hp * p.hpSd)) : p.hp;
         e.hp = e.maxHp;
         const double armor = std::max(0.0, p.armor * (1.0 - get(fx_, "armor_shred")) * (1.0 - armorPen_) - lethality_);
@@ -521,6 +544,11 @@ private:
         e.physMult = 100.0 / (100.0 + armor) * amp;
         e.magicMult = 100.0 / (100.0 + mr) * amp;
         e.trueMult = amp;
+        if (trace_) {
+            TraceEvent ev;
+            ev.t = t_; ev.kind = "spawn"; ev.target = e.uid; ev.text = p.id; ev.hp = e.hp; ev.maxHp = e.maxHp;
+            record(ev);
+        }
         return e;
     }
 
@@ -544,9 +572,11 @@ private:
                 res_.died = true;
                 res_.timeAlive = from + myHp_ / incomingDps_;
                 myHp_ = 0;
+                recordSelf(res_.timeAlive, "death");
                 return true;
             }
             myHp_ -= lost;
+            recordSelf(t);
         }
         damageClock_ = std::max(damageClock_, t);
         return false;
@@ -569,6 +599,7 @@ private:
                 primary_ = *e;
                 e->alive = false;
                 e->respawnAt = t_ + sc_.retargetDelay;
+                recordFocus();
                 return;
             }
         }
@@ -589,11 +620,24 @@ private:
         const bool isPrimary = target == &primary_;
         if (isPrimary) res_.primaryDamage += dmg;
         const double execute = get(fx_, "execute");
+        double executed = 0;
         if (execute > 0 && target->hp > 0 && target->hp < execute * target->maxHp) {
+            executed = target->hp;
             res_.bySource[src] += target->hp;
             res_.totalDamage += target->hp;
             if (isPrimary) res_.primaryDamage += target->hp;
             target->hp = 0;
+        }
+        if (trace_) {
+            TraceEvent ev;
+            ev.t = t_; ev.kind = "damage"; ev.target = target->uid; ev.source = src;
+            ev.text = type == DamageType::Physical ? "physical" : type == DamageType::Magic ? "magic" : "true";
+            ev.amount = dmg + executed; ev.hp = target->hp; ev.maxHp = target->maxHp;
+            record(ev);
+            if (target->hp <= 0) {
+                ev.kind = "kill"; ev.amount = 0;
+                record(ev);
+            }
         }
         if (target->hp <= 0) {
             if (isPrimary) killPrimary();
@@ -671,6 +715,13 @@ private:
         const Source src = a.slot == 'Q' ? SrcQ : a.slot == 'W' ? SrcW : a.slot == 'E' ? SrcE : SrcR;
         const bool primaryHit = rng_.chance(a.hitChance);
         const double amp = abilityAmp_ * abilityCritFactor();
+        if (trace_) {
+            TraceEvent ev;
+            ev.t = t_ - a.castTime; ev.kind = "cast"; ev.slot = a.slot; ev.amount = a.castTime; ev.flag = primaryHit;
+            ev.target = primary_.alive ? primary_.uid : -1;
+            ev.text = a.area == Area::Aoe ? "aoe" : a.area == Area::Line ? "line" : "single";
+            record(ev);
+        }
         auto targets = targetsFor(a.area, primaryHit);
         bool first = true;
         for (Enemy* e : targets) {
@@ -717,6 +768,11 @@ private:
         ++attacks_;
         const bool crit = rng_.chance(crit_);
         const double critMult = rules_.critMult + critDamage_;
+        if (trace_) {
+            TraceEvent ev;
+            ev.t = t_; ev.kind = "attack"; ev.target = e->uid; ev.flag = crit;
+            record(ev);
+        }
         deal(e, ad_ * (crit ? critMult : 1.0), DamageType::Physical, SrcAttack, true);
         applyOnHit(e, 1.0);
         if (get(fx_, "phantom_every") > 0 && attacks_ % static_cast<int>(get(fx_, "phantom_every")) == 0)
@@ -762,6 +818,11 @@ private:
         for (const Ability* a : onhitAbilities_) {
             if (attacks_ % a->onhitEvery != 0 || !e->alive) continue;
             const Source src = a->slot == 'Q' ? SrcQ : a->slot == 'W' ? SrcW : a->slot == 'E' ? SrcE : SrcR;
+            if (trace_) {
+                TraceEvent ev;
+                ev.t = t_; ev.kind = "proc"; ev.slot = a->slot; ev.target = e->uid;
+                record(ev);
+            }
             for (const auto& h : a->hits) deal(e, hitRaw(h, *e) * abilityAmp_, h.type, src);
         }
         reduceCooldowns(get(fx_, "attack_cdr_flat"), get(fx_, "attack_cdr_pct"), false);
@@ -796,6 +857,18 @@ private:
 
 Result Fight::run() {
     res_.duration = duration_;
+    if (trace_) {
+        trace_->engageAt = engageAt_;
+        trace_->maxHp = maxHp_;
+        for (const auto* e : team_) trace_->team.push_back(e->id);
+        for (const auto& [a, b] : cc_) {
+            TraceEvent ev;
+            ev.t = a; ev.kind = "cc"; ev.amount = b;
+            record(ev);
+        }
+        recordFocus();
+        recordSelf(0);
+    }
     for (size_t i = 0; i < ch_.abilities.size(); ++i)
         if (ch_.abilities[i].slot == 'R' && !rUp_) readyAt_[i] = 1e18;
     while (true) {
@@ -808,6 +881,7 @@ Result Fight::run() {
             t_ = std::max(t_, primaryRespawnAt_);
             if (t_ >= duration_) break;
             primary_ = spawnEnemy();
+            recordFocus();
             nextAttack_ = std::max(nextAttack_, t_);
             continue;
         }
@@ -849,6 +923,15 @@ Result Fight::run() {
         takeDamageUntil(duration_);
         if (!dead_) res_.timeAlive = duration_;
     }
+    if (trace_) {
+        lastSelfAt_ = -1;
+        recordSelf(dead_ ? res_.timeAlive : duration_);
+        TraceEvent ev;
+        ev.t = duration_; ev.kind = "end";
+        record(ev);
+        std::stable_sort(trace_->events.begin(), trace_->events.end(),
+                         [](const TraceEvent& a, const TraceEvent& b) { return a.t < b.t; });
+    }
     return res_;
 }
 
@@ -862,6 +945,14 @@ std::vector<Result> runTrials(const Library& lib, const ChampionKit& champ, cons
     for (int i = 0; i < count; ++i)
         out.push_back(Fight(lib, champ, build, sc, firstTrial + static_cast<uint64_t>(i)).run());
     return out;
+}
+
+FightTrace traceFight(const Library& lib, const ChampionKit& champ, const Build& build, const Scenario& sc,
+                      uint64_t trial) {
+    lib.validate(build);
+    FightTrace trace;
+    trace.result = Fight(lib, champ, build, sc, trial, &trace).run();
+    return trace;
 }
 
 Summary summarize(const std::vector<Result>& results) {

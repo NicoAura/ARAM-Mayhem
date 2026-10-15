@@ -7,7 +7,7 @@ HDR := src/sim.hpp src/json.hpp src/rng.hpp
 CHAMP_SRC := src/sim.cpp src/champ.cpp src/champ_main.cpp
 CHAMP_HDR := $(HDR) src/champ.hpp
 
-.PHONY: all run test wasm clean
+.PHONY: all run test wasm clean replay
 
 all: yunara_sim mayhem_sim
 
@@ -38,6 +38,13 @@ wasm: $(SRC) $(HDR)
 		-sMODULARIZE -sEXPORT_NAME=YunaraSim -sALLOW_MEMORY_GROWTH \
 		-sINVOKE_RUN=0 -sEXPORTED_RUNTIME_METHODS=callMain,FS \
 		--preload-file data/yunara_mayhem.json --preload-file data/cn_enemy_pool.json
+
+# Fight replays for viewer/: one traced fight per champion, plus Riot's icons and
+# ability clips (CLIPS=--clips stores shrunk clips locally instead of streaming them).
+replay: mayhem_sim
+	rm -rf viewer/replay-data/traces && mkdir -p viewer/replay-data/traces
+	./mayhem_sim --all --trace-dir viewer/replay-data/traces --json > viewer/replay-data/best-builds.json
+	python3 tools/build_replay_assets.py --traces viewer/replay-data/traces --out viewer/replay-data $(CLIPS)
 
 clean:
 	rm -rf yunara_sim mayhem_sim sanity_test champ_test dist

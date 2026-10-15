@@ -119,6 +119,31 @@ struct Result {
     std::array<double, SrcCount> bySource{};
 };
 
+// One moment of a traced fight, for the animated replay. kind is one of:
+// cc, spawn, focus, cast, attack, proc, damage, kill, self, death, end.
+struct TraceEvent {
+    double t = 0;
+    std::string kind;
+    int target = -1;          // enemy uid (spawn, focus, damage, kill)
+    char slot = 0;            // Q/W/E/R for cast and proc
+    std::string text;         // enemy champion id (spawn), damage type (damage), area (cast)
+    int source = -1;          // Source of a damage event
+    double amount = 0;        // damage dealt; cast time for casts; cc end time for cc
+    double hp = 0, maxHp = 0; // enemy HP after the event, or the champion's own HP for self/death
+    bool flag = false;        // crit for attacks, the main target was hit for casts
+};
+
+struct FightTrace {
+    Result result;
+    double engageAt = 0, maxHp = 0;
+    std::vector<std::string> team;  // enemy champion ids in this fight
+    std::vector<TraceEvent> events;
+};
+
+// Plays one fight (same draws as runTrials for that trial) and records every event.
+FightTrace traceFight(const Library& lib, const ChampionKit& champ, const Build& build, const Scenario& sc,
+                      uint64_t trial);
+
 std::vector<Result> runTrials(const Library& lib, const ChampionKit& champ, const Build& build, const Scenario& sc,
                               uint64_t firstTrial, int count);
 

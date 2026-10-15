@@ -40,6 +40,9 @@ Usage: mayhem_sim [options]
   --threads N         worker threads (default: all cores)
   --rules PATH        rules file (default )" MAYHEM_DEFAULT_RULES R"()
   --json              print results as JSON
+  --trace FILE        with --champ: also write one typical fight (the median-DPS
+                      one of 200) of the best or given build, for the animated replay
+  --trace-dir DIR     with --all: write a replay trace for every champion's best build
   --help              show this help
 )";
 }
@@ -81,6 +84,81 @@ std::string buildJson(const Build& b) {
     s += "], \"augments\": [";
     for (size_t i = 0; i < b.augments.size(); ++i) s += (i ? ", " : "") + jsonStr(b.augments[i]);
     return s + "]}";
+}
+
+std::string summaryJson(const Summary& s);
+
+std::string num(double v) {
+    char buf[32];
+    std::snprintf(buf, sizeof buf, "%.3f", v);
+    std::string s = buf;
+    while (s.back() == '0') s.pop_back();
+    if (s.back() == '.') s.pop_back();
+    return s == "-0" ? "0" : s;
+}
+
+// The fight with the median DPS out of the first 200, so a replay shows a typical fight.
+uint64_t typicalTrial(const Library& lib, const ChampionKit& c, const Build& b, const Scenario& sc) {
+    const auto res = runTrials(lib, c, b, sc, 0, 200);
+    std::vector<std::pair<double, size_t>> dps;
+    for (size_t i = 0; i < res.size(); ++i) dps.push_back({res[i].totalDamage / res[i].duration, i});
+    std::sort(dps.begin(), dps.end());
+    return dps[dps.size() / 2].second;
+}
+
+// Writes a fight trace for the replay viewer (viewer/). Short keys keep the files small.
+bool writeTrace(const Library& lib, const ChampionKit& c, const Build& b, const Scenario& sc, const Summary& summary,
+                const std::string& path) {
+    const uint64_t trial = typicalTrial(lib, c, b, sc);
+    const FightTrace tr = traceFight(lib, c, b, sc, trial);
+    std::ostringstream o;
+    o << "{\"champion\": " << jsonStr(c.id) << ", \"name\": " << jsonStr(c.name) << ", \"key\": " << c.championId
+      << ", \"role\": " << jsonStr(c.role) << ", \"ranged\": " << (c.ranged ? "true" : "false")
+      << ", \"range\": " << num(c.attackRange) << ", \"parse_quality\": " << jsonStr(c.parseQuality);
+    o << ",\n \"build\": {\"items\": [";
+    for (size_t i = 0; i < b.items.size(); ++i)
+        o << (i ? ", " : "") << "{\"key\": " << jsonStr(b.items[i]) << ", \"id\": " << lib.items.at(b.items[i]).id
+          << ", \"name\": " << jsonStr(lib.items.at(b.items[i]).name) << "}";
+    o << "], \"augments\": [";
+    for (size_t i = 0; i < b.augments.size(); ++i)
+        o << (i ? ", " : "") << "{\"key\": " << jsonStr(b.augments[i]) << ", \"name\": "
+          << jsonStr(lib.augments.at(b.augments[i]).name) << "}";
+    o << "]},\n \"abilities\": [";
+    for (size_t i = 0; i < c.abilities.size(); ++i) {
+        const Ability& a = c.abilities[i];
+        o << (i ? ", " : "") << "{\"slot\": \"" << a.slot << "\", \"name\": " << jsonStr(a.name)
+          << ", \"cooldown\": " << num(a.cooldown) << ", \"passive\": " << (a.aura || a.onhitEvery > 0 ? "true" : "false")
+          << "}";
+    }
+    o << "],\n \"summary\": " << summaryJson(summary);
+    o << ",\n \"fight\": {\"trial\": " << trial << ", \"seed\": " << sc.seed << ", \"duration\": " << num(tr.result.duration)
+      << ", \"engage_at\": " << num(tr.engageAt) << ", \"max_hp\": " << num(tr.maxHp)
+      << ", \"died\": " << (tr.result.died ? "true" : "false") << ", \"time_alive\": " << num(tr.result.timeAlive)
+      << ", \"total_damage\": " << num(tr.result.totalDamage) << ", \"kills\": " << tr.result.kills << ", \"team\": [";
+    for (size_t i = 0; i < tr.team.size(); ++i) o << (i ? ", " : "") << jsonStr(tr.team[i]);
+    o << "]},\n \"sources\": [";
+    for (int i = 0; i < SrcCount; ++i) o << (i ? ", " : "") << jsonStr(kSourceNames[i]);
+    o << "],\n \"events\": [";
+    for (size_t i = 0; i < tr.events.size(); ++i) {
+        const TraceEvent& e = tr.events[i];
+        o << (i ? ",\n  " : "\n  ") << "{\"t\": " << num(e.t) << ", \"k\": \"" << e.kind << "\"";
+        if (e.target >= 0) o << ", \"u\": " << e.target;
+        if (e.slot) o << ", \"s\": \"" << e.slot << "\"";
+        if (!e.text.empty()) o << ", \"x\": " << jsonStr(e.text);
+        if (e.source >= 0) o << ", \"src\": " << e.source;
+        if (e.amount != 0) o << ", \"a\": " << num(e.amount);
+        if (e.kind == "spawn" || e.kind == "damage" || e.kind == "kill" || e.kind == "self" || e.kind == "death")
+            o << ", \"hp\": " << num(e.hp) << ", \"max\": " << num(e.maxHp);
+        if (e.flag) o << ", \"f\": 1";
+        o << "}";
+    }
+    o << "\n]}\n";
+    std::FILE* f = std::fopen(path.c_str(), "w");
+    if (!f) { std::cerr << "cannot write " << path << "\n"; return false; }
+    const std::string out = o.str();
+    std::fwrite(out.data(), 1, out.size(), f);
+    std::fclose(f);
+    return true;
 }
 
 std::string summaryJson(const Summary& s) {
@@ -169,6 +247,7 @@ int main(int argc, char** argv) {
     std::string rulesPath = MAYHEM_DEFAULT_RULES, champName, kitName;
     std::vector<std::string> items, augs;
     bool all = false, asJson = false, list = false, customBuild = false, anyItems = false;
+    std::string tracePath, traceDir;
     int trials = 0;
     long long seed = -1;
 #ifdef __EMSCRIPTEN__
@@ -192,6 +271,8 @@ int main(int argc, char** argv) {
         else if (a == "--any-items") anyItems = true;
         else if (a == "--list") list = true;
         else if (a == "--json") asJson = true;
+        else if (a == "--trace") tracePath = next();
+        else if (a == "--trace-dir") traceDir = next();
         else if (a == "--trials") trials = std::stoi(next());
         else if (a == "--seed") seed = std::stoll(next());
         else if (a == "--threads") threads = std::max(1, std::stoi(next()));
@@ -249,6 +330,8 @@ int main(int argc, char** argv) {
             } else {
                 ranked = optimize(lib, *c, sc, threads);
             }
+            if (!tracePath.empty() && !writeTrace(lib, *c, ranked.front().build, sc, ranked.front().summary, tracePath))
+                return 1;
             if (asJson) {
                 std::printf("{\"champion\": %s, \"builds\": [", jsonStr(c->id).c_str());
                 for (size_t i = 0; i < ranked.size(); ++i)
@@ -274,6 +357,9 @@ int main(int argc, char** argv) {
                         const ChampionKit& c = lib.champions[i];
                         const auto ranked = optimize(lib, c, lib.scenarioFor(c), 1, 1);
                         rows[i] = {&c, ranked.front()};
+                        if (!traceDir.empty())
+                            writeTrace(lib, c, ranked.front().build, lib.scenarioFor(c), ranked.front().summary,
+                                       traceDir + "/" + c.id + ".json");
                         std::lock_guard<std::mutex> lock(logMu);
                         std::fprintf(stderr, "\r%zu/%zu %-14s", i + 1, lib.champions.size(), c.id.c_str());
                     }

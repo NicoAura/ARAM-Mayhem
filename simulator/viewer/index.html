@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<!-- replay-page-start -->
+<title>Mayhem Fight Replay</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+/* Layout: arena canvas beside the official ability clip, a fight timeline under both, build and damage below. One dark look: it is a game screen. */
+:root {
+  --abyss: #0a1017;
+  --panel: #111a24;
+  --panel-2: #172331;
+  --line: #24364a;
+  --frost: #dbe7f0;
+  --muted: #8295a8;
+  --ice: #8fd3ff;
+  --q: #4fc3f7; --w: #7bd88f; --e: #f4b860; --r: #e66ad2;
+  --phys: #f08a4b; --magic: #7aa2ff; --true: #f4f4f4;
+  --hp: #5fd38a; --hp-low: #f0605a; --cc: #b388ff;
+  --display: "Chakra Petch", "Rajdhani", "Segoe UI", system-ui, sans-serif;
+  --body: "IBM Plex Sans", "Segoe UI", system-ui, -apple-system, sans-serif;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html, body { background: var(--abyss); color: var(--frost); }
+body { margin: 0; font: 14px/1.5 var(--body); }
+.wrap { max-width: 1240px; margin: 0 auto; padding-block: 20px 32px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+  display: grid; gap: 16px; }
+header { display: flex; flex-wrap: wrap; align-items: end; gap: 12px 24px; justify-content: space-between; }
+h1 { font: 700 26px/1.1 var(--display); letter-spacing: .02em; margin: 0; text-wrap: balance; }
+.eyebrow { font: 600 11px/1 var(--display); letter-spacing: .14em; text-transform: uppercase; color: var(--ice); margin-bottom: 6px; }
+.picker { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+label.lbl { font: 600 11px/1 var(--display); letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+select, button { font: 500 14px var(--body); color: var(--frost); background: var(--panel-2); border: 1px solid var(--line);
+  border-radius: 6px; padding: 7px 10px; }
+button { cursor: pointer; }
+button:hover, select:hover { border-color: var(--ice); }
+:focus-visible { outline: 2px solid var(--ice); outline-offset: 2px; }
+.stage { display: grid; grid-template-columns: minmax(0, 1.7fr) minmax(0, 1fr); gap: 16px; }
+@media (max-width: 860px) { .stage { grid-template-columns: minmax(0, 1fr); } }
+.arena { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; overflow: hidden; position: relative; min-width: 0; }
+.arena canvas { display: block; width: 100%; height: auto; aspect-ratio: 16 / 9; max-width: 100%; }
+.hud { position: absolute; left: 12px; top: 10px; display: flex; gap: 14px; font: 600 12px var(--display);
+  letter-spacing: .06em; text-transform: uppercase; color: var(--muted); pointer-events: none; }
+.hud b { color: var(--frost); font-variant-numeric: tabular-nums; }
+.clip { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; overflow: hidden; display: grid;
+  grid-template-rows: auto auto 1fr; min-width: 0; }
+.clip-video { position: relative; background: #05080c; aspect-ratio: 360 / 246; max-width: 100%; }
+.clip-video video { width: 100%; height: 100%; display: block; object-fit: cover; }
+.clip-video .fallback { position: absolute; inset: 0; display: grid; place-items: center; color: var(--muted); font-size: 13px; text-align: center; padding: 16px; }
+.clip-video canvas.big { width: 96px; height: 96px; border-radius: 8px; }
+.clip-cap { padding: 10px 12px; display: flex; gap: 10px; align-items: center; border-bottom: 1px solid var(--line); min-width: 0; }
+.chip { font: 700 12px/1 var(--display); padding: 5px 7px; border-radius: 4px; color: #071017; flex: none; }
+.clip-cap .nm { font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.abilities { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; padding: 12px; align-content: start; }
+.ab { position: relative; padding: 0; border-radius: 8px; overflow: hidden; aspect-ratio: 1; border: 2px solid var(--line); background: var(--panel-2); }
+.ab canvas { width: 100%; height: 100%; display: block; }
+.ab .key { position: absolute; left: 4px; bottom: 3px; font: 700 12px var(--display); text-shadow: 0 1px 2px #000; }
+.ab .cd { position: absolute; inset: 0; pointer-events: none; }
+.ab.lit { border-color: var(--ice); }
+.clip-note { padding: 0 12px 12px; color: var(--muted); font-size: 12px; }
+.timeline { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; display: grid; gap: 8px; }
+.controls { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.controls .time { font: 600 14px var(--display); font-variant-numeric: tabular-nums; margin-left: auto; color: var(--muted); }
+.controls .time b { color: var(--frost); }
+.track { position: relative; height: 56px; cursor: pointer; touch-action: none; }
+.track canvas { width: 100%; height: 100%; display: block; }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 16px; color: var(--muted); font-size: 12px; }
+.legend i { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 6px; vertical-align: -1px; }
+.lower { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: 16px; }
+@media (max-width: 860px) { .lower { grid-template-columns: minmax(0, 1fr); } }
+.card { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 14px 16px; min-width: 0; }
+.card h2 { font: 600 13px/1 var(--display); letter-spacing: .12em; text-transform: uppercase; color: var(--ice); margin: 0 0 12px; }
+.build { display: flex; flex-wrap: wrap; gap: 6px; }
+.build span { background: var(--panel-2); border: 1px solid var(--line); border-radius: 5px; padding: 3px 8px; font-size: 13px; }
+.build span.aug { border-color: #4a3d63; }
+.stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); gap: 10px; margin-top: 14px; }
+.stats div { display: grid; gap: 2px; }
+.stats small { color: var(--muted); font-size: 11px; text-transform: uppercase; letter-spacing: .08em; }
+.stats b { font: 600 18px var(--display); font-variant-numeric: tabular-nums; }
+.bars { display: grid; gap: 8px; }
+.bar { display: grid; grid-template-columns: 110px minmax(0, 1fr) 70px; gap: 10px; align-items: center; font-size: 13px; }
+.bar .fill { height: 8px; border-radius: 4px; background: var(--panel-2); overflow: hidden; }
+.bar .fill i { display: block; height: 100%; border-radius: 4px; }
+.bar b { text-align: right; font: 600 13px var(--display); font-variant-numeric: tabular-nums; }
+.note { color: var(--muted); font-size: 12px; max-width: 75ch; }
+.note a { color: var(--ice); }
+@media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto; } }
+</style>
+<!-- replay-page-head-end -->
+</head>
+<body>
+<!-- replay-page-body -->
+<div class="wrap">
+  <header>
+    <div>
+      <div class="eyebrow">ARAM Mayhem simulator · fight replay</div>
+      <h1 id="title">Loading replays…</h1>
+    </div>
+    <div class="picker">
+      <label class="lbl" for="champ">Champion</label>
+      <select id="champ" aria-label="Champion"></select>
+      <button id="rand" type="button" title="Pick a random champion">Random</button>
+    </div>
+  </header>
+
+  <section class="stage">
+    <div class="arena">
+      <canvas id="arena" width="1280" height="720" aria-label="Animated fight"></canvas>
+      <div class="hud"><span>Kills <b id="kills">0</b></span><span>Damage <b id="dmg">0</b></span><span id="state"></span></div>
+    </div>
+    <div class="clip">
+      <div class="clip-cap"><span class="chip" id="clipChip" style="background:var(--q)">Q</span><span class="nm" id="clipName">Ability clip</span></div>
+      <div class="clip-video">
+        <video id="video" playsinline muted preload="auto" aria-label="Official ability preview"></video>
+        <div class="fallback" id="fallback" hidden></div>
+      </div>
+      <div>
+        <div class="abilities" id="abilities"></div>
+        <div class="clip-note" id="clipNote">Each cast plays Riot's official preview of that ability. Click an ability to watch it again.</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="timeline">
+    <div class="controls">
+      <button id="play" type="button">Pause</button>
+      <button id="restart" type="button">Restart</button>
+      <select id="speed" aria-label="Playback speed">
+        <option value="0.25">0.25×</option><option value="0.5">0.5×</option><option value="1" selected>1×</option><option value="2">2×</option>
+      </select>
+      <button id="sound" type="button" aria-pressed="false">Sound off</button>
+      <span class="time"><b id="now">0.0</b> / <span id="total">0.0</span> s</span>
+    </div>
+    <div class="track" id="track"><canvas id="trackCanvas" width="1200" height="56"></canvas></div>
+    <div class="legend">
+      <span><i style="background:var(--q)"></i>Q</span><span><i style="background:var(--w)"></i>W</span>
+      <span><i style="background:var(--e)"></i>E</span><span><i style="background:var(--r)"></i>R</span>
+      <span><i style="background:var(--cc)"></i>Crowd control on you</span><span><i style="background:var(--hp-low)"></i>Your HP</span>
+      <span><i style="background:var(--frost)"></i>Kill</span>
+    </div>
+  </section>
+
+  <section class="lower">
+    <div class="card">
+      <h2>Simulated best build</h2>
+      <div class="build" id="build"></div>
+      <div class="stats" id="stats"></div>
+    </div>
+    <div class="card">
+      <h2>Damage so far</h2>
+      <div class="bars" id="bars"></div>
+    </div>
+  </section>
+
+  <p class="note">This is one typical fight (the median of 200) from the simulator, using the build it found best. Enemies and their numbers come from China-server Mayhem data. Ability kits are read automatically from game files, so some champions' numbers are rough, and passives are mostly missing.
+  The ability clips and icons belong to Riot Games. This project isn't endorsed by Riot Games and doesn't reflect the views or opinions of Riot Games or anyone officially involved in producing or managing League of Legends.</p>
+</div>
+<script src="replay.js"></script>
+<!-- replay-page-end -->
+</body>
+</html>
