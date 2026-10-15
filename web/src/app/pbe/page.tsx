@@ -1,14 +1,16 @@
 import type { Metadata } from "next";
-import Placeholder from "@/components/Placeholder";
+import ComingSoon from "@/components/ComingSoon";
+import PageHeader from "@/components/PageHeader";
 
 export const metadata: Metadata = { title: "PBE · ARAM Mayhem" };
 
 export default function PbePage() {
   return (
     <>
-      <h1>PBE changes</h1>
-      <p className="muted">Mayhem changes currently on the test server.</p>
-      <Placeholder>PBE changes will appear here.</Placeholder>
+      <PageHeader section="pbe" eyebrow="Test server" title="PBE Changes">
+        Mayhem changes currently on the test server, before they go live.
+      </PageHeader>
+      <ComingSoon variant="list" label="Patch changes will be listed here" />
     </>
   );
 }

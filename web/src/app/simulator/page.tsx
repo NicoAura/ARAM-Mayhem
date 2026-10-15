@@ -1,14 +1,16 @@
 import type { Metadata } from "next";
-import Placeholder from "@/components/Placeholder";
+import ComingSoon from "@/components/ComingSoon";
+import PageHeader from "@/components/PageHeader";
 
 export const metadata: Metadata = { title: "Simulator · ARAM Mayhem" };
 
 export default function SimulatorPage() {
   return (
     <>
-      <h1>Damage simulator</h1>
-      <p className="muted">Pick a champion, items and augments to estimate damage against a target.</p>
-      <Placeholder>The simulator will appear here.</Placeholder>
+      <PageHeader section="simulator" eyebrow="Theorycraft" title="Damage Simulator">
+        Pick a champion, items and augments to estimate damage against a target.
+      </PageHeader>
+      <ComingSoon variant="form" label="The simulator is being built" />
     </>
   );
 }
