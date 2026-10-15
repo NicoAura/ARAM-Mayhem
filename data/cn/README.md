@@ -24,6 +24,31 @@ Endpoints (all on `https://mlol.qt.qq.com/go/battle_info/odp_proxy/`):
 
 Names come from `game.gtimg.cn` (`hero_list.js`, `kiwi/kiwi_augments.json`).
 
+## Full history
+
+`history.py` downloads champion stats for every day since 2025-11-02, the earliest
+date the API returns, and builds patch and all-time tables in `history/`:
+
+| File | What it holds |
+| --- | --- |
+| `daily/YYYY-MM.csv` | Every day's champion stats; the script only fetches days not already here |
+| `patches.csv` | Each patch's data window (15.21 to now) |
+| `by_patch.csv` | Each champion's whole-patch numbers |
+| `all_time.csv` | Each champion across every patch |
+
+Each day's numbers are cumulative since the current patch's window opened, and they
+reset when the next patch's window opens. The script finds those resets as jumps near
+each release date from Tencent's `versionlist`. The last day of each window is used as
+that patch's full sample. Augments and duos have no history: those endpoints only
+return the current window.
+
+`all_time.csv` combines patches by estimated games. Pick rate is a share of games, so a
+champion's games in a patch are estimated as pick rate × window days, which assumes
+about the same number of games each day. `est_game_share` is the champion's share of all
+champion slots.
+
+The `China Mayhem stats` GitHub Action runs both scripts daily and commits new data.
+
 Caveats: the API is undocumented and can change without notice. Rates are fractions
 (0.5575 = 55.75%). The champion `rank` is Tencent's own ordering, not sorted by win
 rate. Sample sizes are not published.
