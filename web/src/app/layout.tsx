@@ -1,12 +1,13 @@
 import type { Metadata } from "next";
-import { Cinzel, Inter } from "next/font/google";
+import { Cinzel, Roboto_Flex } from "next/font/google";
 import Link from "next/link";
 import NavLinks from "@/components/NavLinks";
+import Ripple from "@/components/Ripple";
 import { HexLogo } from "@/components/icons";
 import "./globals.css";
 
-const display = Cinzel({ subsets: ["latin"], weight: ["600", "700", "800"], variable: "--font-display" });
-const body = Inter({ subsets: ["latin"], variable: "--font-body" });
+const brand = Cinzel({ subsets: ["latin"], weight: ["700"], variable: "--font-brand" });
+const body = Roboto_Flex({ subsets: ["latin"], variable: "--font-body" });
 
 export const metadata: Metadata = {
   title: "ARAM Mayhem",
@@ -19,25 +20,22 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${display.variable} ${body.variable}`}>
+    <html lang="en" className={`${brand.variable} ${body.variable}`}>
       <body>
-        <div className="backdrop" aria-hidden="true">
-          <span className="glow glow-gold" />
-          <span className="glow glow-blue" />
-          <span className="grid" />
-        </div>
-        <header className="site-header">
-          <Link href="/" className="brand">
+        <Ripple />
+        <header className="top-app-bar">
+          <Link href="/" className="brand ripple">
             <HexLogo className="brand-logo" />
             <span>ARAM Mayhem</span>
           </Link>
-          <NavLinks />
+          <NavLinks variant="tabs" />
         </header>
         <main>{children}</main>
-        <footer className="site-footer">
+        <footer className="site-footer body-small">
           ARAM Mayhem isn&apos;t endorsed by Riot Games and doesn&apos;t reflect the views or opinions of Riot
           Games or anyone officially involved in producing or managing Riot Games properties.
         </footer>
+        <NavLinks variant="bar" />
       </body>
     </html>
   );

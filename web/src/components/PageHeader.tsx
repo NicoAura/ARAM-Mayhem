@@ -13,14 +13,14 @@ export default function PageHeader({
   children: React.ReactNode;
 }) {
   return (
-    <header className="page-header fade-up" data-accent={section}>
-      <div className="hex-badge">
+    <header className="page-header enter" data-accent={section}>
+      <div className="icon-container large">
         <SectionIcon section={section} className="icon" />
       </div>
       <div>
-        <p className="eyebrow">{eyebrow}</p>
-        <h1 className="page-title">{title}</h1>
-        <p className="muted">{children}</p>
+        <p className="label-medium accent-text">{eyebrow}</p>
+        <h1 className="headline-large">{title}</h1>
+        <p className="body-large on-variant">{children}</p>
       </div>
     </header>
   );
