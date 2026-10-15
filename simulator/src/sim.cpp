@@ -67,11 +67,14 @@ double ruleValue(const json::Value& rules, const char* key, double fallback) {
 std::map<std::string, Effect> loadEffects(const json::Value& obj) {
     std::map<std::string, Effect> out;
     for (const auto& [id, v] : obj.obj) {
+        if (!v.isObject()) continue;  // skip "_note" entries
         Effect e;
         e.id = id;
         e.name = v["name"].asString(id);
         e.special = v["special"].asString();
         e.requiresItem = v["requires_item"].asString();
+        e.rarity = v["rarity"].asString();
+        e.offeredToYunara = v["offered_to_yunara"].asString("confirmed") == "confirmed";
         e.stats = StatBlock::fromJson(v["stats"]);
         for (const auto& [k, p] : v["params"].obj) e.params[k] = p.asNumber();
         for (const auto& opt : v["anvil_options"].arr) e.anvilOptions.push_back(StatBlock::fromJson(opt));
@@ -281,11 +284,11 @@ private:
     double physMult_ = 1, magicMult_ = 1;
     bool hasRunaan_ = false, hasRageblade_ = false, hasKraken_ = false, hasStorm_ = false, hasYuntal_ = false;
     bool hasSymphony_ = false, hasRhythm_ = false, hasDoubleTap_ = false, hasGauntlet_ = false;
-    bool hasMysticPunch_ = false, hasTyphoon_ = false;
+    bool hasMysticPunch_ = false, hasTyphoon_ = false, hasDualWield_ = false, hasCritMissile_ = false;
     double executeThreshold_ = 0;
     const Effect *runaan_ = nullptr, *rageblade_ = nullptr, *kraken_ = nullptr, *storm_ = nullptr,
                  *yuntal_ = nullptr, *symphony_ = nullptr, *rhythm_ = nullptr, *mystic_ = nullptr,
-                 *typhoon_ = nullptr;
+                 *typhoon_ = nullptr, *dualWield_ = nullptr, *critMissile_ = nullptr;
 
     // Scenario
     double duration_ = 0;
@@ -300,7 +303,7 @@ private:
     double rEnd_ = 0;
     int seething_ = 0, phantomCount_ = 0;
     double lastAttack_ = -100;
-    int krakenCount_ = 0, stormCount_ = 0;
+    int krakenCount_ = 0, stormCount_ = 0, dualWieldCount_ = 0;
     int ltStacks_ = 0;
     double ltLast_ = -100;
     int conqStacks_ = 0;
@@ -373,6 +376,8 @@ private:
         else if (s == "jeweled_gauntlet") hasGauntlet_ = true;
         else if (s == "mystic_punch") { hasMysticPunch_ = true; mystic_ = &e; }
         else if (s == "typhoon") { hasTyphoon_ = true; typhoon_ = &e; }
+        else if (s == "dual_wield") { hasDualWield_ = true; dualWield_ = &e; }
+        else if (s == "critical_missile") { hasCritMissile_ = true; critMissile_ = &e; }
     }
 
     void setupScenario() {
@@ -429,7 +434,9 @@ private:
         double cap = d_.rules.asCap;
         if (hasSymphony_ && ltStacks() >= static_cast<int>(symphony_->param("lt_max_stacks", 6)))
             cap = d_.rules.asCapLethalTempo;
-        return std::min(cap, ch_.baseAs + ch_.asRatio * bonusAs());
+        double as = ch_.baseAs + ch_.asRatio * bonusAs();
+        if (hasDualWield_) as *= 1.0 + dualWield_->param("total_attack_speed", 0.25);
+        return std::min(cap, as);
     }
 
     // --- damage -------------------------------------------------------------
@@ -490,15 +497,15 @@ private:
         }
     }
 
-    void applyOnHit(Enemy* target, int times) {
+    void applyOnHit(Enemy* target, int times, double scale = 1.0) {
         const double qOnhit = ch_.qOnhit[ch_.qRank - 1] + ch_.qOnhitAp * ap_ +
                               (qActive() ? ch_.qActiveOnhit[ch_.qRank - 1] + ch_.qActiveOnhitAp * ap_ : 0.0);
         for (int i = 0; i < times; ++i) {
-            deal(target, qOnhit, Kind::Magic, SrcQOnhit);
-            deal(target, bonus_.onhitMagic + bonus_.onhitMagicAp * ap_, Kind::Magic, SrcItemOnhit);
-            deal(target, bonus_.onhitPhys, Kind::Phys, SrcItemOnhit);
+            deal(target, scale * qOnhit, Kind::Magic, SrcQOnhit);
+            deal(target, scale * (bonus_.onhitMagic + bonus_.onhitMagicAp * ap_), Kind::Magic, SrcItemOnhit);
+            deal(target, scale * bonus_.onhitPhys, Kind::Phys, SrcItemOnhit);
             if (bonus_.onhitCurHpPhys > 0 && target->alive)
-                deal(target, bonus_.onhitCurHpPhys * target->hp, Kind::Phys, SrcItemOnhit);
+                deal(target, scale * bonus_.onhitCurHpPhys * target->hp, Kind::Phys, SrcItemOnhit);
         }
     }
 
@@ -552,6 +559,21 @@ private:
             Enemy* target = group.empty() ? &primary_ : group[rng_.pick(group.size())];
             physicalHit(target, ad * typhoon_->param("ad_ratio", 0.5), SrcExtraBolts);
             applyOnHit(target, 1);
+        }
+        if (hasDualWield_ && ++dualWieldCount_ >= static_cast<int>(dualWield_->param("every", 2))) {
+            // The bolt repeats part of this attack's damage (crit included) and on-hit at reduced strength.
+            dualWieldCount_ = 0;
+            const double ratio = dualWield_->param("repeat_ratio", 0.4);
+            deal(&primary_, ad * (crit ? critMult_ : 1.0) * ratio, Kind::Phys, SrcExtraBolts);
+            applyOnHit(&primary_, 1, dualWield_->param("onhit_effectiveness", 0.4));
+        }
+        if (hasCritMissile_ && crit) {
+            const int missiles = static_cast<int>(critMissile_->param("missiles", 2));
+            const double dmg = critMissile_->param("magic", 30) + critMissile_->param("bonus_ad_ratio", 0.15) * (ad - baseAd_);
+            for (int i = 0; i < missiles; ++i) {
+                Enemy* target = group.empty() ? &primary_ : group[rng_.pick(group.size())];
+                deal(target, dmg, Kind::Magic, SrcExtraBolts);
+            }
         }
 
         if (!qActive()) qStacks_ = std::min(ch_.qStacksNeeded, qStacks_ + 1);

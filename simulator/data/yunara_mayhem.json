@@ -16,7 +16,13 @@
     "stormrazor": "https://seemeta.com/en/lol/items/stormrazor",
     "atma": "https://wiki.leagueoflegends.com/en-us/Atma's_Reckoning",
     "mayhem_26_4": "https://esports.gg/news/league-of-legends/aram-mayhem-26-4/",
-    "augments": "https://www.metasrc.com/lol/mayhem/tier-list/augments"
+    "augments": "https://www.metasrc.com/lol/mayhem/tier-list/augments",
+    "yunara_mayhem_build": "https://arammayhem.com/build/yunara/",
+    "yunara_mayhem_ugg": "https://u.gg/lol/champions/aram-mayhem/yunara-aram-mayhem",
+    "yunara_mayhem_aramgg": "https://aramgg.com/en/champion-stats/804",
+    "augment_text": "https://vntft.com/aram-mayhem-augments",
+    "patch_26_20": "https://www.nerfplz.com/2026/10/lol-2620-patch-notes-every-champion-and.html",
+    "aram_balance": "https://arammayhem.com/aram-balance/"
   },
 
   "mayhem_rules": {
@@ -24,7 +30,7 @@
     "crit_overflow_ad_per_percent": { "value": 0.45, "confidence": "approx", "source": "mayhem_26_1", "note": "Crit chance above 100% converts to bonus AD" },
     "attack_speed_cap": { "value": 5.0, "confidence": "verified", "source": "mayhem_rules" },
     "attack_speed_cap_lethal_tempo": { "value": 10.0, "confidence": "approx", "source": "mayhem_rules" },
-    "yunara_damage_dealt": { "value": 1.0, "confidence": "likely", "source": "mayhem_yunara", "note": "No Mayhem damage modifier for Yunara" }
+    "yunara_damage_dealt": { "value": 1.0, "confidence": "likely", "source": "mayhem_yunara", "note": "No ARAM/Mayhem damage dealt or taken modifier for Yunara as of 26.19. Her other Mayhem change, E movement speed 40% -> 60%, doesn't affect damage." }
   },
 
   "champion": {
@@ -46,10 +52,10 @@
       "stacks_needed": 8,
       "active_duration": 5.0,
       "active_attack_speed": [0.25, 0.35, 0.45, 0.55, 0.65],
-      "active_onhit_magic": [3, 8, 13, 18, 23], "active_onhit_ap_ratio": 0.10,
+      "active_onhit_magic": [3, 8, 13, 18, 23], "active_onhit_ap_ratio": 0.20,
       "spread_ad_ratio": 0.30,
       "confidence": "approx", "source": "wiki_yunara",
-      "note": "On-hit and attack speed from the wiki; active duration and spread ratio are estimates"
+      "note": "On-hit values are the 26.20 numbers (both on-hits cut by 2 per rank to 3-23 +20% AP). Active duration and spread ratio are estimates"
     },
     "w": {
       "rank": 5,
@@ -74,7 +80,7 @@
       "cooldown_mayhem": [80, 70, 60],
       "w_cooldown_refund_on_toggle": 0.8,
       "confidence": "approx", "source": "mayhem_yunara",
-      "note": "Mayhem cooldown is listed as 80/70/60; the W refund on cast and end is an estimate"
+      "note": "Mayhem cooldown 80/70/60 (down from 100/90/80, 26.19 Mayhem buff); the W refund on cast and end is an estimate"
     }
   },
 
@@ -112,8 +118,8 @@
     },
     "botrk": {
       "name": "Blade of the Ruined King",
-      "stats": { "ad": 40, "attack_speed": 0.25, "onhit_cur_hp_phys": 0.06 },
-      "confidence": "approx", "note": "Ranged current-health on-hit; the Mayhem stat changes are not confirmed"
+      "stats": { "ad": 40, "attack_speed": 0.25, "onhit_cur_hp_phys": 0.10 },
+      "confidence": "likely", "source": "aram_balance", "note": "ARAM override: ranged on-hit 10% current health (6% on Summoner's Rift). One source still shows 6%"
     },
     "kraken": {
       "name": "Kraken Slayer",
@@ -129,64 +135,89 @@
       "stats": { "ad": 50, "attack_speed": 0.25, "crit": 0.25 },
       "special": "stormrazor", "params": { "bolt_magic": 100, "attacks_to_energize": 6 },
       "confidence": "approx", "source": "stormrazor",
-      "note": "Mayhem item. Stats and bolt damage from 26.17+ sources; Energized also charges from movement, so the attacks-per-proc value is an estimate"
+      "note": "No Mayhem balance override found (its Mayhem patch history only has a shop bug fix). Stats and bolt damage from 26.17+ sources; Energized also charges from movement, so the attacks-per-proc value is an estimate"
     },
     "atma": {
       "name": "Atma's Reckoning",
       "stats": { "hp": 500, "crit": 0.20 },
       "special": "atma", "params": { "crit_per_100_bonus_hp": 0.01, "max_crit": 0.30 },
       "confidence": "likely", "source": "atma",
-      "note": "Mayhem item. 1% crit per 100 bonus HP up to 30%; base health is 500 or 700 depending on source"
+      "note": "Mayhem-only item. 1% crit per 100 bonus HP up to 30%; base health is 500 or 700 depending on source. Also gives 10 ability haste (not modeled)"
     },
     "heartsteel_hp": { "name": "Warmog's-style health item (filler)", "stats": { "hp": 1000 }, "confidence": "approx" }
   },
 
   "augments": {
+    "_note": "offered_to_yunara is 'confirmed' when the augment shows up in Yunara's ARAM Mayhem augment stats (arammayhem.com, u.gg, aramgg, metasrc), 'unconfirmed' otherwise. Preset builds only use confirmed augments; custom builds print a warning.",
+    "dual_wield": {
+      "name": "Dual Wield", "rarity": "prismatic", "offered_to_yunara": "confirmed",
+      "special": "dual_wield", "params": { "total_attack_speed": 0.25, "every": 2, "repeat_ratio": 0.40, "onhit_effectiveness": 0.40 },
+      "confidence": "likely", "source": "augment_text",
+      "note": "+25% total attack speed; every 2nd attack fires a bolt repeating 40% of the attack and applying on-hit at 40%. One source lists 20% attack speed. Top Yunara pick on several sites"
+    },
+    "critical_missile": {
+      "name": "Critical Missile", "rarity": "gold", "offered_to_yunara": "confirmed",
+      "stats": { "crit": 0.25 },
+      "special": "critical_missile", "params": { "missiles": 2, "magic": 30, "bonus_ad_ratio": 0.15 },
+      "confidence": "approx", "source": "augment_text",
+      "note": "+25% crit (likely). Crits fire firecrackers that deal magic damage; the count and damage are estimates. Highest win-rate Gold augment for Yunara on several sites"
+    },
+    "soul_siphon": {
+      "name": "Soul Siphon", "rarity": "gold", "offered_to_yunara": "confirmed",
+      "stats": { "crit": 0.25 },
+      "confidence": "likely", "source": "augment_text",
+      "note": "+25% crit; crits heal 12% of damage (healing not modeled)"
+    },
+    "deft": {
+      "name": "Deft", "rarity": "silver", "offered_to_yunara": "confirmed",
+      "stats": { "attack_speed": 0.25 },
+      "confidence": "approx", "source": "yunara_mayhem_build", "note": "Listed among Yunara's best augments; the attack speed value is an estimate"
+    },
+    "upgrade_ie": {
+      "name": "Upgrade Infinity Edge", "rarity": "gold", "offered_to_yunara": "confirmed",
+      "stats": { "crit": 0.10, "crit_damage": 0.20 },
+      "requires_item": "ie",
+      "confidence": "approx", "source": "yunara_mayhem_aramgg", "note": "Adds Excoriate-style bonus crit damage plus crit; values are estimates"
+    },
+    "double_tap": {
+      "name": "Double Tap", "rarity": "prismatic", "offered_to_yunara": "confirmed",
+      "stats": { "crit": 0.10 },
+      "special": "double_tap",
+      "confidence": "approx", "source": "yunara_mayhem_build", "note": "Crits apply on-hit effects a second time; crit bonus is an estimate"
+    },
+    "critical_rhythm": {
+      "name": "Critical Rhythm", "rarity": "gold", "offered_to_yunara": "confirmed",
+      "stats": { "crit": 0.10 },
+      "special": "critical_rhythm", "params": { "attack_speed_per_crit": 0.05, "max_stacks": 10, "duration": 3.0 },
+      "confidence": "approx", "source": "yunara_mayhem_ugg"
+    },
+    "jeweled_gauntlet": {
+      "name": "Jeweled Gauntlet", "rarity": "prismatic", "offered_to_yunara": "confirmed",
+      "stats": { "crit": 0.10 },
+      "special": "jeweled_gauntlet",
+      "confidence": "approx", "source": "yunara_mayhem_build", "note": "W can crit, which also triggers Yunara's passive. Real crit bonus scales with AP; flat value is an estimate"
+    },
     "symphony_of_war": {
-      "name": "Symphony of War",
+      "name": "Symphony of War", "rarity": "prismatic", "offered_to_yunara": "confirmed",
       "special": "symphony",
       "params": {
         "lt_attack_speed_per_stack": 0.06, "lt_max_stacks": 6, "lt_duration": 6.0,
         "conq_ad_per_stack": 4.0, "conq_max_stacks": 12, "conq_stacks_per_attack": 1, "conq_duration": 5.0
       },
-      "confidence": "approx", "note": "Grants Lethal Tempo and Conqueror; rune values are estimates"
-    },
-    "critical_rhythm": {
-      "name": "Critical Rhythm",
-      "stats": { "crit": 0.10 },
-      "special": "critical_rhythm", "params": { "attack_speed_per_crit": 0.05, "max_stacks": 10, "duration": 3.0 },
-      "confidence": "approx"
-    },
-    "double_tap": {
-      "name": "Double Tap",
-      "stats": { "crit": 0.10 },
-      "special": "double_tap",
-      "confidence": "approx", "note": "Crits apply on-hit effects a second time"
-    },
-    "jeweled_gauntlet": {
-      "name": "Jeweled Gauntlet",
-      "stats": { "crit": 0.10 },
-      "special": "jeweled_gauntlet",
-      "confidence": "approx", "note": "W can crit, which also triggers Yunara's passive"
+      "confidence": "approx", "source": "yunara_mayhem_build", "note": "Grants Lethal Tempo and Conqueror; rune values are estimates"
     },
     "mystic_punch": {
-      "name": "Mystic Punch",
+      "name": "Mystic Punch", "rarity": "gold", "offered_to_yunara": "confirmed",
       "special": "mystic_punch", "params": { "cdr_per_hit": 1.5 },
-      "confidence": "approx"
+      "confidence": "approx", "source": "yunara_mayhem_build"
     },
     "typhoon": {
-      "name": "Typhoon",
+      "name": "Typhoon", "rarity": "silver", "offered_to_yunara": "confirmed",
       "special": "typhoon", "params": { "ad_ratio": 0.50 },
-      "confidence": "approx", "note": "Attacks fire an extra bolt at a nearby champion that applies on-hit"
-    },
-    "upgrade_ie": {
-      "name": "Upgrade Infinity Edge",
-      "stats": { "crit": 0.10, "crit_damage": 0.20 },
-      "requires_item": "ie",
-      "confidence": "approx"
+      "confidence": "approx", "source": "augments", "note": "Marksman-tagged. Attacks fire an extra bolt at a nearby champion that applies on-hit; ratio is an estimate"
     },
     "stats_on_stats": {
-      "name": "Stats on Stats",
+      "name": "Stats on Stats", "offered_to_yunara": "unconfirmed",
       "special": "stats_on_stats",
       "params": { "anvils": 3 },
       "anvil_options": [
@@ -197,13 +228,22 @@
         { "hp": 200 }
       ],
       "confidence": "approx", "source": "mayhem_26_4",
-      "note": "3 anvils since 26.4; what each anvil can roll is an estimate. Rolled fresh every trial."
+      "note": "Gave 3 anvils as of 26.4, but it doesn't appear in any current Yunara stats page, so it may be renamed or removed"
     },
-    "deft": { "name": "Deft", "stats": { "attack_speed": 0.25 }, "confidence": "approx" },
-    "goliath_hp": { "name": "Goliath", "stats": { "hp": 600 }, "confidence": "approx" }
+    "goliath_hp": {
+      "name": "Goliath", "offered_to_yunara": "unconfirmed",
+      "stats": { "hp": 600 },
+      "confidence": "approx", "note": "Not seen in Yunara's Mayhem stats"
+    }
   },
 
   "builds": {
+    "meta_crit": {
+      "name": "Meta Crit",
+      "note": "Most common Yunara Mayhem items (Yun Tal, IE, Runaan's, Kraken) with her top augments",
+      "items": ["berserkers", "yuntal", "ie", "runaan", "kraken", "ldr"],
+      "augments": ["dual_wield", "critical_missile", "upgrade_ie", "deft"]
+    },
     "crit_classic": {
       "name": "Crit Classic",
       "items": ["berserkers", "yuntal", "ie", "pd", "ldr", "runaan"],
@@ -212,17 +252,17 @@
     "onhit_rageblade": {
       "name": "On-Hit Rageblade",
       "items": ["berserkers", "rageblade", "botrk", "kraken", "wits", "runaan"],
-      "augments": ["typhoon", "symphony_of_war", "mystic_punch", "deft"]
+      "augments": ["dual_wield", "typhoon", "mystic_punch", "deft"]
     },
     "stormrazor_crit": {
       "name": "Stormrazor Crit",
       "items": ["berserkers", "stormrazor", "ie", "pd", "ldr", "runaan"],
-      "augments": ["symphony_of_war", "critical_rhythm", "upgrade_ie", "stats_on_stats"]
+      "augments": ["symphony_of_war", "critical_rhythm", "upgrade_ie", "soul_siphon"]
     },
     "atma_bruiser": {
       "name": "Atma Bruiser",
       "items": ["berserkers", "yuntal", "atma", "ie", "heartsteel_hp", "ldr"],
-      "augments": ["goliath_hp", "critical_rhythm", "upgrade_ie", "symphony_of_war"]
+      "augments": ["soul_siphon", "critical_rhythm", "upgrade_ie", "symphony_of_war"]
     },
     "ap_gauntlet": {
       "name": "AP Jeweled Gauntlet",

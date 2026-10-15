@@ -29,6 +29,8 @@ struct StatBlock {
 
 struct Effect {
     std::string id, name, special, requiresItem;
+    std::string rarity;        // augments: silver, gold or prismatic
+    bool offeredToYunara = true;  // augments: seen in Yunara's Mayhem augment stats
     StatBlock stats;
     std::map<std::string, double> params;
     std::vector<StatBlock> anvilOptions;
@@ -103,7 +105,7 @@ enum Source : int {
     SrcQSpread,        // Q active spread to clumped enemies
     SrcW,              // W impact and lingering zone
     SrcItemOnhit,      // item and rune on-hit (Rageblade, BotRK, Wit's, Nashor, Kraken, Stormrazor)
-    SrcExtraBolts,     // Runaan's and Typhoon bolts
+    SrcExtraBolts,     // Runaan's, Typhoon, Dual Wield and Critical Missile
     SrcCount
 };
 extern const char* const kSourceNames[SrcCount];

@@ -29,7 +29,7 @@ Each entry has a `confidence`:
 - `likely`: one current source.
 - `approx`: an estimate. These are the values to correct from in-game tooltips.
 
-The biggest estimates right now are Yunara's W damage, Q active duration and spread ratio, the R refund on W, the Mayhem augment values (Symphony of War runes, Critical Rhythm, Typhoon, Stats on Stats anvils) and how often Stormrazor charges.
+The biggest estimates right now are Yunara's W damage, Q active duration and spread ratio, the R refund on W, the Mayhem augment values (Critical Missile's firecrackers, Symphony of War runes, Critical Rhythm, Typhoon, Deft) and how often Stormrazor charges.
 
 ## What a trial models
 
@@ -37,7 +37,11 @@ The biggest estimates right now are Yunara's W damage, Q active duration and spr
 - **Targets:** each enemy has the scenario's HP, armor and MR. Overkill is wasted. When the target dies she switches to a grouped enemy, or waits for a new one if none is near.
 - **Kit:** passive crit magic damage; Q on-hit, stacks, and the active's attack speed, extra on-hit and spread; W impact plus lingering zone, cast time shortening with bonus attack speed; R with Arc of Ruin and E attack resets.
 - **Mayhem rules:** 200% base crit damage, crit above 100% turning into AD, the 5.0 attack speed cap (10 with full Lethal Tempo) and the 80/70/60 s ultimate.
-- **Items and augments:** stat items plus Rageblade Seething and Phantom Hit, BotRK, Kraken, Runaan's, Stormrazor, Atma's Reckoning, Yun Tal Flurry, and the augments Symphony of War, Critical Rhythm, Double Tap, Jeweled Gauntlet, Mystic Punch, Typhoon, Upgrade Infinity Edge and Stats on Stats (anvils rolled fresh each trial).
+- **Items and augments:** stat items plus Rageblade Seething and Phantom Hit, BotRK (with its ARAM on-hit override), Kraken, Runaan's, Stormrazor, Atma's Reckoning and Yun Tal Flurry. Augments: Dual Wield, Critical Missile, Soul Siphon, Deft, Upgrade Infinity Edge, Double Tap, Critical Rhythm, Jeweled Gauntlet, Symphony of War, Mystic Punch and Typhoon.
+
+## Augment availability
+
+Each augment in the data file has `offered_to_yunara`. It is `confirmed` when the augment shows up in Yunara's ARAM Mayhem augment stats on current stat sites, which means players actually get offered it on her. Preset builds only use confirmed augments, and `make test` checks that. A custom build that uses an unconfirmed augment (currently Stats on Stats and Goliath) still runs but prints a warning.
 
 Not modeled: mana, Yunara taking damage, lifesteal, and positioning-dependent augments.
 

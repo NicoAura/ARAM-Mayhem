@@ -37,6 +37,12 @@ int main(int argc, char** argv) {
         CHECK(ok, ("preset build '" + id + "' only uses known items and augments").c_str());
     }
 
+    for (const auto& id : d.buildOrder) {
+        bool offered = true;
+        for (const auto& aug : d.builds.at(id).augments) offered &= d.augments.at(aug).offeredToYunara;
+        CHECK(offered, ("preset build '" + id + "' only uses augments confirmed for Yunara").c_str());
+    }
+
     const Build& crit = d.builds.at("crit_classic");
     auto a = runTrials(d, crit, sc, 0, 500);
     auto b1 = runTrials(d, crit, sc, 0, 250);

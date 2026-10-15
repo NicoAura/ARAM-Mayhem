@@ -98,7 +98,9 @@ void list(const GameData& d) {
     std::cout << "Items:\n";
     for (const auto& [id, e] : d.items) std::cout << "  " << id << "  (" << e.name << ")\n";
     std::cout << "Augments:\n";
-    for (const auto& [id, e] : d.augments) std::cout << "  " << id << "  (" << e.name << ")\n";
+    for (const auto& [id, e] : d.augments)
+        std::cout << "  " << id << "  (" << e.name << (e.rarity.empty() ? "" : ", " + e.rarity)
+                  << (e.offeredToYunara ? "" : ", not confirmed for Yunara") << ")\n";
     std::cout << "Builds:\n";
     for (const auto& id : d.buildOrder) {
         const Build& b = d.builds.at(id);
@@ -189,6 +191,14 @@ int main(int argc, char** argv) {
             builds.push_back(it->second);
         }
     }
+
+    for (const auto& b : builds)
+        for (const auto& id : b.augments) {
+            auto it = data.augments.find(id);
+            if (it != data.augments.end() && !it->second.offeredToYunara)
+                std::cerr << "warning: " << b.name << " uses " << it->second.name
+                          << ", which isn't confirmed as offered to Yunara\n";
+        }
 
     std::vector<std::pair<Build, Summary>> results;
     for (const auto& b : builds) {
