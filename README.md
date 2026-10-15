@@ -18,3 +18,22 @@ cd dashboard && python3 -m http.server
 
 Champion and augment names come from Data Dragon and CommunityDragon; without
 network access the page shows ids instead.
+
+## Importing match history (macOS)
+
+`importer/mayhem_import.py` pulls your ARAM Mayhem games from the League client
+into a JSON archive the dashboard reads. It uses only macOS's built-in `python3`
+and `curl`. Start League, sign in, then double-click
+`importer/Import Mayhem Games.command`, or run:
+
+```
+python3 importer/mayhem_import.py -o ~/Downloads/mayhem-backup.json
+```
+
+It gets match ids from Riot's match-history service (the one the client itself
+uses, as in [mayhem-tracker](https://github.com/Yhprum/mayhem-tracker)) and
+fetches each game through the client. Riot only serves an account's last 1000
+matches across all queues, so older games can't be downloaded. The script merges
+into an existing archive and never removes games, so pointing it at your current
+backup keeps everything you already have. `--full` rechecks every game Riot still
+serves to fill gaps.
