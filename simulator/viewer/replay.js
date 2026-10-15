@@ -1,5 +1,7 @@
 // Fight replay for the ARAM Mayhem simulator. Plays a traced fight (mayhem_sim --trace)
-// on a canvas and shows Riot's official clip of each ability as it is cast.
+// on a canvas. Fighters are animated 3D models (models3d.js) posed from the timeline, with
+// a close-up of your champion beside the arena; Riot's ability clips are the fallback
+// when a champion has no model.
 // Data comes from replay-data/, built by tools/build_replay_assets.py.
 (() => {
   "use strict";
@@ -52,6 +54,7 @@
     renderBuild();
     renderAbilities();
     setupClip();
+    setupModels();
     drawTrack();
     if (window.onReplayLoad) window.onReplayLoad(champ, trace, !!custom[champ.id]);
   }
@@ -138,6 +141,8 @@
 
   // ---------- drawing helpers ----------
   const arena = $("arena"), ctx = arena.getContext("2d");
+  const overlayCanvas = $("arenaOverlay"), overlay = overlayCanvas.getContext("2d");
+  const modelCanvas = $("arena3d");
   function iconRow(champId) { const c = byId.get(String(champId).toLowerCase()); return c ? c.row : -1; }
   function drawIcon(g, row, col, x, y, size, round) {
     g.save();
@@ -160,7 +165,7 @@
     const r = arena.getBoundingClientRect();
     const dpr = Math.min(2, window.devicePixelRatio || 1);
     const w = Math.round(r.width * dpr), h = Math.round(r.width * 9 / 16 * dpr);
-    if (arena.width !== w || arena.height !== h) { arena.width = w; arena.height = h; }
+    if (arena.width !== w || arena.height !== h) { arena.width = w; arena.height = h; overlayCanvas.width = w; overlayCanvas.height = h; }
     return dpr;
   }
 
@@ -173,6 +178,25 @@
       back.push({ x: W * 0.8 + Math.cos(a) * W * 0.05, y: H * 0.55 + Math.sin(a) * H * 0.34 });
     }
     return { me: { x: W * 0.2, y: H * 0.55 }, front, back };
+  }
+
+  // Which animation each model plays at time t, worked out from the timeline so
+  // scrubbing shows the same pose as playing.
+  function myAnim(time, s) {
+    if (s.dead) return { role: "death", t: time - fight.death.t, loop: false };
+    let cast = null;
+    for (const c of fight.casts) { if (c.t > time) break; cast = c; }
+    if (cast && time - cast.t < 1.1) return { role: cast.s, t: time - cast.t, loop: false };
+    if (s.cc) return { role: "stunned", t: time, loop: true };
+    let atk = null;
+    for (const a of fight.attacks) { if (a.t - 0.3 > time) break; atk = a; }
+    if (atk && time - (atk.t - 0.3) < 0.75) return { role: atk.f ? "crit" : "attack", t: time - (atk.t - 0.3), loop: false };
+    return { role: "idle", t: time, loop: true };
+  }
+  function enemyAnim(time, en) {
+    if (en.died !== null) return { role: "death", t: time - en.died, loop: false };
+    if (time < fight.engage) return { role: "idle", t: time + en.uid * 0.7, loop: true };
+    return { role: "attack", t: time + en.uid * 0.37, loop: true };
   }
 
   function drawArena(time, dt) {
@@ -269,16 +293,49 @@
           g.beginPath(); g.arc(to.x, to.y, r + age * 120 * u, 0, Math.PI * 2); g.stroke(); g.globalAlpha = 1;
         }
       }
-      if (miss && age > 0 && age < 0.6) floatText(g, "MISS", to.x, to.y - r - 30 * u - age * 40 * u, 1 - age / 0.6, "#c9d6e2", 18 * u);
+      if (miss && age > 0 && age < 0.6) floatText(overlay, "MISS", to.x, to.y - r - 30 * u - age * 40 * u, 1 - age / 0.6, "#c9d6e2", 18 * u);
     }
+
+    // Fighters: 3D models when they're loaded (models3d.js), otherwise portraits.
+    const meX = st.me.x + (posOf(s.focus).x - st.me.x) * 0.25 * lunge;
+    const M = window.Models3D && window.Models3D.ok ? window.Models3D : null;
+    let heads = {};
+    if (M) {
+      const fighters = [{ key: "me", champ: champ.id, x: meX, y: st.me.y, face: 1, ...myAnim(time, s) }];
+      for (const en of alive) {
+        const p = posOf(en.uid);
+        fighters.push({ key: "e" + en.uid, champ: en.champ, x: p.x, y: p.y, face: -1,
+          scale: en.uid === s.focus ? 1 : 0.85, visible: en.died === null || time - en.died < 1.6, ...enemyAnim(time, en) });
+      }
+      heads = M.frame(fighters, W, H);
+    }
+    const og = overlay;
+    og.setTransform(1, 0, 0, 1, 0, 0);
+    og.clearRect(0, 0, W, H);
 
     // Enemies.
     for (const en of alive) {
       const p = posOf(en.uid);
       const born = ease((time - en.born) / 0.3);
       const fade = en.died !== null ? 1 - (time - en.died) / 0.8 : 1;
-      g.globalAlpha = Math.max(0, fade) * born;
       const rr = r * (en.uid === s.focus ? 1.15 : 0.9);
+      const d = shown.get(en.uid);
+      d.hp = d.hp === undefined || dt <= 0 || dt > 0.5 ? en.hp : d.hp + (en.hp - d.hp) * (1 - Math.exp(-dt * 12));
+      const head = heads["e" + en.uid];
+      if (head) {
+        // Model: a ring at its feet, portrait and HP bar above its head.
+        g.globalAlpha = Math.max(0, fade);
+        g.strokeStyle = en.uid === s.focus ? "#f0605a" : "rgba(240,96,90,.55)"; g.lineWidth = 3 * u;
+        g.beginPath(); g.ellipse(p.x, p.y, rr * 1.2, rr * 0.5, 0, 0, Math.PI * 2); g.stroke();
+        g.globalAlpha = 1;
+        if (en.died === null) {
+          const bw = rr * 2;
+          drawIcon(og, iconRow(en.champ), 0, head.x - bw / 2 - 22 * u, head.y - 10 * u, 18 * u, true);
+          hpBar(og, head.x - bw / 2, head.y - 4 * u, bw, d.hp / en.max, "#f0605a");
+        }
+        continue;
+      }
+      g.globalAlpha = Math.max(0, fade) * born;
       g.fillStyle = "rgba(240,96,90,.25)";
       g.beginPath(); g.arc(p.x, p.y, rr + 5 * u, 0, Math.PI * 2); g.fill();
       if (en.died !== null) g.filter = "grayscale(1)";
@@ -286,9 +343,7 @@
       g.filter = "none";
       g.strokeStyle = en.uid === s.focus ? "#f0605a" : "rgba(240,96,90,.6)"; g.lineWidth = 3 * u;
       g.beginPath(); g.arc(p.x, p.y, rr, 0, Math.PI * 2); g.stroke();
-      const d = shown.get(en.uid);
-      d.hp = d.hp === undefined || dt <= 0 || dt > 0.5 ? en.hp : d.hp + (en.hp - d.hp) * (1 - Math.exp(-dt * 12));
-      hpBar(g, p.x - rr, p.y - rr - 14 * u, rr * 2, d.hp / en.max, "#f0605a");
+      hpBar(og, p.x - rr, p.y - rr - 14 * u, rr * 2, d.hp / en.max, "#f0605a");
       if (en.died !== null) {
         g.strokeStyle = "#f4f4f4"; g.lineWidth = 5 * u;
         g.beginPath(); g.moveTo(p.x - rr * 0.6, p.y - rr * 0.6); g.lineTo(p.x + rr * 0.6, p.y + rr * 0.6);
@@ -298,26 +353,35 @@
     }
 
     // You.
-    const meX = st.me.x + (posOf(s.focus).x - st.me.x) * 0.25 * lunge;
-    g.fillStyle = s.dead ? "rgba(120,120,120,.2)" : "rgba(143,211,255,.18)";
-    g.beginPath(); g.arc(meX, st.me.y, R + 7 * u, 0, Math.PI * 2); g.fill();
-    if (s.dead || s.cc) g.filter = s.dead ? "grayscale(1) brightness(.5)" : "saturate(.4)";
-    drawIcon(g, champ.row, 0, meX - R, st.me.y - R, R * 2, true);
-    g.filter = "none";
-    g.strokeStyle = "#8fd3ff"; g.lineWidth = 3 * u;
-    g.beginPath(); g.arc(meX, st.me.y, R, 0, Math.PI * 2); g.stroke();
     const frac = s.selfHp / fight.maxHp;
-    hpBar(g, meX - R, st.me.y - R - 16 * u, R * 2, frac, frac < 0.3 ? "#f0605a" : "#5fd38a");
+    const myHead = heads.me;
+    let labelY = st.me.y + R + 30 * u;
+    if (myHead) {
+      g.strokeStyle = s.dead ? "rgba(120,120,120,.6)" : "#8fd3ff"; g.lineWidth = 3 * u;
+      g.beginPath(); g.ellipse(meX, st.me.y, R * 1.2, R * 0.5, 0, 0, Math.PI * 2); g.stroke();
+      hpBar(og, myHead.x - R, myHead.y - 4 * u, R * 2, frac, frac < 0.3 ? "#f0605a" : "#5fd38a");
+      labelY = st.me.y + R * 0.5 + 26 * u;
+    } else {
+      g.fillStyle = s.dead ? "rgba(120,120,120,.2)" : "rgba(143,211,255,.18)";
+      g.beginPath(); g.arc(meX, st.me.y, R + 7 * u, 0, Math.PI * 2); g.fill();
+      if (s.dead || s.cc) g.filter = s.dead ? "grayscale(1) brightness(.5)" : "saturate(.4)";
+      drawIcon(g, champ.row, 0, meX - R, st.me.y - R, R * 2, true);
+      g.filter = "none";
+      g.strokeStyle = "#8fd3ff"; g.lineWidth = 3 * u;
+      g.beginPath(); g.arc(meX, st.me.y, R, 0, Math.PI * 2); g.stroke();
+      hpBar(og, meX - R, st.me.y - R - 16 * u, R * 2, frac, frac < 0.3 ? "#f0605a" : "#5fd38a");
+    }
     if (s.cc && !s.dead) {
-      g.strokeStyle = "#b388ff"; g.lineWidth = 3 * u;
+      const cy = myHead ? myHead.y - 18 * u : st.me.y - R - 30 * u;
+      og.strokeStyle = "#b388ff"; og.lineWidth = 3 * u;
       for (let i = 0; i < 3; i++) {
         const a = time * 5 + i * 2.1;
-        g.beginPath(); g.arc(meX + Math.cos(a) * R * 0.8, st.me.y - R - 30 * u + Math.sin(a) * 6 * u, 5 * u, 0, Math.PI * 2); g.stroke();
+        og.beginPath(); og.arc(meX + Math.cos(a) * R * 0.8, cy + Math.sin(a) * 6 * u, 5 * u, 0, Math.PI * 2); og.stroke();
       }
-      floatText(g, "STUNNED", meX, st.me.y + R + 30 * u, 1, "#b388ff", 15 * u);
+      floatText(og, "STUNNED", meX, labelY, 1, "#b388ff", 15 * u);
     }
-    if (s.dead) floatText(g, "SLAIN", meX, st.me.y + R + 30 * u, 1, "#f0605a", 18 * u);
-    else if (time < fight.engage) floatText(g, "ENEMIES ENGAGE IN " + (fight.engage - time).toFixed(1) + " s", meX, st.me.y + R + 30 * u, 0.8, "#8295a8", 13 * u);
+    if (s.dead) floatText(og, "SLAIN", meX, labelY, 1, "#f0605a", 18 * u);
+    else if (time < fight.engage) floatText(og, "ENEMIES ENGAGE IN " + (fight.engage - time).toFixed(1) + " s", meX, labelY + (s.cc ? 18 * u : 0), 0.8, "#8295a8", 13 * u);
 
     // On-hit passives.
     for (const pr of fight.procs) {
@@ -333,9 +397,11 @@
       const age = time - n.t;
       if (age < 0 || age > 0.9 || n.a < 1) continue;
       const p = posOf(n.u);
+      const head = heads["e" + n.u];
+      const baseY = head ? head.y - 20 * u : p.y - r - 26 * u;
       const jitter = ((n.t * 997) % 1 - 0.5) * 50 * u;
       const size = (n.crit ? 26 : n.a > 400 ? 22 : 16) * u;
-      floatText(g, Math.round(n.a).toString(), p.x + jitter, p.y - r - 26 * u - age * 70 * u, 1 - age / 0.9,
+      floatText(overlay, Math.round(n.a).toString(), (head ? head.x : p.x) + jitter, baseY - age * 70 * u, 1 - age / 0.9,
         n.crit ? "#ffd36b" : TYPE_COLORS[n.x] || "#fff", size);
     }
 
@@ -396,6 +462,38 @@
   track.addEventListener("pointermove", (e) => { if (dragging) seek(e); });
   track.addEventListener("pointerup", () => { dragging = false; });
 
+  // ---------- 3D models ----------
+  let modelMode = false;
+  function attachModels() {
+    const M = window.Models3D;
+    if (!M || M.arena || !M.attach($("arena3d"), $("closeup"))) return;
+    if (champ) setupModels();
+  }
+  window.addEventListener("models3d-ready", attachModels);
+  attachModels();
+  function setupModels() {
+    const M = window.Models3D;
+    if (!M || !M.ok || !champ) return;
+    const id = champ.id;
+    M.setFight(id, trace.fight.team).then((ok) => {
+      if (!champ || champ.id !== id) return;
+      modelMode = ok;
+      video.pause();
+      video.hidden = ok;
+      $("closeup").hidden = !ok;
+      $("sound").hidden = ok;
+      $("clipNote").textContent = ok
+        ? "Your champion plays each cast as it happens. Click an ability (or press Q, W, E, R) to see its animation."
+        : "No model for this champion yet, so casts play Riot's ability preview instead.";
+      if (!ok) video.hidden = false;
+    });
+  }
+  // Ability button or key: the model's animation, or the clip without a model.
+  function showAbility(slot) {
+    if (modelMode) { showCaption(slot); window.Models3D.previewRole(slot); }
+    else playClip(slot);
+  }
+
   // ---------- ability clips ----------
   const video = $("video");
   const clipState = { slot: null, start: 0, end: 0, startedAt: 0 };
@@ -406,6 +504,7 @@
     else video.removeAttribute("src");
     showCaption("Q");
     video.pause();
+    if (!modelMode) $("clipNote").textContent = "Each cast plays Riot's official preview of that ability. Click an ability to watch it again.";
   }
   function clipUrl(slot) {
     const k = String(champ.key).padStart(4, "0");
@@ -448,6 +547,7 @@
   video.addEventListener("timeupdate", () => { if (video.currentTime >= clipState.end) video.pause(); });
   // A new cast takes over the clip once the current one has had a moment, or at once for an ultimate.
   function maybeClip(slot) {
+    if (modelMode) { showCaption(slot); return; }
     const playedFor = (performance.now() - clipState.startedAt) / 1000;
     const busy = clipState.slot && !video.paused && playedFor < 1.2;
     if (!busy || (slot === "R" && clipState.slot !== "R")) playClip(slot);
@@ -458,13 +558,13 @@
     for (const slot of "QWER") {
       const b = document.createElement("button");
       b.type = "button"; b.className = "ab"; b.dataset.slot = slot;
-      b.title = `${slot}: ${(champ.spells || {})[slot] || ""}. Click to watch it.`;
+      b.title = `${slot}: ${(champ.spells || {})[slot] || ""}. Click to see it.`;
       const c = document.createElement("canvas"); c.width = c.height = 128;
       drawIcon(c.getContext("2d"), champ.row, SLOT_COL[slot], 0, 0, 128, false);
       const cd = document.createElement("canvas"); cd.width = cd.height = 128; cd.className = "cd";
       const k = document.createElement("span"); k.className = "key"; k.textContent = slot; k.style.color = SLOT_COLORS[slot];
       b.append(c, cd, k);
-      b.addEventListener("click", () => playClip(slot));
+      b.addEventListener("click", () => showAbility(slot));
       box.append(b);
     }
   }
@@ -573,7 +673,7 @@
     if (e.code === "Space") { e.preventDefault(); $("play").click(); }
     else if (e.key === "ArrowRight" && fight) { t = Math.min(fight.duration, t + 1); shown.clear(); }
     else if (e.key === "ArrowLeft" && fight) { t = Math.max(0, t - 1); shown.clear(); }
-    else if ("qwer".includes(e.key.toLowerCase()) && e.key.length === 1 && champ) playClip(e.key.toUpperCase());
+    else if ("qwer".includes(e.key.toLowerCase()) && e.key.length === 1 && champ) showAbility(e.key.toUpperCase());
   });
   window.addEventListener("resize", drawTrack);
 })();

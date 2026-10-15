@@ -125,16 +125,19 @@ Boots, five legendaries and four augments. Items are searched greedily to pick a
 
 ## Fight replays
 
-`viewer/` animates one simulated fight per champion: you, the enemy you are hitting and the rest of their team, with every cast, attack, damage number, kill and stun drawn as it happens. Each cast also plays Riot's official preview clip of that ability (the videos on the champion pages of leagueoflegends.com), so you see the real animation next to the simulated one. Clicking an ability, or pressing Q/W/E/R, replays its clip.
+`viewer/` animates one simulated fight per champion: you, the enemy you are hitting and the rest of their team, with every cast, attack, damage number, kill and stun drawn as it happens. Every fighter is the champion's animated 3D model (three.js), posed from the simulated timeline: each cast plays that ability's animation, attacks and crits play theirs, and stuns and deaths show too. Beside the arena is a close-up of your champion; clicking an ability, or pressing Q/W/E/R, plays its animation there. A missing animation falls back to the basic attack (Garen has no separate W, for example). Champions without a model fall back to Riot's ability preview clips.
 
 ```sh
 make replay                          # traces for all champions + icons; clips stream from Riot
 make replay CLIPS=--clips            # also store shrunk clips locally (about 50 MB, needs ffmpeg)
+make replay MODELS=1                 # also build the 3D models (about 130 MB, needs Node; see below)
 cd viewer && python3 -m http.server  # then open http://localhost:8000/#Ahri
 ./mayhem_sim --champ Jinx --trace jinx.json   # one champion's trace
 ```
 
-The replay shown is the median-DPS fight out of the first 200 for the best build, so it is a typical fight rather than a lucky one. `--trace` records the same fight the simulator scores (recording never changes the random draws; `make test` checks this). The generated `viewer/replay-data/` is not committed: the icons and clips belong to Riot Games.
+The replay shown is the median-DPS fight out of the first 200 for the best build, so it is a typical fight rather than a lucky one. `--trace` records the same fight the simulator scores (recording never changes the random draws; `make test` checks this). The generated `viewer/replay-data/` is not committed: the icons, clips and models belong to Riot Games.
+
+**Models.** `tools/build_models.mjs` keeps the ten animations the replay uses (idle, run, attack, crit, Q, W, E, R, stunned, death), shrinks textures to 512 px WebP and compresses meshes with meshopt, about 0.4 to 1.7 MB per champion. For now it downloads the exports from modelviewer.lol; they are meant to be replaced with models exported from a local League install. The viewer hides the parts the game hides (Teemo's mushroom, Ornn's poro) using the visibility data in those files, and keeps each model on its spot in the arena by ignoring root motion.
 
 ### Changing the simulation in the page
 

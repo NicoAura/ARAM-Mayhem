@@ -46,6 +46,7 @@ button:hover, select:hover { border-color: var(--ice); }
 @media (max-width: 860px) { .stage { grid-template-columns: minmax(0, 1fr); } }
 .arena { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; overflow: hidden; position: relative; min-width: 0; }
 .arena canvas { display: block; width: 100%; height: auto; aspect-ratio: 16 / 9; max-width: 100%; }
+.arena canvas.layer { position: absolute; left: 0; top: 0; pointer-events: none; }
 .hud { position: absolute; left: 12px; top: 10px; display: flex; gap: 14px; font: 600 12px var(--display);
   letter-spacing: .06em; text-transform: uppercase; color: var(--muted); pointer-events: none; }
 .hud b { color: var(--frost); font-variant-numeric: tabular-nums; }
@@ -53,6 +54,8 @@ button:hover, select:hover { border-color: var(--ice); }
   grid-template-rows: auto auto 1fr; min-width: 0; }
 .clip-video { position: relative; background: #05080c; aspect-ratio: 360 / 246; max-width: 100%; }
 .clip-video video { width: 100%; height: 100%; display: block; object-fit: cover; }
+.clip-video #closeup { position: absolute; inset: 0; width: 100%; height: 100%; display: block;
+  background: radial-gradient(ellipse at 50% 85%, #1d3346 0%, #0b131b 60%, #05080c 100%); }
 .clip-video .fallback { position: absolute; inset: 0; display: grid; place-items: center; color: var(--muted); font-size: 13px; text-align: center; padding: 16px; }
 .clip-video canvas.big { width: 96px; height: 96px; border-radius: 8px; }
 .clip-cap { padding: 10px 12px; display: flex; gap: 10px; align-items: center; border-bottom: 1px solid var(--line); min-width: 0; }
@@ -146,17 +149,20 @@ fieldset select { width: 100%; min-width: 0; font-size: 13px; padding: 6px 8px; 
   <section class="stage">
     <div class="arena">
       <canvas id="arena" width="1280" height="720" aria-label="Animated fight"></canvas>
+      <canvas id="arena3d" class="layer" aria-hidden="true"></canvas>
+      <canvas id="arenaOverlay" class="layer" width="1280" height="720" aria-hidden="true"></canvas>
       <div class="hud"><span>Kills <b id="kills">0</b></span><span>Damage <b id="dmg">0</b></span><span id="state"></span></div>
     </div>
     <div class="clip">
-      <div class="clip-cap"><span class="chip" id="clipChip" style="background:var(--q)">Q</span><span class="nm" id="clipName">Ability clip</span></div>
+      <div class="clip-cap"><span class="chip" id="clipChip" style="background:var(--q)">Q</span><span class="nm" id="clipName">Ability</span></div>
       <div class="clip-video">
         <video id="video" playsinline muted preload="auto" aria-label="Official ability preview"></video>
+        <canvas id="closeup" aria-label="Your champion's model" hidden></canvas>
         <div class="fallback" id="fallback" hidden></div>
       </div>
       <div>
         <div class="abilities" id="abilities"></div>
-        <div class="clip-note" id="clipNote">Each cast plays Riot's official preview of that ability. Click an ability to watch it again.</div>
+        <div class="clip-note" id="clipNote">Loading your champion's model…</div>
       </div>
     </div>
   </section>
@@ -216,9 +222,12 @@ fieldset select { width: 100%; min-width: 0; font-size: 13px; padding: 6px 8px; 
   </section>
 
   <p class="note">This is one typical fight (the median of 200) from the simulator, using the build it found best. Enemies and their numbers come from China-server Mayhem data. Ability kits are read automatically from game files, so some champions' numbers are rough, and passives are mostly missing.
-  The ability clips and icons belong to Riot Games. This project isn't endorsed by Riot Games and doesn't reflect the views or opinions of Riot Games or anyone officially involved in producing or managing League of Legends.</p>
+  The champion models, animations and icons belong to Riot Games (models currently from modelviewer.lol). This project isn't endorsed by Riot Games and doesn't reflect the views or opinions of Riot Games or anyone officially involved in producing or managing League of Legends.</p>
 </div>
+<script type="importmap">{"imports": {"three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+  "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"}}</script>
 <script src="replay.js"></script>
+<script type="module" src="models3d.js"></script>
 <script src="sim-panel.js"></script>
 <!-- replay-page-end -->
 </body>
