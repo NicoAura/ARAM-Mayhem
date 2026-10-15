@@ -166,7 +166,8 @@
 
   function drawArena(time, dt) {
     const dpr = resize();
-    const W = arena.width, H = arena.height, u = W / 1280;
+    // Scale: bigger shapes on narrow screens so portraits stay readable on a phone.
+    const W = arena.width, H = arena.height, u = W / dpr < 600 ? W / 760 : W / 1280;
     const s = stateAt(time);
     // Ground: the Howling Abyss bridge.
     const g = ctx;

@@ -42,7 +42,7 @@ select, button { font: 500 14px var(--body); color: var(--frost); background: va
 button { cursor: pointer; }
 button:hover, select:hover { border-color: var(--ice); }
 :focus-visible { outline: 2px solid var(--ice); outline-offset: 2px; }
-.stage { display: grid; grid-template-columns: minmax(0, 1.7fr) minmax(0, 1fr); gap: 16px; }
+.stage { display: grid; grid-template-columns: minmax(0, 1.7fr) minmax(0, 1fr); gap: 16px; align-items: start; }
 @media (max-width: 860px) { .stage { grid-template-columns: minmax(0, 1fr); } }
 .arena { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; overflow: hidden; position: relative; min-width: 0; }
 .arena canvas { display: block; width: 100%; height: auto; aspect-ratio: 16 / 9; max-width: 100%; }
