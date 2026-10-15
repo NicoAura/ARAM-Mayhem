@@ -1,4 +1,4 @@
-// Placeholder card that hints at the layout a section will have once its data is wired up.
+// Shimmering skeleton that hints at the layout a section will have once its data is wired up.
 export default function ComingSoon({
   label,
   variant,
@@ -7,25 +7,18 @@ export default function ComingSoon({
   variant: "table" | "form" | "list";
 }) {
   return (
-    <section className="card filled coming-soon enter" style={{ animationDelay: "80ms" }}>
-      <div className="linear-progress" role="progressbar" aria-label={label}>
-        <span />
+    <section className="coming-soon fade-up" style={{ animationDelay: "120ms" }}>
+      <div className="coming-soon-label">
+        <span className="pulse-dot" />
+        {label}
       </div>
-      <p className="title-small on-variant">{label}</p>
       {variant === "table" && (
         <div className="skeleton-table">
-          <div className="skeleton-row header">
-            <span className="label-medium">Champion</span>
-            <span className="label-medium">Win rate</span>
-            <span className="label-medium">Games</span>
-          </div>
           {Array.from({ length: 6 }, (_, i) => (
             <div key={i} className="skeleton-row">
-              <span className="skeleton-cell">
-                <span className="skeleton avatar" />
-                <span className="skeleton" style={{ width: `${70 - i * 6}%` }} />
-              </span>
-              <span className="skeleton bar" style={{ width: `${85 - i * 9}%` }} />
+              <span className="skeleton avatar" />
+              <span className="skeleton" style={{ width: `${40 - i * 3}%` }} />
+              <span className="skeleton bar" style={{ width: `${70 - i * 8}%` }} />
               <span className="skeleton short" />
             </div>
           ))}
@@ -35,28 +28,28 @@ export default function ComingSoon({
         <div className="skeleton-form">
           <div className="skeleton-fields">
             {["Champion", "Items", "Augments", "Target"].map((f) => (
-              <div key={f} className="text-field">
-                <span className="text-field-label">{f}</span>
+              <div key={f} className="skeleton-field">
+                <span className="field-label">{f}</span>
+                <span className="skeleton input" />
               </div>
             ))}
-            <span className="btn filled disabled">Simulate</span>
           </div>
           <div className="skeleton-chart">
             {Array.from({ length: 14 }, (_, i) => (
-              <span key={i} className="column" style={{ height: `${25 + ((i * 37) % 70)}%` }} />
+              <span key={i} className="skeleton column" style={{ height: `${25 + ((i * 37) % 70)}%` }} />
             ))}
           </div>
         </div>
       )}
       {variant === "list" && (
-        <ul className="list">
+        <div className="skeleton-list">
           {["buff", "nerf", "change", "buff", "nerf"].map((tag, i) => (
-            <li key={i} className="list-item">
-              <span className={`chip chip-${tag}`}>{tag}</span>
+            <div key={i} className="skeleton-item">
+              <span className={`tag tag-${tag}`}>{tag}</span>
               <span className="skeleton" style={{ width: `${55 + ((i * 13) % 30)}%` }} />
-            </li>
+            </div>
           ))}
-        </ul>
+        </div>
       )}
     </section>
   );
