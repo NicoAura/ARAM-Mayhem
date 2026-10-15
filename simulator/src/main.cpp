@@ -27,6 +27,8 @@ R"(Yunara ARAM Mayhem Monte Carlo DPS simulator
 Usage: yunara_sim [options]
 
   --data PATH          data file (default )" YUNARA_DEFAULT_DATA R"()
+  --enemies SOURCE     enemy teams: a pool file, or "archetypes" for the built-in
+                       squishy/bruiser/tank mix (default: the data file's enemy_pool)
   --builds a,b,...     preset builds to run (default: all)
   --items a,b,...      run a custom build with these items
   --augs a,b,...       augments for the custom build
@@ -126,6 +128,7 @@ std::string jsonEscape(const std::string& s) {
 
 int main(int argc, char** argv) {
     std::string dataPath = YUNARA_DEFAULT_DATA;
+    std::string enemiesArg;
     std::vector<std::string> buildIds, customItems, customAugs;
     bool asJson = false, doList = false;
 #ifdef __EMSCRIPTEN__
@@ -143,6 +146,7 @@ int main(int argc, char** argv) {
         };
         if (a == "--help" || a == "-h") { usage(); return 0; }
         else if (a == "--data") dataPath = next();
+        else if (a == "--enemies") enemiesArg = next();
         else if (a == "--builds") buildIds = splitList(next());
         else if (a == "--items") customItems = splitList(next());
         else if (a == "--augs") customAugs = splitList(next());
@@ -156,7 +160,10 @@ int main(int argc, char** argv) {
     }
 
     std::string text = readFile(dataPath);
-    if (text.empty()) text = readFile("../" + dataPath);
+    if (text.empty()) {
+        text = readFile("../" + dataPath);
+        if (!text.empty()) dataPath = "../" + dataPath;
+    }
     if (text.empty()) { std::cerr << "could not read data file " << dataPath << "\n"; return 1; }
 
     GameData data;
@@ -167,6 +174,26 @@ int main(int argc, char** argv) {
         return 1;
     }
     if (doList) { list(data); return 0; }
+
+    // Enemy pool: real champion pick rates and stats (see tools/build_enemy_pool.py).
+    std::string poolPath = enemiesArg;
+    if (poolPath.empty()) {
+        const std::string rel = json::parse(text)["scenario"]["enemy_pool"].asString();
+        if (!rel.empty()) {
+            const size_t slash = dataPath.find_last_of('/');
+            poolPath = (slash == std::string::npos ? std::string() : dataPath.substr(0, slash + 1)) + rel;
+        }
+    }
+    if (!poolPath.empty() && poolPath != "archetypes") {
+        const std::string poolText = readFile(poolPath);
+        if (poolText.empty()) { std::cerr << "could not read enemy pool " << poolPath << "\n"; return 1; }
+        try {
+            data.applyEnemyPool(json::parse(poolText));
+        } catch (const std::exception& e) {
+            std::cerr << "bad enemy pool: " << e.what() << "\n";
+            return 1;
+        }
+    }
 
     Scenario sc = data.scenario;
     for (const auto& [flag, v] : overrides) {
@@ -219,6 +246,9 @@ int main(int argc, char** argv) {
         char buf[128];
         std::snprintf(buf, sizeof buf, "fixed target %g HP / %g armor / %g MR", sc.targetHp, sc.targetArmor, sc.targetMr);
         targetDesc = buf;
+    } else if (sc.teamDrivenDamage) {
+        targetDesc = std::to_string(sc.teamSize) + "-champion teams drawn by pick rate from " +
+                     std::to_string(sc.enemies.size()) + " champions (" + sc.enemySource + ")";
     } else {
         targetDesc = "mixed enemy team (";
         for (size_t i = 0; i < sc.enemies.size(); ++i) {

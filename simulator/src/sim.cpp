@@ -214,6 +214,33 @@ GameData GameData::fromJson(const json::Value& root) {
     return d;
 }
 
+void GameData::applyEnemyPool(const json::Value& pool) {
+    Scenario& sc = scenario;
+    sc.enemies.clear();
+    for (const auto& e : pool["enemies"].arr) {
+        EnemyProfile p;
+        p.id = e["id"].asString();
+        p.name = e["name"].asString(p.id);
+        p.weight = e["weight"].asNumber(0.0);
+        p.hp = e["hp"].asNumber(p.hp);
+        p.armor = e["armor"].asNumber(p.armor);
+        p.mr = e["mr"].asNumber(p.mr);
+        p.damageTaken = e["damage_taken"].asNumber(1.0);
+        p.cc = e["cc"].asNumber(1.0);
+        p.physShare = e["phys_share"].asNumber(0.5);
+        p.damageShare = e["damage_share"].asNumber(0.2);
+        if (p.weight > 0) sc.enemies.push_back(p);
+    }
+    if (sc.enemies.empty()) throw std::runtime_error("enemy pool has no enemies");
+    sc.fixedTarget = false;
+    sc.teamSize = static_cast<int>(pool["team"]["size"].asNumber(5));
+    sc.ccRatePerPoint = pool["team"]["cc_rate_per_point"].asNumber(0.0);
+    sc.damageTakenFactor = pool["yunara"]["damage_taken_factor"].asNumber(1.0);
+    sc.teamDrivenDamage = true;
+    sc.enemySource = pool["meta"]["source"].asString("enemy pool") + ", " +
+                     pool["meta"]["champion_stat_date"].asString("");
+}
+
 void GameData::validate(const Build& b) const {
     for (const auto& i : b.items)
         if (!items.count(i)) throw std::runtime_error("unknown item '" + i + "' in build " + b.id);
@@ -310,6 +337,7 @@ private:
     StatBlock bonus_;
     double baseAd_ = 0, staticAd_ = 0, ap_ = 0, crit_ = 0, critMult_ = 2.0, staticBonusAs_ = 0;
     double totalWeight_ = 0;
+    std::vector<const EnemyProfile*> team_;
     // Yunara's own survival
     double myHp_ = 0, myMaxHp_ = 0, incomingDps_ = 0, engageAt_ = 0, damageClock_ = 0;
     bool dead_ = false;
@@ -393,17 +421,36 @@ private:
         myHp_ = myMaxHp_;
     }
 
+    // Draws this fight's enemy team by pick weight, without repeats when the
+    // pool is big enough (champion pools), with repeats otherwise (archetypes).
+    void drawTeam() {
+        const auto& pool = sc_.enemies;
+        const size_t size = static_cast<size_t>(std::max(1, sc_.teamSize));
+        const bool distinct = pool.size() >= size;
+        std::vector<bool> taken(pool.size(), false);
+        double remaining = totalWeight_;
+        for (size_t k = 0; k < size; ++k) {
+            double r = rng_.uniform() * remaining;
+            size_t pick = pool.size();
+            for (size_t i = 0; i < pool.size(); ++i) {
+                if (taken[i]) continue;
+                if (r < pool[i].weight) { pick = i; break; }
+                r -= pool[i].weight;
+            }
+            if (pick == pool.size())  // rounding: take the last available
+                for (size_t i = pool.size(); i-- > 0;)
+                    if (!taken[i]) { pick = i; break; }
+            team_.push_back(&pool[pick]);
+            if (distinct) { taken[pick] = true; remaining -= pool[pick].weight; }
+        }
+    }
+
     Enemy spawnEnemy() {
         EnemyProfile p;
         if (sc_.fixedTarget) {
             p.hp = sc_.targetHp; p.armor = sc_.targetArmor; p.mr = sc_.targetMr;
         } else {
-            double r = rng_.uniform() * totalWeight_;
-            p = sc_.enemies.back();
-            for (const auto& e : sc_.enemies) {
-                if (r < e.weight) { p = e; break; }
-                r -= e.weight;
-            }
+            p = *team_[rng_.pick(team_.size())];
         }
         Enemy e;
         e.maxHp = p.hpSd > 0 ? std::max(0.5 * p.hp, rng_.normal(p.hp, p.hp * p.hpSd)) : p.hp;
@@ -459,14 +506,21 @@ private:
 
     void setupScenario() {
         duration_ = std::clamp(rng_.normal(sc_.fightMean, sc_.fightSd), sc_.fightMin, sc_.fightMax);
+        for (const auto& e : sc_.enemies) totalWeight_ += e.weight;
+        if (!sc_.fixedTarget) drawTeam();
+
         // Some enemy teams bring far more crowd control than others.
-        const double ccRate = rng_.uniform(sc_.ccRateMin, sc_.ccRateMax);
+        double ccRate = rng_.uniform(sc_.ccRateMin, sc_.ccRateMax);
+        if (sc_.ccRatePerPoint > 0 && !team_.empty()) {
+            double points = 0;
+            for (const auto* e : team_) points += e->cc;
+            ccRate = sc_.ccRatePerPoint * points;
+        }
         if (ccRate > 0) {
             for (double t = rng_.exponential(ccRate); t < duration_; t += rng_.exponential(ccRate))
                 cc_.push_back({t, t + rng_.uniform(sc_.ccMin, sc_.ccMax)});
         }
         rAvailable_ = rng_.chance(sc_.rReadyChance);
-        for (const auto& e : sc_.enemies) totalWeight_ += e.weight;
         primary_ = spawnEnemy();
         secondaries_.resize(static_cast<size_t>(rng_.binomial(sc_.clumpMax, sc_.clumpChance)));
         for (auto& e : secondaries_) e = spawnEnemy();
@@ -474,9 +528,18 @@ private:
         const double g = levelScale();
         const double armor = ch_.baseArmor + ch_.armorGrowth * g + bonus_.armor;
         const double mr = ch_.baseMr + ch_.mrGrowth * g + bonus_.mr;
-        const double mitigation = sc_.enemyPhysShare * 100.0 / (100.0 + armor) +
-                                  (1.0 - sc_.enemyPhysShare) * 100.0 / (100.0 + mr);
-        incomingDps_ = std::max(0.0, rng_.normal(sc_.enemyDpsMean, sc_.enemyDpsSd)) * mitigation;
+        double physShare = sc_.enemyPhysShare, teamDamage = 1.0;
+        if (sc_.teamDrivenDamage && !team_.empty()) {
+            // Damage type follows the drawn champions, weighted by how much of
+            // their team's damage each one usually deals; a damage-heavy comp hits harder.
+            double share = 0, phys = 0;
+            for (const auto* e : team_) { share += e->damageShare; phys += e->damageShare * e->physShare; }
+            if (share > 0) physShare = phys / share;
+            teamDamage = share / (0.2 * static_cast<double>(team_.size()));
+        }
+        const double mitigation = physShare * 100.0 / (100.0 + armor) + (1.0 - physShare) * 100.0 / (100.0 + mr);
+        incomingDps_ = std::max(0.0, rng_.normal(sc_.enemyDpsMean, sc_.enemyDpsSd)) * sc_.damageTakenFactor *
+                       teamDamage * mitigation;
         engageAt_ = rng_.uniform(sc_.engageMin, sc_.engageMax);
         if (hasYuntal_) flurryUntil_ = yuntal_->param("flurry_duration", 6.0);
     }

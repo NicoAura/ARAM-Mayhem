@@ -34,14 +34,24 @@ The biggest estimates right now are Yunara's W damage, Q active duration and spr
 ## What a trial models
 
 - **Fight:** length drawn from a normal distribution (default 18 ± 6 s) and 0 to 4 grouped enemies near her target.
-- **Targets:** every enemy is drawn from a mixed late-game team: squishies (45%, about 3000 HP / 95 armor / 60 MR), bruisers (35%, 4300 / 160 / 95) and tanks (20%, 5800 / 260 / 160), with health varied ±12%. Overkill is wasted. When the target dies she switches to a grouped enemy, or waits for a new one if none is near. `--target HP,AR,MR` swaps in one fixed target instead.
-- **Crowd control:** each fight picks how much CC the enemy team brings (0.05 to 0.2 interrupts per second, each 0.75 to 1.75 s). Yunara can't act while interrupted.
-- **Enemy damage:** the enemy team starts hitting Yunara 2 to 6 s in, at a damage rate drawn per fight (default 500 ± 200 per second before her armor and MR). Health items, lifesteal and Soul Siphon healing keep her alive longer. If she dies she deals no more damage, and DPS is still averaged over the whole fight, so fragile builds pay for it. The report shows how often she survives and how long she stays alive. `--enemy-dps 0,0` turns this off.
+- **Enemy team:** each fight draws 5 enemy champions by their China-server ARAM Mayhem pick rate (101.qq.com), from `data/cn_enemy_pool.json`. Each champion has their real level-18 base stats plus an estimated late-game item package for their role, their damage type and Tencent's 1-3 crowd-control rating. Overkill is wasted. When the target dies she switches to a grouped enemy, or waits for a new one if none is near. `--target HP,AR,MR` swaps in one fixed target, and `--enemies archetypes` uses a simple squishy/bruiser/tank mix instead.
+- **Crowd control:** the drawn team's CC ratings set how often Yunara gets interrupted (about 0.125 per second on an average team, each 0.75 to 1.75 s). She can't act while interrupted.
+- **Enemy damage:** the enemy team starts hitting Yunara 2 to 6 s in. The base rate (500 ± 200 per second for an average player, before armor and MR) is an estimate; it is scaled by Yunara's real share of her team's damage taken in CN games (0.79x the average player) and by how damage-heavy the drawn champions are, and the physical/magic split follows their damage types. Health items, lifesteal and Soul Siphon healing keep her alive longer. If she dies she deals no more damage, and DPS is still averaged over the whole fight, so fragile builds pay for it. The report shows how often she survives and how long she stays alive. `--enemy-dps 0,0` turns this off.
 - **Kit:** passive crit magic damage; Q on-hit, stacks, and the active's attack speed, extra on-hit and spread; W impact plus lingering zone, cast time shortening with bonus attack speed; R with Arc of Ruin and E attack resets.
 - **Mayhem rules:** Mayhem inherits all regular ARAM balance changes and adds its own on top, so both are applied (Yunara's ARAM damage dealt and taken are both unchanged; BotRK's ARAM on-hit buff is in). Also 200% base crit damage, crit above 100% turning into AD, the 5.0 attack speed cap (10 with full Lethal Tempo) and the 80/70/60 s ultimate.
 - **Items and augments:** stat items plus Rageblade Seething and Phantom Hit, BotRK (with its ARAM on-hit override), Kraken, Runaan's, Stormrazor, Atma's Reckoning and Yun Tal Flurry. Augments: Dual Wield, Critical Missile, Soul Siphon, Deft, Upgrade Infinity Edge, Double Tap, Critical Rhythm, Jeweled Gauntlet, Symphony of War, Mystic Punch and Typhoon.
 
 Not modeled: mana, Yunara taking damage, lifesteal, and positioning-dependent augments (Scopiest Weapons, Tap Dancer).
+
+## Enemy pool data
+
+`tools/build_enemy_pool.py` builds `data/cn_enemy_pool.json`. It reads the champion snapshot from `data/cn/fetch_cn.py` (pick rates, damage and damage-taken shares, time dead; fetches the table itself if that file is missing) and adds each champion's base stats, role, damage type and CC rating from Tencent's champion files on game.gtimg.cn. Re-run it to refresh:
+
+```sh
+python3 simulator/tools/build_enemy_pool.py
+```
+
+The item package per role and the average CC rate are estimates (listed in the pool file's `meta`); everything else comes from the CN data.
 
 ## Augment availability
 

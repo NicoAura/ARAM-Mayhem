@@ -19,7 +19,7 @@ sanity_test: src/sim.cpp tests/sanity.cpp $(HDR)
 	$(CXX) $(CXXFLAGS) src/sim.cpp tests/sanity.cpp -o $@
 
 test: sanity_test
-	./sanity_test data/yunara_mayhem.json
+	./sanity_test data/yunara_mayhem.json data/cn_enemy_pool.json
 
 # Browser build (needs Emscripten). Single-threaded on purpose: the site runs
 # one copy per Web Worker, so no SharedArrayBuffer or COOP/COEP headers needed.
@@ -28,7 +28,7 @@ wasm: $(SRC) $(HDR)
 	$(EMCC) -std=c++17 -O2 src/sim.cpp src/main.cpp -o dist/yunara_sim.js \
 		-sMODULARIZE -sEXPORT_NAME=YunaraSim -sALLOW_MEMORY_GROWTH \
 		-sINVOKE_RUN=0 -sEXPORTED_RUNTIME_METHODS=callMain,FS \
-		--preload-file data/yunara_mayhem.json
+		--preload-file data/yunara_mayhem.json --preload-file data/cn_enemy_pool.json
 
 clean:
 	rm -rf yunara_sim sanity_test dist

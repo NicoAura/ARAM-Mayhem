@@ -285,14 +285,17 @@
     "retarget_delay": 1.5,
     "target_hp": 3800, "target_armor": 120, "target_mr": 80,
 
-    "enemy_team_note": "Each fight draws every enemy from these profiles by weight. Level 18 base stats average about 2400 HP / 100 armor / 55 MR for squishies and 2430 HP / 115 armor / 66 MR for tanks (metabot.gg 26.19); the rest is a typical late ARAM Mayhem build with stat augments. damage_taken is the champion's ARAM modifier, which Mayhem inherits; 1.0 is the norm. All approx. Passing --target replaces this with one fixed target.",
+    "enemy_pool": "cn_enemy_pool.json",
+    "enemy_pool_note": "Default enemies: 5-champion teams drawn by China-server Mayhem pick rate (101.qq.com), with each champion's real base stats, damage type and CC rating. Rebuild with tools/build_enemy_pool.py. The enemy_team archetypes below are used with --enemies archetypes.",
+
+    "enemy_team_note": "Fallback archetypes. Each fight draws every enemy from these profiles by weight. Level 18 base stats average about 2400 HP / 100 armor / 55 MR for squishies and 2430 HP / 115 armor / 66 MR for tanks (metabot.gg 26.19); the rest is a typical late ARAM Mayhem build with stat augments. damage_taken is the champion's ARAM modifier, which Mayhem inherits; 1.0 is the norm. All approx. Passing --target replaces this with one fixed target.",
     "enemy_team": [
       { "id": "squishy", "name": "Squishy (marksman/mage)", "weight": 0.45, "hp": 3000, "hp_sd": 0.12, "armor": 95, "mr": 60, "damage_taken": 1.0 },
       { "id": "bruiser", "name": "Bruiser", "weight": 0.35, "hp": 4300, "hp_sd": 0.12, "armor": 160, "mr": 95, "damage_taken": 1.0 },
       { "id": "tank", "name": "Tank", "weight": 0.20, "hp": 5800, "hp_sd": 0.12, "armor": 260, "mr": 160, "damage_taken": 1.0 }
     ],
 
-    "enemy_damage_note": "Damage the enemy team aims at Yunara per second, before her armor and MR, starting a random moment after the fight begins. Varies by fight. If it kills her, she deals no more damage that fight. Estimates.",
+    "enemy_damage_note": "Damage per second the enemy team aims at an average player, before armor and MR, starting a random moment after the fight begins (estimate). With the enemy pool it is scaled by Yunara's real share of her team's damage taken (101.qq.com) and by how damage-heavy the drawn enemy team is, and the physical/magic split follows the drawn champions. If it kills her, she deals no more damage that fight.",
     "enemy_dps_mean": 500, "enemy_dps_sd": 200, "enemy_phys_share": 0.55,
     "engage_min": 2.0, "engage_max": 6.0
   }

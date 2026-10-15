@@ -48,6 +48,9 @@ struct EnemyProfile {
     std::string id, name;
     double weight = 1, hp = 3800, hpSd = 0, armor = 120, mr = 80;
     double damageTaken = 1.0;  // the champion's ARAM damage-taken modifier
+    double cc = 0;             // crowd-control rating (1-3) when known
+    double physShare = 0.5;    // share of the champion's damage that is physical
+    double damageShare = 0.2;  // average share of their team's damage (0.2 = 1 of 5)
 };
 
 struct Scenario {
@@ -64,6 +67,15 @@ struct Scenario {
     // Enemy team to draw targets from. With fixedTarget every enemy uses targetHp/Armor/Mr.
     std::vector<EnemyProfile> enemies;
     bool fixedTarget = false;
+    std::string enemySource = "archetypes";
+    int teamSize = 5;
+    // When > 0, a fight's CC rate is this times the enemy team's summed CC ratings
+    // instead of a uniform draw between ccRateMin and ccRateMax.
+    double ccRatePerPoint = 0;
+    // When true, damage type and amount follow the drawn enemy team's champions.
+    bool teamDrivenDamage = false;
+    // How much damage Yunara takes relative to the average player (from real games).
+    double damageTakenFactor = 1.0;
     double targetHp = 3800, targetArmor = 120, targetMr = 80;
     // Damage aimed at Yunara (before her armor and MR), and when it starts.
     double enemyDpsMean = 500, enemyDpsSd = 200, enemyPhysShare = 0.55;
@@ -109,6 +121,9 @@ struct GameData {
     Scenario scenario;
 
     static GameData fromJson(const json::Value& root);
+    // Replaces the scenario's enemy team with a champion pool built by
+    // tools/build_enemy_pool.py (101.qq.com China-server Mayhem data).
+    void applyEnemyPool(const json::Value& pool);
     // Throws std::runtime_error naming any unknown item or augment.
     void validate(const Build& b) const;
 };

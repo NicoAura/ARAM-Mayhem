@@ -98,6 +98,24 @@ int main(int argc, char** argv) {
               summarize(runTrials(d, crit, fixedSquishy, 0, sc.trials)).killsPerMinute,
           "tanks die slower than squishies");
 
+    if (argc > 2) {
+        std::ifstream pin(argv[2]);
+        std::stringstream ps;
+        ps << pin.rdbuf();
+        GameData pooled = d;
+        pooled.applyEnemyPool(json::parse(ps.str()));
+        CHECK(pooled.scenario.enemies.size() > 100, "enemy pool loads 100+ champions");
+        Scenario psc = pooled.scenario;
+        psc.trials = 2000;
+        const Summary pooledSum = summarize(runTrials(pooled, crit, psc, 0, psc.trials));
+        CHECK(pooledSum.meanDps > 0 && pooledSum.survivalRate > 0 && pooledSum.survivalRate < 1,
+              "enemy pool fights produce damage and some deaths");
+        Scenario noCc = psc;
+        noCc.ccRatePerPoint = 0; noCc.ccRateMin = noCc.ccRateMax = 0;
+        CHECK(summarize(runTrials(pooled, crit, noCc, 0, psc.trials)).meanDps > pooledSum.meanDps,
+              "enemy team CC lowers damage");
+    }
+
     Build bad{"bad", "Bad", {"not_an_item"}, {}};
     bool threw = false;
     try { runTrials(d, bad, sc, 0, 1); } catch (...) { threw = true; }
