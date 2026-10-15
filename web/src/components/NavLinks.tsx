@@ -3,19 +3,13 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-const links = [
-  { href: "/stats", label: "Stats" },
-  { href: "/simulator", label: "Simulator" },
-  { href: "/pbe", label: "PBE" },
-];
-
-export default function NavLinks() {
+export default function NavLinks({ tabs }: { tabs: { href: string; label: string }[] }) {
   const pathname = usePathname();
   return (
     <nav className="nav">
-      {links.map((l) => (
-        <Link key={l.href} href={l.href} aria-current={pathname.startsWith(l.href) ? "page" : undefined}>
-          {l.label}
+      {tabs.map((t) => (
+        <Link key={t.href} href={t.href} aria-current={pathname.startsWith(t.href) ? "page" : undefined}>
+          {t.label}
         </Link>
       ))}
     </nav>

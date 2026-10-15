@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import Link from "next/link";
 import NavLinks from "@/components/NavLinks";
+import { allTabs } from "@/lib/tabs";
 import "./globals.css";
 
 const sans = Geist({ subsets: ["latin"], variable: "--font-sans" });
@@ -24,7 +25,7 @@ export default function RootLayout({
           <Link href="/" className="brand">
             ARAM Mayhem
           </Link>
-          <NavLinks />
+          <NavLinks tabs={allTabs().map(({ href, label }) => ({ href, label }))} />
         </header>
         <main>{children}</main>
         <footer className="site-footer">

@@ -61,7 +61,7 @@ ul {
 main,
 .site-footer {
   width: 100%;
-  max-width: 880px;
+  max-width: 1040px;
   margin: 0 auto;
   padding-left: 1.5rem;
   padding-right: 1.5rem;
@@ -217,6 +217,333 @@ h1 {
   font-size: 0.75rem;
 }
 
+/* Section page intros */
+.intro.compact {
+  margin-bottom: 2.5rem;
+}
+
+.intro.compact h1 {
+  font-size: clamp(1.75rem, 4.5vw, 2.5rem);
+}
+
+.lede {
+  max-width: 44rem;
+  margin-top: 1rem;
+  color: var(--muted);
+}
+
+.sub {
+  display: block;
+  color: var(--muted);
+  font-size: 0.875rem;
+}
+
+.inline-link {
+  color: var(--fg);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-color: var(--line);
+}
+
+.inline-link:hover {
+  text-decoration-color: var(--fg);
+}
+
+/* Embedded tools from other folders in the repo */
+.embed iframe {
+  display: block;
+  width: 100%;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--bg);
+}
+
+.embed-open {
+  display: inline-block;
+  margin-top: 0.75rem;
+  color: var(--muted);
+  font-size: 0.875rem;
+}
+
+.embed-open:hover {
+  color: var(--fg);
+}
+
+/* In-page tabs */
+.subtab-list {
+  display: flex;
+  gap: 0.25rem;
+  margin-bottom: 1.5rem;
+  overflow-x: auto;
+  border-bottom: 1px solid var(--line);
+  scrollbar-width: none;
+}
+
+.subtab-list button {
+  flex: none;
+  padding: 0.6rem 0.9rem;
+  margin-bottom: -1px;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  background: none;
+  color: var(--muted);
+  font: inherit;
+  font-size: 0.9375rem;
+  cursor: pointer;
+}
+
+.subtab-list button:hover {
+  color: var(--fg);
+}
+
+.subtab-list button[aria-selected="true"] {
+  color: var(--fg);
+  border-bottom-color: var(--fg);
+}
+
+/* Data tables */
+.table-search {
+  width: 100%;
+  max-width: 320px;
+  margin-bottom: 1rem;
+  padding: 0.6rem 0.8rem;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: transparent;
+  color: var(--fg);
+  font: inherit;
+  font-size: 0.9375rem;
+}
+
+.table-scroll {
+  overflow-x: auto;
+}
+
+.data-table table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.data-table th,
+.data-table td {
+  padding: 0.6rem 0.75rem;
+  border-bottom: 1px solid var(--line);
+  text-align: left;
+  vertical-align: middle;
+}
+
+.data-table th {
+  color: var(--muted);
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.data-table th button {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+
+.data-table th button:hover {
+  color: var(--fg);
+}
+
+.data-table .num {
+  text-align: right;
+  white-space: nowrap;
+}
+
+.data-table tbody tr:hover {
+  background: var(--hover);
+}
+
+.muted-cell {
+  color: var(--muted);
+  font-family: var(--font-mono), monospace;
+  font-size: 0.75rem;
+}
+
+.sort-mark {
+  display: inline-block;
+  width: 1ch;
+  margin-left: 0.25rem;
+}
+
+.champ {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  white-space: nowrap;
+}
+
+.champ img {
+  border-radius: 6px;
+}
+
+.table-note {
+  padding: 1rem 0;
+  color: var(--muted);
+}
+
+.show-more {
+  margin-top: 1rem;
+  padding: 0.5rem 0.9rem;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: none;
+  color: var(--fg);
+  font: inherit;
+  font-size: 0.875rem;
+  cursor: pointer;
+}
+
+.show-more:hover {
+  background: var(--hover);
+}
+
+/* Long-form data pages (PBE) */
+.toc {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.25rem;
+  padding: 1rem 0;
+  margin-bottom: 1rem;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  font-size: 0.875rem;
+}
+
+.toc a {
+  color: var(--muted);
+}
+
+.toc a:hover {
+  color: var(--fg);
+}
+
+.doc-section {
+  padding: 2.5rem 0 1rem;
+  scroll-margin-top: 1rem;
+}
+
+.doc-section h2 {
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
+  font-size: 1.375rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+.doc-section h3 {
+  margin: 2rem 0 0.5rem;
+  font-size: 0.75rem;
+  font-family: var(--font-mono), monospace;
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.count {
+  font-family: var(--font-mono), monospace;
+  font-size: 0.8rem;
+  font-weight: 400;
+  color: var(--muted);
+}
+
+.defs {
+  margin-top: 1rem;
+}
+
+.defs > div {
+  display: grid;
+  grid-template-columns: minmax(10rem, 14rem) 1fr;
+  gap: 0.25rem 1.5rem;
+  padding: 0.9rem 0;
+  border-top: 1px solid var(--line);
+}
+
+.defs dt {
+  font-weight: 500;
+}
+
+.defs dd {
+  color: var(--muted);
+}
+
+.change {
+  display: block;
+}
+
+.change s {
+  opacity: 0.7;
+}
+
+.change b {
+  color: var(--fg);
+  font-weight: 500;
+}
+
+.tier,
+.tag {
+  display: inline-block;
+  margin-right: 0.5rem;
+  padding: 0.05rem 0.4rem;
+  border-radius: 4px;
+  font-family: var(--font-mono), monospace;
+  font-size: 0.6875rem;
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  vertical-align: 0.1em;
+  border: 1px solid var(--line);
+  color: var(--muted);
+}
+
+.tier-prismatic {
+  color: #8b5cf6;
+  border-color: color-mix(in srgb, #8b5cf6 40%, transparent);
+}
+
+.tier-gold {
+  color: var(--accent);
+  border-color: color-mix(in srgb, var(--accent) 40%, transparent);
+}
+
+.tag-buff {
+  color: #16a34a;
+  border-color: color-mix(in srgb, #16a34a 40%, transparent);
+}
+
+.tag-nerf {
+  color: #dc2626;
+  border-color: color-mix(in srgb, #dc2626 40%, transparent);
+}
+
+.inline-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.25rem;
+  margin-top: 0.75rem;
+}
+
+.bullets {
+  margin-top: 1rem;
+  padding-left: 1.1rem;
+  list-style: disc;
+  color: var(--muted);
+}
+
+.bullets li + li {
+  margin-top: 0.4rem;
+}
+
 @keyframes rise {
   from {
     opacity: 0;
@@ -238,8 +565,24 @@ h1 {
     gap: 1rem;
   }
   .site-header {
-    padding-left: 1.25rem;
-    padding-right: 1.25rem;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 0.5rem;
+    height: auto;
+    padding: 1rem 1.25rem 0.5rem;
+  }
+  .nav {
+    max-width: 100%;
+    overflow-x: auto;
+    scrollbar-width: none;
+    padding-bottom: 0.25rem;
+  }
+  .nav a {
+    flex: none;
+  }
+  .defs > div {
+    grid-template-columns: 1fr;
   }
   .index-row {
     grid-template-columns: 2.25rem 1fr 1.5rem;
