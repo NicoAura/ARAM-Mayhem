@@ -1,0 +1,146 @@
+{
+  "meta": {
+    "mode": "ARAM: Mayhem",
+    "codename": "Kiwi",
+    "series": "Kiwi_S3",
+    "label": "Season 3",
+    "source": "PBE datamine (client files diffed against live)",
+    "dataAsOf": "2026-10-15",
+    "caveat": "PBE content can change before release.",
+    "augmentPool": { "live": 223, "pbe": 249 },
+    "augmentCounts": { "added": 40, "removed": 14 },
+    "chinaPoolChanged": false,
+    "notes": [
+      "The datamine reported 40 new augments, but only 39 are named below. One name is missing from the summary.",
+      "Some tooltips use placeholders the data does not fill in (for example exact Attack Speed amounts), so some descriptions leave out numbers.",
+      "Only augment values were diffed. Other Mayhem rules (snowballs, gold, map) may also have changed and are not covered here."
+    ]
+  },
+  "fame": {
+    "summary": "Earn Fame to unlock bands in order. Each band has its own in-game objectives, member dialogue and six rewards. The final reward is \"Welcome to the band!\".",
+    "rewardsPerBand": 6,
+    "bands": [
+      {
+        "id": "pentakill",
+        "name": "Pentakill",
+        "unlockFame": 0,
+        "members": ["Mordekaiser", "Sona", "Karthus", "Yorick", "Olaf"],
+        "sampleObjectives": ["Dance mid", "45 takedowns", "45 → 65 skillshots", "8 → 12 Snowball hits"]
+      },
+      {
+        "id": "heartsteel",
+        "name": "HEARTSTEEL",
+        "unlockFame": 1000,
+        "members": ["Ezreal", "Kayn", "Yone", "Sett", "Aphelios", "K'Sante"],
+        "sampleObjectives": ["15 takedowns within 3s of dashing", "Heal 3k → 6k", "5k → 7k augment damage"]
+      },
+      {
+        "id": "true-damage",
+        "name": "True Damage",
+        "unlockFame": 3200,
+        "members": ["Akali", "Ekko", "Qiyana", "Senna", "Yasuo"],
+        "sampleObjectives": ["Reroll 6 augments", "Gain 5k bonus HP", "300 → 400 bonus AD/AP"]
+      },
+      {
+        "id": "kda",
+        "name": "K/DA",
+        "unlockFame": 5800,
+        "members": ["Ahri", "Evelynn", "Kai'Sa", "Akali"],
+        "sampleObjectives": ["Emote mid-Snowball dash", "200% bonus AS", "4k → 6k ult damage"]
+      },
+      {
+        "id": "worlds",
+        "name": "Worlds",
+        "unlockFame": 8800,
+        "lockedUntilPatch": "26.22",
+        "members": ["Mordekaiser", "Evelynn", "Akali", "K'Sante", "a Poro"],
+        "sampleObjectives": ["15k crit damage", "250 bonus MS", "10 → 12 team multi-kills"]
+      }
+    ],
+    "relatedCosmetics": "True Damage \"Know My Name\" skins and per-band Prospect/Member icons look like rewards for this track (inferred, not confirmed)."
+  },
+  "augments": {
+    "added": [
+      { "name": "HEAVY", "tier": "gold", "set": "Pentakill", "description": "Empowers Q: +20 Ability Haste and +10% damage, healing and shielding." },
+      { "name": "POWER", "tier": "gold", "set": "Pentakill", "description": "Empowers W: +20 Ability Haste and +10% damage, healing and shielding." },
+      { "name": "THRASH", "tier": "gold", "set": "Pentakill", "description": "Empowers E: +20 Ability Haste and +10% damage, healing and shielding." },
+      { "name": "DOOM", "tier": "gold", "set": "Pentakill", "description": "Empowers R: +20 Ability Haste and +10% damage, healing and shielding." },
+
+      { "name": "Big Shot", "tier": "prismatic", "description": "+35% Crit Damage and +25% bonus AD; 75% of your Attack Speed is converted to Crit Damage." },
+      { "name": "Totentanz", "tier": "prismatic", "description": "Summoner spell that blinks you forward and makes you Unkillable. If you don't get a takedown within 5 seconds, you die." },
+      { "name": "Group Hug", "tier": "prismatic", "description": "A heal or shield also recasts on two nearby allies." },
+      { "name": "Mosh Monster", "tier": "prismatic", "description": "Casting the ability gives +300–750 HP and slows nearby enemies; takedowns make it stronger permanently." },
+      { "name": "Third Times the Harm", "tier": "prismatic", "description": "Every third attack deals true damage that grows permanently." },
+      { "name": "Bouncing Bees", "tier": "prismatic", "description": "After an ability, your next attack bounces. Quest rewards +30 AD and extra bounces." },
+
+      { "name": "Get Jinxed", "tier": "gold", "description": "Summoner spell that lets you ride a Jinx rocket." },
+      { "name": "Brass Blast", "tier": "gold", "description": "Summoner spell that charges a trumpet knockback." },
+      { "name": "BEES!!!", "tier": "gold", "description": "Ability hits periodically launch a beehive." },
+      { "name": "Salvation", "tier": "gold", "description": "Near-lethal damage releases a shockwave that heals your team." },
+      { "name": "Heavy Is The Crown", "tier": "gold", "description": "AD, AP and AS that grow with takedowns, at the cost of Move Speed; you lose half your stacks on death." },
+      { "name": "Weapon of Destiny", "tier": "gold", "description": "Your first Legendary item grows with takedowns." },
+      { "name": "Upgrade Stormsurge", "tier": "gold", "description": "Squall always explodes, and you get 500 gold." },
+      { "name": "Arcane Axiom", "tier": "gold", "description": null },
+      { "name": "Armored Impact", "tier": "gold", "description": null },
+      { "name": "CRIMSON COBALT", "tier": "gold", "description": null },
+      { "name": "Double Time", "tier": "gold", "description": null },
+      { "name": "Enchanting Butterflies", "tier": "gold", "description": null },
+      { "name": "Jeweled Bracelet", "tier": "gold", "description": null },
+      { "name": "Recoil", "tier": "gold", "description": null },
+      { "name": "Sap Magic", "tier": "gold", "description": null },
+      { "name": "Still Here", "tier": "gold", "description": null },
+      { "name": "Take'em Down Down Down", "tier": "gold", "description": null },
+      { "name": "The Boom and the Bass", "tier": "gold", "description": null },
+      { "name": "Tickle Monster", "tier": "gold", "description": null },
+
+      { "name": "Lich Brain", "tier": "silver", "description": "30 AP + 4% of bonus HP as AP." },
+      { "name": "Ultimate Recursion", "tier": "silver", "description": "+50 Ultimate Haste." },
+      { "name": "Blue Barrier", "tier": "silver", "description": null },
+      { "name": "Flow of Spirit", "tier": "silver", "description": null },
+      { "name": "Fruitify", "tier": "silver", "description": null },
+      { "name": "Gift of the Drowned", "tier": "silver", "description": null },
+      { "name": "Hands off the Talent", "tier": "silver", "description": null },
+      { "name": "Lonely Warrior", "tier": "silver", "description": null },
+      { "name": "No Mana No Problem", "tier": "silver", "description": null },
+      { "name": "Sound Barrier", "tier": "silver", "description": null }
+    ],
+    "removed": [
+      { "name": "Drop Bear", "tier": "prismatic" },
+      { "name": "Dropkick", "tier": "prismatic" },
+      { "name": "Fan the Hammer", "tier": "prismatic" },
+      { "name": "High Roller", "tier": "prismatic" },
+      { "name": "Dimension Shift", "tier": "prismatic" },
+      { "name": "Poro Stampede", "tier": "prismatic" },
+      { "name": "Ult Bot", "tier": "prismatic" },
+      { "name": "Spiritual Purification", "tier": "gold" },
+      { "name": "Yowch My Coins!", "tier": "gold" },
+      { "name": "Combusting Interest", "tier": "gold" },
+      { "name": "Hide on Bush", "tier": "gold" },
+      { "name": "Critical Missile", "tier": "gold" },
+      { "name": "Our Healing", "tier": "gold" },
+      { "name": "Crit 'n Cast", "tier": "silver" }
+    ],
+    "changed": [
+      {
+        "name": "Echo Cast",
+        "changes": [{ "stat": "Clone duration", "live": "7s", "pbe": "4s" }],
+        "direction": "nerf"
+      },
+      {
+        "name": "Jeweled Gauntlet",
+        "changes": [{ "stat": "Crit Damage (tooltip data)", "live": null, "pbe": "45" }],
+        "direction": "unclear",
+        "note": "New value in tooltip data only; the visible text doesn't change, so this may or may not be a real buff."
+      }
+    ]
+  },
+  "championOverrides": [
+    {
+      "champion": "Varus",
+      "ability": "Q",
+      "live": "150% AD at max charge",
+      "pbe": "90% AD, scaling up with charge",
+      "note": "Follows the base-game Q rework. Varus is the only champion with a changed Mayhem override."
+    }
+  ]
+}
