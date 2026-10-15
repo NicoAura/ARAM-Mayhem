@@ -1,4 +1,5 @@
 :root {
+  color-scheme: light dark;
   --bg: #fafafa;
   --fg: #0a0a0a;
   --muted: #737373;
@@ -50,6 +51,12 @@ ul {
   list-style: none;
 }
 
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
 .site-header,
 main,
 .site-footer {
@@ -69,6 +76,7 @@ main,
 }
 
 .brand {
+  white-space: nowrap;
   font-weight: 600;
   letter-spacing: -0.01em;
 }
@@ -170,6 +178,16 @@ h1 {
   transform: translateX(4px);
 }
 
+.back-link {
+  color: var(--muted);
+  font-size: 0.9375rem;
+  transition: color 0.15s;
+}
+
+.back-link:hover {
+  color: var(--fg);
+}
+
 /* Section pages: quiet empty state */
 .placeholder {
   display: flex;
@@ -219,6 +237,10 @@ h1 {
   .nav {
     gap: 1rem;
   }
+  .site-header {
+    padding-left: 1.25rem;
+    padding-right: 1.25rem;
+  }
   .index-row {
     grid-template-columns: 2.25rem 1fr 1.5rem;
     row-gap: 0.25rem;
@@ -226,6 +248,13 @@ h1 {
   .index-body {
     grid-column: 2;
     grid-row: 2;
+  }
+}
+
+@media (max-width: 360px) {
+  .nav {
+    gap: 0.75rem;
+    font-size: 0.8125rem;
   }
 }
 
