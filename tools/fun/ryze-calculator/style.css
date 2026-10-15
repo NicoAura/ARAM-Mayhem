@@ -93,6 +93,7 @@ output { font-weight: 600; font-variant-numeric: tabular-nums; }
 
 .picker { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 0.4rem; }
 .pick {
+  text-decoration: none;
   display: flex; align-items: center; gap: 0.5rem; text-align: left;
   border: 1px solid var(--line); border-radius: 8px; background: none; color: inherit;
   padding: 0.3rem 0.5rem 0.3rem 0.3rem; font: inherit; font-size: 0.8rem; cursor: pointer; line-height: 1.2;

@@ -1,7 +1,7 @@
 # Infinite Ryze
 
 An interactive calculator for how much Ability Power Ryze reaches in ARAM Mayhem with a
-given set of items and augments. Open `index.html` in a browser; nothing to install.
+given set of items and augments. Open `index.html` in a browser; nothing to install. `tools/fun/site-tab.json` makes `tools/fun/` a "Fun Tools" tab on the website (web/, PR #3), with `tools/fun/index.html` linking to each tool.
 
 Ryze's passive gives him 10% max Mana per 100 AP. Seraph's Embrace gives 2% of bonus Mana
 as AP, and Riftmaker gives 2% of bonus Health as AP, which Mind to Matter (50% of max Mana
