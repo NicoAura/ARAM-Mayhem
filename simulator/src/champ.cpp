@@ -2,6 +2,7 @@
 
 #include <algorithm>
 #include <cmath>
+#include <cctype>
 #include <fstream>
 #include <numeric>
 #include <set>
@@ -218,12 +219,13 @@ const std::vector<std::pair<std::string, std::string>>& Library::settingKeys() {
         {"attack_uptime_melee", "share of time melee champions can attack"},
         {"attack_uptime_short_range", "share of time short-range champions can attack"},
         {"attack_uptime_long_range", "share of time long-range champions can attack"},
+        {"combo_order", "1: cast abilities in each champion's recommended combo order; 0: strongest first"},
     };
     return keys;
 }
 
 static bool isModelKey(const std::string& k) {
-    return k.find("hit_chance") != std::string::npos || k.rfind("attack_uptime", 0) == 0;
+    return k.find("hit_chance") != std::string::npos || k.rfind("attack_uptime", 0) == 0 || k == "combo_order";
 }
 
 Library Library::load(const std::string& rulesPath, const Settings& settings) {
@@ -258,6 +260,7 @@ Library Library::load(const std::string& rulesPath, const Settings& settings) {
         if (it != settings.end()) field = std::clamp(it->second, 0.0, 1.0);
     };
     setRule("skillshot_hit_chance", lib.rules.skillshotHit);
+    setRule("combo_order", lib.rules.comboOrder);
     setRule("aoe_secondary_hit_chance", lib.rules.aoeSecondaryHit);
     setRule("line_secondary_hit_chance", lib.rules.lineSecondaryHit);
     setRule("attack_uptime_melee", lib.rules.uptimeMelee);
@@ -279,11 +282,32 @@ Library Library::load(const std::string& rulesPath, const Settings& settings) {
         lib.champions.push_back(loadChampion(c, lib.rules));
         lib.mayhemDamageTaken[lib.champions.back().championId] = lib.champions.back().damageTaken;
     }
+    // Recommended combos: the order each champion casts abilities in when several are ready.
+    std::ifstream comboFile(dir + "/combos.json");
+    if (comboFile) {
+        const json::Value combos = json::parse(readFile(dir + "/combos.json"));
+        for (auto& c : lib.champions) {
+            const std::string combo = combos[c.id].asString();
+            if (!combo.empty()) Library::setCombo(c, combo);
+        }
+    }
     lib.items = loadEffects(json::parse(readFile(dir + "/items.json"))["items"], "legendary");
     lib.augments = loadEffects(json::parse(readFile(dir + "/augments.json"))["augments"], "augment");
     const std::string pool = root["scenario"]["enemy_pool"].asString();
     if (!pool.empty()) lib.enemyPool = json::parse(readFile(dir + "/" + pool));
     return lib;
+}
+
+void Library::setCombo(ChampionKit& c, const std::string& combo) {
+    std::string out;
+    for (char ch : combo) {
+        const char up = static_cast<char>(std::toupper(static_cast<unsigned char>(ch)));
+        if (up == ' ' || up == '>' || up == '-' || up == ',') continue;
+        if (std::string("QWER").find(up) == std::string::npos || out.find(up) != std::string::npos)
+            throw std::runtime_error("combo '" + combo + "' for " + c.name + ": use each of Q, W, E, R at most once");
+        out += up;
+    }
+    c.combo = out;
 }
 
 const ChampionKit* Library::find(const std::string& nameOrId) const {
@@ -550,7 +574,8 @@ private:
         abilityAmp_ = 1.0 + get(fx_, "ability_amp");
         myHp_ = maxHp_;
 
-        // Ability order: R when it's up, then the rest by damage per cast.
+        // Ability order: the champion's recommended combo when it has one (and the
+        // combo_order setting is on), otherwise R when it's up, then the rest by damage per cast.
         readyAt_.assign(ch_.abilities.size(), 0.0);
         std::vector<std::pair<double, size_t>> byDamage;
         for (size_t i = 0; i < ch_.abilities.size(); ++i) {
@@ -568,6 +593,11 @@ private:
             byDamage.push_back({(a.slot == 'R' ? 1e12 : 0) + raw, i});
             if (a.slot == 'R' && !rUp_) readyAt_[i] = 1e18;
         }
+        if (rules_.comboOrder > 0.5 && !ch_.combo.empty())
+            for (auto& [d, i] : byDamage) {
+                const auto pos = ch_.combo.find(ch_.abilities[i].slot);
+                d = (pos == std::string::npos ? 0 : 1e15 * static_cast<double>(4 - pos)) + d * 1e-15;
+            }
         std::sort(byDamage.rbegin(), byDamage.rend());
         for (const auto& [d, i] : byDamage) order_.push_back(i);
     }

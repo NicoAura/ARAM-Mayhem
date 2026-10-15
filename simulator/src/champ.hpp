@@ -56,6 +56,7 @@ struct ChampionKit {
     double cnDamageShare = 0.2, cnTakenShare = 0.2, cnWeight = 0, cnWinRate = 0.5;
     double attackRange = 125;
     double apRatios = 0, adRatios = 0;  // summed ability scalings, to tell AP from AD kits
+    std::string combo;  // recommended cast order, e.g. "EQRW" (data/combos.json); empty = by damage
     std::vector<Ability> abilities;
 };
 
@@ -74,6 +75,7 @@ struct Rules {
     // Share of the time a champion can actually attack (in range, target reachable),
     // by attack range. Abilities aren't affected.
     double uptimeMelee = 0.6, uptimeShort = 0.7, uptimeLong = 0.8;
+    double comboOrder = 1;  // 1: cast in each champion's recommended combo order; 0: by damage
 };
 
 struct OptimizerSettings {
@@ -110,6 +112,8 @@ struct Library {
     // Unknown setting names throw.
     static Library load(const std::string& rulesPath, const Settings& settings = {});
     const ChampionKit* find(const std::string& nameOrId) const;
+    // Sets a champion's cast order, e.g. "EQRW" (Q, W, E and R, each at most once). Throws if invalid.
+    static void setCombo(ChampionKit& c, const std::string& combo);
     // The fight scenario for one champion: enemy pool without that champion and its
     // real share of team damage taken.
     Scenario scenarioFor(const ChampionKit& c) const;

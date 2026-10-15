@@ -141,6 +141,8 @@ def main():
     full = json.loads(fetch(f"{DDRAGON}/cdn/{version}/data/en_US/championFull.json",
                             cache / f"championFull-{version}.json").read_text())["data"]
 
+    combos_path = Path(args.champions).with_name("combos.json")
+    combos = json.load(open(combos_path)) if combos_path.exists() else {}
     traces, champs = {}, []
     for c in pool["champions"]:
         tpath = Path(args.traces) / f"{c['id']}.json"
@@ -154,7 +156,7 @@ def main():
             continue
         champs.append({
             "id": c["id"], "name": c["name"], "key": int(c["champion_id"]), "title": dd.get("title", ""),
-            "role": c.get("role", ""),
+            "role": c.get("role", ""), "combo": combos.get(c["id"], "QWER"),
             "passive": dd["passive"]["name"],
             "spells": {s: dd["spells"][i]["name"] for i, s in enumerate(SLOTS)},
             "_icons": [f"champion/{dd['image']['full']}", f"passive/{dd['passive']['image']['full']}"] +

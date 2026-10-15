@@ -125,7 +125,7 @@ Boots, five legendaries and four augments. Items are searched greedily to pick a
 
 ## Fight replays
 
-`viewer/` animates one simulated fight per champion: you, the enemy you are hitting and the rest of their team, with every cast, attack, damage number, kill and stun drawn as it happens. Every fighter is the champion's animated 3D model (three.js), posed from the simulated timeline: each cast plays that ability's animation, attacks and crits play theirs, and stuns and deaths show too. Clicking an ability, or pressing Q/W/E/R, makes your champion cast it. Enemies cast their own Q, W and E every few seconds and their R once, with the ability's icon above them; each stun on you is shown as an enemy's ability landing. The simulator models enemy damage as a steady rate, so enemy casts are for show and don't change the numbers. A missing animation falls back to the basic attack (Garen has no separate W, for example). Champions without a model fall back to Riot's ability preview clips.
+`viewer/` animates one simulated fight per champion: you, the enemy you are hitting and the rest of their team, with every cast, attack, damage number, kill and stun drawn as it happens. Every fighter is the champion's animated 3D model (three.js), posed from the simulated timeline: each cast plays that ability's animation, attacks and crits play theirs, and stuns and deaths show too. Clicking an ability, or pressing Q/W/E/R, makes your champion cast it. Enemies open with their recommended combo when they engage and then keep casting their Q, W and E in that order (R once), with the ability's icon above them; each stun on you is shown as an enemy's ability landing. The simulator models enemy damage as a steady rate, so enemy casts are for show and don't change the numbers. A missing animation falls back to the basic attack (Garen has no separate W, for example). Champions without a model fall back to Riot's ability preview clips.
 
 ```sh
 make replay                          # traces for all champions + icons; clips stream from Riot
@@ -138,6 +138,10 @@ cd viewer && python3 -m http.server  # then open http://localhost:8000/#Ahri
 The replay shown is the median-DPS fight out of the first 200 for the best build, so it is a typical fight rather than a lucky one. `--trace` records the same fight the simulator scores (recording never changes the random draws; `make test` checks this). The generated `viewer/replay-data/` is not committed: the icons, clips and models belong to Riot Games.
 
 **Models.** `tools/build_models.mjs` keeps the ten animations the replay uses (idle, run, attack, crit, Q, W, E, R, stunned, death), shrinks textures to 512 px WebP and compresses meshes with meshopt, about 0.4 to 1.7 MB per champion. For now it downloads the exports from modelviewer.lol; they are meant to be replaced with models exported from a local League install. The viewer hides the parts the game hides (Teemo's mushroom, Ornn's poro) using the visibility data in those files, and keeps each model on its spot in the arena by ignoring root motion.
+
+### Combos
+
+Every champion casts in its recommended combat combo (`data/combos.json`, e.g. Ahri `EQRW`): when several abilities are ready, the one earliest in the combo goes first. The combos are written by hand from common guide combos, so they are approximate. `--combo RWQE` (or the page's Combo field) changes yours; `--set combo_order=0` goes back to strongest ability first.
 
 ### Changing the simulation in the page
 

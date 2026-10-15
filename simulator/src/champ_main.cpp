@@ -48,6 +48,8 @@ Usage: mayhem_sim [options]
   --team a,b,...      fight exactly these enemy champions; change one's stats with
                       Name:hp=5000:armor=250 (hp, armor, mr, damage_share, phys_share,
                       cc, damage_taken)
+  --combo EQRW        with --champ: cast order when several abilities are ready
+                      (default: the champion's recommended combo, data/combos.json)
   --list --json       champions, items, augments, settings and the enemy pool as JSON
   --help              show this help
 )";
@@ -253,7 +255,7 @@ int main(int argc, char** argv) {
     std::string rulesPath = MAYHEM_DEFAULT_RULES, champName, kitName;
     std::vector<std::string> items, augs;
     bool all = false, asJson = false, list = false, customBuild = false, anyItems = false;
-    std::string tracePath, traceDir;
+    std::string tracePath, traceDir, combo;
     Library::Settings settings;
     std::vector<std::string> team;
     int trials = 0;
@@ -282,6 +284,7 @@ int main(int argc, char** argv) {
         else if (a == "--trace") tracePath = next();
         else if (a == "--trace-dir") traceDir = next();
         else if (a == "--team") team = splitList(next());
+        else if (a == "--combo") combo = next();
         else if (a == "--set") {
             for (const auto& kv : splitList(next())) {
                 const auto eq = kv.find('=');
@@ -301,6 +304,11 @@ int main(int argc, char** argv) {
     try {
         lib = Library::load(rulesPath, settings);
         lib.enemyTeam = team;
+        if (!combo.empty()) {
+            if (champName.empty()) throw std::runtime_error("--combo needs --champ");
+            const ChampionKit* c = lib.find(champName);
+            if (c) Library::setCombo(lib.champions[static_cast<size_t>(c - lib.champions.data())], combo);
+        }
     } catch (const std::exception& e) {
         std::cerr << "error: " << e.what() << "\n";
         return 1;
@@ -313,8 +321,9 @@ int main(int argc, char** argv) {
         std::printf("{\"champions\": [");
         for (size_t i = 0; i < lib.champions.size(); ++i) {
             const auto& c = lib.champions[i];
-            std::printf("%s{\"id\": %s, \"name\": %s, \"role\": %s, \"ranged\": %s}", i ? ", " : "", jsonStr(c.id).c_str(),
-                        jsonStr(c.name).c_str(), jsonStr(c.role).c_str(), c.ranged ? "true" : "false");
+            std::printf("%s{\"id\": %s, \"name\": %s, \"role\": %s, \"ranged\": %s, \"combo\": %s}", i ? ", " : "",
+                        jsonStr(c.id).c_str(), jsonStr(c.name).c_str(), jsonStr(c.role).c_str(), c.ranged ? "true" : "false",
+                        jsonStr(c.combo).c_str());
         }
         auto effects = [&](const std::map<std::string, Effect>& m) {
             bool first = true;
@@ -342,7 +351,7 @@ int main(int argc, char** argv) {
             {"target_armor", sc.targetArmor}, {"target_mr", sc.targetMr}, {"skillshot_hit_chance", r.skillshotHit},
             {"aoe_secondary_hit_chance", r.aoeSecondaryHit}, {"line_secondary_hit_chance", r.lineSecondaryHit},
             {"attack_uptime_melee", r.uptimeMelee}, {"attack_uptime_short_range", r.uptimeShort},
-            {"attack_uptime_long_range", r.uptimeLong}};
+            {"attack_uptime_long_range", r.uptimeLong}, {"combo_order", r.comboOrder}};
         std::printf("],\n \"settings\": [");
         bool first = true;
         for (const auto& [k, desc] : Library::settingKeys()) {

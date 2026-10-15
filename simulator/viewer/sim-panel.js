@@ -11,6 +11,7 @@
 
   let meta = null, champ = null, trace = null, busy = false;
   let picks = null; // [{id, stats:{hp, armor, mr, damage_share}}]
+  const combos = {};  // champion id -> combo the user typed
   const enemyById = new Map();
 
   // ---------- worker ----------
@@ -82,6 +83,17 @@
     const sub = document.createElement("div"); sub.className = "sub"; sub.textContent = "Augments"; box.append(sub);
     const augKeys = trace.build.augments.map((a) => a.key);
     for (let i = 0; i < 4; i++) row(String(i + 1), select(augs, augKeys[i], "Augment " + (i + 1)));
+    // Cast order when several abilities are ready; defaults to the champion's recommended combo.
+    const sub2 = document.createElement("div"); sub2.className = "sub"; sub2.textContent = "Combo (cast order)"; box.append(sub2);
+    const combo = document.createElement("input");
+    combo.id = "comboInput"; combo.type = "text"; combo.maxLength = 4; combo.autocomplete = "off";
+    combo.setAttribute("aria-label", "Combo, for example EQRW");
+    combo.value = combos[champ.id] || defaultCombo();
+    combo.addEventListener("input", () => {
+      combo.value = combo.value.toUpperCase().replace(/[^QWER]/g, "");
+      combos[champ.id] = combo.value;
+    });
+    row("", combo);
 
     if (!picks) {
       picks = trace.fight.team.slice(0, 5).map((id) => ({ id, stats: {} }));
@@ -96,6 +108,10 @@
       if (p.id.toLowerCase() === champ.id.toLowerCase())
         p.id = meta.enemies.find((e) => !picks.some((q) => q.id === e.id) && e.id.toLowerCase() !== champ.id.toLowerCase()).id;
     renderEnemies();
+  }
+  function defaultCombo() {
+    const c = meta.champions.find((x) => x.id === champ.id);
+    return (c && c.combo) || "";
   }
   function chosenBuild() {
     const sels = [...$("buildBox").querySelectorAll("select")];
@@ -192,6 +208,11 @@
     if (set.length) a.push("--set", set.map(([k, v]) => `${k}=${v}`).join(","));
     if (enemyMode() === "pick")
       a.push("--team", picks.map((p) => [p.id, ...Object.entries(p.stats).map(([k, v]) => `${k}=${v}`)].join(":")).join(","));
+    const combo = $("comboInput") ? $("comboInput").value : "";
+    if (combo && combo !== defaultCombo()) {
+      if (new Set(combo).size !== combo.length) throw new Error("Use each of Q, W, E and R at most once in the combo.");
+      a.push("--combo", combo);
+    }
     if (withBuild) {
       const b = chosenBuild();
       if (!b.items.length) throw new Error("Pick at least one item.");
@@ -255,6 +276,7 @@
   $("findBest").addEventListener("click", () => run(false));
   $("resetAll").addEventListener("click", () => {
     for (const k of Object.keys(fieldValues)) delete fieldValues[k];
+    for (const k of Object.keys(combos)) delete combos[k];
     $("emodePool").checked = true;
     picks = null;
     $("alts").hidden = true;

@@ -123,6 +123,17 @@ int main(int argc, char** argv) {
         CHECK(rejected, "unknown settings are rejected");
     }
 
+    {
+        std::string first;
+        for (const auto& e : tr.events)
+            if (e.kind == "cast" && first.size() < 2) first += e.slot;
+        CHECK(ahri->combo == "EQRW" && first == "EQ", "Ahri opens with her recommended combo (E, then Q)");
+        bool badCombo = false;
+        ChampionKit k = *ahri;
+        try { Library::setCombo(k, "QQW"); } catch (...) { badCombo = true; }
+        CHECK(badCombo, "a combo repeating an ability is rejected");
+    }
+
     bool threw = false;
     try { runTrials(lib, *ahri, Build{{"not_an_item"}, {}}, sc, 0, 1); } catch (...) { threw = true; }
     CHECK(threw, "unknown item ids are rejected");

@@ -108,30 +108,42 @@
     return f;
   }
 
-  // Enemies cast their own Q, W and E every few seconds once they engage, and their R
-  // once. Each crowd control on you is an enemy's ability landing, so a living enemy
+  // Enemies open with their recommended combo when they engage (data/combos.json), then
+  // keep casting their basic abilities in that order every few seconds; R only once. Each crowd control on you is an enemy's ability landing, so a living enemy
   // casts one just before it (their R if it comes before the engage). The simulator
   // models enemy damage as a steady rate, so these casts set the animations only.
   function enemyCasts(f) {
-    const life = new Map();
+    const life = new Map(), champs = new Map();
     for (const e of f.events) {
-      if (e.k === "spawn") life.set(e.u, { born: e.t, died: f.duration });
+      if (e.k === "spawn") { life.set(e.u, { born: e.t, died: f.duration }); champs.set(e.u, e.x); }
       else if (e.k === "kill" && life.has(e.u)) life.get(e.u).died = e.t;
     }
+    const comboOf = (u) => ((byId.get(String(champs.get(u)).toLowerCase()) || {}).combo || "QWER").split("");
     const out = new Map();
     for (const [u, L] of life) out.set(u, []);
     for (const c of f.cc) {
       const alive = [...life].filter(([, L]) => L.born <= c.t && c.t < L.died);
       if (!alive.length) continue;
       const [u] = alive[Math.floor(c.t * 7) % alive.length];
-      out.get(u).push({ t: Math.max(0, c.t - 0.3), s: c.t < f.engage ? "R" : "E", cc: true });
+      out.get(u).push({ t: Math.max(0, c.t - 0.3), s: c.t < f.engage ? "R" : comboOf(u).find((x) => x !== "R"), cc: true });
     }
     for (const [u, L] of life) {
       const list = out.get(u);
-      const start = Math.max(L.born, f.engage) + 0.3 + ((u * 0.73) % 1.2);
-      let k = u % 3;
-      for (let t = start; t < L.died - 0.2; t += 2.4 + ((u * 1.37 + k) % 1.5)) list.push({ t, s: "QWE"[k++ % 3] });
-      if (!list.some((c) => c.s === "R") && L.died - start > 3) list.push({ t: start + 1.7 + (u % 3) * 0.8, s: "R" });
+      // Their recommended combo on engaging (R included), then the basic abilities in the same order.
+      const combo = comboOf(u);
+      const basics = combo.filter((x) => x !== "R");
+      let t = Math.max(L.born, f.engage) + 0.3 + ((u * 0.73) % 1.2);
+      const usedR = list.some((c) => c.s === "R");
+      for (const x of combo) {
+        if (t >= L.died - 0.2) break;
+        if (x === "R" && usedR) continue;
+        list.push({ t, s: x }); t += 1.05;
+      }
+      for (let k = 0; basics.length; k++) {
+        t += 1.6 + ((u * 1.37 + k) % 1.5);
+        if (t >= L.died - 0.2) break;
+        list.push({ t, s: basics[k % basics.length] });
+      }
       list.sort((a, b) => a.t - b.t);
       // Keep casts apart so each animation can play out; crowd control wins a clash.
       const kept = [];

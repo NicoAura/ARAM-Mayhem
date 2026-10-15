@@ -111,9 +111,10 @@ legend { font: 600 12px var(--display); letter-spacing: .1em; text-transform: up
 .field label { color: var(--frost); min-width: 0; }
 .field small { display: block; color: var(--muted); font-size: 11px; line-height: 1.3; }
 .field.changed label::after { content: " •"; color: var(--e); }
-input[type=number] { width: 100%; font: 500 13px var(--display); font-variant-numeric: tabular-nums; color: var(--frost);
+input[type=number], input[type=text] { width: 100%; font: 500 13px var(--display); font-variant-numeric: tabular-nums; color: var(--frost);
   background: var(--panel-2); border: 1px solid var(--line); border-radius: 6px; padding: 6px 8px; }
 fieldset select { width: 100%; min-width: 0; font-size: 13px; padding: 6px 8px; }
+#comboInput { letter-spacing: .2em; text-transform: uppercase; }
 .slot-row { display: grid; grid-template-columns: 22px minmax(0, 1fr); gap: 8px; align-items: center; font: 600 11px var(--display); color: var(--muted); }
 .modes { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: 13px; }
 .modes label { display: flex; gap: 6px; align-items: center; cursor: pointer; }

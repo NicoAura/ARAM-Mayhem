@@ -26,9 +26,10 @@ sanity_test: src/sim.cpp tests/sanity.cpp $(HDR)
 champ_test: src/sim.cpp src/champ.cpp tests/champ_sanity.cpp $(CHAMP_HDR)
 	$(CXX) $(CXXFLAGS) -pthread src/sim.cpp src/champ.cpp tests/champ_sanity.cpp -o $@
 
-test: sanity_test champ_test
+test: sanity_test champ_test mayhem_sim
 	./sanity_test data/yunara_mayhem.json data/cn_enemy_pool.json
 	./champ_test data/mayhem_rules.json
+	./mayhem_sim --list --json | python3 -c "import json, sys; json.load(sys.stdin)" && echo "ok:   --list --json is valid JSON (the page reads it)"
 
 # Browser build (needs Emscripten). Single-threaded on purpose: the site runs
 # one copy per Web Worker, so no SharedArrayBuffer or COOP/COEP headers needed.
@@ -46,7 +47,7 @@ wasm-mayhem: $(CHAMP_SRC) $(CHAMP_HDR)
 		-sMODULARIZE -sEXPORT_NAME=MayhemSim -sALLOW_MEMORY_GROWTH -sENVIRONMENT=worker,web,node \
 		-sINVOKE_RUN=0 -sEXIT_RUNTIME=0 -sEXPORTED_RUNTIME_METHODS=callMain,FS \
 		--embed-file data/mayhem_rules.json --embed-file data/champions.json --embed-file data/items.json \
-		--embed-file data/augments.json --embed-file data/cn_enemy_pool.json
+		--embed-file data/augments.json --embed-file data/cn_enemy_pool.json --embed-file data/combos.json
 
 # Fight replays for viewer/: one traced fight per champion, plus Riot's icons and
 # ability clips (CLIPS=--clips stores shrunk clips locally instead of streaming them).
