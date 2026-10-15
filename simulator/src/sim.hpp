@@ -46,6 +46,7 @@ struct Build {
 // these by weight, with health varied per enemy.
 struct EnemyProfile {
     std::string id, name;
+    int championId = 0;
     double weight = 1, hp = 3800, hpSd = 0, armor = 120, mr = 80;
     double damageTaken = 1.0;  // the champion's ARAM damage-taken modifier
     double cc = 0;             // crowd-control rating (1-3) when known
@@ -80,6 +81,11 @@ struct Scenario {
     // Damage aimed at Yunara (before her armor and MR), and when it starts.
     double enemyDpsMean = 500, enemyDpsSd = 200, enemyPhysShare = 0.55;
     double engageMin = 2, engageMax = 6;
+
+    static Scenario fromJson(const json::Value& s);
+    // Replaces the enemy team with a champion pool built by tools/build_enemy_pool.py
+    // (101.qq.com China-server Mayhem data), leaving out excludeChampionId.
+    void applyEnemyPool(const json::Value& pool, int excludeChampionId = 0);
 };
 
 struct Champion {

@@ -1,0 +1,18 @@
+{
+ "_note": "Mayhem augments the all-champion simulator models: the ones whose effect fits a generic kit. Ids, names and rarities are Riot's Mayhem (KIWI) augment list on game.gtimg.cn. Values are the same augments' Arena values from CommunityDragon (cdragon/arena/en_us.json, first level), tagged likely: Mayhem uses the same scripts but its numbers aren't published in a readable form. Effect keys are the same as items (README.md).",
+ "augments": {
+  "deft": {"id": 1022, "name": "Deft", "rarity": "silver", "stats": {"as": 0.60}, "confidence": "likely"},
+  "witchful_thinking": {"id": 1097, "name": "Witchful Thinking", "rarity": "silver", "stats": {"ap": 60}, "confidence": "likely"},
+  "heavy_hitter": {"id": 1181, "name": "Heavy Hitter", "rarity": "silver", "effects": {"onhit_own_hp": 0.035}, "confidence": "likely"},
+  "erosion": {"id": 1028, "name": "Erosion", "rarity": "silver", "effects": {"armor_shred": 0.15, "mr_shred": 0.15}, "confidence": "approx", "note": "1% per stack up to 20; 15% is a mid-fight average"},
+  "its_critical": {"id": 1047, "name": "It's Critical", "rarity": "gold", "stats": {"crit": 0.50}, "confidence": "likely"},
+  "tank_engine": {"id": 1353, "name": "Tank Engine", "rarity": "gold", "effects": {"hp_pct": 0.20}, "confidence": "approx", "note": "2% bonus health per takedown; 10 late-game takedowns assumed"},
+  "magic_missile": {"id": 1133, "name": "Magic Missile", "rarity": "gold", "effects": {"missile_count": 3, "missile_max_hp": 0.00334, "missile_cd": 6}, "confidence": "likely"},
+  "mystic_punch": {"id": 1058, "name": "Mystic Punch", "rarity": "prismatic", "effects": {"attack_cdr_flat": 1.25}, "confidence": "likely"},
+  "goliath": {"id": 1041, "name": "Goliath", "rarity": "prismatic", "effects": {"hp_pct": 0.15, "adaptive_amp": 0.10}, "confidence": "likely"},
+  "jeweled_gauntlet": {"id": 1048, "name": "Jeweled Gauntlet", "rarity": "prismatic", "stats": {"crit": 0.25}, "effects": {"abilities_crit": 1, "ability_crit_damage": 1.4}, "confidence": "likely"},
+  "dual_wield": {"id": 1225, "name": "Dual Wield", "rarity": "prismatic", "effects": {"total_as_mult": 0.20, "second_bolt": 0.40, "second_bolt_onhit": 0.40}, "confidence": "likely"},
+  "infernal_conduit": {"id": 1045, "name": "Infernal Conduit", "rarity": "prismatic", "effects": {"conduit_ap": 0.045, "conduit_ad": 0.10, "conduit_duration": 5, "conduit_cdr_per_tick": 0.08}, "confidence": "likely"},
+  "eureka": {"id": 1030, "name": "Eureka", "rarity": "prismatic", "effects": {"ah_per_ap": 0.20}, "confidence": "likely"}
+ }
+}

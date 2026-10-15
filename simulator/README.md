@@ -62,3 +62,63 @@ Each augment in the data file has `offered_to_yunara`. It is `confirmed` when th
 The simulator core (`src/sim.cpp`) is single-threaded and seeds each trial from `(seed, trial index)` with its own random number generator. Results are identical no matter how trials are split across threads, and the same seed gives the same answer natively and in the browser.
 
 `make wasm` builds a WebAssembly version with Emscripten. The plan for the site is to run one copy per Web Worker, each taking a slice of the trials. That avoids WebAssembly threads, which need COOP/COEP headers that static hosts can't set.
+
+# All-champion simulator (`mayhem_sim`)
+
+`mayhem_sim` runs the same kind of teamfight for any of the 173 champions and searches for the item and augment build with the highest damage per second. It shares the Yunara sim's fight model, CN enemy pool and RNG, but each champion's kit is built automatically from game data rather than written by hand, so treat it as an approximation.
+
+```sh
+make                          # builds yunara_sim and mayhem_sim
+./mayhem_sim --champ Ahri     # best builds for Ahri
+./mayhem_sim --champ Jinx --items berserkers,infinity_edge,botrk,lord_dominiks,runaans,seryldas \
+             --augs deft,its_critical,mystic_punch,dual_wield
+./mayhem_sim --kit Lux        # what the sim read from Lux's abilities
+./mayhem_sim --all --json     # every champion (about 2 minutes on 4 cores)
+make test                     # both test suites
+```
+
+## How a champion is built
+
+`tools/build_champion_pool.py` writes `data/champions.json` from:
+
+- Data Dragon 16.20.1 for base stats and cooldown fallbacks.
+- CommunityDragon champion bins for ability values, damage formulas, cooldowns and ammo. Riot's own per-mode values (`DataValuesModeOverride`, ARAM then Kiwi = Mayhem) are applied on top.
+- The CommunityDragon string table for ability tooltips. Damage tags (`<magicDamage>`, `<physicalDamage>`, `<trueDamage>`) say which formulas deal damage and of what type. Heals, shields and minion or monster damage are skipped.
+- aramnerfs.com/mayhem for the Mayhem balance table (damage dealt and taken, ability haste, attack speed, cooldown changes). It lists absolute Mayhem values, so they replace the regular ARAM ones.
+- `data/cn/champions.json` (101.qq.com) for role, damage share and damage taken.
+
+Each champion gets a `parse_quality` of good, partial or none (currently 138 / 32 / 3). Abilities the parser gets wrong are fixed in `data/champion_overrides.json`, each with a reason. To rebuild: `python3 tools/build_champion_pool.py` and `python3 tools/build_items.py` (downloads are cached in `~/.cache/aram-mayhem-sim`).
+
+## Items and augments
+
+`data/item_effects.json` is hand-written: which items exist, which roles they suit, and their passives as effect keys. `tools/build_items.py` adds each item's stats from Data Dragon and writes `data/items.json`. Item passive values are tooltip values as best known and should be checked in game. Effect keys:
+
+| Key | Meaning |
+|---|---|
+| `attack_cdr_pct` | basic abilities' cooldowns drop by this share on each attack |
+| `bolts`, `bolts_ad` | extra bolts per attack at this share of AD |
+| `execute` | kills targets under this share of max HP |
+| `spellblade_*` | next attack after a cast deals base/bonus AD or AP; `spellblade_cd` |
+| `storm_every`, `storm_magic` | magic damage every Nth attack |
+| `onhit_cur_hp`, `onhit_own_hp`, `onhit_magic(_ap)` | on-hit damage |
+| `kraken_*`, `phantom_every` | every-Nth-attack procs |
+| `armor_shred`, `cleave_ad` | armor reduction, splash damage |
+| `ability_amp`, `ap_amp`, `damage_amp` | damage or AP multipliers |
+| `maxhp_proc(_cd)` | max-HP damage proc with a cooldown |
+| `burn_*` | damage over time after an ability hits |
+| `proc_*`, `active_*` | Luden's-style procs and active items |
+| `aura_flat`, `aura_bonus_hp` | Sunfire-style aura damage per second |
+
+`data/augments.json` has 13 Mayhem augments with Riot's Kiwi ids and Arena level-1 values. Some (Erosion, Tank Engine) are approximations.
+
+## Optimizer
+
+Boots, five legendaries and four augments. Items are searched greedily to pick about 14 candidates, then every five-item combination is screened on a few fights, then augments are added greedily, and the finalists are re-run on 2000 fights. Every build sees the same fights (common random numbers). Only items whose roles fit the champion's class and ability scalings are searched; `--any-items` lifts that. The objective is mean DPS over the whole fight, so dying early counts against a build. Settings live in `data/mayhem_rules.json`.
+
+## Limits
+
+- Passives, stacking and HP-scaling kits are mostly missing, so fighters and juggernauts (Sett, Sion, Mundo, Mordekaiser, Gwen, Diana) are underrated.
+- Supports are compared on damage builds, and tanks build glassy because only damage is optimized.
+- Across all champions, simulated DPS correlates only weakly with real CN damage share (Spearman 0.17). Use it to compare builds for one champion, not to rank champions.
+- Mystic Punch is picked very often; its value may be too generous.
+- For Yunara, `yunara_sim` is the better model.

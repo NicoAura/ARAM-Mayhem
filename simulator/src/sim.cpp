@@ -1,4 +1,5 @@
 #include "sim.hpp"
+#include "rng.hpp"
 
 #include <algorithm>
 #include <cmath>
@@ -172,8 +173,12 @@ GameData GameData::fromJson(const json::Value& root) {
         d.buildOrder.push_back(id);
     }
 
-    const json::Value& s = root["scenario"];
-    Scenario& sc = d.scenario;
+    d.scenario = Scenario::fromJson(root["scenario"]);
+    return d;
+}
+
+Scenario Scenario::fromJson(const json::Value& s) {
+    Scenario sc;
     sc.level = static_cast<int>(s["level"].asNumber(sc.level));
     sc.trials = static_cast<int>(s["trials"].asNumber(sc.trials));
     sc.seed = static_cast<uint64_t>(s["seed"].asNumber(static_cast<double>(sc.seed)));
@@ -211,16 +216,16 @@ GameData GameData::fromJson(const json::Value& root) {
         sc.enemies.push_back(p);
     }
     sc.fixedTarget = sc.enemies.empty();
-    return d;
+    return sc;
 }
 
-void GameData::applyEnemyPool(const json::Value& pool) {
-    Scenario& sc = scenario;
-    sc.enemies.clear();
+void Scenario::applyEnemyPool(const json::Value& pool, int excludeChampionId) {
+    enemies.clear();
     for (const auto& e : pool["enemies"].arr) {
         EnemyProfile p;
         p.id = e["id"].asString();
         p.name = e["name"].asString(p.id);
+        p.championId = static_cast<int>(e["champion_id"].asNumber(0));
         p.weight = e["weight"].asNumber(0.0);
         p.hp = e["hp"].asNumber(p.hp);
         p.armor = e["armor"].asNumber(p.armor);
@@ -229,16 +234,20 @@ void GameData::applyEnemyPool(const json::Value& pool) {
         p.cc = e["cc"].asNumber(1.0);
         p.physShare = e["phys_share"].asNumber(0.5);
         p.damageShare = e["damage_share"].asNumber(0.2);
-        if (p.weight > 0) sc.enemies.push_back(p);
+        // Mayhem has no mirror matches, so a champion never fights itself.
+        if (p.weight > 0 && (excludeChampionId == 0 || p.championId != excludeChampionId)) enemies.push_back(p);
     }
-    if (sc.enemies.empty()) throw std::runtime_error("enemy pool has no enemies");
-    sc.fixedTarget = false;
-    sc.teamSize = static_cast<int>(pool["team"]["size"].asNumber(5));
-    sc.ccRatePerPoint = pool["team"]["cc_rate_per_point"].asNumber(0.0);
-    sc.damageTakenFactor = pool["yunara"]["damage_taken_factor"].asNumber(1.0);
-    sc.teamDrivenDamage = true;
-    sc.enemySource = pool["meta"]["source"].asString("enemy pool") + ", " +
-                     pool["meta"]["champion_stat_date"].asString("");
+    if (enemies.empty()) throw std::runtime_error("enemy pool has no enemies");
+    fixedTarget = false;
+    teamSize = static_cast<int>(pool["team"]["size"].asNumber(5));
+    ccRatePerPoint = pool["team"]["cc_rate_per_point"].asNumber(0.0);
+    teamDrivenDamage = true;
+    enemySource = pool["meta"]["source"].asString("enemy pool") + ", " + pool["meta"]["champion_stat_date"].asString("");
+}
+
+void GameData::applyEnemyPool(const json::Value& pool) {
+    scenario.applyEnemyPool(pool);
+    scenario.damageTakenFactor = pool["yunara"]["damage_taken_factor"].asNumber(1.0);
 }
 
 void GameData::validate(const Build& b) const {
@@ -253,57 +262,9 @@ void GameData::validate(const Build& b) const {
     }
 }
 
-// ---------------------------------------------------------------------------
-// Random numbers: own generator so native and WebAssembly runs match exactly.
-// ---------------------------------------------------------------------------
-
 namespace {
 
-uint64_t splitmix(uint64_t& x) {
-    uint64_t z = (x += 0x9E3779B97F4A7C15ULL);
-    z = (z ^ (z >> 30)) * 0xBF58476D1CE4E5B9ULL;
-    z = (z ^ (z >> 27)) * 0x94D049BB133111EBULL;
-    return z ^ (z >> 31);
-}
-
-class Rng {
-public:
-    Rng(uint64_t seed, uint64_t stream) {
-        uint64_t x = seed ^ (stream * 0xD1B54A32D192ED03ULL);
-        for (auto& v : s_) v = splitmix(x);
-    }
-    uint64_t next() {
-        const uint64_t result = rotl(s_[1] * 5, 7) * 9;
-        const uint64_t t = s_[1] << 17;
-        s_[2] ^= s_[0]; s_[3] ^= s_[1]; s_[1] ^= s_[2]; s_[0] ^= s_[3];
-        s_[2] ^= t; s_[3] = rotl(s_[3], 45);
-        return result;
-    }
-    double uniform() { return static_cast<double>(next() >> 11) * 0x1.0p-53; }
-    double uniform(double a, double b) { return a + (b - a) * uniform(); }
-    bool chance(double p) { return uniform() < p; }
-    double normal(double mean, double sd) {
-        double u1 = uniform();
-        while (u1 <= 1e-300) u1 = uniform();
-        double u2 = uniform();
-        return mean + sd * std::sqrt(-2.0 * std::log(u1)) * std::cos(6.283185307179586 * u2);
-    }
-    double exponential(double rate) {
-        double u = uniform();
-        while (u <= 1e-300) u = uniform();
-        return -std::log(u) / rate;
-    }
-    int binomial(int n, double p) {
-        int k = 0;
-        for (int i = 0; i < n; ++i) k += chance(p) ? 1 : 0;
-        return k;
-    }
-    size_t pick(size_t n) { return static_cast<size_t>(uniform() * static_cast<double>(n)) % n; }
-
-private:
-    static uint64_t rotl(uint64_t x, int k) { return (x << k) | (x >> (64 - k)); }
-    uint64_t s_[4];
-};
+using mcrng::Rng;
 
 // ---------------------------------------------------------------------------
 // One teamfight

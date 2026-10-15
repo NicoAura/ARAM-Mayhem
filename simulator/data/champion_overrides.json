@@ -1,0 +1,81 @@
+{
+ "_note": "Hand fixes applied by tools/build_champion_pool.py on top of the parsed game data, for abilities the generic parser can't read correctly. Per champion id and ability slot: cooldown (seconds, max rank), onhit_every (the ability is a passive that procs on every Nth attack instead of being cast), skip (ability has no damage worth modelling). Add to this file when a champion's results look wrong.",
+ "TwistedFate": {
+  "E": {
+   "onhit_every": 4,
+   "why": "Stacked Deck procs on every 4th attack"
+  }
+ },
+ "Teemo": {
+  "E": {
+   "onhit_every": 1,
+   "why": "Toxic Shot is on-hit"
+  }
+ },
+ "Veigar": {
+  "W": {
+   "cooldown": 8,
+   "why": "Dark Matter's cooldown is not in the spell record"
+  }
+ },
+ "TahmKench": {
+  "R": {
+   "cooldown": 80,
+   "why": "Devour's cooldown is not in the spell record (120/100/80)"
+  }
+ },
+ "Shyvana": {
+  "R": {
+   "cooldown": 60,
+   "why": "Dragon's Descent is gated by Fury, not a cooldown; roughly once a fight"
+  }
+ },
+ "Cassiopeia": {
+  "E": {
+   "cooldown": 0.75,
+   "why": "Twin Fang really is spammable (0.75s)"
+  }
+ },
+ "Vayne": {
+  "W": {
+   "onhit_every": 3,
+   "why": "Silver Bolts procs on every 3rd hit"
+  }
+ },
+ "Vi": {
+  "W": {
+   "onhit_every": 3,
+   "why": "Denting Blows procs on every 3rd hit"
+  }
+ },
+ "Yunara": {
+  "Q": {
+   "onhit_every": 1,
+   "why": "Q's passive is on-hit (the Yunara simulator models her fully)"
+  }
+ },
+ "Zeri": {
+  "Q": {
+   "onhit_every": 1,
+   "why": "Burst Fire replaces her attacks"
+  }
+ },
+ "Yasuo": {
+  "E": {
+   "cooldown": 2,
+   "why": "Sweeping Blade can't hit the same target again for a few seconds"
+  }
+ },
+ "Jinx": {
+  "Q": {
+   "skip": true,
+   "why": "Switcheroo! changes her attacks; its rocket bonus isn't a separate hit"
+  }
+ },
+ "Ashe": {
+  "Q": {
+   "skip": true,
+   "why": "Ranger's Focus is an attack speed steroid, not a separate hit"
+  }
+ }
+}
