@@ -12,3 +12,12 @@ export function serverEnv(name: string): string | undefined {
   }
   return process.env[name] || undefined;
 }
+
+/** Names (never values) of the Worker's bindings, to check where a secret ended up. */
+export function bindingNames(): string[] {
+  try {
+    return Object.keys(getCloudflareContext().env as object).sort();
+  } catch {
+    return [];
+  }
+}
