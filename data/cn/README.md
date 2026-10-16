@@ -74,3 +74,10 @@ The `China Mayhem stats` GitHub Action runs both scripts daily and commits new d
 Caveats: the API is undocumented and can change without notice. Rates are fractions
 (0.5575 = 55.75%). The champion `rank` is Tencent's own ordering, not sorted by win
 rate. Sample sizes are not published.
+
+## Preview page
+
+`preview/build.py OUT.html` packs the history and the current augment and duo snapshots
+into one self-contained page (`preview/template.html`) with the same patch, month and
+date filters as `query.py`, ported to JavaScript. It's the live preview of the China
+stats section of the site.

@@ -1,0 +1,367 @@
+<title>China Mayhem Stats</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;700&family=IBM+Plex+Sans:wght@400;500;600&family=Noto+Sans+SC:wght@400;500&display=swap">
+<style>
+/* Layout: one column of controls over a wide sortable table; tabs switch dataset. */
+:root {
+  --bg: #f2f4f1; --surface: #ffffff; --ink: #16201b; --muted: #5a6962; --line: #d6ded9;
+  --jade: #0d7457; --jade-soft: #dcefe7; --gold: #9c7210; --gold-soft: #f4ead2;
+  --up: #0d7457; --down: #b3402c; --bar: #c9d6cf;
+  --display: "Chakra Petch", "Segoe UI", system-ui, sans-serif;
+  --body: "IBM Plex Sans", "Noto Sans SC", system-ui, -apple-system, sans-serif;
+  --cn: "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #0d1311; --surface: #141c19; --ink: #e4ebe7; --muted: #8b9d95; --line: #25312c;
+  --jade: #43c49c; --jade-soft: #173328; --gold: #d8a838; --gold-soft: #33290f;
+  --up: #43c49c; --down: #e47c64; --bar: #2c3a34; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #0d1311; --surface: #141c19; --ink: #e4ebe7; --muted: #8b9d95; --line: #25312c;
+  --jade: #43c49c; --jade-soft: #173328; --gold: #d8a838; --gold-soft: #33290f;
+  --up: #43c49c; --down: #e47c64; --bar: #2c3a34; color-scheme: dark }
+
+body { background: var(--bg); color: var(--ink); font-family: var(--body); font-size: 15px; line-height: 1.45; }
+.wrap { max-width: 1180px; margin: 0 auto; padding-block: 28px 48px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+  display: grid; gap: 20px; }
+header { display: grid; gap: 6px; }
+.eyebrow { font: 600 12px/1 var(--body); letter-spacing: .12em; text-transform: uppercase; color: var(--jade); }
+h1 { font: 700 clamp(28px, 5vw, 40px)/1.05 var(--display); margin: 0; text-wrap: balance; letter-spacing: .01em; }
+h1 .cn { font-family: var(--cn); font-weight: 500; font-size: .55em; color: var(--muted); margin-left: .4em; letter-spacing: 0; }
+.lede { color: var(--muted); margin: 0; max-width: 68ch; }
+
+.tabs { display: flex; gap: 4px; border-bottom: 1px solid var(--line); overflow-x: auto; }
+.tab { font: 600 15px var(--display); letter-spacing: .03em; background: none; border: 0; color: var(--muted);
+  padding: 10px 14px; border-bottom: 3px solid transparent; cursor: pointer; white-space: nowrap; }
+.tab[aria-selected="true"] { color: var(--ink); border-bottom-color: var(--jade); }
+.tab:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible { outline: 2px solid var(--jade); outline-offset: 2px; }
+
+.controls { display: flex; flex-wrap: wrap; gap: 12px 20px; align-items: end; }
+.field { display: grid; gap: 6px; min-width: 0; }
+.label { font: 600 11px/1 var(--body); letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+.seg { display: inline-flex; border: 1px solid var(--line); border-radius: 8px; overflow: hidden; background: var(--surface); }
+.seg button { font: 500 14px var(--body); border: 0; background: none; color: var(--ink); padding: 8px 12px; cursor: pointer; }
+.seg button + button { border-left: 1px solid var(--line); }
+.seg button[aria-pressed="true"] { background: var(--jade); color: var(--surface); }
+input[type="search"], input[type="date"], select { font: 14px var(--body); color: var(--ink); background: var(--surface);
+  border: 1px solid var(--line); border-radius: 8px; padding: 7px 10px; min-width: 0; }
+input[type="search"] { width: 220px; max-width: 100%; }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.chip { font: 500 13px var(--body); font-variant-numeric: tabular-nums; border: 1px solid var(--line); background: var(--surface);
+  color: var(--ink); border-radius: 999px; padding: 4px 10px; cursor: pointer; }
+.chip[aria-pressed="true"] { background: var(--jade-soft); border-color: var(--jade); color: var(--jade); }
+.sub { width: 100%; }
+.hint { font-size: 13px; color: var(--muted); }
+
+.summary { display: flex; flex-wrap: wrap; gap: 8px 24px; align-items: baseline; padding: 12px 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+.summary b { font: 700 18px var(--display); }
+.summary span { color: var(--muted); font-size: 14px; }
+
+.tablebox { overflow-x: auto; background: var(--surface); border: 1px solid var(--line); border-radius: 10px; }
+table { border-collapse: collapse; width: 100%; font-variant-numeric: tabular-nums; }
+th, td { padding: 9px 12px; text-align: right; white-space: nowrap; border-bottom: 1px solid var(--line); }
+th { font: 600 12px var(--body); letter-spacing: .04em; color: var(--muted); position: sticky; top: 0; background: var(--surface); }
+th button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; padding: 0; letter-spacing: inherit; }
+th[aria-sort] button { color: var(--ink); }
+th[aria-sort="descending"] button::after { content: " ↓"; }
+th[aria-sort="ascending"] button::after { content: " ↑"; }
+td.l, th.l { text-align: left; }
+tr:last-child td { border-bottom: 0; }
+tbody tr:hover { background: var(--jade-soft); }
+.rank { color: var(--muted); width: 36px; }
+.name { font-weight: 600; }
+.name small { font: 400 12px var(--cn); color: var(--muted); margin-left: 6px; }
+.wr { display: inline-flex; align-items: center; gap: 8px; justify-content: flex-end; }
+.wrbar { position: relative; width: 70px; height: 8px; background: var(--bar); border-radius: 4px; overflow: hidden; }
+.wrbar i { position: absolute; top: 0; bottom: 0; }
+.wrbar::after { content: ""; position: absolute; left: 50%; top: -2px; bottom: -2px; width: 1px; background: var(--muted); }
+.up { color: var(--up); } .down { color: var(--down); }
+.tier { font: 600 11px var(--body); letter-spacing: .06em; text-transform: uppercase; padding: 2px 8px; border-radius: 999px; border: 1px solid var(--line); }
+.tier.Prismatic { color: var(--jade); border-color: var(--jade); background: var(--jade-soft); }
+.tier.Gold { color: var(--gold); border-color: var(--gold); background: var(--gold-soft); }
+.tier.Silver { color: var(--muted); }
+.more { justify-self: start; font: 500 14px var(--body); border: 1px solid var(--line); background: var(--surface); color: var(--ink); border-radius: 8px; padding: 8px 14px; cursor: pointer; }
+.notes { color: var(--muted); font-size: 13px; display: grid; gap: 6px; max-width: 80ch; }
+.notes p { margin: 0; }
+.empty { padding: 28px; text-align: center; color: var(--muted); }
+@media (max-width: 560px) { th, td { padding: 8px; } .wrbar { width: 44px; } input[type="search"] { width: 100%; } }
+</style>
+
+<div class="wrap">
+  <header>
+    <div class="eyebrow">ARAM Mayhem · Chinese servers</div>
+    <h1>China Mayhem Stats<span class="cn">海克斯大乱斗</span></h1>
+    <p class="lede">Champion, augment and duo stats from Tencent's official 101.qq.com rankings. Champion stats go back to November 2025 and can be split by patch, month or any date range.</p>
+  </header>
+
+  <nav class="tabs" role="tablist">
+    <button class="tab" role="tab" id="tab-champions" aria-selected="true" data-view="champions">Champions</button>
+    <button class="tab" role="tab" id="tab-augments" aria-selected="false" data-view="augments">Augments</button>
+    <button class="tab" role="tab" id="tab-duos" aria-selected="false" data-view="duos">Duos</button>
+  </nav>
+
+  <section id="view-champions" class="wrap" style="padding:0;gap:16px">
+    <div class="controls">
+      <div class="field">
+        <span class="label">Time range</span>
+        <div class="seg" id="mode">
+          <button data-mode="all" aria-pressed="true">All patches</button>
+          <button data-mode="patch" aria-pressed="false">Patch</button>
+          <button data-mode="month" aria-pressed="false">Month</button>
+          <button data-mode="dates" aria-pressed="false">Dates</button>
+        </div>
+      </div>
+      <div class="field">
+        <label class="label" for="c-search">Champion</label>
+        <input type="search" id="c-search" placeholder="Search by name">
+      </div>
+      <div class="field sub" id="patch-box" hidden>
+        <span class="label">Patches (pick one or more)</span>
+        <div class="chips" id="patch-chips"></div>
+      </div>
+      <div class="field" id="month-box" hidden>
+        <label class="label" for="month">Month</label>
+        <select id="month"></select>
+      </div>
+      <div class="controls" id="dates-box" hidden>
+        <div class="field"><label class="label" for="from">From</label><input type="date" id="from"></div>
+        <div class="field"><label class="label" for="to">To</label><input type="date" id="to"></div>
+      </div>
+    </div>
+    <div class="summary" id="c-summary"></div>
+    <div class="tablebox"><table id="c-table"></table></div>
+  </section>
+
+  <section id="view-augments" class="wrap" style="padding:0;gap:16px" hidden>
+    <div class="controls">
+      <div class="field">
+        <span class="label">Tier</span>
+        <div class="seg" id="tier">
+          <button data-tier="" aria-pressed="true">All</button>
+          <button data-tier="Prismatic" aria-pressed="false">Prismatic</button>
+          <button data-tier="Gold" aria-pressed="false">Gold</button>
+          <button data-tier="Silver" aria-pressed="false">Silver</button>
+        </div>
+      </div>
+      <div class="field">
+        <label class="label" for="a-search">Augment</label>
+        <input type="search" id="a-search" placeholder="Search English or 中文">
+      </div>
+    </div>
+    <div class="summary" id="a-summary"></div>
+    <div class="tablebox"><table id="a-table"></table></div>
+  </section>
+
+  <section id="view-duos" class="wrap" style="padding:0;gap:16px" hidden>
+    <div class="controls">
+      <div class="field">
+        <label class="label" for="d-search">Champion in the pair</label>
+        <input type="search" id="d-search" placeholder="Search by name">
+      </div>
+    </div>
+    <div class="summary" id="d-summary"></div>
+    <div class="tablebox"><table id="d-table"></table></div>
+    <button class="more" id="d-more" type="button">Show 100 more</button>
+  </section>
+
+  <footer class="notes">
+    <p><b>Source.</b> Tencent's 101.qq.com backend for 海克斯大乱斗, Chinese servers only. Tencent doesn't publish game counts.</p>
+    <p><b>How ranges work.</b> Tencent's daily champion numbers are running totals for the current patch. A whole patch shows Tencent's own final figures. Months and custom dates subtract the running totals at the start of the range from those at the end, and estimate each champion's games as pick rate × days. Ranges of a day or two are rougher than whole patches.</p>
+    <p><b>Augments and duos.</b> Tencent only serves the current patch window for these, so they don't follow the time range.</p>
+  </footer>
+</div>
+
+<script>
+const D = /*__DATA__*/null;
+const DAY = 86400000;
+const toN = s => Date.parse(s + "T00:00:00Z") / DAY;
+const fromN = n => new Date(n * DAY).toISOString().slice(0, 10);
+const dateIdx = new Map(D.dates.map((d, i) => [toN(d), i]));
+const W = D.windows.map(w => ({ ...w, o: toN(w.opened), f: toN(w.first), l: toN(w.last) }));
+const nameOf = id => { const i = D.ids.indexOf(id); return i < 0 ? id : D.names[i][0]; };
+const pct = (x, d = 1) => (x * 100).toFixed(d) + "%";
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const fmtDate = s => new Date(s + "T00:00:00Z").toLocaleDateString(undefined, { month: "short", day: "numeric", year: "numeric", timeZone: "UTC" });
+const [P, WIN, DMG, TANK, PART, DEATH] = [0, 1, 2, 3, 4, 5];
+
+// Running totals (games and stat x games) per champion at day n in window w.
+function totals(w, n) {
+  while (n >= w.f && !dateIdx.has(n)) n--;
+  if (n < w.f) return null;
+  const day = D.days[dateIdx.get(n)], span = n - w.o + 1, out = [];
+  for (let i = 0; i < D.ids.length; i++) {
+    const p = day[P][i];
+    if (p == null) { out.push(null); continue; }
+    const g = p * span;
+    out.push([g, day[WIN][i] * g, day[DMG][i] * g, day[TANK][i] * g, day[PART][i] * g, day[DEATH][i] * g]);
+  }
+  return out;
+}
+
+function champStats(start, end, windows) {
+  const acc = D.ids.map(() => [0, 0, 0, 0, 0, 0]);
+  let days = 0;
+  for (const w of windows) {
+    let lo = Math.max(start, w.o); const hi = Math.min(end, w.l);
+    if (hi < lo) continue;
+    if (lo <= w.f) lo = w.o;  // can't split a window before the API's first day
+    days += hi - lo + 1;
+    const e = totals(w, hi), b = lo > w.f ? totals(w, lo - 1) : null;
+    if (!e) continue;
+    e.forEach((t, i) => { if (!t) return; const s = b && b[i]; for (let k = 0; k < 6; k++) acc[i][k] += t[k] - (s ? s[k] : 0); });
+  }
+  const rows = [];
+  acc.forEach((a, i) => {
+    if (a[0] <= 0) return;
+    const pick = a[0] / days;
+    rows.push({ id: D.ids[i], name: D.names[i][0], cn: D.names[i][1], win: a[1] / a[0], pick, share: pick / 10,
+      dmg: a[2] / a[0], tank: a[3] / a[0], part: a[4] / a[0], death: a[5] / a[0] });
+  });
+  return { rows, days };
+}
+
+function sortable(table, cols, state, rows, render) {
+  const key = state.key, dir = state.dir;
+  const sorted = rows.slice().sort((a, b) => {
+    const x = a[key], y = b[key];
+    return (typeof x === "string" ? x.localeCompare(y) : x - y) * dir;
+  });
+  table.innerHTML = "<thead><tr>" + cols.map(c => {
+    const s = c.key === key ? (dir < 0 ? "descending" : "ascending") : null;
+    return `<th class="${c.cls || ""}"${s ? ` aria-sort="${s}"` : ""}>${c.key ? `<button data-key="${c.key}">${c.label}</button>` : c.label}</th>`;
+  }).join("") + "</tr></thead><tbody>" +
+    (sorted.length ? sorted.map((r, i) => render(r, i + 1)).join("") : `<tr><td class="empty" colspan="${cols.length}">No matches</td></tr>`) +
+    "</tbody>";
+  table.querySelectorAll("th button").forEach(b => b.onclick = () => {
+    const k = b.dataset.key;
+    if (state.key === k) state.dir = -state.dir; else { state.key = k; state.dir = cols.find(c => c.key === k).asc ? 1 : -1; }
+    state.redraw();
+  });
+  return sorted;
+}
+
+function wrCell(w) {
+  const d = w - 0.5, width = Math.min(Math.abs(d) / 0.12, 1) * 50;
+  const bar = `<i style="${d >= 0 ? "left:50%" : `left:${50 - width}%`};width:${width}%;background:var(${d >= 0 ? "--up" : "--down"})"></i>`;
+  return `<span class="wr"><span class="${d >= 0 ? "up" : "down"}">${pct(w, 2)}</span><span class="wrbar">${bar}</span></span>`;
+}
+
+// ---- Champions ----
+const st = { mode: "all", patches: new Set([W[W.length - 1].patch]), month: "", from: "", to: "", q: "" };
+const cSort = { key: "win", dir: -1, redraw: () => drawChamps() };
+const months = [...new Set(D.dates.map(d => d.slice(0, 7)))];
+const monthName = m => new Date(m + "-01T00:00:00Z").toLocaleDateString(undefined, { month: "long", year: "numeric", timeZone: "UTC" });
+document.getElementById("month").innerHTML = months.map(m => `<option value="${m}">${monthName(m)}</option>`).reverse().join("");
+st.month = months[months.length - 1];
+const fromEl = document.getElementById("from"), toEl = document.getElementById("to");
+fromEl.min = toEl.min = D.dates[0]; fromEl.max = toEl.max = D.dates[D.dates.length - 1];
+st.to = D.dates[D.dates.length - 1]; st.from = fromN(toN(st.to) - 13);
+fromEl.value = st.from; toEl.value = st.to;
+
+const chipBox = document.getElementById("patch-chips");
+function drawChips() {
+  chipBox.innerHTML = W.slice().reverse().map(w => `<button class="chip" data-p="${w.patch}" aria-pressed="${st.patches.has(w.patch)}">${w.patch}</button>`).join("");
+  chipBox.querySelectorAll(".chip").forEach(c => c.onclick = () => {
+    const p = c.dataset.p;
+    if (st.patches.has(p)) { if (st.patches.size > 1) st.patches.delete(p); } else st.patches.add(p);
+    drawChips(); drawChamps();
+  });
+}
+
+function selection() {
+  if (st.mode === "patch") {
+    const ws = W.filter(w => st.patches.has(w.patch));
+    const list = ws.map(w => w.patch);
+    return { start: -Infinity, end: Infinity, windows: ws, label: (list.length === 1 ? "Patch " : "Patches ") + list.join(", ") };
+  }
+  if (st.mode === "month") {
+    const s = toN(st.month + "-01"), e = toN(fromN(toN(st.month + "-01") + 31).slice(0, 7) + "-01") - 1;
+    return { start: s, end: e, windows: W, label: monthName(st.month) };
+  }
+  if (st.mode === "dates") {
+    let s = toN(st.from), e = toN(st.to); if (s > e) [s, e] = [e, s];
+    return { start: s, end: e, windows: W, label: `${fmtDate(fromN(s))} to ${fmtDate(fromN(e))}` };
+  }
+  return { start: -Infinity, end: Infinity, windows: W, label: `All patches, ${W[0].patch} to ${W[W.length - 1].patch}` };
+}
+
+const cCols = [
+  { label: "#", cls: "rank" }, { key: "name", label: "Champion", cls: "l", asc: true },
+  { key: "win", label: "Win rate" }, { key: "pick", label: "Pick rate" }, { key: "share", label: "Game share" },
+  { key: "dmg", label: "Damage share" }, { key: "tank", label: "Tank share" },
+  { key: "part", label: "Kill part." }, { key: "death", label: "Time dead", asc: true }];
+
+function drawChamps() {
+  const sel = selection();
+  const { rows, days } = champStats(sel.start, sel.end, sel.windows);
+  const q = st.q.trim().toLowerCase();
+  const shown = q ? rows.filter(r => r.name.toLowerCase().includes(q) || r.cn.includes(q)) : rows;
+  const best = rows.slice().sort((a, b) => b.win - a.win)[0];
+  document.getElementById("c-summary").innerHTML = `<b>${esc(sel.label)}</b><span>${days} days of games</span><span>${rows.length} champions</span>` +
+    (best ? `<span>Top win rate: ${esc(best.name)} ${pct(best.win)}</span>` : "");
+  sortable(document.getElementById("c-table"), cCols, cSort, shown, (r, i) =>
+    `<tr><td class="rank">${i}</td><td class="l name">${esc(r.name)}<small>${esc(r.cn)}</small></td><td>${wrCell(r.win)}</td>` +
+    `<td>${pct(r.pick)}</td><td>${pct(r.share, 2)}</td><td>${pct(r.dmg)}</td><td>${pct(r.tank)}</td><td>${pct(r.part)}</td><td>${r.death.toFixed(0)}s</td></tr>`);
+}
+
+document.querySelectorAll("#mode button").forEach(b => b.onclick = () => {
+  st.mode = b.dataset.mode;
+  document.querySelectorAll("#mode button").forEach(x => x.setAttribute("aria-pressed", x === b));
+  document.getElementById("patch-box").hidden = st.mode !== "patch";
+  document.getElementById("month-box").hidden = st.mode !== "month";
+  document.getElementById("dates-box").hidden = st.mode !== "dates";
+  drawChamps();
+});
+document.getElementById("month").value = st.month;
+document.getElementById("month").onchange = e => { st.month = e.target.value; drawChamps(); };
+fromEl.onchange = () => { if (fromEl.value) { st.from = fromEl.value; drawChamps(); } };
+toEl.onchange = () => { if (toEl.value) { st.to = toEl.value; drawChamps(); } };
+document.getElementById("c-search").oninput = e => { st.q = e.target.value; drawChamps(); };
+
+// ---- Augments ----
+const aSt = { tier: "", q: "" }, aSort = { key: "win", dir: -1, redraw: () => drawAugs() };
+const aCols = [{ label: "#", cls: "rank" }, { key: "name", label: "Augment", cls: "l", asc: true }, { key: "tier", label: "Tier", cls: "l", asc: true },
+  { key: "win", label: "Win rate" }, { key: "pick", label: "Pick rate" }, { label: "Best with", cls: "l" }];
+function drawAugs() {
+  const q = aSt.q.trim().toLowerCase();
+  const rows = D.augments.filter(a => (!aSt.tier || a.tier === aSt.tier) && (!q || a.name.toLowerCase().includes(q) || a.cn.includes(q)));
+  const d = D.augmentDate;
+  document.getElementById("a-summary").innerHTML = `<b>Current patch window</b><span>as of ${fmtDate(d.slice(0, 4) + "-" + d.slice(4, 6) + "-" + d.slice(6))}</span><span>${rows.length} augments</span>`;
+  sortable(document.getElementById("a-table"), aCols, aSort, rows, (a, i) =>
+    `<tr><td class="rank">${i}</td><td class="l name">${esc(a.name)}<small>${esc(a.cn)}</small></td><td class="l"><span class="tier ${esc(a.tier)}">${esc(a.tier || "?")}</span></td>` +
+    `<td>${wrCell(a.win)}</td><td>${pct(a.pick)}</td><td class="l">${a.best.map(nameOf).map(esc).join(", ")}</td></tr>`);
+}
+document.querySelectorAll("#tier button").forEach(b => b.onclick = () => {
+  aSt.tier = b.dataset.tier;
+  document.querySelectorAll("#tier button").forEach(x => x.setAttribute("aria-pressed", x === b));
+  drawAugs();
+});
+document.getElementById("a-search").oninput = e => { aSt.q = e.target.value; drawAugs(); };
+
+// ---- Duos ----
+const dSt = { q: "", limit: 100 }, dSort = { key: "win", dir: -1, redraw: () => drawDuos() };
+const duoRows = D.duos.map(d => ({ ...d, pair: nameOf(d.a) + " + " + nameOf(d.b) }));
+const dCols = [{ label: "#", cls: "rank" }, { key: "pair", label: "Pair", cls: "l", asc: true },
+  { key: "win", label: "Win rate" }, { key: "pick", label: "Pick rate", }, { key: "rank", label: "Tencent rank", asc: true }];
+function drawDuos() {
+  const q = dSt.q.trim().toLowerCase();
+  const rows = q ? duoRows.filter(d => d.pair.toLowerCase().includes(q)) : duoRows;
+  document.getElementById("d-summary").innerHTML = `<b>Current patch window</b><span>${rows.length} pairs</span>`;
+  const sorted = rows.slice().sort((a, b) => (typeof a[dSort.key] === "string" ? a[dSort.key].localeCompare(b[dSort.key]) : a[dSort.key] - b[dSort.key]) * dSort.dir);
+  sortable(document.getElementById("d-table"), dCols, dSort, sorted.slice(0, dSt.limit), (d, i) =>
+    `<tr><td class="rank">${i}</td><td class="l name">${esc(d.pair)}</td><td>${wrCell(d.win)}</td><td>${pct(d.pick, 2)}</td><td>${d.rank}</td></tr>`);
+  document.getElementById("d-more").hidden = rows.length <= dSt.limit;
+}
+document.getElementById("d-search").oninput = e => { dSt.q = e.target.value; dSt.limit = 100; drawDuos(); };
+document.getElementById("d-more").onclick = () => { dSt.limit += 100; drawDuos(); };
+
+// ---- Tabs ----
+document.querySelectorAll(".tab").forEach(t => t.onclick = () => {
+  document.querySelectorAll(".tab").forEach(x => x.setAttribute("aria-selected", x === t));
+  ["champions", "augments", "duos"].forEach(v => document.getElementById("view-" + v).hidden = v !== t.dataset.view);
+});
+
+drawChips(); drawChamps(); drawAugs(); drawDuos();
+</script>
