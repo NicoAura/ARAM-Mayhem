@@ -23,6 +23,8 @@ def main(out):
     html = html.replace('<link rel="stylesheet" href="style.css">', "<style>\n" + read("style.css") + "</style>")
     scripts = "\n".join(f"<script>\n{s}\n</script>" for s in (read("data.js"), icon_js, read("app.js")))
     html = re.sub(r'<script src="data.js"></script>\s*<script src="app.js"></script>', lambda m: scripts, html)
+    # Artifact pages get their own document skeleton, so keep only the title, styles and body content.
+    html = re.sub(r"<!doctype html>|</?html[^>]*>|</?head>|</?body>|<meta [^>]*>", "", html).strip() + "\n"
     with open(out, "w", encoding="utf-8") as f:
         f.write(html)
     print(f"wrote {out} ({os.path.getsize(out) // 1024} KB)")
