@@ -1,4 +1,5 @@
 import "server-only";
+import { serverEnv } from "./env";
 
 // Regional routing values used by the account-v1 and match-v5 APIs.
 export const REGIONS = ["americas", "europe", "asia", "sea"] as const;
@@ -14,7 +15,7 @@ export class RiotError extends Error {
 }
 
 function apiKey(): string {
-  const key = process.env.RIOT_API_KEY;
+  const key = serverEnv("RIOT_API_KEY");
   if (!key) throw new RiotError("RIOT_API_KEY is not set on the server", 500);
   return key;
 }
