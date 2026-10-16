@@ -42,6 +42,7 @@
 }
 
 * { box-sizing: border-box; }
+[hidden] { display: none !important; }
 body {
   margin: 0 auto;
   max-width: 1040px;
@@ -109,6 +110,9 @@ input, select, button, .btn {
 button, .btn { cursor: pointer; }
 button:hover, .btn:hover { background: var(--hover); }
 .btn { display: inline-flex; align-items: center; }
+.filters .btn { flex-direction: row; font-size: 0.875rem; color: var(--fg); }
+button:disabled { cursor: default; color: var(--muted); background: transparent; }
+.sync-row { display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem; margin-top: 1.25rem; }
 .tiny { width: 3.5rem; padding: 0.1rem 0.4rem; }
 
 .tiles {

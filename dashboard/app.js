@@ -353,6 +353,80 @@ loader.addEventListener("drop", async (e) => {
   if (f) loadText(await f.text());
 });
 
+// ---------- sync ----------
+// `python3 importer/mayhem_import.py --serve` hosts this page and exposes
+// api/sync, which pulls new games from the running League client into the
+// archive. The button only appears when that helper answers.
+
+const syncBtn = $("sync");
+const syncStatus = $("sync-status");
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+
+function setSyncStatus(text, error = false) {
+  syncStatus.textContent = text || "";
+  syncStatus.classList.toggle("error", error);
+}
+
+async function syncState() {
+  const res = await fetch("api/sync", { cache: "no-store" });
+  if (!res.ok) throw new Error(`helper answered ${res.status}`);
+  return res.json();
+}
+
+async function reloadArchive() {
+  const res = await fetch("data/mayhem-backup.json", { cache: "no-store" });
+  if (res.ok) await loadText(await res.text());
+}
+
+async function watchSync() {
+  syncBtn.disabled = true;
+  syncBtn.textContent = "Syncing…";
+  try {
+    let s = await syncState();
+    while (s.running) {
+      setSyncStatus(s.log.at(-1) || "Talking to the League client…");
+      await sleep(1000);
+      s = await syncState();
+    }
+    if (s.error) {
+      setSyncStatus(s.error, true);
+    } else if (s.result) {
+      const { added, total, failed } = s.result;
+      await reloadArchive();
+      const summary = added
+        ? `Added ${added} new game${added === 1 ? "" : "s"}. ${total} in your archive.`
+        : `Up to date. ${total} games in your archive.`;
+      setSyncStatus(summary + (failed ? ` ${failed} couldn't be fetched; sync again to retry them.` : ""));
+    }
+  } catch (e) {
+    setSyncStatus("Lost contact with the sync helper. Is it still running?", true);
+  } finally {
+    syncBtn.disabled = false;
+    syncBtn.textContent = "Sync from League";
+  }
+}
+
+syncBtn.addEventListener("click", async () => {
+  setSyncStatus("Starting…");
+  try {
+    const res = await fetch("api/sync", { method: "POST", headers: { "X-Mayhem": "1" } });
+    if (!res.ok && res.status !== 409) throw new Error(String(res.status));
+  } catch (e) {
+    return setSyncStatus("Couldn't reach the sync helper.", true);
+  }
+  watchSync();
+});
+
+async function setupSync() {
+  if (PRESET.sample || location.protocol === "file:") return;
+  try {
+    const s = await syncState();
+    $("sync-row").hidden = false;
+    if (!state.games.length) setSyncStatus("No archive yet. Sync to pull your games from the League client.");
+    if (s.running) watchSync();
+  } catch (e) { /* plain static hosting: no helper, no button */ }
+}
+
 // When served next to a data file (e.g. `python3 -m http.server` in this
 // folder), load it automatically. ?data=path picks a different file.
 (async () => {
@@ -361,6 +435,7 @@ loader.addEventListener("drop", async (e) => {
   if (location.protocol === "file:") return;
   try {
     const res = await fetch(path);
-    if (res.ok) loadText(await res.text());
+    if (res.ok) await loadText(await res.text());
   } catch (e) { /* no bundled data; wait for the file picker */ }
+  setupSync();
 })();

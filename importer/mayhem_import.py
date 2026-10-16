@@ -87,6 +87,10 @@ XWehWA==
 """
 
 
+class ImportFailed(Exception):
+    """A problem the person can fix (League closed, wrong archive...). The message says how."""
+
+
 class HttpError(Exception):
     def __init__(self, status, url):
         super().__init__(f"HTTP {status} from {url}")
@@ -148,7 +152,7 @@ def find_client(lockfile=None):
         if m:
             return Lcu(m.group(2), m.group(3))
     if lockfile:
-        sys.exit(f"Couldn't read a League lockfile at {lockfile}.")
+        raise ImportFailed(f"Couldn't read a League lockfile at {lockfile}.")
     # Fall back to the running client's command line, for installs elsewhere
     out = subprocess.run(["ps", "-A", "-o", "args="], capture_output=True, text=True).stdout
     for line in out.splitlines():
@@ -158,7 +162,7 @@ def find_client(lockfile=None):
         pw = re.search(r"--remoting-auth-token=([\w-]+)", line)
         if port and pw:
             return Lcu(port.group(1), pw.group(1))
-    sys.exit("League isn't running. Start it, sign in, and run this again.")
+    raise ImportFailed("League isn't running. Start it, sign in, and run this again.")
 
 
 # ---------- Riot match-history service (SGP) ----------
@@ -175,7 +179,7 @@ def sgp_token(lcu):
         pass
     token = lcu.get("/lol-league-session/v1/league-session-token")
     if not isinstance(token, str) or not token:
-        sys.exit("The League client hasn't finished signing in. Try again in a moment.")
+        raise ImportFailed("The League client hasn't finished signing in. Try again in a moment.")
     return token
 
 
@@ -205,7 +209,7 @@ def find_sgp_host(lcu, puuid, token, override=None):
             return host
         except (HttpError, ConnectionError):
             continue
-    sys.exit("Couldn't reach Riot's match history service for your region.")
+    raise ImportFailed("Couldn't reach Riot's match history service for your region.")
 
 
 def walk_ids(host, puuid, token, tags, known, full):
@@ -261,7 +265,7 @@ def load_archive(path):
     for key in ("games", "matches", "data"):
         if isinstance(data.get(key), list):
             return data, data[key]
-    sys.exit(f"{path} isn't a match archive this script recognizes. Pick a different -o file.")
+    raise ImportFailed(f"{path} isn't a match archive this script recognizes. Pick a different -o file.")
 
 
 def archive_owner(container, games):
@@ -295,6 +299,171 @@ def save_archive(path, container, games, summoner):
         raise
 
 
+# ---------- import ----------
+
+def run_import(out, full=False, lockfile=None, sgp_host=None, progress=log):
+    """Merge new Mayhem games from the signed-in client into `out`. Returns a summary dict."""
+    container, games = load_archive(out)
+    lcu = find_client(lockfile)
+    try:
+        summoner = lcu.get("/lol-summoner/v1/current-summoner")
+    except (HttpError, ConnectionError) as e:
+        raise ImportFailed(f"Couldn't talk to the League client ({e}). Is it fully signed in?")
+    puuid = summoner["puuid"]
+    name = f"{summoner.get('gameName', '?')}#{summoner.get('tagLine', '?')}"
+
+    owner = archive_owner(container, games)
+    if owner and owner != puuid:
+        raise ImportFailed(f"{out} belongs to a different account than {name}. Use a different archive.")
+
+    known = {g.get("gameId") for g in games}
+    progress(f"Signed in as {name}. {len(known)} games already in {out}.")
+
+    token = sgp_token(lcu)
+    host = find_sgp_host(lcu, puuid, token, sgp_host)
+    ids, stop = walk_ids(host, puuid, token, SGP_MAYHEM_TAGS, known, full)
+    if not ids:
+        # An empty filtered walk could mean Riot renamed the queue tags, so
+        # check every game the slow way before believing there are none
+        progress("No Mayhem games by queue filter; checking all recent games instead.")
+        ids, stop = walk_ids(host, puuid, token, SGP_ALL_TAGS, known, full)
+
+    pending = [i for i in dict.fromkeys(ids) if i not in known]
+    progress(f"Riot lists {len(ids)} matching games; {len(pending)} are new.")
+
+    added = failed = 0
+    try:
+        for n, game_id in enumerate(pending, 1):
+            try:
+                game = lcu.get(f"/lol-match-history/v1/games/{game_id}")
+            except (HttpError, ConnectionError) as e:
+                failed += 1
+                progress(f"  [{n}/{len(pending)}] game {game_id}: {e}; a later run will retry it")
+                continue
+            if game.get("queueId") in MAYHEM_QUEUE_IDS:
+                games.append(game)
+                known.add(game_id)
+                added += 1
+            if n % 25 == 0 or n == len(pending):
+                progress(f"  [{n}/{len(pending)}] {added} added")
+            time.sleep(0.05)  # be gentle with the client
+    except KeyboardInterrupt:
+        progress("Stopped. Saving what was fetched so far.")
+
+    if added or container is None:
+        save_archive(out, container, games, summoner)
+    notes = []
+    if failed:
+        notes.append(f"{failed} games couldn't be fetched. Run again to retry them.")
+    if stop == "page-limit":
+        notes.append(f"Stopped at the {SGP_MAX_PAGES}-page safety limit; older games weren't checked.")
+    elif stop == "exhausted" and history_window_full(host, puuid, token):
+        notes.append(f"Riot only keeps your last {SGP_HISTORY_CAP} matches (all queues). Older games can't be "
+                     "fetched, but any already in the archive are kept.")
+    progress(f"Done: {added} new Mayhem games added, {len(games)} in the archive.")
+    for note in notes:
+        progress(note)
+    return {"added": added, "total": len(games), "failed": failed, "account": name, "notes": notes}
+
+
+# ---------- local server for the dashboard's Sync button ----------
+# A web page can't talk to the League client itself (its certificate and
+# password are local), so this serves the dashboard and runs imports for it.
+# It listens on 127.0.0.1 only and accepts sync requests only from its own
+# pages: a POST needs the X-Mayhem header, which other sites can't send.
+
+DASHBOARD_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "dashboard")
+
+
+def serve(out, port, lockfile=None, sgp_host=None, open_browser=True):
+    import http.server
+    import threading
+    import webbrowser
+
+    state = {"running": False, "log": [], "result": None, "error": None}
+    lock = threading.Lock()
+
+    def sync_worker():
+        def progress(msg):
+            log(msg)
+            with lock:
+                state["log"] = (state["log"] + [msg.strip()])[-50:]
+        try:
+            result = run_import(out, lockfile=lockfile, sgp_host=sgp_host, progress=progress)
+            with lock:
+                state["result"] = result
+        except (ImportFailed, HttpError, ConnectionError) as e:
+            with lock:
+                state["error"] = str(e)
+        except Exception as e:  # keep the server up whatever happens
+            with lock:
+                state["error"] = f"Import failed: {e}"
+        finally:
+            with lock:
+                state["running"] = False
+
+    class Handler(http.server.SimpleHTTPRequestHandler):
+        def __init__(self, *a, **kw):
+            super().__init__(*a, directory=DASHBOARD_DIR, **kw)
+
+        def log_message(self, *a):
+            pass
+
+        def local_host(self):
+            host = (self.headers.get("Host") or "").rsplit(":", 1)[0]
+            return host in ("127.0.0.1", "localhost")
+
+        def send_json(self, obj, code=200):
+            body = json.dumps(obj).encode()
+            self.send_response(code)
+            self.send_header("Content-Type", "application/json")
+            self.send_header("Cache-Control", "no-store")
+            self.send_header("Content-Length", str(len(body)))
+            self.end_headers()
+            self.wfile.write(body)
+
+        def do_GET(self):
+            if not self.local_host():  # refuse DNS-rebinding lookalikes
+                return self.send_json({"error": "forbidden"}, 403)
+            path = self.path.split("?")[0]
+            if path == "/api/sync":
+                with lock:
+                    return self.send_json(dict(state))
+            if path == "/data/mayhem-backup.json":
+                if not os.path.exists(out):
+                    return self.send_json({"error": "no archive yet"}, 404)
+                with open(out, "rb") as f:
+                    body = f.read()
+                self.send_response(200)
+                self.send_header("Content-Type", "application/json")
+                self.send_header("Cache-Control", "no-store")
+                self.send_header("Content-Length", str(len(body)))
+                self.end_headers()
+                return self.wfile.write(body)
+            return super().do_GET()
+
+        def do_POST(self):
+            if not self.local_host() or self.headers.get("X-Mayhem") != "1":
+                return self.send_json({"error": "forbidden"}, 403)
+            if self.path.split("?")[0] != "/api/sync":
+                return self.send_json({"error": "not found"}, 404)
+            with lock:
+                if not state["running"]:
+                    state.update(running=True, log=[], result=None, error=None)
+                    threading.Thread(target=sync_worker, daemon=True).start()
+                return self.send_json(dict(state), 202)
+
+    server = http.server.ThreadingHTTPServer(("127.0.0.1", port), Handler)
+    url = f"http://127.0.0.1:{port}/"
+    log(f"Mayhem Stats is at {url} (archive: {out}). Press Ctrl+C to stop.")
+    if open_browser:
+        webbrowser.open(url)
+    try:
+        server.serve_forever()
+    except KeyboardInterrupt:
+        pass
+
+
 # ---------- main ----------
 
 def main():
@@ -304,67 +473,20 @@ def main():
     ap.add_argument("--full", action="store_true",
                     help="check every game Riot still serves, not just the new ones, to fill gaps")
     ap.add_argument("--lockfile", help="path to League's lockfile, if League isn't in /Applications")
+    ap.add_argument("--serve", action="store_true",
+                    help="open the stats dashboard with a Sync button instead of importing once")
+    ap.add_argument("--port", type=int, default=8787, help="port for --serve (default 8787)")
+    ap.add_argument("--no-browser", action="store_true", help=argparse.SUPPRESS)
     ap.add_argument("--sgp-host", help=argparse.SUPPRESS)  # for testing
     args = ap.parse_args()
     out = os.path.expanduser(args.out)
 
-    container, games = load_archive(out)
-    lcu = find_client(args.lockfile)
+    if args.serve:
+        return serve(out, args.port, args.lockfile, args.sgp_host, not args.no_browser)
     try:
-        summoner = lcu.get("/lol-summoner/v1/current-summoner")
-    except (HttpError, ConnectionError) as e:
-        sys.exit(f"Couldn't talk to the League client ({e}). Is it fully signed in?")
-    puuid = summoner["puuid"]
-    name = f"{summoner.get('gameName', '?')}#{summoner.get('tagLine', '?')}"
-
-    owner = archive_owner(container, games)
-    if owner and owner != puuid:
-        sys.exit(f"{out} belongs to a different account than {name}. Use a different -o file.")
-
-    known = {g.get("gameId") for g in games}
-    log(f"Signed in as {name}. {len(known)} games already in {out}.")
-
-    token = sgp_token(lcu)
-    host = find_sgp_host(lcu, puuid, token, args.sgp_host)
-    ids, stop = walk_ids(host, puuid, token, SGP_MAYHEM_TAGS, known, args.full)
-    if not ids:
-        # An empty filtered walk could mean Riot renamed the queue tags, so
-        # check every game the slow way before believing there are none
-        log("No Mayhem games by queue filter; checking all recent games instead.")
-        ids, stop = walk_ids(host, puuid, token, SGP_ALL_TAGS, known, args.full)
-
-    pending = [i for i in dict.fromkeys(ids) if i not in known]
-    log(f"Riot lists {len(ids)} matching games; {len(pending)} are new.")
-
-    added = failed = 0
-    try:
-        for n, game_id in enumerate(pending, 1):
-            try:
-                game = lcu.get(f"/lol-match-history/v1/games/{game_id}")
-            except (HttpError, ConnectionError) as e:
-                failed += 1
-                log(f"  [{n}/{len(pending)}] game {game_id}: {e}; a later run will retry it")
-                continue
-            if game.get("queueId") in MAYHEM_QUEUE_IDS:
-                games.append(game)
-                known.add(game_id)
-                added += 1
-            if n % 25 == 0 or n == len(pending):
-                log(f"  [{n}/{len(pending)}] {added} added")
-            time.sleep(0.05)  # be gentle with the client
-    except KeyboardInterrupt:
-        log("Stopped. Saving what was fetched so far.")
-
-    if added or container is None:
-        save_archive(out, container, games, summoner)
-    log(f"Done: {added} new Mayhem games added, {len(games)} in the archive.")
-    if failed:
-        log(f"{failed} games couldn't be fetched. Run again to retry them.")
-    if stop == "page-limit":
-        log(f"Stopped at the {SGP_MAX_PAGES}-page safety limit; older games weren't checked.")
-    elif stop == "exhausted" and history_window_full(host, puuid, token):
-        log(f"Riot only keeps your last {SGP_HISTORY_CAP} matches (all queues). Older games can't be "
-            "fetched, but any already in the archive are kept.")
+        run_import(out, args.full, args.lockfile, args.sgp_host)
+    except ImportFailed as e:
+        sys.exit(str(e))
 
 
 if __name__ == "__main__":

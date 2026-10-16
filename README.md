@@ -37,3 +37,17 @@ matches across all queues, so older games can't be downloaded. The script merges
 into an existing archive and never removes games, so pointing it at your current
 backup keeps everything you already have. `--full` rechecks every game Riot still
 serves to fill gaps.
+
+### Sync button
+
+To keep the dashboard current without running the import by hand, start League,
+then double-click `importer/Open Mayhem Stats.command`, or run:
+
+```
+python3 importer/mayhem_import.py --serve -o ~/Downloads/mayhem-backup.json
+```
+
+This opens the dashboard at `http://127.0.0.1:8787/` with a **Sync from League**
+button. Pressing it pulls any new games from the client into the archive and
+redraws the page. The helper only listens on your own computer and refuses
+requests from other sites. Close the Terminal window to stop it.
