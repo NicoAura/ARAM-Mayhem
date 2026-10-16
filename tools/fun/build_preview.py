@@ -56,7 +56,7 @@ def inline_page(folder, icons):
 
     page = re.sub(r'<script src="([^"]+)"></script>', script, page)
     # The eyebrow links back to the hub; inside the preview that is the parent's job.
-    return page.replace('<a href="../index.html">Fun Tools</a>', '<a href="#" onclick="parent.postMessage(\'fun-home\',\'*\');return false">Fun Tools</a>')
+    return page.replace('<a href="../index.html">The Lab</a>', '<a href="#" onclick="parent.postMessage(\'fun-home\',\'*\');return false">The Lab</a>')
 
 
 def main(out):
