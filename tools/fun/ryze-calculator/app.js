@@ -227,7 +227,7 @@
   }
 
   $("ryze-icon").src = data.champion.icon;
-  $("patch").textContent = `Game data: patch ${data.patch.split(".").slice(0, 2).join(".")}.`;
+  $("patch").textContent = `Patch ${data.patch.split(".").slice(0, 2).join(".")}.`;
   $("level").addEventListener("input", (e) => { build.level = +e.target.value; update(false); });
   $("preset").addEventListener("click", () => { build = structuredClone(PRESET); update(); });
   $("reset").addEventListener("click", () => { build = { level: 18, items: [], augments: [], opts: {}, extra: {} }; update(); });

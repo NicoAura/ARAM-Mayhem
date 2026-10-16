@@ -20,7 +20,7 @@
 
   const OPTIONS = [
     { key: "feastStacks", label: "Feast stacks", champ: "Chogath", type: "number", def: 20 },
-    { key: "feastSize", label: "Size % per Feast stack (not in game files)", champ: "Chogath", type: "number", def: 0, step: 0.5 },
+    { key: "feastSize", label: "Size % per Feast stack (your value)", champ: "Chogath", type: "number", def: 0, step: 0.5 },
     { key: "maxHP", label: "Max Health (Heartsteel)", item: 3084, type: "number", def: 5000, step: 250 },
     { key: "lifeline", label: "Lifeline triggered", item: [2525, 3053], type: "check", def: true },
     { key: "madLarge", label: "Mad Scientist: large form", aug: "ARAM_MadScientist", type: "check", def: true },
@@ -222,7 +222,7 @@
     }
   }
 
-  $("patch").textContent = `Game data: patch ${data.patch.split(".").slice(0, 2).join(".")}.`;
+  $("patch").textContent = `Patch ${data.patch.split(".").slice(0, 2).join(".")}.`;
   window.addEventListener("resize", () => renderResult(compute(data, build)));
   $("champ-search").addEventListener("input", (e) => { query = e.target.value; renderChamps(); });
   $("preset").addEventListener("click", () => { build = structuredClone(PRESET); query = ""; $("champ-search").value = ""; update(); });

@@ -162,7 +162,7 @@
     }
   }
 
-  $("patch").textContent = `Game data: patch ${data.patch.split(".").slice(0, 2).join(".")}.`;
+  $("patch").textContent = `Patch ${data.patch.split(".").slice(0, 2).join(".")}.`;
   $("search").addEventListener("input", (e) => { query = e.target.value; renderPicker(); });
   $("roll").addEventListener("click", () => { const t = rollTier(); showOffer(roll(data, t), t); });
   $("roll-until").addEventListener("click", () => {

@@ -271,7 +271,7 @@
     }
   }
 
-  $("patch").textContent = `Game data: patch ${data.patch.split(".").slice(0, 2).join(".")}.`;
+  $("patch").textContent = `Patch ${data.patch.split(".").slice(0, 2).join(".")}.`;
   $("champ-search").addEventListener("input", (e) => { query = e.target.value; renderChamps(); });
   $("level").addEventListener("input", (e) => { build.level = +e.target.value; update(false); });
   $("preset").addEventListener("click", () => { build = structuredClone(PRESET); query = ""; $("champ-search").value = ""; update(); });
