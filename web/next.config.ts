@@ -32,13 +32,16 @@ const nextConfig: NextConfig = {
   async redirects() {
     return [
       ["/china", "/tier-list"],
-      ["/simulator", "/tools/simulator"],
+      ["/tools", "/"],
+      ["/tools/simulator", "/simulator"],
+      ["/tools/lab", "/lab"],
       ["/tools/champions", "/champions"],
       ["/tools/guide", "/info"],
       ["/guide", "/info"],
-      ["/tools/fun", "/tools/lab"],
-      ["/tools/cook-builds", "/tools/lab#cook-builds"],
-      ["/tools/kitchen", "/tools/lab#cook-builds"],
+      ["/tools/fun", "/lab"],
+      ["/tools/cook-builds", "/lab#cook-builds"],
+      ["/tools/kitchen", "/lab#cook-builds"],
+      ["/kitchen", "/lab#cook-builds"],
     ].map(([source, destination]) => ({ source, destination, permanent: true }));
   },
 };

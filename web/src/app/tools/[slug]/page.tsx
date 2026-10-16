@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import ToolPage, { toolMetadata } from "@/components/ToolPage";
 import { discoverToolTabs } from "@/lib/tabs";
 
-// The Tools menu's embedded pages: /tools/lab, /tools/kitchen and any new site-tab.json folder.
+// Any new site-tab.json folder without its own route (lib/tabs.ts ROUTES) lives at /tools/<slug>.
 export const dynamicParams = false;
 
 export function generateStaticParams() {

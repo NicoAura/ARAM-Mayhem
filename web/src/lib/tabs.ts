@@ -5,7 +5,7 @@ import { repoPath } from "./repo-data";
 import { sections } from "./sections";
 
 export type Tab = { href: string; label: string; body: string };
-/** A header tab; one with `children` is a menu (Tools). */
+/** A header tab; one with `children` is a dropdown menu. */
 export type NavItem = { href: string; label: string; body?: string; children?: NavItem[] };
 
 // A folder in the repo becomes a tab when it holds a site-tab.json:
@@ -15,14 +15,14 @@ export type ToolTab = Tab & { slug: string; entry: string; order: number; folder
 
 const SKIP = new Set(["web", "node_modules", ".git", ".github"]);
 
-// Where each embedded folder (by slug) is published. Anything not listed goes in the Tools menu.
+// Where each embedded folder (by slug) is published. Anything not listed lives at /tools/<slug>.
 // The Kitchen's cook builds are part of The Lab now (KITCHEN), so its folder is no tab of its own.
-export const KITCHEN = "/tools/lab#cook-builds";
+export const KITCHEN = "/lab#cook-builds";
 const HIDDEN = new Set(["cook-builds"]);
 const ROUTES: Record<string, string> = {
   champions: "/champions",
   guide: "/info",
-  fun: "/tools/lab",
+  fun: "/lab",
 };
 export const toolHref = (slug: string) => ROUTES[slug] ?? `/tools/${slug}`;
 // Tab names the site sets regardless of the folder's own label.
@@ -68,15 +68,16 @@ const pick = (href: string): NavItem[] => {
   return t ? [{ href: t.href, label: t.label, body: t.body }] : [];
 };
 
-/** The header's tabs: Tier List, Info, a Tools menu (Simulator, The Lab, The Kitchen, ...), PBE.
+/** The header's tabs: Tier List, Info, Simulator, The Lab, any newer tool folder, PBE.
  *  My Stats sits behind the account button; champion pages (/champions#Name) open from the Tier List and search. */
 export function navItems(): NavItem[] {
-  const more = discoverToolTabs().filter((t) => t.href.startsWith("/tools/") && t.href !== "/tools/simulator");
-  const tools = [...pick("/tools/simulator"), ...more.flatMap((t) => pick(t.href))];
+  const more = discoverToolTabs().filter((t) => t.href.startsWith("/tools/"));
   return [
     ...pick("/tier-list"),
     ...pick("/info"),
-    ...(tools.length ? [{ href: "/tools", label: "Tools", children: tools }] : []),
+    ...pick("/simulator"),
+    ...pick("/lab"),
+    ...more.flatMap((t) => pick(t.href)),
     ...pick("/pbe"),
   ];
 }

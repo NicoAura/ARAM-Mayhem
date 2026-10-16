@@ -3,19 +3,19 @@
 /* DeepARAM theme: cool grey page, white surfaces, blue accent. */
 :root {
   color-scheme: light dark;
-  --bg: #f4f6f8;
-  --surface: #ffffff;
-  --raised: #eef1f5;
-  --fg: #0c1017;
-  --muted: #5b6472;
-  --line: #e1e5eb;
-  --hover: #eef1f5;
-  --accent: #0b7fc0;
+  --bg: #e7ebef;
+  --surface: #f0f3f6;
+  --raised: #e0e5eb;
+  --fg: #1f252e;
+  --muted: #525b68;
+  --line: #d3dae2;
+  --hover: #e3e8ee;
+  --accent: #09659d;
   --accent-ink: #ffffff;
-  --accent-soft: #e3f1fa;
-  --good: #1d8a55;
-  --bad: #c2413a;
-  --gold: #a8781c;
+  --accent-soft: #d6e6f1;
+  --good: #197048;
+  --bad: #a83831;
+  --gold: #80601a;
   --display: "Bricolage Grotesque", "Geist", system-ui, sans-serif;
   --sans: "Geist", system-ui, -apple-system, "Segoe UI", sans-serif;
   --mono: "Geist Mono", ui-monospace, "SF Mono", Menlo, monospace;

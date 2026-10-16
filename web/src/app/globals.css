@@ -2,21 +2,21 @@
    Cool neutrals with a glacial blue accent (the Howling Abyss); the prismatic gradient is the one flourish. */
 :root {
   color-scheme: light;
-  --bg: #f4f6f8;
-  --surface: #ffffff;
-  --raised: #eef1f5;
-  --fg: #0c1017;
-  --muted: #5b6472;
-  --line: #e1e5eb;
-  --hover: #eef1f5;
-  --accent: #0b7fc0;
+  --bg: #e7ebef;
+  --surface: #f0f3f6;
+  --raised: #e0e5eb;
+  --fg: #1f252e;
+  --muted: #525b68;
+  --line: #d3dae2;
+  --hover: #e3e8ee;
+  --accent: #09659d;
   --accent-ink: #ffffff;
-  --accent-soft: #e3f1fa;
-  --good: #1d8a55;
-  --bad: #c2413a;
-  --gold: #a8781c;
-  --silver: #6b7686;
-  --mark-core: #0c1017;
+  --accent-soft: #d6e6f1;
+  --good: #197048;
+  --bad: #a83831;
+  --gold: #80601a;
+  --silver: #59626e;
+  --mark-core: #1f252e;
   --prismatic: linear-gradient(100deg, #9fe7ff, #c9b8ff 40%, #ffb8e0 70%, #ffe2a3);
   --r: 14px;
   --r-sm: 8px;
@@ -979,6 +979,44 @@ h1 {
   border-top: 1px solid var(--line);
   color: var(--muted);
   font-size: 0.75rem;
+}
+
+.footer-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 0.6rem;
+}
+
+.footer-links a {
+  color: var(--muted);
+}
+
+.footer-links a:hover {
+  color: var(--fg);
+}
+
+.site-footer p {
+  margin: 0;
+}
+
+.prose {
+  max-width: 72ch;
+  line-height: 1.6;
+}
+
+.prose h2 {
+  margin: 1.4rem 0 0.4rem;
+  font-size: 1.05rem;
+}
+
+.prose h2:first-of-type {
+  margin-top: 0.6rem;
+}
+
+.prose p {
+  margin: 0 0 0.6rem;
+  color: var(--muted);
 }
 
 @keyframes rise {

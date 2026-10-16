@@ -54,6 +54,10 @@ ASSET_EXT = r"png|jpe?g|webp|svg|gif|ogg|mp3|wav|webm|mp4|glb|json"
 URL_RE = re.compile(
     r"https://(?:raw\.communitydragon\.org/(?:latest|pbe|\d+\.\d+)/|ddragon\.leagueoflegends\.com/cdn/)"
     r"[^\s\"'`<>()\\]+?\.(?:" + ASSET_EXT + r")(?=[\s\"'`<>()\\?#]|$)", re.I)
+# Pages that already point at the mirror (/assets/cd/<channel>/..., /assets/dd/<ver>/img/...) still name a
+# source file, so they keep getting mirrored after a patch.
+LOCAL_RE = re.compile(
+    r"/assets/(cd/(?:latest|pbe)/|dd/[\d.]+/img/)[^\s\"'`<>()\\]+?\.(?:" + ASSET_EXT + r")(?=[\s\"'`<>()\\?#]|$)", re.I)
 SCAN_EXT = {".js", ".mjs", ".ts", ".tsx", ".json", ".html", ".css", ".csv"}
 SCAN_SKIP = {".git", "node_modules", ".next", ".open-next", "mac-imports", "assets", "embed", "importer"}
 
@@ -100,7 +104,17 @@ def scan_repo():
             except OSError:
                 continue
             found.update(m.group(0) for m in URL_RE.finditer(text))
+            found.update(source_url(m.group(0)) for m in LOCAL_RE.finditer(text))
     return found
+
+
+def source_url(path):
+    """/assets/cd/latest/x.png -> its CommunityDragon URL; /assets/dd/<ver>/img/x.png -> its Data Dragon URL."""
+    rest = path.removeprefix("/assets/")
+    if rest.startswith("cd/"):
+        return f"{CD}/{rest[3:]}"
+    ver, _, img = rest[3:].partition("/")
+    return f"{DD}/cdn/{ver}/{img}"
 
 
 def client_path(p):
@@ -143,6 +157,14 @@ def save(url, force):
         return rel, 0, None
     try:
         body = fetch(url)
+    except urllib.error.HTTPError as e:
+        # A few icons pages name under latest/ exist only on PBE until the patch ships.
+        if e.code != 404 or "/latest/" not in url:
+            return rel, 0, str(e)
+        try:
+            body = fetch(url.replace("/latest/", "/pbe/", 1))
+        except Exception as e2:  # noqa: BLE001
+            return rel, 0, str(e2)
     except Exception as e:  # noqa: BLE001 — one missing file shouldn't stop the run
         return rel, 0, str(e)
     os.makedirs(os.path.dirname(dst), exist_ok=True)
@@ -331,8 +353,14 @@ def main():
     cd_urls = {u for u in literal | runtime_sets(summary, champ_json) if u and local_path(u)}
 
     index = replay_index()
-    ver = index.get("ddragon_version", "")
-    dd_urls = {f"{DD}/cdn/{ver}/img/{rel}" for c in index["champions"] for rel in c.get("icons", [])}
+    ver = index.get("ddragon_version") or json.loads(fetch(f"{DD}/api/versions.json"))[0]
+    base = index.get("icon_base", "")
+    icons = [rel for c in index["champions"] for rel in c.get("icons", [])]
+    if base.startswith("/assets/"):  # the replay names the mirrored client files directly
+        cd_urls |= {source_url(base + rel.lower()) for rel in icons}
+        dd_urls = set()
+    else:
+        dd_urls = {f"{DD}/cdn/{ver}/img/{rel}" for rel in icons}
     cd_urls -= {u for u in cd_urls if "ddragon" in u}
     dd_urls |= {u for u in literal if "ddragon" in u}
 
