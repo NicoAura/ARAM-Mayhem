@@ -203,6 +203,8 @@ Scenario Scenario::fromJson(const json::Value& s) {
     sc.enemyPhysShare = s["enemy_phys_share"].asNumber(sc.enemyPhysShare);
     sc.engageMin = s["engage_min"].asNumber(sc.engageMin);
     sc.engageMax = s["engage_max"].asNumber(sc.engageMax);
+    sc.startDistance = s["start_distance"].asNumber(sc.startDistance);
+    sc.enemySpread = s["enemy_spread"].asNumber(sc.enemySpread);
     for (const auto& e : s["enemy_team"].arr) {
         EnemyProfile p;
         p.id = e["id"].asString();

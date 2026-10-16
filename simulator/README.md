@@ -89,6 +89,18 @@ make test                     # both test suites
 
 Each champion gets a `parse_quality` of good, partial or none (currently 138 / 32 / 3). Abilities the parser gets wrong are fixed in `data/champion_overrides.json`, each with a reason. To rebuild: `python3 tools/build_champion_pool.py` and `python3 tools/build_items.py` (downloads are cached in `~/.cache/aram-mayhem-sim`).
 
+## Positions and movement
+
+Fights are played on a 2D lane: x runs along it, y across it (±550 units). You start at the origin and the enemy team 1300 units away, spread 250 apart. Every 0.05 s everyone moves:
+
+- **Abilities have real shapes.** `build_champion_pool.py` reads each ability's targeter from the champion bin (line width and length, circle radius and cast range, cone angle, missile speed) into `geometry`. Abilities cast on yourself with a small radius count as self buffs.
+- **You** walk toward your target until your next ability or attack is in range, waiting a moment for an earlier ability in your combo that is almost in range. Ranged champions back away from short-ranged enemies, but not past 1200 units behind the start. If your target is out of reach and another enemy is much closer, you switch.
+- **Enemies** hold position, then walk in to 0.85x their own reach (the median range of their basic abilities, between their attack range and 800), strafe sideways, and back off at about half speed when you push them.
+- **Skillshots** aim where the target will be, partly leading its movement (`aim_lead`). Each enemy inside the shape when it lands dodges with chance `dodge_chance` if the cast time plus flight time is longer than `reaction_time`, moving sideways out of the way. Instant and on-self abilities can't be dodged.
+- **Damage taken** comes only from enemies whose reach you are inside, each in proportion to its share of its team's damage. Without allies the sim would put you in range of everyone far too often, so each champion's total damage taken is anchored to its real CN damage-taken share; positions decide when and from whom it lands. `in_range_damage_boost` scales the rate while in reach.
+
+Settings: `start_distance`, `enemy_spread` (fight), `dodge_chance` 0.75, `reaction_time` 0.25 s, `aim_lead` 0.5, `hitbox_radius` 65, `lane_half_width` 550 (model). Simulated skillshots land about 74% of the time, and simulated damage taken averages 0.9x the real CN numbers.
+
 ## Items and augments
 
 `data/item_effects.json` is hand-written: which items exist, which roles they suit, and their passives as effect keys. `tools/build_items.py` adds each item's stats from Data Dragon and writes `data/items.json`. Item passive values are tooltip values as best known and should be checked in game. Effect keys:
@@ -119,13 +131,13 @@ Boots, five legendaries and four augments. Items are searched greedily to pick a
 
 - Passives, stacking and HP-scaling kits are mostly missing, so fighters and juggernauts (Sett, Sion, Mundo, Mordekaiser, Gwen, Diana) are underrated.
 - Supports are compared on damage builds, and tanks build glassy because only damage is optimized.
-- Across all champions, simulated DPS correlates only weakly with real CN damage share (Spearman 0.17). Use it to compare builds for one champion, not to rank champions.
+- Across all champions, simulated DPS correlates only weakly with real CN damage share (Spearman 0.26). Use it to compare builds for one champion, not to rank champions.
 - Mystic Punch is picked very often; its value may be too generous.
 - For Yunara, `yunara_sim` is the better model.
 
 ## Fight replays
 
-`viewer/` animates one simulated fight per champion: you, the enemy you are hitting and the rest of their team, with every cast, attack, damage number, kill and stun drawn as it happens. Every fighter is the champion's animated 3D model (three.js), posed from the simulated timeline: each cast plays that ability's animation, attacks and crits play theirs, and stuns and deaths show too. Clicking an ability, or pressing Q/W/E/R, makes your champion cast it. Enemies open with their recommended combo when they engage and then keep casting their Q, W and E in that order (R once), with the ability's icon above them; each stun on you is shown as an enemy's ability landing. The simulator models enemy damage as a steady rate, so enemy casts are for show and don't change the numbers. A missing animation falls back to the basic attack (Garen has no separate W, for example). Champions without a model fall back to Riot's ability preview clips.
+`viewer/` animates one simulated fight per champion: you, the enemy you are hitting and the rest of their team, with every cast, attack, damage number, kill and stun drawn as it happens. Everyone stands where the simulation put them, and each ability is drawn at its real size and shape (line, circle or cone); a faint red line marks each enemy whose reach you are inside. Every fighter is the champion's animated 3D model (three.js), posed from the simulated timeline: each cast plays that ability's animation, attacks and crits play theirs, and stuns and deaths show too. Clicking an ability, or pressing Q/W/E/R, makes your champion cast it. Enemies open with their recommended combo when they engage and then keep casting their Q, W and E in that order (R once), with the ability's icon above them; each stun on you is shown as an enemy's ability landing. The simulator models enemy damage as a steady rate, so enemy casts are for show and don't change the numbers. A missing animation falls back to the basic attack (Garen has no separate W, for example). Champions without a model fall back to Riot's ability preview clips.
 
 ```sh
 make replay                          # traces for all champions + icons; clips stream from Riot

@@ -90,13 +90,25 @@ Area areaOf(const std::string& s) {
     return Area::Single;
 }
 
-// Skillshots can miss; point-and-click, self-centred and area-around-target abilities don't.
-double hitChanceOf(const std::string& targeting, double skillshot) {
-    if (targeting == "Direction" || targeting == "DragDirection" || targeting == "Location" ||
-        targeting == "LocationClamped")
-        return skillshot;
-    if (targeting == "Cone") return std::min(1.0, skillshot + 0.1);
-    return 1.0;
+Geometry geometryOf(const json::Value& g, Area area, double attackRange) {
+    Geometry geo;
+    const std::string shape = g["shape"].asString();
+    geo.shape = shape == "line" ? Shape::Line : shape == "circle" ? Shape::Circle : shape == "cone" ? Shape::Cone
+                : shape == "single"                                                     ? Shape::Single
+                : area == Area::Line ? Shape::Line : area == Area::Aoe ? Shape::Circle : Shape::Single;
+    geo.range = g["range"].asNumber(0);
+    geo.radius = g["radius"].asNumber(geo.shape == Shape::Circle ? 250 : 0);
+    geo.width = g["width"].asNumber(geo.shape == Shape::Line ? 80 : 0);
+    geo.angle = g["angle"].asNumber(geo.shape == Shape::Cone ? 45 : 0);
+    geo.speed = g["speed"].asNumber(0);
+    geo.onSelf = g["on_self"].asBool(false);
+    geo.selfBuff = g["self_buff"].asBool(false);
+    geo.stops = g["stops"].asBool(false);
+    const std::string move = g["move"].asString();
+    geo.move = move == "dash" ? Move::Dash : move == "blink" ? Move::Blink : Move::None;
+    if (geo.range <= 0 && !geo.onSelf) geo.range = std::max(600.0, attackRange + 100);
+    if (geo.selfBuff) geo.range = attackRange;
+    return geo;
 }
 
 ChampionKit loadChampion(const json::Value& c, const Rules& rules) {
@@ -120,6 +132,7 @@ ChampionKit loadChampion(const json::Value& c, const Rules& rules) {
     k.asG = s["attack_speed_per_level"].asNumber(k.asG);
     k.asRatio = s["attack_speed_ratio"].asNumber(k.as);
     k.attackRange = s["attack_range"].asNumber(k.ranged ? 550 : 125);
+    k.moveSpeed = s["move_speed"].asNumber(k.moveSpeed);
     const json::Value& m = c["mayhem"];
     k.damageDealt = m["damage_dealt"].asNumber(1.0);
     k.damageTaken = m["damage_taken"].asNumber(1.0);
@@ -142,7 +155,7 @@ ChampionKit loadChampion(const json::Value& c, const Rules& rules) {
         ab.castTime = std::clamp(a["cast_time"].asNumber(0.25), rules.castMin, rules.castMax);
         ab.duration = a["duration"].asNumber(0);
         ab.area = areaOf(a["area"].asString());
-        ab.hitChance = hitChanceOf(a["targeting"].asString(), rules.skillshotHit);
+        ab.geo = geometryOf(a["geometry"], ab.area, k.attackRange);
         ab.onhitEvery = static_cast<int>(a["onhit_every"].asNumber(0));
 
         // Which tooltip numbers count: the first main number fully, repeats of the
@@ -185,6 +198,18 @@ ChampionKit loadChampion(const json::Value& c, const Rules& rules) {
         }
         if (!ab.hits.empty()) k.abilities.push_back(ab);
     }
+    // How far its damage reaches, as an enemy: the middle of its basic abilities' reach
+    // (capped at 800), or its attack range. Ultimates and dashes don't count: a dash
+    // brings it close, and long-range ultimates aren't what it fights with.
+    std::vector<double> reaches;
+    for (const auto& a : k.abilities) {
+        if (a.onhitEvery > 0 || a.slot == 'R' || a.geo.move != Move::None) continue;
+        const Geometry& g = a.geo;
+        double r = g.shape == Shape::Circle ? (g.onSelf ? g.radius : g.range + 0.5 * g.radius) : g.range;
+        reaches.push_back(std::clamp(r, k.attackRange, 800.0));
+    }
+    std::sort(reaches.begin(), reaches.end());
+    k.reach = reaches.empty() ? k.attackRange : std::max(k.attackRange, reaches[reaches.size() / 2]);
     return k;
 }
 
@@ -204,8 +229,8 @@ const std::vector<std::pair<std::string, std::string>>& Library::settingKeys() {
         {"cc_scale", "multiplies how often you get crowd controlled"},
         {"cc_min", "shortest crowd control, seconds"},
         {"cc_max", "longest crowd control, seconds"},
-        {"clump_max", "most extra enemies standing near your target"},
-        {"clump_chance", "chance each extra enemy is near your target"},
+        {"start_distance", "how far away the enemy team starts, game units"},
+        {"enemy_spread", "how spread out the enemy team stands, game units"},
         {"r_ready_chance", "chance your ultimate is up when the fight starts"},
         {"retarget_delay", "seconds to reach the next target after a kill"},
         {"fixed_target", "1: fight dummies with the HP and resists below instead of real champions"},
@@ -213,19 +238,16 @@ const std::vector<std::pair<std::string, std::string>>& Library::settingKeys() {
         {"target_armor", "dummy armor"},
         {"target_mr", "dummy magic resist"},
         // model rules
-        {"skillshot_hit_chance", "chance a skillshot hits its main target"},
-        {"aoe_secondary_hit_chance", "chance an area ability also hits each nearby enemy"},
-        {"line_secondary_hit_chance", "chance a line ability also hits each nearby enemy"},
-        {"attack_uptime_melee", "share of time melee champions can attack"},
-        {"attack_uptime_short_range", "share of time short-range champions can attack"},
-        {"attack_uptime_long_range", "share of time long-range champions can attack"},
+        {"dodge_chance", "chance an enemy sees a skillshot coming and sidesteps"},
+        {"reaction_time", "seconds before a dodging enemy starts moving"},
+        {"aim_lead", "how far ahead of a moving enemy skillshots are aimed (0-1)"},
         {"combo_order", "1: cast abilities in each champion's recommended combo order; 0: strongest first"},
     };
     return keys;
 }
 
 static bool isModelKey(const std::string& k) {
-    return k.find("hit_chance") != std::string::npos || k.rfind("attack_uptime", 0) == 0 || k == "combo_order";
+    return k == "dodge_chance" || k == "reaction_time" || k == "aim_lead" || k == "combo_order";
 }
 
 Library Library::load(const std::string& rulesPath, const Settings& settings) {
@@ -244,28 +266,25 @@ Library Library::load(const std::string& rulesPath, const Settings& settings) {
     lib.rules.asCap = ruleValue(r, "attack_speed_cap", 5.0);
     const json::Value& m = root["model"];
     lib.rules.extraHitWeight = m["extra_hit_weight"].asNumber(lib.rules.extraHitWeight);
-    lib.rules.skillshotHit = m["skillshot_hit_chance"].asNumber(lib.rules.skillshotHit);
-    lib.rules.aoeSecondaryHit = m["aoe_secondary_hit_chance"].asNumber(lib.rules.aoeSecondaryHit);
-    lib.rules.lineSecondaryHit = m["line_secondary_hit_chance"].asNumber(lib.rules.lineSecondaryHit);
+    lib.rules.dodgeChance = m["dodge_chance"].asNumber(lib.rules.dodgeChance);
+    lib.rules.reactionTime = m["reaction_time"].asNumber(lib.rules.reactionTime);
+    lib.rules.aimLead = m["aim_lead"].asNumber(lib.rules.aimLead);
+    lib.rules.hitbox = m["hitbox_radius"].asNumber(lib.rules.hitbox);
+    lib.rules.laneHalfWidth = m["lane_half_width"].asNumber(lib.rules.laneHalfWidth);
+    lib.rules.inRangeBoost = m["in_range_damage_boost"].asNumber(lib.rules.inRangeBoost);
     lib.rules.castMin = m["cast_time_min"].asNumber(lib.rules.castMin);
     lib.rules.castMax = m["cast_time_max"].asNumber(lib.rules.castMax);
     lib.rules.minCooldown = m["min_cooldown"].asNumber(lib.rules.minCooldown);
     lib.rules.dotDuration = m["default_dot_duration"].asNumber(lib.rules.dotDuration);
     lib.rules.spellbladeWindow = m["spellblade_window"].asNumber(lib.rules.spellbladeWindow);
-    lib.rules.uptimeMelee = m["attack_uptime_melee"].asNumber(lib.rules.uptimeMelee);
-    lib.rules.uptimeShort = m["attack_uptime_short_range"].asNumber(lib.rules.uptimeShort);
-    lib.rules.uptimeLong = m["attack_uptime_long_range"].asNumber(lib.rules.uptimeLong);
     auto setRule = [&](const char* key, double& field) {
         auto it = settings.find(key);
         if (it != settings.end()) field = std::clamp(it->second, 0.0, 1.0);
     };
-    setRule("skillshot_hit_chance", lib.rules.skillshotHit);
+    setRule("dodge_chance", lib.rules.dodgeChance);
+    setRule("reaction_time", lib.rules.reactionTime);
+    setRule("aim_lead", lib.rules.aimLead);
     setRule("combo_order", lib.rules.comboOrder);
-    setRule("aoe_secondary_hit_chance", lib.rules.aoeSecondaryHit);
-    setRule("line_secondary_hit_chance", lib.rules.lineSecondaryHit);
-    setRule("attack_uptime_melee", lib.rules.uptimeMelee);
-    setRule("attack_uptime_short_range", lib.rules.uptimeShort);
-    setRule("attack_uptime_long_range", lib.rules.uptimeLong);
     const json::Value& o = root["optimizer"];
     OptimizerSettings& os = lib.optimizer;
     os.legendarySlots = static_cast<int>(o["legendary_slots"].asNumber(os.legendarySlots));
@@ -317,6 +336,8 @@ const ChampionKit* Library::find(const std::string& nameOrId) const {
     return nullptr;
 }
 
+double meanExposure(const Library& lib, const ChampionKit& c, const Scenario& sc);
+
 Scenario Library::scenarioFor(const ChampionKit& c) const {
     Scenario sc = scenario;
     if (enemyPool.isObject()) {
@@ -324,10 +345,13 @@ Scenario Library::scenarioFor(const ChampionKit& c) const {
         for (auto& e : sc.enemies) {
             auto it = mayhemDamageTaken.find(e.championId);
             if (it != mayhemDamageTaken.end()) e.damageTaken = it->second;
+            if (const ChampionKit* k = find(std::to_string(e.championId))) {
+                e.moveSpeed = k->moveSpeed;
+                e.reach = k->reach;
+            }
         }
     }
-    // Everyone's share of their team's damage taken averages 0.2 (1 of 5).
-    sc.damageTakenFactor = (c.hasCn ? c.cnTakenShare / 0.2 : 1.0) * c.damageTaken;
+    sc.damageTakenFactor = c.damageTaken;
 
     if (!enemyTeam.empty() && enemyPool.isObject()) {
         std::vector<EnemyProfile> picked;
@@ -383,8 +407,8 @@ Scenario Library::scenarioFor(const ChampionKit& c) const {
     set("cc_min", sc.ccMin);
     set("cc_max", sc.ccMax);
     sc.ccMax = std::max(sc.ccMax, sc.ccMin);
-    set("clump_max", sc.clumpMax);
-    set("clump_chance", sc.clumpChance);
+    set("start_distance", sc.startDistance);
+    set("enemy_spread", sc.enemySpread);
     set("r_ready_chance", sc.rReadyChance);
     set("retarget_delay", sc.retargetDelay);
     if (auto it = fight.find("enemy_damage_scale"); it != fight.end()) sc.damageTakenFactor *= std::max(0.0, it->second);
@@ -400,6 +424,14 @@ Scenario Library::scenarioFor(const ChampionKit& c) const {
         set("target_armor", sc.targetArmor);
         set("target_mr", sc.targetMr);
     }
+    // Enemies only hurt you while you're within their reach, but the simulation has no
+    // teammates for them to hit instead, so how much damage you take overall still
+    // follows real games (this champion's share of its team's damage taken). Where you
+    // stand decides when it lands and from whom: the damage while in reach is scaled by
+    // how much of the enemies' damage reaches this champion in a typical fight.
+    const double share = c.hasCn ? c.cnTakenShare / 0.2 : 1.0;
+    const double exposure = meanExposure(*this, c, sc);
+    sc.damageTakenFactor *= share / std::max(0.15, exposure);
     return sc;
 }
 
@@ -418,12 +450,32 @@ namespace {
 
 using mcrng::Rng;
 
+struct Vec {
+    double x = 0, y = 0;
+};
+inline Vec operator+(Vec a, Vec b) { return {a.x + b.x, a.y + b.y}; }
+inline Vec operator-(Vec a, Vec b) { return {a.x - b.x, a.y - b.y}; }
+inline Vec operator*(Vec a, double k) { return {a.x * k, a.y * k}; }
+inline double dot(Vec a, Vec b) { return a.x * b.x + a.y * b.y; }
+inline double cross(Vec a, Vec b) { return a.x * b.y - a.y * b.x; }
+inline double len(Vec a) { return std::sqrt(dot(a, a)); }
+inline Vec unit(Vec a, Vec fallback = {1, 0}) {
+    const double l = len(a);
+    return l > 1e-9 ? a * (1.0 / l) : fallback;
+}
+
 struct Enemy {
     double hp = 0, maxHp = 0;
     double physMult = 1, magicMult = 1, trueMult = 1;
     bool alive = true;
     double respawnAt = 0, burnUntil = -1, conduitAt = -1;
     int uid = -1;
+    // where it stands and how it moves
+    const EnemyProfile* profile = nullptr;
+    Vec pos, vel, home;
+    double moveSpeed = 340, reach = 550, damageWeight = 0.2;
+    double strafe = 0, strafeUntil = 0, dodgeUntil = -1;
+    Vec dodgeVel;
 };
 
 // An item or augment effect with its own cooldown or counter.
@@ -467,9 +519,9 @@ private:
         record(e);
     }
     void recordFocus() {
-        if (!trace_ || !primary_.alive) return;
+        if (!trace_ || !hasPrimary()) return;
         TraceEvent e;
-        e.t = t_; e.kind = "focus"; e.target = primary_.uid;
+        e.t = t_; e.kind = "focus"; e.target = P().uid;
         record(e);
     }
 
@@ -495,8 +547,17 @@ private:
     std::vector<std::pair<double, double>> cc_;
     std::vector<const EnemyProfile*> team_;
     double totalWeight_ = 0;
-    Enemy primary_;
-    std::vector<Enemy> secondaries_;
+    // Everyone on the field. enemies_[primary_] is the current target (-1: none alive).
+    std::vector<Enemy> enemies_;
+    int primary_ = -1;
+    Enemy& P() { return enemies_[static_cast<size_t>(primary_)]; }
+    bool hasPrimary() const { return primary_ >= 0 && enemies_[static_cast<size_t>(primary_)].alive; }
+    Vec me_;
+    double moveSpeed_ = 335, posClock_ = 0, nextPosAt_ = 0, busyUntil_ = 0, wantRange_ = 0;
+    Rng moveRng_{1, 2};
+    double exposureSum_ = 0, exposureTime_ = 0;
+    static constexpr double kStep = 0.05;     // movement and damage-taken step, seconds
+    static constexpr double kPosEvery = 0.2;  // replay position snapshots, seconds
     bool rUp_ = false;
     double myHp_ = 0, incomingDps_ = 0, engageAt_ = 0, damageClock_ = 0, auraClock_ = 0, auraDps_ = 0;
     std::vector<std::pair<const Ability*, const Hit*>> auraHits_;
@@ -573,6 +634,9 @@ private:
         damageAmp_ = (1.0 + get(fx_, "damage_amp")) * ch_.damageDealt;
         abilityAmp_ = 1.0 + get(fx_, "ability_amp");
         myHp_ = maxHp_;
+        moveSpeed_ = ch_.moveSpeed;
+        for (const auto& id : b.items)
+            if (lib_.items.at(id).slot == "boots") moveSpeed_ += 45;  // every tier-2 boot gives +45 move speed
 
         // Ability order: the champion's recommended combo when it has one (and the
         // combo_order setting is on), otherwise R when it's up, then the rest by damage per cast.
@@ -655,7 +719,6 @@ private:
             for (double t = rng_.exponential(ccRate); t < duration_; t += rng_.exponential(ccRate))
                 cc_.push_back({t, t + rng_.uniform(sc_.ccMin, sc_.ccMax)});
         rUp_ = rng_.chance(sc_.rReadyChance);
-        secondaries_.resize(static_cast<size_t>(rng_.binomial(sc_.clumpMax, sc_.clumpChance)));
         engageAt_ = rng_.uniform(sc_.engageMin, sc_.engageMax);
         incomingRoll_ = std::max(0.0, rng_.normal(sc_.enemyDpsMean, sc_.enemyDpsSd));
         targetSeed_ = rng_.next();
@@ -664,33 +727,48 @@ private:
     uint64_t targetSeed_ = 0;
 
     void setupDefences() {
-        // Enemy spawns use their own stream so builds that kill faster don't shift
-        // the rest of the fight's random draws.
+        // Enemy spawns and movement use their own streams so builds that kill faster
+        // don't shift the rest of the fight's random draws.
         targetRng_ = Rng(targetSeed_, 1);
-        primary_ = spawnEnemy();
-        for (auto& e : secondaries_) e = spawnEnemy();
-        double physShare = sc_.enemyPhysShare, teamDamage = 1.0;
+        moveRng_ = Rng(targetSeed_, 2);
+        double physShare = sc_.enemyPhysShare, teamDamage = 1.0, share = 0;
         if (sc_.teamDrivenDamage && !team_.empty()) {
-            double share = 0, phys = 0;
+            double phys = 0;
             for (const auto* e : team_) { share += e->damageShare; phys += e->damageShare * e->physShare; }
             if (share > 0) physShare = phys / share;
             teamDamage = share / (0.2 * static_cast<double>(team_.size()));
         }
         const double mitigation = physShare * 100.0 / (100.0 + armor_) + (1.0 - physShare) * 100.0 / (100.0 + mr_);
-        incomingDps_ = incomingRoll_ * sc_.damageTakenFactor * teamDamage * mitigation;
+        incomingDps_ = incomingRoll_ * sc_.damageTakenFactor * teamDamage * mitigation * rules_.inRangeBoost;
         // Always-on damage (Sunfire-style auras and damage toggles).
         auraDps_ = get(fx_, "aura_flat") + get(fx_, "aura_bonus_hp") * bonusHp_;
+
+        // The field: you at the origin, the enemy team further up the lane, its
+        // short-range champions in front.
+        me_ = {0, 0};
+        const size_t n = static_cast<size_t>(std::max(1, sc_.teamSize));
+        enemies_.resize(n);
+        for (size_t i = 0; i < n; ++i) {
+            const EnemyProfile* p = sc_.fixedTarget || team_.empty() ? nullptr : team_[i % team_.size()];
+            Enemy& e = enemies_[i];
+            e = spawnEnemy(p);
+            const double reach = p ? p->reach : 550.0;
+            e.home = {sc_.startDistance + 0.5 * (std::min(reach, 650.0) - 400.0) + moveRng_.normal(0, 0.6 * sc_.enemySpread),
+                      std::clamp(moveRng_.normal(0, sc_.enemySpread), -rules_.laneHalfWidth, rules_.laneHalfWidth)};
+            e.pos = e.home;
+            const double w = p && share > 0 ? p->damageShare / share : 1.0 / static_cast<double>(n);
+            e.damageWeight = w;
+        }
+        primary_ = nearestAlive(me_);
     }
     Rng targetRng_{1, 1};
 
-    Enemy spawnEnemy() {
+    Enemy spawnEnemy(const EnemyProfile* prof) {
         EnemyProfile p;
-        if (sc_.fixedTarget || team_.empty()) {
-            p.hp = sc_.targetHp; p.armor = sc_.targetArmor; p.mr = sc_.targetMr;
-        } else {
-            p = *team_[targetRng_.pick(team_.size())];
-        }
+        if (prof) p = *prof;
+        else { p.hp = sc_.targetHp; p.armor = sc_.targetArmor; p.mr = sc_.targetMr; p.moveSpeed = 0; p.reach = 550; }
         Enemy e;
+        e.profile = prof;
         e.uid = nextUid_++;
         e.maxHp = p.hpSd > 0 ? std::max(0.5 * p.hp, targetRng_.normal(p.hp, p.hp * p.hpSd)) : p.hp;
         e.hp = e.maxHp;
@@ -700,12 +778,21 @@ private:
         e.physMult = 100.0 / (100.0 + armor) * amp;
         e.magicMult = 100.0 / (100.0 + mr) * amp;
         e.trueMult = amp;
+        e.moveSpeed = p.moveSpeed;
+        e.reach = p.reach;
         if (trace_) {
             TraceEvent ev;
             ev.t = t_; ev.kind = "spawn"; ev.target = e.uid; ev.text = p.id; ev.hp = e.hp; ev.maxHp = e.maxHp;
+            ev.amount = e.reach;  // how far its damage reaches, for the replay
             record(ev);
         }
         return e;
+    }
+
+    bool inCc(double t) const {
+        for (const auto& [a, b] : cc_)
+            if (t >= a && t < b) return true;
+        return false;
     }
 
     double freeTime(double t) const {
@@ -718,49 +805,183 @@ private:
         return t;
     }
 
-    bool takeDamageUntil(double t) {
-        if (dead_) return true;
-        const double from = std::max(damageClock_, engageAt_);
-        if (t > from && incomingDps_ > 0) {
-            const double lost = incomingDps_ * (t - from);
-            if (lost >= myHp_) {
-                dead_ = true;
-                res_.died = true;
-                res_.timeAlive = from + myHp_ / incomingDps_;
-                myHp_ = 0;
-                recordSelf(res_.timeAlive, "death");
-                return true;
-            }
-            myHp_ -= lost;
-            recordSelf(t);
+    int nearestAlive(Vec from) const {
+        int best = -1;
+        double bd = 1e18;
+        for (size_t i = 0; i < enemies_.size(); ++i) {
+            if (!enemies_[i].alive) continue;
+            const double d = len(enemies_[i].pos - from);
+            if (d < bd) { bd = d; best = static_cast<int>(i); }
         }
-        damageClock_ = std::max(damageClock_, t);
+        return best;
+    }
+
+    // Centre-to-centre distance at which two champions touch or an attack connects.
+    double attackReach() const { return ch_.attackRange + 2 * rules_.hitbox; }
+    double distTo(const Enemy& e) const { return len(e.pos - me_); }
+
+    // How close you need to be to the target to use ability a on it.
+    double needRange(const Ability& a) const {
+        const Geometry& g = a.geo;
+        if (g.selfBuff || g.shape == Shape::Single) return (g.selfBuff ? ch_.attackRange : g.range) + 2 * rules_.hitbox;
+        if (g.shape == Shape::Circle) return (g.onSelf ? g.radius : g.range + 0.6 * g.radius) + rules_.hitbox;
+        if (g.move != Move::None) return g.range + rules_.hitbox;
+        return g.range * 0.8 + rules_.hitbox;  // skillshots: thrown from a bit inside their range
+    }
+
+    // Moves everyone and applies the enemies' damage up to time t, in small steps.
+    // Returns true if you died.
+    bool advance(double t) {
+        if (dead_) return true;
+        t = std::min(t, duration_);
+        while (posClock_ < t - 1e-9) {
+            const double dt = std::min(kStep, t - posClock_);
+            const double now = posClock_ + dt;
+            for (auto& e : enemies_)
+                if (!e.alive && now >= e.respawnAt) respawn(e, now);
+            moveEnemies(now, dt);
+            if (!inCc(posClock_) && posClock_ >= busyUntil_) moveMe(dt);
+            tickAuras(now);
+            // Damage taken: each enemy hits you only while you're within its reach.
+            double dps = 0;
+            if (now > engageAt_) {
+                double share = 0;
+                for (const auto& e : enemies_)
+                    if (e.alive && distTo(e) <= e.reach + 2 * rules_.hitbox) share += e.damageWeight;
+                dps = incomingDps_ * share;
+                exposureSum_ += share * dt;
+                exposureTime_ += dt;
+            }
+            posClock_ = now;
+            if (dps > 0) {
+                const double lost = dps * dt;
+                if (lost >= myHp_) {
+                    res_.damageTaken += myHp_;
+                    dead_ = true;
+                    res_.died = true;
+                    res_.timeAlive = now - dt + myHp_ / dps;
+                    myHp_ = 0;
+                    recordSelf(res_.timeAlive, "death");
+                    recordPositions(res_.timeAlive, true);
+                    return true;
+                }
+                myHp_ -= lost;
+                res_.damageTaken += lost;
+                recordSelf(now);
+            }
+            recordPositions(now, false);
+        }
         return false;
+    }
+
+    void respawn(Enemy& e, double now) {
+        const double saved = t_;
+        t_ = now;
+        e = spawnEnemy(e.profile);
+        t_ = saved;
+        // The next enemy walks in from behind their team.
+        e.home = {me_.x + sc_.startDistance, std::clamp(moveRng_.normal(0, sc_.enemySpread), -rules_.laneHalfWidth,
+                                                         rules_.laneHalfWidth)};
+        e.pos = e.home;
+        if (primary_ < 0 || !enemies_[static_cast<size_t>(primary_)].alive) {
+            primary_ = nearestAlive(me_);
+            recordFocus();
+        }
+    }
+
+    void clampLane(Vec& p) const { p.y = std::clamp(p.y, -rules_.laneHalfWidth, rules_.laneHalfWidth); }
+
+    void moveEnemies(double now, double dt) {
+        for (auto& e : enemies_) {
+            if (!e.alive || e.moveSpeed <= 0) continue;
+            const Vec toMe = me_ - e.pos;
+            const Vec dir = unit(toMe, {-1, 0});
+            const Vec side{-dir.y, dir.x};
+            if (now >= e.strafeUntil) {  // a new sidestep every so often
+                e.strafe = moveRng_.uniform(-0.6, 0.6);
+                e.strafeUntil = now + moveRng_.uniform(0.4, 1.2);
+            }
+            Vec v{0, 0};
+            if (now < e.dodgeUntil) {
+                v = e.dodgeVel;
+            } else {
+                const double d = len(toMe);
+                const double want = std::max(e.reach * 0.85, 2 * rules_.hitbox);
+                if (now < engageAt_) v = (e.home - e.pos) * 2.0;  // hold position until the fight starts
+                else if (d > want + 25) v = dir * e.moveSpeed;
+                else if (e.reach >= 300 && d < want - 200) v = dir * (-0.45 * e.moveSpeed);  // ranged: back off between attacks
+                v = v + side * (e.strafe * e.moveSpeed);
+                const double sp = len(v);
+                if (sp > e.moveSpeed) v = v * (e.moveSpeed / sp);
+            }
+            e.vel = v;
+            e.pos = e.pos + v * dt;
+            clampLane(e.pos);
+        }
+    }
+
+    void moveMe(double dt) {
+        if (!hasPrimary()) return;
+        const Enemy& tgt = P();
+        const Vec toT = tgt.pos - me_;
+        const double d = len(toT);
+        const double want = std::max(wantRange_ - 15, 2 * rules_.hitbox);
+        Vec v{0, 0};
+        if (d > want) {
+            v = unit(toT) * moveSpeed_;
+        } else if (ch_.attackRange >= 300) {
+            // Ranged: step back from anyone short-ranged who is getting close, if the target stays in range.
+            for (const auto& e : enemies_) {
+                if (!e.alive || e.reach >= ch_.attackRange) continue;
+                const Vec away = me_ - e.pos;
+                if (len(away) < e.reach + 2 * rules_.hitbox + 80 && d < attackReach() - 60) {
+                    v = unit(away) * (0.8 * moveSpeed_);
+                    break;
+                }
+            }
+        }
+        const double step = std::min(len(v) * dt, std::max(0.0, d - 2 * rules_.hitbox));
+        me_ = me_ + unit(v, {0, 0}) * step;
+        clampLane(me_);
+        me_.x = std::max(me_.x, -1200.0);  // your own tower: no retreating past it
+    }
+
+    void recordPositions(double t, bool force) {
+        if (!trace_ || (!force && t + 1e-9 < nextPosAt_)) return;
+        nextPosAt_ = t + kPosEvery;
+        TraceEvent ev;
+        ev.t = t; ev.kind = "pos";
+        ev.pos = {-1, me_.x, me_.y};
+        for (const auto& e : enemies_)
+            if (e.alive) { ev.pos.push_back(e.uid); ev.pos.push_back(e.pos.x); ev.pos.push_back(e.pos.y); }
+        record(ev);
     }
 
     void heal(double amount) {
         if (!dead_) myHp_ = std::min(maxHp_, myHp_ + amount);
     }
 
-    Enemy* secondaryAlive(size_t i) {
-        Enemy& e = secondaries_[i];
-        if (!e.alive && t_ >= e.respawnAt) e = spawnEnemy();
-        return e.alive ? &e : nullptr;
+    void onKill(Enemy* target) {
+        ++res_.kills;
+        target->alive = false;
+        target->respawnAt = t_ + sc_.retargetDelay;
+        if (hasPrimary()) return;
+        primary_ = nearestAlive(me_);
+        recordFocus();
     }
 
-    void killPrimary() {
-        ++res_.kills;
-        for (size_t i = 0; i < secondaries_.size(); ++i) {
-            if (Enemy* e = secondaryAlive(i)) {
-                primary_ = *e;
-                e->alive = false;
-                e->respawnAt = t_ + sc_.retargetDelay;
-                recordFocus();
-                return;
-            }
+    // Other living enemies within radius of a point, nearest first.
+    std::vector<Enemy*> near(Vec at, double radius, const Enemy* skip = nullptr) {
+        std::vector<std::pair<double, Enemy*>> found;
+        for (auto& e : enemies_) {
+            if (!e.alive || &e == skip) continue;
+            const double d = len(e.pos - at);
+            if (d <= radius + rules_.hitbox) found.push_back({d, &e});
         }
-        primary_.alive = false;
-        primaryRespawnAt_ = t_ + sc_.retargetDelay;
+        std::sort(found.begin(), found.end(), [](const auto& a, const auto& b) { return a.first < b.first; });
+        std::vector<Enemy*> out;
+        for (auto& f : found) out.push_back(f.second);
+        return out;
     }
 
     double deal(Enemy* target, double raw, DamageType type, Source src, bool physicalAttack = false) {
@@ -773,7 +994,7 @@ private:
         target->hp -= dmg;
         res_.bySource[src] += dmg;
         res_.totalDamage += dmg;
-        const bool isPrimary = target == &primary_;
+        const bool isPrimary = hasPrimary() && target == &P();
         if (isPrimary) res_.primaryDamage += dmg;
         const double execute = get(fx_, "execute");
         double executed = 0;
@@ -795,26 +1016,113 @@ private:
                 record(ev);
             }
         }
-        if (target->hp <= 0) {
-            if (isPrimary) killPrimary();
-            else {
-                ++res_.kills;
-                target->alive = false;
-                target->respawnAt = t_ + sc_.retargetDelay;
-            }
-        }
+        if (target->hp <= 0) onKill(target);
         return dmg;
     }
 
-    std::vector<Enemy*> targetsFor(Area area, bool primaryHit) {
-        std::vector<Enemy*> out;
-        if (primaryHit && primary_.alive) out.push_back(&primary_);
-        const double p = area == Area::Aoe ? rules_.aoeSecondaryHit : area == Area::Line ? rules_.lineSecondaryHit : 0.0;
-        if (p > 0)
-            for (size_t i = 0; i < secondaries_.size(); ++i)
-                if (Enemy* e = secondaryAlive(i))
-                    if (rng_.chance(p)) out.push_back(e);
-        return out;
+    // Dashes and blinks: move toward the target, up to the ability's reach, stopping
+    // at your attack range (ranged champions keep some distance).
+    void dashFor(const Geometry& g) {
+        if (g.move == Move::None || !hasPrimary()) return;
+        const Vec toT = P().pos - me_;
+        const double d = len(toT);
+        const double stopAt = ch_.attackRange >= 300 ? 0.8 * ch_.attackRange : 2 * rules_.hitbox;
+        const double step = std::clamp(d - stopAt, 0.0, g.range > 0 ? g.range : 350.0);
+        me_ = me_ + unit(toT) * step;
+        clampLane(me_);
+        recordPositions(t_, true);
+    }
+
+    bool inside(const Geometry& g, Vec q, Vec origin, Vec dir, Vec center) const {
+        const double hb = rules_.hitbox;
+        const Vec rel = q - origin;
+        switch (g.shape) {
+            case Shape::Line: {
+                const double along = dot(rel, dir);
+                return along >= -hb && along <= g.range + hb && std::fabs(cross(dir, rel)) <= 0.5 * g.width + hb;
+            }
+            case Shape::Circle: return len(q - center) <= g.radius + hb;
+            case Shape::Cone: {
+                const double d = len(rel);
+                if (d > g.range + hb) return false;
+                if (d < hb) return true;
+                const double off = std::acos(std::clamp(dot(rel * (1.0 / d), dir), -1.0, 1.0));
+                return off <= 0.5 * g.angle * M_PI / 180.0 + std::atan(hb / d);
+            }
+            case Shape::Single: return false;
+        }
+        return false;
+    }
+
+    struct Shot {
+        std::vector<Enemy*> hits;
+        bool primaryHit = false;
+        Vec aim;
+        double flight = 0;
+    };
+
+    // Who an ability hits: where everyone will be when it lands, with enemies who
+    // see a skillshot coming sidestepping it.
+    Shot shoot(const Ability& a) {
+        Shot s;
+        const Geometry& g = a.geo;
+        Enemy* tgt = hasPrimary() ? &P() : nullptr;
+        if (!tgt) return s;
+        if (g.selfBuff || g.shape == Shape::Single) {
+            s.aim = tgt->pos;
+            if (distTo(*tgt) <= needRange(a) + 1) { s.hits.push_back(tgt); s.primaryHit = true; }
+            return s;
+        }
+        if (g.shape == Shape::Circle && g.onSelf) {
+            s.aim = me_;
+            s.hits = near(me_, g.radius);
+            for (Enemy* e : s.hits) s.primaryHit |= e == tgt;
+            return s;
+        }
+        double flight = g.speed > 0 ? distTo(*tgt) / g.speed : 0.0;
+        const Vec lead = tgt->pos + tgt->vel * (flight * rules_.aimLead);
+        const Vec dir = unit(lead - me_);
+        Vec center = lead;
+        if (g.shape == Shape::Circle) {
+            if (len(center - me_) > g.range) center = me_ + dir * g.range;
+            flight = g.speed > 0 ? len(center - me_) / g.speed : 0.0;
+        }
+        s.aim = g.shape == Shape::Circle ? center : me_ + dir * g.range;
+        s.flight = flight;
+        // Seconds a dodging enemy has to get out of the way: it sees the cast start.
+        const double window = a.castTime + flight - rules_.reactionTime;
+        std::vector<std::pair<double, Enemy*>> hit;
+        for (auto& e : enemies_) {
+            if (!e.alive) continue;
+            Vec q = e.pos + e.vel * flight;
+            if (!inside(g, q, me_, dir, center)) continue;
+            if (window > 0 && e.moveSpeed > 0 && moveRng_.chance(rules_.dodgeChance)) {
+                Vec away = g.shape == Shape::Circle ? unit(q - center, Vec{-dir.y, dir.x})
+                                                    : Vec{-dir.y, dir.x} * (cross(dir, q - me_) >= 0 ? 1.0 : -1.0);
+                const double room = e.moveSpeed * window;
+                q = q + away * room;
+                clampLane(q);
+                // Its sidestep, for the replay: the part during the cast at once, the rest while it flies.
+                e.dodgeVel = away * e.moveSpeed;
+                e.dodgeUntil = t_ + flight;
+                e.pos = e.pos + away * (e.moveSpeed * std::max(0.0, std::min(window, a.castTime - rules_.reactionTime)));
+                clampLane(e.pos);
+                if (inside(g, q, me_, dir, center)) hit.push_back({dot(q - me_, dir), &e});
+            } else {
+                hit.push_back({dot(q - me_, dir), &e});
+            }
+        }
+        if (g.shape == Shape::Line && g.stops && hit.size() > 1) {
+            std::sort(hit.begin(), hit.end(), [](const auto& x, const auto& y) { return x.first < y.first; });
+            hit.resize(1);
+        }
+        for (auto& [d, e] : hit) {
+            s.hits.push_back(e);
+            s.primaryHit |= e == tgt;
+        }
+        // The main target first, so item procs land on it.
+        std::stable_partition(s.hits.begin(), s.hits.end(), [&](Enemy* e) { return e == tgt; });
+        return s;
     }
 
     double hitRaw(const Hit& h, const Enemy& e) const {
@@ -856,8 +1164,10 @@ private:
             const double dmg = get(*p.fx, "proc_flat") + get(*p.fx, "proc_ap") * ap_;
             deal(e, dmg, DamageType::Magic, SrcItems);
             int extra = static_cast<int>(get(*p.fx, "proc_targets", 1)) - 1;
-            for (size_t i = 0; i < secondaries_.size() && extra > 0; ++i)
-                if (Enemy* s = secondaryAlive(i)) { deal(s, dmg, DamageType::Magic, SrcItems); --extra; }
+            for (Enemy* s : near(e->pos, 600, e)) {
+                if (extra-- <= 0) break;
+                deal(s, dmg, DamageType::Magic, SrcItems);
+            }
         }
         if (hasMissile_ && t_ >= missile_.readyAt && e->alive) {
             missile_.readyAt = t_ + get(*missile_.fx, "missile_cd");
@@ -869,16 +1179,20 @@ private:
     void castAbility(size_t idx) {
         const Ability& a = ch_.abilities[idx];
         const Source src = a.slot == 'Q' ? SrcQ : a.slot == 'W' ? SrcW : a.slot == 'E' ? SrcE : SrcR;
-        const bool primaryHit = rng_.chance(a.hitChance);
+        dashFor(a.geo);
+        const Shot shot = shoot(a);
         const double amp = abilityAmp_ * abilityCritFactor();
         if (trace_) {
             TraceEvent ev;
-            ev.t = t_ - a.castTime; ev.kind = "cast"; ev.slot = a.slot; ev.amount = a.castTime; ev.flag = primaryHit;
-            ev.target = primary_.alive ? primary_.uid : -1;
-            ev.text = a.area == Area::Aoe ? "aoe" : a.area == Area::Line ? "line" : "single";
+            ev.t = t_ - a.castTime; ev.kind = "cast"; ev.slot = a.slot; ev.amount = a.castTime; ev.flag = shot.primaryHit;
+            ev.target = hasPrimary() ? P().uid : -1;
+            const Geometry& g = a.geo;
+            ev.text = g.selfBuff ? "buff" : g.shape == Shape::Line ? "line" : g.shape == Shape::Cone ? "cone"
+                      : g.shape == Shape::Circle ? (g.onSelf ? "self" : "circle") : "single";
+            ev.x = shot.aim.x; ev.y = shot.aim.y; ev.flight = shot.flight;
             record(ev);
         }
-        auto targets = targetsFor(a.area, primaryHit);
+        const auto& targets = shot.hits;
         bool first = true;
         for (Enemy* e : targets) {
             for (const auto& h : a.hits) {
@@ -920,7 +1234,7 @@ private:
     }
 
     void basicAttack() {
-        Enemy* e = &primary_;
+        Enemy* e = &P();
         ++attacks_;
         const bool crit = rng_.chance(crit_);
         const double critMult = rules_.critMult + critDamage_;
@@ -961,15 +1275,14 @@ private:
             applyOnHit(e, get(fx_, "second_bolt_onhit"));
         }
         if (!ch_.ranged && get(fx_, "cleave_ad") > 0)
-            for (Enemy* s : targetsFor(Area::Aoe, false)) deal(s, get(fx_, "cleave_ad") * ad_, DamageType::Physical, SrcItems);
+            for (Enemy* s : near(e->pos, 350, e)) deal(s, get(fx_, "cleave_ad") * ad_, DamageType::Physical, SrcItems);
         if (ch_.ranged && get(fx_, "bolts") > 0) {
             int bolts = static_cast<int>(get(fx_, "bolts"));
-            for (size_t i = 0; i < secondaries_.size() && bolts > 0; ++i)
-                if (Enemy* s = secondaryAlive(i)) {
-                    deal(s, get(fx_, "bolts_ad") * ad_ * (rng_.chance(crit_) ? critMult : 1.0), DamageType::Physical,
-                         SrcItems, true);
-                    --bolts;
-                }
+            for (Enemy* s : near(me_, ch_.attackRange + rules_.hitbox, e)) {
+                if (bolts-- <= 0) break;
+                deal(s, get(fx_, "bolts_ad") * ad_ * (rng_.chance(crit_) ? critMult : 1.0), DamageType::Physical,
+                     SrcItems, true);
+            }
         }
         for (const Ability* a : onhitAbilities_) {
             if (attacks_ % a->onhitEvery != 0 || !e->alive) continue;
@@ -989,26 +1302,19 @@ private:
         const double dt = until - auraClock_;
         auraClock_ = until;
         if (auraDps_ <= 0 && auraHits_.empty()) return;
-        std::vector<Enemy*> near;
-        if (primary_.alive) near.push_back(&primary_);
-        for (size_t i = 0; i < secondaries_.size(); ++i)
-            if (Enemy* e = secondaryAlive(i)) near.push_back(e);
-        for (Enemy* e : near) {
-            if (auraDps_ > 0) deal(e, auraDps_ * dt, DamageType::Magic, SrcItems);
-            for (const auto& [a, h] : auraHits_) {
-                const Source src = a->slot == 'Q' ? SrcQ : a->slot == 'W' ? SrcW : a->slot == 'E' ? SrcE : SrcR;
-                deal(e, hitRaw(*h, *e) * abilityAmp_ * dt, h->type, src);
-            }
+        // Auras burn whoever stands close: item auras (Sunfire) reach 325, ability
+        // auras their own radius.
+        if (auraDps_ > 0)
+            for (Enemy* e : near(me_, 325)) deal(e, auraDps_ * dt, DamageType::Magic, SrcItems);
+        for (const auto& [a, h] : auraHits_) {
+            const Source src = a->slot == 'Q' ? SrcQ : a->slot == 'W' ? SrcW : a->slot == 'E' ? SrcE : SrcR;
+            const double radius = a->geo.shape == Shape::Circle && a->geo.onSelf ? a->geo.radius : 350.0;
+            for (Enemy* e : near(me_, radius)) deal(e, hitRaw(*h, *e) * abilityAmp_ * dt, h->type, src);
         }
     }
 
     double cooldownOf(const Ability& a) const { return a.cooldown * 100.0 / (100.0 + ah_); }
 
-    double attackUptime() const {
-        if (ch_.attackRange >= 550) return rules_.uptimeLong;
-        if (ch_.attackRange >= 300) return rules_.uptimeShort;
-        return rules_.uptimeMelee;
-    }
 };
 
 Result Fight::run() {
@@ -1028,57 +1334,86 @@ Result Fight::run() {
     for (size_t i = 0; i < ch_.abilities.size(); ++i)
         if (ch_.abilities[i].slot == 'R' && !rUp_) readyAt_[i] = 1e18;
     while (true) {
-        t_ = freeTime(t_);
-        tickAuras(std::min(t_, duration_));
-        if (takeDamageUntil(std::min(t_, duration_))) break;
-        if (t_ >= duration_) break;
+        // Crowd control: you can't act or move, but everyone else keeps going.
+        const double free = std::min(freeTime(t_), duration_);
+        if (advance(free)) break;
+        t_ = std::max(t_, free);
+        if (advance(t_) || t_ >= duration_) break;
 
-        if (!primary_.alive) {
-            t_ = std::max(t_, primaryRespawnAt_);
-            if (t_ >= duration_) break;
-            primary_ = spawnEnemy();
+        // Switch to a much closer enemy when the target is out of reach (it ran or kited).
+        if (hasPrimary() && distTo(P()) > attackReach() + 100) {
+            const int near = nearestAlive(me_);
+            if (near >= 0 && near != primary_ && distTo(enemies_[static_cast<size_t>(near)]) < distTo(P()) - 200) {
+                primary_ = near;
+                recordFocus();
+            }
+        }
+        if (!hasPrimary()) {
+            primary_ = nearestAlive(me_);
+            if (primary_ < 0) {  // everyone is down: wait for the next one to walk in
+                double next = duration_;
+                for (const auto& e : enemies_) next = std::min(next, e.respawnAt);
+                t_ = std::max(t_ + kStep, next);
+                continue;
+            }
             recordFocus();
-            nextAttack_ = std::max(nextAttack_, t_);
-            continue;
         }
 
-        bool cast = false;
+        // Cast the first ready ability that reaches the target; otherwise walk
+        // until it (or your attack) does.
+        wantRange_ = attackReach();
+        bool cast = false, waiting = false, holding = false;
         for (size_t i : order_) {
             if (readyAt_[i] > t_) continue;
             const Ability& a = ch_.abilities[i];
+            const double need = needRange(a);
+            if (distTo(P()) > need) {
+                wantRange_ = std::min(wantRange_, need);
+                // Nearly in range of an ability earlier in the combo: close in for it
+                // rather than casting the later ones first.
+                if (distTo(P()) - need < 400) holding = true;
+                waiting = true;
+                continue;
+            }
+            if (holding) continue;
+            busyUntil_ = t_ + a.castTime;
             t_ += a.castTime;
-            if (t_ >= duration_) break;
-            tickAuras(t_);
-            castAbility(i);
+            if (t_ >= duration_ || advance(t_)) break;
+            if (!hasPrimary()) primary_ = nearestAlive(me_);
+            if (primary_ >= 0) castAbility(i);
             readyAt_[i] = t_ + cooldownOf(a);
             nextAttack_ = std::max(nextAttack_, t_);
             cast = true;
             break;
         }
-        if (t_ >= duration_) break;
+        if (dead_ || t_ >= duration_) break;
         if (cast) continue;
 
         for (auto& p : actives_) {
-            if (t_ >= p.readyAt) {
+            if (t_ >= p.readyAt && distTo(P()) <= 700) {
                 p.readyAt = t_ + get(*p.fx, "active_cd");
-                deal(&primary_, get(*p.fx, "active_flat") + get(*p.fx, "active_ap") * ap_, DamageType::Magic, SrcItems);
+                deal(&P(), get(*p.fx, "active_flat") + get(*p.fx, "active_ap") * ap_, DamageType::Magic, SrcItems);
             }
         }
+        if (!hasPrimary()) continue;
 
-        if (nextAttack_ > t_) {
-            double nt = nextAttack_;
-            for (size_t i : order_) nt = std::min(nt, readyAt_[i]);
+        const bool inRange = distTo(P()) <= attackReach();
+        if (nextAttack_ > t_ || !inRange) {
+            double nt = inRange ? nextAttack_ : t_ + kStep;
+            if (waiting) nt = std::min(nt, t_ + kStep);
+            for (size_t i : order_)
+                if (readyAt_[i] > t_) nt = std::min(nt, readyAt_[i]);
             t_ = std::max(nt, t_ + 1e-9);
             continue;
         }
         basicAttack();
-        nextAttack_ = t_ + 1.0 / (attackSpeed_ * attackUptime());
+        nextAttack_ = t_ + 1.0 / attackSpeed_;
     }
     if (!dead_) {
-        tickAuras(duration_);
-        takeDamageUntil(duration_);
+        advance(duration_);
         if (!dead_) res_.timeAlive = duration_;
     }
+    res_.exposure = exposureTime_ > 0 ? exposureSum_ / exposureTime_ : 0.0;
     if (trace_) {
         lastSelfAt_ = -1;
         recordSelf(dead_ ? res_.timeAlive : duration_);
@@ -1092,6 +1427,15 @@ Result Fight::run() {
 }
 
 }  // namespace
+
+// How much of the enemies' damage can reach this champion, on average over a fight
+// (fights with no items, so every build sees the same scaling).
+double meanExposure(const Library& lib, const ChampionKit& c, const Scenario& sc) {
+    double sum = 0;
+    const int n = 48;
+    for (int i = 0; i < n; ++i) sum += Fight(lib, c, Build{}, sc, 1000000 + static_cast<uint64_t>(i)).run().exposure;
+    return sum / n;
+}
 
 std::vector<Result> runTrials(const Library& lib, const ChampionKit& champ, const Build& build, const Scenario& sc,
                               uint64_t firstTrial, int count) {
@@ -1124,6 +1468,7 @@ Summary summarize(const std::vector<Result>& results) {
         kpm += r.kills / r.duration * 60.0;
         s.survivalRate += r.died ? 0.0 : 1.0;
         s.meanTimeAlive += r.timeAlive;
+        s.damageTakenPerSec += r.timeAlive > 0 ? r.damageTaken / r.timeAlive : 0.0;
         total += r.totalDamage;
         for (int i = 0; i < SrcCount; ++i) s.shareBySource[i] += r.bySource[i];
     }
@@ -1142,6 +1487,7 @@ Summary summarize(const std::vector<Result>& results) {
     s.killsPerMinute = kpm / n;
     s.survivalRate /= n;
     s.meanTimeAlive /= n;
+    s.damageTakenPerSec /= n;
     if (total > 0)
         for (auto& x : s.shareBySource) x /= total;
     return s;

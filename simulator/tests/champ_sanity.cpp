@@ -62,10 +62,11 @@ int main(int argc, char** argv) {
     CHECK(meanDps(lib, *jinx, Build{{"infinity_edge"}, {}}, jsc) > meanDps(lib, *jinx, Build{{"rabadons"}, {}}, jsc),
           "a marksman gets more from Infinity Edge than from Rabadon's");
 
-    Scenario tanky = sc;
-    tanky.fixedTarget = true;
+    Scenario dummies = sc;
+    dummies.fixedTarget = true;
+    Scenario tanky = dummies;
     tanky.targetArmor = tanky.targetMr = 300;
-    CHECK(meanDps(lib, *ahri, cap, tanky) < meanDps(lib, *ahri, cap, sc), "more resists means less damage");
+    CHECK(meanDps(lib, *ahri, cap, tanky) < meanDps(lib, *ahri, cap, dummies), "more resists means less damage");
 
     Scenario peaceful = sc;
     peaceful.enemyDpsMean = peaceful.enemyDpsSd = 0;
@@ -132,6 +133,41 @@ int main(int argc, char** argv) {
         ChampionKit k = *ahri;
         try { Library::setCombo(k, "QQW"); } catch (...) { badCombo = true; }
         CHECK(badCombo, "a combo repeating an ability is rejected");
+    }
+
+    {
+        // Positions: skillshots that enemies dodge more often land less, everyone stays
+        // on the lane, and a melee champion only attacks from melee range.
+        const char* rules = argc > 1 ? argv[1] : "data/mayhem_rules.json";
+        const Library sharp = Library::load(rules, {{"dodge_chance", 0.0}});
+        const Library slippery = Library::load(rules, {{"dodge_chance", 1.0}});
+        const ChampionKit& sl = *sharp.find("Lux");
+        CHECK(meanDps(sharp, sl, cap, sharp.scenarioFor(sl), 600) >
+                  meanDps(slippery, *slippery.find("Lux"), cap, slippery.scenarioFor(*slippery.find("Lux")), 600),
+              "skillshots land less when enemies dodge more");
+
+        const ChampionKit* garen = lib.find("Garen");
+        const FightTrace gt = traceFight(lib, *garen, Build{{"trinity"}, {}}, lib.scenarioFor(*garen), 3);
+        bool onLane = true, melee = true;
+        int attacks = 0;
+        std::vector<double> last;  // latest positions
+        int focus = -1;
+        for (const auto& e : gt.events) {
+            if (e.kind == "pos") {
+                last = e.pos;
+                for (size_t i = 0; i + 2 < e.pos.size(); i += 3) onLane &= std::fabs(e.pos[i + 2]) <= 551;
+            }
+            if (e.kind == "focus") focus = e.target;
+            if (e.kind == "attack" && last.size() >= 3) {
+                ++attacks;
+                for (size_t i = 3; i + 2 < last.size(); i += 3)
+                    if (static_cast<int>(last[i]) == e.target)
+                        melee &= std::hypot(last[i + 1] - last[1], last[i + 2] - last[2]) <= garen->attackRange + 130 + 80;
+            }
+        }
+        (void)focus;
+        CHECK(onLane, "everyone stays on the lane");
+        CHECK(attacks > 0 && melee, "a melee champion attacks only from melee range");
     }
 
     bool threw = false;
