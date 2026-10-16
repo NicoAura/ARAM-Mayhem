@@ -47,6 +47,7 @@ async function loadText(text, { sample = false } = {}) {
   $("load-error").hidden = true;
   $("loader").hidden = true;
   $("stats").hidden = false;
+  $("actions").hidden = false;
   $("sample-note").hidden = !sample;
   setupFilters();
   render();
@@ -157,6 +158,7 @@ function setupFilters() {
   const name = state.games.find((g) => g.name)?.name;
   const first = new Date(state.games[state.games.length - 1].time);
   const last = new Date(state.games[0].time);
+  $("account").hidden = false;
   $("account").textContent = `${name ? name + " · " : ""}${state.games.length} games, ${fmtDate(first)} to ${fmtDate(last)}`;
   if (filtersReady) return;
   filtersReady = true;
@@ -358,13 +360,14 @@ loader.addEventListener("drop", async (e) => {
 // api/sync, which pulls new games from the running League client into the
 // archive. Opened any other way, the button explains how to get there.
 
-const syncBtn = $("sync");
+const syncBtns = [...document.querySelectorAll(".sync-btn")];
 const syncStatus = $("sync-status");
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 const OFFLINE_HINT = "Sync needs League open on your Mac and this page opened from importer/Open Mayhem Stats.command.";
 let helperOnline = false;
 
 function setSyncStatus(text, error = false) {
+  syncStatus.hidden = !text;
   syncStatus.textContent = text || "";
   syncStatus.classList.toggle("error", error);
 }
@@ -381,8 +384,7 @@ async function reloadArchive() {
 }
 
 async function watchSync() {
-  syncBtn.disabled = true;
-  syncBtn.textContent = "Syncing…";
+  for (const b of syncBtns) { b.disabled = true; b.textContent = "Syncing…"; }
   try {
     let s = await syncState();
     while (s.running) {
@@ -403,12 +405,11 @@ async function watchSync() {
   } catch (e) {
     setSyncStatus("Lost contact with the sync helper. Is it still running?", true);
   } finally {
-    syncBtn.disabled = false;
-    syncBtn.textContent = "Sync from League";
+    for (const b of syncBtns) { b.disabled = false; b.textContent = "Sync from League"; }
   }
 }
 
-syncBtn.addEventListener("click", async () => {
+const startSync = async () => {
   if (!helperOnline) {
     // the helper may have been started since the page loaded
     try { await syncState(); helperOnline = true; } catch (e) { return setSyncStatus(OFFLINE_HINT); }
@@ -421,20 +422,17 @@ syncBtn.addEventListener("click", async () => {
     return setSyncStatus("Couldn't reach the sync helper.", true);
   }
   watchSync();
-});
+};
+for (const b of syncBtns) b.addEventListener("click", startSync);
 
 async function setupSync() {
-  if (PRESET.sample) return;
-  $("sync-row").hidden = false;
-  if (location.protocol === "file:") return setSyncStatus(OFFLINE_HINT);
+  // The empty state already explains Sync, so this only picks up a running sync
+  if (PRESET.sample || location.protocol === "file:") return;
   try {
     const s = await syncState();
     helperOnline = true;
-    if (!state.games.length) setSyncStatus("No archive yet. Sync to pull your games from the League client.");
     if (s.running) watchSync();
-  } catch (e) {
-    setSyncStatus(state.games.length ? "" : "Sync from League, or load an archive file below.");
-  }
+  } catch (e) { /* no helper; the button explains when pressed */ }
 }
 
 // When served next to a data file (e.g. `python3 -m http.server` in this
