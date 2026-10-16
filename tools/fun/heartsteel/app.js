@@ -153,7 +153,7 @@
 
   function save() {
     const h = [build.champion, build.level, build.items.join("."), build.augments.join("."), encodeURIComponent(JSON.stringify(build.opts))].join("~");
-    history.replaceState(null, "", `#${h}`);
+    try { history.replaceState(null, "", `#${h}`); } catch { /* embedded pages may not own the URL */ }
   }
 
   function load() {

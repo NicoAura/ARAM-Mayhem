@@ -207,7 +207,7 @@
   function save() {
     const h = [build.level, build.items.join("."), build.augments.join("."),
       encodeURIComponent(JSON.stringify({ o: build.opts, x: build.extra }))].join("~");
-    history.replaceState(null, "", `#${h}`);
+    try { history.replaceState(null, "", `#${h}`); } catch { /* embedded pages may not own the URL */ }
   }
 
   function load() {
