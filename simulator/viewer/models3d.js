@@ -258,9 +258,17 @@ const api = {
   hasModel(champId) { return !!(manifest && manifest[String(champId).toLowerCase()]); },
 
   // Click on an ability: your champion plays it once in the arena.
+  previewCounts: {},
   previewRole(role) {
-    const n = this.preview && this.preview.role === role ? this.preview.n + 1 : 0;
+    const n = this.previewCounts[role] = (this.previewCounts[role] ?? -1) + 1;
     this.preview = { role, n, start: performance.now() };
+  },
+  // The ability you clicked, while it plays: {role, t, loop, n}, or null.
+  previewAnim(champId) {
+    if (!this.preview) return null;
+    const t = (performance.now() - this.preview.start) / 1000;
+    const len = this.castLength(champId, this.preview.role) || 1.1;
+    return t < len + 0.2 ? { role: this.preview.role, t, loop: false, n: this.preview.n } : null;
   },
   // Seconds the ability's animation runs for a loaded champion, or 0 if not loaded yet.
   castLength(champId, slot) { return (lengths.get(String(champId).toLowerCase()) || {})[slot] || 0; },

@@ -292,6 +292,16 @@
     if (atk && time - (atk.t - 0.3) < 0.75) return { role: atk.f ? "crit" : "attack", t: time - (atk.t - 0.3), loop: false };
     return { role: "idle", t: time, loop: true };
   }
+  // How far along its dash a fighter is (0 to 1): out in 0.25 s, held, back over the last 0.35 s.
+  function dashShare(c, anim) {
+    if (!c || !c.dash || !anim || anim.loop || !c.dash.includes(anim.role)) return 0;
+    const len = Math.max(0.7, castLength(c.id, anim.role)), t = anim.t;
+    if (t < 0 || t > len) return 0;
+    const ease = (x) => 1 - (1 - x) * (1 - x);
+    if (t < 0.25) return ease(t / 0.25);
+    if (t > len - 0.35) return ease((len - t) / 0.35);
+    return 1;
+  }
   function enemyAnim(time, en) {
     if (en.died !== null) return { role: "death", t: time - en.died, loop: false };
     const cast = enemyCastAt(en.uid, time);
@@ -397,16 +407,22 @@
       if (miss && age > 0 && age < 0.6) floatText(overlay, "MISS", to.x, to.y - r - 30 * u - age * 40 * u, 1 - age / 0.6, "#c9d6e2", 18 * u);
     }
 
-    // Fighters: 3D models when they're loaded (models3d.js), otherwise portraits.
-    const meX = st.me.x + (posOf(s.focus).x - st.me.x) * 0.25 * lunge;
+    // Fighters: 3D models when they're loaded (models3d.js), otherwise portraits. A dash,
+    // leap or blink (index.json "dash") carries the caster most of the way to its target and back.
+    const M3 = window.Models3D, preview = M3 && M3.ok && M3.previewAnim ? M3.previewAnim(champ.id) : null;
+    const meAnim = preview || myAnim(time, s), focusPos = posOf(s.focus);
+    const meDash = dashShare(champ, meAnim);
+    const meX = st.me.x + (focusPos.x - st.me.x) * (0.25 * lunge + 0.55 * meDash);
+    const meY = st.me.y + (focusPos.y - st.me.y) * 0.55 * meDash;
     const M = window.Models3D && window.Models3D.ok ? window.Models3D : null;
     let heads = {};
     if (M) {
-      const fighters = [{ key: "me", champ: champ.id, x: meX, y: st.me.y, face: 1, ...myAnim(time, s) }];
+      const fighters = [{ key: "me", champ: champ.id, x: meX, y: meY, face: 1, ...meAnim }];
       for (const en of alive) {
-        const p = posOf(en.uid);
-        fighters.push({ key: "e" + en.uid, champ: en.champ, x: p.x, y: p.y, face: -1,
-          scale: en.uid === s.focus ? 1 : 0.85, visible: en.died === null || time - en.died < 1.6, ...enemyAnim(time, en) });
+        const p = posOf(en.uid), anim = enemyAnim(time, en);
+        const d = 0.4 * dashShare(byId.get(String(en.champ).toLowerCase()), anim);
+        fighters.push({ key: "e" + en.uid, champ: en.champ, x: p.x + (meX - p.x) * d, y: p.y + (meY - p.y) * d, face: -1,
+          scale: en.uid === s.focus ? 1 : 0.85, visible: en.died === null || time - en.died < 1.6, ...anim });
       }
       heads = M.frame(fighters, W, H);
     }
@@ -435,7 +451,7 @@
         // The ability flying at you.
         const fly = (age - 0.15) / 0.35;
         if (fly > 0 && fly < 1.4) {
-          const tx = meX, ty = st.me.y - R * 0.6, k = Math.min(1, fly);
+          const tx = meX, ty = meY - R * 0.6, k = Math.min(1, fly);
           const x0 = p.x, y0 = p.y - rr * 0.6, x1 = x0 + (tx - x0) * k, y1 = y0 + (ty - y0) * k;
           g.globalAlpha = Math.max(0, 1 - Math.max(0, fly - 1) / 0.4) * 0.9;
           g.strokeStyle = SLOT_COLORS[cast.s]; g.lineWidth = (cast.s === "R" ? 7 : 4) * u; g.lineCap = "round";
@@ -476,24 +492,24 @@
     // You.
     const frac = s.selfHp / fight.maxHp;
     const myHead = heads.me;
-    let labelY = st.me.y + R + 30 * u;
+    let labelY = meY + R + 30 * u;
     if (myHead) {
       g.strokeStyle = s.dead ? "rgba(120,120,120,.6)" : "#8fd3ff"; g.lineWidth = 3 * u;
-      g.beginPath(); g.ellipse(meX, st.me.y, R * 1.2, R * 0.5, 0, 0, Math.PI * 2); g.stroke();
+      g.beginPath(); g.ellipse(meX, meY, R * 1.2, R * 0.5, 0, 0, Math.PI * 2); g.stroke();
       hpBar(og, myHead.x - R, myHead.y - 4 * u, R * 2, frac, frac < 0.3 ? "#f0605a" : "#5fd38a");
-      labelY = st.me.y + R * 0.5 + 26 * u;
+      labelY = meY + R * 0.5 + 26 * u;
     } else {
       g.fillStyle = s.dead ? "rgba(120,120,120,.2)" : "rgba(143,211,255,.18)";
-      g.beginPath(); g.arc(meX, st.me.y, R + 7 * u, 0, Math.PI * 2); g.fill();
+      g.beginPath(); g.arc(meX, meY, R + 7 * u, 0, Math.PI * 2); g.fill();
       if (s.dead || s.cc) g.filter = s.dead ? "grayscale(1) brightness(.5)" : "saturate(.4)";
-      drawIcon(g, champ.row, 0, meX - R, st.me.y - R, R * 2, true);
+      drawIcon(g, champ.row, 0, meX - R, meY - R, R * 2, true);
       g.filter = "none";
       g.strokeStyle = "#8fd3ff"; g.lineWidth = 3 * u;
-      g.beginPath(); g.arc(meX, st.me.y, R, 0, Math.PI * 2); g.stroke();
-      hpBar(og, meX - R, st.me.y - R - 16 * u, R * 2, frac, frac < 0.3 ? "#f0605a" : "#5fd38a");
+      g.beginPath(); g.arc(meX, meY, R, 0, Math.PI * 2); g.stroke();
+      hpBar(og, meX - R, meY - R - 16 * u, R * 2, frac, frac < 0.3 ? "#f0605a" : "#5fd38a");
     }
     if (s.cc && !s.dead) {
-      const cy = myHead ? myHead.y - 18 * u : st.me.y - R - 30 * u;
+      const cy = myHead ? myHead.y - 18 * u : meY - R - 30 * u;
       og.strokeStyle = "#b388ff"; og.lineWidth = 3 * u;
       for (let i = 0; i < 3; i++) {
         const a = time * 5 + i * 2.1;

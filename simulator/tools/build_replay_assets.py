@@ -21,6 +21,7 @@ import argparse
 import concurrent.futures as cf
 import json
 import os
+import re
 import subprocess
 import sys
 import urllib.request
@@ -29,6 +30,11 @@ from pathlib import Path
 DDRAGON = "https://ddragon.leagueoflegends.com"
 CLIP_CDN = "https://d28xe8vt774jo5.cloudfront.net/champion-abilities"
 ICON = 64
+# Abilities that move the caster (from the Data Dragon descriptions), so the replay can carry
+# the model to its target and back.
+DASH = re.compile(r"\b(dash(es|ing)?|leaps?|leaping|lunges?|blinks?|jumps?|vaults?|rush(es)?|tumbles?|"
+                  r"charges? (forward|toward|at|to)|teleports? (to|behind)|hops?|slides?|surges? forward|flies to|"
+                  r"steps forward|propels?|(flings?|launch(es)?|pulls?) (him|her|it)self)\b", re.I)
 SLOTS = "QWER"
 
 
@@ -159,6 +165,7 @@ def main():
             "role": c.get("role", ""), "combo": combos.get(c["id"], "QWER"),
             "passive": dd["passive"]["name"],
             "spells": {s: dd["spells"][i]["name"] for i, s in enumerate(SLOTS)},
+            "dash": "".join(s for i, s in enumerate(SLOTS) if DASH.search(dd["spells"][i]["description"].split(". ")[0])),
             "_icons": [f"champion/{dd['image']['full']}", f"passive/{dd['passive']['image']['full']}"] +
                       [f"spell/{dd['spells'][i]['image']['full']}" for i in range(4)],
         })
