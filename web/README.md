@@ -42,23 +42,44 @@ Open http://localhost:3000.
 The key lives only in the `RIOT_API_KEY` environment variable and is read on
 the server (`src/lib/riot.ts`). The browser calls this site's own API routes,
 never Riot directly, so the key is never sent to visitors. Riot responses are
-cached for a few minutes to save rate limit.
+cached for a few minutes to save rate limit (on Vercel; see Known differences
+for Cloudflare).
 
 Example route: `/api/riot/account?gameName=Name&tagLine=NA1&region=americas`.
 
 ## Keeping the site up to date
 
 `npm run build` (and `npm run dev`) first runs `scripts/sync-embeds.mjs`, which
-copies the embedded folders in. With Vercel connected, every push to `main`
+copies the embedded folders in. With Cloudflare connected, every push to `main`
 rebuilds the site, so merged work from other threads and the daily China data
-commits show up on their own. Each pull request also gets a preview deployment
-built from its own branch.
+commits show up on their own. Pull requests get their own preview URL.
 
-## Deploy on Vercel
+## Deploy on Cloudflare
 
-1. Import the GitHub repo in Vercel and set **Root Directory** to `web`.
-2. Add `RIOT_API_KEY` under Project Settings → Environment Variables.
-3. Every push to `main` deploys.
+The site runs on Cloudflare Workers through the OpenNext adapter
+(`@opennextjs/cloudflare`). Every page is prerendered at build time and served
+as a static asset; only `/api/riot/*` runs as code.
+
+1. In the Cloudflare dashboard go to **Workers & Pages → Create → Import a
+   repository** and pick this repo.
+2. Set **Root directory** to `web`, **Build command** to
+   `npx opennextjs-cloudflare build` and **Deploy command** to
+   `npx opennextjs-cloudflare deploy`.
+3. Add `RIOT_API_KEY` as a **Secret** under the Worker's Settings → Variables
+   and Secrets.
+4. Every push to `main` deploys.
+
+To try the Cloudflare build locally, copy `.dev.vars.example` to `.dev.vars`,
+add your key, and run `npm run preview` (http://localhost:8787). `npm run deploy`
+deploys from your machine after `npx wrangler login`.
 
 A development key expires every 24 hours, so a site that stays up needs a
 Personal or Production key from the Riot Developer Portal.
+
+### Known differences from Vercel
+
+- Riot API responses are not cached between requests yet: the page cache is
+  read-only on this setup. If lookups hit Riot's rate limit, add a KV or R2
+  cache in `open-next.config.ts`.
+- Each static file must be under 25 MiB. Large simulator models or replay
+  traces would need to move to R2.
