@@ -139,8 +139,9 @@ export default function RiotIdSignIn() {
           <input
             value={riotId}
             onChange={(e) => setRiotId(e.target.value)}
+            name="riot-id"
             placeholder="Name#NA1"
-            autoComplete="off"
+            autoComplete="username"
             spellCheck={false}
           />
         </label>

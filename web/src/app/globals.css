@@ -16,6 +16,7 @@
   --bad: #c2413a;
   --gold: #a8781c;
   --silver: #6b7686;
+  --mark-core: #0c1017;
   --prismatic: linear-gradient(100deg, #9fe7ff, #c9b8ff 40%, #ffb8e0 70%, #ffe2a3);
   --r: 14px;
   --r-sm: 8px;
@@ -41,6 +42,7 @@
     --bad: #f0776f;
     --gold: #e0b45c;
     --silver: #a3adbb;
+    --mark-core: #181d26;
   }
 }
 
@@ -60,6 +62,7 @@
   --bad: #f0776f;
   --gold: #e0b45c;
   --silver: #a3adbb;
+  --mark-core: #181d26;
 }
 
 * {
@@ -153,12 +156,9 @@ body::before {
   letter-spacing: -0.02em;
 }
 
-.brand i {
+.brand-mark {
   display: block;
-  width: 22px;
-  height: 22px;
-  border-radius: 7px;
-  background: conic-gradient(from 200deg, var(--accent), #8a7dff, #ff7ac6, #ffc35a, var(--accent));
+  flex: none;
 }
 
 .brand b {
@@ -1852,4 +1852,14 @@ html[data-device="mobile"] .theme-toggle button {
   font-family: var(--mono);
   font-size: 0.8125rem;
   font-weight: 400;
+}
+
+/* Present for password managers and screen readers' forms logic, invisible on screen. */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
 }

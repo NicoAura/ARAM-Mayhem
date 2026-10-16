@@ -68,14 +68,18 @@ export default function AdminEditor({ fields }: { fields: Field[] }) {
     return (
       <form
         className="card admin-login"
+        method="post"
+        action="/admin"
         onSubmit={(e) => {
           e.preventDefault();
           void load(password);
         }}
       >
+        {/* Password managers save a login only when a username field sits beside the password. */}
+        <input type="text" name="username" autoComplete="username" value="admin" readOnly tabIndex={-1} aria-hidden="true" className="visually-hidden" />
         <label htmlFor="admin-pw">Password</label>
         <div className="admin-row">
-          <input id="admin-pw" type="password" autoComplete="current-password" value={password} onChange={(e) => setPassword(e.target.value)} />
+          <input id="admin-pw" name="password" type="password" autoComplete="current-password" value={password} onChange={(e) => setPassword(e.target.value)} />
           <button type="submit" className="btn" disabled={!password || status?.kind === "busy"}>
             Unlock
           </button>
