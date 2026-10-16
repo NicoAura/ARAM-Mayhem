@@ -36,9 +36,6 @@ export default function Embed({ src, title, minHeight = 600 }: { src: string; ti
   return (
     <div className="embed">
       <iframe ref={ref} src={src} title={title} style={{ height }} />
-      <a className="embed-open" href={src} target="_blank" rel="noreferrer">
-        Open full screen ↗
-      </a>
     </div>
   );
 }

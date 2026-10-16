@@ -9,7 +9,7 @@ export default function AdminPage() {
   return (
     <>
       <Intro eyebrow="Editor" title="Edit the site.">
-        Change any text below and save. The site redeploys with it in about a minute.
+        Change any text below and save. The site shows it in about a minute.
       </Intro>
       <AdminEditor fields={FIELDS} />
     </>
