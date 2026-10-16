@@ -16,10 +16,9 @@ import urllib.request
 from pathlib import Path
 
 HERE = Path(__file__).parent
-CDRAGON = "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/cherry-augments.json"
-# cherry-augments.json mixes Arena and Mayhem augments; mayhem-tracker keeps a
-# list of the Mayhem ones (from the mode's own game data), used for the examples
-MAYHEM_AUGMENTS = "https://raw.githubusercontent.com/Yhprum/mayhem-tracker/main/src/main/augment-descriptions.json"
+# The live client's game data, as mirrored by CommunityDragon
+GAME_DATA = "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/"
+CDRAGON = GAME_DATA + "cherry-augments.json"
 
 
 def get_json(url):
@@ -30,15 +29,21 @@ def get_json(url):
 
 
 def name_tables():
-    version = get_json("https://ddragon.leagueoflegends.com/api/versions.json")[0]
-    champs = get_json(f"https://ddragon.leagueoflegends.com/cdn/{version}/data/en_US/champion.json")["data"]
+    champs = get_json(GAME_DATA + "champion-summary.json")
     augs = get_json(CDRAGON)
     augs = augs if isinstance(augs, list) else augs.get("augments", [])
     return (
-        {c["key"]: c["name"] for c in champs.values()},
+        {str(c["id"]): c["name"] for c in champs if c["id"] > 0},
         {str(a["id"]): a["nameTRA"] for a in augs if a.get("nameTRA")},
         {str(a["id"]): a["rarity"] for a in augs if a.get("rarity")},
     )
+
+
+def mayhem_augment_ids():
+    """Ids of the augments in the client's Mayhem (KIWI) augment list."""
+    lists = {l["modeName"]: l["augmentList"] for l in get_json(GAME_DATA + "augment-lists.json")}
+    names = {path.rsplit("/", 1)[-1] for path in lists.get("KIWI", [])}
+    return {str(a["id"]) for a in get_json(CDRAGON) if a.get("augmentNameId") in names}
 
 
 def sample_kill_map(rng, kills, deaths, win):
@@ -94,6 +99,7 @@ def sample_archive(champ_names, aug_names, aug_rarity, mayhem_ids, n=640, seed=7
             "gameId": 5_400_000_000 - i * 7919,
             "queueId": 2400 if rng.random() < 0.85 else 2450,
             "gameCreation": t,
+            "gameVersion": f"16.{max(1, 20 - i // 40)}.1",
             "gameDuration": int(rng.gauss(1150, 160)),
             "participants": [{"participantId": 1, "championId": int(champ), "teamId": 100, "stats": stats}],
             "participantIdentities": [{"participantId": 1, "player": me}],
@@ -111,7 +117,7 @@ def main():
     }
     if "--sample" in sys.argv:  # example games, off unless asked for
         preset["sample"] = sample_archive(champ_names, aug_names, aug_rarity,
-                                          set(get_json(MAYHEM_AUGMENTS)["descriptions"]))
+                                          mayhem_augment_ids())
     html = (HERE / "index.html").read_text()
     body = re.search(r"<body>(.*)</body>", html, re.S).group(1)
     body = body.replace('<script src="app.js"></script>', "")
