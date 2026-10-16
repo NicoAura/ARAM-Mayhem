@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mayhem Guide</title>
+  <meta name="description" content="How ARAM Mayhem works, read from the League client's own files.">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main>
+    <div class="nav">
+      <div class="segmented" role="tablist">
+        <button type="button" role="tab" data-tab="overview">What is Mayhem</button>
+        <button type="button" role="tab" data-tab="quests">Quests</button>
+        <button type="button" role="tab" data-tab="challenges">Challenges</button>
+        <button type="button" role="tab" data-tab="maps">Maps &amp; extras</button>
+      </div>
+      <span id="patch" class="eyebrow"></span>
+    </div>
+
+    <section class="panel" id="panel-overview" hidden>
+      <img id="hero" class="hero" alt="Mayhem augment cards, Poro Snax and the Poro King crown">
+      <div class="card">
+        <p class="eyebrow">The mode</p>
+        <h2 class="section">ARAM with augments</h2>
+        <p class="muted" style="margin-top:0.5rem">ARAM: Mayhem is ARAM on the Howling Abyss with Arena-style augments.
+          During the game you pick augments from a hand of Silver, Gold or Prismatic cards, and you can reroll the hand.
+          Some augments are quests: hit a goal during the game and they turn into something bigger, including items you
+          can't buy anywhere else. Everything on this page is read from the game client's files.</p>
+      </div>
+      <div class="facts" id="facts"></div>
+      <div class="card">
+        <div class="card-head"><h2>Queues</h2><span class="muted small">Queue IDs in the client</span></div>
+        <div class="chips" id="queues"></div>
+      </div>
+    </section>
+
+    <section class="panel" id="panel-quests" hidden>
+      <div class="card">
+        <p class="eyebrow">Quest augments</p>
+        <h2 class="section">Every quest, every milestone</h2>
+        <p class="muted" style="margin-top:0.5rem">These augments track a goal during the game. Each step lists what you
+          need and what you get. Numbers come from the quest data in the client; the game fills in a few amounts, like
+          damage, at play time, so they aren't shown here.</p>
+      </div>
+      <div class="grid" id="quest-list"></div>
+    </section>
+
+    <section class="panel" id="panel-challenges" hidden>
+      <div class="card">
+        <p class="eyebrow">ARAM challenges</p>
+        <h2 class="section">Mayhem games count</h2>
+        <p class="muted" style="margin-top:0.5rem" id="ch-intro"></p>
+        <form class="lookup" id="lookup" hidden style="margin-top:0.85rem">
+          <input name="riotId" placeholder="Riot ID, like Name#NA1" autocomplete="off" required>
+          <select name="region" aria-label="Region">
+            <option value="na1">NA</option><option value="euw1">EUW</option><option value="eun1">EUNE</option>
+            <option value="kr">KR</option><option value="br1">BR</option><option value="la1">LAN</option>
+            <option value="la2">LAS</option><option value="oc1">OCE</option><option value="tr1">TR</option>
+            <option value="ru">RU</option><option value="jp1">JP</option><option value="sg2">SEA</option>
+            <option value="tw2">TW</option><option value="vn2">VN</option>
+          </select>
+          <button class="btn" type="submit">Show my progress</button>
+          <span id="lookup-msg" class="muted small"></span>
+        </form>
+      </div>
+      <div id="challenge-groups" class="panel"></div>
+    </section>
+
+    <section class="panel" id="panel-maps" hidden>
+      <div class="card">
+        <p class="eyebrow">Maps</p>
+        <h2 class="section">Howling Abyss and its skins</h2>
+        <p class="muted" style="margin-top:0.5rem">Mayhem games can load the bridge in different themes. Same layout, new look.</p>
+      </div>
+      <div class="grid tight maps" id="map-list"></div>
+      <div class="card">
+        <div class="card-head"><h2>Mayhem-only items</h2><span class="muted small">Quest rewards and cosmetics</span></div>
+        <div class="grid tight" id="item-list"></div>
+      </div>
+      <div class="card">
+        <div class="card-head"><h2>Mayhem units</h2><span class="muted small">Characters that exist only for this mode</span></div>
+        <div class="grid tight" id="summon-list"></div>
+      </div>
+    </section>
+
+    <p class="muted small">Source: League client files via CommunityDragon. Rebuild with <code>python3 guide/build_data.py</code>.</p>
+  </main>
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

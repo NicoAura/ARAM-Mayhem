@@ -1,0 +1,119 @@
+/* DeepARAM reference theme for pages embedded in the site (dashboard/, simulator/viewer/,
+   tools/fun/, data/cook-builds/). Copy this into your page's stylesheet.
+   Cool neutrals with a glacial blue accent; the prismatic gradient is the one flourish. */
+@import url("https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap");
+
+:root {
+  color-scheme: light;
+  --bg: #f4f6f8;
+  --surface: #ffffff;
+  --raised: #eef1f5;
+  --fg: #0c1017;
+  --muted: #5b6472;
+  --line: #e1e5eb;
+  --hover: #eef1f5;
+  --accent: #0b7fc0;
+  --accent-ink: #ffffff;
+  --accent-soft: #e3f1fa;
+  --good: #1d8a55;
+  --bad: #c2413a;
+  --gold: #a8781c;
+  --silver: #6b7686;
+  --prismatic: linear-gradient(100deg, #9fe7ff, #c9b8ff 40%, #ffb8e0 70%, #ffe2a3);
+  --display: "Bricolage Grotesque", "Geist", system-ui, sans-serif;
+  --sans: "Geist", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: "Geist Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  --r: 14px;
+  --r-sm: 8px;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --bg: #090b0f; --surface: #11151c; --raised: #181d26; --fg: #e8ecf2; --muted: #8b94a3; --line: #222936;
+    --hover: #181d26; --accent: #5cc0ff; --accent-ink: #04121c; --accent-soft: #0f2533;
+    --good: #4cc98b; --bad: #f0776f; --gold: #e0b45c; --silver: #a3adbb;
+  }
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #090b0f; --surface: #11151c; --raised: #181d26; --fg: #e8ecf2; --muted: #8b94a3; --line: #222936;
+  --hover: #181d26; --accent: #5cc0ff; --accent-ink: #04121c; --accent-soft: #0f2533;
+  --good: #4cc98b; --bad: #f0776f; --gold: #e0b45c; --silver: #a3adbb;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: var(--bg); color: var(--fg); font: 15px/1.5 var(--sans); -webkit-font-smoothing: antialiased; }
+a { color: var(--accent); text-decoration: none; }
+
+/* Headings: mono eyebrow above a display-font heading. */
+.eyebrow { font: 500 11px/1.4 var(--mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+h1, h2.display { font-family: var(--display); font-weight: 700; letter-spacing: -0.03em; line-height: 1.05; text-wrap: balance; }
+h1 { font-size: clamp(1.9rem, 4vw, 2.6rem); }
+h2 { font-size: 0.95rem; font-weight: 600; }
+
+/* Cards: white (or raised dark) surfaces, 1px line, 14px radius, no shadow. */
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: 1.1rem 1.15rem; min-width: 0; }
+.card-head { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; margin-bottom: 0.75rem; }
+.card-head a { font-size: 13px; }
+
+/* Pills: segmented tabs, chips and tier badges. */
+.segmented { display: inline-flex; gap: 2px; padding: 3px; background: var(--raised); border: 1px solid var(--line); border-radius: 999px; }
+.segmented button { border: 0; background: none; color: var(--muted); font: 500 14px var(--sans); padding: 0.35rem 0.9rem; border-radius: 999px; cursor: pointer; }
+.segmented button[aria-selected="true"] { background: var(--surface); color: var(--fg); box-shadow: 0 0 0 1px var(--line); }
+.chip { display: inline-block; font: 500 11px/1 var(--mono); padding: 0.3rem 0.55rem; border-radius: 999px; border: 1px solid var(--line); color: var(--muted); }
+.tier-prismatic { background: var(--prismatic); border-color: transparent; color: #1b1630; }
+.tier-gold { color: var(--gold); border-color: color-mix(in srgb, var(--gold) 45%, transparent); }
+.tier-silver { color: var(--silver); }
+.buff { color: var(--good); } .nerf { color: var(--bad); }
+
+/* Inputs and buttons. */
+input, select { font: inherit; font-size: 14px; color: var(--fg); background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-sm); padding: 0.5rem 0.75rem; }
+input:focus-visible, button:focus-visible, select:focus-visible, a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.btn { font: 500 14px var(--sans); border: 0; border-radius: 999px; padding: 0.5rem 1rem; background: var(--accent); color: var(--accent-ink); cursor: pointer; }
+
+/* Tables: inside a bordered card, mono uppercase headers, tabular numbers. */
+.table-wrap { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; font-size: 14px; }
+th { font: 500 11px var(--mono); letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); text-align: left; padding: 0.65rem 0.9rem; border-bottom: 1px solid var(--line); }
+td { padding: 0.55rem 0.9rem; border-top: 1px solid var(--line); }
+tr:first-child td { border-top: 0; }
+tbody tr:hover { background: var(--hover); }
+.num { text-align: right; font-variant-numeric: tabular-nums; font-family: var(--mono); }
+
+/* Meters: a thin accent bar for win rates and damage. */
+.meter { height: 6px; border-radius: 999px; background: var(--raised); overflow: hidden; }
+.meter i { display: block; height: 100%; border-radius: inherit; background: var(--accent); }
+
+/* ---- Mayhem Guide ---- */
+main { max-width: 1120px; margin: 0 auto; padding: 16px; display: grid; gap: 1rem; }
+.muted { color: var(--muted); }
+.small { font-size: 13px; }
+.nav { display: flex; flex-wrap: wrap; gap: 0.75rem; align-items: center; justify-content: space-between; }
+.panel { display: grid; gap: 1rem; }
+.panel[hidden] { display: none; }
+.hero { width: 100%; border-radius: var(--r); display: block; aspect-ratio: 900 / 323; object-fit: cover; background: #1b1630; }
+.grid { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr)); }
+.grid.tight { grid-template-columns: repeat(auto-fill, minmax(min(100%, 230px), 1fr)); }
+.facts { display: grid; gap: 0.75rem; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); }
+.fact .value { font: 600 1.6rem/1.1 var(--display); letter-spacing: -0.02em; display: block; margin-top: 0.25rem; }
+.row { display: flex; gap: 0.8rem; align-items: center; }
+.icon { width: 44px; height: 44px; border-radius: 10px; background: #14161c; flex: none; object-fit: cover; }
+.icon.round { border-radius: 50%; }
+.title { font-weight: 600; font-size: 15px; }
+.chips { display: flex; flex-wrap: wrap; gap: 0.35rem; margin-top: 0.3rem; }
+ol.steps { list-style: none; display: grid; gap: 0.55rem; margin-top: 0.85rem; }
+ol.steps li { display: grid; grid-template-columns: 4.2rem 1fr; gap: 0.6rem; font-size: 14px; }
+ol.steps .need { font: 500 13px var(--mono); text-align: right; color: var(--accent); padding-top: 1px; }
+.reward { color: var(--muted); }
+.note { margin-top: 0.75rem; font-size: 13px; color: var(--muted); font-style: italic; }
+.maps img { width: 100%; aspect-ratio: 1; object-fit: cover; border-radius: var(--r-sm); display: block; background: var(--raised); margin-bottom: 0.6rem; }
+.tiers { display: flex; flex-wrap: wrap; gap: 0.3rem; margin-top: 0.6rem; }
+.tiers span { font: 500 11px/1 var(--mono); padding: 0.3rem 0.45rem; border-radius: 999px; background: var(--raised); color: var(--muted); }
+.tiers span.done { background: var(--accent-soft); color: var(--accent); }
+.tiers span b { font-weight: 500; color: var(--fg); }
+.lookup { display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center; }
+.lookup input { min-width: 0; flex: 1 1 180px; }
+.progress { margin-top: 0.6rem; display: grid; gap: 0.3rem; font-size: 13px; }
+h2.section { font-family: var(--display); font-size: 1.35rem; letter-spacing: -0.02em; }
+@media (max-width: 640px) { input, select { font-size: 16px; } ol.steps li { grid-template-columns: 3.4rem 1fr; } }
+.lookup[hidden] { display: none; }
