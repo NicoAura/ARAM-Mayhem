@@ -9,8 +9,8 @@ const sans = Geist({ subsets: ["latin"], variable: "--font-sans" });
 const mono = Geist_Mono({ subsets: ["latin"], variable: "--font-mono" });
 
 export const metadata: Metadata = {
-  title: "ARAM Mayhem",
-  description: "ARAM Mayhem stats, damage simulator and PBE changes",
+  title: "DeepARAM",
+  description: "DeepARAM: ARAM Mayhem stats, damage simulator and PBE changes",
 };
 
 export default function RootLayout({
@@ -23,13 +23,13 @@ export default function RootLayout({
       <body>
         <header className="site-header">
           <Link href="/" className="brand">
-            ARAM Mayhem
+            DeepARAM
           </Link>
           <NavLinks tabs={allTabs().map(({ href, label }) => ({ href, label }))} />
         </header>
         <main>{children}</main>
         <footer className="site-footer">
-          ARAM Mayhem isn&apos;t endorsed by Riot Games and doesn&apos;t reflect the views or opinions of Riot
+          DeepARAM isn&apos;t endorsed by Riot Games and doesn&apos;t reflect the views or opinions of Riot
           Games or anyone officially involved in producing or managing Riot Games properties.
         </footer>
       </body>

@@ -6,7 +6,7 @@ import Pending from "@/components/Pending";
 import SubTabs from "@/components/SubTabs";
 import { readRepoJson, repoHas } from "@/lib/repo-data";
 
-export const metadata: Metadata = { title: "Simulator · ARAM Mayhem" };
+export const metadata: Metadata = { title: "Simulator · DeepARAM" };
 
 type Named = Record<string, { name: string }>;
 type BestBuilds = {
