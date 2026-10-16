@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { text } from "@/lib/content";
-import { statsDate, counts, kitchenBuild, livePatch, topAugments, topChampions, topDps } from "@/lib/highlights";
+import { statsDate, counts, augmentPool, kitchenBuilds, livePatch, liveTiers, topAugments, topDps } from "@/lib/highlights";
+import { AugmentRoll, ChampionJump, KitchenPick, TierSnapshot } from "@/components/HomeWidgets";
 import { BETA } from "@/lib/beta";
 import { navPages } from "@/lib/tabs";
 
@@ -8,14 +9,13 @@ import { navPages } from "@/lib/tabs";
 const Icon = ({ src }: { src: string }) => <img className="icon" src={src} alt="" width={24} height={24} loading="lazy" />;
 
 const pct = (v: number) => `${(v * 100).toFixed(1)}%`;
-// Win rates sit between roughly 44% and 58%, so bars use that range to show differences.
-const wrWidth = (v: number) => `${Math.max(4, Math.min(100, ((v - 0.44) / 0.14) * 100))}%`;
 
 export default function Home() {
-  const champs = topChampions();
+  const tiers = liveTiers();
+  const pool = augmentPool();
   const augs = topAugments();
   const patch = livePatch();
-  const build = kitchenBuild();
+  const builds = kitchenBuilds();
   const dps = topDps();
   const n = counts();
   const date = statsDate();
@@ -28,6 +28,7 @@ export default function Home() {
         </p>
         <h1>{text("home.title", "Every Mayhem pick, measured.")}</h1>
         <p className="lede">{text("home.lede")}</p>
+        {tiers.length > 0 && <ChampionJump champs={tiers} />}
         <div className="stat-row">
           <div>
             <b>{n.champions}</b>
@@ -41,25 +42,13 @@ export default function Home() {
       </section>
 
       <div className="bento">
-        {champs.length > 0 && (
+        {tiers.length > 0 && (
           <section className="card span-7">
             <div className="card-head">
-              <h2>Highest win rate</h2>
+              <h2>Tier List{patch ? ` · Patch ${patch}` : ""}</h2>
               <Link href="/tier-list">All {n.champions} →</Link>
             </div>
-            <div className="rank">
-              {champs.map((c, i) => (
-                <Link key={c.id} href={`/tier-list?q=${encodeURIComponent(c.name)}`}>
-                  <span className="rank-i">{i + 1}</span>
-                  <Icon src={`/icons/champions/${c.id}.webp`} />
-                  <span className="rank-name">{c.name}</span>
-                  <span className="meter">
-                    <i style={{ width: wrWidth(c.winRate) }} />
-                  </span>
-                  <span className="rank-v">{pct(c.winRate)}</span>
-                </Link>
-              ))}
-            </div>
+            <TierSnapshot champs={tiers} />
           </section>
         )}
         {augs.length > 0 && (
@@ -81,22 +70,22 @@ export default function Home() {
             </div>
           </section>
         )}
-        {build && (
+        {pool.length >= 3 && (
+          <section className="card span-7">
+            <div className="card-head">
+              <h2>Roll an augment offer</h2>
+              <Link href="/tier-list?tab=augments">All augments →</Link>
+            </div>
+            <AugmentRoll pool={pool} />
+          </section>
+        )}
+        {builds.length > 0 && (
           <section className="card span-5 feature">
             <div className="card-head">
               <h2>From The Kitchen</h2>
               <Link href="/tools/kitchen">More →</Link>
             </div>
-            <p className="eyebrow">{build.champion}</p>
-            <h3>{build.title}</h3>
-            <p className="clamp">{build.why}</p>
-            <div className="chips">
-              {build.augments.slice(0, 4).map((a) => (
-                <span key={a} className="chip">
-                  {a}
-                </span>
-              ))}
-            </div>
+            <KitchenPick builds={builds} />
           </section>
         )}
         {dps.length > 0 && (
@@ -121,7 +110,7 @@ export default function Home() {
             </div>
           </section>
         )}
-        <section className="card span-all">
+        <section className="card span-5">
           <div className="card-head">
             <h2>More to explore</h2>
           </div>

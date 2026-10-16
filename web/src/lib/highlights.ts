@@ -5,6 +5,7 @@ import type { SearchItem } from "@/components/SearchPalette";
 import { readRepoCsv, readRepoJson } from "./repo-data";
 import { navPages } from "./tabs";
 import { BETA } from "./beta";
+import { champStats, type PatchRow } from "./tiers";
 
 // Small summaries of each section's data, read from the repo at build time.
 // Used by the home page highlights and the header search.
@@ -85,3 +86,37 @@ export function searchItems(): SearchItem[] {
     }));
   return [...pages, ...champs.sort((a, b) => a.name.localeCompare(b.name)), ...augs.sort((a, b) => a.name.localeCompare(b.name))];
 }
+
+export type HomeChamp = { id: string; name: string; tier: string; winRate: number; pickRate: number };
+
+/** Live-patch tiers for every champion (same Bayesian tiers as the Tier List's default view). */
+export function liveTiers(): HomeChamp[] {
+  const patch = livePatch();
+  const num = (v?: string) => (v === undefined || v === "" ? null : Number(v));
+  const rows: PatchRow[] = (readRepoCsv("data/cn/history/by_patch.csv") ?? [])
+    .filter((r) => r.patch === patch)
+    .map((r) => ({
+      patch: r.patch,
+      days: Number(r.days),
+      name: r.name,
+      win_rate: Number(r.win_rate),
+      pick_rate: Number(r.pick_rate),
+      damage: num(r.avg_damage_ratio),
+      tank: num(r.avg_tank_ratio),
+      kp: num(r.avg_participation_rate),
+      dead: num(r.avg_death_time),
+      augs: r.augment_ids ?? "",
+    }));
+  if (!patch || !rows.length) return [];
+  return champStats(rows, new Set([patch])).map((c) => ({ id: c.name, name: champName(c.name), tier: c.tier, winRate: c.win_rate, pickRate: c.pick_rate }));
+}
+
+export type HomeAugment = { id: string; name: string; tier: string; winRate: number; pickRate: number };
+
+/** Every rated live augment, for the home page's augment offer. */
+export const augmentPool = (): HomeAugment[] =>
+  (readRepoCsv("data/cn/augments.csv") ?? [])
+    .filter((r) => r.tier && AUGS[r.augment_id])
+    .map((r) => ({ id: r.augment_id, name: AUGS[r.augment_id], tier: r.tier.toLowerCase(), winRate: Number(r.win_rate), pickRate: Number(r.pick_rate) }));
+
+export const kitchenBuilds = () => readRepoJson<Builds>("data/cook-builds/builds.json")?.builds ?? [];
