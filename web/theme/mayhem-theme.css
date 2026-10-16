@@ -1,0 +1,47 @@
+/* ARAM Mayhem reference theme (owned by the Website thread, matches web/src/app/globals.css).
+   Copy this block into your page's stylesheet. Pages embedded in the site run in an iframe,
+   so they need their own copy of the tokens and fonts. */
+@import url("https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400&display=swap");
+
+:root {
+  color-scheme: light dark;
+  --bg: #fafafa;      /* page */
+  --fg: #0a0a0a;      /* text */
+  --muted: #737373;   /* secondary text, table headers */
+  --line: #e5e5e5;    /* all borders and dividers */
+  --hover: #f0f0f0;   /* row / button hover */
+  --accent: #b8862e;  /* gold: eyebrow labels, focus ring, gold tier only */
+  --prismatic: #8b5cf6;
+  --good: #16a34a;    /* win, buff */
+  --bad: #dc2626;     /* loss, nerf */
+  --sans: "Geist", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: "Geist Mono", ui-monospace, Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0a0a0a; --fg: #ededed; --muted: #8f8f8f; --line: #262626; --hover: #141414; --accent: #d9b16a;
+    --prismatic: #a78bfa; --good: #4ade80; --bad: #f87171;
+  }
+}
+
+body { background: var(--bg); color: var(--fg); font-family: var(--sans); line-height: 1.5; -webkit-font-smoothing: antialiased; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 4px; }
+
+/* Eyebrow label above a heading */
+.eyebrow { font-family: var(--mono); font-size: 0.75rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); }
+h1 { font-weight: 600; letter-spacing: -0.035em; line-height: 1.1; }
+h2 { font-weight: 600; letter-spacing: -0.02em; }
+
+/* Inputs and buttons: hairline border, no fill, 8px radius */
+input, select, button { font: inherit; color: var(--fg); background: transparent; border: 1px solid var(--line); border-radius: 8px; padding: 0.5rem 0.8rem; }
+button:hover { background: var(--hover); }
+
+/* Tables: no zebra, hairline rows, muted headers, right-aligned numbers */
+table { width: 100%; border-collapse: collapse; font-size: 0.875rem; font-variant-numeric: tabular-nums; }
+th, td { padding: 0.6rem 0.75rem; border-bottom: 1px solid var(--line); text-align: left; }
+th { color: var(--muted); font-weight: 500; }
+tbody tr:hover { background: var(--hover); }
+
+/* Tier / tag chips: outlined, mono, uppercase */
+.chip { display: inline-block; padding: 0.05rem 0.4rem; border: 1px solid var(--line); border-radius: 4px;
+  font-family: var(--mono); font-size: 0.6875rem; letter-spacing: 0.04em; text-transform: uppercase; color: var(--muted); }

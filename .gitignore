@@ -219,5 +219,8 @@ __marimo__/
 # Streamlit
 .streamlit/secrets.toml
 
+# Next.js source folder, not a Python build dir
+!web/src/lib/
+
 # Personal match archives
 dashboard/data/
