@@ -96,10 +96,11 @@ def main():
     body = re.search(r"<body>(.*)</body>", html, re.S).group(1)
     body = body.replace('<script src="app.js"></script>', "")
     title = re.search(r"<title>(.*?)</title>", html).group(1)
+    fonts = re.search(r'<link rel="stylesheet" href="https://fonts\.googleapis\.com[^>]*>', html).group(0)
     page = (
         f"<title>{title}</title>\n"
         '<meta name="claude:viewport-fit-sides" content="cover">\n'
-        '<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono&display=swap">\n'
+        f"{fonts}\n"
         f"<style>\n{(HERE / 'style.css').read_text()}</style>\n"
         f"{body}\n"
         f"<script>window.MAYHEM_PRESET = {json.dumps(preset, separators=(',', ':'))};</script>\n"
