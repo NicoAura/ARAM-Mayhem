@@ -1,6 +1,4 @@
-// ARAM Mayhem stats dashboard.
-// Reads a match archive (the mayhem-archive / mayhem-backup.json format from the
-// League client's local API, or Riot match-v5 JSON) entirely in the browser.
+// ARAM Mayhem stats dashboard. Reads a match archive entirely in the browser.
 "use strict";
 
 const QUEUE_NAMES = { 2400: "ARAM Mayhem", 2450: "ARAM Mayhem (2450)", 450: "ARAM" };
@@ -14,8 +12,7 @@ const state = {
   sample: false,
 };
 
-// A page can ship name tables and an example archive ahead of time (the
-// published preview does, since it can't reach Riot's CDNs).
+// A page can ship name tables and an example archive ahead of time.
 const PRESET = window.MAYHEM_PRESET || {};
 try { if (window.self !== window.top && !PRESET.sample) document.documentElement.classList.add("embedded"); } catch (e) { document.documentElement.classList.add("embedded"); }
 Object.assign(state.champNames, PRESET.champNames || {});
@@ -96,10 +93,10 @@ function normalize(g, owner) {
   const me = players(g).find((p) => p.puuid === owner);
   if (!me) return null;
   const p = me.participant;
-  const s = p.stats || p; // LCU nests stats; match-v5 is flat
+  const s = p.stats || p;
   const augs = [1, 2, 3, 4, 5, 6].map((i) => s["playerAugment" + i]).filter((a) => a && a > 0);
   let time = info.gameCreation || Date.parse(info.gameCreationDate || "") || 0;
-  // gameDuration is seconds in the LCU and newer match-v5, milliseconds in old match-v5
+  // gameDuration is seconds in newer archives, milliseconds in older ones
   let dur = info.gameDuration || 0;
   if (dur > 20000) dur = Math.round(dur / 1000);
   return {
@@ -117,15 +114,13 @@ function normalize(g, owner) {
     damage: s.totalDamageDealtToChampions || 0,
     augs,
     name: me.name,
-    // [seconds, x, y, killerId, victimId] per kill, added by the importer from
-    // the game's timeline; undefined until synced, null if the client had none
+    // [seconds, x, y, killerId, victimId] per kill; undefined until synced
     killMap: g.killMap,
     pid: p.participantId,
   };
 }
 
-// Champion and augment names come from the live client's game data (as
-// mirrored by CommunityDragon). If it's unreachable the page falls back to ids.
+// Champion and augment names; if unavailable the page falls back to ids.
 async function loadNames() {
   try {
     const champs = await (await fetch("https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-summary.json")).json();
@@ -284,8 +279,7 @@ function renderChart(games) {
 }
 
 // ---------- kill map ----------
-// Timeline positions are game units on the Howling Abyss (map 12). These are
-// the map's published bounds; the minimap image spans exactly this square.
+// Positions are game units on the Howling Abyss; the minimap spans this square.
 const MAP12 = { minX: -28, minY: -19, maxX: 12849, maxY: 12858 };
 const MINIMAP_BASE = "https://raw.communitydragon.org/latest/game/assets/maps/info/map12/";
 const KM_GRID = 128;
@@ -462,9 +456,8 @@ loader.addEventListener("drop", async (e) => {
 });
 
 // ---------- sync ----------
-// `python3 importer/mayhem_import.py --serve` hosts this page and exposes
-// api/sync, which pulls new games from the running League client into the
-// archive. Opened any other way, the button explains how to get there.
+// Opened from the local sync helper, the button adds new games to the archive.
+// Opened any other way, the button explains how to get there.
 
 const syncBtns = [...document.querySelectorAll(".sync-btn")];
 const syncStatus = $("sync-status");
@@ -541,8 +534,7 @@ async function setupSync() {
   } catch (e) { /* no helper; the button explains when pressed */ }
 }
 
-// When served next to a data file (e.g. `python3 -m http.server` in this
-// folder), load it automatically. ?data=path picks a different file.
+// When served next to a data file, load it automatically. ?data=path picks a different file.
 (async () => {
   if (PRESET.sample) return loadText(JSON.stringify(PRESET.sample), { sample: true });
   const path = new URLSearchParams(location.search).get("data") || "data/mayhem-backup.json";
