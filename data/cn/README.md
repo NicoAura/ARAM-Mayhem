@@ -1,0 +1,83 @@
+# China-server Mayhem stats
+
+`fetch_cn.py` pulls ARAM Mayhem (海克斯大乱斗) stats for the Chinese servers from the
+backend behind Tencent's official strategy site, [101.qq.com](https://101.qq.com/).
+No login is needed. Python 3 standard library only.
+
+```
+python3 data/cn/fetch_cn.py            # newest day
+python3 data/cn/fetch_cn.py --date 20261014
+```
+
+| File | What it holds |
+| --- | --- |
+| `champions.json` / `.csv` | Per champion: rank, win rate, pick rate, rank change, damage/tank share, kill participation, avg time dead, best partners |
+| `augments.json` / `.csv` | Per augment: win rate, pick rate, ranks, tier, best champions |
+| `duos.json` | Top 2,000 champion pairs by win rate and pick rate |
+| `raw/` (git-ignored) | Untouched API responses |
+
+Endpoints (all on `https://mlol.qt.qq.com/go/battle_info/odp_proxy/`):
+
+- `fuwen_aram_hero_rank_v2?dtstatdate=YYYYMMDD` champions (daily; yesterday is newest)
+- `fuwen_aram_rune_rank_v2?augmentid_level=255` augments
+- `fuwen_aram_hero_parttner?role1=255&role2=255&championid=255` duos
+
+Names come from `game.gtimg.cn` (`hero_list.js`, `kiwi/kiwi_augments.json`).
+
+## Full history
+
+`history.py` downloads champion stats for every day since 2025-11-02, the earliest
+date the API returns, and builds patch and all-time tables in `history/`:
+
+| File | What it holds |
+| --- | --- |
+| `daily/YYYY-MM.csv` | Every day's champion stats; the script only fetches days not already here |
+| `patches.csv` | Each patch's data window (15.21 to now) |
+| `by_patch.csv` | Each champion's whole-patch numbers |
+| `all_time.csv` | Each champion across every patch |
+| `by_month.csv` | Each champion per calendar month |
+| `augments/`, `duos/` | One file per day, written by `fetch_cn.py`; starts 2026-10-15 |
+
+Each day's numbers are cumulative since the current patch's window opened, and they
+reset when the next patch's window opens. The script finds those resets as jumps near
+each release date from Tencent's `versionlist`. The last day of each window is used as
+that patch's full sample. Augments and duos have no history in the API, so `fetch_cn.py` saves one file per day
+from now on.
+
+`all_time.csv` combines patches by estimated games. Pick rate is a share of games, so a
+champion's games in a patch are estimated as pick rate × window days, which assumes
+about the same number of games each day. `est_game_share` is the champion's share of all
+champion slots.
+
+## Filtering by patch, month or dates
+
+`history/by_patch.csv` and `history/by_month.csv` are ready-made splits. For anything
+else, `query.py` works offline from `history/`:
+
+```
+python3 data/cn/query.py --patch 16.19                  # one patch
+python3 data/cn/query.py --patch 16.18 --patch 16.19    # several patches combined
+python3 data/cn/query.py --month 2026-09
+python3 data/cn/query.py --from 2026-09-01 --to 2026-09-14
+python3 data/cn/query.py --out sept.csv --month 2026-09
+```
+
+A whole patch is exactly Tencent's own final numbers. A date range that cuts through a
+patch is the difference between the running totals at its end and the day before its
+start, using the same games estimate as above, so short ranges (a day or two) are rougher
+than whole patches. 15.21 started before the API's first day (2025-11-02), so a range
+that starts in early November 2025 counts from 15.21's release on 2025-10-23. That's why
+November 2025 shows 39 days in `by_month.csv`.
+
+The `China Mayhem stats` GitHub Action runs both scripts daily and commits new data.
+
+Caveats: the API is undocumented and can change without notice. Rates are fractions
+(0.5575 = 55.75%). The champion `rank` is Tencent's own ordering, not sorted by win
+rate. Sample sizes are not published.
+
+## Preview page
+
+`preview/build.py OUT.html` packs the history and the current augment and duo snapshots
+into one self-contained page (`preview/template.html`) with the same patch, month and
+date filters as `query.py`, ported to JavaScript. It's the live preview of the China
+stats section of the site.
