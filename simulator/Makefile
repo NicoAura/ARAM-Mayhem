@@ -51,6 +51,7 @@ wasm-mayhem: $(CHAMP_SRC) $(CHAMP_HDR)
 
 # Fight replays for viewer/: one traced fight per champion, plus Riot's icons and
 # ability clips (CLIPS=--clips stores shrunk clips locally instead of streaming them).
+# SOUNDS=1 also cuts the ability sounds into files for sandboxed pages.
 # MODELS=1 also builds the animated 3D models (tools/build_models.mjs; needs the
 # glTF-Transform packages listed there on NODE_PATH).
 replay: mayhem_sim
@@ -59,6 +60,7 @@ replay: mayhem_sim
 	python3 tools/build_replay_assets.py --traces viewer/replay-data/traces --out viewer/replay-data $(CLIPS)
 	$(MAKE) wasm-mayhem && cp dist/mayhem_sim.js dist/mayhem_sim.wasm viewer/replay-data/
 	$(if $(MODELS),node tools/build_models.mjs --index viewer/replay-data/index.json --out viewer/replay-data/models)
+	python3 tools/build_sounds.py --index viewer/replay-data/index.json $(if $(SOUNDS),--out viewer/replay-data/sounds)
 
 clean:
 	rm -rf yunara_sim mayhem_sim sanity_test champ_test dist

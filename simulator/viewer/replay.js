@@ -587,7 +587,6 @@
       modelMode = ok;
       video.pause();
       $("clipVideo").hidden = ok;
-      $("sound").hidden = ok;
       $("clipNote").textContent = ok
         ? "Click an ability (or press Q, W, E, R) and your champion casts it in the arena."
         : "No model for this champion yet, so casts play Riot's ability preview instead.";
@@ -595,9 +594,60 @@
   }
   // Ability button or key: the model's animation, or the clip without a model.
   function showAbility(slot) {
-    if (modelMode) { showCaption(slot); window.Models3D.previewRole(slot); }
+    if (modelMode) { showCaption(slot); window.Models3D.previewRole(slot); playSound(champ, slot, 1); }
     else playClip(slot);
   }
+
+  // ---------- ability sounds ----------
+  // With the 3D models, each cast plays its ability's sound: the first burst of sound in
+  // Riot's preview video of it (found by tools/build_sounds.py), streamed from Riot's CDN.
+  // Sandboxed pages, which can't load outside media, use replay-data/sounds/sounds.mp3,
+  // all the sounds joined into one file, instead. Browsers only allow sound after the first click or key.
+  let soundOn = true, gestured = false, soundFiles = {};
+  fetch(DATA + "sounds/sounds.json" + BUST).then((r) => (r.ok ? r.json() : {})).then((m) => { soundFiles = m; }).catch(() => {});
+  // A few audio players reused round robin. Each is started once inside the first click or
+  // key press, which lets it play later from the animation loop (Safari needs this per player).
+  const voices = [];
+  let nextVoice = 0;
+  function silentWav() {
+    const n = 400, b = new Uint8Array(44 + n), v = new DataView(b.buffer);
+    const str = (o, t) => { for (let i = 0; i < t.length; i++) b[o + i] = t.charCodeAt(i); };
+    str(0, "RIFF"); v.setUint32(4, 36 + n, true); str(8, "WAVEfmt "); v.setUint32(16, 16, true);
+    v.setUint16(20, 1, true); v.setUint16(22, 1, true); v.setUint32(24, 8000, true); v.setUint32(28, 8000, true);
+    v.setUint16(32, 1, true); v.setUint16(34, 8, true); str(36, "data"); v.setUint32(40, n, true); b.fill(128, 44);
+    return "data:audio/wav;base64," + btoa(String.fromCharCode(...b));
+  }
+  function unlockVoices() {
+    const silent = silentWav();
+    for (let i = 0; i < 6; i++) {
+      const a = new Audio(silent);
+      const p = a.play();
+      if (p && p.catch) p.catch(() => {});
+      voices.push(a);
+    }
+  }
+  function playSound(c, slot, volume) {
+    if (!soundOn || !gestured || !voices.length || !c || !c.sound || !c.sound[slot]) return;
+    const [start, len] = c.sound[slot];
+    const packed = soundFiles.clips && soundFiles.clips[c.id] && soundFiles.clips[c.id][slot];
+    const k = String(c.key).padStart(4, "0");
+    const a = voices[nextVoice++ % voices.length];
+    a.pause();
+    a.src = packed ? `${DATA}sounds/${soundFiles.file}${BUST}#t=${packed[0]},${packed[0] + packed[1]}`
+      : `${index.clip_cdn}/${k}/ability_${k}_${slot}1.webm#t=${start},${start + len}`;
+    a.volume = volume * 0.8;
+    const p = a.play();
+    if (p && p.catch) p.catch(() => {});
+  }
+  function syncSound() {
+    video.muted = !(soundOn && gestured);
+    if (!soundOn) for (const a of voices) a.pause();
+    const b = $("sound");
+    b.textContent = soundOn ? "Sound on" : "Sound off";
+    b.setAttribute("aria-pressed", String(soundOn));
+  }
+  for (const type of ["pointerdown", "keydown"])
+    window.addEventListener(type, () => { if (!gestured) { gestured = true; unlockVoices(); syncSound(); } }, { capture: true });
 
   // ---------- ability clips ----------
   const video = $("video");
@@ -742,6 +792,14 @@
         let latest = null;
         for (const c of fight.casts) if (c.t > before && c.t <= t) latest = !latest || c.s === "R" ? c : latest;
         if (latest) maybeClip(latest.s);
+        if (modelMode) {
+          for (const c of fight.casts) if (c.t > before && c.t <= t) playSound(champ, c.s, 1);
+          for (const [uid, list] of fight.enemyCasts)
+            for (const c of list) if (c.t > before && c.t <= t) {
+              const sp = fight.spawns.get(uid);
+              playSound(sp && byId.get(String(sp.x).toLowerCase()), c.s, 0.45);
+            }
+        }
       }
       const s = drawArena(t, reduceMotion ? 0 : dt);
       drawPlayhead();
@@ -768,11 +826,7 @@
   });
   $("restart").addEventListener("click", () => { t = 0; shown.clear(); playing = true; $("play").textContent = "Pause"; });
   $("speed").addEventListener("change", (e) => { speed = parseFloat(e.target.value); });
-  $("sound").addEventListener("click", (e) => {
-    video.muted = !video.muted;
-    e.currentTarget.textContent = video.muted ? "Sound off" : "Sound on";
-    e.currentTarget.setAttribute("aria-pressed", String(!video.muted));
-  });
+  $("sound").addEventListener("click", () => { soundOn = !soundOn; syncSound(); });
   document.addEventListener("keydown", (e) => {
     if (e.target.tagName === "SELECT") return;
     if (e.code === "Space") { e.preventDefault(); $("play").click(); }
