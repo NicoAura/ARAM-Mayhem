@@ -224,7 +224,7 @@
   const inc = data.income;
   $("source").textContent = `Mayhem's starting gold (${fmt(inc.startingGold)}), passive gold (${fmt(inc.passiveGold, 1)} every ${fmt(inc.passiveInterval)} seconds from ${clock(inc.passiveStart)}), ` +
     `${fmt(inc.killGold)} gold per kill, minion gold (melee ${fmt(inc.minionGold.melee)}, caster ${fmt(inc.minionGold.ranged)})`;
-  $("patch").textContent = `Game data: patch ${data.patch.split(".").slice(0, 2).join(".")}.`;
+  $("patch").textContent = `Patch ${data.patch.split(".").slice(0, 2).join(".")}.`;
   $("item-search").addEventListener("input", (e) => { query = e.target.value; renderItems(); });
   $("preset").addEventListener("click", () => { build = structuredClone(PRESET); query = ""; $("item-search").value = ""; update(); });
   $("reset").addEventListener("click", () => { build = structuredClone(EMPTY); update(); });
