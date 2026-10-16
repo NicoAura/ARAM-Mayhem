@@ -18,7 +18,7 @@ export const sections = [
   {
     href: "/simulator",
     label: text("tab./simulator.label", "Simulator"),
-    body: text("tab./simulator.body", "Simulated teamfights, best builds and fight replays for every champion."),
+    body: text("tab./simulator.body", "Simulated teamfights, simulated builds and fight replays for every champion."),
     pr: 4,
   },
   {
