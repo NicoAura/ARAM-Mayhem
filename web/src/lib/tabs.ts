@@ -68,17 +68,16 @@ const pick = (href: string): NavItem[] => {
   return t ? [{ href: t.href, label: t.label, body: t.body }] : [];
 };
 
-/** The header's tabs: Tier List, Info, Simulator, The Lab, any newer tool folder, PBE.
+/** The header's tabs: Tier List, Simulator, PBE, and a More menu (Info, The Lab, any newer tool folder).
  *  My Stats sits behind the account button; champion pages (/champions#Name) open from the Tier List and search. */
 export function navItems(): NavItem[] {
-  const more = discoverToolTabs().filter((t) => t.href.startsWith("/tools/"));
+  const tools = discoverToolTabs().filter((t) => t.href.startsWith("/tools/"));
+  const more = [...pick("/info"), ...pick("/lab"), ...tools.flatMap((t) => pick(t.href))];
   return [
     ...pick("/tier-list"),
-    ...pick("/info"),
     ...pick("/simulator"),
-    ...pick("/lab"),
-    ...more.flatMap((t) => pick(t.href)),
     ...pick("/pbe"),
+    ...(more.length ? [{ href: "#more", label: "More", children: more }] : []),
   ];
 }
 

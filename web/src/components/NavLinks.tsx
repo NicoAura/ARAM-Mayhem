@@ -15,7 +15,7 @@ export default function NavLinks({ items }: { items: NavItem[] }) {
     <nav className="nav">
       {items.map((t) =>
         t.children ? (
-          <NavMenu key={t.href} item={t} current={active(t.href)} pathname={pathname} />
+          <NavMenu key={t.href} item={t} current={t.children.some((c) => active(c.href))} pathname={pathname} />
         ) : (
           <Link key={t.href} href={t.href} aria-current={active(t.href) ? "page" : undefined}>
             {t.label}
@@ -27,7 +27,7 @@ export default function NavLinks({ items }: { items: NavItem[] }) {
   );
 }
 
-// A tab that opens a list of pages (Tools). The nav scrolls sideways on narrow screens, so the
+// A tab that opens a list of pages (More). The nav scrolls sideways on narrow screens, so the
 // list is placed with fixed coordinates under the button instead of inside the nav.
 function NavMenu({ item, current, pathname }: { item: NavItem; current: boolean; pathname: string }) {
   const [at, setAt] = useState<{ top: number; left: number } | null>(null);

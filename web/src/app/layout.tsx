@@ -11,7 +11,7 @@ import { text } from "@/lib/content";
 import { searchItems } from "@/lib/highlights";
 import { SETTINGS_SCRIPT } from "@/lib/settings";
 import { THEME_COLORS, THEME_KEY } from "@/lib/theme";
-import { navItems } from "@/lib/tabs";
+import { navItems, navPages } from "@/lib/tabs";
 import "./globals.css";
 
 const sans = Geist({ subsets: ["latin"], variable: "--font-sans" });
@@ -102,7 +102,7 @@ export default function RootLayout({
           </nav>
           <p>{text("footer")}</p>
         </footer>
-        <MobileTabBar tabs={navItems().map(({ href, label }) => ({ href, label }))} />
+        <MobileTabBar tabs={navPages().map(({ href, label }) => ({ href, label }))} />
       </body>
     </html>
   );

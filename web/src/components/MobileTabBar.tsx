@@ -8,7 +8,7 @@ type Tab = { href: string; label: string };
 
 // Bottom tab bar for phones and tablets. It is only shown when the inline script in the
 // layout marks the page as running on iOS or Android (html[data-device="mobile"]).
-const PRIMARY = ["/tier-list", "/info", "/simulator"];
+const PRIMARY = ["/tier-list", "/simulator", "/pbe"];
 
 const ICONS: Record<string, React.ReactNode> = {
   "/": <path d="M4 11.5 12 5l8 6.5V19a1 1 0 0 1-1 1h-4.5v-5h-5v5H5a1 1 0 0 1-1-1z" />,
