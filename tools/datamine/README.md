@@ -3,7 +3,10 @@
 Scripts that compare PBE against live client data and pull out what affects
 ARAM: Mayhem. Results are written up by hand in `data/pbe/`.
 
-Get the data from one of two sources. Both write the same layout (`DIR/pbe`, `DIR/latest`):
+Get the data with `get.py`, which reads the installed clients first and falls back to CommunityDragon
+when a client is missing, cdtb isn't installed, reading fails, or the local PBE build is behind
+(`python3 tools/datamine/get.py /tmp/dm`; it records the source used in `DIR/source.json`).
+Or run either source directly. Both write the same layout (`DIR/pbe`, `DIR/latest`):
 
 ```sh
 # From the League clients installed on this computer (live + PBE)
