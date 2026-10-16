@@ -13,6 +13,7 @@
   "jeweled_gauntlet": {"id": 1048, "name": "Jeweled Gauntlet", "rarity": "prismatic", "stats": {"crit": 0.25}, "effects": {"abilities_crit": 1, "ability_crit_damage": 1.4}, "confidence": "likely"},
   "dual_wield": {"id": 1225, "name": "Dual Wield", "rarity": "prismatic", "effects": {"total_as_mult": 0.20, "second_bolt": 0.40, "second_bolt_onhit": 0.40}, "confidence": "likely"},
   "infernal_conduit": {"id": 1045, "name": "Infernal Conduit", "rarity": "prismatic", "effects": {"conduit_ap": 0.045, "conduit_ad": 0.10, "conduit_duration": 5, "conduit_cdr_per_tick": 0.08}, "confidence": "likely"},
-  "eureka": {"id": 1030, "name": "Eureka", "rarity": "prismatic", "effects": {"ah_per_ap": 0.20}, "confidence": "likely"}
+  "eureka": {"id": 1030, "name": "Eureka", "rarity": "prismatic", "effects": {"ah_per_ap": 0.20}, "confidence": "likely"},
+  "poro_stampede": {"id": 2046, "name": "Poro Stampede", "rarity": "prismatic", "effects": {"poro_cd": 120, "poros_fed": 20, "poro_min": 100, "poro_max": 200, "poro_per_fed": 20, "poro_range": 1500, "poro_width": 420, "poro_speed": 900, "poro_repeat": 0.5, "poro_wave_gap": 0.5}, "confidence": "approx", "note": "Quest augment: feed Poros to unlock Poro Charge (120 s cooldown), one wave per milestone (5, 12, 20, 30, 44, 63, 90, 129, 187, 275 fed). Damage 100-200 by level + 20 per Poro fed, physical; later waves deal 50% to champions already hit (kiwi.bin PoroCharge_Active). Assumes the quest is done with 20 Poros fed (3 waves). Wave length, width and spacing are estimates from the Poro missile (speed 900, radius 210); the first wave's 85% slow is not modeled."}
  }
 }

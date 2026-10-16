@@ -159,7 +159,7 @@ bool writeTrace(const Library& lib, const ChampionKit& c, const Build& b, const 
         if (e.kind == "spawn" || e.kind == "damage" || e.kind == "kill" || e.kind == "self" || e.kind == "death")
             o << ", \"hp\": " << num(e.hp) << ", \"max\": " << num(e.maxHp);
         if (e.flag) o << ", \"f\": 1";
-        if (e.kind == "cast") o << ", \"ax\": " << std::lround(e.x) << ", \"ay\": " << std::lround(e.y) << ", \"fl\": " << num(e.flight);
+        if (e.kind == "cast" || e.kind == "poro") o << ", \"ax\": " << std::lround(e.x) << ", \"ay\": " << std::lround(e.y) << ", \"fl\": " << num(e.flight);
         if (!e.pos.empty()) {
             o << ", \"p\": [";  // uid, x, y for everyone standing; uid -1 is the champion
             for (size_t j = 0; j < e.pos.size(); ++j) o << (j ? "," : "") << std::lround(e.pos[j]);
