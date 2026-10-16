@@ -72,7 +72,7 @@ export default function PbePage() {
   return (
     <>
       <Intro eyebrow={`PBE · ${meta.label}`} title={`Mayhem ${meta.label} (${meta.codename}) on the test server.`}>
-        PBE {meta.builds.pbe} compared with live {meta.builds.live}, from the PBE client files as of {meta.dataAsOf}. Augment pool{" "}
+        PBE {meta.builds.pbe} compared with live {meta.builds.live}, as of {meta.dataAsOf}. Augment pool{" "}
         {meta.augmentPool.live} → {meta.augmentPool.pbe}. {meta.caveat}
       </Intro>
 

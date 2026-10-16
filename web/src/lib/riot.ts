@@ -32,7 +32,7 @@ export async function riotFetch<T>(
     next: { revalidate },
   });
   if (!res.ok) {
-    throw new RiotError(`Riot API returned ${res.status}`, res.status);
+    throw new RiotError(`Lookup failed (${res.status})`, res.status);
   }
   return res.json() as Promise<T>;
 }
