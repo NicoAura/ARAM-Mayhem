@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Mayhem Guide</title>
-  <meta name="description" content="How ARAM Mayhem works, read from the League client's own files.">
+  <meta name="description" content="How ARAM Mayhem works: rules, quests, challenges, items, maps and augment history.">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -17,6 +17,7 @@
         <button type="button" role="tab" data-tab="challenges">Challenges</button>
         <button type="button" role="tab" data-tab="items">Items</button>
         <button type="button" role="tab" data-tab="maps">Maps &amp; extras</button>
+        <button type="button" role="tab" data-tab="history">Augment history</button>
         <button type="button" role="tab" data-tab="archive">Archive</button>
       </div>
       <span id="patch" class="eyebrow"></span>
@@ -30,11 +31,11 @@
         <p class="muted" style="margin-top:0.5rem">ARAM: Mayhem is ARAM on the Howling Abyss with Arena-style augments.
           You pick an augment from a hand of Silver, Gold or Prismatic cards at <span id="aug-levels">set levels</span>, and you can reroll the hand.
           Some augments are quests: hit a goal during the game and they turn into something bigger, including items you
-          can't buy anywhere else. Everything on this page is read from the game client's files.</p>
+          can't buy anywhere else.</p>
       </div>
       <div class="facts" id="facts"></div>
       <div class="card">
-        <div class="card-head"><h2>Queues</h2><span class="muted small">Queue IDs in the client</span></div>
+        <div class="card-head"><h2>Queues</h2><span class="muted small">Queue IDs</span></div>
         <div class="chips" id="queues"></div>
       </div>
     </section>
@@ -43,8 +44,7 @@
       <div class="card">
         <p class="eyebrow">House rules</p>
         <h2 class="section">What Mayhem changes on top of ARAM</h2>
-        <p class="muted" style="margin-top:0.5rem">Mode-wide settings from the map data. The client lists these values without
-          saying whether each one is per level or flat, so they're shown as the game stores them.</p>
+        <p class="muted" style="margin-top:0.5rem">Mode-wide settings. Some of these values may be per level rather than flat.</p>
       </div>
       <div class="grid" id="rule-list"></div>
       <div class="card">
@@ -69,17 +69,28 @@
       </table></div>
     </section>
 
+    <section class="panel" id="panel-history" hidden>
+      <div class="card">
+        <p class="eyebrow">Augment history</p>
+        <h2 class="section">Every augment change, patch by patch</h2>
+        <p class="muted" style="margin-top:0.5rem" id="history-intro"></p>
+        <div class="lookup" style="margin-top:0.85rem">
+          <input id="history-search" type="search" placeholder="Find an augment" autocomplete="off" aria-label="Find an augment">
+        </div>
+      </div>
+      <div class="panel" id="history-list"></div>
+      <p class="muted small" id="history-empty" hidden>No changes for that augment.</p>
+    </section>
+
     <section class="panel" id="panel-archive" hidden>
       <div class="card">
         <p class="eyebrow">Archive</p>
         <h2 class="section">Features from past Mayhem seasons</h2>
-        <p class="muted" style="margin-top:0.5rem">Things Mayhem used to have. Their text and art are still in the client, which is
-          how they're listed here.</p>
+        <p class="muted" style="margin-top:0.5rem">Things Mayhem used to have.</p>
       </div>
       <div class="card">
         <div class="card-head"><h2>Augment Sets</h2><span class="muted small">Bonuses for taking augments that share a theme</span></div>
-        <p class="muted small" style="margin-bottom:0.85rem">The client still has each set's name and bonus. Which augments belonged to
-          each set, and the exact numbers per tier, aren't in the files, so they aren't shown.</p>
+        <p class="muted small" style="margin-bottom:0.85rem">Each set's name and bonus. Which augments belonged to each set and the exact numbers per tier aren't known, so they aren't shown.</p>
         <div class="grid tight" id="set-list"></div>
       </div>
     </section>
@@ -89,8 +100,8 @@
         <p class="eyebrow">Quest augments</p>
         <h2 class="section">Every quest, every milestone</h2>
         <p class="muted" style="margin-top:0.5rem">These augments track a goal during the game. Each step lists what you
-          need and what you get. Numbers come from the quest data in the client; the game fills in a few amounts, like
-          damage, at play time, so they aren't shown here.</p>
+          need and what you get. A few amounts, like damage, are
+          filled in during the game, so they aren't shown here.</p>
       </div>
       <div class="grid" id="quest-list"></div>
     </section>
@@ -133,9 +144,9 @@
       </div>
     </section>
 
-    <p class="muted small">Source: League client files via CommunityDragon. Rebuild with <code>python3 guide/build_data.py</code>.</p>
-  </main>
+      </main>
   <script src="data.js"></script>
+  <script src="history.js"></script>
   <script src="app.js"></script>
 </body>
 </html>
