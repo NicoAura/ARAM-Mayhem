@@ -2,22 +2,21 @@
 
 Usage: python3 champions/build_data.py [--channel latest|pbe]
 Writes champions/data.js. Python 3 standard library only. Champion files are cached in
-~/.cache/deeparam-champions/<patch>/, build stats per day.
+~/.cache/deeparam-champions/<patch>/.
 
 What it reads:
   v1/champion-summary.json, v1/champions/{id}.json   names, titles, roles, splash, ability text and icons, pick quote
   game/data/characters/{alias}/{alias}.bin.json      Mayhem ability changes (DataValuesModeOverride and the
                                                      cooldown override, ARAM then Kiwi)
   v1/items.json, v1/cherry-augments.json             item and augment names and icons (ids match Tencent's)
-  mlol.qt.qq.com .../fuwen_hero_rank?championid=N    Mayhem build stats per champion (the 101.qq.com Mayhem
-                                                     build view): starting items, boots, first item, core
-                                                     trios, full builds, augments by tier, skill orders, teammates
+  data/cn/builds/{id}.json (in this repo)            Mayhem build stats per champion (101.qq.com, refreshed daily
+                                                     by the My Stats thread): items, augments, skill orders, teammates
   data/cn/champions.csv (in this repo)               Tier List rank, win and pick rate
 
 Not in the client: the per-champion damage dealt/taken, tenacity, healing and ability haste
 adjustments. Riot applies those on the game server, so this page doesn't show them.
 """
-import argparse, csv, datetime as dt, json, os, re, time, urllib.error, urllib.request
+import argparse, csv, json, os, re, time, urllib.error, urllib.request
 from concurrent.futures import ThreadPoolExecutor
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -123,111 +122,30 @@ def mayhem_changes(bin_, record):
     return out
 
 
-BUILDS_API = "https://mlol.qt.qq.com/go/battle_info/odp_proxy/fuwen_hero_rank"
-BUILDS_HEADERS = {"Referer": "https://101.qq.com/", "User-Agent": "Mozilla/5.0"}
-
-
-def fetch_build(cid, cache_dir, tries=5):
-    """One champion's Mayhem build stats for the newest day: the payload behind the strategy site's Mayhem build view."""
-    path = os.path.join(cache_dir, f"{cid}.json")
-    if os.path.exists(path):
-        with open(path) as f:
-            return json.load(f)
-    req = urllib.request.Request(f"{BUILDS_API}?championid={cid}", headers=BUILDS_HEADERS)
-    for attempt in range(tries):
-        try:
-            with urllib.request.urlopen(req, timeout=60) as r:
-                raw = json.loads(r.read().decode("utf-8"))
-            break
-        except (urllib.error.URLError, ConnectionError, TimeoutError, ValueError):
-            if attempt == tries - 1:
-                return None
-            time.sleep(1.5 * (attempt + 1))
-    fields = (raw.get("data") or {}).get("_fieldValues") or {}
-    if not fields:
+def load_build(cid):
+    """One champion's Mayhem build stats from data/cn/builds/{id}.json (the My Stats thread refreshes them daily)."""
+    path = os.path.join(REPO, "data", "cn", "builds", f"{cid}.json")
+    if not os.path.exists(path):
         return None
-    payload = json.loads(next(iter(fields.values())))
-    os.makedirs(cache_dir, exist_ok=True)
-    with open(path, "w") as f:
-        json.dump(payload, f)
-    return payload
-
-
-def parse_build(p):
-    """Turn the payload's packed strings into lists. Rates are fractions (0.52 = 52%)."""
-    if not p:
-        return None
-    ids = lambda s, sep: [int(x) for x in str(s).split(sep) if x.strip().isdigit()]  # noqa: E731
-
-    def dollar(s):  # "3020$0.4995$0.5146#3158$..." -> items, pick, win
-        out = []
-        for rec in filter(None, (s or "").split("#")):
-            parts = rec.split("$")
-            if len(parts) >= 3:
-                out.append({"items": ids(parts[0], ","), "pick": float(parts[1]), "win": float(parts[2])})
-        return out
-
-    def ranked(js, key):  # {"1": {key: "a&b", "winrate": 5287, "showrate": 1543}} (hundredths of a percent)
-        try:
-            d = json.loads(js) if isinstance(js, str) else (js or {})
-        except ValueError:
-            return []
-        rows = [d[k] for k in sorted(d, key=lambda k: int(k))]
-        return [{"items": ids(r[key], "&"), "pick": int(r["showrate"]) / 10000, "win": int(r["winrate"]) / 10000} for r in rows]
-
-    builds = []
-    for rec in filter(None, (p.get("itemover_rec") or "").split(";")):
-        parts = rec.split("_")
-        if len(parts) >= 4:
-            builds.append({"items": ids(parts[1], ","), "pick": float(parts[2]), "win": float(parts[3])})
-
-    grade = {}
-    for rec in filter(None, (p.get("augment_json_irank") or "").split(":", 1)[-1].split("#")):
-        f = rec.split("|")
-        if len(f) >= 6 and f[2].isdigit():
-            grade[int(f[2])] = f[5]
-    augments = {}
-    for block in filter(None, (p.get("augment_json") or "").split("&")):
-        tier, _, rows = block.partition(":")
-        name = {"kPrismatic": "prismatic", "kGold": "gold", "kSilver": "silver"}.get(tier)
-        if not name:
-            continue
-        for rec in filter(None, rows.split("#")):
-            f = rec.split("|")
-            if len(f) >= 5 and f[2].isdigit():
-                augments.setdefault(name, []).append({"id": int(f[2]), "pick": float(f[4]), "grade": grade.get(int(f[2]), "")})
-
-    skills = []
-    try:
-        sk = json.loads(p.get("skill_json") or "{}")
-    except ValueError:
-        sk = {}
-    keys = "QWER"
-    for k in sorted(sk, key=int):
-        g = sk[k]
-        orders = [{"levels": "".join(keys[int(x) - 1] for x in o["sk"].split("&") if x.isdigit() and 0 < int(x) <= 4),
-                   "pick": int(o["sk_s"]) / 10000, "win": int(o["sk_w"]) / 10000} for _, o in sorted((g.get("sks") or {}).items(), key=lambda kv: int(kv[0]))]
-        skills.append({"max": "".join(keys[int(x) - 1] for x in g["qwe"].split("&") if x.isdigit()),
-                       "pick": int(g["qwe_s"]) / 10000, "win": int(g["qwe_w"]) / 10000, "orders": orders[:3]})
-
-    mates = []
-    for rec in filter(None, (p.get("championid_json") or "").split("#")):
-        f = rec.split("|")
-        if len(f) >= 3 and f[0].isdigit():
-            mates.append({"id": int(f[0]), "win": float(f[1]), "pick": float(f[2])})
-
+    with open(path) as f:
+        b = json.load(f)
+    rows = lambda xs, n: [{"items": x["items"], "pick": x["pick_rate"], "win": x["win_rate"]} for x in xs or []][:n]  # noqa: E731
+    items = b.get("items") or {}
+    aug = b.get("augments") or {}
     return {
-        "date": p.get("dtstatdate"),
-        "start": sorted(dollar(p.get("itemout")), key=lambda r: -r["pick"])[:5],
-        "boots": dollar(p.get("itemshoes"))[:4],
-        "first": ranked(p.get("itemone_json"), "itemone")[:8],
-        "core": ranked(p.get("itemcore_json"), "itemcore")[:6],
-        "full": builds[:6],
-        "augments": {t: v[:10] for t, v in augments.items()},
-        "skills": skills[:3],
-        "mates": mates[:5],
+        "date": b.get("date"),
+        "start": sorted(rows(items.get("starting"), 99), key=lambda r: -r["pick"])[:5],
+        "boots": rows(items.get("boots"), 4),
+        "first": rows(items.get("other"), 8),
+        "core": rows(items.get("core"), 6),
+        "full": rows(items.get("full_builds"), 6),
+        "augments": {t: [{"id": a["id"], "pick": a["pick_rate"], "grade": a.get("grade") or ""} for a in aug.get(t) or []][:10]
+                     for t in ("prismatic", "gold", "silver")},
+        "skills": [{"max": "".join(s["max_order"]), "pick": s["pick_rate"], "win": s["win_rate"],
+                    "orders": [{"levels": "".join(o["order"]), "pick": o["pick_rate"], "win": o["win_rate"]} for o in s.get("orders") or []][:3]}
+                   for s in b.get("skills") or []][:3],
+        "mates": [{"id": m["id"], "win": m["win_rate"], "pick": m["pick_rate"]} for m in b.get("partners") or []][:5],
     }
-
 
 def main():
     ap = argparse.ArgumentParser()
@@ -271,10 +189,7 @@ def main():
                 "damage": float(r["avg_damage_ratio"]), "tank": float(r["avg_tank_ratio"]),
             }
 
-    # Mayhem build stats, newest day; cached per day so a rerun the same day is quick
-    day_cache = os.path.join(CACHE, "builds-" + dt.date.today().isoformat())
-    with ThreadPoolExecutor(6) as pool:
-        builds = dict(zip([c["id"] for c in summary], pool.map(lambda c: parse_build(fetch_build(c["id"], day_cache)), summary)))
+    builds = {c["id"]: load_build(c["id"]) for c in summary}
 
     used_items, used_augs, champions = set(), set(), []
     for c, (info, bin_) in zip(summary, loaded):
