@@ -1,0 +1,239 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<!-- replay-page-start -->
+<title>Mayhem Fight Replay</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&display=swap">
+<style>
+/* Same minimalist look as the website (web/): Geist and Geist Mono, plain light and dark following the
+   system, gold only for labels and the focus ring. The arena and timeline stay a dark game screen. */
+:root {
+  --bg: #fafafa; --fg: #0a0a0a; --muted: #737373; --line: #e5e5e5; --hover: #f0f0f0; --accent: #b8862e;
+  --abyss: var(--bg);
+  --panel: var(--bg);
+  --panel-2: var(--hover);
+  --frost: var(--fg);
+  --ice: var(--fg);
+  --screen: #0b0f14;
+  --q: #4fc3f7; --w: #7bd88f; --e: #f4b860; --r: #e66ad2;
+  --phys: #f08a4b; --magic: #7aa2ff; --true: #9ca3af;
+  --hp: #3fb873; --hp-low: #e5534b; --cc: #b388ff;
+  --display: "Geist", system-ui, -apple-system, sans-serif;
+  --mono: "Geist Mono", ui-monospace, monospace;
+  --body: "Geist", system-ui, -apple-system, sans-serif;
+  color-scheme: light dark;
+}
+@media (prefers-color-scheme: dark) {
+  :root { --bg: #0a0a0a; --fg: #ededed; --muted: #8f8f8f; --line: #262626; --hover: #141414; --accent: #d9b16a; }
+}
+* { box-sizing: border-box; }
+html, body { background: var(--abyss); color: var(--frost); }
+body { margin: 0; font: 14px/1.5 var(--body); }
+.wrap { max-width: 1240px; margin: 0 auto; padding-block: 40px 48px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+  display: grid; gap: 16px; }
+header { display: flex; flex-wrap: wrap; align-items: end; gap: 12px 24px; justify-content: space-between; }
+h1 { font: 600 28px/1.15 var(--display); letter-spacing: -.02em; margin: 0; text-wrap: balance; }
+.eyebrow { font: 500 12px/1 var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--accent); margin-bottom: 10px; }
+.picker { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+label.lbl { font: 500 11px/1 var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+select, button { font: 500 14px var(--body); color: var(--frost); background: transparent; border: 1px solid var(--line);
+  border-radius: 8px; padding: 7px 12px; }
+button { cursor: pointer; }
+button:hover, select:hover { background: var(--hover); }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 4px; }
+.stage { display: grid; grid-template-columns: minmax(0, 1.7fr) minmax(0, 1fr); gap: 16px; align-items: start; }
+@media (max-width: 860px) { .stage { grid-template-columns: minmax(0, 1fr); } }
+.arena { background: var(--screen); border: 1px solid var(--line); border-radius: 12px; color-scheme: dark; overflow: hidden; position: relative; min-width: 0; }
+.arena canvas { display: block; width: 100%; height: auto; aspect-ratio: 16 / 9; max-width: 100%; }
+.arena canvas.layer { position: absolute; left: 0; top: 0; pointer-events: none; }
+.hud { position: absolute; left: 12px; top: 10px; display: flex; gap: 14px; font: 500 11px var(--mono);
+  letter-spacing: .06em; text-transform: uppercase; color: #8f8f8f; pointer-events: none; }
+.hud b { color: #ededed; font-variant-numeric: tabular-nums; }
+.clip { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; overflow: hidden; display: grid;
+  grid-template-rows: auto auto 1fr; min-width: 0; }
+.clip-video { position: relative; background: #05080c; aspect-ratio: 360 / 246; max-width: 100%; }
+.clip-video video { width: 100%; height: 100%; display: block; object-fit: cover; }
+.clip-video .fallback { position: absolute; inset: 0; display: grid; place-items: center; color: var(--muted); font-size: 13px; text-align: center; padding: 16px; }
+.clip-video canvas.big { width: 96px; height: 96px; border-radius: 8px; }
+.clip-cap { padding: 10px 12px; display: flex; gap: 10px; align-items: center; border-bottom: 1px solid var(--line); min-width: 0; }
+.chip { font: 600 12px/1 var(--mono); padding: 5px 7px; border-radius: 4px; color: #071017; flex: none; }
+.clip-cap .nm { font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.abilities { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; padding: 12px; align-content: start; }
+.ab { position: relative; padding: 0; border-radius: 8px; overflow: hidden; aspect-ratio: 1; border: 2px solid var(--line); background: var(--panel-2); }
+.ab canvas { width: 100%; height: 100%; display: block; }
+.ab .key { position: absolute; left: 4px; bottom: 3px; font: 600 12px var(--mono); text-shadow: 0 1px 2px #000; }
+.ab .cd { position: absolute; inset: 0; pointer-events: none; }
+.ab.lit { border-color: var(--fg); }
+.clip-note { padding: 0 12px 12px; color: var(--muted); font-size: 12px; }
+.timeline { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 10px 12px; display: grid; gap: 8px; }
+.controls { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.controls .time { font: 500 13px var(--mono); font-variant-numeric: tabular-nums; margin-left: auto; color: var(--muted); }
+.controls .time b { color: var(--frost); }
+.track { position: relative; height: 56px; cursor: pointer; touch-action: none; border-radius: 6px; overflow: hidden; }
+.track canvas { width: 100%; height: 100%; display: block; }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 16px; color: var(--muted); font-size: 12px; }
+.legend i { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 6px; vertical-align: -1px; }
+.lower { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: 16px; }
+@media (max-width: 860px) { .lower { grid-template-columns: minmax(0, 1fr); } }
+.card { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 18px 20px; min-width: 0; }
+.card h2 { font: 500 12px/1 var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--accent); margin: 0 0 12px; }
+.build { display: flex; flex-wrap: wrap; gap: 6px; }
+.build span { border: 1px solid var(--line); border-radius: 4px; padding: 3px 8px; font-size: 13px; }
+.build span.aug { border-style: dashed; }
+.stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); gap: 10px; margin-top: 14px; }
+.stats div { display: grid; gap: 2px; }
+.stats small { color: var(--muted); font: 500 11px var(--mono); text-transform: uppercase; letter-spacing: .06em; }
+.stats b { font: 600 20px var(--display); letter-spacing: -.01em; font-variant-numeric: tabular-nums; }
+.bars { display: grid; gap: 8px; }
+.bar { display: grid; grid-template-columns: 110px minmax(0, 1fr) 70px; gap: 10px; align-items: center; font-size: 13px; }
+.bar .fill { height: 8px; border-radius: 4px; background: var(--panel-2); overflow: hidden; }
+.bar .fill i { display: block; height: 100%; border-radius: 4px; }
+.bar b { text-align: right; font: 500 13px var(--mono); font-variant-numeric: tabular-nums; }
+.note { color: var(--muted); font-size: 12px; max-width: 75ch; }
+.note a { color: var(--fg); text-decoration: underline; text-underline-offset: 2px; }
+/* Simulation settings */
+.sim { display: grid; gap: 14px; }
+.sim-head { display: flex; flex-wrap: wrap; gap: 8px 12px; align-items: center; }
+.sim-head h2 { margin: 0 auto 0 0; }
+.sim-status { color: var(--muted); font-size: 13px; min-height: 20px; }
+.sim-status.err { color: var(--hp-low); }
+.sim-status.busy::before { content: ""; display: inline-block; width: 10px; height: 10px; margin-right: 8px; border-radius: 50%;
+  border: 2px solid var(--ice); border-right-color: transparent; animation: spin .8s linear infinite; vertical-align: -1px; }
+@keyframes spin { to { transform: rotate(1turn); } }
+button.primary { background: var(--fg); color: var(--bg); border-color: var(--fg); font-weight: 500; }
+button.primary:hover { opacity: .85; border-color: var(--fg); }
+button:disabled { opacity: .5; cursor: progress; }
+.sim-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+@media (max-width: 980px) { .sim-grid { grid-template-columns: minmax(0, 1fr); } }
+fieldset { border: 1px solid var(--line); border-radius: 8px; padding: 10px 12px 12px; margin: 0; min-width: 0; display: grid; gap: 8px; align-content: start; }
+legend { font: 500 11px var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--accent); padding: 0 6px; }
+.field { display: grid; grid-template-columns: minmax(0, 1fr) 96px; gap: 8px; align-items: center; font-size: 13px; }
+.field label { color: var(--frost); min-width: 0; }
+.field small { display: block; color: var(--muted); font-size: 11px; line-height: 1.3; }
+.field.changed label::after { content: " •"; color: var(--e); }
+input[type=number], input[type=text] { width: 100%; font: 500 13px var(--mono); font-variant-numeric: tabular-nums; color: var(--frost);
+  background: transparent; border: 1px solid var(--line); border-radius: 8px; padding: 6px 8px; }
+fieldset select { width: 100%; min-width: 0; font-size: 13px; padding: 6px 8px; }
+#comboInput { letter-spacing: .2em; text-transform: uppercase; }
+.slot-row { display: grid; grid-template-columns: 22px minmax(0, 1fr); gap: 8px; align-items: center; font: 500 11px var(--mono); color: var(--muted); }
+.modes { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: 13px; }
+.modes label { display: flex; gap: 6px; align-items: center; cursor: pointer; }
+.enemy { display: grid; gap: 6px; padding: 8px; border: 1px solid var(--line); border-radius: 6px; background: transparent; }
+.enemy-stats { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px; }
+.enemy-stats label { display: grid; gap: 2px; font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; }
+.enemy-stats input.changed { border-color: var(--e); }
+.sub { font: 500 11px var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin-top: 4px; }
+.alts { display: grid; gap: 6px; }
+.alts button { text-align: left; display: grid; grid-template-columns: 64px minmax(0, 1fr); gap: 10px; font-size: 12px; }
+.alts button b { font: 500 13px var(--mono); font-variant-numeric: tabular-nums; }
+@media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto; } .sim-status.busy::before { animation: none; } }
+</style>
+<!-- replay-page-head-end -->
+</head>
+<body>
+<!-- replay-page-body -->
+<div class="wrap">
+  <header>
+    <div>
+      <div class="eyebrow">ARAM Mayhem simulator · fight replay</div>
+      <h1 id="title">Loading replays…</h1>
+    </div>
+    <div class="picker">
+      <label class="lbl" for="champ">Champion</label>
+      <select id="champ" aria-label="Champion"></select>
+      <button id="rand" type="button" title="Pick a random champion">Random</button>
+    </div>
+  </header>
+
+  <section class="stage">
+    <div class="arena">
+      <canvas id="arena" width="1280" height="720" aria-label="Animated fight"></canvas>
+      <canvas id="arena3d" class="layer" aria-hidden="true"></canvas>
+      <canvas id="arenaOverlay" class="layer" width="1280" height="720" aria-hidden="true"></canvas>
+      <div class="hud"><span>Kills <b id="kills">0</b></span><span>Damage <b id="dmg">0</b></span><span id="state"></span></div>
+    </div>
+    <div class="clip">
+      <div class="clip-cap"><span class="chip" id="clipChip" style="background:var(--q)">Q</span><span class="nm" id="clipName">Ability</span></div>
+      <div class="clip-video" id="clipVideo">
+        <video id="video" playsinline muted preload="auto" aria-label="Official ability preview"></video>
+        <div class="fallback" id="fallback" hidden></div>
+      </div>
+      <div>
+        <div class="abilities" id="abilities"></div>
+        <div class="clip-note" id="clipNote">Loading your champion's model…</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="timeline">
+    <div class="controls">
+      <button id="play" type="button">Pause</button>
+      <button id="restart" type="button">Restart</button>
+      <select id="speed" aria-label="Playback speed">
+        <option value="0.25">0.25×</option><option value="0.5">0.5×</option><option value="1" selected>1×</option><option value="2">2×</option>
+      </select>
+      <button id="sound" type="button" aria-pressed="true">Sound on</button>
+      <span class="time"><b id="now">0.0</b> / <span id="total">0.0</span> s</span>
+    </div>
+    <div class="track" id="track"><canvas id="trackCanvas" width="1200" height="56"></canvas></div>
+    <div class="legend">
+      <span><i style="background:var(--q)"></i>Q</span><span><i style="background:var(--w)"></i>W</span>
+      <span><i style="background:var(--e)"></i>E</span><span><i style="background:var(--r)"></i>R</span>
+      <span><i style="background:var(--cc)"></i>Crowd control on you</span><span><i style="background:var(--hp-low)"></i>Your HP</span>
+      <span><i style="background:#ededed;box-shadow:inset 0 0 0 1px var(--muted)"></i>Kill</span>
+    </div>
+  </section>
+
+  <section class="card sim" id="sim">
+    <div class="sim-head">
+      <h2>Change the simulation</h2>
+      <button id="runBuild" class="primary" type="button" disabled>Simulate this build</button>
+      <button id="findBest" type="button" disabled>Find the best build</button>
+      <button id="resetAll" type="button" disabled>Reset to defaults</button>
+    </div>
+    <div class="sim-status" id="simStatus">Loading the simulator…</div>
+    <div class="sim-grid">
+      <fieldset id="buildBox"><legend>Build</legend></fieldset>
+      <fieldset id="enemyBox"><legend>Enemies</legend>
+        <div class="modes" role="radiogroup" aria-label="Enemy team">
+          <label><input type="radio" name="emode" id="emodePool" value="pool" checked> Random mix (China-server data)</label>
+          <label><input type="radio" name="emode" id="emodePick" value="pick"> Pick five</label>
+          <label><input type="radio" name="emode" id="emodeDummy" value="dummy"> Training dummies</label>
+        </div>
+        <div id="enemyDetail"></div>
+      </fieldset>
+      <fieldset id="fightBox"><legend>Fight</legend></fieldset>
+    </div>
+    <div class="alts" id="alts" hidden></div>
+  </section>
+
+  <section class="lower">
+    <div class="card">
+      <h2 id="buildTitle">Simulated best build</h2>
+      <div class="build" id="build"></div>
+      <div class="stats" id="stats"></div>
+    </div>
+    <div class="card">
+      <h2>Damage so far</h2>
+      <div class="bars" id="bars"></div>
+    </div>
+  </section>
+
+  <p class="note">This is one typical fight (the median of 200) from the simulator, using the build it found best. Enemies and their numbers come from China-server Mayhem data. Ability kits are read automatically from game files, so some champions' numbers are rough, and passives are mostly missing.
+  The champion models, animations and icons belong to Riot Games (models currently from modelviewer.lol). This project isn't endorsed by Riot Games and doesn't reflect the views or opinions of Riot Games or anyone officially involved in producing or managing League of Legends.</p>
+</div>
+<script type="importmap">{"imports": {"three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+  "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"}}</script>
+<script>window.REPLAY_VERSION = "15";</script>
+<script src="replay.js?v=15"></script>
+<script type="module" src="models3d.js?v=15"></script>
+<script src="sim-panel.js?v=15"></script>
+<!-- replay-page-end -->
+</body>
+</html>
