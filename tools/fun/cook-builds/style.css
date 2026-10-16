@@ -30,6 +30,8 @@ body { background: var(--bg); color: var(--fg); font: 15px/1.5 var(--sans); -web
 
 main { max-width: 1120px; margin: 0 auto; padding: 28px 16px 64px; display: grid; gap: 20px; }
 .eyebrow { font: 500 11.5px var(--mono); letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+.eyebrow a { color: var(--accent); text-decoration: none; }
+.eyebrow a:hover { text-decoration: underline; }
 h1 { font: 700 clamp(32px, 5vw, 52px)/1.04 var(--display); letter-spacing: -.035em; text-wrap: balance; margin-top: 6px; }
 h2 { font: 700 21px/1.15 var(--display); letter-spacing: -.02em; }
 header p.muted { margin-top: 10px; max-width: 60ch; }

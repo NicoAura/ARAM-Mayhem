@@ -1,4 +1,4 @@
-"""Build data.js for the Cook Builds page from builds.json.
+"""Build data.js for the Cook Builds page (tools/fun/cook-builds/, part of The Lab) from builds.json.
 
 Adds, for every build:
 - each augment's live English name, rarity, tooltip and icon (CommunityDragon, Mayhem = KIWI)
@@ -18,6 +18,8 @@ import argparse, csv, json, os, re, subprocess, time, urllib.request
 import xxhash
 
 HERE = os.path.dirname(os.path.abspath(__file__))
+# The page lives in The Lab (tools/fun/cook-builds/); this folder keeps the hand-written builds.
+PAGE = os.path.join(HERE, "..", "..", "tools", "fun", "cook-builds")
 CD = "https://raw.communitydragon.org/latest"
 GD = CD + "/plugins/rcp-be-lol-game-data/global/default/v1"
 RARITY = {0: "Silver", 1: "Gold", 2: "Prismatic"}
@@ -107,7 +109,7 @@ def mayhem_augments():
 
 
 def save_icon(url, name):
-    path = os.path.join(HERE, "icons", name)
+    path = os.path.join(PAGE, "icons", name)
     if not os.path.exists(path):
         os.makedirs(os.path.dirname(path), exist_ok=True)
         with open(path, "wb") as f:
@@ -222,7 +224,7 @@ def main():
         "champion_count": n_champs, "augment_count": len(aug_stats),
         "generated": time.strftime("%Y-%m-%d"),
     }
-    with open(os.path.join(HERE, "data.js"), "w", encoding="utf-8") as f:
+    with open(os.path.join(PAGE, "data.js"), "w", encoding="utf-8") as f:
         f.write("window.COOK_DATA = " + json.dumps({"meta": meta, "builds": out}, indent=1, ensure_ascii=False) + ";\n")
     print(f"wrote {len(out)} builds")
 
