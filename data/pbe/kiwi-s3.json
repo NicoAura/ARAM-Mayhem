@@ -4,7 +4,6 @@
     "codename": "Kiwi",
     "series": "Kiwi_S3",
     "label": "Season 3",
-    "source": "From the PBE client files via CommunityDragon, compared with live; the locally installed PBE client is on the same build",
     "dataAsOf": "2026-10-16",
     "caveat": "PBE content can change before release.",
     "augmentPool": {
@@ -17,9 +16,9 @@
     },
     "chinaPoolChanged": false,
     "notes": [
-      "The 40th new augment is the generic Pentakill augment (GoH_PentakillAug_Generic). It has no name in the data; its tooltip says it Empowers one basic ability, and a second ability (ultimate included) at level 18.",
-      "Some tooltips use placeholders the data does not fill in (for example exact Attack Speed amounts), so some descriptions leave out numbers.",
-      "aram.bin changes are keybind config only, not per-champion ARAM balance. Per-champion ARAM damage/healing modifiers were not found in the data.",
+      "The 40th new augment is a generic Pentakill augment with no name yet. Its tooltip says it Empowers one basic ability, and a second ability (ultimate included) at level 18.",
+      "Some tooltips leave placeholders unfilled (for example exact Attack Speed amounts), so some descriptions leave out numbers.",
+      "Other ARAM changes are keybind settings only, not per-champion ARAM balance. No per-champion ARAM damage or healing modifiers changed.",
       "Champion arrays are listed for ranks 1-5 (basic abilities) or 1-3 (ultimates). Mode-specific values for Arena, URF and other modes are excluded.",
       "Build 16.21.8284168 (2026-10-16) reverted the Caitlyn passive crit nerf, extended the Qiyana Q nerf to unenchanted Q, and made Fruitify step up at levels 7, 11 and 15 instead of scaling smoothly."
     ],
@@ -485,7 +484,7 @@
           }
         ],
         "direction": "unclear",
-        "note": "The bomb's missile now hits a narrower set of units. The exact unit type isn't labeled in the data.",
+        "note": "The bomb's missile now hits a narrower set of units. The exact unit type isn't labeled.",
         "icon": "https://raw.communitydragon.org/pbe/game/assets/ux/kiwi/augments/icons/spiritbomb_large.png",
         "tier": "prismatic"
       },
@@ -546,11 +545,11 @@
       "live": "Shield 80/140/200/260/320 (+80% AP)",
       "pbe": "Shield 80 at all ranks (+80% AP)",
       "direction": "nerf",
-      "note": "Mayhem-only override. Could be a data mistake; worth re-checking on the next PBE build."
+      "note": "Mayhem-only override. Could be a mistake; worth re-checking on the next PBE build."
     }
   ],
   "headliners": {
-    "summary": "New per-match \"Headliner\" system (internally Guest of Honor). Each Mayhem match features one Headliner that adds game-wide bonuses and effects. Replaces the old \"Quest Augments\" menu section.",
+    "summary": "New per-match \"Headliner\" system. Each Mayhem match features one Headliner that adds game-wide bonuses and effects. Replaces the old \"Quest Augments\" menu section.",
     "list": [
       {
         "id": "Pentakill",
@@ -595,19 +594,19 @@
         "id": "CommandLine",
         "name": "Command Line",
         "effect": "\"Hacked Rerolls\" improve your augments. Voice lines also mention hacked merch stalls.",
-        "note": "Exact effect not spelled out in the strings."
+        "note": "Exact effect not spelled out yet."
       },
       {
         "id": "CafeCuties",
         "name": "Cafe Cuties",
         "effect": "Hands out treats that grant decaying bonus Move Speed. Health Relics are empowered: +20% missing Health restored and 25% decaying Move Speed for 6s.",
-        "note": "The Health Relic link to Cafe Cuties is inferred from the strings."
+        "note": "The Health Relic link to Cafe Cuties is inferred."
       },
       {
         "id": "TrueDamage",
         "name": "True Damage",
         "effect": null,
-        "note": "Listed as a Headliner, but its in-game effect wasn't found in the strings."
+        "note": "Listed as a Headliner, but its in-game effect isn't known yet."
       }
     ]
   },
@@ -617,7 +616,7 @@
       {
         "champion": "Azir",
         "changes": [
-          "Resource stat (hash-named field) 40 → 50 (unclear which stat)"
+          "Unnamed resource stat 40 → 50 (unclear which stat)"
         ]
       },
       {
@@ -650,7 +649,7 @@
       {
         "champion": "Locke",
         "changes": [
-          "Resource stat (hash-named field) 70 → 60",
+          "Unnamed resource stat 70 → 60",
           "Q ammo cooldown reset 20–35% → 10–40%",
           "W mana cost 55–75 → 65–85",
           "W heal cap 150–450 → 100–500 (level 1 → 18)",
@@ -812,7 +811,7 @@
       {
         "item": "Party Favor",
         "changes": [
-          "Removed from the consumables quick-buy and from the item data, along with the Healthbar Splash cosmetics"
+          "Removed from the consumables quick-buy and from the item list, along with the Healthbar Splash cosmetics"
         ]
       },
       {
@@ -828,7 +827,7 @@
   },
   "modeChanges": [
     "Health Relics are added to the Mayhem map's character list (they tie in with the Cafe Cuties Headliner).",
-    "New champion augment tags: each champion gets excluded and build tags, and a new AugmentFilters data set is loaded for Mayhem. Augment offers likely get tailored to the champion's kit.",
+    "New champion augment tags: each champion gets excluded and build tags, and Mayhem gets a new set of augment filters. Augment offers likely get tailored to the champion's kit.",
     "Mayhem gets its own audio feature on the Bloom map skin (BloomKiwi).",
     "Bot difficulty constants changed (AI level-up health penalty 0.7 → 0.99, max HP penalty 0.65 → 0.99). This only matters in games with bots.",
     "Menu copy: the mode is pitched as \"THIS IS MAYHEM\" and \"JOURNEY TO STARDOM\"; the old \"Quest Augments\" section is now \"HEADLINERS\"."
