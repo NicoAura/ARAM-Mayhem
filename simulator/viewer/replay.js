@@ -15,6 +15,18 @@
   const $ = (id) => document.getElementById(id);
 
   let index = null, traces = null, sprite = null, byId = new Map();
+  // Which abilities move their caster (dash or blink), from the game's spell tags (tools/build_anim_data.py).
+  let anims = {};
+  fetch(DATA + "anims.json" + BUST).then((r) => (r.ok ? r.json() : {})).then((a) => {
+    for (const [k, v] of Object.entries(a)) anims[k.toLowerCase()] = v;
+  }).catch(() => {});
+  // Champions the game data doesn't cover fall back to index.json's "dash" (from the ability descriptions).
+  const moveOf = (id, slot) => {
+    const a = anims[String(id).toLowerCase()];
+    if (a) return (a[slot] || {}).move || null;
+    const c = byId.get(String(id).toLowerCase());
+    return c && c.dash && c.dash.includes(slot) ? "dash" : null;
+  };
   let champ = null, trace = null, fight = null;
   let t = 0, playing = true, speed = 1, lastFrame = 0;
   const shown = new Map(); // enemy uid -> displayed {x, y, hp}
@@ -99,14 +111,8 @@
     const bySlot = {};
     for (const c of f.casts) (bySlot[c.s] = bySlot[c.s] || []).push(c);
     for (const list of Object.values(bySlot))
-      list.forEach((c, i) => { c.n = i; c.next = i + 1 < list.length ? list[i + 1].t : f.duration; c.land = c.t + (c.a || 0); });
+      list.forEach((c, i) => { c.next = i + 1 < list.length ? list[i + 1].t : f.duration; c.land = c.t + (c.a || 0); c.n = i; });
     f.enemyCasts = enemyCasts(f);
-    // Count each enemy's casts per ability, so repeated casts play the model's other versions
-    // of the move (Yasuo's three Q swings).
-    for (const list of f.enemyCasts.values()) {
-      const seen = {};
-      for (const c of list) c.n = seen[c.s] = (seen[c.s] ?? -1) + 1;
-    }
     // Crits on attacks: tag the matching damage number.
     for (const a of f.attacks) if (a.f) {
       const n = f.numbers.find((n) => n.u === a.u && Math.abs(n.t - a.t) < 1e-6 && n.src === 0);
@@ -159,22 +165,16 @@
         if (!last || c.t - last.t >= 1) kept.push(c);
         else if (c.cc && !last.cc) kept[kept.length - 1] = c;
       }
+      const count = {};
+      for (const c of kept) { c.n = count[c.s] || 0; count[c.s] = c.n + 1; }
       out.set(u, kept);
     }
     return out;
   }
-  // How long a cast's animation shows: the model's whole move when it is loaded (up to 2.5 s,
-  // or until the next cast takes over), else 1.1 s.
-  function castLength(champId, slot) {
-    const M = window.Models3D;
-    const d = M && M.castLength ? M.castLength(champId, slot) : 0;
-    return d ? Math.min(2.5, d) : 1.1;
-  }
   function enemyCastAt(uid, time) {
     let cast = null;
     for (const c of fight.enemyCasts.get(uid) || []) { if (c.t > time) break; cast = c; }
-    const sp = fight.spawns.get(uid);
-    return cast && time - cast.t < castLength(sp ? sp.x : "", cast.s) ? cast : null;
+    return cast && time - cast.t < castWindow("e" + uid, cast) ? cast : null;
   }
 
   // ---------- state at time t ----------
@@ -279,28 +279,33 @@
     return { me: { x: W * 0.2, y: H * 0.55 }, front, back };
   }
 
+  // How long a cast's animation holds: its clips' length once the model is loaded (a channel
+  // or a multi-part ability runs longer), at least 1.1 s, and never past the next cast.
+  function castWindow(key, cast) {
+    const M = window.Models3D && window.Models3D.ok ? window.Models3D : null;
+    const len = M ? M.castLength(key, cast.s, cast.n) : 0;
+    return Math.min(Math.max(1.1, len), 3, (cast.next || Infinity) - cast.t);
+  }
+  // How far a dash or blink has carried its caster toward the target, 0 to 1, at age k seconds
+  // into the cast: a dash slides out and back, a blink jumps there and back.
+  function travel(move, k) {
+    if (!move || k < 0 || k > 1.1) return 0;
+    if (move === "blink") return k < 0.85 ? 0.72 : 0;
+    const out = Math.min(1, k / 0.22), back = k > 0.7 ? Math.min(1, (k - 0.7) / 0.35) : 0;
+    return 0.62 * (ease(out) - ease(back));
+  }
   // Which animation each model plays at time t, worked out from the timeline so
   // scrubbing shows the same pose as playing.
   function myAnim(time, s) {
     if (s.dead) return { role: "death", t: time - fight.death.t, loop: false };
     let cast = null;
     for (const c of fight.casts) { if (c.t > time) break; cast = c; }
-    if (cast && time - cast.t < castLength(champ.id, cast.s)) return { role: cast.s, t: time - cast.t, loop: false, n: cast.n };
+    if (cast && time - cast.t < castWindow("me", cast)) return { role: cast.s, t: time - cast.t, loop: false, n: cast.n };
     if (s.cc) return { role: "stunned", t: time, loop: true };
     let atk = null;
     for (const a of fight.attacks) { if (a.t - 0.3 > time) break; atk = a; }
     if (atk && time - (atk.t - 0.3) < 0.75) return { role: atk.f ? "crit" : "attack", t: time - (atk.t - 0.3), loop: false };
     return { role: "idle", t: time, loop: true };
-  }
-  // How far along its dash a fighter is (0 to 1): out in 0.25 s, held, back over the last 0.35 s.
-  function dashShare(c, anim) {
-    if (!c || !c.dash || !anim || anim.loop || !c.dash.includes(anim.role)) return 0;
-    const len = Math.max(0.7, castLength(c.id, anim.role)), t = anim.t;
-    if (t < 0 || t > len) return 0;
-    const ease = (x) => 1 - (1 - x) * (1 - x);
-    if (t < 0.25) return ease(t / 0.25);
-    if (t > len - 0.35) return ease((len - t) / 0.35);
-    return 1;
   }
   function enemyAnim(time, en) {
     if (en.died !== null) return { role: "death", t: time - en.died, loop: false };
@@ -407,28 +412,55 @@
       if (miss && age > 0 && age < 0.6) floatText(overlay, "MISS", to.x, to.y - r - 30 * u - age * 40 * u, 1 - age / 0.6, "#c9d6e2", 18 * u);
     }
 
-    // Fighters: 3D models when they're loaded (models3d.js), otherwise portraits. A dash,
-    // leap or blink (index.json "dash") carries the caster most of the way to its target and back.
-    const M3 = window.Models3D, preview = M3 && M3.ok && M3.previewAnim ? M3.previewAnim(champ.id) : null;
-    const meAnim = preview || myAnim(time, s), focusPos = posOf(s.focus);
-    const meDash = dashShare(champ, meAnim);
-    const meX = st.me.x + (focusPos.x - st.me.x) * (0.25 * lunge + 0.55 * meDash);
-    const meY = st.me.y + (focusPos.y - st.me.y) * 0.55 * meDash;
+    // Fighters: 3D models when they're loaded (models3d.js), otherwise portraits.
+    let meX = st.me.x + (posOf(s.focus).x - st.me.x) * 0.25 * lunge, meY = st.me.y;
+    // Dashes and blinks carry your model toward your target.
+    // A later cast doesn't cancel the move (Zed's E right after his R stays at the target).
+    let myCast = null, myTravel = 0;
+    for (const c of fight.casts) {
+      if (c.t > time) break;
+      const m = s.dead ? 0 : travel(moveOf(champ.id, c.s), time - c.t);
+      if (m > myTravel) { myTravel = m; myCast = c; }
+    }
+    const myMove = myCast ? moveOf(champ.id, myCast.s) : null;
+    if (myTravel > 0) {
+      const to = posOf(s.focus);
+      meX = st.me.x + (to.x - st.me.x) * Math.max(myTravel, 0.25 * lunge);
+      meY = st.me.y + (to.y - st.me.y) * myTravel;
+    }
+    const blinks = [];
+    if (myMove === "blink" && myCast) blinks.push({ k: time - myCast.t, a: st.me, b: { x: meX, y: meY } });
     const M = window.Models3D && window.Models3D.ok ? window.Models3D : null;
     let heads = {};
     if (M) {
-      const fighters = [{ key: "me", champ: champ.id, x: meX, y: meY, face: 1, ...meAnim }];
+      const fighters = [{ key: "me", champ: champ.id, x: meX, y: meY, face: 1, ...myAnim(time, s) }];
       for (const en of alive) {
-        const p = posOf(en.uid), anim = enemyAnim(time, en);
-        const d = 0.4 * dashShare(byId.get(String(en.champ).toLowerCase()), anim);
-        fighters.push({ key: "e" + en.uid, champ: en.champ, x: p.x + (meX - p.x) * d, y: p.y + (meY - p.y) * d, face: -1,
-          scale: en.uid === s.focus ? 1 : 0.85, visible: en.died === null || time - en.died < 1.6, ...anim });
+        let p = posOf(en.uid);
+        const ec = en.died === null ? enemyCastAt(en.uid, time) : null;
+        const em = ec && moveOf(en.champ, ec.s);
+        const et = em ? travel(em, time - ec.t) : 0;
+        if (et > 0) {
+          const q = { x: p.x + (st.me.x - p.x) * et, y: p.y + (st.me.y - p.y) * et };
+          if (em === "blink") blinks.push({ k: time - ec.t, a: p, b: q });
+          p = q;
+        }
+        fighters.push({ key: "e" + en.uid, champ: en.champ, x: p.x, y: p.y, face: -1,
+          scale: en.uid === s.focus ? 1 : 0.85, visible: en.died === null || time - en.died < 1.6, ...enemyAnim(time, en) });
       }
       heads = M.frame(fighters, W, H);
     }
     const og = overlay;
     og.setTransform(1, 0, 0, 1, 0, 0);
     og.clearRect(0, 0, W, H);
+    // Blinks: a flash where the caster leaves and where they land, and again on the way back.
+    for (const b of blinks) {
+      for (const [age, from, to] of [[b.k, b.a, b.b], [b.k - 0.85, b.b, b.a]]) {
+        if (age < 0 || age > 0.3) continue;
+        og.globalAlpha = 1 - age / 0.3; og.strokeStyle = "#e9f3ff"; og.lineWidth = 2.5 * u;
+        for (const p of [from, to]) { og.beginPath(); og.ellipse(p.x, p.y, (18 + age * 90) * u, (7 + age * 35) * u, 0, 0, Math.PI * 2); og.stroke(); }
+      }
+    }
+    og.globalAlpha = 1;
 
     // Enemies.
     for (const en of alive) {
@@ -628,11 +660,12 @@
     else playClip(slot);
   }
 
-  // ---------- ability sounds ----------
-  // With the 3D models, each cast plays its ability's sound: the first burst of sound in
-  // Riot's preview video of it (found by tools/build_sounds.py), streamed from Riot's CDN.
-  // Sandboxed pages, which can't load outside media, use replay-data/sounds/sounds.mp3,
-  // all the sounds joined into one file, instead. Browsers only allow sound after the first click or key.
+  // ---------- ability and death sounds ----------
+  // With the 3D models, each cast plays its ability's sound and each death the champion's death sound.
+  // replay-data/sounds/ holds them taken from the game's own sound banks (tools/build_game_sounds.py),
+  // all joined into one file. Without it, casts fall back to the first burst of sound in Riot's
+  // preview video of the ability (tools/build_sounds.py), streamed from Riot's CDN, and deaths are silent.
+  // Browsers only allow sound after the first click or key.
   let soundOn = true, gestured = false, soundFiles = {};
   fetch(DATA + "sounds/sounds.json" + BUST).then((r) => (r.ok ? r.json() : {})).then((m) => { soundFiles = m; }).catch(() => {});
   // A few audio players reused round robin. Each is started once inside the first click or
@@ -657,17 +690,21 @@
     }
   }
   function playSound(c, slot, volume) {
-    if (!soundOn || !gestured || !voices.length || !c || !c.sound || !c.sound[slot]) return;
-    const [start, len] = c.sound[slot];
+    if (!soundOn || !gestured || !voices.length || !c) return;
     const packed = soundFiles.clips && soundFiles.clips[c.id] && soundFiles.clips[c.id][slot];
+    const video = !soundFiles.clips && slot !== "D" && c.sound && c.sound[slot];
+    if (!packed && !video) return;
     const k = String(c.key).padStart(4, "0");
     const a = voices[nextVoice++ % voices.length];
     a.pause();
     a.src = packed ? `${DATA}sounds/${soundFiles.file}${BUST}#t=${packed[0]},${packed[0] + packed[1]}`
-      : `${index.clip_cdn}/${k}/ability_${k}_${slot}1.webm#t=${start},${start + len}`;
+      : `${index.clip_cdn}/${k}/ability_${k}_${slot}1.webm#t=${video[0]},${video[0] + video[1]}`;
     a.volume = volume * 0.8;
     const p = a.play();
     if (p && p.catch) p.catch(() => {});
+    // Media fragments stop late in some browsers; end the clip on time so it never runs into the next one.
+    clearTimeout(a.stopTimer);
+    a.onplaying = packed ? () => { clearTimeout(a.stopTimer); a.stopTimer = setTimeout(() => a.pause(), packed[1] * 1000); } : null;
   }
   function syncSound() {
     video.muted = !(soundOn && gestured);
@@ -829,6 +866,11 @@
               const sp = fight.spawns.get(uid);
               playSound(sp && byId.get(String(sp.x).toLowerCase()), c.s, 0.45);
             }
+          if (fight.death && fight.death.t > before && fight.death.t <= t) playSound(champ, "D", 1);
+          for (const k of fight.kills) if (k.t > before && k.t <= t) {
+            const sp = fight.spawns.get(k.u);
+            playSound(sp && byId.get(String(sp.x).toLowerCase()), "D", 0.6);
+          }
         }
       }
       const s = drawArena(t, reduceMotion ? 0 : dt);
