@@ -23,8 +23,9 @@
   --mono: var(--font-mono), ui-monospace, monospace;
 }
 
+/* Dark palette: follows the system unless the header switch picked light; the switch's "dark" forces it. */
 @media (prefers-color-scheme: dark) {
-  :root {
+  :root:not([data-theme="light"]) {
     color-scheme: dark;
     --bg: #090b0f;
     --surface: #11151c;
@@ -41,6 +42,24 @@
     --gold: #e0b45c;
     --silver: #a3adbb;
   }
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #090b0f;
+  --surface: #11151c;
+  --raised: #181d26;
+  --fg: #e8ecf2;
+  --muted: #8b94a3;
+  --line: #222936;
+  --hover: #181d26;
+  --accent: #5cc0ff;
+  --accent-ink: #04121c;
+  --accent-soft: #0f2533;
+  --good: #4cc98b;
+  --bad: #f0776f;
+  --gold: #e0b45c;
+  --silver: #a3adbb;
 }
 
 * {
@@ -1495,4 +1514,79 @@ html[data-device="mobile"] .admin-bar {
   background: var(--raised);
   color: var(--muted);
   font: 600 0.6875rem var(--mono);
+}
+
+/* Header extras: Ko-fi link and the Light / Dark / System switch, at the right end of the bar. */
+.kofi-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  flex: none;
+  height: 36px;
+  padding: 0 0.75rem;
+  border-radius: 10px;
+  background: var(--accent-soft);
+  color: var(--accent);
+  font-size: 0.84375rem;
+  font-weight: 600;
+  transition: filter 0.15s;
+}
+
+.kofi-btn:hover {
+  filter: brightness(1.08);
+}
+
+.theme-toggle {
+  display: flex;
+  flex: none;
+  gap: 2px;
+  padding: 3px;
+  border-radius: 10px;
+  background: var(--raised);
+}
+
+.theme-toggle button {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border: 0;
+  border-radius: 7px;
+  background: none;
+  color: var(--muted);
+  cursor: pointer;
+}
+
+.theme-toggle button:hover {
+  color: var(--fg);
+}
+
+.theme-toggle button[aria-pressed="true"] {
+  background: var(--surface);
+  color: var(--fg);
+  box-shadow:
+    0 1px 2px rgb(0 0 0 / 0.08),
+    0 0 0 1px var(--line);
+}
+
+@media (max-width: 640px) {
+  .kofi-btn span {
+    display: none;
+  }
+  .kofi-btn {
+    padding: 0 0.6rem;
+  }
+}
+
+html[data-device="mobile"] .kofi-btn span {
+  display: none;
+}
+
+html[data-device="mobile"] .kofi-btn {
+  padding: 0 0.6rem;
+}
+
+html[data-device="mobile"] .theme-toggle button {
+  width: 28px;
+  height: 28px;
 }

@@ -4,8 +4,10 @@ import Link from "next/link";
 import MobileTabBar from "@/components/MobileTabBar";
 import NavLinks from "@/components/NavLinks";
 import SearchPalette from "@/components/SearchPalette";
+import ThemeToggle from "@/components/ThemeToggle";
 import { text } from "@/lib/content";
 import { searchItems } from "@/lib/highlights";
+import { THEME_COLORS, THEME_KEY } from "@/lib/theme";
 import { allTabs } from "@/lib/tabs";
 import "./globals.css";
 
@@ -21,8 +23,8 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   viewportFit: "cover",
   themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#f4f6f8" },
-    { media: "(prefers-color-scheme: dark)", color: "#090b0f" },
+    { media: "(prefers-color-scheme: light)", color: THEME_COLORS.light },
+    { media: "(prefers-color-scheme: dark)", color: THEME_COLORS.dark },
   ],
 };
 
@@ -31,15 +33,27 @@ export const viewport: Viewport = {
 // so a Mac with a touch screen counts as iOS. Runs before paint so the layout doesn't jump.
 const DEVICE_SCRIPT = `try{var u=navigator.userAgent;if(/iPhone|iPad|iPod|Android/i.test(u)||(/Macintosh/.test(u)&&navigator.maxTouchPoints>1))document.documentElement.dataset.device="mobile"}catch(e){}`;
 
+// The header's Light / Dark choice, applied before paint so the page doesn't flash the other theme.
+const THEME_SCRIPT = `try{var t=localStorage.getItem(${JSON.stringify(THEME_KEY)});if(t==="light"||t==="dark")document.documentElement.dataset.theme=t}catch(e){}`;
+
+// The Ko-fi link Nico sets at /admin: a full ko-fi.com link or just the page name.
+function kofiUrl() {
+  const v = text("kofi").trim();
+  if (!v) return "";
+  const name = v.replace(/^(https?:\/\/)?(www\.)?ko-fi\.com\//i, "").replace(/[/?#].*$/, "");
+  return /^[A-Za-z0-9_-]+$/.test(name) ? `https://ko-fi.com/${name}` : "";
+}
+
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const kofi = kofiUrl();
   return (
     <html lang="en" className={`${sans.variable} ${mono.variable} ${display.variable}`} suppressHydrationWarning>
       <head>
-        <script dangerouslySetInnerHTML={{ __html: DEVICE_SCRIPT }} />
+        <script dangerouslySetInnerHTML={{ __html: DEVICE_SCRIPT + THEME_SCRIPT }} />
       </head>
       <body>
         <header className="site-header">
@@ -52,6 +66,17 @@ export default function RootLayout({
             </Link>
             <NavLinks tabs={[{ href: "/", label: "Home" }, ...allTabs().map(({ href, label }) => ({ href, label }))]} />
             <SearchPalette items={searchItems()} />
+            {kofi && (
+              <a className="kofi-btn" href={kofi} target="_blank" rel="noreferrer" aria-label="Support DeepARAM on Ko-fi">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                  <path d="M4 8h13v5a6 6 0 0 1-6 6H10a6 6 0 0 1-6-6V8z" />
+                  <path d="M17 9h1.5a2.5 2.5 0 0 1 0 5H17" />
+                  <path d="M10.5 15s-2.5-1.4-2.5-3a1.25 1.25 0 0 1 2.5-.4A1.25 1.25 0 0 1 13 12c0 1.6-2.5 3-2.5 3z" fill="currentColor" stroke="none" />
+                </svg>
+                <span>Ko-fi</span>
+              </a>
+            )}
+            <ThemeToggle />
           </div>
         </header>
         {text("banner") && <p className="site-banner">{text("banner")}</p>}
