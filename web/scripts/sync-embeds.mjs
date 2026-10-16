@@ -51,17 +51,18 @@ for (const { name, from, exclude = [] } of embeds) {
 
 // Every image, sound, model, font and script the pages use is mirrored in public/assets/ (scripts/fetch_assets.py),
 // so links to the outside copies are pointed at the site's own. Pages that already use /assets/ are left as they are.
-// A prefix is only swapped once its folder exists in public/assets (clips and models land separately).
-const has = (dir) => existsSync(join(web, "public", "assets", dir));
+// A rule with a third entry only applies when that file is in public/assets/ (in git, so in the deployed build):
+// until the clips, models or three.js are committed there, pages keep loading them from the outside copy.
 const LOCAL = [
   [/https:\/\/raw\.communitydragon\.org\//g, "/assets/cd/"],
   [/https:\/\/ddragon\.leagueoflegends\.com\/cdn\//g, "/assets/dd/"],
-  ...(has("clips") ? [[/https:\/\/d28xe8vt774jo5\.cloudfront\.net\/champion-abilities/g, "/assets/clips"]] : []),
-  ...(has("models") ? [[/https:\/\/cdn\.modelviewer\.lol\/lol\/models/g, "/assets/models"]] : []),
-  [/https:\/\/cdn\.jsdelivr\.net\/npm\/three@0\.160\.0\//g, "/assets/lib/three-0.160.0/"],
+  [/https:\/\/d28xe8vt774jo5\.cloudfront\.net\/champion-abilities/g, "/assets/clips", "clips"],
+  [/https:\/\/cdn\.modelviewer\.lol\/lol\/models/g, "/assets/models", "models/models.json"],
+  [/https:\/\/cdn\.jsdelivr\.net\/npm\/three@0\.160\.0\//g, "/assets/lib/three-0.160.0/", "lib/three-0.160.0/build/three.module.js"],
   [/<link[^>]+rel="preconnect"[^>]+fonts\.g(?:oogleapis|static)\.com[^>]*>\s*/g, ""],
   [/https:\/\/fonts\.googleapis\.com\/css2\?[^"')\s]+/g, "/assets/fonts/fonts.css"],
 ];
+const ACTIVE = LOCAL.filter(([, , needs]) => !needs || existsSync(join(web, "public", "assets", needs)));
 const TEXT = /\.(html|js|mjs|css|json)$/;
 function localize(dir) {
   let changed = 0;
@@ -70,7 +71,7 @@ function localize(dir) {
     if (d.isDirectory()) changed += localize(p);
     else if (TEXT.test(d.name)) {
       const before = readFileSync(p, "utf8");
-      const after = LOCAL.reduce((s, [re, to]) => s.replace(re, to), before);
+      const after = ACTIVE.reduce((s, [re, to]) => s.replace(re, to), before);
       if (after !== before) (writeFileSync(p, after), changed++);
     }
   }
