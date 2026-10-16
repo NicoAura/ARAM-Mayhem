@@ -18,9 +18,16 @@ const sans = Geist({ subsets: ["latin"], variable: "--font-sans" });
 const mono = Geist_Mono({ subsets: ["latin"], variable: "--font-mono" });
 const display = Bricolage_Grotesque({ subsets: ["latin"], weight: ["600", "700"], variable: "--font-display" });
 
+const DESCRIPTION = "ARAM Mayhem tier list, augment win rates and a teamfight simulator for the current patch.";
+
 export const metadata: Metadata = {
+  metadataBase: new URL("https://deeparam.com"),
   title: "DeepARAM",
-  description: "DeepARAM: ARAM Mayhem stats for the current patch and a damage simulator",
+  description: DESCRIPTION,
+  alternates: { canonical: "/" },
+  applicationName: "DeepARAM",
+  openGraph: { type: "website", siteName: "DeepARAM", title: "DeepARAM", description: DESCRIPTION, url: "/", images: [{ url: "/og.png", width: 1200, height: 630, alt: "DeepARAM" }] },
+  twitter: { card: "summary_large_image", title: "DeepARAM", description: DESCRIPTION, images: ["/og.png"] },
 };
 
 export const viewport: Viewport = {

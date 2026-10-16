@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { pageMeta } from "@/lib/meta";
 import DataTable, { type Row } from "@/components/DataTable";
 import Embed from "@/components/Embed";
 import Intro from "@/components/Intro";
@@ -7,7 +8,7 @@ import Pending from "@/components/Pending";
 import SubTabs from "@/components/SubTabs";
 import { readRepoJson, repoHas } from "@/lib/repo-data";
 
-export const metadata: Metadata = { title: "Simulator · DeepARAM" };
+export const metadata: Metadata = pageMeta("/tools/simulator", "Simulator", "Simulated ARAM Mayhem teamfights, best builds and fight replays for every champion.");
 
 type Named = Record<string, { name: string }>;
 type BestBuilds = {

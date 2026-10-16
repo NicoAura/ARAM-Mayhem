@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
+import { pageMeta } from "@/lib/meta";
 import AugmentCard from "@/components/AugmentCard";
 import Intro from "@/components/Intro";
 import Pending from "@/components/Pending";
 import { readRepoJson } from "@/lib/repo-data";
 
-export const metadata: Metadata = { title: "PBE · DeepARAM" };
+export const metadata: Metadata = pageMeta("/pbe", "PBE", "What's changing for ARAM Mayhem on the test server: new and changed augments, rules and quests.");
 
 type Change = { stat: string; live: string; pbe: string };
 type Pbe = {

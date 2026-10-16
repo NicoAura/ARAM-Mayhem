@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { pageMeta } from "@/lib/meta";
 import augmentNames from "@/data/augment-names.json";
 import { AdvancedProvider, AdvancedToggle } from "@/components/Advanced";
 import ChampionTiers from "@/components/ChampionTiers";
@@ -12,7 +13,7 @@ import Pending from "@/components/Pending";
 import SubTabs from "@/components/SubTabs";
 import { readRepoCsv, readRepoJson } from "@/lib/repo-data";
 
-export const metadata: Metadata = { title: "Tier List · DeepARAM" };
+export const metadata: Metadata = pageMeta("/tier-list", "Tier List", "ARAM Mayhem champion tier list for the current patch, with augment and duo win rates.");
 
 type Duos = { meta: { champion_stat_date?: string }; duos: { names: string[]; roles?: string[]; win_rate: number; pick_rate: number; rank?: number }[] };
 
