@@ -4,8 +4,8 @@ Adds, for every build:
 - each augment's live English name, rarity, tooltip and icon (CommunityDragon, Mayhem = KIWI)
 - China-server win and pick rates for the champion and each augment (data/cn/, see data/cn/README.md)
 - whether the champion is on China's best-champion list for that augment
-- optional simulator numbers: the build's items against the simulator's best build for that champion
-  (both with the best build's augments, since most cook augments aren't in the simulator)
+- optional simulator numbers: the build against the simulator's best build for that champion
+  (items only, with the best build's augments, unless all of the build's augments are in the simulator)
 
 Usage:
   python3 -m pip install xxhash
@@ -124,17 +124,21 @@ def run_sim(sim, args):
     return json.loads(out.stdout)
 
 
-def simulate(sim, sim_list, build, items):
-    """Score the build's items: run them with the augments of the simulator's best build for this champion,
-    so the comparison is items against items. Most cook augments aren't in the simulator, so augments are held equal."""
+def simulate(sim, sim_list, build, items, augs):
+    """Score the build against the simulator's best build for this champion. When every augment is in the
+    simulator the whole build is run; otherwise its items run with the best build's augments, so the
+    comparison is items against items."""
     champ = next((c for c in sim_list["champions"] if c["id"] == build["champion"]), None)
     if not champ:
         return None
     item_keys = {i["name"].lower(): i["key"] for i in sim_list["items"]}
+    aug_keys = {a["name"].lower(): a["key"] for a in sim_list["augments"]}
     it = [item_keys[n.lower()] for n in items if n.lower() in item_keys]
     best_run = run_sim(sim, ["--champ", champ["id"]])["builds"][0]
     best = best_run["summary"]
-    cook = run_sim(sim, ["--champ", champ["id"], "--items", ",".join(it), "--augs", ",".join(best_run["build"]["augments"])])["builds"][0]["summary"]
+    whole = all(n.lower() in aug_keys for n in augs)
+    ag = [aug_keys[n.lower()] for n in augs] if whole else best_run["build"]["augments"]
+    cook = run_sim(sim, ["--champ", champ["id"], "--items", ",".join(it), "--augs", ",".join(ag)])["builds"][0]["summary"]
     names = {i["key"]: i["name"] for i in sim_list["items"]} | {a["key"]: a["name"] for a in sim_list["augments"]}
     return {
         "dps": round(cook["mean_dps"]),
@@ -145,6 +149,7 @@ def simulate(sim, sim_list, build, items):
         "best_items": [names.get(k, k) for k in best_run["build"]["items"]],
         "best_augments": [names.get(k, k) for k in best_run["build"]["augments"]],
         "items_not_modeled": [n for n in items if n.lower() not in item_keys],
+        "whole_build": whole,
     }
 
 
@@ -204,7 +209,7 @@ def main():
             "augments": rows, "core_win_rate": core_wr, "tier": tier(core_wr),
         })
         if a.sim:
-            entry["sim"] = simulate(a.sim, sim_list, b, b["items"])
+            entry["sim"] = simulate(a.sim, sim_list, b, b["items"], b["augments"])
         out.append(entry)
 
     meta = {

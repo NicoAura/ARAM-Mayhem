@@ -355,6 +355,259 @@
       ],
       "why": "Every heal is an attack. Circle of Death sends 70% of your healing as magic damage at the nearest enemy, Sonic Boom deals true damage and slows around whoever you heal, and Spirit Bomb throws a heal-and-shield bomb at your lowest teammate. Wee Woo Wee Woo makes you faster toward hurt allies.",
       "play": "Heal everyone. Watch the kill feed."
+    },
+    {
+      "id": "leesin-flash-mob",
+      "champion": "LeeSin",
+      "title": "Flash Mob",
+      "augments": [
+        "Flashy",
+        "Flash 2",
+        "Flashbang",
+        "Earthwake"
+      ],
+      "core": 3,
+      "items": [
+        "Berserker's Greaves",
+        "Black Cleaver",
+        "Lord Dominik's Regards",
+        "Profane Hydra",
+        "Serylda's Grudge",
+        "Umbral Glaive"
+      ],
+      "why": "Every Flash augment at once. Flashy gives Flash 3 charges, Flash 2 adds a second Flash spell with 70 Summoner Haste, and Flashbang makes each one explode and slow. That is four Flashes on call for Insec kicks, and Earthwake leaves a detonating trail behind every Q and W dash in between.",
+      "play": "Ward-hop, Flash, kick, Flash, Flash. Nobody will know where you are, including you.",
+      "lab": true
+    },
+    {
+      "id": "garen-beyblade",
+      "champion": "Garen",
+      "title": "Beyblade Garen",
+      "augments": [
+        "Spin To Win",
+        "Echo Cast",
+        "Quickstep",
+        "Blade Waltz"
+      ],
+      "core": 4,
+      "items": [
+        "Berserker's Greaves",
+        "Stridebreaker",
+        "Black Cleaver",
+        "Profane Hydra",
+        "Serylda's Grudge",
+        "Sterak's Gage"
+      ],
+      "why": "Spin To Win makes Judgment bigger, faster and more often. If Echo Cast and Quickstep roll on E, Judgment also sends a spinning clone and dashes you toward your cursor every time you press it. Blade Waltz adds a summoner spell that dashes through enemies eight times. Garen in China is on the best-champion list for all four.",
+      "play": "Hope Echo Cast and Quickstep land on E, then hold the spin and steer with your mouse.",
+      "lab": true
+    },
+    {
+      "id": "singed-prom-king",
+      "champion": "Singed",
+      "title": "Prom King",
+      "augments": [
+        "Prom Queen",
+        "Leg Day",
+        "Escape Plan",
+        "Pat On The Back"
+      ],
+      "core": 4,
+      "items": [
+        "Mercury's Treads",
+        "Rylai's Crystal Scepter",
+        "Liandry's Torment",
+        "Rod of Ages",
+        "Dead Man's Plate",
+        "Warmog's Armor"
+      ],
+      "why": "Every 35 seconds a tiara drops on Singed and he gets Rakan's ultimate, charming everyone he runs past. Leg Day adds 50 Move Speed and Slow Resist, Escape Plan gives a giant shield and 150% Move Speed when he drops low, and every teammate he jogs past pats him for a shield and more speed. Singed is on China's best-champion list for all four.",
+      "play": "Run past your team to collect pats, then run through theirs in your tiara. Leave poison everywhere.",
+      "lab": true
+    },
+    {
+      "id": "tf-autopilot",
+      "champion": "TwistedFate",
+      "title": "Autopilot",
+      "augments": [
+        "Ok Boomerang",
+        "FireFox",
+        "Hextech Soul",
+        "Quantum Computing"
+      ],
+      "core": 3,
+      "items": [
+        "Sorcerer's Shoes",
+        "Cryptbloom",
+        "Horizon Focus",
+        "Rabadon's Deathcap",
+        "Shadowflame",
+        "Void Staff"
+      ],
+      "why": "All four augments fire on their own. A boomerang flies out every 7 seconds, three fox flames orbit and shoot the closest enemy, Hextech Soul chains lightning off your next hit, and Quantum Computing swings a giant slash around you every 30 seconds. Twisted Fate is the top China champion for Ok Boomerang.",
+      "play": "Pick a card and let the augments play the rest. Quantum Computing has no China stats yet.",
+      "lab": true
+    },
+    {
+      "id": "zilean-time-loop",
+      "champion": "Zilean",
+      "title": "Time Loop",
+      "augments": [
+        "Ult Bot",
+        "Ultimate Revolution",
+        "Recursion",
+        "Archmage"
+      ],
+      "core": 2,
+      "items": [
+        "Ionian Boots of Lucidity",
+        "Malignance",
+        "Cosmic Drive",
+        "Horizon Focus",
+        "Shadowflame",
+        "Rabadon's Deathcap"
+      ],
+      "why": "Ult Bot sends all Ability Haste to R at 1.5x, Recursion's 60 haste and every haste item go there too, and Ultimate Revolution gives a second Chronoshift right after the first. Your team gets two revives on a short cooldown. Archmage keeps Q and W refunding each other since they get no haste of their own.",
+      "play": "Chronoshift whoever is about to die, then the next person. Save nothing.",
+      "lab": true
+    },
+    {
+      "id": "ezreal-mana-tank",
+      "champion": "Ezreal",
+      "title": "Mana Tank",
+      "augments": [
+        "Mind to Matter",
+        "Overflow",
+        "Upgrade Sheen",
+        "Mystic Punch"
+      ],
+      "core": 3,
+      "items": [
+        "Ionian Boots of Lucidity",
+        "Manamune",
+        "Trinity Force",
+        "Archangel's Staff",
+        "Rod of Ages",
+        "Frozen Heart"
+      ],
+      "why": "Mind to Matter gives Health equal to half your Mana, and Overflow doubles your Mana costs but makes your damage scale with max Mana. Stack Muramana, Seraph's, Rod of Ages and Frozen Heart and Ezreal turns into a frontline that throws Mystic Shots. Ezreal is on China's best list for both mana augments and Upgrade Sheen.",
+      "play": "Q everything, Spellblade everything, and stand closer than an Ezreal should.",
+      "lab": true
+    },
+    {
+      "id": "sona-heavy-metal",
+      "champion": "Sona",
+      "title": "Heavy Metal",
+      "augments": [
+        "Heavy Hitter",
+        "Goliath",
+        "Tank Engine",
+        "Sonata"
+      ],
+      "core": 3,
+      "items": [
+        "Plated Steelcaps",
+        "Heartsteel",
+        "Warmog's Armor",
+        "Titanic Hydra",
+        "Sunfire Aegis",
+        "Jak'Sho, The Protean"
+      ],
+      "why": "Sona as a giant tank. Goliath and Tank Engine stack size and Health, Heavy Hitter makes every Power Chord hit for a share of that Health, and Sonata plays her heal and speed songs automatically every 10 seconds, so she never has to press W or E.",
+      "play": "Walk up, Q, auto. The band plays itself.",
+      "lab": true
+    },
+    {
+      "id": "mf-net-zero",
+      "champion": "MissFortune",
+      "title": "Net Zero",
+      "augments": [
+        "Goliath",
+        "Giant Slayer",
+        "Celestial Body",
+        "Glass Cannon"
+      ],
+      "core": 4,
+      "items": [
+        "Berserker's Greaves",
+        "Blade of The Ruined King",
+        "Infinity Edge",
+        "Lord Dominik's Regards",
+        "Mortal Reminder",
+        "Runaan's Hurricane"
+      ],
+      "why": "Every augment cancels another one. Goliath makes you big and Giant Slayer makes you tiny. Celestial Body adds 1,500 Health and cuts your damage 10%, and Glass Cannon cuts 30% of your Health for extra true damage. Miss Fortune is on China's list for Giant Slayer and Glass Cannon, which is the only reason she was picked.",
+      "play": "Play normal Miss Fortune. Nobody will be able to tell what changed.",
+      "lab": true
+    },
+    {
+      "id": "karma-marksman",
+      "champion": "Karma",
+      "title": "Marksman Karma",
+      "augments": [
+        "Dual Wield",
+        "Deft",
+        "Heavy Hitter",
+        "Erosion"
+      ],
+      "core": 4,
+      "items": [
+        "Berserker's Greaves",
+        "Blade of The Ruined King",
+        "Infinity Edge",
+        "Lord Dominik's Regards",
+        "Runaan's Hurricane",
+        "Yun Tal Wildarrows"
+      ],
+      "why": "The simulator's biggest surprise. Searching every item for every champion, its best Karma build was a full crit marksman build, at 2.4x the damage of its best mage build and with better survival. The simulator doesn't model enchanter shields or Mantra, so take it with salt, but these are the simulator's own augment picks.",
+      "play": "Buy Berserker's and right-click. RQ to Mantra your own damage if you remember.",
+      "lab": true
+    },
+    {
+      "id": "skarner-lethality",
+      "champion": "Skarner",
+      "title": "Glass Scorpion",
+      "augments": [
+        "Mystic Punch",
+        "Goliath",
+        "Jeweled Gauntlet",
+        "It's Critical"
+      ],
+      "core": 4,
+      "items": [
+        "Ionian Boots of Lucidity",
+        "Axiom Arc",
+        "Black Cleaver",
+        "Lord Dominik's Regards",
+        "Serylda's Grudge",
+        "Umbral Glaive"
+      ],
+      "why": "Another simulator find: a full lethality Skarner did 1.36x the damage of its best tank build. The catch is he survived a third of fights instead of more than half, so the tank gets deleted after grabbing someone.",
+      "play": "R the carry into your team and hope your team is there.",
+      "lab": true
+    },
+    {
+      "id": "taric-bonk",
+      "champion": "Taric",
+      "title": "Bonk Taric",
+      "augments": [
+        "Dual Wield",
+        "Heavy Hitter",
+        "Deft",
+        "Tank Engine"
+      ],
+      "core": 4,
+      "items": [
+        "Berserker's Greaves",
+        "Blade of The Ruined King",
+        "Heartsteel",
+        "Hollow Radiance",
+        "Sunfire Aegis",
+        "Titanic Hydra"
+      ],
+      "why": "The simulator's best Taric is half tank and half on-hit: Dual Wield and Deft make him swing fast, and Heavy Hitter and Titanic Hydra make every swing hit for a share of his Heartsteel Health. It beat his best normal build by about a quarter in damage with the same survival.",
+      "play": "Stun, then bonk. Bravado keeps the empowered bonks coming.",
+      "lab": true
     }
   ]
 }
