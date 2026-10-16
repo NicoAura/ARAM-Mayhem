@@ -135,6 +135,11 @@ fieldset select { width: 100%; min-width: 0; font-size: 13px; padding: 6px 8px; 
 .enemy-stats label { display: grid; gap: 2px; font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; }
 .enemy-stats input.changed { border-color: var(--e); }
 .sub { font: 500 11px var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin-top: 4px; }
+.adv { border-top: 1px solid var(--line); padding-top: 10px; }
+.adv summary { cursor: pointer; font: 500 12px var(--mono); letter-spacing: .06em; text-transform: uppercase; color: var(--muted); width: fit-content; }
+.adv summary:hover { color: var(--frost); }
+.adv[open] summary { margin-bottom: 12px; }
+#advCount { color: var(--e); text-transform: none; letter-spacing: 0; }
 .alts { display: grid; gap: 6px; }
 .alts button { text-align: left; display: grid; grid-template-columns: 64px minmax(0, 1fr); gap: 10px; font-size: 12px; }
 .alts button b { font: 500 13px var(--mono); font-variant-numeric: tabular-nums; }
@@ -217,6 +222,10 @@ fieldset select { width: 100%; min-width: 0; font-size: 13px; padding: 6px 8px; 
       </fieldset>
       <fieldset id="fightBox"><legend>Fight</legend></fieldset>
     </div>
+    <details class="adv" id="advBox">
+      <summary>Advanced settings <span id="advCount"></span></summary>
+      <div class="sim-grid" id="advGrid"></div>
+    </details>
     <div class="alts" id="alts" hidden></div>
   </section>
 
@@ -237,10 +246,10 @@ fieldset select { width: 100%; min-width: 0; font-size: 13px; padding: 6px 8px; 
 </div>
 <script type="importmap">{"imports": {"three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
   "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"}}</script>
-<script>window.REPLAY_VERSION = "20";</script>
-<script src="replay.js?v=20"></script>
-<script type="module" src="models3d.js?v=20"></script>
-<script src="sim-panel.js?v=20"></script>
+<script>window.REPLAY_VERSION = "21";</script>
+<script src="replay.js?v=21"></script>
+<script type="module" src="models3d.js?v=21"></script>
+<script src="sim-panel.js?v=21"></script>
 <!-- replay-page-end -->
 </body>
 </html>
