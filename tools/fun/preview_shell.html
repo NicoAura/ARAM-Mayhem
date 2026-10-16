@@ -1,0 +1,162 @@
+<meta charset="utf-8">
+<title>The Lab</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: the website's minimalist shell (header, section intro) around the Fun Tools tab; each tool runs in its own frame. */
+:root {
+  --bg: #fafafa;
+  --fg: #0a0a0a;
+  --muted: #737373;
+  --line: #e5e5e5;
+  --hover: #f0f0f0;
+  --accent: #b8862e;
+  --font-sans: "Geist", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: "Geist Mono", ui-monospace, Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0a0a0a; --fg: #ededed; --muted: #8f8f8f; --line: #262626; --hover: #141414; --accent: #d9b16a;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0a0a0a; --fg: #ededed; --muted: #8f8f8f; --line: #262626; --hover: #141414; --accent: #d9b16a;
+  color-scheme: dark;
+}
+
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-sans);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+.wrap {
+  max-width: 880px;
+  margin: 0 auto;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+.site-header { border-bottom: 1px solid var(--line); }
+.site-header .wrap { display: flex; align-items: center; justify-content: space-between; gap: 1rem; min-height: 64px; flex-wrap: wrap; padding-block: 0.5rem; }
+.brand { font-weight: 600; white-space: nowrap; }
+.site-nav { display: flex; gap: 0.25rem 1rem; flex-wrap: wrap; font-size: 0.875rem; color: var(--muted); }
+.site-nav span[aria-current] { color: var(--fg); font-weight: 500; }
+
+.intro { padding-block: 2.5rem 1.25rem; display: grid; gap: 0.6rem; }
+.intro > *, .tool-card > *, .note { margin: 0; }
+.eyebrow { font-family: var(--font-mono); font-size: 0.75rem; color: var(--accent); text-transform: uppercase; letter-spacing: 0.08em; }
+h1 { font-size: clamp(1.6rem, 4vw, 2.25rem); letter-spacing: -0.02em; line-height: 1.15; text-wrap: balance; font-weight: 600; }
+.intro p { color: var(--muted); max-width: 62ch; }
+
+.tabs { display: flex; gap: 0.25rem; border-bottom: 1px solid var(--line); overflow-x: auto; }
+.tab {
+  font: inherit; font-size: 0.875rem; background: none; border: 0; color: var(--muted); cursor: pointer;
+  padding: 0.6rem 0.75rem; border-bottom: 2px solid transparent; margin-bottom: -1px; white-space: nowrap;
+}
+.tab:hover { color: var(--fg); }
+.tab[aria-selected="true"] { color: var(--fg); border-bottom-color: var(--fg); }
+.tab:focus-visible, .tool-card:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 4px; }
+
+.panels { padding-block: 0.5rem 3rem; }
+.panel iframe { display: block; width: 100%; border: 0; min-height: 600px; background: var(--bg); }
+
+.cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 0.75rem; padding-top: 1.5rem; }
+.tool-card {
+  display: grid; gap: 0.35rem; text-align: left; font: inherit; color: inherit; cursor: pointer;
+  background: none; border: 1px solid var(--line); border-radius: 10px; padding: 1rem;
+}
+.tool-card:hover { background: var(--hover); }
+.tool-name { font-weight: 600; }
+.tool-desc { color: var(--muted); font-size: 0.875rem; }
+.note { color: var(--muted); font-size: 0.8rem; padding-top: 1.25rem; max-width: 62ch; }
+.note code { font-family: var(--font-mono); font-size: 0.75rem; }
+</style>
+
+<header class="site-header">
+  <div class="wrap">
+    <span class="brand">ARAM Mayhem</span>
+    <nav class="site-nav" aria-label="Site sections">
+      <span>My Stats</span><span>China Stats</span><span>Simulator</span><span>PBE</span><span aria-current="page">The Lab</span>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="intro">
+    <p class="eyebrow">ARAM Mayhem · /tools/fun</p>
+    <h1>The Lab</h1>
+    <p>Pick a champion, items and augments and see how far the numbers go. Each tool loads the best build found so far; change anything to try your own.</p>
+  </section>
+
+  <nav class="tabs" role="tablist" aria-label="The Lab">
+    <button class="tab" type="button" role="tab" id="tab-home" data-go="home">Overview</button>
+    <!--TABS-->
+  </nav>
+
+  <div class="panels">
+    <section class="panel" id="panel-home" role="tabpanel" hidden>
+      <div class="cards">
+        <!--CARDS-->
+      </div>
+      <p class="note">This preview bundles the tab exactly as the website serves it from <code>tools/fun/</code>, with game data from patch 16.20.</p>
+    </section>
+    <!--FRAMES-->
+  </div>
+</main>
+
+<script>
+(function () {
+  "use strict";
+  const PAGES = /*PAGES*/null;
+  const frames = {};
+
+  function syncTheme(doc) {
+    const t = document.documentElement.getAttribute("data-theme");
+    if (t) doc.documentElement.setAttribute("data-theme", t);
+    else doc.documentElement.removeAttribute("data-theme");
+  }
+
+  function fit(frame) {
+    const doc = frame.contentDocument;
+    if (doc && doc.body) frame.style.height = doc.documentElement.scrollHeight + "px";
+  }
+
+  function load(id) {
+    const panel = document.getElementById("panel-" + id);
+    const frame = panel && panel.querySelector("iframe");
+    if (!frame || frames[id]) return;
+    frames[id] = frame;
+    frame.addEventListener("load", () => {
+      const doc = frame.contentDocument;
+      syncTheme(doc);
+      const preset = doc.getElementById("preset");
+      if (preset) preset.click();
+      fit(frame);
+      new ResizeObserver(() => fit(frame)).observe(doc.body);
+    });
+    frame.srcdoc = PAGES[id];
+  }
+
+  function show(id) {
+    if (id !== "home" && !PAGES[id]) id = "home";
+    document.querySelectorAll(".tab").forEach((t) => t.setAttribute("aria-selected", String(t.dataset.go === id)));
+    document.querySelectorAll(".panel").forEach((p) => { p.hidden = p.id !== "panel-" + id; });
+    load(id);
+    if (frames[id]) fit(frames[id]);
+  }
+
+  document.addEventListener("click", (e) => {
+    const b = e.target.closest("[data-go]");
+    if (b) show(b.dataset.go);
+  });
+  window.addEventListener("message", (e) => { if (e.data === "fun-home") show("home"); });
+  new MutationObserver(() => Object.values(frames).forEach((f) => f.contentDocument && syncTheme(f.contentDocument)))
+    .observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
+
+  const start = location.hash.slice(1);
+  show(PAGES && PAGES[start] ? start : "ryze-calculator");
+})();
+</script>

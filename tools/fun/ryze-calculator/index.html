@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Infinite Ryze</title>
+  <meta name="description" content="How much AP can Ryze reach in ARAM Mayhem? Pick items and augments and watch the AP to Mana loop.">
+  <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+  <main>
+    <header class="intro">
+      <img id="ryze-icon" alt="" width="56" height="56">
+      <div>
+        <p class="eyebrow"><a href="../index.html">The Lab</a> · ARAM Mayhem</p>
+        <h1>Infinite Ryze</h1>
+        <p class="muted">Ryze turns AP into Mana, and Seraph's turns Mana back into AP. Pick items and augments to see how far the loop goes. <span id="patch"></span></p>
+      </div>
+    </header>
+
+    <section class="result" aria-live="polite">
+      <div class="big">
+        <span class="label">Ability Power</span>
+        <span id="ap" class="value">0</span>
+      </div>
+      <div class="loop">
+        <div class="loop-head">
+          <span class="label">Loop strength</span>
+          <span id="gain">0%</span>
+        </div>
+        <div class="meter"><div id="gain-bar"></div><div class="meter-mark" title="100% = infinite"></div></div>
+        <p id="gain-note" class="muted small"></p>
+      </div>
+      <svg id="chart" viewBox="0 0 300 80" preserveAspectRatio="none" role="img" aria-label="AP after each loop"></svg>
+      <dl id="stats" class="stats"></dl>
+    </section>
+
+    <section>
+      <div class="row-head">
+        <h2>Level</h2>
+        <output id="level-out">18</output>
+      </div>
+      <input id="level" type="range" min="1" max="18" value="18" aria-label="Champion level">
+    </section>
+
+    <section>
+      <div class="row-head">
+        <h2>Items</h2>
+        <span class="muted small">Click a slot to empty it</span>
+      </div>
+      <div id="item-slots" class="slots"></div>
+      <div id="item-picker" class="picker"></div>
+    </section>
+
+    <section>
+      <div class="row-head">
+        <h2>Augments</h2>
+        <span class="muted small">Up to 4</span>
+      </div>
+      <div id="aug-slots" class="slots"></div>
+      <div id="aug-picker" class="picker"></div>
+    </section>
+
+    <section>
+      <h2>Stacks and extras</h2>
+      <div id="options" class="options"></div>
+    </section>
+
+    <section>
+      <h2>Ability damage (rank 5, before resists)</h2>
+      <table id="spells" class="table"></table>
+    </section>
+
+    <section>
+      <h2>Where the AP comes from</h2>
+      <table id="breakdown" class="table"></table>
+    </section>
+
+    <section class="actions">
+      <button id="preset" type="button">Load the highest-AP build</button>
+      <button id="reset" type="button" class="ghost">Clear</button>
+      <button id="share" type="button" class="ghost">Copy link</button>
+    </section>
+
+    <footer class="muted small">
+      Numbers come from the game files via CommunityDragon. AP % bonuses (Rabadon's, Goliath, Hand of Baron and so on)
+      are added together before they multiply AP, and stacking effects use the values you set above.
+      Mayhem's per-champion damage modifiers are not applied.
+    </footer>
+  </main>
+
+  <script src="data.js"></script>
+  <script src="calc.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

@@ -221,3 +221,6 @@ __marimo__/
 
 # Next.js source folder, not a Python build dir
 !web/src/lib/
+
+# Personal match archives
+dashboard/data/

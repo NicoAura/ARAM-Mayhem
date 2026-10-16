@@ -1,0 +1,61 @@
+{
+ "_note": "Rules, fight scenario and optimizer settings for the all-champion simulator (mayhem_sim). The fight scenario matches the Yunara simulator's. Everything under model is an estimate of how a generic kit plays out, not game data.",
+ "rules": {
+  "base_crit_multiplier": {"value": 2.0, "confidence": "likely", "note": "Mayhem raised base crit damage 175% -> 200% in 26.1"},
+  "crit_overflow_ad_per_percent": {"value": 0.45, "confidence": "approx"},
+  "attack_speed_cap": {"value": 5.0, "confidence": "verified"}
+ },
+ "model": {
+  "extra_hit_weight": 0.5,
+  "extra_hit_weight_note": "An ability's first damage number counts fully; other different numbers in the same tooltip (second parts, splash, follow-ups) count at this weight because the parser can't tell when they all land.",
+  "skillshot_hit_chance": 0.8,
+  "aoe_secondary_hit_chance": 0.6,
+  "line_secondary_hit_chance": 0.3,
+  "cast_time_min": 0.15,
+  "cast_time_max": 0.6,
+  "min_cooldown": 0.75,
+  "default_dot_duration": 3.0,
+  "spellblade_window": 10.0,
+  "attack_uptime_melee": 0.6,
+  "attack_uptime_short_range": 0.7,
+  "attack_uptime_long_range": 0.8,
+  "attack_uptime_note": "Share of the fight a champion can actually attack (target in range and reachable), by attack range: melee, under 550, 550+. Abilities aren't limited this way. Estimate."
+ },
+ "scenario": {
+  "level": 18,
+  "trials": 4000,
+  "seed": 20261015,
+  "fight_mean": 18.0,
+  "fight_sd": 6.0,
+  "fight_min": 6.0,
+  "fight_max": 40.0,
+  "cc_rate_min": 0.05,
+  "cc_rate_max": 0.2,
+  "cc_min": 0.75,
+  "cc_max": 1.75,
+  "clump_max": 4,
+  "clump_chance": 0.45,
+  "w_hit_chance": 0.8,
+  "r_ready_chance": 0.85,
+  "retarget_delay": 1.5,
+  "target_hp": 3800,
+  "target_armor": 120,
+  "target_mr": 80,
+  "enemy_dps_mean": 500,
+  "enemy_dps_sd": 200,
+  "enemy_phys_share": 0.55,
+  "engage_min": 2.0,
+  "engage_max": 6.0,
+  "enemy_pool": "cn_enemy_pool.json"
+ },
+ "optimizer": {
+  "legendary_slots": 5,
+  "augment_slots": 4,
+  "candidate_items": 14,
+  "screen_trials": 64,
+  "final_trials": 2000,
+  "finalists": 12,
+  "fitting_items_only": true,
+  "fitting_items_note": "Search only items whose roles fit the champion's class and its AP/AD ability scalings. mayhem_sim --any-items lifts this."
+ }
+}

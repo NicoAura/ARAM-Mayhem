@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mayhem Stats</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono&display=swap">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="top">
+    <p class="eyebrow">Match data</p>
+    <h1>My Mayhem stats</h1>
+    <p id="account" class="muted">Load your archive to see your stats.</p>
+    <p id="sample-note" class="sample-note" hidden>Showing example games, not real ones. Load your own archive to see your stats.</p>
+    <div id="sync-row" class="sync-row" hidden>
+      <button id="sync" type="button">Sync from League</button>
+      <span id="sync-status" class="muted small" aria-live="polite"></span>
+    </div>
+  </header>
+
+  <section id="loader" class="card loader">
+    <p>Drop <code>mayhem-backup.json</code> here, or pick it.</p>
+    <input type="file" id="file" accept=".json,application/json">
+    <p class="muted small">The file stays in your browser. Nothing is uploaded. Or press <strong>Sync from League</strong> above to import straight from the client.</p>
+    <p id="load-error" class="error" hidden></p>
+  </section>
+
+  <main id="stats" hidden>
+    <div class="filters">
+      <label>Queue
+        <select id="f-queue"><option value="">All</option></select>
+      </label>
+      <label>From <input type="date" id="f-from"></label>
+      <label>To <input type="date" id="f-to"></label>
+      <label>Champion <input type="search" id="f-champ" placeholder="Any"></label>
+      <button id="f-reset" type="button">Reset</button>
+      <label class="btn file-btn">Load archive<input type="file" id="file-2" accept=".json,application/json" hidden></label>
+    </div>
+
+    <div class="tiles" id="tiles"></div>
+
+    <section class="card">
+      <h2>Win rate by month</h2>
+      <div id="chart" class="chart"></div>
+    </section>
+
+    <div class="two-col">
+      <section class="card">
+        <h2>Champions</h2>
+        <div class="table-wrap"><table id="t-champs"></table></div>
+      </section>
+      <section class="card">
+        <h2>Augments</h2>
+        <p class="muted small">Augments with at least <input type="number" id="f-minaug" value="3" min="1" class="tiny"> picks.</p>
+        <div class="table-wrap"><table id="t-augs"></table></div>
+      </section>
+    </div>
+
+    <section class="card">
+      <h2>Recent games</h2>
+      <div class="table-wrap"><table id="t-games"></table></div>
+    </section>
+  </main>
+
+  <div id="tooltip" class="tooltip" hidden></div>
+  <script src="app.js"></script>
+</body>
+</html>
