@@ -1,17 +1,19 @@
 # Mayhem Champions
 
-The site's **Champions** tab (`/tools/champions`): one page per champion (`#Alias` opens it).
+One page per champion at `/champions#Alias` (e.g. `#MonkeyKing`). The nav tab is hidden; pages are reached from the
+Tier List, search and the Home champion search. `site-tab.json` still makes sync-embeds copy this folder.
 
+- **Builds** (Mayhem match stats from 101.qq.com, endpoint
+  `mlol.qt.qq.com/go/battle_info/odp_proxy/fuwen_hero_rank?championid=N`): most-picked augments by tier with grade,
+  starting items, boots, core three-item paths, full builds, most-built items, skill max/level orders and best
+  teammates, each with win and pick rate. There are no per-champion augment win rates.
 - **Mayhem changes**: every ability number Mayhem changes, from each champion's bin
   (`game/data/characters/{alias}/{alias}.bin.json`): `DataValuesModeOverride` (ARAM, then Kiwi on top) and the
   per-mode cooldown override `{f9c2333e}`, compared with the Summoner's Rift values.
-- **Abilities**, title, roles, splash and pick quote from `v1/champions/{id}.json`; base stats from the CharacterRecord.
-- **Riot's ARAM build**: the shop's suggestion (`ItemRecommendationOverride` for map 12, ARAM).
-- **Tier List stats** from `data/cn/champions.csv` and the **Simulator's best build** from
-  `simulator/viewer/replay-data/best-builds.json`, both already in the repo.
+- **Abilities**, title, roles, splash and pick quote from `v1/champions/{id}.json`.
+- **Tier List stats** from `data/cn/champions.csv`.
 
-Not in the client: per-champion damage dealt/taken, healing, tenacity and ability haste adjustments. Riot applies
-those on the game server, so they aren't shown.
+Not in the client: per-champion damage dealt/taken, healing, tenacity and ability haste adjustments.
 
-Rebuild after a patch: `python3 champions/build_data.py` (live patch, standard library only; writes `data.js`).
-Page text doesn't mention where data comes from (Nico, 2026-10-16). `site-tab.json` makes this folder a site tab.
+Rebuild: `python3 champions/build_data.py` (live patch, standard library only; writes `data.js`). Build stats change
+daily, so the daily routine should rerun it. Page text doesn't mention where data comes from (Nico, 2026-10-16).

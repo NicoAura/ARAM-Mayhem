@@ -15,7 +15,7 @@
   const changed = D.champions.filter((c) => c.mayhem.length).length;
   $("list-intro").textContent =
     `${D.champions.length} champions. ${changed} of them have abilities that Mayhem changes. ` +
-    "Pick one to see its changes, abilities, Riot's suggested ARAM build and how it does on the Tier List.";
+    "Pick one to see its Mayhem builds, augments, skill order, best teammates and ability changes.";
 
   // ---- List
   const filters = [["all", "All"], ["changed", "Mayhem changes"], ...Object.entries(ROLE)];
@@ -56,10 +56,6 @@
     const it = D.items[id];
     return it ? `<img src="${esc(it.icon)}" alt="${esc(it.name)}" title="${esc(it.name)}" loading="lazy">` : "";
   };
-  const augImg = (id) => {
-    const a = D.augments[id];
-    return a ? `<img src="${esc(a.icon)}" alt="${esc(a.name)}" title="${esc(a.name)}" loading="lazy">` : "";
-  };
 
   function renderPage(c) {
     const ab = Object.fromEntries(c.abilities.map((a) => [a.slot, a]));
@@ -79,23 +75,47 @@
           }).join("")}</tbody></table></div>
           <p class="muted small">Ranks run left to right.</p>`
       : `<p class="muted">Mayhem doesn't change any of ${esc(c.name)}'s ability numbers.</p>`;
-    const build = c.aramBuild
-      ? `<div class="build-steps">
-          <div><span class="eyebrow">Start</span><div class="items">${c.aramBuild.start.map((g) => g.map(itemImg).join("")).join('<span class="or">or</span>')}</div></div>
-          ${c.aramBuild.core.map((g, i) => `<div><span class="eyebrow">${i === 0 ? "Then" : ""}</span><div class="items">${g.map(itemImg).join("")}</div></div>`).join("")}
-        </div>`
-      : '<p class="muted small">No suggested ARAM build for this champion.</p>';
-    const sim = c.sim
-      ? `<div class="build-steps">
-          <div><span class="eyebrow">Items</span><div class="items">${c.sim.items.map(itemImg).join("")}</div></div>
-          <div><span class="eyebrow">Augments</span><div class="items">${c.sim.augments.map(augImg).join("")}</div></div>
-        </div>${c.sim.dps ? `<p class="muted small" style="margin-top:0.6rem">${num(c.sim.dps, 0)} damage per second in the Simulator's team fight.</p>` : ""}`
+    const B = c.builds;
+    const rate = (r) => `<span class="rates"><span><b>${pct(r.win)}</b> win</span><span>${pct(r.pick)} pick</span></span>`;
+    const itemRow = (r, sep = "") => `<div class="build-row"><div class="items">${r.items.map(itemImg).join(sep)}</div>${rate(r)}</div>`;
+    const block = (title, rows, sep, hint = "") => (rows && rows.length
+      ? `<div class="card"><div class="card-head"><h2>${title}</h2>${hint ? `<span class="muted small">${hint}</span>` : ""}</div>
+          <div class="build-list">${rows.map((r) => itemRow(r, sep)).join("")}</div></div>`
+      : "");
+    const TIERS = [["prismatic", "Prismatic"], ["gold", "Gold"], ["silver", "Silver"]];
+    const augs = B && B.augments
+      ? `<div class="card"><div class="card-head"><h2>Augments</h2><span class="muted small">Most picked by ${esc(c.name)} players</span></div>
+          <div class="aug-cols">${TIERS.filter(([k]) => (B.augments[k] || []).length).map(([k, l]) => `<div>
+            <div class="eyebrow" style="margin-bottom:0.5rem">${l}</div>
+            ${B.augments[k].map((x) => {
+              const a = D.augments[x.id] || { name: `#${x.id}` };
+              return `<div class="aug-row">${a.icon ? `<img src="${esc(a.icon)}" alt="" loading="lazy">` : ""}<span class="name">${esc(a.name)}</span>
+                ${x.grade ? `<span class="chip grade-${esc(x.grade.toLowerCase())}">${esc(x.grade)}</span>` : ""}<span class="muted mono">${pct(x.pick)}</span></div>`;
+            }).join("")}</div>`).join("")}</div></div>`
       : "";
-    const S = c.stats;
-    const stats = [
-      ["Health", S.hp, S.hpPerLevel], ["Attack Damage", S.ad, S.adPerLevel], ["Armor", S.armor, S.armorPerLevel],
-      ["Magic Resist", S.mr, S.mrPerLevel], ["Attack Speed", S.attackSpeed], ["Attack Range", S.range], ["Move Speed", S.moveSpeed],
-    ].filter((s) => s[1] != null);
+    const icon = (slot) => (ab[slot] ? img(ab[slot].icon, "skill-icon", slot) : "");
+    const skills = B && B.skills.length
+      ? `<div class="card"><div class="card-head"><h2>Skill order</h2></div><div class="build-list">${B.skills.map((s) => {
+          const o = s.orders[0];
+          return `<div class="skill"><div class="build-row"><div class="max">${[...s.max].map((k) => `${icon(k)}<b>${k}</b>`).join('<span class="muted">›</span>')}</div>${rate(s)}</div>
+            ${o ? `<div class="levels">${[...o.levels].map((k, i) => `<span class="lv k-${k}" title="Level ${i + 1}">${k}</span>`).join("")}</div>` : ""}</div>`;
+        }).join("")}</div><p class="muted small">Max order first, then the most common level-by-level order for it.</p></div>`
+      : "";
+    const byId = Object.fromEntries(D.champions.map((x) => [x.id, x]));
+    const mates = B && B.mates.length
+      ? `<div class="card"><div class="card-head"><h2>Best teammates</h2></div><div class="mates">${B.mates.map((m) => {
+          const x = byId[m.id];
+          return x ? `<a class="champ" href="#${esc(x.alias)}">${img(x.icon)}<div><div class="title">${esc(x.name)}</div><div class="muted small">${pct(m.win)} win together</div></div></a>` : "";
+        }).join("")}</div></div>`
+      : "";
+    const builds = B
+      ? `${augs}
+        <div class="grid">${block("Starting items", B.start, "")}${block("Boots", B.boots, "")}</div>
+        ${block("Core items", B.core, '<span class="arrow">›</span>', "First three items, in order")}
+        ${block("Full builds", B.full, "")}
+        ${block("Most-built items", B.first, "", "Share of games with the item")}
+        <div class="grid">${skills}${mates}</div>`
+      : '<p class="muted">No build stats for this champion yet.</p>';
 
     $("page").innerHTML = `
       <a class="back" href="#">← All champions</a>
@@ -106,6 +126,7 @@
         ${c.vo ? '<button class="btn" type="button" id="vo">▶ Pick quote</button>' : ""}
       </div></div>
       ${facts.length ? `<div class="facts">${facts.map(([l, v]) => `<div class="card fact"><span class="eyebrow">${l}</span><span class="value">${v}</span></div>`).join("")}</div>` : ""}
+      ${builds}
       <div class="card">
         <div class="card-head"><h2>Mayhem changes</h2></div>
         ${changes}
@@ -117,15 +138,6 @@
         <div class="grid">${c.abilities.map((a) => `<div class="ability">${img(a.icon)}<div><div class="title"><span class="slot">${a.slot}</span> ${esc(a.name)}
           ${a.cooldown && a.cooldown.some((x) => x) ? `<span class="muted small">${values("Cooldown", a.cooldown)}s</span>` : ""}</div>
           <div class="muted small" style="white-space:pre-line;margin-top:0.2rem">${esc(a.text)}</div></div></div>`).join("")}</div>
-      </div>
-      <div class="grid">
-        <div class="card"><div class="card-head"><h2>Riot's ARAM build</h2><span class="muted small">What the shop suggests</span></div>${build}</div>
-        ${sim ? `<div class="card"><div class="card-head"><h2>Simulator's best build</h2><a href="/simulator" target="_top">Open the Simulator</a></div>${sim}</div>` : ""}
-      </div>
-      <div class="card">
-        <div class="card-head"><h2>Base stats</h2><span class="muted small">Level 1, with per-level growth</span></div>
-        <div class="stat-grid">${stats.map(([l, v, g]) => `<div><span>${l}</span> <span>${num(v, 3)}${g ? ` +${num(g, 3)}` : ""}</span></div>`).join("")}</div>
-        ${c.bio ? `<p class="muted small" style="margin-top:0.9rem">${esc(c.bio)}</p>` : ""}
       </div>
       ${c.tier ? '<p class="small"><a href="/tier-list" target="_top">See the full Tier List →</a></p>' : ""}`;
     const vo = $("vo");
