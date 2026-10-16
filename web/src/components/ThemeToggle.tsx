@@ -5,6 +5,7 @@ import { THEME_COLORS, THEME_EVENT, THEME_KEY } from "@/lib/theme";
 
 // Light / Dark / System switch in the header. The choice is kept in localStorage and applied as
 // <html data-theme> before paint (THEME_SCRIPT in layout.tsx); "system" removes the attribute.
+// With nothing saved the site is dark, so "system" is saved as a choice of its own.
 // Embedded tools follow through Embed, which listens for THEME_EVENT.
 
 type Theme = "light" | "dark" | "system";
@@ -44,14 +45,14 @@ function apply(theme: Theme) {
 }
 
 export default function ThemeToggle({ labels = false }: { labels?: boolean }) {
-  const [theme, setTheme] = useState<Theme>("system");
+  const [theme, setTheme] = useState<Theme>("dark");
 
   useEffect(() => {
     let saved: string | null = null;
     try {
       saved = localStorage.getItem(THEME_KEY);
     } catch {}
-    const t: Theme = saved === "light" || saved === "dark" ? saved : "system";
+    const t: Theme = saved === "light" || saved === "system" ? saved : "dark";
     setTheme(t);
     apply(t);
     const mq = matchMedia("(prefers-color-scheme: dark)");
@@ -64,8 +65,7 @@ export default function ThemeToggle({ labels = false }: { labels?: boolean }) {
     setTheme(t);
     apply(t);
     try {
-      if (t === "system") localStorage.removeItem(THEME_KEY);
-      else localStorage.setItem(THEME_KEY, t);
+      localStorage.setItem(THEME_KEY, t);
     } catch {}
   };
 
