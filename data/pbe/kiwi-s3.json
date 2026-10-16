@@ -4,8 +4,8 @@
     "codename": "Kiwi",
     "series": "Kiwi_S3",
     "label": "Season 3",
-    "source": "PBE datamine via CommunityDragon (PBE vs live client data)",
-    "dataAsOf": "2026-10-15",
+    "source": "PBE datamine via CommunityDragon (PBE vs live client data); the locally installed PBE client is on the same build",
+    "dataAsOf": "2026-10-16",
     "caveat": "PBE content can change before release.",
     "augmentPool": {
       "live": 223,
@@ -20,10 +20,11 @@
       "The 40th new augment is the generic Pentakill augment (GoH_PentakillAug_Generic). It has no name in the data; its tooltip says it Empowers one basic ability, and a second ability (ultimate included) at level 18.",
       "Some tooltips use placeholders the data does not fill in (for example exact Attack Speed amounts), so some descriptions leave out numbers.",
       "aram.bin changes are keybind config only, not per-champion ARAM balance. Per-champion ARAM damage/healing modifiers were not found in the data.",
-      "Champion arrays are listed for ranks 1-5 (basic abilities) or 1-3 (ultimates). Mode-specific values for Arena, URF and other modes are excluded."
+      "Champion arrays are listed for ranks 1-5 (basic abilities) or 1-3 (ultimates). Mode-specific values for Arena, URF and other modes are excluded.",
+      "Build 16.21.8284168 (2026-10-16) reverted the Caitlyn passive crit nerf, extended the Qiyana Q nerf to unenchanted Q, and made Fruitify step up at levels 7, 11 and 15 instead of scaling smoothly."
     ],
     "builds": {
-      "pbe": "16.21.8282428",
+      "pbe": "16.21.8284168",
       "live": "16.20.8248524"
     }
   },
@@ -310,7 +311,7 @@
       {
         "name": "Fruitify",
         "tier": "silver",
-        "description": null
+        "description": "Takedowns burst into Fruit: 3 at level 1, +1 at levels 7, 11 and 15. Each Fruit restores 6% max Health and 6% max Mana (or 10 Energy, Fury, Rage or Courage)."
       },
       {
         "name": "Gift of the Drowned",
@@ -561,7 +562,6 @@
         "champion": "Caitlyn",
         "changes": [
           "Q base damage 50/90/130/170/210 → 50/95/140/185/230",
-          "Passive crit damage scaling 100% → 80%",
           "Passive headshot bonus at level breakpoints +20% → +10%"
         ]
       },
@@ -627,7 +627,7 @@
       {
         "champion": "Qiyana",
         "changes": [
-          "Q base damage 80/110/140/170/200 → 70/100/130/160/190"
+          "Q base damage 80/110/140/170/200 → 70/100/130/160/190, now for both enchanted and unenchanted Q"
         ]
       },
       {
