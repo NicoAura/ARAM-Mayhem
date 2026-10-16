@@ -159,7 +159,7 @@ Every champion casts in its recommended combat combo (`data/combos.json`, e.g. A
 
 ### Changing the simulation in the page
 
-Under the replay, **Change the simulation** edits the build (boots, five items, four augments), the enemies and the fight settings, then re-runs the simulator in the browser (`make wasm-mayhem`, run in a Web Worker) and replays a typical fight with the new setup. Enemies default to the China-server mix; you can instead pick five champions and change each one's HP, armor, MR and share of their team's damage, or fight training dummies. The same settings work on the command line:
+Under the replay, **Change the simulation** edits the build (boots, five items, four augments), the enemies and the main fight settings (level, fight length, enemy damage, crowd control, dodging; the rest, including the combo, are under **Advanced settings**), then re-runs the simulator in the browser (`make wasm-mayhem`, run in a Web Worker) and replays a typical fight with the new setup. Enemies default to the China-server mix; you can instead pick five champions and change each one's HP, armor, MR and share of their team's damage, or fight training dummies. The same settings work on the command line:
 
 ```sh
 ./mayhem_sim --list --json                       # every setting with its default and the enemy pool

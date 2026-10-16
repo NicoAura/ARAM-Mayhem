@@ -4,7 +4,13 @@
   "use strict";
   const $ = (id) => document.getElementById(id);
   const DUMMY_KEYS = ["fixed_target", "target_hp", "target_armor", "target_mr"];
-  const isModelKey = (k) => ["dodge_chance", "reaction_time", "aim_lead"].includes(k);
+  // The Fight box shows the few settings most people change; the rest sit under "Advanced settings".
+  const BASIC_KEYS = ["level", "fight_mean", "enemy_damage_scale", "cc_scale", "dodge_chance"];
+  const ADVANCED = [
+    ["Fight timing", ["fight_sd", "fight_min", "fight_max", "engage_min", "engage_max", "retarget_delay", "r_ready_chance"]],
+    ["Positions and skillshots", ["start_distance", "enemy_spread", "reaction_time", "aim_lead"]],
+    ["Crowd control and casting", ["cc_min", "cc_max", "combo_order"]],
+  ];
   const ENEMY_STATS = [
     ["hp", "HP", 1], ["armor", "Armor", 1], ["mr", "MR", 1], ["damage_share", "Dmg share", 0.01],
   ];
@@ -83,17 +89,7 @@
     const sub = document.createElement("div"); sub.className = "sub"; sub.textContent = "Augments"; box.append(sub);
     const augKeys = trace.build.augments.map((a) => a.key);
     for (let i = 0; i < 4; i++) row(String(i + 1), select(augs, augKeys[i], "Augment " + (i + 1)));
-    // Cast order when several abilities are ready; defaults to the champion's recommended combo.
-    const sub2 = document.createElement("div"); sub2.className = "sub"; sub2.textContent = "Combo (cast order)"; box.append(sub2);
-    const combo = document.createElement("input");
-    combo.id = "comboInput"; combo.type = "text"; combo.maxLength = 4; combo.autocomplete = "off";
-    combo.setAttribute("aria-label", "Combo, for example EQRW");
-    combo.value = combos[champ.id] || defaultCombo();
-    combo.addEventListener("input", () => {
-      combo.value = combo.value.toUpperCase().replace(/[^QWER]/g, "");
-      combos[champ.id] = combo.value;
-    });
-    row("", combo);
+    renderCombo();
 
     if (!picks) {
       picks = trace.fight.team.slice(0, 5).map((id) => ({ id, stats: {} }));
@@ -187,17 +183,61 @@
       const v = parseFloat(inp.value);
       if (Number.isFinite(v) && Math.abs(v - s.default) > 1e-9) fieldValues[s.key] = v; else delete fieldValues[s.key];
       mark();
+      countAdvanced();
     });
     mark();
     wrap.append(l, inp);
     return wrap;
   }
   function buildFightForm() {
+    const byKey = new Map(meta.settings.map((s) => [s.key, s]));
     const box = $("fightBox");
     box.querySelectorAll(".field, .sub").forEach((n) => n.remove());
-    for (const s of meta.settings) if (!DUMMY_KEYS.includes(s.key) && !isModelKey(s.key)) box.append(field(s));
-    const sub = document.createElement("div"); sub.className = "sub"; sub.textContent = "Model assumptions"; box.append(sub);
-    for (const s of meta.settings) if (isModelKey(s.key)) box.append(field(s));
+    for (const k of BASIC_KEYS) if (byKey.has(k)) box.append(field(byKey.get(k)));
+    const grid = $("advGrid");
+    grid.textContent = "";
+    const placed = new Set([...BASIC_KEYS, ...DUMMY_KEYS]);
+    const groups = ADVANCED.map(([name, keys]) => {
+      keys.forEach((k) => placed.add(k));
+      return [name, keys.filter((k) => byKey.has(k))];
+    });
+    // Settings the engine adds later still show up, in the first group.
+    groups[0][1].push(...meta.settings.map((s) => s.key).filter((k) => !placed.has(k)));
+    for (const [name, keys] of groups) {
+      const fs = document.createElement("fieldset");
+      const lg = document.createElement("legend"); lg.textContent = name; fs.append(lg);
+      if (keys.includes("combo_order")) fs.id = "castBox";
+      for (const k of keys) fs.append(field(byKey.get(k)));
+      grid.append(fs);
+    }
+    if (champ) renderCombo();
+    countAdvanced();
+  }
+  // Cast order when several abilities are ready; defaults to the champion's recommended combo.
+  function renderCombo() {
+    const box = $("castBox");
+    if (!box || !champ) return;
+    box.querySelectorAll(".combo-field").forEach((n) => n.remove());
+    const wrap = document.createElement("div"); wrap.className = "field combo-field";
+    const l = document.createElement("label"); l.htmlFor = "comboInput"; l.textContent = "Combo (cast order), for example EQRW";
+    const combo = document.createElement("input");
+    combo.id = "comboInput"; combo.type = "text"; combo.maxLength = 4; combo.autocomplete = "off";
+    combo.value = combos[champ.id] || defaultCombo();
+    const mark = () => { wrap.classList.toggle("changed", combo.value !== defaultCombo()); countAdvanced(); };
+    combo.addEventListener("input", () => {
+      combo.value = combo.value.toUpperCase().replace(/[^QWER]/g, "");
+      combos[champ.id] = combo.value;
+      mark();
+    });
+    wrap.append(l, combo);
+    box.prepend(wrap);
+    box.prepend(box.querySelector("legend"));
+    mark();
+  }
+  // "Advanced settings (2 changed)", so changes hidden in the closed section aren't forgotten.
+  function countAdvanced() {
+    const n = $("advGrid").querySelectorAll(".field.changed").length;
+    $("advCount").textContent = n ? `(${n} changed)` : "";
   }
 
   // ---------- running ----------
