@@ -1866,3 +1866,152 @@ html[data-device="mobile"] .theme-toggle button {
   clip-path: inset(50%);
   white-space: nowrap;
 }
+
+/* Account button (top right): sign in with a Riot ID, or open the signed-in player's menu. */
+.account {
+  position: relative;
+  flex: none;
+}
+
+.account-btn {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  background: var(--surface);
+  color: var(--muted);
+  cursor: pointer;
+}
+
+.account-btn:hover,
+.account-btn[aria-expanded="true"] {
+  border-color: var(--muted);
+  color: var(--fg);
+}
+
+.account-btn.signed-in {
+  border-color: var(--accent);
+}
+
+.account-btn img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.account-menu {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  z-index: 40;
+  width: min(300px, calc(100vw - 2rem));
+  padding: 0.5rem;
+  border: 1px solid var(--line);
+  border-radius: var(--r);
+  background: var(--surface);
+  box-shadow: 0 12px 32px rgb(0 0 0 / 0.18);
+}
+
+.account-who {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.5rem 0.5rem 0.75rem;
+  border-bottom: 1px solid var(--line);
+  margin-bottom: 0.35rem;
+}
+
+.account-who img {
+  border-radius: 50%;
+}
+
+.account-who div {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.account-who b {
+  font: 700 1rem/1.2 var(--display);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.account-who b span,
+.account-who div > span {
+  color: var(--muted);
+  font: 500 0.8125rem var(--font-sans), system-ui, sans-serif;
+}
+
+.account-item {
+  display: block;
+  width: 100%;
+  padding: 0.6rem 0.65rem;
+  border: 0;
+  border-radius: var(--r-sm);
+  background: none;
+  color: var(--fg);
+  font: inherit;
+  font-size: 0.9rem;
+  text-align: left;
+  cursor: pointer;
+}
+
+.account-item:hover {
+  background: var(--hover);
+}
+
+.account-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  padding: 0.5rem;
+}
+
+.account-title {
+  font: 700 1rem/1.2 var(--display);
+}
+
+.account-form label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  color: var(--muted);
+  font-size: 0.8125rem;
+}
+
+.account-form input,
+.account-form select {
+  height: 38px;
+  padding: 0 0.65rem;
+  border: 1px solid var(--line);
+  border-radius: var(--r-sm);
+  background: var(--bg);
+  color: var(--fg);
+  font: inherit;
+  font-size: 0.9rem;
+}
+
+.account-note {
+  color: var(--muted);
+  font-size: 0.78rem;
+}
+
+.account-note.error {
+  color: var(--bad);
+}
+
+@media (max-width: 640px) {
+  .site-header-inner {
+    gap: 0.4rem;
+  }
+}
+
+html[data-device="mobile"] .site-header-inner {
+  gap: 0.4rem;
+}
