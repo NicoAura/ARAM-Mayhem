@@ -1,14 +1,19 @@
 """Add each Mayhem augment's icon to data/pbe/kiwi-s3.json.
 
-Matches augments by display name against kiwi.bin (AugmentLargeIconPath) and
-writes a CommunityDragon PNG URL to an "icon" field. Added and changed augments
+Matches augments by display name against kiwi.bin (AugmentLargeIconPath), saves the
+CommunityDragon PNG into web/public/assets/cd/ and writes its site path (/assets/cd/...)
+to an "icon" field, so the PBE tab loads it from the site. Added and changed augments
 use the PBE icon; removed ones use the live icon. Changed augments also get
 their tier. Run after fetch.py or local.py.
 
 Usage: python3 icons.py DATA_DIR [JSON]
 """
-import json, os, sys, urllib.request
+import json, os, sys, urllib.parse, urllib.request
 from strings import StringTable
+
+HERE = os.path.dirname(os.path.abspath(__file__))
+ASSETS = os.path.normpath(os.path.join(HERE, "..", "..", "web", "public", "assets"))
+UA = {"User-Agent": "aram-mayhem-datamine/1.0"}
 
 CDRAGON = "https://raw.communitydragon.org/{channel}/{root}/{path}"
 # New icons often reach the client's game-data plugin before the game WAD export.
@@ -39,7 +44,7 @@ def icons(root, channel):
     return out
 
 def exists(url):
-    req = urllib.request.Request(url, method="HEAD", headers={"User-Agent": "aram-mayhem-datamine/1.0"})
+    req = urllib.request.Request(url, method="HEAD", headers=UA)
     try:
         with urllib.request.urlopen(req, timeout=20) as r:
             return r.status == 200
@@ -48,6 +53,19 @@ def exists(url):
 
 def first_live(urls):
     return next((u for u in urls if exists(u)), None)
+
+def save(url):
+    """Copy a CommunityDragon file to web/public/assets/cd/<channel>/<path, lower case>; return its site path."""
+    channel, _, rest = urllib.parse.urlsplit(url).path.lstrip("/").partition("/")
+    site = f"/assets/cd/{channel}/{urllib.parse.unquote(rest).lower()}"
+    dest = ASSETS + site[len("/assets"):]
+    if not os.path.exists(dest):
+        os.makedirs(os.path.dirname(dest), exist_ok=True)
+        with urllib.request.urlopen(urllib.request.Request(url, headers=UA), timeout=60) as r:
+            data = r.read()
+        with open(dest, "wb") as f:
+            f.write(data)
+    return site
 
 def tiers(root):
     """Display name (lowercase) -> silver/gold/prismatic, from the client's augment list."""
@@ -70,7 +88,7 @@ def main(root, path):
             name = (a.get("name") or "").lower()
             url = first_live(table.get(name) or pbe.get(name) or [])
             if url:
-                a["icon"] = url
+                a["icon"] = save(url)
             else:
                 a.pop("icon", None)
                 missing.append(a.get("name"))
