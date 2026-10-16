@@ -1,47 +1,85 @@
-/* ARAM Mayhem reference theme (owned by the Website thread, matches web/src/app/globals.css).
-   Copy this block into your page's stylesheet. Pages embedded in the site run in an iframe,
-   so they need their own copy of the tokens and fonts. */
-@import url("https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400&display=swap");
+/* DeepARAM reference theme for pages embedded in the site (dashboard/, simulator/viewer/,
+   tools/fun/, data/cook-builds/). Copy this into your page's stylesheet.
+   Cool neutrals with a glacial blue accent; the prismatic gradient is the one flourish. */
+@import url("https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap");
 
 :root {
-  color-scheme: light dark;
-  --bg: #fafafa;      /* page */
-  --fg: #0a0a0a;      /* text */
-  --muted: #737373;   /* secondary text, table headers */
-  --line: #e5e5e5;    /* all borders and dividers */
-  --hover: #f0f0f0;   /* row / button hover */
-  --accent: #b8862e;  /* gold: eyebrow labels, focus ring, gold tier only */
-  --prismatic: #8b5cf6;
-  --good: #16a34a;    /* win, buff */
-  --bad: #dc2626;     /* loss, nerf */
+  color-scheme: light;
+  --bg: #f4f6f8;
+  --surface: #ffffff;
+  --raised: #eef1f5;
+  --fg: #0c1017;
+  --muted: #5b6472;
+  --line: #e1e5eb;
+  --hover: #eef1f5;
+  --accent: #0b7fc0;
+  --accent-ink: #ffffff;
+  --accent-soft: #e3f1fa;
+  --good: #1d8a55;
+  --bad: #c2413a;
+  --gold: #a8781c;
+  --silver: #6b7686;
+  --prismatic: linear-gradient(100deg, #9fe7ff, #c9b8ff 40%, #ffb8e0 70%, #ffe2a3);
+  --display: "Bricolage Grotesque", "Geist", system-ui, sans-serif;
   --sans: "Geist", system-ui, -apple-system, "Segoe UI", sans-serif;
-  --mono: "Geist Mono", ui-monospace, Menlo, monospace;
+  --mono: "Geist Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  --r: 14px;
+  --r-sm: 8px;
 }
 @media (prefers-color-scheme: dark) {
-  :root {
-    --bg: #0a0a0a; --fg: #ededed; --muted: #8f8f8f; --line: #262626; --hover: #141414; --accent: #d9b16a;
-    --prismatic: #a78bfa; --good: #4ade80; --bad: #f87171;
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --bg: #090b0f; --surface: #11151c; --raised: #181d26; --fg: #e8ecf2; --muted: #8b94a3; --line: #222936;
+    --hover: #181d26; --accent: #5cc0ff; --accent-ink: #04121c; --accent-soft: #0f2533;
+    --good: #4cc98b; --bad: #f0776f; --gold: #e0b45c; --silver: #a3adbb;
   }
 }
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #090b0f; --surface: #11151c; --raised: #181d26; --fg: #e8ecf2; --muted: #8b94a3; --line: #222936;
+  --hover: #181d26; --accent: #5cc0ff; --accent-ink: #04121c; --accent-soft: #0f2533;
+  --good: #4cc98b; --bad: #f0776f; --gold: #e0b45c; --silver: #a3adbb;
+}
 
-body { background: var(--bg); color: var(--fg); font-family: var(--sans); line-height: 1.5; -webkit-font-smoothing: antialiased; }
-:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 4px; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: var(--bg); color: var(--fg); font: 15px/1.5 var(--sans); -webkit-font-smoothing: antialiased; }
+a { color: var(--accent); text-decoration: none; }
 
-/* Eyebrow label above a heading */
-.eyebrow { font-family: var(--mono); font-size: 0.75rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); }
-h1 { font-weight: 600; letter-spacing: -0.035em; line-height: 1.1; }
-h2 { font-weight: 600; letter-spacing: -0.02em; }
+/* Headings: mono eyebrow above a display-font heading. */
+.eyebrow { font: 500 11px/1.4 var(--mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+h1, h2.display { font-family: var(--display); font-weight: 700; letter-spacing: -0.03em; line-height: 1.05; text-wrap: balance; }
+h1 { font-size: clamp(1.9rem, 4vw, 2.6rem); }
+h2 { font-size: 0.95rem; font-weight: 600; }
 
-/* Inputs and buttons: hairline border, no fill, 8px radius */
-input, select, button { font: inherit; color: var(--fg); background: transparent; border: 1px solid var(--line); border-radius: 8px; padding: 0.5rem 0.8rem; }
-button:hover { background: var(--hover); }
+/* Cards: white (or raised dark) surfaces, 1px line, 14px radius, no shadow. */
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: 1.1rem 1.15rem; min-width: 0; }
+.card-head { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; margin-bottom: 0.75rem; }
+.card-head a { font-size: 13px; }
 
-/* Tables: no zebra, hairline rows, muted headers, right-aligned numbers */
-table { width: 100%; border-collapse: collapse; font-size: 0.875rem; font-variant-numeric: tabular-nums; }
-th, td { padding: 0.6rem 0.75rem; border-bottom: 1px solid var(--line); text-align: left; }
-th { color: var(--muted); font-weight: 500; }
+/* Pills: segmented tabs, chips and tier badges. */
+.segmented { display: inline-flex; gap: 2px; padding: 3px; background: var(--raised); border: 1px solid var(--line); border-radius: 999px; }
+.segmented button { border: 0; background: none; color: var(--muted); font: 500 14px var(--sans); padding: 0.35rem 0.9rem; border-radius: 999px; cursor: pointer; }
+.segmented button[aria-selected="true"] { background: var(--surface); color: var(--fg); box-shadow: 0 0 0 1px var(--line); }
+.chip { display: inline-block; font: 500 11px/1 var(--mono); padding: 0.3rem 0.55rem; border-radius: 999px; border: 1px solid var(--line); color: var(--muted); }
+.tier-prismatic { background: var(--prismatic); border-color: transparent; color: #1b1630; }
+.tier-gold { color: var(--gold); border-color: color-mix(in srgb, var(--gold) 45%, transparent); }
+.tier-silver { color: var(--silver); }
+.buff { color: var(--good); } .nerf { color: var(--bad); }
+
+/* Inputs and buttons. */
+input, select { font: inherit; font-size: 14px; color: var(--fg); background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-sm); padding: 0.5rem 0.75rem; }
+input:focus-visible, button:focus-visible, select:focus-visible, a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.btn { font: 500 14px var(--sans); border: 0; border-radius: 999px; padding: 0.5rem 1rem; background: var(--accent); color: var(--accent-ink); cursor: pointer; }
+
+/* Tables: inside a bordered card, mono uppercase headers, tabular numbers. */
+.table-wrap { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; font-size: 14px; }
+th { font: 500 11px var(--mono); letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); text-align: left; padding: 0.65rem 0.9rem; border-bottom: 1px solid var(--line); }
+td { padding: 0.55rem 0.9rem; border-top: 1px solid var(--line); }
+tr:first-child td { border-top: 0; }
 tbody tr:hover { background: var(--hover); }
+.num { text-align: right; font-variant-numeric: tabular-nums; font-family: var(--mono); }
 
-/* Tier / tag chips: outlined, mono, uppercase */
-.chip { display: inline-block; padding: 0.05rem 0.4rem; border: 1px solid var(--line); border-radius: 4px;
-  font-family: var(--mono); font-size: 0.6875rem; letter-spacing: 0.04em; text-transform: uppercase; color: var(--muted); }
+/* Meters: a thin accent bar for win rates and damage. */
+.meter { height: 6px; border-radius: 999px; background: var(--raised); overflow: hidden; }
+.meter i { display: block; height: 100%; border-radius: inherit; background: var(--accent); }
