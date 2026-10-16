@@ -23,7 +23,7 @@
     return `<li class="${a.core ? "core" : "flex"}">
       <img src="${icon(a.icon)}" alt="" width="32" height="32" loading="lazy">
       <div>
-        <div class="name">${esc(a.name)} <span class="chip ${rarity === "silver" ? "" : rarity}">${esc(a.rarity)}</span> ${best}</div>
+        <div class="name">${esc(a.name)} <span class="chip ${rarity}">${esc(a.rarity)}</span> ${best}</div>
         <div class="desc">${esc(a.text)}</div>
       </div>
       <div class="wr">${stat}</div>
