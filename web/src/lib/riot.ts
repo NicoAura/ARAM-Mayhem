@@ -62,3 +62,23 @@ export async function getChallengesByRiotId(platform: Platform, gameName: string
   const { puuid } = await getAccountByRiotId(PLATFORMS[platform], gameName, tagLine);
   return riotFetch<ChallengeProgress>(platform, `/lol/challenges/v1/player-data/${encodeURIComponent(puuid)}`);
 }
+
+export type RankedEntry = { queueType: string; tier: string; rank: string; leaguePoints: number; wins: number; losses: number };
+export type Profile = Account & { platform: Platform; profileIconId: number; summonerLevel: number; ranked: RankedEntry[] };
+
+/** Account, level, icon and ranked standing for a Riot ID on one server. */
+export async function getProfileByRiotId(platform: Platform, gameName: string, tagLine: string): Promise<Profile> {
+  const account = await getAccountByRiotId(PLATFORMS[platform], gameName, tagLine);
+  const id = encodeURIComponent(account.puuid);
+  const [summoner, ranked] = await Promise.all([
+    riotFetch<{ profileIconId: number; summonerLevel: number }>(platform, `/lol/summoner/v4/summoners/by-puuid/${id}`),
+    riotFetch<RankedEntry[]>(platform, `/lol/league/v4/entries/by-puuid/${id}`).catch(() => []),
+  ]);
+  return {
+    ...account,
+    platform,
+    profileIconId: summoner.profileIconId,
+    summonerLevel: summoner.summonerLevel,
+    ranked: ranked.map(({ queueType, tier, rank, leaguePoints, wins, losses }) => ({ queueType, tier, rank, leaguePoints, wins, losses })),
+  };
+}

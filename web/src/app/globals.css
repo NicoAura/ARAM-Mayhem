@@ -1746,3 +1746,110 @@ html[data-device="mobile"] .theme-toggle button {
 .aug-removed .aug-icon {
   filter: grayscale(0.6);
 }
+
+/* Riot ID sign-in (My Stats) */
+.riot-id {
+  display: grid;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.riot-id-form {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  gap: 0.5rem;
+}
+
+.riot-id-field {
+  display: grid;
+  gap: 0.3rem;
+  color: var(--muted);
+  font-size: 0.8125rem;
+  font-weight: 500;
+}
+
+.riot-id-field:first-child {
+  flex: 1 1 14rem;
+}
+
+.riot-id-field input,
+.riot-id-field select {
+  height: 38px;
+  min-width: 0;
+  padding: 0 0.75rem;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--surface);
+  color: var(--fg);
+  font: inherit;
+  font-size: 0.9375rem;
+}
+
+.riot-id-note {
+  color: var(--muted);
+  font-size: 0.8125rem;
+}
+
+.riot-id-note.error {
+  color: var(--bad);
+}
+
+.riot-id-who {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+}
+
+.riot-id-who img {
+  flex: none;
+  border-radius: 50%;
+  background: var(--raised);
+}
+
+.riot-id-who > div {
+  flex: 1;
+  min-width: 0;
+}
+
+.riot-id-who .eyebrow {
+  margin-bottom: 0.15rem;
+}
+
+.riot-id-who h2 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+.riot-id-who h2 span {
+  color: var(--muted);
+  font-weight: 500;
+}
+
+.riot-id-ranks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 2rem;
+  margin: 0;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--line);
+}
+
+.riot-id-ranks dt {
+  color: var(--muted);
+  font-size: 0.8125rem;
+}
+
+.riot-id-ranks dd {
+  margin: 0;
+  font-weight: 600;
+}
+
+.riot-id-ranks dd span {
+  margin-left: 0.5rem;
+  color: var(--muted);
+  font-family: var(--mono);
+  font-size: 0.8125rem;
+  font-weight: 400;
+}
