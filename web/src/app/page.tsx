@@ -94,7 +94,7 @@ export default function Home() {
               <h2>
                 Simulator: top damage per second <span className="beta">Beta</span>
               </h2>
-              <Link href="/tools/simulator">Open →</Link>
+              <Link href="/simulator">Open →</Link>
             </div>
             <div className="bars">
               {dps.map((d) => (

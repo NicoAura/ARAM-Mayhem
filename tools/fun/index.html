@@ -51,7 +51,7 @@
     </nav>
   </main>
   <script>
-    // Deep links: /tools/lab#cook-builds (or #<tool folder>) opens that page straight away.
+    // Deep links: /lab#cook-builds (or #<tool folder>) opens that page straight away.
     (function () {
       var go = location.hash.slice(1).replace(/[^a-z-]/g, "");
       var a = go && document.querySelector('.tool[href="' + go + '/index.html"]');

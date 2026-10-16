@@ -3,9 +3,9 @@
 
 :root {
   color-scheme: light;
-  --bg: #f4f6f8; --surface: #ffffff; --raised: #eef1f5; --fg: #0c1017; --muted: #5b6472; --line: #e1e5eb;
-  --accent: #0b7fc0; --accent-ink: #ffffff; --accent-soft: #e3f1fa;
-  --good: #1d8a55; --bad: #c2413a; --gold: #a8781c; --silver: #6b7686;
+  --bg: #e7ebef; --surface: #f0f3f6; --raised: #e0e5eb; --fg: #1f252e; --muted: #525b68; --line: #d3dae2;
+  --accent: #09659d; --accent-ink: #ffffff; --accent-soft: #d6e6f1;
+  --good: #197048; --bad: #a83831; --gold: #80601a; --silver: #59626e;
   --display: "Bricolage Grotesque", "Geist", system-ui, sans-serif;
   --sans: "Geist", system-ui, -apple-system, "Segoe UI", sans-serif;
   --mono: "Geist Mono", ui-monospace, "SF Mono", Menlo, monospace;

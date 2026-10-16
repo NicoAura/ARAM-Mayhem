@@ -94,7 +94,14 @@ export default function RootLayout({
         </header>
         {text("banner") && <p className="site-banner">{text("banner")}</p>}
         <main>{children}</main>
-        <footer className="site-footer">{text("footer")}</footer>
+        <footer className="site-footer">
+          <nav className="footer-links" aria-label="Legal">
+            <Link href="/privacy">Privacy</Link>
+            <Link href="/terms">Terms</Link>
+            <a href="mailto:admin@deeparam.com">Contact</a>
+          </nav>
+          <p>{text("footer")}</p>
+        </footer>
         <MobileTabBar tabs={navItems().map(({ href, label }) => ({ href, label }))} />
       </body>
     </html>
