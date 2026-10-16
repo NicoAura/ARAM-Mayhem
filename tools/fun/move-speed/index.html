@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Speed Cap Breaker</title>
+  <meta name="description" content="How fast any champion can go in ARAM Mayhem with Move Speed items and augments, after the soft caps.">
+  <link rel="stylesheet" href="../style.css">
+  <style>
+    #chart line.here { stroke: var(--fg); stroke-width: 2; vector-effect: non-scaling-stroke; }
+    .table tr.muted td { color: var(--muted); }
+    #breakdown td:nth-child(2), #breakdown th:nth-child(2) { white-space: nowrap; padding: 0.4rem 0.75rem; }
+  </style>
+</head>
+<body>
+  <main>
+    <header class="intro">
+      <img id="champ-icon" alt="" width="56" height="56">
+      <div>
+        <p class="eyebrow"><a href="../index.html">Fun Tools</a> · ARAM Mayhem</p>
+        <h1>Speed Cap Breaker</h1>
+        <p class="muted">Stack Move Speed from items and Mayhem augments and see how fast any champion goes, and how much the soft caps take away. <span id="patch"></span></p>
+      </div>
+    </header>
+
+    <section class="result" aria-live="polite">
+      <div class="big">
+        <span class="label">Move Speed</span>
+        <span id="speed" class="value">0</span>
+      </div>
+      <div class="loop">
+        <div class="loop-head">
+          <span class="label">Raw speed before caps</span>
+          <span id="raw">0</span>
+        </div>
+        <div class="meter"><div id="gain-bar"></div></div>
+        <p id="cap-note" class="muted small"></p>
+      </div>
+      <svg id="chart" viewBox="0 0 300 80" preserveAspectRatio="none" role="img" aria-label="Final speed against raw speed"></svg>
+      <dl id="stats" class="stats"></dl>
+    </section>
+
+    <p id="compare" class="muted"></p>
+
+    <section>
+      <div class="row-head">
+        <h2>Champion</h2>
+        <span id="champ-count" class="muted small"></span>
+      </div>
+      <input id="champ-search" class="search" type="search" placeholder="Search champions" aria-label="Search champions" autocomplete="off">
+      <div id="champ-picker" class="picker"></div>
+    </section>
+
+    <section>
+      <div class="row-head">
+        <h2>Items</h2>
+        <span class="muted small">Up to 6, one pair of boots</span>
+      </div>
+      <div id="item-slots" class="slots"></div>
+      <div id="item-picker" class="picker"></div>
+    </section>
+
+    <section>
+      <div class="row-head">
+        <h2>Augments</h2>
+        <span class="muted small">Up to 4</span>
+      </div>
+      <div id="aug-slots" class="slots augs"></div>
+      <div id="aug-picker" class="picker augs"></div>
+    </section>
+
+    <section>
+      <h2>Conditions and extras</h2>
+      <div id="options" class="options"></div>
+    </section>
+
+    <section>
+      <h2>Where the speed comes from</h2>
+      <table id="breakdown" class="table"></table>
+    </section>
+
+    <section class="actions">
+      <button id="preset" type="button">Load the fastest build</button>
+      <button id="reset" type="button" class="ghost">Clear</button>
+      <button id="share" type="button" class="ghost">Copy link</button>
+    </section>
+
+    <footer class="muted small">
+      Base speeds, item stats and augment values come from the game files via CommunityDragon, with Mayhem's item changes applied.
+      Speed is (base + flat bonuses) × (1 + all % bonuses) × any multipliers, then League's soft caps: above 415 only 80% of the
+      extra counts and above 490 only half. No other cap was found in the game data. Conditional effects (actives, decaying
+      bursts, out of combat bonuses) count at their peak when switched on, even if they could never all line up at once.
+      Champion abilities and passives, runes, slows, Draw Your Sword's extra bonus for long-range champions and Sonata's song
+      (no number in the data) are left out. Use the "Other" inputs for anything missing. The lane length is a rough guess, so change it if you know better.
+    </footer>
+  </main>
+
+  <script src="data.js"></script>
+  <script src="calc.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
