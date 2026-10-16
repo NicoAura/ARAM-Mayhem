@@ -175,6 +175,7 @@ footer { max-width: 70ch; padding-inline: 4px; }
 }
 
 /* Hub: one card per tool. */
+.group { font: 500 11.5px var(--mono); text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); margin: 0.5rem 0 -0.5rem; }
 .tools { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 260px), 1fr)); gap: 12px; }
 .tool {
   display: flex; justify-content: space-between; align-items: center; gap: 12px;

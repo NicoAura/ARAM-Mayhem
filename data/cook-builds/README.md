@@ -1,17 +1,17 @@
-# The Kitchen (cook builds)
+# Cook builds (part of The Lab)
 
 Troll builds for ARAM Mayhem built on strange augment interactions (a hook that applies
 on-hit effects, an artillery mage gone melee, champions who swap their range), each checked
-against Mayhem win rates and the all-champion damage simulator. The folder
-is a website tab through `site-tab.json`.
+against Mayhem win rates and the all-champion damage simulator. The page is the Cook Builds section of The Lab
+(`tools/fun/cook-builds/`, on the site at `/tools/lab#cook-builds`); this folder keeps the
+hand-written builds and the generator.
 
 | File | What it is |
 | --- | --- |
 | `builds.json` | The builds, written by hand: champion, title, augments, items, why it's funny, how to play |
 | `build_data.py` | Adds augment text and icons, Mayhem stats and simulator numbers, and writes `data.js` |
-| `data.js`, `icons/` | Generated; committed so the page works as static files |
-| `index.html`, `app.js`, `style.css` | The page (site minimal theme) |
-| `build_preview.py` | Packs the page into one HTML file for previews |
+| `tools/fun/cook-builds/data.js`, `icons/` | Generated; committed so the page works as static files |
+| `tools/fun/cook-builds/index.html`, `app.js`, `style.css` | The page (site theme); The Lab's `build_preview.py` bundles it into the Lab preview |
 
 ## Rebuilding
 

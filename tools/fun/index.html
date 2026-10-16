@@ -9,11 +9,12 @@
 <body>
   <main>
     <header>
-      <p class="eyebrow">Calculators · ARAM Mayhem</p>
+      <p class="eyebrow">Calculators and cook builds · ARAM Mayhem</p>
       <h1>The Lab</h1>
-      <p class="muted">Calculators that push Mayhem builds to their limits.</p>
+      <p class="muted">Calculators that push Mayhem builds to their limits, and troll builds that turn out to work.</p>
     </header>
-    <nav class="tools" aria-label="Tools">
+    <h2 class="group">Calculators</h2>
+    <nav class="tools" aria-label="Calculators">
       <a class="tool" href="ryze-calculator/index.html">
         <span><b>Infinite Ryze</b><span>How far Ryze's AP to Mana loop goes with your items and augments</span></span><span class="arrow" aria-hidden="true">→</span>
       </a>
@@ -42,6 +43,20 @@
         <span><b>Augment Odds</b><span>Your chance of being offered a specific augment, and how many games it takes</span></span><span class="arrow" aria-hidden="true">→</span>
       </a>
     </nav>
+    <h2 class="group" id="cook-builds">Cook builds</h2>
+    <nav class="tools" aria-label="Cook builds">
+      <a class="tool" href="cook-builds/index.html">
+        <span><b>Cook Builds</b><span>Troll builds built on strange augment interactions, checked against Mayhem win rates and the simulator</span></span><span class="arrow" aria-hidden="true">→</span>
+      </a>
+    </nav>
   </main>
+  <script>
+    // Deep links: /tools/lab#cook-builds (or #<tool folder>) opens that page straight away.
+    (function () {
+      var go = location.hash.slice(1).replace(/[^a-z-]/g, "");
+      var a = go && document.querySelector('.tool[href="' + go + '/index.html"]');
+      if (a) location.replace(a.getAttribute("href"));
+    })();
+  </script>
 </body>
 </html>

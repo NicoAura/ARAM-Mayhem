@@ -16,7 +16,8 @@ TOOLS = [("ryze-calculator", "Infinite Ryze", "How far Ryze's AP to Mana loop go
          ("move-speed", "Speed Cap Breaker", "How fast any champion goes with speed items and augments, after the soft caps."),
          ("gold-rush", "Gold Rush", "When you finish a full build, and how much sooner gold augments get you there."),
          ("biggest-champion", "Biggest Champion", "How big a champion grows with size augments and items, next to Baron."),
-         ("augment-odds", "Augment Odds", "Your chance of being offered a specific augment, and how many games it takes.")]
+         ("augment-odds", "Augment Odds", "Your chance of being offered a specific augment, and how many games it takes."),
+         ("cook-builds", "Cook Builds", "Troll builds built on strange augment interactions, checked against Mayhem win rates and the simulator.")]
 SWAP_ICONS = ("<script>(function(){var M=parent.FUN_ICONS||{};function w(o){for(var k in o){var v=o[k];"
               "if(typeof v==='string'){if(M[v])o[k]=M[v];}else if(v&&typeof v==='object')w(v);}}"
               "Object.keys(window).forEach(function(k){if(/_DATA$/.test(k))w(window[k]);});})();</script>")
@@ -40,17 +41,33 @@ def read(path):
         return f.read()
 
 
+def local_icons(folder):
+    """Cook Builds keeps its icons next to the page (icons/...); its app.js reads them from COOK_ICONS."""
+    root = os.path.join(HERE, folder, "icons")
+    if not os.path.isdir(root):
+        return ""
+    found = {}
+    for dirpath, _, names in os.walk(root):
+        for name in sorted(names):
+            path = os.path.join(dirpath, name)
+            with open(path, "rb") as f:
+                found[os.path.relpath(path, os.path.join(HERE, folder))] = "data:image/png;base64," + base64.b64encode(f.read()).decode()
+    return "<script>window.COOK_ICONS = " + json.dumps(found) + ";</script>"
+
+
 def inline_page(folder, icons):
     """One tool's index.html with its CSS, data and scripts inlined."""
     page = read(f"{folder}/index.html")
     page = page.replace('<link rel="stylesheet" href="../style.css">', "<style>" + read("style.css") + "\n#share{display:none}</style>")
+    if '<link rel="stylesheet" href="style.css">' in page:  # a page with its own stylesheet (Cook Builds)
+        page = page.replace('<link rel="stylesheet" href="style.css">', "<style>" + read(f"{folder}/style.css") + "</style>")
 
     def script(m):
         js = read(f"{folder}/{m.group(1)}")
         if m.group(1) == "data.js":
             # Icons are shared by many tools, so the shell holds each one once (FUN_ICONS) and the
             # page swaps its data's icon URLs for them right after the data loads.
-            return "<script>" + js.replace("</script", "<\\/script") + "</script>" + SWAP_ICONS
+            return "<script>" + js.replace("</script", "<\\/script") + "</script>" + SWAP_ICONS + local_icons(folder)
         js = ICON.sub(lambda u: icons.get(u.group(0), u.group(0)), js)
         return "<script>" + js.replace("</script", "<\\/script") + "</script>"
 
