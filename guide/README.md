@@ -1,6 +1,6 @@
-# Mayhem Guide
+# Mayhem Info
 
-The site's **Guide** tab (`/tools/guide`): how ARAM Mayhem works, read from the League client's own files.
+The site's **Info** tab (formerly Guide) (`/tools/guide`): how ARAM Mayhem works, read from the League client's own files.
 
 - **What is Mayhem**: the mode's tutorial art, augment pool size by tier, and the Mayhem queue IDs.
 - **Quests**: all 12 quest augments with every milestone and its reward (`ModesQuestData` in kiwi.bin).
