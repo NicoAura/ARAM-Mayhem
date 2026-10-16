@@ -21,11 +21,15 @@ TOOLS = [("ryze-calculator", "Infinite Ryze", "How far Ryze's AP to Mana loop go
 SWAP_ICONS = ("<script>(function(){var M=parent.FUN_ICONS||{};function w(o){for(var k in o){var v=o[k];"
               "if(typeof v==='string'){if(M[v])o[k]=M[v];}else if(v&&typeof v==='object')w(v);}}"
               "Object.keys(window).forEach(function(k){if(/_DATA$/.test(k))w(window[k]);});})();</script>")
-ICON = re.compile(r"https://raw\.communitydragon\.org/[^\"']+?\.png")
+ICON = re.compile(r"/assets/cd/[^\"']+?\.png")
+# The site serves icons and fonts itself (/assets/...); the preview page can't reach those, so it
+# fetches the same files from CommunityDragon and loads the fonts from Google Fonts.
+FONTS = ('/assets/fonts/fonts.css', "https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;"
+         "12..96,700&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap")
 
 
 def fetch(url):
-    req = urllib.request.Request(url, headers={"User-Agent": "aram-mayhem-fun-tools"})
+    req = urllib.request.Request(url.replace("/assets/cd/", "https://raw.communitydragon.org/", 1), headers={"User-Agent": "aram-mayhem-fun-tools"})
     for attempt in range(3):
         try:
             with urllib.request.urlopen(req, timeout=120) as r:
@@ -58,9 +62,9 @@ def local_icons(folder):
 def inline_page(folder, icons):
     """One tool's index.html with its CSS, data and scripts inlined."""
     page = read(f"{folder}/index.html")
-    page = page.replace('<link rel="stylesheet" href="../style.css">', "<style>" + read("style.css") + "\n#share{display:none}</style>")
+    page = page.replace('<link rel="stylesheet" href="../style.css">', "<style>" + read("style.css").replace(*FONTS) + "\n#share{display:none}</style>")
     if '<link rel="stylesheet" href="style.css">' in page:  # a page with its own stylesheet (Cook Builds)
-        page = page.replace('<link rel="stylesheet" href="style.css">', "<style>" + read(f"{folder}/style.css") + "</style>")
+        page = page.replace('<link rel="stylesheet" href="style.css">', "<style>" + read(f"{folder}/style.css").replace(*FONTS) + "</style>")
 
     def script(m):
         js = read(f"{folder}/{m.group(1)}")

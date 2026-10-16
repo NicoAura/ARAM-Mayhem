@@ -131,5 +131,7 @@ def calcs(spell_calcs, values):
 
 
 def write_data_js(path, var, data):
+    # Pages load icons from the site's own copies (/assets/cd/..., see web/scripts/fetch_assets.py).
+    text = json.dumps(data, indent=1, ensure_ascii=False).replace(BASE + "/", "/assets/cd/")
     with open(path, "w") as f:
-        f.write(f"window.{var} = " + json.dumps(data, indent=1, ensure_ascii=False) + ";\n")
+        f.write(f"window.{var} = " + text + ";\n")

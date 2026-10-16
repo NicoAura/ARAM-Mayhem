@@ -5,7 +5,7 @@ window.ONESHOT_DATA = {
   {
    "alias": "Aatrox",
    "name": "Aatrox",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/266.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/266.png",
    "hp": 650.0,
    "hpG": 114.0,
    "ar": 38.0,
@@ -16,7 +16,7 @@ window.ONESHOT_DATA = {
   {
    "alias": "Ahri",
    "name": "Ahri",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/103.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/103.png",
    "hp": 590.0,
    "hpG": 104.0,
    "ar": 21.0,
@@ -27,7 +27,7 @@ window.ONESHOT_DATA = {
   {
    "alias": "Akali",
    "name": "Akali",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/84.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/84.png",
    "hp": 600.0,
    "hpG": 119.0,
    "ar": 23.0,
@@ -38,7 +38,7 @@ window.ONESHOT_DATA = {
   {
    "alias": "Akshan",
    "name": "Akshan",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/166.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/166.png",
    "hp": 610.0,
    "hpG": 107.0,
    "ar": 26.0,
@@ -49,7 +49,7 @@ window.ONESHOT_DATA = {
   {
    "alias": "Alistar",
    "name": "Alistar",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/12.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/12.png",
    "hp": 685.0,
    "hpG": 120.0,
    "ar": 40.0,
@@ -60,7 +60,7 @@ window.ONESHOT_DATA = {
   {
    "alias": "Ambessa",
    "name": "Ambessa",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/799.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/799.png",
    "hp": 630.0,
    "hpG": 110.0,
    "ar": 35.0,
@@ -71,7 +71,7 @@ window.ONESHOT_DATA = {
   {
    "alias": "Amumu",
    "name": "Amumu",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/32.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/32.png",
    "hp": 685.0,
    "hpG": 94.0,
    "ar": 33.0,
@@ -82,7 +82,7 @@ window.ONESHOT_DATA = {
   {
    "alias": "Anivia",
    "name": "Anivia",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/34.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/34.png",
    "hp": 550.0,
    "hpG": 92.0,
    "ar": 19.0,
@@ -93,7 +93,7 @@ window.ONESHOT_DATA = {
   {
    "alias": "Annie",
    "name": "Annie",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/1.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/1.png",
    "hp": 560.0,
    "hpG": 96.0,
    "ar": 23.0,
@@ -104,7 +104,7 @@ window.ONESHOT_DATA = {
   {
    "alias": "Aphelios",
    "name": "Aphelios",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/523.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/523.png",
    "hp": 600.0,
    "hpG": 102.0,
    "ar": 26.0,
@@ -115,7 +115,7 @@ window.ONESHOT_DATA = {
   {
    "alias": "Ashe",
    "name": "Ashe",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/22.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/22.png",
    "hp": 610.0,
    "hpG": 101.0,
    "ar": 26.0,
@@ -126,7 +126,7 @@ window.ONESHOT_DATA = {
   {
    "alias": "AurelionSol",
    "name": "Aurelion Sol",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/136.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/136.png",
    "hp": 600.0,
    "hpG": 90.0,
    "ar": 22.0,
@@ -137,7 +137,7 @@ window.ONESHOT_DATA = {
   {
    "alias": "Aurora",
    "name": "Aurora",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/893.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/893.png",
    "hp": 607.0,
    "hpG": 110.0,
    "ar": 23.0,
@@ -148,7 +148,7 @@ window.ONESHOT_DATA = {
   {
    "alias": "Azir",
    "name": "Azir",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/268.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/268.png",
    "hp": 575.0,
    "hpG": 108.0,
    "ar": 25.0,
@@ -159,7 +159,7 @@ window.ONESHOT_DATA = {
   {
    "alias": "Bard",
    "name": "Bard",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/432.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/432.png",
    "hp": 630.0,
    "hpG": 103.0,
    "ar": 32.0,
@@ -170,7 +170,7 @@ window.ONESHOT_DATA = {
   {
    "alias": "Belveth",
    "name": "Bel'Veth",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/200.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/200.png",
    "hp": 580.0,
    "hpG": 105.0,
    "ar": 28.0,
@@ -181,7 +181,7 @@ window.ONESHOT_DATA = {
   {
    "alias": "Blitzcrank",
    "name": "Blitzcrank",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/53.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/53.png",
    "hp": 600.0,
    "hpG": 109.0,
    "ar": 37.0,
@@ -192,7 +192,7 @@ window.ONESHOT_DATA = {
   {
    "alias": "Brand",
    "name": "Brand",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/63.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/63.png",
    "hp": 570.0,
    "hpG": 105.0,
    "ar": 24.0,
@@ -203,7 +203,7 @@ window.ONESHOT_DATA = {
   {
    "alias": "Braum",
    "name": "Braum",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/201.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/201.png",
    "hp": 610.0,
    "hpG": 112.0,
    "ar": 35.0,
@@ -214,7 +214,7 @@ window.ONESHOT_DATA = {
   {
    "alias": "Briar",
    "name": "Briar",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/233.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/233.png",
    "hp": 625.0,
    "hpG": 95.0,
    "ar": 30.0,
@@ -225,7 +225,7 @@ window.ONESHOT_DATA = {
   {
    "alias": "Caitlyn",
    "name": "Caitlyn",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/51.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/51.png",
    "hp": 580.0,
    "hpG": 107.0,
    "ar": 27.0,
@@ -236,7 +236,7 @@ window.ONESHOT_DATA = {
   {
    "alias": "Camille",
    "name": "Camille",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/164.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/164.png",
    "hp": 650.0,
    "hpG": 99.0,
    "ar": 35.0,
@@ -247,7 +247,7 @@ window.ONESHOT_DATA = {
   {
    "alias": "Cassiopeia",
    "name": "Cassiopeia",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/69.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/69.png",
    "hp": 610.0,
    "hpG": 98.0,
    "ar": 18.0,
@@ -258,7 +258,7 @@ window.ONESHOT_DATA = {
   {
    "alias": "Chogath",
    "name": "Cho'Gath",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/31.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/31.png",
    "hp": 644.0,
    "hpG": 94.0,
    "ar": 38.0,
@@ -269,7 +269,7 @@ window.ONESHOT_DATA = {
   {
    "alias": "Corki",
    "name": "Corki",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/42.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/42.png",
    "hp": 610.0,
    "hpG": 100.0,
    "ar": 27.0,
@@ -280,7 +280,7 @@ window.ONESHOT_DATA = {
   {
    "alias": "Darius",
    "name": "Darius",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/122.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/122.png",
    "hp": 652.0,
    "hpG": 114.0,
    "ar": 37.0,
@@ -291,7 +291,7 @@ window.ONESHOT_DATA = {
   {
    "alias": "Diana",
    "name": "Diana",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/131.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/131.png",
    "hp": 640.0,
    "hpG": 109.0,
    "ar": 31.0,
@@ -302,7 +302,7 @@ window.ONESHOT_DATA = {
   {
    "alias": "DrMundo",
    "name": "Dr. Mundo",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/36.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/36.png",
    "hp": 640.0,
    "hpG": 103.0,
    "ar": 32.0,
@@ -313,7 +313,7 @@ window.ONESHOT_DATA = {
   {
    "alias": "Draven",
    "name": "Draven",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/119.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/119.png",
    "hp": 675.0,
    "hpG": 104.0,
    "ar": 29.0,
@@ -324,7 +324,7 @@ window.ONESHOT_DATA = {
   {
    "alias": "Ekko",
    "name": "Ekko",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/245.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/245.png",
    "hp": 655.0,
    "hpG": 99.0,
    "ar": 32.0,
@@ -335,7 +335,7 @@ window.ONESHOT_DATA = {
   {
    "alias": "Elise",
    "name": "Elise",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/60.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/60.png",
    "hp": 620.0,
    "hpG": 109.0,
    "ar": 30.0,
@@ -346,7 +346,7 @@ window.ONESHOT_DATA = {
   {
    "alias": "Evelynn",
    "name": "Evelynn",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/28.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/28.png",
    "hp": 642.0,
    "hpG": 98.0,
    "ar": 37.0,
@@ -357,7 +357,7 @@ window.ONESHOT_DATA = {
   {
    "alias": "Ezreal",
    "name": "Ezreal",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/81.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/81.png",
    "hp": 600.0,
    "hpG": 102.0,
    "ar": 24.0,
@@ -368,7 +368,7 @@ window.ONESHOT_DATA = {
   {
    "alias": "FiddleSticks",
    "name": "Fiddlesticks",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/9.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/9.png",
    "hp": 650.0,
    "hpG": 106.0,
    "ar": 34.0,
@@ -379,7 +379,7 @@ window.ONESHOT_DATA = {
   {
    "alias": "Fiora",
    "name": "Fiora",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/114.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/114.png",
    "hp": 620.0,
    "hpG": 105.0,
    "ar": 33.0,
@@ -390,7 +390,7 @@ window.ONESHOT_DATA = {
   {
    "alias": "Fizz",
    "name": "Fizz",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/105.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/105.png",
    "hp": 640.0,
    "hpG": 106.0,
    "ar": 26.0,
@@ -401,7 +401,7 @@ window.ONESHOT_DATA = {
   {
    "alias": "Galio",
    "name": "Galio",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/3.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/3.png",
    "hp": 600.0,
    "hpG": 126.0,
    "ar": 24.0,
@@ -412,7 +412,7 @@ window.ONESHOT_DATA = {
   {
    "alias": "Gangplank",
    "name": "Gangplank",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/41.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/41.png",
    "hp": 630.0,
    "hpG": 114.0,
    "ar": 31.0,
@@ -423,7 +423,7 @@ window.ONESHOT_DATA = {
   {
    "alias": "Garen",
    "name": "Garen",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/86.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/86.png",
    "hp": 690.0,
    "hpG": 98.0,
    "ar": 38.0,
@@ -434,7 +434,7 @@ window.ONESHOT_DATA = {
   {
    "alias": "Gnar",
    "name": "Gnar",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/150.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/150.png",
    "hp": 540.0,
    "hpG": 79.0,
    "ar": 32.0,
@@ -445,7 +445,7 @@ window.ONESHOT_DATA = {
   {
    "alias": "Gragas",
    "name": "Gragas",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/79.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/79.png",
    "hp": 640.0,
    "hpG": 115.0,
    "ar": 38.0,
@@ -456,7 +456,7 @@ window.ONESHOT_DATA = {
   {
    "alias": "Graves",
    "name": "Graves",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/104.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/104.png",
    "hp": 625.0,
    "hpG": 106.0,
    "ar": 33.0,
@@ -467,7 +467,7 @@ window.ONESHOT_DATA = {
   {
    "alias": "Gwen",
    "name": "Gwen",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/887.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/887.png",
    "hp": 620.0,
    "hpG": 115.0,
    "ar": 39.0,
@@ -478,7 +478,7 @@ window.ONESHOT_DATA = {
   {
    "alias": "Hecarim",
    "name": "Hecarim",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/120.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/120.png",
    "hp": 625.0,
    "hpG": 106.0,
    "ar": 32.0,
@@ -489,7 +489,7 @@ window.ONESHOT_DATA = {
   {
    "alias": "Heimerdinger",
    "name": "Heimerdinger",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/74.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/74.png",
    "hp": 558.0,
    "hpG": 105.0,
    "ar": 19.0,
@@ -500,7 +500,7 @@ window.ONESHOT_DATA = {
   {
    "alias": "Hwei",
    "name": "Hwei",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/910.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/910.png",
    "hp": 580.0,
    "hpG": 109.0,
    "ar": 21.0,
@@ -511,7 +511,7 @@ window.ONESHOT_DATA = {
   {
    "alias": "Illaoi",
    "name": "Illaoi",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/420.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/420.png",
    "hp": 656.0,
    "hpG": 115.0,
    "ar": 35.0,
@@ -522,7 +522,7 @@ window.ONESHOT_DATA = {
   {
    "alias": "Irelia",
    "name": "Irelia",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/39.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/39.png",
    "hp": 630.0,
    "hpG": 115.0,
    "ar": 36.0,
@@ -533,7 +533,7 @@ window.ONESHOT_DATA = {
   {
    "alias": "Ivern",
    "name": "Ivern",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/427.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/427.png",
    "hp": 630.0,
    "hpG": 99.0,
    "ar": 27.0,
@@ -544,7 +544,7 @@ window.ONESHOT_DATA = {
   {
    "alias": "Janna",
    "name": "Janna",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/40.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/40.png",
    "hp": 570.0,
    "hpG": 90.0,
    "ar": 28.0,
@@ -555,7 +555,7 @@ window.ONESHOT_DATA = {
   {
    "alias": "JarvanIV",
    "name": "Jarvan IV",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/59.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/59.png",
    "hp": 640.0,
    "hpG": 104.0,
    "ar": 36.0,
@@ -566,7 +566,7 @@ window.ONESHOT_DATA = {
   {
    "alias": "Jax",
    "name": "Jax",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/24.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/24.png",
    "hp": 650.0,
    "hpG": 103.0,
    "ar": 36.0,
@@ -577,7 +577,7 @@ window.ONESHOT_DATA = {
   {
    "alias": "Jayce",
    "name": "Jayce",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/126.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/126.png",
    "hp": 590.0,
    "hpG": 109.0,
    "ar": 22.0,
@@ -588,7 +588,7 @@ window.ONESHOT_DATA = {
   {
    "alias": "Jhin",
    "name": "Jhin",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/202.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/202.png",
    "hp": 655.0,
    "hpG": 107.0,
    "ar": 24.0,
@@ -599,7 +599,7 @@ window.ONESHOT_DATA = {
   {
    "alias": "Jinx",
    "name": "Jinx",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/222.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/222.png",
    "hp": 630.0,
    "hpG": 105.0,
    "ar": 26.0,
@@ -610,7 +610,7 @@ window.ONESHOT_DATA = {
   {
    "alias": "KSante",
    "name": "K'Sante",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/897.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/897.png",
    "hp": 625.0,
    "hpG": 120.0,
    "ar": 36.0,
@@ -621,7 +621,7 @@ window.ONESHOT_DATA = {
   {
    "alias": "Kaisa",
    "name": "Kai'Sa",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/145.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/145.png",
    "hp": 640.0,
    "hpG": 102.0,
    "ar": 25.0,
@@ -632,7 +632,7 @@ window.ONESHOT_DATA = {
   {
    "alias": "Kalista",
    "name": "Kalista",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/429.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/429.png",
    "hp": 560.0,
    "hpG": 114.0,
    "ar": 24.0,
@@ -643,7 +643,7 @@ window.ONESHOT_DATA = {
   {
    "alias": "Karma",
    "name": "Karma",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/43.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/43.png",
    "hp": 630.0,
    "hpG": 109.0,
    "ar": 28.0,
@@ -654,7 +654,7 @@ window.ONESHOT_DATA = {
   {
    "alias": "Karthus",
    "name": "Karthus",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/30.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/30.png",
    "hp": 620.0,
    "hpG": 110.0,
    "ar": 21.0,
@@ -665,7 +665,7 @@ window.ONESHOT_DATA = {
   {
    "alias": "Kassadin",
    "name": "Kassadin",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/38.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/38.png",
    "hp": 646.0,
    "hpG": 113.0,
    "ar": 21.0,
@@ -676,7 +676,7 @@ window.ONESHOT_DATA = {
   {
    "alias": "Katarina",
    "name": "Katarina",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/55.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/55.png",
    "hp": 672.0,
    "hpG": 108.0,
    "ar": 32.0,
@@ -687,7 +687,7 @@ window.ONESHOT_DATA = {
   {
    "alias": "Kayle",
    "name": "Kayle",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/10.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/10.png",
    "hp": 670.0,
    "hpG": 92.0,
    "ar": 26.0,
@@ -698,7 +698,7 @@ window.ONESHOT_DATA = {
   {
    "alias": "Kayn",
    "name": "Kayn",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/141.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/141.png",
    "hp": 655.0,
    "hpG": 103.0,
    "ar": 38.0,
@@ -709,7 +709,7 @@ window.ONESHOT_DATA = {
   {
    "alias": "Kennen",
    "name": "Kennen",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/85.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/85.png",
    "hp": 580.0,
    "hpG": 98.0,
    "ar": 29.0,
@@ -720,7 +720,7 @@ window.ONESHOT_DATA = {
   {
    "alias": "Khazix",
    "name": "Kha'Zix",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/121.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/121.png",
    "hp": 643.0,
    "hpG": 99.0,
    "ar": 32.0,
@@ -731,7 +731,7 @@ window.ONESHOT_DATA = {
   {
    "alias": "Kindred",
    "name": "Kindred",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/203.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/203.png",
    "hp": 595.0,
    "hpG": 104.0,
    "ar": 29.0,
@@ -742,7 +742,7 @@ window.ONESHOT_DATA = {
   {
    "alias": "Kled",
    "name": "Kled",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/240.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/240.png",
    "hp": 410.0,
    "hpG": 84.0,
    "ar": 35.0,
@@ -753,7 +753,7 @@ window.ONESHOT_DATA = {
   {
    "alias": "KogMaw",
    "name": "Kog'Maw",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/96.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/96.png",
    "hp": 635.0,
    "hpG": 99.0,
    "ar": 24.0,
@@ -764,7 +764,7 @@ window.ONESHOT_DATA = {
   {
    "alias": "Leblanc",
    "name": "LeBlanc",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/7.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/7.png",
    "hp": 598.0,
    "hpG": 108.0,
    "ar": 22.0,
@@ -775,7 +775,7 @@ window.ONESHOT_DATA = {
   {
    "alias": "LeeSin",
    "name": "Lee Sin",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/64.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/64.png",
    "hp": 645.0,
    "hpG": 108.0,
    "ar": 36.0,
@@ -786,7 +786,7 @@ window.ONESHOT_DATA = {
   {
    "alias": "Leona",
    "name": "Leona",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/89.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/89.png",
    "hp": 646.0,
    "hpG": 101.0,
    "ar": 43.0,
@@ -797,7 +797,7 @@ window.ONESHOT_DATA = {
   {
    "alias": "Lillia",
    "name": "Lillia",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/876.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/876.png",
    "hp": 605.0,
    "hpG": 105.0,
    "ar": 24.0,
@@ -808,7 +808,7 @@ window.ONESHOT_DATA = {
   {
    "alias": "Lissandra",
    "name": "Lissandra",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/127.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/127.png",
    "hp": 620.0,
    "hpG": 110.0,
    "ar": 22.0,
@@ -819,7 +819,7 @@ window.ONESHOT_DATA = {
   {
    "alias": "Locke",
    "name": "Locke",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/805.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/805.png",
    "hp": 620.0,
    "hpG": 109.0,
    "ar": 32.0,
@@ -830,7 +830,7 @@ window.ONESHOT_DATA = {
   {
    "alias": "Lucian",
    "name": "Lucian",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/236.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/236.png",
    "hp": 641.0,
    "hpG": 100.0,
    "ar": 28.0,
@@ -841,7 +841,7 @@ window.ONESHOT_DATA = {
   {
    "alias": "Lulu",
    "name": "Lulu",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/117.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/117.png",
    "hp": 565.0,
    "hpG": 92.0,
    "ar": 26.0,
@@ -852,7 +852,7 @@ window.ONESHOT_DATA = {
   {
    "alias": "Lux",
    "name": "Lux",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/99.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/99.png",
    "hp": 580.0,
    "hpG": 99.0,
    "ar": 21.0,
@@ -863,7 +863,7 @@ window.ONESHOT_DATA = {
   {
    "alias": "Malphite",
    "name": "Malphite",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/54.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/54.png",
    "hp": 665.0,
    "hpG": 104.0,
    "ar": 40.0,
@@ -874,7 +874,7 @@ window.ONESHOT_DATA = {
   {
    "alias": "Malzahar",
    "name": "Malzahar",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/90.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/90.png",
    "hp": 580.0,
    "hpG": 101.0,
    "ar": 18.0,
@@ -885,7 +885,7 @@ window.ONESHOT_DATA = {
   {
    "alias": "Maokai",
    "name": "Maokai",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/57.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/57.png",
    "hp": 665.0,
    "hpG": 109.0,
    "ar": 35.0,
@@ -896,7 +896,7 @@ window.ONESHOT_DATA = {
   {
    "alias": "MasterYi",
    "name": "Master Yi",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/11.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/11.png",
    "hp": 640.0,
    "hpG": 105.0,
    "ar": 33.0,
@@ -907,7 +907,7 @@ window.ONESHOT_DATA = {
   {
    "alias": "Mel",
    "name": "Mel",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/800.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/800.png",
    "hp": 630.0,
    "hpG": 99.0,
    "ar": 21.0,
@@ -918,7 +918,7 @@ window.ONESHOT_DATA = {
   {
    "alias": "Milio",
    "name": "Milio",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/902.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/902.png",
    "hp": 560.0,
    "hpG": 88.0,
    "ar": 26.0,
@@ -929,7 +929,7 @@ window.ONESHOT_DATA = {
   {
    "alias": "MissFortune",
    "name": "Miss Fortune",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/21.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/21.png",
    "hp": 625.0,
    "hpG": 100.0,
    "ar": 25.0,
@@ -940,7 +940,7 @@ window.ONESHOT_DATA = {
   {
    "alias": "Mordekaiser",
    "name": "Mordekaiser",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/82.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/82.png",
    "hp": 645.0,
    "hpG": 104.0,
    "ar": 37.0,
@@ -951,7 +951,7 @@ window.ONESHOT_DATA = {
   {
    "alias": "Morgana",
    "name": "Morgana",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/25.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/25.png",
    "hp": 630.0,
    "hpG": 104.0,
    "ar": 25.0,
@@ -962,7 +962,7 @@ window.ONESHOT_DATA = {
   {
    "alias": "Naafiri",
    "name": "Naafiri",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/950.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/950.png",
    "hp": 610.0,
    "hpG": 105.0,
    "ar": 28.0,
@@ -973,7 +973,7 @@ window.ONESHOT_DATA = {
   {
    "alias": "Nami",
    "name": "Nami",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/267.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/267.png",
    "hp": 560.0,
    "hpG": 88.0,
    "ar": 29.0,
@@ -984,7 +984,7 @@ window.ONESHOT_DATA = {
   {
    "alias": "Nasus",
    "name": "Nasus",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/75.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/75.png",
    "hp": 650.0,
    "hpG": 104.0,
    "ar": 34.0,
@@ -995,7 +995,7 @@ window.ONESHOT_DATA = {
   {
    "alias": "Nautilus",
    "name": "Nautilus",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/111.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/111.png",
    "hp": 646.0,
    "hpG": 100.0,
    "ar": 39.0,
@@ -1006,7 +1006,7 @@ window.ONESHOT_DATA = {
   {
    "alias": "Neeko",
    "name": "Neeko",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/518.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/518.png",
    "hp": 610.0,
    "hpG": 104.0,
    "ar": 21.0,
@@ -1017,7 +1017,7 @@ window.ONESHOT_DATA = {
   {
    "alias": "Nidalee",
    "name": "Nidalee",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/76.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/76.png",
    "hp": 610.0,
    "hpG": 109.0,
    "ar": 32.0,
@@ -1028,7 +1028,7 @@ window.ONESHOT_DATA = {
   {
    "alias": "Nilah",
    "name": "Nilah",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/895.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/895.png",
    "hp": 570.0,
    "hpG": 101.0,
    "ar": 27.0,
@@ -1039,7 +1039,7 @@ window.ONESHOT_DATA = {
   {
    "alias": "Nocturne",
    "name": "Nocturne",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/56.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/56.png",
    "hp": 640.0,
    "hpG": 109.0,
    "ar": 36.0,
@@ -1050,7 +1050,7 @@ window.ONESHOT_DATA = {
   {
    "alias": "Nunu",
    "name": "Nunu & Willump",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/20.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/20.png",
    "hp": 610.0,
    "hpG": 90.0,
    "ar": 29.0,
@@ -1061,7 +1061,7 @@ window.ONESHOT_DATA = {
   {
    "alias": "Olaf",
    "name": "Olaf",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/2.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/2.png",
    "hp": 645.0,
    "hpG": 119.0,
    "ar": 35.0,
@@ -1072,7 +1072,7 @@ window.ONESHOT_DATA = {
   {
    "alias": "Orianna",
    "name": "Orianna",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/61.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/61.png",
    "hp": 565.0,
    "hpG": 110.0,
    "ar": 20.0,
@@ -1083,7 +1083,7 @@ window.ONESHOT_DATA = {
   {
    "alias": "Ornn",
    "name": "Ornn",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/516.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/516.png",
    "hp": 660.0,
    "hpG": 109.0,
    "ar": 33.0,
@@ -1094,7 +1094,7 @@ window.ONESHOT_DATA = {
   {
    "alias": "Pantheon",
    "name": "Pantheon",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/80.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/80.png",
    "hp": 650.0,
    "hpG": 109.0,
    "ar": 40.0,
@@ -1105,7 +1105,7 @@ window.ONESHOT_DATA = {
   {
    "alias": "Poppy",
    "name": "Poppy",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/78.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/78.png",
    "hp": 610.0,
    "hpG": 110.0,
    "ar": 35.0,
@@ -1116,7 +1116,7 @@ window.ONESHOT_DATA = {
   {
    "alias": "Pyke",
    "name": "Pyke",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/555.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/555.png",
    "hp": 670.0,
    "hpG": 110.0,
    "ar": 37.0,
@@ -1127,7 +1127,7 @@ window.ONESHOT_DATA = {
   {
    "alias": "Qiyana",
    "name": "Qiyana",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/246.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/246.png",
    "hp": 590.0,
    "hpG": 115.0,
    "ar": 31.0,
@@ -1138,7 +1138,7 @@ window.ONESHOT_DATA = {
   {
    "alias": "Quinn",
    "name": "Quinn",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/133.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/133.png",
    "hp": 565.0,
    "hpG": 107.0,
    "ar": 28.0,
@@ -1149,7 +1149,7 @@ window.ONESHOT_DATA = {
   {
    "alias": "Rakan",
    "name": "Rakan",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/497.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/497.png",
    "hp": 610.0,
    "hpG": 99.0,
    "ar": 30.0,
@@ -1160,7 +1160,7 @@ window.ONESHOT_DATA = {
   {
    "alias": "Rammus",
    "name": "Rammus",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/33.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/33.png",
    "hp": 645.0,
    "hpG": 100.0,
    "ar": 35.0,
@@ -1171,7 +1171,7 @@ window.ONESHOT_DATA = {
   {
    "alias": "RekSai",
    "name": "Rek'Sai",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/421.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/421.png",
    "hp": 600.0,
    "hpG": 99.0,
    "ar": 35.0,
@@ -1182,7 +1182,7 @@ window.ONESHOT_DATA = {
   {
    "alias": "Rell",
    "name": "Rell",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/526.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/526.png",
    "hp": 620.0,
    "hpG": 104.0,
    "ar": 30.0,
@@ -1193,7 +1193,7 @@ window.ONESHOT_DATA = {
   {
    "alias": "Renata",
    "name": "Renata Glasc",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/888.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/888.png",
    "hp": 545.0,
    "hpG": 94.0,
    "ar": 27.0,
@@ -1204,7 +1204,7 @@ window.ONESHOT_DATA = {
   {
    "alias": "Renekton",
    "name": "Renekton",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/58.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/58.png",
    "hp": 660.0,
    "hpG": 111.0,
    "ar": 35.0,
@@ -1215,7 +1215,7 @@ window.ONESHOT_DATA = {
   {
    "alias": "Rengar",
    "name": "Rengar",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/107.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/107.png",
    "hp": 590.0,
    "hpG": 104.0,
    "ar": 34.0,
@@ -1226,7 +1226,7 @@ window.ONESHOT_DATA = {
   {
    "alias": "Riven",
    "name": "Riven",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/92.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/92.png",
    "hp": 630.0,
    "hpG": 100.0,
    "ar": 33.0,
@@ -1237,7 +1237,7 @@ window.ONESHOT_DATA = {
   {
    "alias": "Rumble",
    "name": "Rumble",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/68.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/68.png",
    "hp": 640.0,
    "hpG": 105.0,
    "ar": 36.0,
@@ -1248,7 +1248,7 @@ window.ONESHOT_DATA = {
   {
    "alias": "Ryze",
    "name": "Ryze",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/13.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/13.png",
    "hp": 620.0,
    "hpG": 124.0,
    "ar": 22.0,
@@ -1259,7 +1259,7 @@ window.ONESHOT_DATA = {
   {
    "alias": "Samira",
    "name": "Samira",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/360.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/360.png",
    "hp": 630.0,
    "hpG": 108.0,
    "ar": 26.0,
@@ -1270,7 +1270,7 @@ window.ONESHOT_DATA = {
   {
    "alias": "Sejuani",
    "name": "Sejuani",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/113.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/113.png",
    "hp": 630.0,
    "hpG": 114.0,
    "ar": 34.0,
@@ -1281,7 +1281,7 @@ window.ONESHOT_DATA = {
   {
    "alias": "Senna",
    "name": "Senna",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/235.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/235.png",
    "hp": 530.0,
    "hpG": 89.0,
    "ar": 25.0,
@@ -1292,7 +1292,7 @@ window.ONESHOT_DATA = {
   {
    "alias": "Seraphine",
    "name": "Seraphine",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/147.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/147.png",
    "hp": 570.0,
    "hpG": 95.0,
    "ar": 26.0,
@@ -1303,7 +1303,7 @@ window.ONESHOT_DATA = {
   {
    "alias": "Sett",
    "name": "Sett",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/875.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/875.png",
    "hp": 670.0,
    "hpG": 114.0,
    "ar": 33.0,
@@ -1314,7 +1314,7 @@ window.ONESHOT_DATA = {
   {
    "alias": "Shaco",
    "name": "Shaco",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/35.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/35.png",
    "hp": 630.0,
    "hpG": 99.0,
    "ar": 30.0,
@@ -1325,7 +1325,7 @@ window.ONESHOT_DATA = {
   {
    "alias": "Shen",
    "name": "Shen",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/98.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/98.png",
    "hp": 610.0,
    "hpG": 99.0,
    "ar": 34.0,
@@ -1336,7 +1336,7 @@ window.ONESHOT_DATA = {
   {
    "alias": "Shyvana",
    "name": "Shyvana",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/102.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/102.png",
    "hp": 625.0,
    "hpG": 95.0,
    "ar": 35.0,
@@ -1347,7 +1347,7 @@ window.ONESHOT_DATA = {
   {
    "alias": "Singed",
    "name": "Singed",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/27.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/27.png",
    "hp": 650.0,
    "hpG": 96.0,
    "ar": 34.0,
@@ -1358,7 +1358,7 @@ window.ONESHOT_DATA = {
   {
    "alias": "Sion",
    "name": "Sion",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/14.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/14.png",
    "hp": 655.0,
    "hpG": 87.0,
    "ar": 36.0,
@@ -1369,7 +1369,7 @@ window.ONESHOT_DATA = {
   {
    "alias": "Sivir",
    "name": "Sivir",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/15.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/15.png",
    "hp": 600.0,
    "hpG": 104.0,
    "ar": 30.0,
@@ -1380,7 +1380,7 @@ window.ONESHOT_DATA = {
   {
    "alias": "Skarner",
    "name": "Skarner",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/72.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/72.png",
    "hp": 630.0,
    "hpG": 110.0,
    "ar": 33.0,
@@ -1391,7 +1391,7 @@ window.ONESHOT_DATA = {
   {
    "alias": "Smolder",
    "name": "Smolder",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/901.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/901.png",
    "hp": 575.0,
    "hpG": 100.0,
    "ar": 24.0,
@@ -1402,7 +1402,7 @@ window.ONESHOT_DATA = {
   {
    "alias": "Sona",
    "name": "Sona",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/37.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/37.png",
    "hp": 550.0,
    "hpG": 91.0,
    "ar": 26.0,
@@ -1413,7 +1413,7 @@ window.ONESHOT_DATA = {
   {
    "alias": "Soraka",
    "name": "Soraka",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/16.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/16.png",
    "hp": 605.0,
    "hpG": 88.0,
    "ar": 32.0,
@@ -1424,7 +1424,7 @@ window.ONESHOT_DATA = {
   {
    "alias": "Swain",
    "name": "Swain",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/50.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/50.png",
    "hp": 595.0,
    "hpG": 99.0,
    "ar": 23.0,
@@ -1435,7 +1435,7 @@ window.ONESHOT_DATA = {
   {
    "alias": "Sylas",
    "name": "Sylas",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/517.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/517.png",
    "hp": 600.0,
    "hpG": 122.0,
    "ar": 29.0,
@@ -1446,7 +1446,7 @@ window.ONESHOT_DATA = {
   {
    "alias": "Syndra",
    "name": "Syndra",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/134.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/134.png",
    "hp": 583.0,
    "hpG": 100.0,
    "ar": 25.0,
@@ -1457,7 +1457,7 @@ window.ONESHOT_DATA = {
   {
    "alias": "TahmKench",
    "name": "Tahm Kench",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/223.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/223.png",
    "hp": 640.0,
    "hpG": 103.0,
    "ar": 39.0,
@@ -1468,7 +1468,7 @@ window.ONESHOT_DATA = {
   {
    "alias": "Taliyah",
    "name": "Taliyah",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/163.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/163.png",
    "hp": 550.0,
    "hpG": 104.0,
    "ar": 18.0,
@@ -1479,7 +1479,7 @@ window.ONESHOT_DATA = {
   {
    "alias": "Talon",
    "name": "Talon",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/91.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/91.png",
    "hp": 658.0,
    "hpG": 109.0,
    "ar": 30.0,
@@ -1490,7 +1490,7 @@ window.ONESHOT_DATA = {
   {
    "alias": "Taric",
    "name": "Taric",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/44.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/44.png",
    "hp": 645.0,
    "hpG": 99.0,
    "ar": 40.0,
@@ -1501,7 +1501,7 @@ window.ONESHOT_DATA = {
   {
    "alias": "Teemo",
    "name": "Teemo",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/17.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/17.png",
    "hp": 615.0,
    "hpG": 104.0,
    "ar": 24.0,
@@ -1512,7 +1512,7 @@ window.ONESHOT_DATA = {
   {
    "alias": "Thresh",
    "name": "Thresh",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/412.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/412.png",
    "hp": 620.0,
    "hpG": 120.0,
    "ar": 33.0,
@@ -1523,7 +1523,7 @@ window.ONESHOT_DATA = {
   {
    "alias": "Tristana",
    "name": "Tristana",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/18.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/18.png",
    "hp": 640.0,
    "hpG": 102.0,
    "ar": 30.0,
@@ -1534,7 +1534,7 @@ window.ONESHOT_DATA = {
   {
    "alias": "Trundle",
    "name": "Trundle",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/48.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/48.png",
    "hp": 650.0,
    "hpG": 110.0,
    "ar": 37.0,
@@ -1545,7 +1545,7 @@ window.ONESHOT_DATA = {
   {
    "alias": "Tryndamere",
    "name": "Tryndamere",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/23.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/23.png",
    "hp": 696.0,
    "hpG": 108.0,
    "ar": 33.0,
@@ -1556,7 +1556,7 @@ window.ONESHOT_DATA = {
   {
    "alias": "TwistedFate",
    "name": "Twisted Fate",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/4.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/4.png",
    "hp": 604.0,
    "hpG": 108.0,
    "ar": 24.0,
@@ -1567,7 +1567,7 @@ window.ONESHOT_DATA = {
   {
    "alias": "Twitch",
    "name": "Twitch",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/29.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/29.png",
    "hp": 630.0,
    "hpG": 98.0,
    "ar": 27.0,
@@ -1578,7 +1578,7 @@ window.ONESHOT_DATA = {
   {
    "alias": "Udyr",
    "name": "Udyr",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/77.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/77.png",
    "hp": 664.0,
    "hpG": 92.0,
    "ar": 31.0,
@@ -1589,7 +1589,7 @@ window.ONESHOT_DATA = {
   {
    "alias": "Urgot",
    "name": "Urgot",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/6.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/6.png",
    "hp": 655.0,
    "hpG": 102.0,
    "ar": 36.0,
@@ -1600,7 +1600,7 @@ window.ONESHOT_DATA = {
   {
    "alias": "Varus",
    "name": "Varus",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/110.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/110.png",
    "hp": 600.0,
    "hpG": 105.0,
    "ar": 24.0,
@@ -1611,7 +1611,7 @@ window.ONESHOT_DATA = {
   {
    "alias": "Vayne",
    "name": "Vayne",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/67.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/67.png",
    "hp": 580.0,
    "hpG": 98.0,
    "ar": 23.0,
@@ -1622,7 +1622,7 @@ window.ONESHOT_DATA = {
   {
    "alias": "Veigar",
    "name": "Veigar",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/45.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/45.png",
    "hp": 580.0,
    "hpG": 108.0,
    "ar": 18.0,
@@ -1633,7 +1633,7 @@ window.ONESHOT_DATA = {
   {
    "alias": "Velkoz",
    "name": "Vel'Koz",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/161.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/161.png",
    "hp": 590.0,
    "hpG": 102.0,
    "ar": 22.0,
@@ -1644,7 +1644,7 @@ window.ONESHOT_DATA = {
   {
    "alias": "Vex",
    "name": "Vex",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/711.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/711.png",
    "hp": 590.0,
    "hpG": 104.0,
    "ar": 23.0,
@@ -1655,7 +1655,7 @@ window.ONESHOT_DATA = {
   {
    "alias": "Vi",
    "name": "Vi",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/254.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/254.png",
    "hp": 655.0,
    "hpG": 105.0,
    "ar": 30.0,
@@ -1666,7 +1666,7 @@ window.ONESHOT_DATA = {
   {
    "alias": "Viego",
    "name": "Viego",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/234.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/234.png",
    "hp": 630.0,
    "hpG": 109.0,
    "ar": 34.0,
@@ -1677,7 +1677,7 @@ window.ONESHOT_DATA = {
   {
    "alias": "Viktor",
    "name": "Viktor",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/112.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/112.png",
    "hp": 600.0,
    "hpG": 100.0,
    "ar": 23.0,
@@ -1688,7 +1688,7 @@ window.ONESHOT_DATA = {
   {
    "alias": "Vladimir",
    "name": "Vladimir",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/8.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/8.png",
    "hp": 600.0,
    "hpG": 110.0,
    "ar": 24.0,
@@ -1699,7 +1699,7 @@ window.ONESHOT_DATA = {
   {
    "alias": "Volibear",
    "name": "Volibear",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/106.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/106.png",
    "hp": 650.0,
    "hpG": 104.0,
    "ar": 35.0,
@@ -1710,7 +1710,7 @@ window.ONESHOT_DATA = {
   {
    "alias": "Warwick",
    "name": "Warwick",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/19.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/19.png",
    "hp": 620.0,
    "hpG": 99.0,
    "ar": 33.0,
@@ -1721,7 +1721,7 @@ window.ONESHOT_DATA = {
   {
    "alias": "MonkeyKing",
    "name": "Wukong",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/62.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/62.png",
    "hp": 610.0,
    "hpG": 99.0,
    "ar": 31.0,
@@ -1732,7 +1732,7 @@ window.ONESHOT_DATA = {
   {
    "alias": "Xayah",
    "name": "Xayah",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/498.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/498.png",
    "hp": 630.0,
    "hpG": 107.0,
    "ar": 25.0,
@@ -1743,7 +1743,7 @@ window.ONESHOT_DATA = {
   {
    "alias": "Xerath",
    "name": "Xerath",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/101.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/101.png",
    "hp": 575.0,
    "hpG": 106.0,
    "ar": 22.0,
@@ -1754,7 +1754,7 @@ window.ONESHOT_DATA = {
   {
    "alias": "XinZhao",
    "name": "Xin Zhao",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/5.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/5.png",
    "hp": 620.0,
    "hpG": 106.0,
    "ar": 35.0,
@@ -1765,7 +1765,7 @@ window.ONESHOT_DATA = {
   {
    "alias": "Yasuo",
    "name": "Yasuo",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/157.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/157.png",
    "hp": 590.0,
    "hpG": 110.0,
    "ar": 32.0,
@@ -1776,7 +1776,7 @@ window.ONESHOT_DATA = {
   {
    "alias": "Yone",
    "name": "Yone",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/777.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/777.png",
    "hp": 620.0,
    "hpG": 105.0,
    "ar": 33.0,
@@ -1787,7 +1787,7 @@ window.ONESHOT_DATA = {
   {
    "alias": "Yorick",
    "name": "Yorick",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/83.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/83.png",
    "hp": 650.0,
    "hpG": 114.0,
    "ar": 36.0,
@@ -1798,7 +1798,7 @@ window.ONESHOT_DATA = {
   {
    "alias": "Yunara",
    "name": "Yunara",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/804.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/804.png",
    "hp": 590.0,
    "hpG": 110.0,
    "ar": 25.0,
@@ -1809,7 +1809,7 @@ window.ONESHOT_DATA = {
   {
    "alias": "Yuumi",
    "name": "Yuumi",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/350.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/350.png",
    "hp": 500.0,
    "hpG": 69.0,
    "ar": 25.0,
@@ -1820,7 +1820,7 @@ window.ONESHOT_DATA = {
   {
    "alias": "Zaahen",
    "name": "Zaahen",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/904.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/904.png",
    "hp": 640.0,
    "hpG": 114.0,
    "ar": 36.0,
@@ -1831,7 +1831,7 @@ window.ONESHOT_DATA = {
   {
    "alias": "Zac",
    "name": "Zac",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/154.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/154.png",
    "hp": 685.0,
    "hpG": 109.0,
    "ar": 33.0,
@@ -1842,7 +1842,7 @@ window.ONESHOT_DATA = {
   {
    "alias": "Zed",
    "name": "Zed",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/238.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/238.png",
    "hp": 654.0,
    "hpG": 99.0,
    "ar": 32.0,
@@ -1853,7 +1853,7 @@ window.ONESHOT_DATA = {
   {
    "alias": "Zeri",
    "name": "Zeri",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/221.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/221.png",
    "hp": 600.0,
    "hpG": 110.0,
    "ar": 24.0,
@@ -1864,7 +1864,7 @@ window.ONESHOT_DATA = {
   {
    "alias": "Ziggs",
    "name": "Ziggs",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/115.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/115.png",
    "hp": 606.0,
    "hpG": 106.0,
    "ar": 21.0,
@@ -1875,7 +1875,7 @@ window.ONESHOT_DATA = {
   {
    "alias": "Zilean",
    "name": "Zilean",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/26.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/26.png",
    "hp": 574.0,
    "hpG": 96.0,
    "ar": 24.0,
@@ -1886,7 +1886,7 @@ window.ONESHOT_DATA = {
   {
    "alias": "Zoe",
    "name": "Zoe",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/142.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/142.png",
    "hp": 630.0,
    "hpG": 106.0,
    "ar": 21.0,
@@ -1897,7 +1897,7 @@ window.ONESHOT_DATA = {
   {
    "alias": "Zyra",
    "name": "Zyra",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/143.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/143.png",
    "hp": 574.0,
    "hpG": 93.0,
    "ar": 29.0,
@@ -1911,7 +1911,7 @@ window.ONESHOT_DATA = {
    "id": 3135,
    "name": "Void Staff",
    "price": 3000,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3135_mage_t3_voidstaff.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3135_mage_t3_voidstaff.png",
    "hp": 0.0,
    "values": {},
    "limitGroups": [
@@ -1927,7 +1927,7 @@ window.ONESHOT_DATA = {
    "id": 3036,
    "name": "Lord Dominik's Regards",
    "price": 3300,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3036_marksman_t3_dominikregards.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3036_marksman_t3_dominikregards.png",
    "hp": 0.0,
    "values": {
     "MaxBonusDamagePercent": 0.15,
@@ -1946,7 +1946,7 @@ window.ONESHOT_DATA = {
    "id": 6694,
    "name": "Serylda's Grudge",
    "price": 3000,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/6694_assasin_t3_seryldasgrudge.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/6694_assasin_t3_seryldasgrudge.png",
    "hp": 0.0,
    "values": {},
    "limitGroups": [
@@ -1962,7 +1962,7 @@ window.ONESHOT_DATA = {
    "id": 3137,
    "name": "Cryptbloom",
    "price": 3000,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3137_cryptbloom.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3137_cryptbloom.png",
    "hp": 0.0,
    "values": {},
    "limitGroups": [
@@ -1978,7 +1978,7 @@ window.ONESHOT_DATA = {
    "id": 3033,
    "name": "Mortal Reminder",
    "price": 3000,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3033_marksman_t3_mortalreminder.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3033_marksman_t3_mortalreminder.png",
    "hp": 0.0,
    "values": {},
    "limitGroups": [
@@ -1995,7 +1995,7 @@ window.ONESHOT_DATA = {
    "id": 2520,
    "name": "Bastionbreaker",
    "price": 3000,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/2520_adassassingameender.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/2520_adassassingameender.png",
    "hp": 0.0,
    "values": {
     "AbilityDamageRangeMod": 0.5,
@@ -2015,7 +2015,7 @@ window.ONESHOT_DATA = {
    "id": 6696,
    "name": "Axiom Arc",
    "price": 2750,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/6696_axiomarc.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/6696_axiomarc.png",
    "hp": 0.0,
    "values": {},
    "limitGroups": [
@@ -2031,7 +2031,7 @@ window.ONESHOT_DATA = {
    "id": 6697,
    "name": "Hubris",
    "price": 2800,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/6697_hubris.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/6697_hubris.png",
    "hp": 0.0,
    "values": {},
    "limitGroups": [
@@ -2047,7 +2047,7 @@ window.ONESHOT_DATA = {
    "id": 3035,
    "name": "Last Whisper",
    "price": 1450,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3035_marksman_t2_lastwhisper.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3035_marksman_t2_lastwhisper.png",
    "hp": 0.0,
    "values": {},
    "limitGroups": [
@@ -2063,7 +2063,7 @@ window.ONESHOT_DATA = {
    "id": 6698,
    "name": "Profane Hydra",
    "price": 2850,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/6698_profanehydra.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/6698_profanehydra.png",
    "hp": 0.0,
    "values": {},
    "limitGroups": [
@@ -2080,7 +2080,7 @@ window.ONESHOT_DATA = {
    "id": 3179,
    "name": "Umbral Glaive",
    "price": 2800,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3179_assassin_t3_umbralglaive.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3179_assassin_t3_umbralglaive.png",
    "hp": 0.0,
    "values": {},
    "limitGroups": [
@@ -2096,7 +2096,7 @@ window.ONESHOT_DATA = {
    "id": 3142,
    "name": "Youmuu's Ghostblade",
    "price": 2800,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3142_assassin_t3_youmuusghostblade.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3142_assassin_t3_youmuusghostblade.png",
    "hp": 0.0,
    "values": {},
    "limitGroups": [
@@ -2112,7 +2112,7 @@ window.ONESHOT_DATA = {
    "id": 3814,
    "name": "Edge of Night",
    "price": 3000,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3814_assassin_t3_edgeofnight.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3814_assassin_t3_edgeofnight.png",
    "hp": 250.0,
    "values": {},
    "limitGroups": [
@@ -2129,7 +2129,7 @@ window.ONESHOT_DATA = {
    "id": 6695,
    "name": "Serpent's Fang",
    "price": 2500,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/6695_assassin_t3_serpentsfang.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/6695_assassin_t3_serpentsfang.png",
    "hp": 0.0,
    "values": {},
    "limitGroups": [
@@ -2145,7 +2145,7 @@ window.ONESHOT_DATA = {
    "id": 4645,
    "name": "Shadowflame",
    "price": 3200,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/4645_shadowflame.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/4645_shadowflame.png",
    "hp": 0.0,
    "values": {},
    "limitGroups": [
@@ -2161,7 +2161,7 @@ window.ONESHOT_DATA = {
    "id": 4646,
    "name": "Stormsurge",
    "price": 2800,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/4646_stormsurge.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/4646_stormsurge.png",
    "hp": 0.0,
    "values": {},
    "limitGroups": [
@@ -2177,7 +2177,7 @@ window.ONESHOT_DATA = {
    "id": 4630,
    "name": "Blighting Jewel",
    "price": 1100,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/4630_mage_t2_voidcrystal.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/4630_mage_t2_voidcrystal.png",
    "hp": 0.0,
    "values": {},
    "limitGroups": [
@@ -2193,7 +2193,7 @@ window.ONESHOT_DATA = {
    "id": 3020,
    "name": "Sorcerer's Shoes",
    "price": 1100,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3020_class_t2_sorcerersshoes.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3020_class_t2_sorcerersshoes.png",
    "hp": 0.0,
    "values": {},
    "limitGroups": [
@@ -2210,7 +2210,7 @@ window.ONESHOT_DATA = {
    "id": 3134,
    "name": "Serrated Dirk",
    "price": 1000,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3134_assassin_t2_serrateddirk.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3134_assassin_t2_serrateddirk.png",
    "hp": 0.0,
    "values": {},
    "limitGroups": [
@@ -2226,7 +2226,7 @@ window.ONESHOT_DATA = {
    "id": 6676,
    "name": "The Collector",
    "price": 3000,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/6676_marksman_t3_thecollector.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/6676_marksman_t3_thecollector.png",
    "hp": 0.0,
    "values": {
     "ExecuteThreshold": 0.05
@@ -2244,7 +2244,7 @@ window.ONESHOT_DATA = {
    "id": 6699,
    "name": "Voltaic Cyclosword",
    "price": 3000,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/6699_voltaiccyclosword.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/6699_voltaiccyclosword.png",
    "hp": 0.0,
    "values": {},
    "limitGroups": [
@@ -2260,7 +2260,7 @@ window.ONESHOT_DATA = {
    "id": 2020,
    "name": "The Brutalizer",
    "price": 1337,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/2020_thebrutalizer.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/2020_thebrutalizer.png",
    "hp": 0.0,
    "values": {},
    "limitGroups": [],
@@ -2274,7 +2274,7 @@ window.ONESHOT_DATA = {
    "id": 8020,
    "name": "Abyssal Mask",
    "price": 2650,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/8020_tank_t3_abyssalmask.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/8020_tank_t3_abyssalmask.png",
    "hp": 350.0,
    "values": {
     "DamageAmp": 0.12
@@ -2292,7 +2292,7 @@ window.ONESHOT_DATA = {
    "id": 3071,
    "name": "Black Cleaver",
    "price": 3000,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3071_fighter_t3_blackcleaver.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3071_fighter_t3_blackcleaver.png",
    "hp": 400.0,
    "values": {
     "MaxStacks": 5.0,
@@ -2312,7 +2312,7 @@ window.ONESHOT_DATA = {
    "id": 6653,
    "name": "Liandry's Torment",
    "price": 3000,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/6653_mage_t4_liandrysanguish.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/6653_mage_t4_liandrysanguish.png",
    "hp": 300.0,
    "values": {
     "DamageIncreaseMax": 0.06
@@ -2330,7 +2330,7 @@ window.ONESHOT_DATA = {
    "id": 4633,
    "name": "Riftmaker",
    "price": 3100,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/4633_mage_t4_riftmaker.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/4633_mage_t4_riftmaker.png",
    "hp": 350.0,
    "values": {
     "EternityDamageIncreaseMax": 0.08
@@ -2348,7 +2348,7 @@ window.ONESHOT_DATA = {
    "id": 3161,
    "name": "Spear of Shojin",
    "price": 3100,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3161_fighter_t3_spearofshojin.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3161_fighter_t3_spearofshojin.png",
    "hp": 450.0,
    "values": {
     "SpellDamageIncrease": 0.03,
@@ -2370,7 +2370,7 @@ window.ONESHOT_DATA = {
    "id": 1084,
    "name": "Thread the Needle",
    "tier": "Gold",
-   "icon": "https://raw.communitydragon.org/latest/game/assets/ux/cherry/augments/icons/threadtheneedle_small.png",
+   "icon": "/assets/cd/latest/game/assets/ux/cherry/augments/icons/threadtheneedle_small.png",
    "values": {
     "PercentPen": 0.18
    },
@@ -2381,7 +2381,7 @@ window.ONESHOT_DATA = {
    "id": 1028,
    "name": "Erosion",
    "tier": "Silver",
-   "icon": "https://raw.communitydragon.org/latest/game/assets/ux/cherry/augments/icons/erosion_small.png",
+   "icon": "/assets/cd/latest/game/assets/ux/cherry/augments/icons/erosion_small.png",
    "values": {
     "Shred": 0.015,
     "ShredDuration": 4.0,
@@ -2394,7 +2394,7 @@ window.ONESHOT_DATA = {
    "id": 2083,
    "name": "Tooth Fairy",
    "tier": "Gold",
-   "icon": "https://raw.communitydragon.org/latest/game/assets/ux/kiwi/augments/icons/questburstingteeth_small.png",
+   "icon": "/assets/cd/latest/game/assets/ux/kiwi/augments/icons/questburstingteeth_small.png",
    "values": {
     "BurstDurationCheck": 2.5,
     "PerTargetCooldown": 4.0,
@@ -2408,7 +2408,7 @@ window.ONESHOT_DATA = {
    "id": 1325,
    "name": "Glass Cannon",
    "tier": "Prismatic",
-   "icon": "https://raw.communitydragon.org/latest/game/assets/ux/kiwi/augments/icons/glasscannon_small.png",
+   "icon": "/assets/cd/latest/game/assets/ux/kiwi/augments/icons/glasscannon_small.png",
    "values": {
     "TrueDamagePerc": 0.25,
     "HPReductionPerc": 0.3,
@@ -2423,7 +2423,7 @@ window.ONESHOT_DATA = {
    "id": 2007,
    "name": "Devil on Your Shoulder",
    "tier": "Prismatic",
-   "icon": "https://raw.communitydragon.org/latest/game/assets/ux/kiwi/augments/icons/littledevil_small.png",
+   "icon": "/assets/cd/latest/game/assets/ux/kiwi/augments/icons/littledevil_small.png",
    "values": {
     "Amp_Duration": 8.0,
     "Amp": 2.0,
@@ -2444,7 +2444,7 @@ window.ONESHOT_DATA = {
    "id": 1195,
    "name": "Giant Slayer",
    "tier": "Prismatic",
-   "icon": "https://raw.communitydragon.org/latest/game/assets/ux/cherry/augments/icons/giantslayer_small.png",
+   "icon": "/assets/cd/latest/game/assets/ux/cherry/augments/icons/giantslayer_small.png",
    "values": {
     "SizeMod": 0.25,
     "MovespeedMod": 0.2,
@@ -2460,7 +2460,7 @@ window.ONESHOT_DATA = {
    "id": 2042,
    "name": "Hide on Bush",
    "tier": "Gold",
-   "icon": "https://raw.communitydragon.org/latest/game/assets/ux/kiwi/augments/icons/brushpower_small.png",
+   "icon": "/assets/cd/latest/game/assets/ux/kiwi/augments/icons/brushpower_small.png",
    "values": {
     "DamageAmplification": 0.2,
     "BuffDuration": 2.0
@@ -2472,7 +2472,7 @@ window.ONESHOT_DATA = {
    "id": 1038,
    "name": "From Beginning To End",
    "tier": "Gold",
-   "icon": "https://raw.communitydragon.org/latest/game/assets/ux/cherry/augments/icons/frombeginningtoend_small.png",
+   "icon": "/assets/cd/latest/game/assets/ux/cherry/augments/icons/frombeginningtoend_small.png",
    "values": {
     "AugDuration": 3.0,
     "DamageAmp": 0.1,
@@ -2501,7 +2501,7 @@ window.ONESHOT_DATA = {
    "id": 1004,
    "name": "Back To Basics",
    "tier": "Prismatic",
-   "icon": "https://raw.communitydragon.org/latest/game/assets/ux/cherry/augments/icons/backtobasics_small.png",
+   "icon": "/assets/cd/latest/game/assets/ux/cherry/augments/icons/backtobasics_small.png",
    "values": {
     "DamageAmp": 0.35,
     "HealingAmp": 0.35,
@@ -2515,7 +2515,7 @@ window.ONESHOT_DATA = {
    "id": 1311,
    "name": "Overflow",
    "tier": "Gold",
-   "icon": "https://raw.communitydragon.org/latest/game/assets/ux/cherry/augments/icons/overflow_small.png",
+   "icon": "/assets/cd/latest/game/assets/ux/cherry/augments/icons/overflow_small.png",
    "values": {
     "InitialAmpPercent": 10.0
    },
@@ -2534,7 +2534,7 @@ window.ONESHOT_DATA = {
    "id": 1026,
    "name": "Don't Blink",
    "tier": "Silver",
-   "icon": "https://raw.communitydragon.org/latest/game/assets/ux/cherry/augments/icons/dontblink_small.png",
+   "icon": "/assets/cd/latest/game/assets/ux/cherry/augments/icons/dontblink_small.png",
    "values": {
     "BonusDamagePerMSDifference": 0.001
    },
@@ -2545,7 +2545,7 @@ window.ONESHOT_DATA = {
    "id": 2006,
    "name": "Dropkick",
    "tier": "Prismatic",
-   "icon": "https://raw.communitydragon.org/latest/game/assets/ux/kiwi/augments/icons/dropkick_small.png",
+   "icon": "/assets/cd/latest/game/assets/ux/kiwi/augments/icons/dropkick_small.png",
    "values": {
     "ExecuteBase": 0.04
    },

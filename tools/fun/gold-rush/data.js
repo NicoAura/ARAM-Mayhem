@@ -19,7 +19,7 @@ window.GOLD_DATA = {
    "id": 3006,
    "name": "Berserker's Greaves",
    "price": 1100,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3006_class_t2_berserkersgreaves.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3006_class_t2_berserkersgreaves.png",
    "boots": true,
    "parts": [
     1001,
@@ -36,7 +36,7 @@ window.GOLD_DATA = {
    "id": 3009,
    "name": "Boots of Swiftness",
    "price": 1000,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3009_class_t2_bootsofswiftness.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3009_class_t2_bootsofswiftness.png",
    "boots": true,
    "parts": [
     1001
@@ -51,7 +51,7 @@ window.GOLD_DATA = {
    "id": 3008,
    "name": "Gluttonous Greaves",
    "price": 1000,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3008_gluttonousgreaves.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3008_gluttonousgreaves.png",
    "boots": true,
    "parts": [
     1001
@@ -67,7 +67,7 @@ window.GOLD_DATA = {
    "id": 3158,
    "name": "Ionian Boots of Lucidity",
    "price": 900,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3158_class_t2_ionianbootsoflucidity.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3158_class_t2_ionianbootsoflucidity.png",
    "boots": true,
    "parts": [
     1001,
@@ -83,7 +83,7 @@ window.GOLD_DATA = {
    "id": 3111,
    "name": "Mercury's Treads",
    "price": 1250,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3111_class_t2_mercurystreads.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3111_class_t2_mercurystreads.png",
    "boots": true,
    "parts": [
     1001,
@@ -99,7 +99,7 @@ window.GOLD_DATA = {
    "id": 3047,
    "name": "Plated Steelcaps",
    "price": 1200,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3047_class_t2_ninjatabi.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3047_class_t2_ninjatabi.png",
    "boots": true,
    "parts": [
     1001,
@@ -115,7 +115,7 @@ window.GOLD_DATA = {
    "id": 3020,
    "name": "Sorcerer's Shoes",
    "price": 1100,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3020_class_t2_sorcerersshoes.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3020_class_t2_sorcerersshoes.png",
    "boots": true,
    "parts": [
     1001
@@ -130,7 +130,7 @@ window.GOLD_DATA = {
    "id": 8020,
    "name": "Abyssal Mask",
    "price": 2650,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/8020_tank_t3_abyssalmask.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/8020_tank_t3_abyssalmask.png",
    "boots": false,
    "parts": [
     3067,
@@ -148,7 +148,7 @@ window.GOLD_DATA = {
    "id": 2522,
    "name": "Actualizer",
    "price": 2800,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/2522_manaactive.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/2522_manaactive.png",
    "boots": false,
    "parts": [
     3802,
@@ -166,7 +166,7 @@ window.GOLD_DATA = {
    "id": 3003,
    "name": "Archangel's Staff",
    "price": 2900,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3003_mage_t3_archangelstaff.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3003_mage_t3_archangelstaff.png",
    "boots": false,
    "parts": [
     3070,
@@ -189,7 +189,7 @@ window.GOLD_DATA = {
    "id": 3504,
    "name": "Ardent Censer",
    "price": 2200,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3504_enchanter_t3_ardentcenser.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3504_enchanter_t3_ardentcenser.png",
    "boots": false,
    "parts": [
     3113,
@@ -206,7 +206,7 @@ window.GOLD_DATA = {
    "id": 3039,
    "name": "Atma's Reckoning",
    "price": 2900,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3005_fighter_t3_atmasreckoning.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3005_fighter_t3_atmasreckoning.png",
    "boots": false,
    "parts": [
     1011,
@@ -224,7 +224,7 @@ window.GOLD_DATA = {
    "id": 6696,
    "name": "Axiom Arc",
    "price": 2750,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/6696_axiomarc.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/6696_axiomarc.png",
    "boots": false,
    "parts": [
     2020,
@@ -244,7 +244,7 @@ window.GOLD_DATA = {
    "id": 2524,
    "name": "Bandlepipes",
    "price": 2300,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/2524_tankasaura.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/2524_tankasaura.png",
    "boots": false,
    "parts": [
     3067,
@@ -262,7 +262,7 @@ window.GOLD_DATA = {
    "id": 3102,
    "name": "Banshee's Veil",
    "price": 3000,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3102_mage_t3_bansheesveil.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3102_mage_t3_bansheesveil.png",
    "boots": false,
    "parts": [
     1058,
@@ -281,7 +281,7 @@ window.GOLD_DATA = {
    "id": 3071,
    "name": "Black Cleaver",
    "price": 3000,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3071_fighter_t3_blackcleaver.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3071_fighter_t3_blackcleaver.png",
    "boots": false,
    "parts": [
     3044,
@@ -302,7 +302,7 @@ window.GOLD_DATA = {
    "id": 2503,
    "name": "Blackfire Torch",
    "price": 2800,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/2503_blackfiretorch64.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/2503_blackfiretorch64.png",
    "boots": false,
    "parts": [
     3802,
@@ -321,7 +321,7 @@ window.GOLD_DATA = {
    "id": 3153,
    "name": "Blade of The Ruined King",
    "price": 3200,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3153_fighter_t3_bladeoftheruinedking.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3153_fighter_t3_bladeoftheruinedking.png",
    "boots": false,
    "parts": [
     1053,
@@ -339,7 +339,7 @@ window.GOLD_DATA = {
    "id": 3072,
    "name": "Bloodthirster",
    "price": 3400,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3072_fighter_t3_bloodthirster.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3072_fighter_t3_bloodthirster.png",
    "boots": false,
    "parts": [
     1038,
@@ -356,7 +356,7 @@ window.GOLD_DATA = {
    "id": 6609,
    "name": "Chempunk Chainsword",
    "price": 3000,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/6609_fighter_t3_chempunkchainsword.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/6609_fighter_t3_chempunkchainsword.png",
    "boots": false,
    "parts": [
     3123,
@@ -377,7 +377,7 @@ window.GOLD_DATA = {
    "id": 4629,
    "name": "Cosmic Drive",
    "price": 3000,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/4629_mage_t3_cosmicdrive.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/4629_mage_t3_cosmicdrive.png",
    "boots": false,
    "parts": [
     3067,
@@ -398,7 +398,7 @@ window.GOLD_DATA = {
    "id": 3137,
    "name": "Cryptbloom",
    "price": 3000,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3137_cryptbloom.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3137_cryptbloom.png",
    "boots": false,
    "parts": [
     4630,
@@ -419,7 +419,7 @@ window.GOLD_DATA = {
    "id": 6621,
    "name": "Dawncore",
    "price": 2500,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/6621_dawncore.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/6621_dawncore.png",
    "boots": false,
    "parts": [
     1026,
@@ -437,7 +437,7 @@ window.GOLD_DATA = {
    "id": 3742,
    "name": "Dead Man's Plate",
    "price": 2900,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3742_tank_t3_deadmansplate.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3742_tank_t3_deadmansplate.png",
    "boots": false,
    "parts": [
     3066,
@@ -456,7 +456,7 @@ window.GOLD_DATA = {
    "id": 6333,
    "name": "Death's Dance",
    "price": 3300,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/6333_fighter_t3_deathsdance.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/6333_fighter_t3_deathsdance.png",
    "boots": false,
    "parts": [
     2019,
@@ -478,7 +478,7 @@ window.GOLD_DATA = {
    "id": 2510,
    "name": "Dusk and Dawn",
    "price": 3100,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/2510_apfightersheen.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/2510_apfightersheen.png",
    "boots": false,
    "parts": [
     3057,
@@ -499,7 +499,7 @@ window.GOLD_DATA = {
    "id": 6620,
    "name": "Echoes of Helia",
    "price": 2200,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/6620_echoes_of_helia.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/6620_echoes_of_helia.png",
    "boots": false,
    "parts": [
     3067,
@@ -519,7 +519,7 @@ window.GOLD_DATA = {
    "id": 6692,
    "name": "Eclipse",
    "price": 2900,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/6692_assassin_t4_eclipse.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/6692_assassin_t4_eclipse.png",
    "boots": false,
    "parts": [
     3133,
@@ -538,7 +538,7 @@ window.GOLD_DATA = {
    "id": 3814,
    "name": "Edge of Night",
    "price": 3000,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3814_assassin_t3_edgeofnight.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3814_assassin_t3_edgeofnight.png",
    "boots": false,
    "parts": [
     3134,
@@ -558,7 +558,7 @@ window.GOLD_DATA = {
    "id": 2517,
    "name": "Endless Hunger",
    "price": 3100,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/2517_adfighteromnivamp.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/2517_adfighteromnivamp.png",
    "boots": false,
    "parts": [
     3133,
@@ -577,7 +577,7 @@ window.GOLD_DATA = {
    "id": 3508,
    "name": "Essence Reaver",
    "price": 3050,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3508_marksman_t3_essencereaver.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3508_marksman_t3_essencereaver.png",
    "boots": false,
    "parts": [
     3057,
@@ -598,7 +598,7 @@ window.GOLD_DATA = {
    "id": 3073,
    "name": "Experimental Hexplate",
    "price": 3000,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3073_hexaegis.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3073_hexaegis.png",
    "boots": false,
    "parts": [
     2021,
@@ -618,7 +618,7 @@ window.GOLD_DATA = {
    "id": 2512,
    "name": "Fiendhunter Bolts",
    "price": 2650,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/2512_adcallin.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/2512_adcallin.png",
    "boots": false,
    "parts": [
     3086,
@@ -637,7 +637,7 @@ window.GOLD_DATA = {
    "id": 4401,
    "name": "Force of Nature",
    "price": 2800,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/4401_tank_t3_forceofnature.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/4401_tank_t3_forceofnature.png",
    "boots": false,
    "parts": [
     1057,
@@ -655,7 +655,7 @@ window.GOLD_DATA = {
    "id": 3110,
    "name": "Frozen Heart",
    "price": 2500,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3110_tank_t3_frozenheart.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3110_tank_t3_frozenheart.png",
    "boots": false,
    "parts": [
     3082,
@@ -675,7 +675,7 @@ window.GOLD_DATA = {
    "id": 3124,
    "name": "Guinsoo's Rageblade",
    "price": 3000,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3124_marksman_t3_guinsoosrageblade.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3124_marksman_t3_guinsoosrageblade.png",
    "boots": false,
    "parts": [
     1052,
@@ -692,7 +692,7 @@ window.GOLD_DATA = {
    "id": 3084,
    "name": "Heartsteel",
    "price": 3000,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3084_tank_t4_heartsteel.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3084_tank_t4_heartsteel.png",
    "boots": false,
    "parts": [
     1011,
@@ -712,7 +712,7 @@ window.GOLD_DATA = {
    "id": 2523,
    "name": "Hexoptics C44",
    "price": 2800,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/2523_adcscope.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/2523_adcscope.png",
    "boots": false,
    "parts": [
     1037,
@@ -730,7 +730,7 @@ window.GOLD_DATA = {
    "id": 3146,
    "name": "Hextech Gunblade",
    "price": 3000,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3146_hextechgunblade.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3146_hextechgunblade.png",
    "boots": false,
    "parts": [
     1053,
@@ -749,7 +749,7 @@ window.GOLD_DATA = {
    "id": 3152,
    "name": "Hextech Rocketbelt",
    "price": 2650,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3152_mage_t4_hextechrocketbelt.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3152_mage_t4_hextechrocketbelt.png",
    "boots": false,
    "parts": [
     3145,
@@ -769,7 +769,7 @@ window.GOLD_DATA = {
    "id": 6664,
    "name": "Hollow Radiance",
    "price": 2800,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/6664_hollowradiance.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/6664_hollowradiance.png",
    "boots": false,
    "parts": [
     6660,
@@ -790,7 +790,7 @@ window.GOLD_DATA = {
    "id": 4628,
    "name": "Horizon Focus",
    "price": 2700,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/4628_mage_t3_horizonfocus.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/4628_mage_t3_horizonfocus.png",
    "boots": false,
    "parts": [
     3108,
@@ -810,7 +810,7 @@ window.GOLD_DATA = {
    "id": 3181,
    "name": "Hullbreaker",
    "price": 3000,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3181_hullbreaker.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3181_hullbreaker.png",
    "boots": false,
    "parts": [
     2021,
@@ -829,7 +829,7 @@ window.GOLD_DATA = {
    "id": 6662,
    "name": "Iceborn Gauntlet",
    "price": 2900,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/6662_tank_t3_iceborngauntlet.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/6662_tank_t3_iceborngauntlet.png",
    "boots": false,
    "parts": [
     3057,
@@ -848,7 +848,7 @@ window.GOLD_DATA = {
    "id": 6673,
    "name": "Immortal Shieldbow",
    "price": 3000,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/6673_marksman_t4_crimsonshieldbow.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/6673_marksman_t4_crimsonshieldbow.png",
    "boots": false,
    "parts": [
     1037,
@@ -866,7 +866,7 @@ window.GOLD_DATA = {
    "id": 4005,
    "name": "Imperial Mandate",
    "price": 2400,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/4005_enchanter_t4_imperialmandate.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/4005_enchanter_t4_imperialmandate.png",
    "boots": false,
    "parts": [
     1052,
@@ -885,7 +885,7 @@ window.GOLD_DATA = {
    "id": 3031,
    "name": "Infinity Edge",
    "price": 3500,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3031_marksman_t3_infinityedge.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3031_marksman_t3_infinityedge.png",
    "boots": false,
    "parts": [
     1038,
@@ -902,7 +902,7 @@ window.GOLD_DATA = {
    "id": 6665,
    "name": "Jak'Sho, The Protean",
    "price": 3200,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/6665_tank_t4_jakshotheprotean.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/6665_tank_t4_jakshotheprotean.png",
    "boots": false,
    "parts": [
     1011,
@@ -921,7 +921,7 @@ window.GOLD_DATA = {
    "id": 2504,
    "name": "Kaenic Rookern",
    "price": 2900,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/2504_kaenicrookern.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/2504_kaenicrookern.png",
    "boots": false,
    "parts": [
     3211,
@@ -940,7 +940,7 @@ window.GOLD_DATA = {
    "id": 3109,
    "name": "Knight's Vow",
    "price": 2300,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3109_tank_t3_knightsvow.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3109_tank_t3_knightsvow.png",
    "boots": false,
    "parts": [
     3067,
@@ -959,7 +959,7 @@ window.GOLD_DATA = {
    "id": 6672,
    "name": "Kraken Slayer",
    "price": 3000,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/6672_marksman_t4_behemothslayer.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/6672_marksman_t4_behemothslayer.png",
    "boots": false,
    "parts": [
     6690,
@@ -980,7 +980,7 @@ window.GOLD_DATA = {
    "id": 6653,
    "name": "Liandry's Torment",
    "price": 3000,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/6653_mage_t4_liandrysanguish.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/6653_mage_t4_liandrysanguish.png",
    "boots": false,
    "parts": [
     3147,
@@ -998,7 +998,7 @@ window.GOLD_DATA = {
    "id": 3100,
    "name": "Lich Bane",
    "price": 2900,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3100_mage_t3_lichbane.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3100_mage_t3_lichbane.png",
    "boots": false,
    "parts": [
     3057,
@@ -1017,7 +1017,7 @@ window.GOLD_DATA = {
    "id": 3190,
    "name": "Locket of the Iron Solari",
    "price": 2200,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3190_enchanter_t4_locketofironsolari.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3190_enchanter_t4_locketofironsolari.png",
    "boots": false,
    "parts": [
     3067,
@@ -1035,7 +1035,7 @@ window.GOLD_DATA = {
    "id": 3036,
    "name": "Lord Dominik's Regards",
    "price": 3300,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3036_marksman_t3_dominikregards.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3036_marksman_t3_dominikregards.png",
    "boots": false,
    "parts": [
     3035,
@@ -1054,7 +1054,7 @@ window.GOLD_DATA = {
    "id": 6655,
    "name": "Luden's Echo",
    "price": 2750,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/6655_mage_t4_ludenstempest.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/6655_mage_t4_ludenstempest.png",
    "boots": false,
    "parts": [
     3802,
@@ -1074,7 +1074,7 @@ window.GOLD_DATA = {
    "id": 3118,
    "name": "Malignance",
    "price": 2700,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3118_malignance.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3118_malignance.png",
    "boots": false,
    "parts": [
     3802,
@@ -1092,7 +1092,7 @@ window.GOLD_DATA = {
    "id": 3004,
    "name": "Manamune",
    "price": 2900,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3004_marksman_t3_manamune.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3004_marksman_t3_manamune.png",
    "boots": false,
    "parts": [
     3070,
@@ -1112,7 +1112,7 @@ window.GOLD_DATA = {
    "id": 3156,
    "name": "Maw of Malmortius",
    "price": 3100,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3156_fighter_t3_mawofmalmortius.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3156_fighter_t3_mawofmalmortius.png",
    "boots": false,
    "parts": [
     3155,
@@ -1133,7 +1133,7 @@ window.GOLD_DATA = {
    "id": 3139,
    "name": "Mercurial Scimitar",
    "price": 3200,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3139_marksman_t3_mercurialscimitar.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3139_marksman_t3_mercurialscimitar.png",
    "boots": false,
    "parts": [
     3140,
@@ -1151,7 +1151,7 @@ window.GOLD_DATA = {
    "id": 3222,
    "name": "Mikael's Blessing",
    "price": 2300,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3222_enchanter_t3_mikaelsblessing.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3222_enchanter_t3_mikaelsblessing.png",
    "boots": false,
    "parts": [
     3067,
@@ -1169,7 +1169,7 @@ window.GOLD_DATA = {
    "id": 6617,
    "name": "Moonstone Renewer",
    "price": 2200,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/6617_enchanter_t4_moonstonerenewer.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/6617_enchanter_t4_moonstonerenewer.png",
    "boots": false,
    "parts": [
     3067,
@@ -1189,7 +1189,7 @@ window.GOLD_DATA = {
    "id": 3165,
    "name": "Morellonomicon",
    "price": 2850,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3165_mage_t3_morellonomicon.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3165_mage_t3_morellonomicon.png",
    "boots": false,
    "parts": [
     3916,
@@ -1208,7 +1208,7 @@ window.GOLD_DATA = {
    "id": 3033,
    "name": "Mortal Reminder",
    "price": 3000,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3033_marksman_t3_mortalreminder.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3033_marksman_t3_mortalreminder.png",
    "boots": false,
    "parts": [
     3123,
@@ -1228,7 +1228,7 @@ window.GOLD_DATA = {
    "id": 3115,
    "name": "Nashor's Tooth",
    "price": 2900,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3115_mage_t3_nashorstooth.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3115_mage_t3_nashorstooth.png",
    "boots": false,
    "parts": [
     1043,
@@ -1247,7 +1247,7 @@ window.GOLD_DATA = {
    "id": 6675,
    "name": "Navori Flickerblade",
    "price": 2650,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/6675_navoriflickerblade.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/6675_navoriflickerblade.png",
    "boots": false,
    "parts": [
     1042,
@@ -1265,7 +1265,7 @@ window.GOLD_DATA = {
    "id": 2501,
    "name": "Overlord's Bloodmail",
    "price": 3300,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/7111_overlordsbloodmail.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/7111_overlordsbloodmail.png",
    "boots": false,
    "parts": [
     2021,
@@ -1284,7 +1284,7 @@ window.GOLD_DATA = {
    "id": 3046,
    "name": "Phantom Dancer",
    "price": 2650,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3046_marksman_t3_phantomdancer.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3046_marksman_t3_phantomdancer.png",
    "boots": false,
    "parts": [
     1042,
@@ -1302,7 +1302,7 @@ window.GOLD_DATA = {
    "id": 6698,
    "name": "Profane Hydra",
    "price": 2850,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/6698_profanehydra.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/6698_profanehydra.png",
    "boots": false,
    "parts": [
     3077,
@@ -1322,7 +1322,7 @@ window.GOLD_DATA = {
    "id": 2525,
    "name": "Protoplasm Harness",
    "price": 2600,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/2525_tanklifeline.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/2525_tanklifeline.png",
    "boots": false,
    "parts": [
     3067,
@@ -1341,7 +1341,7 @@ window.GOLD_DATA = {
    "id": 3089,
    "name": "Rabadon's Deathcap",
    "price": 3500,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3089_mage_t3_deathcap.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3089_mage_t3_deathcap.png",
    "boots": false,
    "parts": [
     1058,
@@ -1357,7 +1357,7 @@ window.GOLD_DATA = {
    "id": 3143,
    "name": "Randuin's Omen",
    "price": 2700,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3143_tank_t3_randuinsomen.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3143_tank_t3_randuinsomen.png",
    "boots": false,
    "parts": [
     3082,
@@ -1375,7 +1375,7 @@ window.GOLD_DATA = {
    "id": 3094,
    "name": "Rapid Firecannon",
    "price": 2650,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3094_marksman_t3_rapidfirehandcannon.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3094_marksman_t3_rapidfirehandcannon.png",
    "boots": false,
    "parts": [
     3086,
@@ -1394,7 +1394,7 @@ window.GOLD_DATA = {
    "id": 3074,
    "name": "Ravenous Hydra",
    "price": 3300,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3074_fighter_t3_ravenoushydra.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3074_fighter_t3_ravenoushydra.png",
    "boots": false,
    "parts": [
     3077,
@@ -1417,7 +1417,7 @@ window.GOLD_DATA = {
    "id": 3107,
    "name": "Redemption",
    "price": 2300,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3107_enchanter_t3_redemption.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3107_enchanter_t3_redemption.png",
    "boots": false,
    "parts": [
     3108,
@@ -1435,7 +1435,7 @@ window.GOLD_DATA = {
    "id": 4633,
    "name": "Riftmaker",
    "price": 3100,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/4633_mage_t4_riftmaker.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/4633_mage_t4_riftmaker.png",
    "boots": false,
    "parts": [
     3147,
@@ -1454,7 +1454,7 @@ window.GOLD_DATA = {
    "id": 6657,
    "name": "Rod of Ages",
    "price": 2600,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/6657_mage_t4_rodofages.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/6657_mage_t4_rodofages.png",
    "boots": false,
    "parts": [
     1026,
@@ -1473,7 +1473,7 @@ window.GOLD_DATA = {
    "id": 3085,
    "name": "Runaan's Hurricane",
    "price": 2650,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3085_marksman_t3_runaans.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3085_marksman_t3_runaans.png",
    "boots": false,
    "parts": [
     3086,
@@ -1493,7 +1493,7 @@ window.GOLD_DATA = {
    "id": 3116,
    "name": "Rylai's Crystal Scepter",
    "price": 2600,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3116_mage_t3_rylajscrystalscepter.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3116_mage_t3_rylajscrystalscepter.png",
    "boots": false,
    "parts": [
     1026,
@@ -1510,7 +1510,7 @@ window.GOLD_DATA = {
    "id": 6695,
    "name": "Serpent's Fang",
    "price": 2500,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/6695_assassin_t3_serpentsfang.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/6695_assassin_t3_serpentsfang.png",
    "boots": false,
    "parts": [
     3134,
@@ -1527,7 +1527,7 @@ window.GOLD_DATA = {
    "id": 6694,
    "name": "Serylda's Grudge",
    "price": 3000,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/6694_assasin_t3_seryldasgrudge.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/6694_assasin_t3_seryldasgrudge.png",
    "boots": false,
    "parts": [
     3133,
@@ -1547,7 +1547,7 @@ window.GOLD_DATA = {
    "id": 4645,
    "name": "Shadowflame",
    "price": 3200,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/4645_shadowflame.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/4645_shadowflame.png",
    "boots": false,
    "parts": [
     3145,
@@ -1564,7 +1564,7 @@ window.GOLD_DATA = {
    "id": 2065,
    "name": "Shurelya's Battlesong",
    "price": 2200,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/2065_tank_t4_shurelyasbattlesong.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/2065_tank_t4_shurelyasbattlesong.png",
    "boots": false,
    "parts": [
     3113,
@@ -1583,7 +1583,7 @@ window.GOLD_DATA = {
    "id": 3161,
    "name": "Spear of Shojin",
    "price": 3100,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3161_fighter_t3_spearofshojin.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3161_fighter_t3_spearofshojin.png",
    "boots": false,
    "parts": [
     1037,
@@ -1601,7 +1601,7 @@ window.GOLD_DATA = {
    "id": 4004,
    "name": "Spectral Cutlass",
    "price": 2800,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/4004_assassin_t3_spectralcutlass.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/4004_assassin_t3_spectralcutlass.png",
    "boots": false,
    "parts": [
     4003,
@@ -1621,7 +1621,7 @@ window.GOLD_DATA = {
    "id": 3065,
    "name": "Spirit Visage",
    "price": 2700,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3065_tank_t3_spiritvisage.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3065_tank_t3_spiritvisage.png",
    "boots": false,
    "parts": [
     3211,
@@ -1641,7 +1641,7 @@ window.GOLD_DATA = {
    "id": 6616,
    "name": "Staff of Flowing Water",
    "price": 2250,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3744_enchanter_t3_staffofflowingwater.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3744_enchanter_t3_staffofflowingwater.png",
    "boots": false,
    "parts": [
     3108,
@@ -1659,7 +1659,7 @@ window.GOLD_DATA = {
    "id": 3087,
    "name": "Statikk Shiv",
    "price": 3000,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3087_statikk_shiv.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3087_statikk_shiv.png",
    "boots": false,
    "parts": [
     3144,
@@ -1678,7 +1678,7 @@ window.GOLD_DATA = {
    "id": 3053,
    "name": "Sterak's Gage",
    "price": 3200,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3053_steraks_gage.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3053_steraks_gage.png",
    "boots": false,
    "parts": [
     1037,
@@ -1696,7 +1696,7 @@ window.GOLD_DATA = {
    "id": 3095,
    "name": "Stormrazor",
    "price": 3200,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3095_windblade.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3095_windblade.png",
    "boots": false,
    "parts": [
     1038,
@@ -1714,7 +1714,7 @@ window.GOLD_DATA = {
    "id": 4646,
    "name": "Stormsurge",
    "price": 2800,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/4646_stormsurge.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/4646_stormsurge.png",
    "boots": false,
    "parts": [
     3145,
@@ -1732,7 +1732,7 @@ window.GOLD_DATA = {
    "id": 6631,
    "name": "Stridebreaker",
    "price": 3300,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/6631_fighter_t4_stridebreaker.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/6631_fighter_t4_stridebreaker.png",
    "boots": false,
    "parts": [
     3077,
@@ -1753,7 +1753,7 @@ window.GOLD_DATA = {
    "id": 6610,
    "name": "Sundered Sky",
    "price": 3100,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/6610_sunderedsky.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/6610_sunderedsky.png",
    "boots": false,
    "parts": [
     2021,
@@ -1773,7 +1773,7 @@ window.GOLD_DATA = {
    "id": 3068,
    "name": "Sunfire Aegis",
    "price": 2800,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3068_tank_t4_sunfireaegis.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3068_tank_t4_sunfireaegis.png",
    "boots": false,
    "parts": [
     6660,
@@ -1793,7 +1793,7 @@ window.GOLD_DATA = {
    "id": 3302,
    "name": "Terminus",
    "price": 3000,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3302_terminus.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3302_terminus.png",
    "boots": false,
    "parts": [
     3051,
@@ -1814,7 +1814,7 @@ window.GOLD_DATA = {
    "id": 6676,
    "name": "The Collector",
    "price": 3000,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/6676_marksman_t3_thecollector.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/6676_marksman_t3_thecollector.png",
    "boots": false,
    "parts": [
     1037,
@@ -1832,7 +1832,7 @@ window.GOLD_DATA = {
    "id": 3075,
    "name": "Thornmail",
    "price": 2450,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3075_tank_t3_thornmail.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3075_tank_t3_thornmail.png",
    "boots": false,
    "parts": [
     3076,
@@ -1852,7 +1852,7 @@ window.GOLD_DATA = {
    "id": 3748,
    "name": "Titanic Hydra",
    "price": 3300,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3748_fighter_t3_titanichydra.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3748_fighter_t3_titanichydra.png",
    "boots": false,
    "parts": [
     3077,
@@ -1874,7 +1874,7 @@ window.GOLD_DATA = {
    "id": 3078,
    "name": "Trinity Force",
    "price": 3333,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3078_fighter_t4_trinityforce.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3078_fighter_t4_trinityforce.png",
    "boots": false,
    "parts": [
     3057,
@@ -1897,7 +1897,7 @@ window.GOLD_DATA = {
    "id": 3179,
    "name": "Umbral Glaive",
    "price": 2800,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3179_assassin_t3_umbralglaive.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3179_assassin_t3_umbralglaive.png",
    "boots": false,
    "parts": [
     3134,
@@ -1917,7 +1917,7 @@ window.GOLD_DATA = {
    "id": 2502,
    "name": "Unending Despair",
    "price": 2800,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/2502_unendingdespair.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/2502_unendingdespair.png",
    "boots": false,
    "parts": [
     1031,
@@ -1936,7 +1936,7 @@ window.GOLD_DATA = {
    "id": 3135,
    "name": "Void Staff",
    "price": 3000,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3135_mage_t3_voidstaff.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3135_mage_t3_voidstaff.png",
    "boots": false,
    "parts": [
     4630,
@@ -1952,7 +1952,7 @@ window.GOLD_DATA = {
    "id": 6699,
    "name": "Voltaic Cyclosword",
    "price": 3000,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/6699_voltaiccyclosword.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/6699_voltaiccyclosword.png",
    "boots": false,
    "parts": [
     2020,
@@ -1970,7 +1970,7 @@ window.GOLD_DATA = {
    "id": 3083,
    "name": "Warmog's Armor",
    "price": 3100,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3083_tank_t3_warmogs.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3083_tank_t3_warmogs.png",
    "boots": false,
    "parts": [
     1011,
@@ -1990,7 +1990,7 @@ window.GOLD_DATA = {
    "id": 3119,
    "name": "Winter's Approach",
    "price": 2400,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3119_wintersapproach.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3119_wintersapproach.png",
    "boots": false,
    "parts": [
     3070,
@@ -2011,7 +2011,7 @@ window.GOLD_DATA = {
    "id": 3091,
    "name": "Wit's End",
    "price": 2800,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3091_fighter_t3_witsend.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3091_fighter_t3_witsend.png",
    "boots": false,
    "parts": [
     1043,
@@ -2030,7 +2030,7 @@ window.GOLD_DATA = {
    "id": 3142,
    "name": "Youmuu's Ghostblade",
    "price": 2800,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3142_assassin_t3_youmuusghostblade.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3142_assassin_t3_youmuusghostblade.png",
    "boots": false,
    "parts": [
     3134,
@@ -2049,7 +2049,7 @@ window.GOLD_DATA = {
    "id": 3032,
    "name": "Yun Tal Wildarrows",
    "price": 3000,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3032_yuntalwildarrows.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3032_yuntalwildarrows.png",
    "boots": false,
    "parts": [
     1038,
@@ -2067,7 +2067,7 @@ window.GOLD_DATA = {
    "id": 3050,
    "name": "Zeke's Convergence",
    "price": 2200,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3050_enchanter_t3_zekesconvergence.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3050_enchanter_t3_zekesconvergence.png",
    "boots": false,
    "parts": [
     3067,
@@ -2085,7 +2085,7 @@ window.GOLD_DATA = {
    "id": 3157,
    "name": "Zhonya's Hourglass",
    "price": 3250,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3157_mage_t3_zhonyashourglass.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3157_mage_t3_zhonyashourglass.png",
    "boots": false,
    "parts": [
     1058,
@@ -2106,7 +2106,7 @@ window.GOLD_DATA = {
    "id": 1335,
    "name": "Goldrend",
    "tier": "Prismatic",
-   "icon": "https://raw.communitydragon.org/latest/game/assets/ux/kiwi/augments/icons/goldrend_small.png",
+   "icon": "/assets/cd/latest/game/assets/ux/kiwi/augments/icons/goldrend_small.png",
    "values": {
     "MovementSpeedDuration": 1.5,
     "PercentMovespeedGain": 0.25,
@@ -2128,7 +2128,7 @@ window.GOLD_DATA = {
    "id": 2128,
    "name": "Combusting Interest",
    "tier": "Gold",
-   "icon": "https://raw.communitydragon.org/latest/game/assets/ux/kiwi/augments/icons/bloodmoney2_small.png",
+   "icon": "/assets/cd/latest/game/assets/ux/kiwi/augments/icons/bloodmoney2_small.png",
    "values": {
     "PercentGoldFromDamage": 0.007499999832361937
    },
@@ -2148,7 +2148,7 @@ window.GOLD_DATA = {
    "id": 2089,
    "name": "Yowch, My Coins!",
    "tier": "Gold",
-   "icon": "https://raw.communitydragon.org/latest/game/assets/ux/kiwi/augments/icons/youchmycoins_small.png",
+   "icon": "/assets/cd/latest/game/assets/ux/kiwi/augments/icons/youchmycoins_small.png",
    "values": {
     "GoldPerCoin": 15.0,
     "AmountOfCoins": 1.0,
@@ -2171,7 +2171,7 @@ window.GOLD_DATA = {
    "id": 1038,
    "name": "From Beginning To End",
    "tier": "Gold",
-   "icon": "https://raw.communitydragon.org/latest/game/assets/ux/cherry/augments/icons/frombeginningtoend_small.png",
+   "icon": "/assets/cd/latest/game/assets/ux/cherry/augments/icons/frombeginningtoend_small.png",
    "values": {
     "AugDuration": 3.0,
     "DamageAmp": 0.10000000149011612,
@@ -2209,7 +2209,7 @@ window.GOLD_DATA = {
    "id": 1384,
    "name": "Donation",
    "tier": "Gold",
-   "icon": "https://raw.communitydragon.org/latest/game/assets/ux/kiwi/augments/icons/donation_small.png",
+   "icon": "/assets/cd/latest/game/assets/ux/kiwi/augments/icons/donation_small.png",
    "values": {
     "GoldAmount": 1750.0,
     "IncFrequency": 10.0,
@@ -2226,7 +2226,7 @@ window.GOLD_DATA = {
    "id": 1319,
    "name": "Upgrade Immolate",
    "tier": "Silver",
-   "icon": "https://raw.communitydragon.org/latest/game/assets/ux/kiwi/augments/icons/upgradeimmolate_small.png",
+   "icon": "/assets/cd/latest/game/assets/ux/kiwi/augments/icons/upgradeimmolate_small.png",
    "values": {
     "GoldPerTick": 12.0
    },
@@ -2244,7 +2244,7 @@ window.GOLD_DATA = {
    "id": 1320,
    "name": "Upgrade Collector",
    "tier": "Silver",
-   "icon": "https://raw.communitydragon.org/latest/game/assets/ux/kiwi/augments/icons/upgradecollector_small.png",
+   "icon": "/assets/cd/latest/game/assets/ux/kiwi/augments/icons/upgradecollector_small.png",
    "values": {
     "UpgradedGoldAmount": 50.0,
     "ExecutionInc": 0.004999999888241291,
@@ -2265,7 +2265,7 @@ window.GOLD_DATA = {
    "id": 1336,
    "name": "Upgrade Infinity Edge",
    "tier": "Gold",
-   "icon": "https://raw.communitydragon.org/latest/game/assets/ux/kiwi/augments/icons/upgradeie_small.png",
+   "icon": "/assets/cd/latest/game/assets/ux/kiwi/augments/icons/upgradeie_small.png",
    "values": {
     "BonusCritDMG": 0.10000000149011612,
     "CritChanceToDamage": 0.5
@@ -2283,7 +2283,7 @@ window.GOLD_DATA = {
    "id": 1996,
    "name": "Upgrade Sheen",
    "tier": "Gold",
-   "icon": "https://raw.communitydragon.org/latest/game/assets/ux/kiwi/augments/icons/upgradesheen_small.png",
+   "icon": "/assets/cd/latest/game/assets/ux/kiwi/augments/icons/upgradesheen_small.png",
    "values": {
     "DamageMaxHP": 0.03999999910593033,
     "HealMaxHP": 0.03500000014901161
@@ -2306,7 +2306,7 @@ window.GOLD_DATA = {
    "id": 2157,
    "name": "Upgrade Death's Dance",
    "tier": "Silver",
-   "icon": "https://raw.communitydragon.org/latest/game/assets/ux/kiwi/augments/icons/upgradedeathdance_small.png",
+   "icon": "/assets/cd/latest/game/assets/ux/kiwi/augments/icons/upgradedeathdance_small.png",
    "values": {
     "HealPercent": 1.25,
     "BonusHealPercentTT": 0.25
@@ -2324,7 +2324,7 @@ window.GOLD_DATA = {
    "id": 2143,
    "name": "Upgrade Sundered Sky",
    "tier": "Gold",
-   "icon": "https://raw.communitydragon.org/latest/game/assets/ux/kiwi/augments/icons/upgradeie_small.png",
+   "icon": "/assets/cd/latest/game/assets/ux/kiwi/augments/icons/upgradeie_small.png",
    "values": {},
    "calcs": {},
    "text": "{{UpgradeSunderedSky_Description}}",
@@ -2339,7 +2339,7 @@ window.GOLD_DATA = {
    "id": 2140,
    "name": "Upgrade Ravenous Hydra",
    "tier": "Gold",
-   "icon": "https://raw.communitydragon.org/latest/game/assets/ux/kiwi/augments/icons/upgradesheen_small.png",
+   "icon": "/assets/cd/latest/game/assets/ux/kiwi/augments/icons/upgradesheen_small.png",
    "values": {
     "Cooldown": 1.0,
     "Gold": 500.0
@@ -2357,7 +2357,7 @@ window.GOLD_DATA = {
    "id": 1156,
    "name": "Wooglet's Witchcap",
    "tier": "Prismatic",
-   "icon": "https://raw.communitydragon.org/latest/game/assets/ux/cherry/augments/icons/quest_woogletswitchcap_small.png",
+   "icon": "/assets/cd/latest/game/assets/ux/cherry/augments/icons/quest_woogletswitchcap_small.png",
    "values": {},
    "calcs": {},
    "text": "Immediately gain a Needlessly Large Rod. QUEST: Possess Rabadon's Deathcap and Zhonya's Hourglass. REWARD: Gain Wooglet's Witchcap.",
@@ -2375,7 +2375,7 @@ window.GOLD_DATA = {
    "id": 1361,
    "name": "Icathia's Fall",
    "tier": "Prismatic",
-   "icon": "https://raw.communitydragon.org/latest/game/assets/ux/kiwi/augments/icons/quest_voidimmolation_small.png",
+   "icon": "/assets/cd/latest/game/assets/ux/kiwi/augments/icons/quest_voidimmolation_small.png",
    "values": {},
    "calcs": {},
    "text": "Immediately: Gain a Bami's Cinder. Requirement: Possess Sunfire Aegis and Hollow Radiance. Reward: Combine Sunfire Aegis and Hollow Radiance into Void Immolation.",

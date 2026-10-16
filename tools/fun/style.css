@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap");
+@import url("/assets/fonts/fonts.css");
 
 /* DeepARAM theme: cool grey page, white surfaces, blue accent. */
 :root {
@@ -51,7 +51,6 @@ body {
 }
 
 main {
-  max-width: 1120px;
   margin: 0 auto;
   padding: 1.75rem 16px 4rem;
   display: flex;
