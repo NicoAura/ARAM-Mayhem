@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { THEME_EVENT, themeDocument } from "@/lib/theme";
 
 // Same-origin iframe that grows to fit its page, so the embedded tool scrolls with the site.
 export default function Embed({ src, title, minHeight = 600 }: { src: string; title: string; minHeight?: number }) {
@@ -14,16 +15,20 @@ export default function Embed({ src, title, minHeight = 600 }: { src: string; ti
     const attach = () => {
       const doc = frame.contentDocument;
       if (!doc?.body) return;
+      themeDocument(doc, document.documentElement.dataset.theme);
       const fit = () => setHeight(Math.max(minHeight, doc.documentElement.scrollHeight));
       fit();
       observer?.disconnect();
       observer = new ResizeObserver(fit);
       observer.observe(doc.body);
     };
+    const retheme = () => frame.contentDocument && themeDocument(frame.contentDocument, document.documentElement.dataset.theme);
     frame.addEventListener("load", attach);
+    window.addEventListener(THEME_EVENT, retheme);
     attach();
     return () => {
       frame.removeEventListener("load", attach);
+      window.removeEventListener(THEME_EVENT, retheme);
       observer?.disconnect();
     };
   }, [minHeight]);
