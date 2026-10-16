@@ -3,7 +3,7 @@ import Intro from "@/components/Intro";
 import Pending from "@/components/Pending";
 import { readRepoJson } from "@/lib/repo-data";
 
-export const metadata: Metadata = { title: "PBE · ARAM Mayhem" };
+export const metadata: Metadata = { title: "PBE · DeepARAM" };
 
 type Change = { stat: string; live: string; pbe: string };
 type Pbe = {

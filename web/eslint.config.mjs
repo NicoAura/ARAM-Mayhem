@@ -16,6 +16,7 @@ const eslintConfig = [
       "node_modules/**",
       ".next/**",
       ".open-next/**",
+      "public/embed/**",
       ".wrangler/**",
       "cloudflare-env.d.ts",
       "out/**",

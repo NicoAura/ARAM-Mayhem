@@ -6,7 +6,7 @@ import Pending from "@/components/Pending";
 import SubTabs from "@/components/SubTabs";
 import { readRepoCsv, readRepoJson, type CsvRow } from "@/lib/repo-data";
 
-export const metadata: Metadata = { title: "China Stats · ARAM Mayhem" };
+export const metadata: Metadata = { title: "China Stats · DeepARAM" };
 
 type Duos = { meta: { champion_stat_date?: string }; duos: { names: string[]; win_rate: number; pick_rate: number }[] };
 
