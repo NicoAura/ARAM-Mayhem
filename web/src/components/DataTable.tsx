@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import championNames from "@/data/champion-names.json";
+import { useAdvanced } from "./Advanced";
 import ChampionPanel, { hasPanel } from "./ChampionPanel";
 
 export type Column = {
@@ -11,6 +12,10 @@ export type Column = {
   sortable?: boolean;
   /** For "augment" columns: the row key holding the augment id, for its icon. */
   iconKey?: string;
+  /** Sort by this row key instead (a tier letter sorts by its score). */
+  sortKey?: string;
+  /** Explains the column; shown on hover and to screen readers. */
+  hint?: string;
 };
 
 export type Row = Record<string, string | number | null>;
@@ -69,7 +74,8 @@ function Champion({ id, onOpen }: { id: string; onOpen: (id: string) => void }) 
 
 // Sortable, searchable table. Rows are shown a page at a time.
 export default function DataTable({
-  columns,
+  columns: standardColumns,
+  advancedColumns,
   rows,
   initialSort,
   searchKey,
@@ -77,6 +83,8 @@ export default function DataTable({
   urlTab,
 }: {
   columns: Column[];
+  /** Columns for the tier list's Advanced view; the standard columns are used when absent. */
+  advancedColumns?: Column[];
   rows: Row[];
   initialSort: { key: string; desc: boolean };
   searchKey?: string;
@@ -84,6 +92,7 @@ export default function DataTable({
   // Fill the search from ?q= when the page's ?tab= names this table's tab ("" = the default tab).
   urlTab?: string;
 }) {
+  const columns = useAdvanced() && advancedColumns ? advancedColumns : standardColumns;
   const [sort, setSort] = useState(initialSort);
   const [query, setQuery] = useState("");
   const [shown, setShown] = useState(PAGE);
@@ -137,9 +146,15 @@ export default function DataTable({
                   {c.sortable === false ? (
                     c.label
                   ) : (
-                    <button type="button" onClick={() => toggle(c.key)} aria-sort={sort.key === c.key ? (sort.desc ? "descending" : "ascending") : undefined}>
+                    <button
+                      type="button"
+                      onClick={() => toggle(c.sortKey ?? c.key)}
+                      title={c.hint}
+                      aria-sort={sort.key === (c.sortKey ?? c.key) ? (sort.desc ? "descending" : "ascending") : undefined}
+                    >
                       {c.label}
-                      <span className="sort-mark">{sort.key === c.key ? (sort.desc ? "↓" : "↑") : ""}</span>
+                      {c.hint && <span className="col-hint" aria-hidden="true">?</span>}
+                      <span className="sort-mark">{sort.key === (c.sortKey ?? c.key) ? (sort.desc ? "↓" : "↑") : ""}</span>
                     </button>
                   )}
                 </th>
