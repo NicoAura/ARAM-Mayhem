@@ -6,8 +6,10 @@ import championNames from "@/data/champion-names.json";
 export type Column = {
   key: string;
   label: string;
-  format?: "pct" | "num" | "int" | "sec" | "text" | "champion" | "tier";
+  format?: "pct" | "num" | "int" | "sec" | "text" | "champion" | "augment" | "tier";
   sortable?: boolean;
+  /** For "augment" columns: the row key holding the augment id, for its icon. */
+  iconKey?: string;
 };
 
 export type Row = Record<string, string | number | null>;
@@ -21,7 +23,6 @@ function searchText(v: Row[string]) {
   return `${raw} ${names.join(" ")}`.toLowerCase();
 }
 
-const DDRAGON = "https://ddragon.leagueoflegends.com/cdn/16.20.1/img/champion";
 const PAGE = 50;
 
 function show(v: Row[string], format: Column["format"]) {
@@ -41,18 +42,21 @@ function show(v: Row[string], format: Column["format"]) {
   }
 }
 
-function Champion({ id }: { id: string }) {
+// Champion and augment icons come from the League client (web/scripts/fetch_icons.py).
+function Named({ src, name }: { src: string; name: string }) {
   const [broken, setBroken] = useState(false);
   return (
     <span className="champ">
       {!broken && (
         // eslint-disable-next-line @next/next/no-img-element
-        <img src={`${DDRAGON}/${id}.png`} alt="" width={24} height={24} loading="lazy" onError={() => setBroken(true)} />
+        <img src={src} alt="" width={24} height={24} loading="lazy" onError={() => setBroken(true)} />
       )}
-      {NAMES[id] ?? id.replace(/([a-z])([A-Z])/g, "$1 $2")}
+      {name}
     </span>
   );
 }
+
+const Champion = ({ id }: { id: string }) => <Named src={`/icons/champions/${id}.webp`} name={NAMES[id] ?? id.replace(/([a-z])([A-Z])/g, "$1 $2")} />;
 
 // Sortable, searchable table. Rows are shown a page at a time.
 export default function DataTable({
@@ -118,7 +122,7 @@ export default function DataTable({
             <tr>
               <th className="num">#</th>
               {columns.map((c) => (
-                <th key={c.key} className={c.format && !["text", "champion", "tier"].includes(c.format) ? "num" : ""}>
+                <th key={c.key} className={c.format && !["text", "champion", "augment", "tier"].includes(c.format) ? "num" : ""}>
                   {c.sortable === false ? (
                     c.label
                   ) : (
@@ -136,9 +140,11 @@ export default function DataTable({
               <tr key={i}>
                 <td className="num muted-cell">{i + 1}</td>
                 {columns.map((c) => (
-                  <td key={c.key} className={c.format && !["text", "champion", "tier"].includes(c.format) ? "num" : ""}>
+                  <td key={c.key} className={c.format && !["text", "champion", "augment", "tier"].includes(c.format) ? "num" : ""}>
                     {c.format === "champion" ? (
                       <Champion id={String(r[c.key])} />
+                    ) : c.format === "augment" ? (
+                      <Named src={`/icons/augments/${r[c.iconKey ?? "id"]}.webp`} name={String(r[c.key] ?? "")} />
                     ) : c.format === "tier" && r[c.key] ? (
                       <span className={`chip tier-${String(r[c.key]).toLowerCase()}`}>{r[c.key]}</span>
                     ) : (

@@ -8,11 +8,11 @@ type Tab = { href: string; label: string };
 
 // Bottom tab bar for phones and tablets. It is only shown when the inline script in the
 // layout marks the page as running on iOS or Android (html[data-device="mobile"]).
-const PRIMARY = ["/china", "/simulator", "/pbe"];
+const PRIMARY = ["/tier-list", "/simulator", "/pbe"];
 
 const ICONS: Record<string, React.ReactNode> = {
   "/": <path d="M4 11.5 12 5l8 6.5V19a1 1 0 0 1-1 1h-4.5v-5h-5v5H5a1 1 0 0 1-1-1z" />,
-  "/china": <path d="M5 19V11M10 19V6M15 19v-9M20 19V4" />,
+  "/tier-list": <path d="M5 19V11M10 19V6M15 19v-9M20 19V4" />,
   "/simulator": <path d="M4 14h4l2-6 4 12 2-6h4" />,
   "/pbe": <path d="M9 4h6M10 4v5l-5 9a1.5 1.5 0 0 0 1.3 2h11.4A1.5 1.5 0 0 0 19 18l-5-9V4" />,
   more: (
@@ -57,7 +57,7 @@ export default function MobileTabBar({ tabs }: { tabs: Tab[] }) {
         {primary.map((t) => (
           <Link key={t.href} href={t.href} aria-current={isActive(t.href) ? "page" : undefined}>
             <Icon name={t.href} />
-            <span>{t.href === "/china" ? "China" : t.label}</span>
+            <span>{t.href === "/tier-list" ? "Tiers" : t.label}</span>
           </Link>
         ))}
         <button

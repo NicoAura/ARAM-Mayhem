@@ -3,7 +3,7 @@
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
-export type SearchItem = { group: string; name: string; hint: string; href: string };
+export type SearchItem = { group: string; name: string; hint: string; href: string; icon?: string };
 
 // Header search: ⌘K, Ctrl+K or / opens a palette that jumps to any page, champion or augment.
 export default function SearchPalette({ items }: { items: SearchItem[] }) {
@@ -97,6 +97,10 @@ export default function SearchPalette({ items }: { items: SearchItem[] }) {
                   <li key={`${it.group}-${it.name}`}>
                     {head && <p className="palette-group">{head}</p>}
                     <button type="button" data-active={i === sel || undefined} onMouseEnter={() => setSel(i)} onClick={() => go(i)}>
+                      {it.icon && (
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img src={it.icon} alt="" width={22} height={22} loading="lazy" />
+                      )}
                       {it.name}
                       <span>{it.hint}</span>
                     </button>

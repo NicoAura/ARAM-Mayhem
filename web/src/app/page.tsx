@@ -1,5 +1,8 @@
 import Link from "next/link";
-import { chinaDate, counts, kitchenBuild, pbeSummary, toolTabs, topAugments, topChampions, topDps } from "@/lib/highlights";
+import { statsDate, counts, kitchenBuild, pbeSummary, toolTabs, topAugments, topChampions, topDps } from "@/lib/highlights";
+
+// eslint-disable-next-line @next/next/no-img-element
+const Icon = ({ src }: { src: string }) => <img className="icon" src={src} alt="" width={24} height={24} loading="lazy" />;
 
 const pct = (v: number) => `${(v * 100).toFixed(1)}%`;
 // Win rates sit between roughly 44% and 58%, so bars use that range to show differences.
@@ -13,16 +16,16 @@ export default function Home() {
   const dps = topDps();
   const tools = toolTabs().filter((t) => t.slug !== "cook-builds");
   const n = counts();
-  const date = chinaDate();
+  const date = statsDate();
 
   return (
     <>
       <section className="hero">
         <p className="eyebrow">
-          ARAM Mayhem{date ? ` · China data ${date.toLocaleDateString("en-US", { month: "short", day: "numeric", timeZone: "UTC" })}` : ""}
+          ARAM Mayhem{date ? ` · Stats from ${date.toLocaleDateString("en-US", { month: "short", day: "numeric", timeZone: "UTC" })}` : ""}
         </p>
         <h1>Every Mayhem pick, measured.</h1>
-        <p className="lede">Win rates from the Chinese servers, a fight simulator for every champion, and Season 3 changes from the test server.</p>
+        <p className="lede">Win rates for every champion and augment, a fight simulator for every champion, and Season 3 changes from the test server.</p>
         <div className="stat-row">
           <div>
             <b>{n.champions}</b>
@@ -52,12 +55,13 @@ export default function Home() {
           <section className="card span-7">
             <div className="card-head">
               <h2>Highest win rate</h2>
-              <Link href="/china">All {n.champions} →</Link>
+              <Link href="/tier-list">All {n.champions} →</Link>
             </div>
             <div className="rank">
               {champs.map((c, i) => (
-                <Link key={c.id} href={`/china?q=${encodeURIComponent(c.name)}`}>
+                <Link key={c.id} href={`/tier-list?q=${encodeURIComponent(c.name)}`}>
                   <span className="rank-i">{i + 1}</span>
+                  <Icon src={`/icons/champions/${c.id}.webp`} />
                   <span className="rank-name">{c.name}</span>
                   <span className="meter">
                     <i style={{ width: wrWidth(c.winRate) }} />
@@ -72,12 +76,13 @@ export default function Home() {
           <section className="card span-5">
             <div className="card-head">
               <h2>Best augments</h2>
-              <Link href="/china?tab=augments">All →</Link>
+              <Link href="/tier-list?tab=augments">All →</Link>
             </div>
             <div className="rank">
               {augs.map((a, i) => (
-                <Link key={a.id} href={`/china?tab=augments&q=${encodeURIComponent(a.name)}`}>
+                <Link key={a.id} href={`/tier-list?tab=augments&q=${encodeURIComponent(a.name)}`}>
                   <span className="rank-i">{i + 1}</span>
+                  <Icon src={`/icons/augments/${a.id}.webp`} />
                   <span className="rank-name">{a.name}</span>
                   <span className={`chip tier-${a.tier?.toLowerCase()}`}>{a.tier}</span>
                   <span className="rank-v">{pct(a.winRate)}</span>
@@ -129,7 +134,10 @@ export default function Home() {
             <div className="bars">
               {dps.map((d) => (
                 <div key={d.id}>
-                  <span className="rank-name">{d.name}</span>
+                  <span className="rank-name">
+                    <Icon src={`/icons/champions/${d.id}.webp`} />
+                    {d.name}
+                  </span>
                   <span className="bar" style={{ width: `${(d.dps / dps[0].dps) * 100}%` }} />
                   <span className="rank-v">{Math.round(d.dps).toLocaleString("en-US")}</span>
                 </div>

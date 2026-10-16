@@ -32,7 +32,7 @@ export function topAugments(n = 6): Ranked[] {
     .slice(0, n);
 }
 
-export function chinaDate() {
+export function statsDate() {
   const meta = readRepoJson<{ meta: { champion_stat_date?: string } }>("data/cn/champions.json")?.meta;
   const d = meta?.champion_stat_date;
   return d && d.length === 8 ? new Date(`${d.slice(0, 4)}-${d.slice(4, 6)}-${d.slice(6)}T00:00:00Z`) : null;
@@ -72,7 +72,8 @@ export function searchItems(): SearchItem[] {
     group: "Champions",
     name: champName(r.name),
     hint: pct(Number(r.win_rate)),
-    href: `/china?q=${encodeURIComponent(champName(r.name))}`,
+    href: `/tier-list?q=${encodeURIComponent(champName(r.name))}`,
+    icon: `/icons/champions/${r.name}.webp`,
   }));
   const augs = (readRepoCsv("data/cn/augments.csv") ?? [])
     .filter((r) => AUGS[r.augment_id])
@@ -80,7 +81,8 @@ export function searchItems(): SearchItem[] {
       group: "Augments",
       name: AUGS[r.augment_id],
       hint: r.tier || "Augment",
-      href: `/china?tab=augments&q=${encodeURIComponent(AUGS[r.augment_id])}`,
+      href: `/tier-list?tab=augments&q=${encodeURIComponent(AUGS[r.augment_id])}`,
+      icon: `/icons/augments/${r.augment_id}.webp`,
     }));
   return [...pages, ...champs.sort((a, b) => a.name.localeCompare(b.name)), ...augs.sort((a, b) => a.name.localeCompare(b.name))];
 }
