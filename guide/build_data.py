@@ -32,6 +32,20 @@ SUMMONS = [
     ("Tibbers", "kiwi_tibbers", "bear_circle.png", "A Mayhem copy of Annie's bear. Its spell is named \"Summon: Tibbers\"."),
     ("Viego Soul", "kiwi_viegosoul", "kiwi_viegosoul_circle.png", "A Mayhem companion unit that reuses Senna's soul model."),
 ]
+# Augment Sets (an earlier Mayhem season's feature; the text is still in the client): string-table key stem per set
+AUGMENT_SETS = [
+    ("Snowball", "Snowday", ""),
+    ("Ambulance", "Wee Woo Wee Woo", "Gain Movement Speed and Heal and Shield Power toward allies at low Health."),
+    ("Money", "Make it Rain", ""),
+    ("Gamble", "High Roller", "Minions can drop Stat Anvils, and more of the set raises the chance of Gold or Prismatic Anvils."),
+    ("Stacking", "Stackosaurus Rex", ""),
+    ("FullyAutomated", "Fully Automated", "Lowers your Autocast cooldown, and at the next tier Autocast cooldown scales with Ability Haste."),
+    ("Firecracker", "Firecracker Set", ""),
+    ("DiveBomb", "Dive Bomb Set", "Reduces your death timer."),
+    ("Mana", "Archmage", ""),
+]
+# Augments that hand you an extra summoner spell
+SPELL_AUGMENTS = ["PoroCharge_Active", "DimensionShift_Active", "Flash2"]
 MAYHEM_ITEMS = [550001, 550002, 550003, 550004, 550006, 550005, 550007, 226668, 223069]
 
 
@@ -150,12 +164,74 @@ def main():
     summons = [{"name": n, "text": t, "icon": f"{BASE}/{ch}/game/assets/characters/{folder}/hud/{icon}"}
                for n, folder, icon, t in SUMMONS]
 
+    # ---- Mode rules from map12.bin
+    m12 = get(f"{BASE}/{ch}/game/data/maps/shipping/map12/map12.bin.json")
+    consts = {v["mName"]: {k: c.get("mValue") for k, c in v.get("mConstants", {}).items()}
+              for v in m12.values() if isinstance(v, dict) and v.get("mName", "").startswith("Kiwi_Balance")}
+    spells = {p.split("/")[-1]: v for p, v in m12.items() if "/Spells/" in p and isinstance(v, dict)}
+    def dv(name):
+        return {d["name"]: d["values"][0] for d in (spells.get(name, {}).get("mSpell") or {}).get("DataValues", []) if d.get("values")}
+    def tip(name):
+        keys = ((spells.get(name, {}).get("mBuff") or {}).get("mTooltipData") or {}).get("mLocKeys") or {}
+        return clean(s(keys.get("keyTooltip")))
+    combo = tip("Kiwi_ComboBreaker")
+    levels = [int(x) for x in re.findall(r"\d+", (re.search(r"Level\s*([\d/]+)", combo) or [None, ""])[1])]
+    rules = {
+        "augmentLevels": levels,
+        "rerolls": dv("ARAM_Augment_Manager").get("InitialReroll"),
+        "comboBreakerTenacity": dv("Kiwi_ComboBreaker").get("TenacityAmp"),
+        "balance": consts.get("Kiwi_Balance", {}),
+        "onFire": {"text": tip("Kiwi_OnFireBuff"), "values": dv("Kiwi_OnFireBuff")},
+    }
+
+    # ---- Summoner spells allowed in Mayhem, and augments that add one
+    allowed = [{"name": x["name"], "cooldown": x["cooldown"], "text": x["description"], "icon": asset(x["iconPath"])}
+               for x in get(f"{gd}/v1/summoner-spells.json") if "KIWI" in x.get("gameModes", [])]
+    allowed.sort(key=lambda x: x["name"])
+    by_key = {v["AugmentNameId"]: v for v in augments.values()}
+    spell_augments = []
+    for key in SPELL_AUGMENTS:
+        a = by_key.get(key)
+        if a:
+            spell_augments.append({"name": s(a["NameTra"], key), "id": a.get("AugmentPlatformId"),
+                                   "tier": TIERS[a.get("rarity", 0)], "icon": asset(a["AugmentSmallIconPath"]),
+                                   "text": strip_unknown(s(a.get("DescriptionTra")).split('"')[0])})
+
+    # ---- Items with Mayhem (or ARAM) values that differ from Summoner's Rift
+    items_bin = get(f"{BASE}/{ch}/game/items.cdtb.bin.json")
+    item_changes = []
+    for path, b in items_bin.items():
+        o = (b.get("DataValuesModeOverride") or {}) if isinstance(b, dict) else {}
+        mode = "Kiwi" if "Kiwi" in o else "ARAM" if "ARAM" in o else None
+        iid = path.split("/")[-1]
+        # ids above 100000 are other modes' copies of an item; keep the normal one
+        if not mode or not iid.isdigit() or int(iid) >= 100000 or int(iid) not in items_by_id:
+            continue
+        base = {d["mName"]: d.get("mValue") for d in b.get("mDataValues", [])}
+        diffs = [{"name": d["mName"], "rift": base.get(d["mName"]), "mayhem": d.get("mValue")}
+                 for d in o[mode].get("DataValues", []) if base.get(d["mName"]) != d.get("mValue")]
+        if diffs and not any(c["id"] == int(iid) for c in item_changes):
+            it = items_by_id[int(iid)]
+            item_changes.append({"id": int(iid), "name": it["name"], "icon": asset(it["iconPath"]), "changes": diffs})
+    item_changes.sort(key=lambda x: x["name"])
+
+    # ---- Archive: Augment Sets
+    sets = []
+    for stem, fallback, fallback_bonus in AUGMENT_SETS:
+        k = f"Kiwi_Augment_Set_{stem}_"
+        raw = s(k + "Tracker") or s(k + "Tacker") or s(k + "Description")
+        bonus = clean(raw).removeprefix("Set Bonus").strip()
+        if "@" in bonus or not bonus:
+            bonus = fallback_bonus or strip_unknown(bonus)
+        sets.append({"name": s(k + "Name") or fallback, "bonus": bonus})
+
     out = {
         "patch": version, "channel": ch,
         "hero": f"{gd}/assets/leagueclient/gamemodeassets/kiwi/kiwi-tutorial-set2.png",
         "queues": [{"id": i, "name": n} for i, n in mayhem_queues],
         "augmentCounts": tier_counts, "maps": maps, "summons": summons, "items": items,
-        "quests": quests, "challenges": challenges,
+        "quests": quests, "challenges": challenges, "rules": rules, "spells": allowed,
+        "spellAugments": spell_augments, "itemChanges": item_changes, "augmentSets": sets,
     }
     with open(os.path.join(HERE, "data.js"), "w") as f:
         f.write("// Generated from CommunityDragon by build_data.py. Do not edit by hand.\n")
@@ -213,6 +289,12 @@ def split_quest(text):
         elif out["quest"] and (para.startswith('"') or " - " in para):
             out["notes"].append(para)
     return out
+
+
+def strip_unknown(text):
+    """Game text with its @placeholders@ dropped, for strings whose numbers aren't in the client data."""
+    text = re.sub(r"\s*@[^@]+@\s*%?", " ", text or "")
+    return re.sub(r"\s+([.,%)])", r"\1", clean(text)).replace("  ", " ").strip()
 
 
 def clean(text):

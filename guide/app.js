@@ -36,6 +36,51 @@
   $("facts").innerHTML = facts.map(([l, v]) => `<div class="card fact"><span class="eyebrow">${l}</span><span class="value">${v}</span></div>`).join("");
   $("queues").innerHTML = D.queues.map((q) => `<span class="chip">${q.id} · ${esc(q.name.replace("ARAM: ", ""))}</span>`).join("");
 
+  // ---- Rules
+  const R = D.rules, B = R.balance, F = R.onFire.values;
+  const pct = (x) => `${fmt(x * 100)}%`;
+  if (R.augmentLevels.length) $("aug-levels").textContent = `levels ${R.augmentLevels.join(", ").replace(/, (\d+)$/, " and $1")}`;
+  const rules = [
+    ["Augments", [
+      `One augment at levels ${R.augmentLevels.join(", ")}.`,
+      "You can still pick it while you're dead.",
+      R.rerolls != null ? `${fmt(R.rerolls)} reroll to start.` : "",
+    ]],
+    ["Combo Breaker", [`A Mayhem buff worth ${pct(R.comboBreakerTenacity)} Tenacity.`]],
+    ["Melee champions", [`Bonus Health ${fmt(B.MeleeHealthBonus)}, up to ${fmt(B.MeleeHealthBonusMax)}.`, `${fmt(B.MeleeFlatArmor)} flat Armor.`]],
+    ["Ranged champions", [`Bonus Health ${fmt(B.RangeHealthBonus)}, up to ${fmt(B.RangeHealthBonusMax)}.`,
+      `Armor and Magic Resist ${fmt(B.RangeARMRBonus)}, up to ${fmt(B.RangeARMRBonusMax)}.`]],
+    ["Everyone", [`${pct(B.TenacityAndSlowResBonus)} Tenacity and Slow Resist.`, `${pct(B.ManaRegenBonus)} Mana Regen, ${pct(B.EnergyRegenBonus)} Energy Regen.`,
+      `Passive XP ${fmt(B.GeneralPassiveXP)}, passive gold ${fmt(B.PassiveGold)}.`]],
+    ["Catch-up XP", [`Kicks in when a team falls ${fmt(B.LevelGapTrigger_EarlyGame)} levels behind, or ${fmt(B.LevelGapTrigger_LateGame)} after level ${fmt(B.LevelThreshold)}.`]],
+    ["On Fire!", [R.onFire.text,
+      `Burns enemies within ${fmt(F.ImmolateRadius)} units, +${pct(F.PercentAS)} Attack Speed, +${pct(F.RegularMS)} Move Speed (+${pct(F.MoveTowardsEnemyMS)} toward enemies), +${pct(F.ManaRegen)} Mana Regen.`,
+      `The cost: ${pct(-F.GrievousAmount)} less healing and shielding, ${pct(F.DamageTakenAmp_Melee - 1)} more damage taken (${pct(F.DamageTakenAmp_Range - 1)} for ranged champions).`]],
+  ];
+  $("rule-list").innerHTML = rules
+    .map(([t, lines]) => `<article class="card"><div class="title">${esc(t)}</div>${lines.filter(Boolean).map((l) => `<p class="muted small" style="margin-top:0.4rem">${esc(l)}</p>`).join("")}</article>`)
+    .join("");
+  $("spell-list").innerHTML = D.spells
+    .map((x) => `<div class="row" style="align-items:flex-start">${img(x.icon)}<div><div class="title">${esc(x.name)} <span class="muted small">${fmt(x.cooldown)}s</span></div><div class="muted small">${esc(x.text)}</div></div></div>`)
+    .join("");
+  $("spell-augment-list").innerHTML = D.spellAugments
+    .map((x) => `<div class="row" style="align-items:flex-start">${img(x.icon)}<div><div class="title">${esc(x.name)} ${tierChip(x.tier)}</div><div class="muted small" style="white-space:pre-line">${esc(x.text)}</div></div></div>`)
+    .join("");
+
+  // ---- Items
+  const words = (n) => n.replace(/([a-z])([A-Z])/g, "$1 $2").replace(/([A-Z])([A-Z][a-z])/g, "$1 $2").replace(/_/g, " ");
+  const exact = (n) => Number(n).toLocaleString("en-US", { maximumFractionDigits: 4 });
+  $("items-intro").textContent = `${D.itemChanges.length} items have their own values in Mayhem. Each row is one value the game changes; names are the game's internal labels.`;
+  $("item-changes").innerHTML = D.itemChanges
+    .flatMap((it) => it.changes.map((c, i) => `<tr>${i === 0 ? `<td rowspan="${it.changes.length}"><div class="row">${img(it.icon)}<span class="title">${esc(it.name)}</span></div></td>` : ""}
+      <td>${esc(words(c.name))}</td><td class="num">${c.rift == null ? "–" : exact(c.rift)}</td><td class="num"><b>${c.mayhem == null ? "–" : exact(c.mayhem)}</b></td></tr>`))
+    .join("");
+
+  // ---- Archive
+  $("set-list").innerHTML = D.augmentSets
+    .map((x) => `<div><div class="title">${esc(x.name)}</div><div class="muted small">${esc(x.bonus)}</div></div>`)
+    .join("");
+
   // ---- Quests
   $("quest-list").innerHTML = D.quests
     .map((q) => `

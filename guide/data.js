@@ -1356,5 +1356,570 @@ window.GUIDE_DATA = {
    ],
    "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/challenges/config/101307/tokens/challenger.png"
   }
+ ],
+ "rules": {
+  "augmentLevels": [
+   3,
+   7,
+   11,
+   15
+  ],
+  "rerolls": 1.0,
+  "comboBreakerTenacity": 0.20000000298023224,
+  "balance": {
+   "MeleeHealthBonus": 20.0,
+   "MeleeHealthBonusMax": 600.0,
+   "RangeHealthBonus": 20.0,
+   "RangeHealthBonusMax": 400.0,
+   "TenacityAndSlowResBonus": 0.10000000149011612,
+   "RangeARMRBonus": 2.0,
+   "RangeARMRBonusMax": 25.0,
+   "ManaRegenBonus": 0.10000000149011612,
+   "EnergyRegenBonus": 0.10000000149011612,
+   "MeleeFlatArmor": 15.0,
+   "LevelThreshold": 15.0,
+   "LevelGapTrigger_EarlyGame": 3.0,
+   "LevelGapTrigger_LateGame": 2.0,
+   "GeneralPassiveXP": 3.0,
+   "PassiveGold": 50.0
+  },
+  "onFire": {
+   "text": "Burn nearby enemies and gain faster spell Cooldowns, increased Movement Speed towards enemy champions, increased Attack Speed, and increased Mana Regen. However, become more vulnerable to damage and receive reduced shielding and healing.",
+   "values": {
+    "GrievousAmount": -0.25,
+    "ImmolateRadius": 400.0,
+    "MoveTowardsEnemyMS": 0.20000000298023224,
+    "RegularMS": 0.10000000149011612,
+    "PercentAS": 0.20000000298023224,
+    "ManaRegen": 0.10000000149011612,
+    "EnergyRegen": 0.20000000298023224,
+    "FaceEnemyTriggerRadius": 1400.0,
+    "DamageTakenAmp_Range": 1.350000023841858,
+    "DamageTakenAmp_Melee": 1.25
+   }
+  }
+ },
+ "spells": [
+  {
+   "name": "Barrier",
+   "cooldown": 180,
+   "text": "Gain a brief Shield.",
+   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/data/spells/icons2d/summonerbarrier.png"
+  },
+  {
+   "name": "Clarity",
+   "cooldown": 240,
+   "text": "Restores your and ally champion's Mana.",
+   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/data/spells/icons2d/summonermana.png"
+  },
+  {
+   "name": "Cleanse",
+   "cooldown": 240,
+   "text": "Removes all disables (excluding suppression and airborne) and summoner spell debuffs affecting your champion and gives Tenacity.",
+   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/data/spells/icons2d/summoner_boost.png"
+  },
+  {
+   "name": "Flash",
+   "cooldown": 300,
+   "text": "Teleports you a short distance toward your cursor.",
+   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/data/spells/icons2d/summoner_flash.png"
+  },
+  {
+   "name": "Ghost",
+   "cooldown": 240,
+   "text": "Gain Move Speed and ignore unit collision for the duration.",
+   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/data/spells/icons2d/summoner_haste.png"
+  },
+  {
+   "name": "Heal",
+   "cooldown": 240,
+   "text": "Restores Health and grants Move Speed to you and target allied champion.",
+   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/data/spells/icons2d/summoner_heal.png"
+  },
+  {
+   "name": "Ignite",
+   "cooldown": 180,
+   "text": "Deals true damage over time to target enemy champion and reduces healing effects on them for the duration.",
+   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/data/spells/icons2d/summonerignite.png"
+  },
+  {
+   "name": "Mark",
+   "cooldown": 80,
+   "text": "Throw a snowball in a straight line at your enemies. If it hits an enemy, they become marked, granting True Sight, and your champion can quickly travel to the marked target as a follow up.",
+   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/data/spells/icons2d/summoner_mark.png"
+  }
+ ],
+ "spellAugments": [
+  {
+   "name": "Poro Stampede",
+   "id": 2046,
+   "tier": "Prismatic",
+   "icon": "https://raw.communitydragon.org/latest/game/assets/ux/kiwi/augments/icons/questporocharge_small.png",
+   "text": "QUEST: Gather Poro Snax and feed Poros.\n\nREWARD: Gain the Poro Charge Summoner Spell, which launches waves of Poros at the enemy team. Additional waves unlock per Quest Level."
+  },
+  {
+   "name": "Dimension Shift",
+   "id": 2063,
+   "tier": "Prismatic",
+   "icon": "https://raw.communitydragon.org/latest/game/assets/ux/kiwi/augments/icons/whenthedarknesscomes_small.png",
+   "text": "Gain the When the Darkness Comes Summoner Spell. Create a zone that transports everyone inside of it to another dimension."
+  },
+  {
+   "name": "Flash 2",
+   "id": 1348,
+   "tier": "Silver",
+   "icon": "https://raw.communitydragon.org/latest/game/assets/ux/kiwi/augments/icons/flash2_small.png",
+   "text": "Gain a second Flash Summoner Spell and Summoner Haste."
+  }
+ ],
+ "itemChanges": [
+  {
+   "id": 3003,
+   "name": "Archangel's Staff",
+   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3003_mage_t3_archangelstaff.png",
+   "changes": [
+    {
+     "name": "ManaPerCharge",
+     "rift": 5.0,
+     "mayhem": 7.5
+    }
+   ]
+  },
+  {
+   "id": 6333,
+   "name": "Death's Dance",
+   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/6333_fighter_t3_deathsdance.png",
+   "changes": [
+    {
+     "name": "BonusADRatio",
+     "rift": 0.75,
+     "mayhem": 1.0
+    }
+   ]
+  },
+  {
+   "id": 6692,
+   "name": "Eclipse",
+   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/6692_assassin_t4_eclipse.png",
+   "changes": [
+    {
+     "name": "MeleeShieldADRatio",
+     "rift": null,
+     "mayhem": 0.5
+    }
+   ]
+  },
+  {
+   "id": 3814,
+   "name": "Edge of Night",
+   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3814_assassin_t3_edgeofnight.png",
+   "changes": [
+    {
+     "name": "Cooldown",
+     "rift": 40.0,
+     "mayhem": 30.0
+    }
+   ]
+  },
+  {
+   "id": 1521,
+   "name": "Fortification",
+   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/34.png",
+   "changes": [
+    {
+     "name": "DamageReductionPer",
+     "rift": 0.30000001192092896,
+     "mayhem": 0.4000000059604645
+    },
+    {
+     "name": "FortificationTimer",
+     "rift": 60.0,
+     "mayhem": 70.0
+    }
+   ]
+  },
+  {
+   "id": 3084,
+   "name": "Heartsteel",
+   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3084_tank_t4_heartsteel.png",
+   "changes": [
+    {
+     "name": "DamageToMaxHealthRatio",
+     "rift": 0.10000000149011612,
+     "mayhem": 0.05000000074505806
+    }
+   ]
+  },
+  {
+   "id": 3155,
+   "name": "Hexdrinker",
+   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3155_fighter_t2_hexdrinker.png",
+   "changes": [
+    {
+     "name": "Cooldown",
+     "rift": 90.0,
+     "mayhem": 75.0
+    }
+   ]
+  },
+  {
+   "id": 6697,
+   "name": "Hubris",
+   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/6697_hubris.png",
+   "changes": [
+    {
+     "name": "ADPerStatue",
+     "rift": 3.0,
+     "mayhem": 1.0
+    },
+    {
+     "name": "BaseADBonus",
+     "rift": 12.0,
+     "mayhem": 10.0
+    },
+    {
+     "name": "BuffDuration",
+     "rift": 90.0,
+     "mayhem": 45.0
+    }
+   ]
+  },
+  {
+   "id": 6673,
+   "name": "Immortal Shieldbow",
+   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/6673_marksman_t4_crimsonshieldbow.png",
+   "changes": [
+    {
+     "name": "Cooldown",
+     "rift": 90.0,
+     "mayhem": 60.0
+    }
+   ]
+  },
+  {
+   "id": 6672,
+   "name": "Kraken Slayer",
+   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/6672_marksman_t4_behemothslayer.png",
+   "changes": [
+    {
+     "name": "RangedDamageMultiplier",
+     "rift": 0.800000011920929,
+     "mayhem": 1.0
+    }
+   ]
+  },
+  {
+   "id": 6653,
+   "name": "Liandry's Torment",
+   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/6653_mage_t4_liandrysanguish.png",
+   "changes": [
+    {
+     "name": "BurnPercentHealthDamage",
+     "rift": 0.019999999552965164,
+     "mayhem": 0.017999999225139618
+    }
+   ]
+  },
+  {
+   "id": 3190,
+   "name": "Locket of the Iron Solari",
+   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3190_enchanter_t4_locketofironsolari.png",
+   "changes": [
+    {
+     "name": "Cooldown",
+     "rift": 90.0,
+     "mayhem": 75.0
+    }
+   ]
+  },
+  {
+   "id": 3118,
+   "name": "Malignance",
+   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3118_malignance.png",
+   "changes": [
+    {
+     "name": "APRatio",
+     "rift": 0.05000000074505806,
+     "mayhem": 0.02800000086426735
+    },
+    {
+     "name": "BaseDamage",
+     "rift": 60.0,
+     "mayhem": 40.0
+    }
+   ]
+  },
+  {
+   "id": 3004,
+   "name": "Manamune",
+   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3004_marksman_t3_manamune.png",
+   "changes": [
+    {
+     "name": "ManaPerCharge",
+     "rift": 3.0,
+     "mayhem": 4.5
+    }
+   ]
+  },
+  {
+   "id": 3156,
+   "name": "Maw of Malmortius",
+   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3156_fighter_t3_mawofmalmortius.png",
+   "changes": [
+    {
+     "name": "Cooldown",
+     "rift": 90.0,
+     "mayhem": 60.0
+    }
+   ]
+  },
+  {
+   "id": 2525,
+   "name": "Protoplasm Harness",
+   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/2525_tanklifeline.png",
+   "changes": [
+    {
+     "name": "Cooldown",
+     "rift": 90.0,
+     "mayhem": 60.0
+    }
+   ]
+  },
+  {
+   "id": 3143,
+   "name": "Randuin's Omen",
+   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3143_tank_t3_randuinsomen.png",
+   "changes": [
+    {
+     "name": "Cooldown",
+     "rift": 90.0,
+     "mayhem": 60.0
+    }
+   ]
+  },
+  {
+   "id": 3074,
+   "name": "Ravenous Hydra",
+   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3074_fighter_t3_ravenoushydra.png",
+   "changes": [
+    {
+     "name": "ActiveADRatio",
+     "rift": 0.800000011920929,
+     "mayhem": 1.0
+    }
+   ]
+  },
+  {
+   "id": 6657,
+   "name": "Rod of Ages",
+   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/6657_mage_t4_rodofages.png",
+   "changes": [
+    {
+     "name": "SecondsPerStack",
+     "rift": 60.0,
+     "mayhem": 40.0
+    }
+   ]
+  },
+  {
+   "id": 3040,
+   "name": "Seraph's Embrace",
+   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3048_mage_t3_seraphsembrace.png",
+   "changes": [
+    {
+     "name": "LifelineCooldown",
+     "rift": 90.0,
+     "mayhem": 75.0
+    },
+    {
+     "name": "Cooldown",
+     "rift": 90.0,
+     "mayhem": 75.0
+    }
+   ]
+  },
+  {
+   "id": 2065,
+   "name": "Shurelya's Battlesong",
+   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/2065_tank_t4_shurelyasbattlesong.png",
+   "changes": [
+    {
+     "name": "ActiveCooldown",
+     "rift": 75.0,
+     "mayhem": 60.0
+    },
+    {
+     "name": "Cooldown",
+     "rift": 75.0,
+     "mayhem": 60.0
+    }
+   ]
+  },
+  {
+   "id": 3087,
+   "name": "Statikk Shiv",
+   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3087_statikk_shiv.png",
+   "changes": [
+    {
+     "name": "ChainDamage",
+     "rift": 60.0,
+     "mayhem": 70.0
+    }
+   ]
+  },
+  {
+   "id": 3053,
+   "name": "Sterak's Gage",
+   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3053_steraks_gage.png",
+   "changes": [
+    {
+     "name": "BaseShieldRatio",
+     "rift": 0.6000000238418579,
+     "mayhem": 0.699999988079071
+    },
+    {
+     "name": "Cooldown",
+     "rift": 90.0,
+     "mayhem": 60.0
+    }
+   ]
+  },
+  {
+   "id": 6631,
+   "name": "Stridebreaker",
+   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/6631_fighter_t4_stridebreaker.png",
+   "changes": [
+    {
+     "name": "ADRatio",
+     "rift": 0.800000011920929,
+     "mayhem": 1.0
+    },
+    {
+     "name": "ActiveMS",
+     "rift": 0.3499999940395355,
+     "mayhem": 0.44999998807907104
+    }
+   ]
+  },
+  {
+   "id": 3070,
+   "name": "Tear of the Goddess",
+   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3070_all_t1_tearofthegoddess.png",
+   "changes": [
+    {
+     "name": "ManaPerCharge",
+     "rift": 3.0,
+     "mayhem": 4.5
+    }
+   ]
+  },
+  {
+   "id": 1503,
+   "name": "Warden's Eye",
+   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/096_eye_of_the_observer.png",
+   "changes": [
+    {
+     "name": "TrueSightRadius",
+     "rift": 1100.0,
+     "mayhem": 900.0
+    }
+   ]
+  },
+  {
+   "id": 3083,
+   "name": "Warmog's Armor",
+   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3083_tank_t3_warmogs.png",
+   "changes": [
+    {
+     "name": "OOCTimer",
+     "rift": 3.0,
+     "mayhem": 4.0
+    }
+   ]
+  },
+  {
+   "id": 3119,
+   "name": "Winter's Approach",
+   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3119_wintersapproach.png",
+   "changes": [
+    {
+     "name": "ManaPerCharge",
+     "rift": 3.0,
+     "mayhem": 4.5
+    }
+   ]
+  },
+  {
+   "id": 3142,
+   "name": "Youmuu's Ghostblade",
+   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3142_assassin_t3_youmuusghostblade.png",
+   "changes": [
+    {
+     "name": "MeleeItemCalcValueB",
+     "rift": 20.0,
+     "mayhem": 45.0
+    },
+    {
+     "name": "RangedItemCalcValueB",
+     "rift": 15.0,
+     "mayhem": 30.0
+    },
+    {
+     "name": "BaseOOCMS",
+     "rift": 20.0,
+     "mayhem": 30.0
+    }
+   ]
+  },
+  {
+   "id": 3032,
+   "name": "Yun Tal Wildarrows",
+   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3032_yuntalwildarrows.png",
+   "changes": [
+    {
+     "name": "CritPerStackMelee",
+     "rift": 0.4000000059604645,
+     "mayhem": 1.0
+    }
+   ]
+  }
+ ],
+ "augmentSets": [
+  {
+   "name": "Snowday",
+   "bonus": "Increase Ability Haste and damage with a Snowball Augment."
+  },
+  {
+   "name": "Wee Woo Wee Woo",
+   "bonus": "Gain Movement Speed and Heal and Shield Power toward allies at low Health."
+  },
+  {
+   "name": "Make it Rain",
+   "bonus": "Enemies drop coins on takedown."
+  },
+  {
+   "name": "High Roller",
+   "bonus": "Minions can drop Stat Anvils, and more of the set raises the chance of Gold or Prismatic Anvils."
+  },
+  {
+   "name": "Stackosaurus Rex",
+   "bonus": "Whenever you gain stacks, gain additional stacks."
+  },
+  {
+   "name": "Fully Automated",
+   "bonus": "Lowers your Autocast cooldown, and at the next tier Autocast cooldown scales with Ability Haste."
+  },
+  {
+   "name": "Firecracker Set",
+   "bonus": "Firecrackers bounce extra times to the nearest enemies and deal a portion of their original damage."
+  },
+  {
+   "name": "Dive Bomb Set",
+   "bonus": "Reduces your death timer."
+  },
+  {
+   "name": "Archmage",
+   "bonus": "Whenever you cast a spell, refund another random spell by a percentage of the cast spell's Cooldown."
+  }
  ]
 };

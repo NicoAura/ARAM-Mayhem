@@ -12,9 +12,12 @@
     <div class="nav">
       <div class="segmented" role="tablist">
         <button type="button" role="tab" data-tab="overview">What is Mayhem</button>
+        <button type="button" role="tab" data-tab="rules">Rules</button>
         <button type="button" role="tab" data-tab="quests">Quests</button>
         <button type="button" role="tab" data-tab="challenges">Challenges</button>
+        <button type="button" role="tab" data-tab="items">Items</button>
         <button type="button" role="tab" data-tab="maps">Maps &amp; extras</button>
+        <button type="button" role="tab" data-tab="archive">Archive</button>
       </div>
       <span id="patch" class="eyebrow"></span>
     </div>
@@ -25,7 +28,7 @@
         <p class="eyebrow">The mode</p>
         <h2 class="section">ARAM with augments</h2>
         <p class="muted" style="margin-top:0.5rem">ARAM: Mayhem is ARAM on the Howling Abyss with Arena-style augments.
-          During the game you pick augments from a hand of Silver, Gold or Prismatic cards, and you can reroll the hand.
+          You pick an augment from a hand of Silver, Gold or Prismatic cards at <span id="aug-levels">set levels</span>, and you can reroll the hand.
           Some augments are quests: hit a goal during the game and they turn into something bigger, including items you
           can't buy anywhere else. Everything on this page is read from the game client's files.</p>
       </div>
@@ -33,6 +36,51 @@
       <div class="card">
         <div class="card-head"><h2>Queues</h2><span class="muted small">Queue IDs in the client</span></div>
         <div class="chips" id="queues"></div>
+      </div>
+    </section>
+
+    <section class="panel" id="panel-rules" hidden>
+      <div class="card">
+        <p class="eyebrow">House rules</p>
+        <h2 class="section">What Mayhem changes on top of ARAM</h2>
+        <p class="muted" style="margin-top:0.5rem">Mode-wide settings from the map data. The client lists these values without
+          saying whether each one is per level or flat, so they're shown as the game stores them.</p>
+      </div>
+      <div class="grid" id="rule-list"></div>
+      <div class="card">
+        <div class="card-head"><h2>Summoner spells</h2><span class="muted small">Allowed in Mayhem</span></div>
+        <div class="grid tight" id="spell-list"></div>
+      </div>
+      <div class="card">
+        <div class="card-head"><h2>Augments that add a summoner spell</h2></div>
+        <div class="grid" id="spell-augment-list"></div>
+      </div>
+    </section>
+
+    <section class="panel" id="panel-items" hidden>
+      <div class="card">
+        <p class="eyebrow">Items</p>
+        <h2 class="section">Items that work differently in Mayhem</h2>
+        <p class="muted" style="margin-top:0.5rem" id="items-intro"></p>
+      </div>
+      <div class="table-wrap"><table>
+        <thead><tr><th>Item</th><th>Value</th><th class="num">Rift</th><th class="num">Mayhem</th></tr></thead>
+        <tbody id="item-changes"></tbody>
+      </table></div>
+    </section>
+
+    <section class="panel" id="panel-archive" hidden>
+      <div class="card">
+        <p class="eyebrow">Archive</p>
+        <h2 class="section">Features from past Mayhem seasons</h2>
+        <p class="muted" style="margin-top:0.5rem">Things Mayhem used to have. Their text and art are still in the client, which is
+          how they're listed here.</p>
+      </div>
+      <div class="card">
+        <div class="card-head"><h2>Augment Sets</h2><span class="muted small">Bonuses for taking augments that share a theme</span></div>
+        <p class="muted small" style="margin-bottom:0.85rem">The client still has each set's name and bonus. Which augments belonged to
+          each set, and the exact numbers per tier, aren't in the files, so they aren't shown.</p>
+        <div class="grid tight" id="set-list"></div>
       </div>
     </section>
 

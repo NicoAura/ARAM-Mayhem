@@ -117,3 +117,4 @@ ol.steps .need { font: 500 13px var(--mono); text-align: right; color: var(--acc
 h2.section { font-family: var(--display); font-size: 1.35rem; letter-spacing: -0.02em; }
 @media (max-width: 640px) { input, select { font-size: 16px; } ol.steps li { grid-template-columns: 3.4rem 1fr; } }
 .lookup[hidden] { display: none; }
+td[rowspan] { vertical-align: top; }
