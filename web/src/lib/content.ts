@@ -15,6 +15,7 @@ const TABS = [
 export const FIELDS: Field[] = [
   { key: "banner", label: "Announcement", group: "Whole site", hint: "Shown above every page. Leave empty to hide it." },
   { key: "footer", label: "Footer", group: "Whole site", long: true },
+  { key: "kofi", label: "Ko-fi link", group: "Whole site", hint: "Your Ko-fi page, like https://ko-fi.com/yourname. Shows a Ko-fi button in the header; leave empty to hide it." },
   { key: "home.title", label: "Headline", group: "Home" },
   { key: "home.lede", label: "Intro", group: "Home", long: true },
   ...TABS.flatMap(([href, name]) => [
