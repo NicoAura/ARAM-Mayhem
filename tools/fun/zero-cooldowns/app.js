@@ -29,10 +29,10 @@
     { key: "otherHaste", label: "Other Ability Haste (runes, passives)", type: "number", def: 0, step: 5 },
   ];
 
-  let build = load() || structuredClone(EMPTY);
   let query = "";
   const itemById = (id) => data.items.find((i) => i.id === id);
   const augByKey = (k) => data.augments.find((a) => a.key === k);
+  let build = load() || structuredClone(EMPTY);
   const champ = () => data.champions.find((c) => c.alias === build.champion) || data.champions[0];
 
   function canAddItem(it) {

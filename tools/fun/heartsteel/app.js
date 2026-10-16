@@ -25,9 +25,9 @@
     { key: "otherHP", label: "Other Health (Cho'Gath R, Sion W, anvils)", type: "number", def: 0, step: 50 },
   ];
 
-  let build = load() || structuredClone(EMPTY);
   const itemById = (id) => data.items.find((i) => i.id === id);
   const augByKey = (k) => data.augments.find((a) => a.key === k);
+  let build = load() || structuredClone(EMPTY);
 
   function canAddItem(it) {
     if (build.items.length >= MAX_ITEMS || build.items.includes(it.id)) return false;

@@ -35,10 +35,10 @@
     { key: "hp", label: "Extra Health" },
   ];
 
-  let build = load() || { level: 18, items: [3040], augments: [], opts: {}, extra: {} };
 
   const itemById = (id) => data.items.find((i) => i.id === id);
   const augByKey = (k) => data.augments.find((a) => a.key === k);
+  let build = load() || { level: 18, items: [3040], augments: [], opts: {}, extra: {} };
 
   function canAddItem(it) {
     if (build.items.length >= MAX_ITEMS) return false;
