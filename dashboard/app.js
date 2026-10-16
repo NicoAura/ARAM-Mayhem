@@ -123,12 +123,12 @@ function normalize(g, owner) {
 // Champion and augment names; if unavailable the page falls back to ids.
 async function loadNames() {
   try {
-    const champs = await (await fetch("https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-summary.json")).json();
+    const champs = await (await fetch("/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-summary.json")).json();
     for (const c of champs) if (c.id > 0) state.champNames[c.id] = c.name;
   } catch (e) { console.warn("champion names unavailable", e); }
   for (const url of [
-    "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/cherry-augments.json",
-    "https://raw.communitydragon.org/latest/cdragon/arena/en_us.json",
+    "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/cherry-augments.json",
+    "/assets/cd/latest/cdragon/arena/en_us.json",
   ]) {
     try {
       const j = await (await fetch(url)).json();
@@ -281,7 +281,7 @@ function renderChart(games) {
 // ---------- kill map ----------
 // Positions are game units on the Howling Abyss; the minimap spans this square.
 const MAP12 = { minX: -28, minY: -19, maxX: 12849, maxY: 12858 };
-const MINIMAP_BASE = "https://raw.communitydragon.org/latest/game/assets/maps/info/map12/";
+const MINIMAP_BASE = "/assets/cd/latest/game/assets/maps/info/map12/";
 const KM_GRID = 128;
 let kmMode = "kills";
 

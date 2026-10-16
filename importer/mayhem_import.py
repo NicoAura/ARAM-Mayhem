@@ -428,6 +428,28 @@ def run_import(out, full=False, lockfile=None, sgp_host=None, progress=log):
 # pages: a POST needs the X-Mayhem header, which other sites can't send.
 
 DASHBOARD_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "dashboard")
+# The page loads names, fonts and the minimap from the site's /assets/; when it's
+# served from here those come from deeparam.com and are kept for next time.
+SITE = "https://deeparam.com"
+ASSET_CACHE = os.path.expanduser("~/Library/Caches/Mayhem Stats")
+
+
+def site_asset(path):
+    """Bytes for a /assets/... path, cached on disk; None if the site doesn't have it."""
+    rel = path.lstrip("/")
+    if ".." in rel.split("/") or not rel.startswith("assets/"):
+        return None
+    cached = os.path.join(ASSET_CACHE, rel)
+    if os.path.exists(cached):
+        with open(cached, "rb") as f:
+            return f.read()
+    res = subprocess.run(["curl", "-sSf", "--max-time", "30", f"{SITE}/{rel}"], capture_output=True)
+    if res.returncode != 0:
+        return None
+    os.makedirs(os.path.dirname(cached), exist_ok=True)
+    with open(cached, "wb") as f:
+        f.write(res.stdout)
+    return res.stdout
 
 
 def serve(out, port, lockfile=None, sgp_host=None, open_browser=True):
@@ -484,6 +506,15 @@ def serve(out, port, lockfile=None, sgp_host=None, open_browser=True):
             if path == "/api/sync":
                 with lock:
                     return self.send_json(dict(state))
+            if path.startswith("/assets/"):
+                body = site_asset(path)
+                if body is None:
+                    return self.send_json({"error": "not found"}, 404)
+                self.send_response(200)
+                self.send_header("Content-Type", self.guess_type(path))
+                self.send_header("Content-Length", str(len(body)))
+                self.end_headers()
+                return self.wfile.write(body)
             if path == "/data/mayhem-backup.json":
                 if not os.path.exists(out):
                     return self.send_json({"error": "no archive yet"}, 404)
