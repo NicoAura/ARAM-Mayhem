@@ -51,12 +51,14 @@ for (const { name, from, exclude = [] } of embeds) {
 
 // Every image, sound, model, font and script the pages use is mirrored in public/assets/ (scripts/fetch_assets.py),
 // so links to the outside copies are pointed at the site's own. Pages that already use /assets/ are left as they are.
+// A prefix is only swapped once its folder exists in public/assets (clips and models land separately).
+const has = (dir) => existsSync(join(web, "public", "assets", dir));
 const LOCAL = [
   [/https:\/\/raw\.communitydragon\.org\//g, "/assets/cd/"],
   [/https:\/\/ddragon\.leagueoflegends\.com\/cdn\//g, "/assets/dd/"],
-  [/https:\/\/d28xe8vt774jo5\.cloudfront\.net\/champion-abilities/g, "/assets/clips"],
-  [/https:\/\/cdn\.modelviewer\.lol\/lol\/models/g, "/assets/models"],
-  [/https:\/\/cdn\.jsdelivr\.net\/npm\/three@0\.160\.0\//g, "/assets/lib/three@0.160.0/"],
+  ...(has("clips") ? [[/https:\/\/d28xe8vt774jo5\.cloudfront\.net\/champion-abilities/g, "/assets/clips"]] : []),
+  ...(has("models") ? [[/https:\/\/cdn\.modelviewer\.lol\/lol\/models/g, "/assets/models"]] : []),
+  [/https:\/\/cdn\.jsdelivr\.net\/npm\/three@0\.160\.0\//g, "/assets/lib/three-0.160.0/"],
   [/<link[^>]+rel="preconnect"[^>]+fonts\.g(?:oogleapis|static)\.com[^>]*>\s*/g, ""],
   [/https:\/\/fonts\.googleapis\.com\/css2\?[^"')\s]+/g, "/assets/fonts/fonts.css"],
 ];
