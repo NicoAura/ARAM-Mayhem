@@ -1590,3 +1590,159 @@ html[data-device="mobile"] .theme-toggle button {
   width: 28px;
   height: 28px;
 }
+
+/* Augment offer cards (PBE tab): the in-game card art from game/assets/ux/kiwi/augments/augmentselection.
+   The card face stays dark in both themes, like the game. */
+.aug-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(12.5rem, 1fr));
+  gap: 0.75rem;
+  margin-top: 0.75rem;
+}
+
+.aug-grid.aug-mini {
+  grid-template-columns: repeat(auto-fill, minmax(10rem, 1fr));
+}
+
+.aug-card {
+  --tier: #c9d2de;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 1.1rem 0.9rem 1rem;
+  overflow: hidden;
+  border: 1px solid color-mix(in srgb, var(--tier) 55%, transparent);
+  border-radius: var(--r);
+  background: radial-gradient(120% 70% at 50% 0%, color-mix(in srgb, var(--tier) 22%, #121826), #0b0f17 70%);
+  color: #e8ecf2;
+  text-align: center;
+  isolation: isolate;
+}
+
+.aug-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: url(/augment-card/holo.webp) center / cover;
+  opacity: 0.08;
+  mix-blend-mode: screen;
+}
+
+.aug-gold {
+  --tier: #e0b45c;
+}
+
+.aug-prismatic {
+  --tier: #c9b8ff;
+  padding: calc(1.1rem + 1px) calc(0.9rem + 1px) calc(1rem + 1px);
+  background:
+    radial-gradient(120% 70% at 50% 0%, #2a2346, #0b0f17 70%) padding-box,
+    var(--prismatic) border-box;
+  border-color: transparent;
+}
+
+.aug-prismatic::before {
+  opacity: 0.22;
+}
+
+.aug-art {
+  position: relative;
+  width: 96px;
+  height: 96px;
+  flex: none;
+}
+
+.aug-art img {
+  position: absolute;
+}
+
+.aug-back {
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.9;
+  filter: brightness(1.6);
+}
+
+.aug-icon,
+.aug-frame {
+  top: 20px;
+  left: 20px;
+  width: 56px;
+  height: 56px;
+}
+
+.aug-icon {
+  padding: 3px;
+  border-radius: 4px;
+  object-fit: cover;
+}
+
+.aug-text h4 {
+  font: 600 1rem/1.25 var(--display);
+  color: #fff;
+}
+
+.aug-set {
+  display: block;
+  margin-top: 0.15rem;
+  color: var(--tier);
+  font: 500 0.6875rem var(--mono);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.aug-desc {
+  margin-top: 0.45rem;
+  color: #aab3c2;
+  font-size: 0.8125rem;
+  line-height: 1.45;
+}
+
+.aug-desc .change b {
+  color: #fff;
+}
+
+.aug-compact {
+  flex-direction: row;
+  gap: 0.5rem;
+  padding: 0.5rem 0.75rem 0.5rem 0.4rem;
+  text-align: left;
+}
+
+.aug-compact.aug-prismatic {
+  padding: calc(0.5rem + 1px) calc(0.75rem + 1px) calc(0.5rem + 1px) calc(0.4rem + 1px);
+}
+
+.aug-compact .aug-art {
+  width: 52px;
+  height: 52px;
+}
+
+.aug-compact .aug-icon,
+.aug-compact .aug-frame {
+  top: 11px;
+  left: 11px;
+  width: 30px;
+  height: 30px;
+}
+
+.aug-compact .aug-icon {
+  padding: 2px;
+}
+
+.aug-compact h4 {
+  font-size: 0.875rem;
+}
+
+.aug-removed h4 {
+  text-decoration: line-through;
+  text-decoration-color: color-mix(in srgb, #fff 45%, transparent);
+}
+
+.aug-removed .aug-icon {
+  filter: grayscale(0.6);
+}
