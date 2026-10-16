@@ -8,29 +8,34 @@
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&display=swap">
 <style>
-/* Same minimalist look as the website (web/): Geist and Geist Mono, plain light and dark following the
-   system, gold only for labels and the focus ring. The arena and timeline stay a dark game screen. */
+/* Same look as the website (web/): cool grey page, white cards with hairline borders, blue accent,
+   Bricolage Grotesque headings over Geist and Geist Mono; light and dark follow the system.
+   The arena and timeline stay a dark game screen. */
 :root {
-  --bg: #fafafa; --fg: #0a0a0a; --muted: #737373; --line: #e5e5e5; --hover: #f0f0f0; --accent: #b8862e;
+  --bg: #f4f6f8; --surface: #ffffff; --raised: #eef1f5; --fg: #0c1017; --muted: #5b6472; --line: #e1e5eb;
+  --hover: var(--raised); --accent: #0b7fc0; --accent-ink: #ffffff;
   --abyss: var(--bg);
-  --panel: var(--bg);
-  --panel-2: var(--hover);
+  --panel: var(--surface);
+  --panel-2: var(--raised);
   --frost: var(--fg);
   --ice: var(--fg);
   --screen: #0b0f14;
   --q: #4fc3f7; --w: #7bd88f; --e: #f4b860; --r: #e66ad2;
   --phys: #f08a4b; --magic: #7aa2ff; --true: #9ca3af;
   --hp: #3fb873; --hp-low: #e5534b; --cc: #b388ff;
-  --display: "Geist", system-ui, -apple-system, sans-serif;
+  --display: "Bricolage Grotesque", "Geist", system-ui, sans-serif;
   --mono: "Geist Mono", ui-monospace, monospace;
   --body: "Geist", system-ui, -apple-system, sans-serif;
-  color-scheme: light dark;
+  color-scheme: light;
 }
-@media (prefers-color-scheme: dark) {
-  :root { --bg: #0a0a0a; --fg: #ededed; --muted: #8f8f8f; --line: #262626; --hover: #141414; --accent: #d9b16a; }
-}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #090b0f; --surface: #11151c; --raised: #181d26; --fg: #e8ecf2; --muted: #8b94a3; --line: #222936;
+  --accent: #5cc0ff; --accent-ink: #04121c; color-scheme: dark; } }
+:root[data-theme="dark"] {
+  --bg: #090b0f; --surface: #11151c; --raised: #181d26; --fg: #e8ecf2; --muted: #8b94a3; --line: #222936;
+  --accent: #5cc0ff; --accent-ink: #04121c; color-scheme: dark; }
 * { box-sizing: border-box; }
 html, body { background: var(--abyss); color: var(--frost); }
 body { margin: 0; font: 14px/1.5 var(--body); }
@@ -38,24 +43,24 @@ body { margin: 0; font: 14px/1.5 var(--body); }
   padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
   display: grid; gap: 16px; }
 header { display: flex; flex-wrap: wrap; align-items: end; gap: 12px 24px; justify-content: space-between; }
-h1 { font: 600 28px/1.15 var(--display); letter-spacing: -.02em; margin: 0; text-wrap: balance; }
-.eyebrow { font: 500 12px/1 var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--accent); margin-bottom: 10px; }
+h1 { font: 700 clamp(26px, 3.2vw, 32px)/1.1 var(--display); letter-spacing: -.025em; margin: 0; text-wrap: balance; }
+.eyebrow { font: 500 11.5px/1 var(--mono); letter-spacing: .06em; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; }
 .picker { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
 label.lbl { font: 500 11px/1 var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
 select, button { font: 500 14px var(--body); color: var(--frost); background: transparent; border: 1px solid var(--line);
-  border-radius: 8px; padding: 7px 12px; }
+  border-radius: 10px; padding: 7px 12px; background: var(--surface); }
 button { cursor: pointer; }
 button:hover, select:hover { background: var(--hover); }
-:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 4px; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 6px; }
 .stage { display: grid; grid-template-columns: minmax(0, 1.7fr) minmax(0, 1fr); gap: 16px; align-items: start; }
 @media (max-width: 860px) { .stage { grid-template-columns: minmax(0, 1fr); } }
-.arena { background: var(--screen); border: 1px solid var(--line); border-radius: 12px; color-scheme: dark; overflow: hidden; position: relative; min-width: 0; }
+.arena { background: var(--screen); border: 1px solid var(--line); border-radius: 14px; color-scheme: dark; overflow: hidden; position: relative; min-width: 0; }
 .arena canvas { display: block; width: 100%; height: auto; aspect-ratio: 16 / 9; max-width: 100%; }
 .arena canvas.layer { position: absolute; left: 0; top: 0; pointer-events: none; }
 .hud { position: absolute; left: 12px; top: 10px; display: flex; gap: 14px; font: 500 11px var(--mono);
   letter-spacing: .06em; text-transform: uppercase; color: #8f8f8f; pointer-events: none; }
 .hud b { color: #ededed; font-variant-numeric: tabular-nums; }
-.clip { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; overflow: hidden; display: grid;
+.clip { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; overflow: hidden; display: grid;
   grid-template-rows: auto auto 1fr; min-width: 0; }
 .clip-video { position: relative; background: #05080c; aspect-ratio: 360 / 246; max-width: 100%; }
 .clip-video video { width: 100%; height: 100%; display: block; object-fit: cover; }
@@ -69,9 +74,9 @@ button:hover, select:hover { background: var(--hover); }
 .ab canvas { width: 100%; height: 100%; display: block; }
 .ab .key { position: absolute; left: 4px; bottom: 3px; font: 600 12px var(--mono); text-shadow: 0 1px 2px #000; }
 .ab .cd { position: absolute; inset: 0; pointer-events: none; }
-.ab.lit { border-color: var(--fg); }
+.ab.lit { border-color: var(--accent); }
 .clip-note { padding: 0 12px 12px; color: var(--muted); font-size: 12px; }
-.timeline { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 10px 12px; display: grid; gap: 8px; }
+.timeline { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 10px 12px; display: grid; gap: 8px; }
 .controls { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
 .controls .time { font: 500 13px var(--mono); font-variant-numeric: tabular-nums; margin-left: auto; color: var(--muted); }
 .controls .time b { color: var(--frost); }
@@ -81,15 +86,15 @@ button:hover, select:hover { background: var(--hover); }
 .legend i { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 6px; vertical-align: -1px; }
 .lower { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: 16px; }
 @media (max-width: 860px) { .lower { grid-template-columns: minmax(0, 1fr); } }
-.card { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 18px 20px; min-width: 0; }
-.card h2 { font: 500 12px/1 var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--accent); margin: 0 0 12px; }
+.card { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 18px 20px; min-width: 0; }
+.card h2 { font: 500 11.5px/1 var(--mono); letter-spacing: .06em; text-transform: uppercase; color: var(--muted); margin: 0 0 12px; }
 .build { display: flex; flex-wrap: wrap; gap: 6px; }
 .build span { border: 1px solid var(--line); border-radius: 4px; padding: 3px 8px; font-size: 13px; }
 .build span.aug { border-style: dashed; }
 .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); gap: 10px; margin-top: 14px; }
 .stats div { display: grid; gap: 2px; }
 .stats small { color: var(--muted); font: 500 11px var(--mono); text-transform: uppercase; letter-spacing: .06em; }
-.stats b { font: 600 20px var(--display); letter-spacing: -.01em; font-variant-numeric: tabular-nums; }
+.stats b { font: 600 20px var(--mono); letter-spacing: -.02em; font-variant-numeric: tabular-nums; }
 .bars { display: grid; gap: 8px; }
 .bar { display: grid; grid-template-columns: 110px minmax(0, 1fr) 70px; gap: 10px; align-items: center; font-size: 13px; }
 .bar .fill { height: 8px; border-radius: 4px; background: var(--panel-2); overflow: hidden; }
@@ -106,25 +111,25 @@ button:hover, select:hover { background: var(--hover); }
 .sim-status.busy::before { content: ""; display: inline-block; width: 10px; height: 10px; margin-right: 8px; border-radius: 50%;
   border: 2px solid var(--ice); border-right-color: transparent; animation: spin .8s linear infinite; vertical-align: -1px; }
 @keyframes spin { to { transform: rotate(1turn); } }
-button.primary { background: var(--fg); color: var(--bg); border-color: var(--fg); font-weight: 500; }
-button.primary:hover { opacity: .85; border-color: var(--fg); }
+button.primary { background: var(--accent); color: var(--accent-ink); border-color: transparent; font-weight: 500; }
+button.primary:hover { opacity: .9; background: var(--accent); }
 button:disabled { opacity: .5; cursor: progress; }
 .sim-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
 @media (max-width: 980px) { .sim-grid { grid-template-columns: minmax(0, 1fr); } }
 fieldset { border: 1px solid var(--line); border-radius: 8px; padding: 10px 12px 12px; margin: 0; min-width: 0; display: grid; gap: 8px; align-content: start; }
-legend { font: 500 11px var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--accent); padding: 0 6px; }
+legend { font: 500 11px var(--mono); letter-spacing: .06em; text-transform: uppercase; color: var(--muted); padding: 0 6px; }
 .field { display: grid; grid-template-columns: minmax(0, 1fr) 96px; gap: 8px; align-items: center; font-size: 13px; }
 .field label { color: var(--frost); min-width: 0; }
 .field small { display: block; color: var(--muted); font-size: 11px; line-height: 1.3; }
 .field.changed label::after { content: " •"; color: var(--e); }
 input[type=number], input[type=text] { width: 100%; font: 500 13px var(--mono); font-variant-numeric: tabular-nums; color: var(--frost);
-  background: transparent; border: 1px solid var(--line); border-radius: 8px; padding: 6px 8px; }
+  background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 6px 8px; }
 fieldset select { width: 100%; min-width: 0; font-size: 13px; padding: 6px 8px; }
 #comboInput { letter-spacing: .2em; text-transform: uppercase; }
 .slot-row { display: grid; grid-template-columns: 22px minmax(0, 1fr); gap: 8px; align-items: center; font: 500 11px var(--mono); color: var(--muted); }
 .modes { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: 13px; }
 .modes label { display: flex; gap: 6px; align-items: center; cursor: pointer; }
-.enemy { display: grid; gap: 6px; padding: 8px; border: 1px solid var(--line); border-radius: 6px; background: transparent; }
+.enemy { display: grid; gap: 6px; padding: 8px; border: 1px solid var(--line); border-radius: 8px; background: var(--raised); }
 .enemy-stats { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px; }
 .enemy-stats label { display: grid; gap: 2px; font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; }
 .enemy-stats input.changed { border-color: var(--e); }
@@ -230,10 +235,10 @@ fieldset select { width: 100%; min-width: 0; font-size: 13px; padding: 6px 8px; 
 </div>
 <script type="importmap">{"imports": {"three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
   "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"}}</script>
-<script>window.REPLAY_VERSION = "16";</script>
-<script src="replay.js?v=16"></script>
-<script type="module" src="models3d.js?v=16"></script>
-<script src="sim-panel.js?v=16"></script>
+<script>window.REPLAY_VERSION = "17";</script>
+<script src="replay.js?v=17"></script>
+<script type="module" src="models3d.js?v=17"></script>
+<script src="sim-panel.js?v=17"></script>
 <!-- replay-page-end -->
 </body>
 </html>
