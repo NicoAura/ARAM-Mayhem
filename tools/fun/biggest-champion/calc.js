@@ -1,6 +1,6 @@
 // Champion size math. Pure functions, no DOM.
 //
-// Every size bonus is a percent of normal size. The game files give them as separate percents
+// Every size bonus is a percent of normal size. They come as separate percents
 // (Goliath SizeAmp 0.5, Tank Engine 0.05 per stack, Heartsteel 3% per 1000 Health up to a 30% cap),
 // and the cap on Heartsteel only makes sense for a summed stat, so we add them together:
 // size = 1 + sum of bonuses. Shrink Engine stops at 20% of normal size (its MinSize value).

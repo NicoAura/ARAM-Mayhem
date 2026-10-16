@@ -1,4 +1,3 @@
-// Generated from CommunityDragon by build_data.py. Do not edit by hand.
 window.STACKING_DATA = {
  "patch": "16.20.8248524",
  "channel": "latest",

@@ -43,8 +43,6 @@ def main():
         art[f"frame_{tier}"] = uri(load(f"abilityframe_{tier}"), 90)
 
     with open(os.path.join(HERE, "art.js"), "w", encoding="utf-8") as f:
-        f.write("// Generated from CommunityDragon by build_art.py. Do not edit by hand.\n")
-        f.write(f"// Source: {DIR}/ (augment selection screen).\n")
         f.write("window.ODDS_ART = {\n" + ",\n".join(f' "{k}": "{v}"' for k, v in art.items()) + "\n};\n")
     print("art.js:", {k: len(v) for k, v in art.items()})
 

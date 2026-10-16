@@ -132,5 +132,4 @@ def calcs(spell_calcs, values):
 
 def write_data_js(path, var, data):
     with open(path, "w") as f:
-        f.write("// Generated from CommunityDragon by build_data.py. Do not edit by hand.\n")
         f.write(f"window.{var} = " + json.dumps(data, indent=1, ensure_ascii=False) + ";\n")
