@@ -105,7 +105,7 @@
   const m = data.meta;
   const d = (s) => (s ? `${s.slice(0, 4)}-${s.slice(4, 6)}-${s.slice(6)}` : "?");
   document.getElementById("footer").innerHTML = `
-    <p><b>Every build flips its champion's identity</b>, the way Melee Bomb Man turns an artillery mage into a sword fighter. "Usual on" counts the core augments where the champion is on Tencent's best-champion list; pick rate is how often those augments are taken across all games.</p>
+    <p><b>Every build is built on an augment interaction</b>: an augment that changes what an ability or stat does, combined with a champion or items that make it absurd. Some interactions come from reading the augment text and haven't been tested in game. "Usual on" counts the core augments where the champion is on Tencent's best-champion list; pick rate is how often those augments are taken across all games.</p>
     <p><b>Tier</b> is the average China-server win rate of a build's core augments (the ones without the "flex" tag): Secretly strong at 55.5% or more, Holds up from 51.5%, Pure troll below that. China doesn't publish augment win rates per champion, so "best on" marks the champions Tencent lists as best for that augment.</p>
     <p><b>Simulator</b> runs the build in the all-champion teamfight simulator against the simulator's own top build for that champion. When all of a build's augments are in the simulator the whole build is compared; otherwise only the items, both with the top build's augments. Over 100% means these items out-damage the simulator's pick, usually by dying more.</p>
     <p>China augment stats from ${d(m.cn_augment_date)}, champion stats from ${d(m.cn_champion_date)} (101.qq.com). Augment text and icons from the live client via CommunityDragon. Generated ${esc(m.generated)}.</p>`;

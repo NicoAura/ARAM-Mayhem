@@ -1,7 +1,8 @@
 {
   "_note": "Hand-written cook builds. Every build flips what its champion is known for (Nico, 2026-10-16: keep only builds like Melee Bomb Man Ziggs). build_data.py adds augment text, China win rates and simulator numbers and writes data.js. The first `core` augments decide the build's tier; the rest are flex picks. `augment_text` replaces the generated text for augments whose tooltip numbers the game data doesn't fill in.",
   "augment_text": {
-    "With Haste": "Gain Move Speed equal to a share of your Ability Haste."
+    "With Haste": "Gain Move Speed equal to a share of your Ability Haste.",
+    "Overloaded": "Using another Ability resets the cooldown of the chosen ability."
   },
   "builds": [
     {
@@ -71,92 +72,136 @@
       "play": "Farm Q stacks like normal, then right-click everyone. Cage still works."
     },
     {
-      "id": "kayle-grounded",
-      "champion": "Kayle",
-      "title": "Grounded",
+      "id": "karthus-global-onhit",
+      "champion": "Karthus",
+      "title": "Global On-Hit",
       "augments": [
-        "Draw Your Sword",
-        "Goliath",
-        "Heavy Hitter",
-        "Tank Engine"
+        "Ethereal Weapon",
+        "Jeweled Gauntlet",
+        "Juiced",
+        "Firebrand"
       ],
       "core": 2,
       "items": [
-        "Plated Steelcaps",
+        "Sorcerer's Shoes",
         "Nashor's Tooth",
-        "Guinsoo's Rageblade",
-        "Heartsteel",
-        "Sunfire Aegis",
-        "Titanic Hydra"
+        "Blade of The Ruined King",
+        "Kraken Slayer",
+        "Wit's End",
+        "Rabadon's Deathcap"
       ],
-      "why": "Kayle spends the early game as a weak melee champion waiting to ascend into a ranged carry. Draw Your Sword sets her to melee range for good, which should keep her from ever getting the range, and pays her back with AD, Health, Attack Speed and Lifesteal. Goliath and Heavy Hitter turn the angel into a giant frontline bruiser.",
-      "play": "Skip the ascension. Walk in front and hit things with your sword."
+      "why": "Ethereal Weapon makes abilities apply on-hit effects, and Requiem hits every enemy champion on the map. So one R procs BotRK, Kraken Slayer, Wit's End, Nashor's, Juiced and a stack of Firebrand's burn on all five at once, from your fountain. Jeweled Gauntlet lets Requiem crit too.",
+      "play": "Buy marksman items on a mage. Press R from anywhere."
     },
     {
-      "id": "nasus-sniper",
-      "champion": "Nasus",
-      "title": "Long-Range Siphon",
+      "id": "anivia-blizzard-engine",
+      "champion": "Anivia",
+      "title": "Blizzard Engine",
       "augments": [
-        "Scoped Weapons",
-        "Scopier Weapons",
-        "Scopiest Weapons",
-        "Stackosaurus Rex"
+        "Ethereal Weapon",
+        "Mystic Punch",
+        "Infernal Conduit",
+        "Recursion"
+      ],
+      "core": 2,
+      "items": [
+        "Sorcerer's Shoes",
+        "Nashor's Tooth",
+        "Liandry's Torment",
+        "Rylai's Crystal Scepter",
+        "Rabadon's Deathcap",
+        "Void Staff"
+      ],
+      "why": "Glacial Storm damages everyone inside it over and over. With Ethereal Weapon each enemy in the storm triggers your on-hit effects once a second, and Mystic Punch turns every on-hit into 1.25 seconds off your cooldowns. Three enemies in the storm should take almost four seconds off Q and E every second, so Flash Frost and Frostbite never stop.",
+      "play": "Drop R on their team and keep throwing Q and E into it."
+    },
+    {
+      "id": "teemo-critical-shrooms",
+      "champion": "Teemo",
+      "title": "Critical Shrooms",
+      "augments": [
+        "Vulnerability",
+        "It's Critical",
+        "Zealot",
+        "Infernal Conduit"
       ],
       "core": 3,
       "items": [
-        "Ionian Boots of Lucidity",
-        "Trinity Force",
-        "Spear of Shojin",
-        "Black Cleaver",
-        "Sterak's Gage",
-        "Spirit Visage"
+        "Berserker's Greaves",
+        "Nashor's Tooth",
+        "Liandry's Torment",
+        "Infinity Edge",
+        "Blade of The Ruined King",
+        "Riftmaker"
       ],
-      "why": "Siphoning Strike is an empowered auto attack, and the three Scope augments give a melee champion 475 range, so Nasus stacks Q from 600 range. Stackosaurus Rex doubles every stack he earns. The dog farms from across the lane like a marksman.",
-      "play": "Last-hit every minion with Q from max range. Walk up only when the stacks are big."
+      "why": "Vulnerability lets damage over time and item effects crit. Teemo's whole kit is damage over time, so every tick of Toxic Shot, every shroom and every Liandry's and Nashor's proc can crit. It's Critical and Zealot stack the crit chance, so the shrooms crit too.",
+      "play": "Plant shrooms, watch the yellow numbers."
     },
     {
-      "id": "jinx-caster",
-      "champion": "Jinx",
-      "title": "Rocket Spammer",
+      "id": "tristana-bowling",
+      "champion": "Tristana",
+      "title": "Yordle Bowling",
       "augments": [
-        "Purist - Caster",
-        "Jeweled Gauntlet",
-        "Skilled Sniper",
-        "Infinite Recursion"
-      ],
-      "core": 1,
-      "items": [
-        "Ionian Boots of Lucidity",
-        "Youmuu's Ghostblade",
-        "Axiom Arc",
-        "Serylda's Grudge",
-        "Black Cleaver",
-        "Lord Dominik's Regards"
-      ],
-      "why": "Jinx is an attack speed marksman, and Purist - Caster converts all of her Attack Speed into Ability Haste (0.65 per 1%). Her minigun stacks and Get Excited's huge Attack Speed burst become haste, so she stops attacking fast and spams Zap!, Chompers and Super Mega Death Rocket instead.",
-      "play": "Get a takedown, then spam W and R while Get Excited lasts."
-    },
-    {
-      "id": "jax-mage",
-      "champion": "Jax",
-      "title": "Grandmaster Mage",
-      "augments": [
-        "ADAPt",
-        "Marksmage",
-        "Dual Wield",
-        "Witchful Thinking"
+        "Chain Reaction",
+        "Fey Magic",
+        "Scopiest Weapons",
+        "Typhoon"
       ],
       "core": 2,
       "items": [
         "Berserker's Greaves",
-        "Blade of The Ruined King",
-        "Guinsoo's Rageblade",
-        "Nashor's Tooth",
-        "Rabadon's Deathcap",
-        "Riftmaker"
+        "Infinity Edge",
+        "Kraken Slayer",
+        "Lord Dominik's Regards",
+        "Runaan's Hurricane",
+        "Yun Tal Wildarrows"
       ],
-      "why": "The reverse of Tiny Marksman. ADAPt turns every point of Jax's bonus AD into 1.67 AP, so his BotRK and Rageblade become mage items, and Marksmage adds a share of that AP to every auto. W, E and R scale with AP, so the lamp post becomes a magic staff.",
-      "play": "Build like an AD Jax, play like an AP Jax. Hop on the carry and empower everything."
+      "why": "Buster Shot knocks its target back a long way. Fey Magic turns the target into a critter first, and Chain Reaction makes it a bowling ball: when the knocked-back champion hits another champion, both get knocked up and take damage, and hitting a wall knocks them up even longer.",
+      "play": "Line up a critter with their team, or with a wall, and R."
+    },
+    {
+      "id": "blitzcrank-hook-storm",
+      "champion": "Blitzcrank",
+      "title": "Hook Storm",
+      "augments": [
+        "Overloaded",
+        "Spell Split",
+        "Echo Cast",
+        "Archmage"
+      ],
+      "core": 3,
+      "items": [
+        "Ionian Boots of Lucidity",
+        "Rod of Ages",
+        "Liandry's Torment",
+        "Rylai's Crystal Scepter",
+        "Sunfire Aegis",
+        "Warmog's Armor"
+      ],
+      "why": "With these on Rocket Grab, Overloaded resets the hook every time you use W, E or R, and Echo Cast sends a clone that fires a second hook. Spell Split then breaks each hook into two when it hits or reaches max range. That's up to four grabs flying out per hook.",
+      "play": "Q, E, Q, W, Q, R, Q. Somebody is getting pulled."
+    },
+    {
+      "id": "jinx-critter-rocket",
+      "champion": "Jinx",
+      "title": "Critter Rocket",
+      "augments": [
+        "Fey Magic",
+        "Ultimate Revolution",
+        "Ult Bot",
+        "Can't Touch This"
+      ],
+      "core": 3,
+      "items": [
+        "Ionian Boots of Lucidity",
+        "Infinity Edge",
+        "The Collector",
+        "Lord Dominik's Regards",
+        "Navori Flickerblade",
+        "Rapid Firecannon"
+      ],
+      "why": "Super Mega Death Rocket crosses the whole map, and Fey Magic turns everyone it hits into a critter. Ultimate Revolution gives a second rocket right after the first and Ult Bot puts all your haste into R, so you fire map-wide polymorphs on a short cooldown. Can't Touch This makes you invulnerable each time you fire.",
+      "play": "Watch the minimap and snipe whoever is about to escape."
     }
   ]
 }

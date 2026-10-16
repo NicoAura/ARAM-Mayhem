@@ -1,8 +1,8 @@
 # The Kitchen (cook builds)
 
-Troll builds for ARAM Mayhem that flip what a champion is known for (an artillery mage
-gone melee, a melee fighter turned sniper), each checked against China-server win rates and
-the all-champion damage simulator. The folder
+Troll builds for ARAM Mayhem built on strange augment interactions (abilities that apply
+on-hit effects, damage over time that crits, champions who swap their range), each checked
+against China-server win rates and the all-champion damage simulator. The folder
 is a website tab through `site-tab.json`.
 
 | File | What it is |
