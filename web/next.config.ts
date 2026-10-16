@@ -1,9 +1,16 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  // The tier list used to live at /china.
+  // Old addresses of moved tabs. A #hash (like /tools/champions#Yasuo) carries over.
   async redirects() {
-    return [{ source: "/china", destination: "/tier-list", permanent: true }];
+    return [
+      ["/china", "/tier-list"],
+      ["/simulator", "/tools/simulator"],
+      ["/tools/champions", "/champions"],
+      ["/tools/guide", "/guide"],
+      ["/tools/fun", "/tools/lab"],
+      ["/tools/cook-builds", "/tools/kitchen"],
+    ].map(([source, destination]) => ({ source, destination, permanent: true }));
   },
 };
 

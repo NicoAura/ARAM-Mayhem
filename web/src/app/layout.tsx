@@ -11,7 +11,7 @@ import { text } from "@/lib/content";
 import { searchItems } from "@/lib/highlights";
 import { SETTINGS_SCRIPT } from "@/lib/settings";
 import { THEME_COLORS, THEME_KEY } from "@/lib/theme";
-import { allTabs } from "@/lib/tabs";
+import { navItems } from "@/lib/tabs";
 import "./globals.css";
 
 const sans = Geist({ subsets: ["latin"], variable: "--font-sans" });
@@ -47,8 +47,6 @@ function kofiUrl() {
   return /^[A-Za-z0-9_-]+$/.test(name) ? `https://ko-fi.com/${name}` : "";
 }
 
-// My Stats lives behind the account button at the top right, not in the tab bars.
-const navTabs = () => allTabs().filter((t) => t.href !== "/stats").map(({ href, label }) => ({ href, label }));
 
 export default function RootLayout({
   children,
@@ -70,7 +68,7 @@ export default function RootLayout({
                 Deep<b>ARAM</b>
               </span>
             </Link>
-            <NavLinks tabs={[{ href: "/", label: "Home" }, ...navTabs()]} />
+            <NavLinks items={[{ href: "/", label: "Home" }, ...navItems()]} />
             <SearchPalette items={searchItems()} />
             {kofi && (
               <a className="kofi-btn" href={kofi} target="_blank" rel="noreferrer" aria-label="Support DeepARAM on Ko-fi">
@@ -89,7 +87,7 @@ export default function RootLayout({
         {text("banner") && <p className="site-banner">{text("banner")}</p>}
         <main>{children}</main>
         <footer className="site-footer">{text("footer")}</footer>
-        <MobileTabBar tabs={navTabs()} />
+        <MobileTabBar tabs={navItems().map(({ href, label }) => ({ href, label }))} />
       </body>
     </html>
   );

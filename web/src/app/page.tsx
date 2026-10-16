@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { text } from "@/lib/content";
-import { statsDate, counts, kitchenBuild, livePatch, toolTabs, topAugments, topChampions, topDps } from "@/lib/highlights";
+import { statsDate, counts, kitchenBuild, livePatch, topAugments, topChampions, topDps } from "@/lib/highlights";
+import { BETA } from "@/lib/beta";
+import { navPages } from "@/lib/tabs";
 
 // eslint-disable-next-line @next/next/no-img-element
 const Icon = ({ src }: { src: string }) => <img className="icon" src={src} alt="" width={24} height={24} loading="lazy" />;
@@ -15,7 +17,6 @@ export default function Home() {
   const patch = livePatch();
   const build = kitchenBuild();
   const dps = topDps();
-  const tools = toolTabs().filter((t) => t.slug !== "cook-builds");
   const n = counts();
   const date = statsDate();
 
@@ -84,7 +85,7 @@ export default function Home() {
           <section className="card span-5 feature">
             <div className="card-head">
               <h2>From The Kitchen</h2>
-              <Link href="/tools/cook-builds">More →</Link>
+              <Link href="/tools/kitchen">More →</Link>
             </div>
             <p className="eyebrow">{build.champion}</p>
             <h3>{build.title}</h3>
@@ -104,7 +105,7 @@ export default function Home() {
               <h2>
                 Simulator: top damage per second <span className="beta">Beta</span>
               </h2>
-              <Link href="/simulator">Open →</Link>
+              <Link href="/tools/simulator">Open →</Link>
             </div>
             <div className="bars">
               {dps.map((d) => (
@@ -125,13 +126,12 @@ export default function Home() {
             <h2>More to explore</h2>
           </div>
           <div className="rank links">
-            {[
-              { href: "/stats", label: "My Stats", body: "Your own Mayhem games" },
-              ...tools.map((t) => ({ href: t.href, label: t.label, body: t.body })),
-              { href: "/pbe", label: "PBE", body: "Upcoming changes on the test server" },
-            ].map((l) => (
+            {[...navPages().filter((t) => t.href !== "/tier-list"), { href: "/stats", label: "My Stats", body: "Your own Mayhem games" }].map((l) => (
               <Link key={l.href} href={l.href}>
-                <span className="rank-name">{l.label}</span>
+                <span className="rank-name">
+                  {l.label}
+                  {BETA.has(l.href) && <span className="beta">Beta</span>}
+                </span>
                 <span className="rank-body">{l.body}</span>
                 <span className="rank-arrow" aria-hidden="true">
                   →
