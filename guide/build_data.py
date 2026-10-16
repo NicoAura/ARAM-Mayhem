@@ -62,6 +62,11 @@ def get(url, tries=4):
             time.sleep(2 ** attempt)
 
 
+def site_paths(text):
+    """Point asset URLs at the site's own copies (/assets/cd/<channel>/<path, lower case>)."""
+    return re.sub(re.escape(BASE) + r"/([^\s\"']+)", lambda m: "/assets/cd/" + m.group(1).lower(), text)
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--channel", default="latest")
@@ -235,7 +240,7 @@ def main():
     }
     with open(os.path.join(HERE, "data.js"), "w") as f:
         # no header comment: the file ships to the site, and pages don't say where data comes from
-        f.write("window.GUIDE_DATA = " + json.dumps(out, indent=1, ensure_ascii=False) + ";\n")
+        f.write("window.GUIDE_DATA = " + site_paths(json.dumps(out, indent=1, ensure_ascii=False)) + ";\n")
     print(f"{version}: {len(quests)} quests, {len(challenges)} challenges "
           f"({sum(c['mayhem'] for c in challenges)} count Mayhem), {len(items)} items, pool {tier_counts}")
 
