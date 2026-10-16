@@ -14,8 +14,8 @@ export default function Privacy() {
         <p>Last updated October 16, 2026.</p>
         <h2>No accounts, no tracking</h2>
         <p>
-          DeepARAM has no user accounts, no passwords, no ads and no analytics or tracking cookies. We don&apos;t sell or share
-          personal data.
+          DeepARAM has no user accounts, no passwords, no ads and no tracking cookies. We count page visits anonymously,
+          without cookies, to see which pages are used. We don&apos;t sell or share personal data.
         </p>
         <h2>Stored in your browser</h2>
         <p>
@@ -30,10 +30,10 @@ export default function Privacy() {
         </p>
         <h2>My Stats</h2>
         <p>My Stats reads your games through a companion app on your own computer. Those games stay on your computer.</p>
-        <h2>Server logs</h2>
+        <h2>Server logs and security</h2>
         <p>
-          Like any website, our hosting keeps short-lived request logs (IP address, page and time) to keep the site running
-          and to stop abuse, such as limiting how often Riot ID lookups can be made.
+          Like any website, our hosting provider keeps short-lived request logs (IP address, page and time) and runs security
+          checks to keep the site running and stop abuse, such as limiting how often Riot ID lookups can be made.
         </p>
         <h2>Contact</h2>
         <p>
