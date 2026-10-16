@@ -1,17 +1,17 @@
 {
   "banner": "",
-  "home.title": "Every Mayhem pick, measured.",
+  "footer": "DeepARAM isn't endorsed by Riot Games and doesn't reflect the views or opinions of Riot Games or anyone officially involved in producing or managing Riot Games properties.",
+  "home.title": "Everything ARAM Mayhem.",
   "home.lede": "Win rates for every champion and augment, a fight simulator for every champion, and Season 3 changes from the test server.",
   "tab./stats.label": "My Stats",
   "tab./stats.body": "Your own Mayhem games: win rate, champions, augments and recent matches.",
-  "tab./tier-list.label": "Tier List",
+  "page./stats.title": "Your Mayhem games, in one place.",
+  "tab./tier-list.label": "Stats",
   "tab./tier-list.body": "Champion, augment and duo win rates, patch by patch.",
+  "page./tier-list.title": "Every Mayhem champion and augment, ranked.",
   "tab./simulator.label": "Simulator",
   "tab./simulator.body": "Simulated teamfights, best builds and fight replays for every champion.",
-  "tab./pbe.label": "PBE",
-  "tab./pbe.body": "Mayhem Season 3 changes datamined from the test server.",
-  "page./stats.title": "Your Mayhem games, in one place.",
-  "page./tier-list.title": "Every Mayhem champion and augment, ranked.",
   "page./simulator.title": "Teamfight damage, simulated.",
-  "footer": "DeepARAM isn't endorsed by Riot Games and doesn't reflect the views or opinions of Riot Games or anyone officially involved in producing or managing Riot Games properties."
+  "tab./pbe.label": "PBE",
+  "tab./pbe.body": "Mayhem Season 3 changes."
 }
