@@ -130,7 +130,7 @@
     const mode = enemyMode();
     if (mode === "pool") {
       const p = document.createElement("p"); p.className = "note";
-      p.textContent = "Each fight draws five enemies weighted by how often they're picked on the China server, with their real HP, resists and damage. This is the default.";
+      p.textContent = "Each fight draws five enemies weighted by how often they're picked in Mayhem, with their real HP, resists and damage. This is the default.";
       box.append(p);
       return;
     }
@@ -166,7 +166,7 @@
       card.append(s, grid); box.append(card);
     });
     const p = document.createElement("p"); p.className = "note";
-    p.textContent = "Starts from each champion's China-server HP, resists and share of their team's damage. Change any number to make that enemy tougher or hit harder.";
+    p.textContent = "Starts from each champion's real Mayhem HP, resists and share of their team's damage. Change any number to make that enemy tougher or hit harder.";
     box.append(p);
   }
 
