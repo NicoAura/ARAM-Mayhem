@@ -84,7 +84,7 @@ tbody tr:hover { background: var(--hover); }
 .meter { height: 6px; border-radius: 999px; background: var(--raised); overflow: hidden; }
 .meter i { display: block; height: 100%; border-radius: inherit; background: var(--accent); }
 
-/* ---- Mayhem Guide ---- */
+/* ---- Mayhem Info ---- */
 main { max-width: 1120px; margin: 0 auto; padding: 16px; display: grid; gap: 1rem; }
 .muted { color: var(--muted); }
 .small { font-size: 13px; }
