@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Bricolage_Grotesque, Geist, Geist_Mono } from "next/font/google";
 import Link from "next/link";
+import BrandMark from "@/components/BrandMark";
 import MobileTabBar from "@/components/MobileTabBar";
 import NavLinks from "@/components/NavLinks";
 import SearchPalette from "@/components/SearchPalette";
@@ -59,7 +60,7 @@ export default function RootLayout({
         <header className="site-header">
           <div className="site-header-inner">
             <Link href="/" className="brand">
-              <i aria-hidden="true" />
+              <BrandMark />
               <span>
                 Deep<b>ARAM</b>
               </span>
