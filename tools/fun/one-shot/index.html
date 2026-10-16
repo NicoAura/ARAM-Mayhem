@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>One-Shot Checker</title>
+  <meta name="description" content="Does your burst kill a target from full Health in ARAM Mayhem, after Armor, Magic Resist, penetration and augments?">
+  <link rel="stylesheet" href="../style.css">
+  <style>
+    .options select {
+      width: 9.5rem; padding: 0.3rem 0.45rem; border: 1px solid var(--line); border-radius: 6px;
+      background: var(--bg); color: inherit; font: inherit;
+    }
+    #target-picker .pick { padding: 0.45rem 0.6rem; }
+    #bonus { margin-top: 0.75rem; }
+    .table th[colspan], .table tr:last-child th { color: var(--fg); font-weight: 600; }
+  </style>
+</head>
+<body>
+  <main>
+    <header class="intro">
+      <img id="champ-icon" alt="" width="56" height="56">
+      <div>
+        <p class="eyebrow"><a href="../index.html">Fun Tools</a> · ARAM Mayhem</p>
+        <h1>One-Shot Checker</h1>
+        <p class="muted">Enter your burst, add penetration items and Mayhem augments, and see if it kills a target from full Health through their Armor and Magic Resist. <span id="patch"></span></p>
+      </div>
+    </header>
+
+    <section class="result" aria-live="polite">
+      <div class="big">
+        <span class="label">From full Health</span>
+        <span id="verdict" class="value">–</span>
+      </div>
+      <div class="loop">
+        <div class="loop-head">
+          <span id="dealt" class="label">0 damage</span>
+          <span id="pct-hp">0%</span>
+        </div>
+        <div class="meter"><div id="gain-bar"></div><div class="meter-mark"></div></div>
+        <p id="verdict-note" class="muted small"></p>
+      </div>
+      <dl id="stats" class="stats"></dl>
+    </section>
+
+    <section>
+      <h2>Damage after resists</h2>
+      <table id="damage" class="table"></table>
+    </section>
+
+    <section>
+      <div class="row-head">
+        <h2>Your burst</h2>
+        <span class="muted small">Raw damage before resists</span>
+      </div>
+      <div id="burst" class="options"></div>
+    </section>
+
+    <section>
+      <div class="row-head">
+        <h2>Target</h2>
+        <span id="champ-count" class="muted small"></span>
+      </div>
+      <input id="champ-search" class="search" type="search" placeholder="Search champions" aria-label="Search champions" autocomplete="off">
+      <div id="champ-picker" class="picker"></div>
+    </section>
+
+    <section>
+      <div class="row-head">
+        <h2>Target level</h2>
+        <output id="level-out">18</output>
+      </div>
+      <input id="level" type="range" min="1" max="18" value="18" aria-label="Target level">
+    </section>
+
+    <section>
+      <div class="row-head">
+        <h2>Target build</h2>
+        <span class="muted small">Edit the numbers to match their items</span>
+      </div>
+      <div id="target-picker" class="picker"></div>
+      <div id="bonus" class="options"></div>
+    </section>
+
+    <section>
+      <div class="row-head">
+        <h2>Your items</h2>
+        <span class="muted small">Up to 6</span>
+      </div>
+      <div id="item-slots" class="slots"></div>
+      <div id="item-picker" class="picker"></div>
+    </section>
+
+    <section>
+      <div class="row-head">
+        <h2>Your augments</h2>
+        <span class="muted small">Up to 4</span>
+      </div>
+      <div id="aug-slots" class="slots augs"></div>
+      <div id="aug-picker" class="picker augs"></div>
+    </section>
+
+    <section id="options-section">
+      <h2>Conditions</h2>
+      <div id="options" class="options"></div>
+    </section>
+
+    <section>
+      <h2>Where the extra damage comes from</h2>
+      <table id="breakdown" class="table"></table>
+    </section>
+
+    <section class="actions">
+      <button id="preset" type="button">Load the tank one-shot</button>
+      <button id="reset" type="button" class="ghost">Clear</button>
+      <button id="share" type="button" class="ghost">Copy link</button>
+    </section>
+
+    <footer class="muted small">
+      Champion stats, item penetration and augment values come from the game files via CommunityDragon, with Mayhem's item changes applied.
+      Resists are cut by % reduction, then % penetration, then flat penetration and Lethality, and damage taken is 100 ÷ (100 + resist).
+      Damage bonuses multiply together. The target builds are plain numbers we picked, not real items.
+      Not counted: ARAM's per-champion damage adjustments, the target's shields, healing and damage reduction,
+      Shadowflame and other effects that need the target already hurt, and Dropkick's stat scaling (type your own threshold).
+    </footer>
+  </main>
+
+  <script src="data.js"></script>
+  <script src="calc.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

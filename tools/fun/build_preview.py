@@ -11,7 +11,14 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 TOOLS = [("ryze-calculator", "Infinite Ryze", "How far Ryze's AP to Mana loop goes with your items and augments."),
          ("heartsteel", "Heartsteel Quest", "How much Health a tank snowballs to with Heartsteel and Steel Your Heart."),
          ("zero-cooldowns", "Zero Cooldowns", "How close any champion gets to casting nonstop with Ability Haste items and augments."),
-         ("stacking-timer", "Stacking Timer", "How fast Veigar, Nasus, Senna and Smolder stack, and when they hit each goal.")]
+         ("stacking-timer", "Stacking Timer", "How fast Veigar, Nasus, Senna and Smolder stack, and when they hit each goal."),
+         ("one-shot", "One-Shot Checker", "Whether your burst kills a target from full Health after armor and magic resist."),
+         ("move-speed", "Speed Cap Breaker", "How fast any champion goes with speed items and augments, after the soft caps."),
+         ("gold-rush", "Gold Rush", "When you finish a full build, and how much sooner gold augments get you there."),
+         ("biggest-champion", "Biggest Champion", "How big a champion grows with size augments and items, next to Baron.")]
+SWAP_ICONS = ("<script>(function(){var M=parent.FUN_ICONS||{};function w(o){for(var k in o){var v=o[k];"
+              "if(typeof v==='string'){if(M[v])o[k]=M[v];}else if(v&&typeof v==='object')w(v);}}"
+              "Object.keys(window).forEach(function(k){if(/_DATA$/.test(k))w(window[k]);});})();</script>")
 ICON = re.compile(r"https://raw\.communitydragon\.org/[^\"']+?\.png")
 
 
@@ -39,6 +46,10 @@ def inline_page(folder, icons):
 
     def script(m):
         js = read(f"{folder}/{m.group(1)}")
+        if m.group(1) == "data.js":
+            # Icons are shared by many tools, so the shell holds each one once (FUN_ICONS) and the
+            # page swaps its data's icon URLs for them right after the data loads.
+            return "<script>" + js.replace("</script", "<\\/script") + "</script>" + SWAP_ICONS
         js = ICON.sub(lambda u: icons.get(u.group(0), u.group(0)), js)
         return "<script>" + js.replace("</script", "<\\/script") + "</script>"
 
@@ -62,7 +73,8 @@ def main(out):
     frames = "\n".join(f'<section class="panel" id="panel-{f}" role="tabpanel" hidden><iframe title="{html.escape(n)}" data-src="{f}"></iframe></section>'
                        for f, n, _ in TOOLS)
     shell = (shell.replace("<!--CARDS-->", cards).replace("<!--TABS-->", tabs).replace("<!--FRAMES-->", frames)
-             .replace("/*PAGES*/null", json.dumps(pages).replace("</", "<\\/")))
+             .replace("/*PAGES*/null", json.dumps(pages).replace("</", "<\\/"))
+             .replace("<script>\n(function", "<script>window.FUN_ICONS = " + json.dumps({u: d for u, d in icons.items() if d}) + ";</script>\n<script>\n(function", 1))
     with open(out, "w", encoding="utf-8") as f:
         f.write(shell)
     print(f"wrote {out}: {len(shell) / 1e6:.1f} MB, {sum(1 for v in icons.values() if v)} icons")
