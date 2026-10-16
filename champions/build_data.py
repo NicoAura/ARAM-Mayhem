@@ -139,6 +139,10 @@ def load_build(cid):
         "first": rows(items.get("other"), 8),
         "core": rows(items.get("core"), 6),
         "full": rows(items.get("full_builds"), 6),
+        # inputs for archetypes(); dropped before writing
+        "_core": rows(items.get("core"), 99), "_full": rows(items.get("full_builds"), 99),
+        "_other": rows(items.get("other"), 99),
+        "_augs": [{"id": a["id"], "pick": a["pick_rate"]} for a in aug.get("all") or []],
         "augments": {t: [{"id": a["id"], "pick": a["pick_rate"], "grade": a.get("grade") or ""} for a in aug.get(t) or []][:10]
                      for t in ("prismatic", "gold", "silver")},
         "skills": [{"max": "".join(s["max_order"]), "pick": s["pick_rate"], "win": s["win_rate"],
@@ -151,6 +155,99 @@ def load_build(cid):
 def site_paths(text):
     """Point asset URLs at the site's own copies (/assets/cd/<channel>/<path, lower case>)."""
     return re.sub(re.escape(BASE) + r"/([^\s\"']+)", lambda m: "/assets/cd/" + m.group(1).lower(), text)
+
+
+# Build styles. An item's style comes from its shop categories; a build's style is the most common one among its
+# items (ties go to the earlier style in STYLES).
+STYLES = {"crit": "Crit", "onhit": "On-hit", "ap": "AP", "lethality": "Lethality", "fighter": "AD",
+          "tank": "Tank", "enchanter": "Enchanter"}
+# An augment fits a style when its internal name or its spell's value names mention it (CamelCase, split into words).
+AUG_STYLE = {
+    "crit": (r"crit|crti", set()),
+    "onhit": (r"onhit|attackspeed|asperstack|dualwield|deft", {"as"}),
+    "ap": (r"abilitypower|magic|witch|warlock|apratio|apflat|apamp", {"ap"}),
+    "lethality": (r"lethality|armorpen|assassin|execute|adratio|bonusad|adamp", {"ad"}),
+    "fighter": (r"omnivamp|lifesteal|vamp|adratio|bonusad", {"ad"}),
+    "tank": (r"health|armor|resist|tank|damagereduction|maxhp|size", {"hp", "mr"}),
+    "enchanter": (r"heal|shield|ally|allies", set()),
+}
+
+
+def item_style(it):
+    c = set(it.get("categories") or [])
+    desc = (it.get("description") or "").lower()
+    if "Boots" in c or "Consumable" in c:
+        return None
+    if "CriticalStrike" in c:
+        return "crit"
+    if "OnHit" in c and "AttackSpeed" in c:
+        return "onhit"
+    if "lethality" in desc:
+        return "lethality"
+    if "heal and shield power" in desc:
+        return "enchanter"
+    if "SpellDamage" in c:
+        return "ap"
+    if "Damage" in c:
+        return "fighter"
+    if c & {"Health", "Armor", "SpellBlock"}:
+        return "tank"
+    return None
+
+
+def build_style(ids, items):
+    styles = [x for x in (item_style(items[i]) for i in ids if i in items) if x]
+    order = list(STYLES)  # ties go to the more specific style
+    return max(styles, key=lambda x: (styles.count(x), -order.index(x))) if styles else None
+
+
+def augment_styles(kiwi):
+    """{augment id: set of styles it fits}"""
+    out = {}
+    for a in kiwi.values():
+        if not (isinstance(a, dict) and a.get("__type") == "AugmentData" and a.get("AugmentPlatformId")):
+            continue
+        sp = (kiwi.get(a.get("RootSpell")) or {}).get("mSpell") or {}
+        names = [a.get("AugmentNameId") or ""] + [d.get("name", "") for d in sp.get("DataValues") or []]
+        text = " ".join(names).lower()
+        words = {w.lower() for n in names for w in re.findall(r"[A-Z]+(?![a-z])|[A-Z]?[a-z]+", n)}
+        fits = {k for k, (pat, toks) in AUG_STYLE.items() if re.search(pat, text) or words & toks}
+        if 0 < len(fits) <= 3:  # an augment that fits nearly everything says nothing about a style
+            out[a["AugmentPlatformId"]] = fits
+    return out
+
+
+def archetypes(b, items, aug_fits):
+    """Group a champion's core paths and full builds by style, with the items and augments that go with each."""
+    def weigh(rows):
+        pick = sum(r["pick"] for r in rows)
+        return pick, (sum(r["win"] * r["pick"] for r in rows) / pick if pick else 0)
+
+    groups = {}
+    for r in b["_core"]:
+        st = build_style(r["items"], items)
+        if st:
+            groups.setdefault(st, {"core": [], "full": []})["core"].append(r)
+    for r in b["_full"]:
+        st = build_style(r["items"], items)
+        if st in groups:
+            groups[st]["full"].append(r)
+    total = sum(r["pick"] for g in groups.values() for r in g["core"]) or 1
+    out = []
+    for st, g in groups.items():
+        pick, win = weigh(g["core"])
+        if pick / total < 0.05 and out:
+            continue
+        in_core = {i for r in g["core"] for i in r["items"]}
+        out.append({
+            "style": st, "label": STYLES[st], "share": round(pick / total, 4), "win": round(win, 4),
+            "core": g["core"][:3], "full": g["full"][:2],
+            "items": [r["items"][0] for r in b["_other"] if item_style(items.get(r["items"][0], {})) == st
+                      and r["items"][0] not in in_core][:4],
+            "augments": [a["id"] for a in b["_augs"] if st in aug_fits.get(a["id"], ())][:6],
+        })
+    out.sort(key=lambda a: -a["share"])
+    return out
 
 
 def main():
@@ -183,6 +280,7 @@ def main():
 
     items = {i["id"]: i for i in get(f"{gd}/v1/items.json")}
     augs = {a["id"]: a for a in get(f"{gd}/v1/cherry-augments.json")}
+    aug_fits = augment_styles(get(f"{BASE}/{ch}/game/maps/modespecificdata/kiwi.bin.json", os.path.join(cache, "kiwi.bin.json")))
 
     tier = {}
     path = os.path.join(REPO, "data", "cn", "champions.csv")
@@ -211,8 +309,14 @@ def main():
                               "text": clean(s.get("description")), "cooldown": ranks([0] + s.get("cooldownCoefficients", []), s["spellKey"].upper())})
         b = builds.get(c["id"])
         if b:
+            b["styles"] = archetypes(b, items, aug_fits)
+            for k in [k for k in b if k.startswith("_")]:
+                del b[k]
             used_items.update(i for k in ("start", "boots", "first", "core", "full") for r in b[k] for i in r["items"])
+            used_items.update(i for st in b["styles"] for r in st["core"] + st["full"] for i in r["items"])
+            used_items.update(i for st in b["styles"] for i in st["items"])
             used_augs.update(a["id"] for rows in b["augments"].values() for a in rows)
+            used_augs.update(a for st in b["styles"] for a in st["augments"])
         champions.append({
             "id": c["id"], "alias": c["alias"], "name": info["name"], "title": info.get("title", ""),
             "roles": info.get("roles") or [],

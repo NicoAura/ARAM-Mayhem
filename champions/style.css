@@ -174,3 +174,14 @@ td.num { white-space: nowrap; }
 .lv { text-align: center; font: 600 11px/22px var(--mono); border-radius: 5px; background: var(--raised); color: var(--muted); }
 .lv.k-R { background: var(--accent-soft); color: var(--accent); }
 .mates { display: grid; gap: 0.5rem; }
+
+/* Builds by style */
+.styles { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr)); }
+.style { border: 1px solid var(--line); border-radius: var(--r); background: var(--surface); padding: 0.9rem; display: grid; gap: 0.5rem; align-content: start; }
+.style-head { display: flex; align-items: baseline; justify-content: space-between; gap: 0.5rem; flex-wrap: wrap; }
+.style-head h3 { margin: 0; font-size: 1.1rem; }
+.style .eyebrow { margin-top: 0.35rem; }
+.aug-chips { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+.aug-chip { display: inline-flex; align-items: center; gap: 0.35rem; padding: 0.2rem 0.55rem 0.2rem 0.25rem; border-radius: 999px;
+  border: 1px solid var(--line); font-size: 0.85rem; }
+.aug-chip img { width: 22px; height: 22px; border-radius: 6px; }
