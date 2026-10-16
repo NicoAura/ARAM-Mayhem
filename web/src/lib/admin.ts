@@ -1,4 +1,5 @@
 import "server-only";
+import { serverEnv } from "./env";
 import { cleanContent, type Content } from "./content";
 import bundled from "@/content/site.json";
 
@@ -21,7 +22,7 @@ export class AdminError extends Error {
 }
 
 export async function checkPassword(given: string | null) {
-  const want = process.env.ADMIN_PASSWORD;
+  const want = serverEnv("ADMIN_PASSWORD");
   if (!want) throw new AdminError("The editor isn't set up yet: ADMIN_PASSWORD is missing.", 503);
   const enc = new TextEncoder();
   const [a, b] = await Promise.all([crypto.subtle.digest("SHA-256", enc.encode(given ?? "")), crypto.subtle.digest("SHA-256", enc.encode(want))]);
@@ -36,7 +37,7 @@ export async function checkPassword(given: string | null) {
 }
 
 function github(path: string, init?: RequestInit) {
-  const token = process.env.GITHUB_TOKEN;
+  const token = serverEnv("GITHUB_TOKEN");
   if (!token) throw new AdminError("Saving isn't set up yet: GITHUB_TOKEN is missing.", 503);
   return fetch(`https://api.github.com/repos/${REPO}/${path}`, {
     ...init,
@@ -56,7 +57,7 @@ const fromBase64 = (b: string) => new TextDecoder().decode(Uint8Array.from(atob(
 
 /** The text as it is on main now (it can be newer than this deploy), plus the file version for saving. */
 export async function loadContent(): Promise<{ content: Content; sha: string | null }> {
-  if (!process.env.GITHUB_TOKEN) return { content: cleanContent(bundled), sha: null };
+  if (!serverEnv("GITHUB_TOKEN")) return { content: cleanContent(bundled), sha: null };
   const res = await github(`contents/${FILE}?ref=${BRANCH}`);
   if (!res.ok) throw new AdminError(`GitHub returned ${res.status} reading the site text.`, 502);
   const file = (await res.json()) as { content: string; sha: string };
