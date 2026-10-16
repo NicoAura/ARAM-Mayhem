@@ -3,7 +3,7 @@ import augmentNames from "@/data/augment-names.json";
 import championNames from "@/data/champion-names.json";
 import type { SearchItem } from "@/components/SearchPalette";
 import { readRepoCsv, readRepoJson } from "./repo-data";
-import { allTabs, discoverToolTabs } from "./tabs";
+import { navPages } from "./tabs";
 import { BETA } from "./beta";
 
 // Small summaries of each section's data, read from the repo at build time.
@@ -61,16 +61,17 @@ export function counts() {
   };
 }
 
-export const toolTabs = () => discoverToolTabs();
-
 export function searchItems(): SearchItem[] {
   const pct = (v: number) => `${(v * 100).toFixed(1)}% win`;
-  const pages: SearchItem[] = [{ group: "Pages", name: "Home", hint: "Page", href: "/" }, ...allTabs().map((t) => ({ group: "Pages", name: t.label, hint: BETA.has(t.href) ? "Page · Beta" : "Page", href: t.href }))];
+  const pages: SearchItem[] = [
+    { group: "Pages", name: "Home", hint: "Page", href: "/" },
+    ...[...navPages(), { href: "/stats", label: "My Stats" }].map((t) => ({ group: "Pages", name: t.label, hint: BETA.has(t.href) ? "Page · Beta" : "Page", href: t.href })),
+  ];
   const champs = (readRepoCsv("data/cn/champions.csv") ?? []).map((r) => ({
     group: "Champions",
     name: champName(r.name),
     hint: pct(Number(r.win_rate)),
-    href: `/tier-list?q=${encodeURIComponent(champName(r.name))}`,
+    href: `/champions#${r.name}`,
     icon: `/icons/champions/${r.name}.webp`,
   }));
   const augs = (readRepoCsv("data/cn/augments.csv") ?? [])

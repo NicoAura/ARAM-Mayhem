@@ -1,29 +1,20 @@
 import type { Metadata } from "next";
-import { notFound } from "next/navigation";
-import Embed from "@/components/Embed";
-import Intro from "@/components/Intro";
+import ToolPage, { toolMetadata } from "@/components/ToolPage";
 import { discoverToolTabs } from "@/lib/tabs";
 
+// The Tools menu's embedded pages: /tools/lab, /tools/kitchen and any new site-tab.json folder.
 export const dynamicParams = false;
 
 export function generateStaticParams() {
-  return discoverToolTabs().map((t) => ({ slug: t.slug }));
+  return discoverToolTabs()
+    .filter((t) => t.href.startsWith("/tools/"))
+    .map((t) => ({ slug: t.href.slice("/tools/".length) }));
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
-  const { slug } = await params;
-  const tab = discoverToolTabs().find((t) => t.slug === slug);
-  return { title: tab ? `${tab.label} · DeepARAM` : "DeepARAM" };
+  return toolMetadata(`/tools/${(await params).slug}`);
 }
 
-export default async function ToolPage({ params }: { params: Promise<{ slug: string }> }) {
-  const { slug } = await params;
-  const tab = discoverToolTabs().find((t) => t.slug === slug);
-  if (!tab) notFound();
-  return (
-    <>
-      <Intro eyebrow={tab.label} title={tab.body || tab.label} />
-      <Embed src={`/embed/${tab.slug}/${tab.entry}`} title={tab.label} />
-    </>
-  );
+export default async function Page({ params }: { params: Promise<{ slug: string }> }) {
+  return <ToolPage href={`/tools/${(await params).slug}`} />;
 }

@@ -15,7 +15,7 @@ export default function Embed({
 }) {
   const ref = useRef<HTMLIFrameElement>(null);
   const [height, setHeight] = useState(minHeight);
-  // Pass the page's #hash to the tool, so links like /tools/champions#Yasuo open that champion.
+  // Pass the page's #hash to the tool, so links like /champions#Yasuo open that champion.
   const [frameSrc, setFrameSrc] = useState(src);
   useEffect(() => {
     const sync = () => setFrameSrc(src + location.hash);

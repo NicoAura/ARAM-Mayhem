@@ -8,7 +8,7 @@ export type Field = { key: string; label: string; group: string; long?: boolean;
 const TABS = [
   ["/stats", "My Stats"],
   ["/tier-list", "Tier List"],
-  ["/simulator", "Simulator"],
+  ["/simulator", "Simulator"], // key names predate the move to /tools/simulator
   ["/pbe", "PBE"],
 ] as const;
 
