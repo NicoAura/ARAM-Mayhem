@@ -250,7 +250,7 @@ static bool isModelKey(const std::string& k) {
     return k == "dodge_chance" || k == "reaction_time" || k == "aim_lead" || k == "combo_order";
 }
 
-Library Library::load(const std::string& rulesPath, const Settings& settings) {
+Library Library::load(const std::string& rulesPath, const Settings& settings, const std::string& gameDir) {
     Library lib;
     for (const auto& [k, v] : settings) {
         bool known = false;
@@ -259,6 +259,7 @@ Library Library::load(const std::string& rulesPath, const Settings& settings) {
         if (!isModelKey(k)) lib.fight[k] = v;
     }
     const std::string dir = dirOf(rulesPath);
+    const std::string game = gameDir.empty() ? dir : gameDir;
     const json::Value root = json::parse(readFile(rulesPath));
     const json::Value& r = root["rules"];
     lib.rules.critMult = ruleValue(r, "base_crit_multiplier", 2.0);
@@ -296,7 +297,7 @@ Library Library::load(const std::string& rulesPath, const Settings& settings) {
     os.fittingItemsOnly = o["fitting_items_only"].asBool(os.fittingItemsOnly);
 
     lib.scenario = Scenario::fromJson(root["scenario"]);
-    const json::Value champs = json::parse(readFile(dir + "/champions.json"));
+    const json::Value champs = json::parse(readFile(game + "/champions.json"));
     for (const auto& c : champs["champions"].arr) {
         lib.champions.push_back(loadChampion(c, lib.rules));
         lib.mayhemDamageTaken[lib.champions.back().championId] = lib.champions.back().damageTaken;
@@ -310,8 +311,8 @@ Library Library::load(const std::string& rulesPath, const Settings& settings) {
             if (!combo.empty()) Library::setCombo(c, combo);
         }
     }
-    lib.items = loadEffects(json::parse(readFile(dir + "/items.json"))["items"], "legendary");
-    lib.augments = loadEffects(json::parse(readFile(dir + "/augments.json"))["augments"], "augment");
+    lib.items = loadEffects(json::parse(readFile(game + "/items.json"))["items"], "legendary");
+    lib.augments = loadEffects(json::parse(readFile(game + "/augments.json"))["augments"], "augment");
     const std::string pool = root["scenario"]["enemy_pool"].asString();
     if (!pool.empty()) lib.enemyPool = json::parse(readFile(dir + "/" + pool));
     return lib;
@@ -604,6 +605,8 @@ private:
         baseAd_ = ch_.ad + ch_.adG * g;
         bonusAd_ = get(stats, "ad");
         ap_ = get(stats, "ap");
+        // AP that grows with level (Witchful Thinking: ap_min at level 1 up to ap_max at 18).
+        if (get(fx_, "ap_max") > 0) ap_ += get(fx_, "ap_min") + (get(fx_, "ap_max") - get(fx_, "ap_min")) * (sc_.level - 1) / 17.0;
         // Adaptive amplifiers boost whichever of AP or bonus AD the build has more of.
         const double adaptive = get(fx_, "adaptive_amp");
         if (ap_ >= bonusAd_) ap_ *= 1.0 + adaptive;

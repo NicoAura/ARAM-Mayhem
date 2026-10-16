@@ -134,7 +134,9 @@ struct Library {
 
     // rulesPath: data/mayhem_rules.json; the other files are found next to it.
     // Unknown setting names throw.
-    static Library load(const std::string& rulesPath, const Settings& settings = {});
+    // gameDir: where champions.json, items.json and augments.json are (default: next to the rules,
+    // the live patch; data/pbe for the PBE patch).
+    static Library load(const std::string& rulesPath, const Settings& settings = {}, const std::string& gameDir = "");
     const ChampionKit* find(const std::string& nameOrId) const;
     // Sets a champion's cast order, e.g. "EQRW" (Q, W, E and R, each at most once). Throws if invalid.
     static void setCombo(ChampionKit& c, const std::string& combo);

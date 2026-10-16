@@ -16,6 +16,9 @@
   ];
 
   let meta = null, champ = null, trace = null, busy = false;
+  // Live patch by default; PBE runs the same model on the test server's numbers (data/pbe).
+  let patch = "live";
+  const patchArgs = () => (patch === "pbe" ? ["--game-data", "data/pbe"] : []);
   let picks = null; // [{id, stats:{hp, armor, mr, damage_share}}]
   const combos = {};  // champion id -> combo the user typed
   const enemyById = new Map();
@@ -40,22 +43,38 @@
     worker = new Worker("sim-worker.js?v=" + (window.REPLAY_VERSION || "0"));
     worker.onmessage = (e) => { const r = pending.get(e.data.id); pending.delete(e.data.id); if (r) r(e.data); };
     worker.onerror = () => status("The simulator couldn't start in this browser. The replays above still work.", "err");
-    call(["--list", "--json"]).then((r) => {
-      if (!r.ok) { status("The simulator couldn't load its data: " + r.stderr, "err"); return; }
-      meta = JSON.parse(r.stdout);
-      for (const e of meta.enemies) enemyById.set(e.id.toLowerCase(), e);
-      buildFightForm();
-      for (const b of ["runBuild", "findBest", "resetAll"]) $(b).disabled = false;
-      status("Change anything below, then simulate. Changed values are marked with a dot.");
-      if (champ) fillFromTrace();
-    });
+    loadMeta().then((ok) => { if (ok) status("Change anything below, then simulate. Changed values are marked with a dot."); });
   } catch (e) {
     status("The simulator needs Web Workers, which this browser blocks.", "err");
   }
 
+  // Champions, items, augments and settings for the chosen patch.
+  function loadMeta() {
+    for (const b of ["runBuild", "findBest", "resetAll", "patchSel"]) $(b).disabled = true;
+    return call(["--list", "--json", ...patchArgs()]).then((r) => {
+      if (!r.ok) { status("The simulator couldn't load its data: " + r.stderr, "err"); return false; }
+      meta = JSON.parse(r.stdout);
+      enemyById.clear();
+      for (const e of meta.enemies) enemyById.set(e.id.toLowerCase(), e);
+      buildFightForm();
+      for (const b of ["runBuild", "findBest", "resetAll", "patchSel"]) $(b).disabled = false;
+      if (champ) fillFromTrace();
+      return true;
+    });
+  }
+  $("patchSel").addEventListener("change", (e) => {
+    patch = e.target.value;
+    loadMeta().then((ok) => {
+      if (!ok) return;
+      status(patch === "pbe"
+        ? "PBE patch: simulations now use the test server's numbers. The replay above changes when you simulate."
+        : "Live patch: simulations use the current patch's numbers again.");
+    });
+  });
+
   window.onReplayLoad = (c, tr, isCustom) => {
     const changedChamp = !champ || champ.id !== c.id;
-    $("buildTitle").textContent = isCustom ? "Your simulated setup" : "Simulated best build";
+    $("buildTitle").textContent = isCustom ? "Your simulated setup" + (tr.patch === "pbe" ? " (PBE patch)" : "") : "Simulated best build";
     champ = c; trace = tr;
     if (meta && (changedChamp || !isCustom)) fillFromTrace();
   };
@@ -242,7 +261,7 @@
 
   // ---------- running ----------
   function args(withBuild) {
-    const a = ["--champ", champ.id, "--json", "--trace", "/trace.json"];
+    const a = ["--champ", champ.id, "--json", "--trace", "/trace.json", ...patchArgs()];
     const set = Object.entries(fieldValues).filter(([k]) => !DUMMY_KEYS.includes(k) || enemyMode() === "dummy");
     if (enemyMode() === "dummy") set.push(["fixed_target", 1]);
     if (set.length) a.push("--set", set.map(([k, v]) => `${k}=${v}`).join(","));
@@ -266,22 +285,23 @@
     let a;
     try { a = args(withBuild); } catch (e) { status(e.message, "err"); return; }
     busy = true;
-    for (const b of ["runBuild", "findBest", "resetAll"]) $(b).disabled = true;
+    for (const b of ["runBuild", "findBest", "resetAll", "patchSel"]) $(b).disabled = true;
     status(withBuild ? "Simulating 2,000 fights…" : "Searching item and augment builds. This takes a few seconds…", "busy");
     const t0 = performance.now();
     const r = await call(a);
     busy = false;
-    for (const b of ["runBuild", "findBest", "resetAll"]) $(b).disabled = false;
+    for (const b of ["runBuild", "findBest", "resetAll", "patchSel"]) $(b).disabled = false;
     if (!r.ok || !r.trace) {
       status((r.stderr || "The simulation failed.").replace(/^error:\s*/, ""), "err");
       return;
     }
     const res = JSON.parse(r.stdout);
     const tr = JSON.parse(r.trace);
+    tr.patch = patch;
     const best = res.builds[0].summary;
     const def = window.ReplayViewer.defaultTrace().summary.mean_dps;
     const secs = ((performance.now() - t0) / 1000).toFixed(1);
-    status(`Done in ${secs} s. Average DPS ${Math.round(best.mean_dps).toLocaleString()} ` +
+    status(`Done in ${secs} s${patch === "pbe" ? " on the PBE patch" : ""}. Average DPS ${Math.round(best.mean_dps).toLocaleString()} ` +
       `(±${Math.round(best.ci95)}), survives ${Math.round(best.survival_rate * 100)}% of fights. ` +
       `The default setup averaged ${Math.round(def).toLocaleString()}. The replay above now shows a typical fight with these settings.`);
     showAlternatives(withBuild ? [] : res.builds);
@@ -323,5 +343,9 @@
     buildFightForm();
     window.ReplayViewer.resetTrace();
     status("Back to the default build, enemies and fight settings.");
+    if (patch !== "live") {  // and back to the live patch
+      patch = $("patchSel").value = "live";
+      loadMeta();
+    }
   });
 })();

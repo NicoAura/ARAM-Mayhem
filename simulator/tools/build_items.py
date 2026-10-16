@@ -26,10 +26,16 @@ import time
 import urllib.request
 
 HERE = os.path.dirname(os.path.abspath(__file__))
+# --pbe builds the PBE (test server) patch instead, into data/pbe/, for the simulator's optional
+# PBE mode. The live patch stays the default everywhere.
+PBE = "--pbe" in sys.argv
+if PBE:
+    sys.argv.remove("--pbe")
 DATA = os.path.join(HERE, "..", "data")
-DEFAULT_CACHE = os.path.join(os.path.expanduser("~"), ".cache", "aram-mayhem-sim")
+OUT_DIR = os.path.join(DATA, "pbe") if PBE else DATA
+DEFAULT_CACHE = os.path.join(os.path.expanduser("~"), ".cache", "aram-mayhem-sim", "pbe" if PBE else "")
 
-CDRAGON = "https://raw.communitydragon.org/latest"
+CDRAGON = "https://raw.communitydragon.org/" + ("pbe" if PBE else "latest")
 CONTENT_METADATA = CDRAGON + "/content-metadata.json"
 ITEM_LIST = CDRAGON + "/plugins/rcp-be-lol-game-data/global/default/v1/items.json"
 ITEM_BIN = CDRAGON + "/game/items.cdtb.bin.json"
@@ -205,7 +211,7 @@ def main():
                               "(passives; approx unless confidence says otherwise), with values the item bin holds "
                               "(Mayhem over ARAM over base) read from it."]},
            "items": out}
-    path = os.path.join(DATA, "items.json")
+    path = os.path.join(OUT_DIR, "items.json")
     with open(path, "w", encoding="utf-8") as f:
         json.dump(doc, f, ensure_ascii=False, indent=1)
         f.write("\n")
