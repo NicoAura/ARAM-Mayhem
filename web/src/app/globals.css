@@ -2297,3 +2297,245 @@ html[data-motion="reduce"] *::after {
 .tools-list {
   margin-top: 1rem;
 }
+
+/* Home: jump to a champion (hero search). */
+.jump {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  max-width: 28rem;
+  margin-top: 1.25rem;
+  padding: 0 0.9rem;
+  height: 46px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--surface);
+  color: var(--muted);
+  box-shadow: 0 1px 2px rgb(0 0 0 / 0.06);
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.jump:focus-within {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-soft);
+}
+
+.jump input {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  outline: 0;
+  background: none;
+  color: var(--fg);
+  font: inherit;
+  font-size: 0.95rem;
+}
+
+.jump-list {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  right: 0;
+  z-index: 30;
+  margin: 0;
+  padding: 0.35rem;
+  list-style: none;
+  border: 1px solid var(--line);
+  border-radius: var(--r);
+  background: var(--surface);
+  box-shadow: 0 12px 32px rgb(0 0 0 / 0.18);
+}
+
+.jump-list a {
+  display: grid;
+  grid-template-columns: 28px minmax(0, 1fr) auto 3.5rem;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.4rem 0.5rem;
+  border-radius: calc(var(--r) - 4px);
+  color: var(--fg);
+}
+
+.jump-list img {
+  border-radius: 6px;
+}
+
+.jump-list [aria-selected="true"] a {
+  background: var(--raised);
+}
+
+.jump-wr {
+  color: var(--muted);
+  font: 500 0.8125rem var(--mono);
+  text-align: right;
+}
+
+/* Home: live tier snapshot. */
+.snap {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.snap-tiers {
+  align-self: flex-start;
+}
+
+.snap-tiers button {
+  min-width: 2.4rem;
+  font-weight: 600;
+}
+
+.snap-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  min-height: 44px;
+}
+
+.snap-grid a {
+  display: block;
+  border-radius: 9px;
+  outline-offset: 2px;
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+
+.snap-grid img {
+  display: block;
+  border-radius: 9px;
+}
+
+.snap-grid a:hover,
+.snap-grid a.on {
+  transform: translateY(-2px);
+  box-shadow: 0 0 0 2px var(--accent);
+}
+
+.snap-card {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.6rem 0.75rem;
+  border-radius: var(--r);
+  background: var(--raised);
+}
+
+.snap-card img {
+  border-radius: 9px;
+}
+
+.snap-card div {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.snap-card span:not(.chip) {
+  color: var(--muted);
+  font-size: 0.8125rem;
+}
+
+/* Home: augment offer roll. */
+.roll-cards {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.6rem;
+}
+
+.roll-card {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  animation: deal 0.45s cubic-bezier(0.16, 1, 0.3, 1) both;
+  transition: transform 0.2s, opacity 0.2s;
+}
+
+.roll-card:not(:disabled):hover {
+  transform: translateY(-3px);
+}
+
+.roll-card:disabled {
+  cursor: default;
+}
+
+.roll-card .aug-card {
+  height: 100%;
+}
+
+.roll-card.dim {
+  opacity: 0.55;
+}
+
+.roll-card.best .aug-card {
+  box-shadow: 0 0 0 2px var(--accent);
+}
+
+.roll-card.picked .aug-card {
+  box-shadow: 0 0 0 2px var(--line);
+}
+
+.roll-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-top: 0.85rem;
+  color: var(--muted);
+  font-size: 0.875rem;
+}
+
+.roll-foot p {
+  margin: 0;
+}
+
+@keyframes deal {
+  from {
+    opacity: 0;
+    transform: translateY(10px) rotateY(60deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .roll-card {
+    animation: none;
+  }
+}
+
+/* Home: Kitchen build with reroll. */
+.kitchen-pick {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  animation: rise 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.kitchen-head {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+}
+
+.kitchen-head img {
+  border-radius: 9px;
+}
+
+.kitchen-pick .btn {
+  align-self: flex-start;
+  margin-top: 0.25rem;
+}
+
+@media (max-width: 640px) {
+  .roll-cards {
+    grid-template-columns: 1fr;
+  }
+  .roll-foot {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
