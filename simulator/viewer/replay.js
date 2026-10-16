@@ -667,6 +667,9 @@
   // preview video of the ability (tools/build_sounds.py), streamed from Riot's CDN, and deaths are silent.
   // Browsers only allow sound after the first click or key.
   let soundOn = true, gestured = false, soundFiles = {};
+  // Master volume from the slider, 0 to 1, remembered between visits.
+  let masterVolume = 0.8;
+  try { const v = parseFloat(localStorage.getItem("replayVolume")); if (v >= 0 && v <= 1) masterVolume = v; } catch (e) {}
   fetch(DATA + "sounds/sounds.json" + BUST).then((r) => (r.ok ? r.json() : {})).then((m) => { soundFiles = m; }).catch(() => {});
   // A few audio players reused round robin. Each is started once inside the first click or
   // key press, which lets it play later from the animation loop (Safari needs this per player).
@@ -699,7 +702,7 @@
     a.pause();
     a.src = packed ? `${DATA}sounds/${soundFiles.file}${BUST}#t=${packed[0]},${packed[0] + packed[1]}`
       : `${index.clip_cdn}/${k}/ability_${k}_${slot}1.webm#t=${video[0]},${video[0] + video[1]}`;
-    a.volume = volume * 0.8;
+    a.volume = Math.min(1, volume * masterVolume);
     const p = a.play();
     if (p && p.catch) p.catch(() => {});
     // Media fragments stop late in some browsers; end the clip on time so it never runs into the next one.
@@ -707,7 +710,9 @@
     a.onplaying = packed ? () => { clearTimeout(a.stopTimer); a.stopTimer = setTimeout(() => a.pause(), packed[1] * 1000); } : null;
   }
   function syncSound() {
-    video.muted = !(soundOn && gestured);
+    video.muted = !(soundOn && gestured) || masterVolume === 0;
+    video.volume = masterVolume;
+    for (const a of voices) if (!a.paused) a.volume = Math.min(a.volume, masterVolume);
     if (!soundOn) for (const a of voices) a.pause();
     const b = $("sound");
     b.textContent = soundOn ? "Sound on" : "Sound off";
@@ -899,6 +904,14 @@
   $("restart").addEventListener("click", () => { t = 0; shown.clear(); playing = true; $("play").textContent = "Pause"; });
   $("speed").addEventListener("change", (e) => { speed = parseFloat(e.target.value); });
   $("sound").addEventListener("click", () => { soundOn = !soundOn; syncSound(); });
+  const volumeInput = $("volume");
+  volumeInput.value = Math.round(masterVolume * 100);
+  volumeInput.addEventListener("input", () => {
+    masterVolume = volumeInput.value / 100;
+    try { localStorage.setItem("replayVolume", String(masterVolume)); } catch (e) {}
+    if (masterVolume > 0 && !soundOn) soundOn = true;
+    syncSound();
+  });
   document.addEventListener("keydown", (e) => {
     if (e.target.tagName === "SELECT") return;
     if (e.code === "Space") { e.preventDefault(); $("play").click(); }
