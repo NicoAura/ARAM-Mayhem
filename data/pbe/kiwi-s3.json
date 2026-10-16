@@ -4,7 +4,7 @@
     "codename": "Kiwi",
     "series": "Kiwi_S3",
     "label": "Season 3",
-    "source": "PBE datamine via CommunityDragon (PBE vs live client data); the locally installed PBE client is on the same build",
+    "source": "From the PBE client files via CommunityDragon, compared with live; the locally installed PBE client is on the same build",
     "dataAsOf": "2026-10-16",
     "caveat": "PBE content can change before release.",
     "augmentPool": {
