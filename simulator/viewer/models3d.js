@@ -1,6 +1,8 @@
 // 3D champion models for the fight replay (three.js). Each fighter in the arena is an
 // animated model posed from the simulated timeline (cast, attack, stunned, death, idle). Models come from
-// replay-data/models/, built by tools/build_models.mjs. If WebGL or a model is missing,
+// replay-data/models/, built by tools/build_models.mjs; a champion with no built model (the
+// website, which doesn't ship Riot art) loads the full model from modelviewer.lol instead,
+// picking its clips here the same way. If WebGL or a model is missing,
 // replay.js keeps drawing the 2D portraits.
 import * as THREE from "three";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
@@ -16,7 +18,45 @@ const FALLBACK = { Q: ["attack"], W: ["attack"], E: ["attack"], R: ["attack"], c
 let manifest = null;
 const manifestReady = fetch(DATA + "models.json" + BUST).then((r) => (r.ok ? r.json() : {})).catch(() => ({}))
   .then((m) => { manifest = {}; for (const [k, v] of Object.entries(m)) manifest[k.toLowerCase()] = v; });
+const keysReady = fetch("replay-data/index.json" + BUST).then((r) => r.json())
+  .then((idx) => new Map(idx.champions.map((c) => [c.id.toLowerCase(), { id: c.id, key: c.key }]))).catch(() => new Map());
+const SOURCE = "https://cdn.modelviewer.lol/lol/models";
 const loader = new GLTFLoader().setMeshoptDecoder(MeshoptDecoder);
+
+// Same rules as pickClips in tools/build_models.mjs: animation names vary by champion
+// (Spell4 vs Spell4_NoMove, Idle1 vs Idle_Base, Zed_idle1.anm), so try exact names first.
+function pickClips(names) {
+  const clean = (n) => n.replace(/\.anm$/i, "").toLowerCase();
+  const list = names.map((n) => ({ n, c: clean(n) }));
+  const transition = (c) => /_to_|to_?idle|to_?run|2idle|2run|_in\d*$|idle_?in|run_?in|lead_?in|leadout|intro|enter|exit|winddown|wndup|windup|_back$/.test(c);
+  const find = (...patterns) => {
+    for (const p of patterns) {
+      const hit = list.find(({ c }) => (p instanceof RegExp ? p.test(c) : c === p) && !transition(c));
+      if (hit) return hit.n;
+    }
+    return null;
+  };
+  const spell = (k) => find(`spell${k}`, `spell${k}_base`, `spell${k}_cast`, `spell${k}a`, `spell${k}_nomove`,
+    new RegExp(`^spell${k}(_|$)`), new RegExp(`(^|_)spell${k}(_base|_cast)?$`), new RegExp(`spell${k}`));
+  return {
+    idle: find("idle1", "idle_base", "idle", /^idle/, /(^|_)idle0?1(_base)?$/, /(^|_)idle\d*(_base|v\d)?$/),
+    run: find("run_base", "run", "run1", /^run(?!_homeguard|_slow)/, /(^|_)run(1|_base)?$/),
+    attack: find("attack1", "attack_1", /^attack/, /(^|_)attack_?1$/, /(^|_)attack\d*$/),
+    crit: find("crit1", "crit", /^crit/, /(^|_)crit(_base)?$/),
+    Q: spell(1), W: spell(2), E: spell(3), R: spell(4),
+    stunned: find("stunned", "stun", /stun/),
+    death: find("death", /^death/, /(^|_)death/),
+  };
+}
+
+function loadRemote(key) {
+  return keysReady.then((keys) => {
+    const c = keys.get(key);
+    if (!c) return null;
+    return loader.loadAsync(`${SOURCE}/${key}/${c.key * 1000}/model.glb`)
+      .then((g) => ({ gltf: g, entry: { clips: pickClips(g.animations.map((a) => a.name)) } }));
+  });
+}
 const gltfs = new Map();         // champion id (lower case) -> Promise<gltf | null>
 
 function loadChampion(id) {
@@ -24,7 +64,7 @@ function loadChampion(id) {
   if (!gltfs.has(key)) {
     gltfs.set(key, manifestReady.then(() => {
       const entry = manifest[key];
-      if (!entry) return null;
+      if (!entry) return loadRemote(key).catch(() => null);
       // A ".txt" file is the same .glb in base64, for hosts that only serve text.
       const load = entry.file.endsWith(".txt")
         ? fetch(DATA + entry.file + BUST).then((r) => r.text()).then((b64) => {

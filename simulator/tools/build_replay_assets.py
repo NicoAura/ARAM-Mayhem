@@ -176,7 +176,7 @@ def main():
         for col, im in enumerate(icons):
             if im is not None:
                 atlas.paste(im, (col * ICON, row * ICON))
-        del c["_icons"]
+        c["icons"] = c.pop("_icons")  # Data Dragon paths, for pages without the atlas
     atlas.save(out / "sprites.webp", quality=88, method=6)
 
     if args.clips:

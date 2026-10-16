@@ -24,7 +24,7 @@
   Promise.all([
     fetch(DATA + "index.json" + BUST).then((r) => r.json()),
     fetch(DATA + "traces.json" + BUST).then((r) => r.json()),
-    new Promise((ok, fail) => { const im = new Image(); im.onload = () => ok(im); im.onerror = fail; im.src = DATA + "sprites.webp" + BUST; }),
+    new Promise((ok, fail) => { const im = new Image(); im.onload = () => ok(im); im.onerror = () => ok(null); im.src = DATA + "sprites.webp" + BUST; }),
   ]).then(([idx, tr, im]) => {
     index = idx; traces = tr; sprite = im;
     for (const c of index.champions) byId.set(c.id.toLowerCase(), c);
@@ -200,12 +200,41 @@
   const overlayCanvas = $("arenaOverlay"), overlay = overlayCanvas.getContext("2d");
   const modelCanvas = $("arena3d");
   function iconRow(champId) { const c = byId.get(String(champId).toLowerCase()); return c ? c.row : -1; }
+  // Without the icon atlas (the website doesn't ship Riot art), icons load one by one
+  // from Data Dragon; until one arrives its square stays blank.
+  const ddIcons = new Map();
+  function ddImage(row, col) {
+    const c = index.champions[row], rel = c && c.icons && c.icons[col];
+    if (!rel) return null;
+    let im = ddIcons.get(rel);
+    if (!im) {
+      im = new Image(); im.crossOrigin = "anonymous";
+      im.src = "https://ddragon.leagueoflegends.com/cdn/" + index.ddragon_version + "/img/" + rel;
+      ddIcons.set(rel, im);
+    }
+    return im;
+  }
+  function ddIcon(row, col) {
+    const im = ddImage(row, col);
+    return im && im.complete && im.naturalWidth ? im : null;
+  }
+  // An icon on its own canvas, drawn again once a Data Dragon icon finishes loading.
+  function paintIcon(c, row, col, size) {
+    const g = c.getContext("2d");
+    drawIcon(g, row, col, 0, 0, size, false);
+    const im = !sprite && row >= 0 ? ddImage(row, col) : null;
+    if (im && !(im.complete && im.naturalWidth))
+      im.addEventListener("load", () => { g.clearRect(0, 0, size, size); drawIcon(g, row, col, 0, 0, size, false); }, { once: true });
+  }
   function drawIcon(g, row, col, x, y, size, round) {
     g.save();
     if (round) { g.beginPath(); g.arc(x + size / 2, y + size / 2, size / 2, 0, Math.PI * 2); g.clip(); }
+    const single = row >= 0 && !sprite ? ddIcon(row, col) : null;
     if (row >= 0 && sprite) {
       const S = index.icon_size;
       g.drawImage(sprite, col * S, row * S, S, S, x, y, size, size);
+    } else if (single) {
+      g.drawImage(single, x, y, size, size);
     } else {
       g.fillStyle = "#24364a"; g.fillRect(x, y, size, size);
     }
@@ -600,7 +629,7 @@
     const showFallback = (msg) => {
       fb.hidden = false; fb.textContent = "";
       const c = document.createElement("canvas"); c.width = c.height = 96; c.className = "big";
-      drawIcon(c.getContext("2d"), champ.row, SLOT_COL[slot], 0, 0, 96, false);
+      paintIcon(c, champ.row, SLOT_COL[slot], 96);
       const p = document.createElement("div"); p.textContent = msg;
       fb.append(c, p);
     };
@@ -636,7 +665,7 @@
       b.type = "button"; b.className = "ab"; b.dataset.slot = slot;
       b.title = `${slot}: ${(champ.spells || {})[slot] || ""}. Click to see it.`;
       const c = document.createElement("canvas"); c.width = c.height = 128;
-      drawIcon(c.getContext("2d"), champ.row, SLOT_COL[slot], 0, 0, 128, false);
+      paintIcon(c, champ.row, SLOT_COL[slot], 128);
       const cd = document.createElement("canvas"); cd.width = cd.height = 128; cd.className = "cd";
       const k = document.createElement("span"); k.className = "key"; k.textContent = slot; k.style.color = SLOT_COLORS[slot];
       b.append(c, cd, k);
