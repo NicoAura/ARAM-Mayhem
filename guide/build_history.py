@@ -132,7 +132,7 @@ def main():
         "patches": events,
     }
     with open(os.path.join(HERE, "history.js"), "w") as f:
-        f.write("// Built by guide/build_history.py from past patches of the League client files. Do not edit by hand.\n")
+        # no header comment: the file ships to the site, and pages don't say where data comes from
         f.write("window.GUIDE_HISTORY = " + json.dumps(out, ensure_ascii=False, separators=(",", ":")) + ";\n")
     print(f"{len(events)} patches with changes, {len(used)} augments touched")
 

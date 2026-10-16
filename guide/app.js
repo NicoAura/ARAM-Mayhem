@@ -1,4 +1,3 @@
-// Mayhem Guide: renders data.js (built from the client files by build_data.py).
 (() => {
   const D = window.GUIDE_DATA;
   const $ = (id) => document.getElementById(id);
@@ -159,7 +158,7 @@
   }
   renderChallenges();
 
-  // Live progress needs the site's /api/riot/challenges route (it holds the Riot key). Show the form only once it exists.
+  // Show the progress form only when the lookup is available.
   const API = "/api/riot/challenges";
   fetch(API)
     .then((r) => { if (r.status !== 404) $("lookup").hidden = false; })

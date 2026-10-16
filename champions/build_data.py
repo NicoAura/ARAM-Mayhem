@@ -239,7 +239,7 @@ def main():
     champions.sort(key=lambda c: c["name"])
 
     out = {
-        "patch": version, "channel": ch,
+        "patch": version,
         "champions": champions,
         "items": {i: {"name": items[i]["name"], "icon": asset(items[i]["iconPath"])} for i in sorted(used_items) if i in items},
         "augments": {a: {"name": augs[a]["nameTRA"], "icon": asset(augs[a].get("augmentSmallIconPath"))} for a in sorted(used_augs) if a in augs},
@@ -248,7 +248,7 @@ def main():
     print(f"{changed} champions with Mayhem ability changes, {sum(len(c['mayhem']) for c in champions)} changes;"
           f" {sum(1 for c in champions if c['aramBuild'])} ARAM builds; {len(tier)} tier rows; {len(sim)} sim builds")
     with open(os.path.join(HERE, "data.js"), "w") as f:
-        f.write("// Built by champions/build_data.py from the League client files. Do not edit by hand.\n")
+        # no header comment: the file ships to the site, and pages don't say where data comes from
         f.write("window.CHAMPS_DATA = " + json.dumps(out, ensure_ascii=False, separators=(",", ":")) + ";\n")
 
 
