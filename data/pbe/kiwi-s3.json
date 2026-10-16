@@ -20,10 +20,11 @@
       "Some tooltips leave placeholders unfilled (for example exact Attack Speed amounts), so some descriptions leave out numbers.",
       "Other ARAM changes are keybind settings only, not per-champion ARAM balance. No per-champion ARAM damage or healing modifiers changed.",
       "Champion arrays are listed for ranks 1-5 (basic abilities) or 1-3 (ultimates). Mode-specific values for Arena, URF and other modes are excluded.",
-      "Build 16.21.8284168 (2026-10-16) reverted the Caitlyn passive crit nerf, extended the Qiyana Q nerf to unenchanted Q, and made Fruitify step up at levels 7, 11 and 15 instead of scaling smoothly."
+      "Build 16.21.8284168 (2026-10-16) reverted the Caitlyn passive crit nerf, extended the Qiyana Q nerf to unenchanted Q, and made Fruitify step up at levels 7, 11 and 15 instead of scaling smoothly.",
+      "Build 16.21.8289811 (2026-10-16) brought back the Caitlyn passive crit nerf (crit damage scaling 100% → 80%). Nothing else in the Mayhem augments, items or mode changed."
     ],
     "builds": {
-      "pbe": "16.21.8284168",
+      "pbe": "16.21.8289811",
       "live": "16.20.8248524"
     }
   },
@@ -623,6 +624,7 @@
         "champion": "Caitlyn",
         "changes": [
           "Q base damage 50/90/130/170/210 → 50/95/140/185/230",
+          "Passive crit damage scaling 100% → 80%",
           "Passive headshot bonus at level breakpoints +20% → +10%"
         ]
       },
