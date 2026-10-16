@@ -149,3 +149,18 @@ td.augs { text-align: left; white-space: normal; color: var(--muted); font-size:
   .field.grow { max-width: none; }
 }
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+
+/* Kill map: the minimap with a density layer on top */
+.seg { display: inline-flex; border: 1px solid var(--line); border-radius: var(--r-sm); overflow: hidden; margin-left: auto; }
+.seg button { border: 0; background: none; padding: 4px 12px; font-size: 13px; color: var(--muted); cursor: pointer; }
+.seg button.on { background: var(--raised); color: var(--fg); }
+.killmap { display: grid; grid-template-columns: minmax(0, 512px) 1fr; gap: 20px; align-items: start; }
+.km-frame { position: relative; aspect-ratio: 1; border-radius: var(--r-sm); overflow: hidden; background: var(--raised); }
+.km-frame img, .km-frame canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+.km-frame img { filter: saturate(.7) brightness(.8); }
+.km-side { display: grid; gap: 12px; }
+.km-legend { display: grid; gap: 8px; }
+.km-key { display: flex; align-items: center; gap: 8px; font-size: 13.5px; }
+.km-key i { width: 10px; height: 10px; border-radius: 50%; }
+.km-key b { font: 500 13.5px var(--mono); margin-left: auto; }
+@media (max-width: 720px) { .killmap { grid-template-columns: 1fr; } }

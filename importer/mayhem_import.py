@@ -299,6 +299,54 @@ def save_archive(path, container, games, summoner):
         raise
 
 
+# ---------- kill positions ----------
+# The client keeps a timeline for each game; its CHAMPION_KILL events carry map
+# positions, which the dashboard's kill map draws. Each game stores a compact
+# list under "killMap": [seconds, x, y, killerId, victimId] per kill, with
+# participant ids as in the game. None means the client had no timeline.
+
+TIMELINES_PER_RUN = 200
+
+
+def compact_kills(timeline):
+    kills = []
+    for frame in (timeline or {}).get("frames") or []:
+        for ev in frame.get("events") or []:
+            if str(ev.get("type", "")).upper() != "CHAMPION_KILL":
+                continue
+            pos = ev.get("position") or {}
+            if pos.get("x") is None or pos.get("y") is None:
+                continue
+            kills.append([round((ev.get("timestamp") or 0) / 1000), pos["x"], pos["y"],
+                          ev.get("killerId") or 0, ev.get("victimId") or 0])
+    return kills
+
+
+def fill_kill_maps(lcu, games, progress=log, limit=TIMELINES_PER_RUN):
+    """Adds "killMap" to games that don't have one yet. Returns how many changed."""
+    todo = [g for g in games if "killMap" not in g and g.get("gameId")][:limit]
+    if not todo:
+        return 0
+    progress(f"Fetching kill positions for {len(todo)} games.")
+    changed = 0
+    for n, game in enumerate(todo, 1):
+        try:
+            timeline = lcu.get(f"/lol-match-history/v1/game-timelines/{game['gameId']}")
+        except HttpError as e:
+            if e.status == 404:
+                game["killMap"] = None
+                changed += 1
+            continue
+        except ConnectionError:
+            continue  # a later run retries it
+        game["killMap"] = compact_kills(timeline)
+        changed += 1
+        if n % 50 == 0 or n == len(todo):
+            progress(f"  [{n}/{len(todo)}] kill positions")
+        time.sleep(0.05)
+    return changed
+
+
 # ---------- import ----------
 
 def run_import(out, full=False, lockfile=None, sgp_host=None, progress=log):
@@ -350,7 +398,14 @@ def run_import(out, full=False, lockfile=None, sgp_host=None, progress=log):
     except KeyboardInterrupt:
         progress("Stopped. Saving what was fetched so far.")
 
-    if added or container is None:
+    mapped = 0
+    try:
+        mapped = fill_kill_maps(lcu, games, progress)
+    except KeyboardInterrupt:
+        mapped = 1  # some games may have changed; save them
+        progress("Stopped. Saving what was fetched so far.")
+
+    if added or mapped or container is None:
         save_archive(out, container, games, summoner)
     notes = []
     if failed:

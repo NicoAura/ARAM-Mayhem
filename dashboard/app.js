@@ -116,6 +116,10 @@ function normalize(g, owner) {
     damage: s.totalDamageDealtToChampions || 0,
     augs,
     name: me.name,
+    // [seconds, x, y, killerId, victimId] per kill, added by the importer from
+    // the game's timeline; undefined until synced, null if the client had none
+    killMap: g.killMap,
+    pid: p.participantId,
   };
 }
 
@@ -190,6 +194,7 @@ function render() {
   const games = filtered();
   renderTiles(games);
   renderChart(games);
+  renderKillMap(games);
   renderChamps(games);
   renderAugs(games);
   renderGames(games);
@@ -266,6 +271,96 @@ function renderChart(games) {
     });
   });
 }
+
+// ---------- kill map ----------
+// Timeline positions are game units on the Howling Abyss (map 12). These are
+// the map's published bounds; the minimap image spans exactly this square.
+const MAP12 = { minX: -28, minY: -19, maxX: 12849, maxY: 12858 };
+const MINIMAP_BASE = "https://raw.communitydragon.org/latest/game/assets/maps/info/map12/";
+const KM_GRID = 128;
+let kmMode = "kills";
+
+function cssVar(name) { return getComputedStyle(document.documentElement).getPropertyValue(name).trim(); }
+
+function hexRgb(hex) {
+  const m = /^#?([0-9a-f]{6})$/i.exec(hex);
+  if (!m) return [255, 255, 255];
+  const n = parseInt(m[1], 16);
+  return [n >> 16, (n >> 8) & 255, n & 255];
+}
+
+// Smooths points into a KM_GRID square grid with a small Gaussian kernel.
+function density(points) {
+  const grid = new Float32Array(KM_GRID * KM_GRID);
+  const R = 3, sigma2 = 2 * 1.6 * 1.6;
+  for (const [gx, gy] of points) {
+    const cx = Math.round(gx), cy = Math.round(gy);
+    for (let dy = -R; dy <= R; dy++) for (let dx = -R; dx <= R; dx++) {
+      const x = cx + dx, y = cy + dy;
+      if (x < 0 || y < 0 || x >= KM_GRID || y >= KM_GRID) continue;
+      grid[y * KM_GRID + x] += Math.exp(-(dx * dx + dy * dy) / sigma2);
+    }
+  }
+  return grid;
+}
+
+function renderKillMap(games) {
+  const kills = [], deaths = [];
+  let mapped = 0, missing = 0;
+  for (const g of games) {
+    if (!Array.isArray(g.killMap)) { missing++; continue; }
+    mapped++;
+    for (const [, x, y, killer, victim] of g.killMap) {
+      const gx = (x - MAP12.minX) / (MAP12.maxX - MAP12.minX) * KM_GRID;
+      const gy = (1 - (y - MAP12.minY) / (MAP12.maxY - MAP12.minY)) * KM_GRID;
+      if (killer === g.pid) kills.push([gx, gy]);
+      if (victim === g.pid) deaths.push([gx, gy]);
+    }
+  }
+  const img = $("km-img");
+  const src = MINIMAP_BASE + $("km-skin").value + ".png";
+  if (img.getAttribute("src") !== src) img.src = src;
+
+  const layers = [];
+  if (kmMode !== "deaths") layers.push({ pts: kills, rgb: hexRgb(cssVar("--good")) });
+  if (kmMode !== "kills") layers.push({ pts: deaths, rgb: hexRgb(cssVar("--bad")) });
+  const canvas = $("km-canvas");
+  const ctx = canvas.getContext("2d");
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  const off = document.createElement("canvas");
+  off.width = off.height = KM_GRID;
+  const octx = off.getContext("2d");
+  for (const { pts, rgb } of layers) {
+    if (!pts.length) continue;
+    const grid = density(pts);
+    let max = 0;
+    for (const v of grid) if (v > max) max = v;
+    const im = octx.createImageData(KM_GRID, KM_GRID);
+    for (let i = 0; i < grid.length; i++) {
+      const v = Math.sqrt(grid[i] / max); // sqrt keeps lighter spots visible next to the hottest one
+      im.data[i * 4] = rgb[0]; im.data[i * 4 + 1] = rgb[1]; im.data[i * 4 + 2] = rgb[2];
+      im.data[i * 4 + 3] = v < 0.08 ? 0 : Math.round(40 + v * 200);
+    }
+    octx.putImageData(im, 0, 0);
+    ctx.imageSmoothingEnabled = true;
+    ctx.drawImage(off, 0, 0, canvas.width, canvas.height);
+  }
+
+  $("km-legend").innerHTML =
+    `<div class="km-key"><i style="background:var(--good)"></i>Kills<b>${kills.length.toLocaleString()}</b></div>` +
+    `<div class="km-key"><i style="background:var(--bad)"></i>Deaths<b>${deaths.length.toLocaleString()}</b></div>`;
+  let note = `From ${mapped.toLocaleString()} of ${games.length.toLocaleString()} games.`;
+  if (missing) note += " The rest have no positions yet: Sync from League adds them, up to 200 games per sync. Very old games may not have one.";
+  note += " The game doesn't record which map skin was played, so pick one above.";
+  $("km-note").textContent = note;
+}
+
+document.querySelectorAll("[data-km]").forEach((b) => b.addEventListener("click", () => {
+  kmMode = b.dataset.km;
+  document.querySelectorAll("[data-km]").forEach((o) => o.classList.toggle("on", o === b));
+  render();
+}));
+$("km-skin").addEventListener("input", render);
 
 // Sortable table helper. cols: [{label, get, fmt?}]
 const sortState = {};

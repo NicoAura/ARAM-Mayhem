@@ -23,11 +23,11 @@ function apiKey(): string {
 // Calls the Riot API with the key from the environment. Responses are cached
 // by Next.js for `revalidate` seconds so repeat lookups don't spend rate limit.
 export async function riotFetch<T>(
-  region: Region,
+  host: Region | Platform,
   path: string,
   revalidate = 300,
 ): Promise<T> {
-  const res = await fetch(`https://${region}.api.riotgames.com${path}`, {
+  const res = await fetch(`https://${host}.api.riotgames.com${path}`, {
     headers: { "X-Riot-Token": apiKey() },
     next: { revalidate },
   });
@@ -44,4 +44,21 @@ export function getAccountByRiotId(region: Region, gameName: string, tagLine: st
     region,
     `/riot/account/v1/accounts/by-riot-id/${encodeURIComponent(gameName)}/${encodeURIComponent(tagLine)}`,
   );
+}
+
+// Platform routing values (one per server) and the regional host each one's accounts live on.
+export const PLATFORMS = {
+  na1: "americas", br1: "americas", la1: "americas", la2: "americas",
+  euw1: "europe", eun1: "europe", tr1: "europe", ru: "europe",
+  kr: "asia", jp1: "asia",
+  oc1: "sea", sg2: "sea", tw2: "sea", vn2: "sea",
+} as const satisfies Record<string, Region>;
+export type Platform = keyof typeof PLATFORMS;
+
+export type ChallengeProgress = { challenges: { challengeId: number; level: string; value: number; percentile: number }[] };
+
+/** A player's challenge progress (challenges-v1), looked up by Riot ID. */
+export async function getChallengesByRiotId(platform: Platform, gameName: string, tagLine: string) {
+  const { puuid } = await getAccountByRiotId(PLATFORMS[platform], gameName, tagLine);
+  return riotFetch<ChallengeProgress>(platform, `/lol/challenges/v1/player-data/${encodeURIComponent(puuid)}`);
 }
