@@ -21,6 +21,7 @@ Then:
 ```sh
 python3 tools/datamine/augments.py /tmp/dm       # Mayhem augment pool diff
 python3 tools/datamine/champions.py /tmp/dm      # champion changes
+python3 tools/datamine/icons.py /tmp/dm          # add augment icons (and changed-augment tiers) to kiwi-s3.json
 ```
 
 - `local.py`: reads the WAD archives directly. It finds the clients in the default macOS or

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import AugmentCard from "@/components/AugmentCard";
 import Intro from "@/components/Intro";
 import Pending from "@/components/Pending";
 import { readRepoJson } from "@/lib/repo-data";
@@ -22,9 +23,9 @@ type Pbe = {
     bands: { name: string; unlockFame: number; members: string[]; sampleObjectives: string[] }[];
   };
   augments: {
-    added: { name: string | null; tier: string; set?: string; description: string | null }[];
-    removed: { name: string; tier: string }[];
-    changed: { name: string; direction?: string; changes: Change[] }[];
+    added: { name: string | null; tier: string; set?: string; description: string | null; icon?: string }[];
+    removed: { name: string; tier: string; icon?: string }[];
+    changed: { name: string; tier?: string; direction?: string; changes: Change[]; icon?: string }[];
   };
   championOverrides: { champion: string; ability: string; live: string; pbe: string; note?: string }[];
   championChanges: { summary: string; list: { champion: string; changes: string[] }[] };
@@ -115,50 +116,36 @@ export default function PbePage() {
 
       <Section id="augments" title="Augments" count={augments.added.length + augments.removed.length + augments.changed.length}>
         <h3>Added ({augments.added.length})</h3>
-        {TIERS.map((tier) => {
-          const list = augments.added.filter((a) => a.tier === tier);
-          return list.length ? (
-            <dl className="defs" key={tier}>
-              {list.map((a, i) => (
-                <div key={`${a.name}-${i}`}>
-                  <dt>
-                    <span className={`tier tier-${tier}`}>{tier}</span>
-                    {a.name ?? "Unnamed"}
-                    {a.set && <span className="sub">{a.set}</span>}
-                  </dt>
-                  <dd>{a.description ?? <span className="sub">No tooltip summary yet.</span>}</dd>
-                </div>
-              ))}
-            </dl>
-          ) : null;
-        })}
+        <div className="aug-grid">
+          {TIERS.flatMap((tier) =>
+            augments.added
+              .filter((a) => a.tier === tier)
+              .map((a, i) => (
+                <AugmentCard key={`${a.name}-${i}`} name={a.name ?? "Unnamed"} tier={tier} icon={a.icon} set={a.set}>
+                  {a.description ?? "No tooltip summary yet."}
+                </AugmentCard>
+              )),
+          )}
+        </div>
         <h3>Changed ({augments.changed.length})</h3>
-        <dl className="defs">
+        <div className="aug-grid">
           {augments.changed.map((a) => (
-            <div key={a.name}>
-              <dt>
-                {a.direction && <span className={`tag tag-${a.direction}`}>{a.direction}</span>}
-                {a.name}
-              </dt>
-              <dd>
-                {a.changes.map((c) => (
-                  <span key={c.stat} className="change">
-                    {c.stat}: <s>{c.live}</s> → <b>{c.pbe}</b>
-                  </span>
-                ))}
-              </dd>
-            </div>
+            <AugmentCard key={a.name} name={a.name} tier={a.tier} icon={a.icon}>
+              {a.direction && <span className={`tag tag-${a.direction}`}>{a.direction}</span>}
+              {a.changes.map((c) => (
+                <span key={c.stat} className="change">
+                  {c.stat}: <s>{c.live}</s> → <b>{c.pbe}</b>
+                </span>
+              ))}
+            </AugmentCard>
           ))}
-        </dl>
+        </div>
         <h3>Removed ({augments.removed.length})</h3>
-        <p className="inline-list">
+        <div className="aug-grid aug-mini">
           {augments.removed.map((a) => (
-            <span key={a.name}>
-              <span className={`tier tier-${a.tier}`}>{a.tier}</span>
-              {a.name}
-            </span>
+            <AugmentCard key={a.name} name={a.name} tier={a.tier} icon={a.icon} removed compact />
           ))}
-        </p>
+        </div>
       </Section>
 
       <Section id="overrides" title="Mayhem overrides" count={d.championOverrides.length}>
