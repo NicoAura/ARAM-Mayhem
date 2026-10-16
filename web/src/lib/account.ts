@@ -10,8 +10,7 @@ export const SERVERS: [string, string][] = [
   ["oc1", "OCE"], ["tr1", "TR"], ["ru", "RU"], ["jp1", "JP"], ["sg2", "SEA"], ["tw2", "TW"], ["vn2", "VN"],
 ];
 
-export const profileIcon = (id: number) =>
-  `https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/profile-icons/${id}.jpg`;
+export const profileIcon = (id: number) => `/assets/profile-icon/${id}.jpg`;
 
 export type Ranked = { queueType: string; tier: string; rank: string; leaguePoints: number; wins: number; losses: number };
 export type Profile = { gameName: string; tagLine: string; platform: string; profileIconId: number; summonerLevel: number; ranked: Ranked[] };

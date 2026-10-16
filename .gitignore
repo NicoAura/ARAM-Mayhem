@@ -224,3 +224,4 @@ __marimo__/
 
 # Personal match archives
 dashboard/data/
+!web/public/assets/lib/

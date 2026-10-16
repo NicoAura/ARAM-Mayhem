@@ -6,10 +6,9 @@ import championIds from "@/data/champion-ids.json";
 import { loadSettings } from "@/lib/settings";
 
 // A champion's splash art, pick quote and abilities, straight from the League client's files
-// (CommunityDragon's extract of each patch). Opens from a champion name in the tier list.
+// (CommunityDragon's extract of each patch, copied to public/assets/). Opens from a champion name in the tier list.
 
-const GAME_DATA =
-  "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default";
+const GAME_DATA = "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default";
 const IDS = championIds as Record<string, number>;
 
 // Client paths look like /lol-game-data/assets/ASSETS/Characters/...; CommunityDragon serves them lowercased.
