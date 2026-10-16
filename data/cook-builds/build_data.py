@@ -2,8 +2,8 @@
 
 Adds, for every build:
 - each augment's live English name, rarity, tooltip and icon (CommunityDragon, Mayhem = KIWI)
-- China-server win and pick rates for the champion and each augment (data/cn/, see data/cn/README.md)
-- whether the champion is on China's best-champion list for that augment
+- Mayhem win and pick rates for the champion and each augment (data/cn/, see data/cn/README.md)
+- whether the champion is on the best-champion list for that augment
 - optional simulator numbers: the build against the simulator's best build for that champion
   (items only, with the best build's augments, unless all of the build's augments are in the simulator)
 
@@ -208,7 +208,7 @@ def main():
             "champion_win_rate": c.get("win_rate"), "champion_pick_rate": c.get("pick_rate"),
             "champion_win_rank": 1 + sum(1 for x in champs.values() if x["win_rate"] > c.get("win_rate", 0)),
             "augments": rows, "core_win_rate": core_wr, "tier": tier(core_wr),
-            # How unconventional: how many core augments China already plays on this champion, and how often they're picked.
+            # How unconventional: how many core augments players already use on this champion, and how often they're picked.
             "core_usual": sum(1 for r in rows if r["core"] and r["champion_is_best"]),
             "core_pick_rate": round(sum(picks) / len(picks), 4) if (picks := [r["pick_rate"] for r in rows if r["core"] and r["pick_rate"] is not None]) else None,
         })

@@ -2,7 +2,7 @@
   const data = window.COOK_DATA;
   const TIERS = ["Secretly strong", "Holds up", "Pure troll", "Untested"];
   const TIER_NOTE = {
-    "Secretly strong": "core augments win 55.5%+ in China",
+    "Secretly strong": "core augments win 55.5%+",
     "Holds up": "core augments win 51.5 to 55.5%",
     "Pure troll": "core augments win under 51.5%",
     "Lab originals": "invented for this page",
@@ -19,7 +19,7 @@
     const stat = a.win_rate == null
       ? `<span class="muted">no data</span>`
       : `${pct(a.win_rate)}<small>#${a.win_rank} of ${data.meta.augment_count}</small>`;
-    const best = a.champion_is_best ? `<span class="chip" title="${esc(champ)} is on China's best-champion list for this augment">best on ${esc(champ)}</span>` : "";
+    const best = a.champion_is_best ? `<span class="chip" title="${esc(champ)} is on the best-champion list for this augment">best on ${esc(champ)}</span>` : "";
     return `<li class="${a.core ? "core" : "flex"}">
       <img src="${icon(a.icon)}" alt="" width="32" height="32" loading="lazy">
       <div>
@@ -60,7 +60,7 @@
       </div>
       <dl class="stats">
         <div><dt>Usual on ${esc(b.champion_name)}</dt><dd>${b.core_usual} of ${b.core} <small>core augments · picked ${pct(b.core_pick_rate, 0)} of games</small></dd></div>
-        <div><dt>${esc(b.champion_name)} in China</dt><dd>${pct(b.champion_win_rate)} <small>#${b.champion_win_rank} of ${data.meta.champion_count} by win rate</small></dd></div>
+        <div><dt>${esc(b.champion_name)} win rate</dt><dd>${pct(b.champion_win_rate)} <small>#${b.champion_win_rank} of ${data.meta.champion_count} by win rate</small></dd></div>
         ${simStat(b)}
       </dl>
     </article>`;
@@ -105,10 +105,10 @@
   const m = data.meta;
   const d = (s) => (s ? `${s.slice(0, 4)}-${s.slice(4, 6)}-${s.slice(6)}` : "?");
   document.getElementById("footer").innerHTML = `
-    <p><b>Every build is built on an augment interaction</b>: an augment that changes what an ability or stat does, combined with a champion or items that make it absurd. Some interactions come from reading the augment text and haven't been tested in game. "Usual on" counts the core augments where the champion is on Tencent's best-champion list; pick rate is how often those augments are taken across all games.</p>
-    <p><b>Tier</b> is the average China-server win rate of a build's core augments (the ones without the "flex" tag): Secretly strong at 55.5% or more, Holds up from 51.5%, Pure troll below that. China doesn't publish augment win rates per champion, so "best on" marks the champions Tencent lists as best for that augment.</p>
+    <p><b>Every build is built on an augment interaction</b>: an augment that changes what an ability or stat does, combined with a champion or items that make it absurd. Some interactions come from reading the augment text and haven't been tested in game. "Usual on" counts the core augments where the champion is on the best-champion list; pick rate is how often those augments are taken across all games.</p>
+    <p><b>Tier</b> is the average Mayhem win rate of a build's core augments (the ones without the "flex" tag): Secretly strong at 55.5% or more, Holds up from 51.5%, Pure troll below that. Augment win rates aren't published per champion, so "best on" marks the champions listed as best for that augment.</p>
     <p><b>Simulator</b> runs the build in the all-champion teamfight simulator against the simulator's own top build for that champion. When all of a build's augments are in the simulator the whole build is compared; otherwise only the items, both with the top build's augments. Over 100% means these items out-damage the simulator's pick, usually by dying more.</p>
-    <p>China augment stats from ${d(m.cn_augment_date)}, champion stats from ${d(m.cn_champion_date)} (101.qq.com). Augment text and icons from the live client via CommunityDragon. Generated ${esc(m.generated)}.</p>`;
+    <p>Augment stats from ${d(m.cn_augment_date)}, champion stats from ${d(m.cn_champion_date)}. Augment text and icons from the live client via CommunityDragon. Generated ${esc(m.generated)}.</p>`;
 
   render();
 })();
