@@ -3,8 +3,8 @@
 One page per champion at `/champions#Alias` (e.g. `#MonkeyKing`). The nav tab is hidden; pages are reached from the
 Tier List, search and the Home champion search. `site-tab.json` still makes sync-embeds copy this folder.
 
-- **Builds** (Mayhem match stats from 101.qq.com, endpoint
-  `mlol.qt.qq.com/go/battle_info/odp_proxy/fuwen_hero_rank?championid=N`): most-picked augments by tier with grade,
+- **Builds** (Mayhem match stats from 101.qq.com, read from `data/cn/builds/{id}.json`, which the My Stats
+  thread refreshes daily): most-picked augments by tier with grade,
   starting items, boots, core three-item paths, full builds, most-built items, skill max/level orders and best
   teammates, each with win and pick rate. There are no per-champion augment win rates.
 - **Mayhem changes**: every ability number Mayhem changes, from each champion's bin
