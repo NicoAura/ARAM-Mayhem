@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Augment Odds</title>
+  <meta name="description" content="Your chance of being offered a specific ARAM Mayhem augment in a game.">
+  <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+  <main>
+    <header class="intro">
+      <img id="aug-icon" alt="" width="56" height="56" style="background:#1c1c1c">
+      <div>
+        <p class="eyebrow"><a href="../index.html">Fun Tools</a> · ARAM Mayhem</p>
+        <h1>Augment Odds</h1>
+        <p class="muted">Pick the augments you're hunting and see your chance of being offered one in a game, and how many games it takes. <span id="patch"></span></p>
+      </div>
+    </header>
+
+    <section class="result" aria-live="polite">
+      <div class="big">
+        <span class="label">Chance to be offered <span id="target-label">it</span> in a game</span>
+        <span id="chance" class="value">0%</span>
+      </div>
+      <div class="loop">
+        <div class="loop-head">
+          <span class="label">Without your reroll</span>
+          <span id="no-reroll">0%</span>
+        </div>
+        <div class="meter"><div id="gain-bar"></div></div>
+        <p id="chance-note" class="muted small"></p>
+      </div>
+      <dl id="stats" class="stats"></dl>
+    </section>
+
+    <section>
+      <div class="row-head">
+        <h2>Augments you want</h2>
+        <span class="muted small">Up to 4, any of them counts</span>
+      </div>
+      <div id="target-slots" class="slots augs"></div>
+      <input id="search" class="search" type="search" placeholder="Search augments" aria-label="Search augments" autocomplete="off">
+      <div id="tier-filter" class="actions" style="margin-bottom:0.75rem"></div>
+      <div id="aug-picker" class="picker augs"></div>
+      <p id="aug-count" class="muted small" style="margin-top:0.5rem"></p>
+    </section>
+
+    <section>
+      <h2>Your game</h2>
+      <div id="options" class="options"></div>
+    </section>
+
+    <section>
+      <h2>Per tier</h2>
+      <table id="tiers" class="table"></table>
+    </section>
+
+    <section>
+      <div class="row-head">
+        <h2>Roll an offer</h2>
+        <span id="roll-count" class="muted small"></span>
+      </div>
+      <div class="actions" style="margin-bottom:0.75rem">
+        <button id="roll" type="button" class="ghost">Roll</button>
+        <button id="roll-until" type="button" class="ghost">Roll until it shows</button>
+      </div>
+      <div id="offer" class="picker augs"></div>
+    </section>
+
+    <section class="actions">
+      <button id="preset" type="button">Load an example hunt</button>
+      <button id="reset" type="button" class="ghost">Clear</button>
+      <button id="share" type="button" class="ghost">Copy link</button>
+    </section>
+
+    <footer class="muted small">
+      The pool, the number of cards per offer and the starting reroll come from the game files via CommunityDragon.
+      The files have no weights, so every augment in a tier is treated as equally likely, and a reroll is treated as a fresh
+      offer of the same tier. Which tier each offer is isn't in the files either, so set how many offers of each tier you get.
+      Augments you already took, champion or build filters the server may apply, and Transmute or Pandora's Box rolls are not counted.
+    </footer>
+  </main>
+
+  <script src="data.js"></script>
+  <script src="calc.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

@@ -15,7 +15,8 @@ TOOLS = [("ryze-calculator", "Infinite Ryze", "How far Ryze's AP to Mana loop go
          ("one-shot", "One-Shot Checker", "Whether your burst kills a target from full Health after armor and magic resist."),
          ("move-speed", "Speed Cap Breaker", "How fast any champion goes with speed items and augments, after the soft caps."),
          ("gold-rush", "Gold Rush", "When you finish a full build, and how much sooner gold augments get you there."),
-         ("biggest-champion", "Biggest Champion", "How big a champion grows with size augments and items, next to Baron.")]
+         ("biggest-champion", "Biggest Champion", "How big a champion grows with size augments and items, next to Baron."),
+         ("augment-odds", "Augment Odds", "Your chance of being offered a specific augment, and how many games it takes.")]
 SWAP_ICONS = ("<script>(function(){var M=parent.FUN_ICONS||{};function w(o){for(var k in o){var v=o[k];"
               "if(typeof v==='string'){if(M[v])o[k]=M[v];}else if(v&&typeof v==='object')w(v);}}"
               "Object.keys(window).forEach(function(k){if(/_DATA$/.test(k))w(window[k]);});})();</script>")
