@@ -70,7 +70,7 @@
   // ---- Items
   const words = (n) => n.replace(/([a-z])([A-Z])/g, "$1 $2").replace(/([A-Z])([A-Z][a-z])/g, "$1 $2").replace(/_/g, " ");
   const exact = (n) => Number(n).toLocaleString("en-US", { maximumFractionDigits: 4 });
-  $("items-intro").textContent = `${D.itemChanges.length} items have their own values in Mayhem. Each row is one value the game changes; names are the game's internal labels.`;
+  $("items-intro").textContent = `${D.itemChanges.length} items have their own values in Mayhem. Each row is one value that changes.`;
   $("item-changes").innerHTML = D.itemChanges
     .flatMap((it) => it.changes.map((c, i) => `<tr>${i === 0 ? `<td rowspan="${it.changes.length}"><div class="row">${img(it.icon)}<span class="title">${esc(it.name)}</span></div></td>` : ""}
       <td>${esc(words(c.name))}</td><td class="num">${c.rift == null ? "–" : exact(c.rift)}</td><td class="num"><b>${c.mayhem == null ? "–" : exact(c.mayhem)}</b></td></tr>`))
@@ -80,6 +80,38 @@
   $("set-list").innerHTML = D.augmentSets
     .map((x) => `<div><div class="title">${esc(x.name)}</div><div class="muted small">${esc(x.bonus)}</div></div>`)
     .join("");
+
+  // ---- Augment history
+  const H = window.GUIDE_HISTORY;
+  if (H) {
+    $("history-intro").textContent =
+      `From patch ${H.from} to ${H.to}, the augment pool went from ${H.startPool} to ${H.pool}. Newest patch first; ` +
+      "each change shows the old value and the new one.";
+    const val = (v) => (v == null ? "–" : Array.isArray(v) ? v.map(exact).join(" / ") : typeof v === "number" ? exact(v) : esc(v));
+    const aug = (id) => H.augments[id] || { name: id };
+    const augRow = (id, extra = "") => {
+      const a = aug(id);
+      return `<div class="row" style="align-items:flex-start">${img(a.icon)}<div><div class="title">${esc(a.name)} ${tierChip(a.tier)}</div>${extra}</div></div>`;
+    };
+    function renderHistory() {
+      const q = $("history-search").value.trim().toLowerCase();
+      const hit = (id) => !q || aug(id).name.toLowerCase().includes(q);
+      const blocks = H.patches.map((p) => {
+        const added = p.added.filter(hit), removed = p.removed.filter(hit), changed = p.changed.filter((c) => hit(c.id));
+        if (!added.length && !removed.length && !changed.length) return "";
+        const list = (title, ids) => (ids.length ? `<div><div class="eyebrow" style="margin-bottom:0.5rem">${title} (${ids.length})</div>
+          <div class="grid tight">${ids.map((id) => augRow(id)).join("")}</div></div>` : "");
+        return `<div class="card"><div class="card-head"><h2>Patch ${esc(p.patch)}</h2></div><div class="panel">
+          ${changed.length ? `<div class="grid">${changed.map((c) => augRow(c.id, c.changes.map((r) =>
+            `<div class="small"><span class="muted">${esc(words(r.name))}:</span> ${val(r.old)} → <b>${val(r.new)}</b></div>`).join(""))).join("")}</div>` : ""}
+          ${list("Added to the pool", added)}${list("Removed from the pool", removed)}</div></div>`;
+      }).join("");
+      $("history-list").innerHTML = blocks;
+      $("history-empty").hidden = !!blocks;
+    }
+    $("history-search").addEventListener("input", renderHistory);
+    renderHistory();
+  }
 
   // ---- Quests
   $("quest-list").innerHTML = D.quests

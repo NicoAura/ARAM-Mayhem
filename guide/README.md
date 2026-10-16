@@ -10,8 +10,12 @@ The site's **Guide** tab (`/tools/guide`): how ARAM Mayhem works, read from the 
 - **Rules**: Mayhem's mode-wide settings from map12.bin (`Kiwi_Balance`, `Kiwi_OnFireBuff`, `Kiwi_ComboBreaker`,
   `ARAM_Augment_Manager`), the summoner spells allowed in Mayhem, and augments that add one.
 - **Items**: items whose `DataValuesModeOverride` (Kiwi, else ARAM) differs from Summoner's Rift, from items.cdtb.bin.
+- **Augment history**: every augment change from patch 16.2 (the first patch whose kiwi.bin CommunityDragon exports)
+  to the live patch: pool additions and removals, tier changes and each changed number. Built by `build_history.py`
+  from CommunityDragon's per-patch folders; never reads PBE.
 - **Archive**: features from past Mayhem seasons. Augment Sets: names and bonus text still in the string table.
 - **Maps & extras**: the Howling Abyss map skins (minimaps), Mayhem-only items and Mayhem-only units.
 
-Rebuild after a patch: `python3 -m pip install xxhash && python3 guide/build_data.py` (writes `data.js`).
+Rebuild after a patch: `python3 -m pip install xxhash && python3 guide/build_data.py && python3 guide/build_history.py`
+(writes `data.js` and `history.js`; both read the live patch). Page text doesn't mention where data comes from (Nico, 2026-10-16).
 Images load from CommunityDragon at view time. `site-tab.json` makes this folder a site tab.
