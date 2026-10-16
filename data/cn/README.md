@@ -1,6 +1,6 @@
-# China-server Mayhem stats
+# Mayhem stats (101.qq.com)
 
-`fetch_cn.py` pulls ARAM Mayhem (海克斯大乱斗) stats for the Chinese servers from the
+`fetch_cn.py` pulls ARAM Mayhem (海克斯大乱斗) stats from the
 backend behind Tencent's official strategy site, [101.qq.com](https://101.qq.com/).
 No login is needed. Python 3 standard library only.
 
@@ -69,7 +69,7 @@ than whole patches. 15.21 started before the API's first day (2025-11-02), so a 
 that starts in early November 2025 counts from 15.21's release on 2025-10-23. That's why
 November 2025 shows 39 days in `by_month.csv`.
 
-The `China Mayhem stats` GitHub Action runs both scripts daily and commits new data.
+The `Mayhem stats` GitHub Action runs both scripts daily and commits new data.
 
 Caveats: the API is undocumented and can change without notice. Rates are fractions
 (0.5575 = 55.75%). The champion `rank` is Tencent's own ordering, not sorted by win
@@ -79,5 +79,5 @@ rate. Sample sizes are not published.
 
 `preview/build.py OUT.html` packs the history and the current augment and duo snapshots
 into one self-contained page (`preview/template.html`) with the same patch, month and
-date filters as `query.py`, ported to JavaScript. It's the live preview of the China
+date filters as `query.py`, ported to JavaScript. It was the preview of the
 stats section of the site.
