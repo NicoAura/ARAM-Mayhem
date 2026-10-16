@@ -12,7 +12,8 @@ const out = join(web, "public", "embed");
 const SKIP = new Set(["web", "node_modules", ".git", ".github"]);
 
 const embeds = [
-  { name: "dashboard", from: join(repo, "dashboard") },
+  // My Stats starts empty on the site: a local match archive in dashboard/data/ is never shipped
+  { name: "dashboard", from: join(repo, "dashboard"), exclude: ["data"] },
   { name: "simulator", from: join(repo, "simulator", "viewer") },
 ];
 
@@ -36,11 +37,12 @@ discover(repo, 1);
 
 rmSync(out, { recursive: true, force: true });
 mkdirSync(out, { recursive: true });
-for (const { name, from } of embeds) {
+for (const { name, from, exclude = [] } of embeds) {
   if (!existsSync(from)) {
     console.log(`sync-embeds: ${name} not found, skipping`);
     continue;
   }
-  cpSync(from, join(out, name), { recursive: true });
+  const skip = exclude.map((d) => join(from, d));
+  cpSync(from, join(out, name), { recursive: true, filter: (src) => !skip.some((d) => src === d || src.startsWith(d + "/")) });
   console.log(`sync-embeds: copied ${name}`);
 }
