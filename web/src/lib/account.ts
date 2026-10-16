@@ -24,7 +24,11 @@ export const PROFILE_FRESH_MS = 60 * 60 * 1000;
 export function loadAccount(): Saved | null {
   try {
     const v = JSON.parse(localStorage.getItem(ACCOUNT_STORE) || "null");
-    return v && typeof v.riotId === "string" ? v : null;
+    if (!v || typeof v.riotId !== "string") return null;
+    // A profile cached by an older version (or a partial lookup) is dropped, so it's fetched again.
+    const p = v.profile;
+    if (p && (typeof p.gameName !== "string" || !Array.isArray(p.ranked))) return { riotId: v.riotId, platform: v.platform ?? "na1" };
+    return v;
   } catch {
     return null;
   }
@@ -47,7 +51,7 @@ export async function signIn(riotId: string, platform: string): Promise<Profile>
   const res = await fetch(`/api/riot/profile?${new URLSearchParams({ gameName, tagLine, platform })}`);
   const body = await res.json().catch(() => ({}));
   if (!res.ok) throw new Error(body.error || `Lookup failed (${res.status})`);
-  const profile = body as Profile;
+  const profile = { ...body, ranked: Array.isArray(body.ranked) ? body.ranked : [] } as Profile;
   saveAccount({ riotId: `${profile.gameName}#${profile.tagLine}`, platform, profile, at: Date.now() });
   return profile;
 }
