@@ -54,7 +54,7 @@ window.COOK_DATA = {
     {
      "name": "Firebrand",
      "rarity": "Gold",
-     "text": "Your Attacks also Burn enemies, dealing 0.4% max Health magic damage damage per second over 5 seconds. This Burn stacks infinitely.",
+     "text": "Your Attacks also Burn enemies, dealing 0.4% max Health magic damage per second over 5 seconds. This Burn stacks infinitely.",
      "core": true,
      "icon": "icons/augments/firebrand.png",
      "win_rate": 0.5086,
@@ -387,140 +387,14 @@ window.COOK_DATA = {
    }
   },
   {
-   "id": "karthus-global-onhit",
-   "champion": "Karthus",
-   "title": "Global On-Hit",
+   "id": "blitzcrank-hook-line-kraken",
+   "champion": "Blitzcrank",
+   "title": "Hook, Line and Kraken",
    "augments": [
     {
      "name": "Ethereal Weapon",
      "rarity": "Gold",
-     "text": "Your Abilities apply On-Hit effects. 1 second Cooldown per target. Times Triggered:",
-     "core": true,
-     "icon": "icons/augments/ethereal-weapon.png",
-     "win_rate": 0.582,
-     "pick_rate": 0.4317,
-     "win_rank": 15,
-     "best_champions": [
-      "Hecarim",
-      "Teemo",
-      "TahmKench",
-      "Ekko",
-      "Katarina",
-      "MasterYi"
-     ],
-     "champion_is_best": false
-    },
-    {
-     "name": "Jeweled Gauntlet",
-     "rarity": "Prismatic",
-     "text": "Your Abilities can Critically Strike. Gain % Crit Chance.",
-     "core": true,
-     "icon": "icons/augments/jeweled-gauntlet.png",
-     "win_rate": 0.5726,
-     "pick_rate": 0.5175,
-     "win_rank": 22,
-     "best_champions": [
-      "Smolder",
-      "Lucian",
-      "Jayce",
-      "Ezreal",
-      "AurelionSol",
-      "TwistedFate"
-     ],
-     "champion_is_best": false
-    },
-    {
-     "name": "Juiced",
-     "rarity": "Silver",
-     "text": "On-Hit deal magic damage, this damage can Critically Strike.",
-     "core": false,
-     "icon": "icons/augments/juiced.png",
-     "win_rate": 0.4899,
-     "pick_rate": 0.1209,
-     "win_rank": 167,
-     "best_champions": [
-      "Ezreal",
-      "Kaisa",
-      "Ryze",
-      "Ashe",
-      "Teemo",
-      "Kayle"
-     ],
-     "champion_is_best": false
-    },
-    {
-     "name": "Firebrand",
-     "rarity": "Gold",
-     "text": "Your Attacks also Burn enemies, dealing 0.4% max Health magic damage damage per second over 5 seconds. This Burn stacks infinitely.",
-     "core": false,
-     "icon": "icons/augments/firebrand.png",
-     "win_rate": 0.5086,
-     "pick_rate": 0.1378,
-     "win_rank": 126,
-     "best_champions": [
-      "Teemo",
-      "Ashe",
-      "Katarina",
-      "Kayle",
-      "Jinx",
-      "Caitlyn"
-     ],
-     "champion_is_best": false
-    }
-   ],
-   "core": 2,
-   "items": [
-    "Sorcerer's Shoes",
-    "Nashor's Tooth",
-    "Blade of The Ruined King",
-    "Kraken Slayer",
-    "Wit's End",
-    "Rabadon's Deathcap"
-   ],
-   "why": "Ethereal Weapon makes abilities apply on-hit effects, and Requiem hits every enemy champion on the map. So one R procs BotRK, Kraken Slayer, Wit's End, Nashor's, Juiced and a stack of Firebrand's burn on all five at once, from your fountain. Jeweled Gauntlet lets Requiem crit too.",
-   "play": "Buy marksman items on a mage. Press R from anywhere.",
-   "champion_name": "Karthus",
-   "champion_icon": "icons/champions/30.png",
-   "champion_win_rate": 0.4861,
-   "champion_pick_rate": 0.1177,
-   "champion_win_rank": 95,
-   "core_win_rate": 0.5773,
-   "tier": "Secretly strong",
-   "core_usual": 0,
-   "core_pick_rate": 0.4746,
-   "sim": {
-    "dps": 779,
-    "survival": 0.506,
-    "best_dps": 1528,
-    "best_survival": 0.762,
-    "pct_of_best": 0.51,
-    "best_items": [
-     "Sorcerer's Shoes",
-     "Cryptbloom",
-     "Hextech Gunblade",
-     "Rabadon's Deathcap",
-     "Shadowflame",
-     "Void Staff"
-    ],
-    "best_augments": [
-     "Eureka",
-     "Mystic Punch",
-     "Goliath",
-     "Witchful Thinking"
-    ],
-    "items_not_modeled": [],
-    "whole_build": false
-   }
-  },
-  {
-   "id": "anivia-blizzard-engine",
-   "champion": "Anivia",
-   "title": "Blizzard Engine",
-   "augments": [
-    {
-     "name": "Ethereal Weapon",
-     "rarity": "Gold",
-     "text": "Your Abilities apply On-Hit effects. 1 second Cooldown per target. Times Triggered:",
+     "text": "Your Abilities apply On-Hit effects. 1 second Cooldown per target.",
      "core": true,
      "icon": "icons/augments/ethereal-weapon.png",
      "win_rate": 0.582,
@@ -556,448 +430,70 @@ window.COOK_DATA = {
      "champion_is_best": false
     },
     {
-     "name": "Infernal Conduit",
-     "rarity": "Prismatic",
-     "text": "Your Abilities apply stacking Burn that deals damage over time. Your Burn effects reduce your basic Ability Cooldowns.",
-     "core": false,
-     "icon": "icons/augments/infernal-conduit.png",
-     "win_rate": 0.5725,
-     "pick_rate": 0.2363,
-     "win_rank": 23,
-     "best_champions": [
-      "Brand",
-      "AurelionSol",
-      "Lillia",
-      "Morgana",
-      "Malzahar",
-      "Teemo"
-     ],
-     "champion_is_best": false
-    },
-    {
-     "name": "Recursion",
-     "rarity": "Gold",
-     "text": "Gain 60 Ability Haste.",
-     "core": false,
-     "icon": "icons/augments/recursion.png",
-     "win_rate": 0.612,
-     "pick_rate": 0.6098,
-     "win_rank": 3,
-     "best_champions": [
-      "Teemo",
-      "Karthus",
-      "Ashe",
-      "Hecarim",
-      "Brand",
-      "AurelionSol"
-     ],
-     "champion_is_best": false
-    }
-   ],
-   "core": 2,
-   "items": [
-    "Sorcerer's Shoes",
-    "Nashor's Tooth",
-    "Liandry's Torment",
-    "Rylai's Crystal Scepter",
-    "Rabadon's Deathcap",
-    "Void Staff"
-   ],
-   "why": "Glacial Storm damages everyone inside it over and over. With Ethereal Weapon each enemy in the storm triggers your on-hit effects once a second, and Mystic Punch turns every on-hit into 1.25 seconds off your cooldowns. Three enemies in the storm should take almost four seconds off Q and E every second, so Flash Frost and Frostbite never stop.",
-   "play": "Drop R on their team and keep throwing Q and E into it.",
-   "champion_name": "Anivia",
-   "champion_icon": "icons/champions/34.png",
-   "champion_win_rate": 0.4554,
-   "champion_pick_rate": 0.0267,
-   "champion_win_rank": 159,
-   "core_win_rate": 0.5691,
-   "tier": "Secretly strong",
-   "core_usual": 0,
-   "core_pick_rate": 0.3548,
-   "sim": {
-    "dps": 1255,
-    "survival": 0.498,
-    "best_dps": 1456,
-    "best_survival": 0.414,
-    "pct_of_best": 0.862,
-    "best_items": [
-     "Sorcerer's Shoes",
-     "Blackfire Torch",
-     "Liandry's Torment",
-     "Rabadon's Deathcap",
-     "Shadowflame",
-     "Void Staff"
-    ],
-    "best_augments": [
-     "Mystic Punch",
-     "Eureka",
-     "Infernal Conduit",
-     "Goliath"
-    ],
-    "items_not_modeled": [],
-    "whole_build": false
-   }
-  },
-  {
-   "id": "teemo-critical-shrooms",
-   "champion": "Teemo",
-   "title": "Critical Shrooms",
-   "augments": [
-    {
-     "name": "Vulnerability",
-     "rarity": "Gold",
-     "text": "Your Item and damage over time effects can Critically Strike for 145% extra damage. Gain 25% Crit chance.",
-     "core": true,
-     "icon": "icons/augments/vulnerability.png",
-     "win_rate": 0.5786,
-     "pick_rate": 0.3768,
-     "win_rank": 17,
-     "best_champions": [
-      "Lucian",
-      "Smolder",
-      "MissFortune",
-      "Caitlyn",
-      "Jhin",
-      "Jinx"
-     ],
-     "champion_is_best": false
-    },
-    {
-     "name": "It's Critical",
-     "rarity": "Gold",
-     "text": "Gain 50% Crit chance.",
-     "core": true,
-     "icon": "icons/augments/it-s-critical.png",
-     "win_rate": 0.5228,
-     "pick_rate": 0.16,
-     "win_rank": 98,
-     "best_champions": [
-      "Jhin",
-      "Graves",
-      "Yasuo",
-      "Caitlyn",
-      "Yone",
-      "Vayne"
-     ],
-     "champion_is_best": false
-    },
-    {
-     "name": "Zealot",
+     "name": "Juiced",
      "rarity": "Silver",
-     "text": "Gain Critical Strike Chance and Attack Speed.",
+     "text": "On-Hit deal magic damage, this damage can Critically Strike.",
      "core": true,
-     "icon": "icons/augments/zealot.png",
-     "win_rate": 0.5506,
-     "pick_rate": 0.3015,
-     "win_rank": 48,
+     "icon": "icons/augments/juiced.png",
+     "win_rate": 0.4899,
+     "pick_rate": 0.1209,
+     "win_rank": 167,
      "best_champions": [
+      "Ezreal",
       "Kaisa",
-      "Kayle",
+      "Ryze",
       "Ashe",
       "Teemo",
-      "MissFortune",
-      "TwistedFate"
+      "Kayle"
      ],
-     "champion_is_best": true
+     "champion_is_best": false
     },
     {
-     "name": "Infernal Conduit",
-     "rarity": "Prismatic",
-     "text": "Your Abilities apply stacking Burn that deals damage over time. Your Burn effects reduce your basic Ability Cooldowns.",
+     "name": "Firebrand",
+     "rarity": "Gold",
+     "text": "Your Attacks also Burn enemies, dealing 0.4% max Health magic damage per second over 5 seconds. This Burn stacks infinitely.",
      "core": false,
-     "icon": "icons/augments/infernal-conduit.png",
-     "win_rate": 0.5725,
-     "pick_rate": 0.2363,
-     "win_rank": 23,
+     "icon": "icons/augments/firebrand.png",
+     "win_rate": 0.5086,
+     "pick_rate": 0.1378,
+     "win_rank": 126,
      "best_champions": [
-      "Brand",
-      "AurelionSol",
-      "Lillia",
-      "Morgana",
-      "Malzahar",
-      "Teemo"
+      "Teemo",
+      "Ashe",
+      "Katarina",
+      "Kayle",
+      "Jinx",
+      "Caitlyn"
      ],
-     "champion_is_best": true
+     "champion_is_best": false
     }
    ],
    "core": 3,
    "items": [
     "Berserker's Greaves",
     "Nashor's Tooth",
-    "Liandry's Torment",
-    "Infinity Edge",
-    "Blade of The Ruined King",
-    "Riftmaker"
-   ],
-   "why": "Vulnerability lets damage over time and item effects crit. Teemo's whole kit is damage over time, so every tick of Toxic Shot, every shroom and every Liandry's and Nashor's proc can crit. It's Critical and Zealot stack the crit chance, so the shrooms crit too.",
-   "play": "Plant shrooms, watch the yellow numbers.",
-   "champion_name": "Teemo",
-   "champion_icon": "icons/champions/17.png",
-   "champion_win_rate": 0.5356,
-   "champion_pick_rate": 0.1385,
-   "champion_win_rank": 16,
-   "core_win_rate": 0.5507,
-   "tier": "Holds up",
-   "core_usual": 1,
-   "core_pick_rate": 0.2794,
-   "sim": {
-    "dps": 789,
-    "survival": 0.697,
-    "best_dps": 1142,
-    "best_survival": 0.513,
-    "pct_of_best": 0.691,
-    "best_items": [
-     "Berserker's Greaves",
-     "Blade of The Ruined King",
-     "Nashor's Tooth",
-     "Rabadon's Deathcap",
-     "Shadowflame",
-     "Void Staff"
-    ],
-    "best_augments": [
-     "Dual Wield",
-     "Deft",
-     "Mystic Punch",
-     "Eureka"
-    ],
-    "items_not_modeled": [],
-    "whole_build": false
-   }
-  },
-  {
-   "id": "tristana-bowling",
-   "champion": "Tristana",
-   "title": "Yordle Bowling",
-   "augments": [
-    {
-     "name": "Chain Reaction",
-     "rarity": "Gold",
-     "text": "If a target Knocked Back by the chosen ability hits another champion, they are Knocked Up and dealt damage. When colliding with terrain, the Knock Up duration is extended and they are dealt bonus damage.",
-     "core": true,
-     "icon": "icons/augments/chain-reaction.png",
-     "win_rate": 0.4727,
-     "pick_rate": 0.0735,
-     "win_rank": 195,
-     "best_champions": [
-      "Gragas",
-      "LeeSin",
-      "Syndra",
-      "Alistar",
-      "Maokai",
-      "Thresh"
-     ],
-     "champion_is_best": false
-    },
-    {
-     "name": "Fey Magic",
-     "rarity": "Prismatic",
-     "text": "Damaging with your Ultimate Polymorphs enemies for 2 seconds (15 second Cooldown).",
-     "core": true,
-     "icon": "icons/augments/fey-magic.png",
-     "win_rate": 0.4893,
-     "pick_rate": 0.1164,
-     "win_rank": 170,
-     "best_champions": [
-      "Katarina",
-      "Ornn",
-      "Samira",
-      "Udyr",
-      "Blitzcrank",
-      "FiddleSticks"
-     ],
-     "champion_is_best": false
-    },
-    {
-     "name": "Scopiest Weapons",
-     "rarity": "Prismatic",
-     "text": "Gain Attack Range.",
-     "core": false,
-     "icon": "icons/augments/scopiest-weapons.png",
-     "win_rate": 0.5281,
-     "pick_rate": 0.1789,
-     "win_rank": 85,
-     "best_champions": [
-      "Caitlyn",
-      "Jinx",
-      "Vayne",
-      "Kayle",
-      "Tristana",
-      "Senna"
-     ],
-     "champion_is_best": true
-    },
-    {
-     "name": "Typhoon",
-     "rarity": "Silver",
-     "text": "Your Attacks shoot a missile at an additional target, dealing 30% damage and applying On-Hit effects.",
-     "core": false,
-     "icon": "icons/augments/typhoon.png",
-     "win_rate": 0.5087,
-     "pick_rate": 0.1815,
-     "win_rank": 125,
-     "best_champions": [
-      "Jinx",
-      "Vayne",
-      "Caitlyn",
-      "Senna",
-      "Tristana",
-      "Yunara"
-     ],
-     "champion_is_best": true
-    }
-   ],
-   "core": 2,
-   "items": [
-    "Berserker's Greaves",
-    "Infinity Edge",
     "Kraken Slayer",
-    "Lord Dominik's Regards",
-    "Runaan's Hurricane",
-    "Yun Tal Wildarrows"
+    "Blade of The Ruined King",
+    "Wit's End",
+    "Guinsoo's Rageblade"
    ],
-   "why": "Buster Shot knocks its target back a long way. Fey Magic turns the target into a critter first, and Chain Reaction makes it a bowling ball: when the knocked-back champion hits another champion, both get knocked up and take damage, and hitting a wall knocks them up even longer.",
-   "play": "Line up a critter with their team, or with a wall, and R.",
-   "champion_name": "Tristana",
-   "champion_icon": "icons/champions/18.png",
-   "champion_win_rate": 0.4894,
-   "champion_pick_rate": 0.0849,
-   "champion_win_rank": 86,
-   "core_win_rate": 0.481,
-   "tier": "Pure troll",
-   "core_usual": 0,
-   "core_pick_rate": 0.095,
-   "sim": {
-    "dps": 1238,
-    "survival": 0.474,
-    "best_dps": 1434,
-    "best_survival": 0.848,
-    "pct_of_best": 0.863,
-    "best_items": [
-     "Berserker's Greaves",
-     "Blade of The Ruined King",
-     "Infinity Edge",
-     "Lord Dominik's Regards",
-     "Runaan's Hurricane",
-     "Yun Tal Wildarrows"
-    ],
-    "best_augments": [
-     "Dual Wield",
-     "Deft",
-     "Heavy Hitter",
-     "Goliath"
-    ],
-    "items_not_modeled": [],
-    "whole_build": false
-   }
-  },
-  {
-   "id": "blitzcrank-hook-storm",
-   "champion": "Blitzcrank",
-   "title": "Hook Storm",
-   "augments": [
-    {
-     "name": "Overloaded",
-     "rarity": "Prismatic",
-     "text": "Using another Ability resets the cooldown of the chosen ability.",
-     "core": true,
-     "icon": "icons/augments/overloaded.png",
-     "win_rate": 0.4939,
-     "pick_rate": 0.1538,
-     "win_rank": 158,
-     "best_champions": [
-      "Ryze",
-      "Smolder",
-      "Qiyana",
-      "TwistedFate",
-      "Morgana",
-      "Brand"
-     ],
-     "champion_is_best": false
-    },
-    {
-     "name": "Spell Split",
-     "rarity": "Prismatic",
-     "text": "Your chosen ability missile splits into two on hit, at max Range, or when Recast. Additional target hit: Enemies take less damage if hit by the same spell.",
-     "core": true,
-     "icon": "icons/augments/spell-split.png",
-     "win_rate": 0.4873,
-     "pick_rate": 0.0853,
-     "win_rank": 172,
-     "best_champions": [
-      "Morgana",
-      "Nidalee",
-      "Ashe",
-      "Blitzcrank",
-      "Veigar",
-      "Ezreal"
-     ],
-     "champion_is_best": true
-    },
-    {
-     "name": "Echo Cast",
-     "rarity": "Prismatic",
-     "text": "Casting Your chosen ability sends a clone of the ability toward your mouse position and recasts it after 0.25 seconds.",
-     "core": true,
-     "icon": "icons/augments/echo-cast.png",
-     "win_rate": 0.5261,
-     "pick_rate": 0.0755,
-     "win_rank": 90,
-     "best_champions": [
-      "TwistedFate",
-      "Hecarim",
-      "Sett",
-      "Blitzcrank",
-      "Darius",
-      "Garen"
-     ],
-     "champion_is_best": true
-    },
-    {
-     "name": "Archmage",
-     "rarity": "Prismatic",
-     "text": "Casting a spell refunds another random spell's cost by 30% of the original spell's Cooldown.",
-     "core": false,
-     "icon": "icons/augments/archmage.png",
-     "win_rate": 0.5288,
-     "pick_rate": 0.3505,
-     "win_rank": 84,
-     "best_champions": [
-      "Teemo",
-      "MissFortune",
-      "Ashe",
-      "Zilean",
-      "Brand",
-      "Morgana"
-     ],
-     "champion_is_best": false
-    }
-   ],
-   "core": 3,
-   "items": [
-    "Ionian Boots of Lucidity",
-    "Rod of Ages",
-    "Liandry's Torment",
-    "Rylai's Crystal Scepter",
-    "Sunfire Aegis",
-    "Warmog's Armor"
-   ],
-   "why": "With these on Rocket Grab, Overloaded resets the hook every time you use W, E or R, and Echo Cast sends a clone that fires a second hook. Spell Split then breaks each hook into two when it hits or reaches max range. That's up to four grabs flying out per hook.",
-   "play": "Q, E, Q, W, Q, R, Q. Somebody is getting pulled.",
+   "why": "Ethereal Weapon makes Rocket Grab apply on-hit effects, so the hook lands like a fully built attack-speed carry's auto: Blade of the Ruined King takes a chunk of current health, Kraken Slayer, Wit's End, Nashor's and Juiced all proc, and Firebrand starts a burn before the target has even arrived. Mystic Punch then turns that on-hit into cooldown back on the hook. The support robot is now the team's on-hit ADC, and his best attack has 1,100 range.",
+   "play": "Turn on Overdrive, hook someone, then Power Fist them as they land so they eat two rounds of on-hit. Pop Static Field to proc everything on everyone nearby, and keep auto-attacking until Mystic Punch hands the hook back.",
    "champion_name": "Blitzcrank",
    "champion_icon": "icons/champions/53.png",
    "champion_win_rate": 0.4592,
    "champion_pick_rate": 0.0819,
    "champion_win_rank": 153,
-   "core_win_rate": 0.5024,
-   "tier": "Pure troll",
-   "core_usual": 2,
-   "core_pick_rate": 0.1049,
+   "core_win_rate": 0.5427,
+   "tier": "Holds up",
+   "core_usual": 0,
+   "core_pick_rate": 0.2769,
    "sim": {
-    "dps": 405,
-    "survival": 0.789,
+    "dps": 577,
+    "survival": 0.443,
     "best_dps": 782,
     "best_survival": 0.397,
-    "pct_of_best": 0.517,
+    "pct_of_best": 0.738,
     "best_items": [
      "Sorcerer's Shoes",
      "Blackfire Torch",
@@ -1011,132 +507,6 @@ window.COOK_DATA = {
      "Mystic Punch",
      "Deft",
      "Goliath"
-    ],
-    "items_not_modeled": [],
-    "whole_build": false
-   }
-  },
-  {
-   "id": "jinx-critter-rocket",
-   "champion": "Jinx",
-   "title": "Critter Rocket",
-   "augments": [
-    {
-     "name": "Fey Magic",
-     "rarity": "Prismatic",
-     "text": "Damaging with your Ultimate Polymorphs enemies for 2 seconds (15 second Cooldown).",
-     "core": true,
-     "icon": "icons/augments/fey-magic.png",
-     "win_rate": 0.4893,
-     "pick_rate": 0.1164,
-     "win_rank": 170,
-     "best_champions": [
-      "Katarina",
-      "Ornn",
-      "Samira",
-      "Udyr",
-      "Blitzcrank",
-      "FiddleSticks"
-     ],
-     "champion_is_best": false
-    },
-    {
-     "name": "Ultimate Revolution",
-     "rarity": "Prismatic",
-     "text": "Refresh your Ultimate after casting it (75 seconds Cooldown or reset on death).",
-     "core": true,
-     "icon": "icons/augments/ultimate-revolution.png",
-     "win_rate": 0.4892,
-     "pick_rate": 0.1871,
-     "win_rank": 171,
-     "best_champions": [
-      "Karthus",
-      "Malphite",
-      "Ashe",
-      "Chogath",
-      "Lucian",
-      "Brand"
-     ],
-     "champion_is_best": false
-    },
-    {
-     "name": "Ult Bot",
-     "rarity": "Prismatic",
-     "text": "Your Ability Haste only applies to your Ultimate, but is 50% more effective. Gain 100 Ability Haste.",
-     "core": true,
-     "icon": "icons/augments/ult-bot.png",
-     "win_rate": 0.4703,
-     "pick_rate": 0.1634,
-     "win_rank": 196,
-     "best_champions": [
-      "Karthus",
-      "Teemo",
-      "Ashe",
-      "Malphite",
-      "Gangplank",
-      "Lucian"
-     ],
-     "champion_is_best": false
-    },
-    {
-     "name": "Can't Touch This",
-     "rarity": "Prismatic",
-     "text": "Casting your Ultimate makes you Invulnerable for 2 seconds (8s Cooldown).",
-     "core": false,
-     "icon": "icons/augments/can-t-touch-this.png",
-     "win_rate": 0.4854,
-     "pick_rate": 0.1161,
-     "win_rank": 175,
-     "best_champions": [
-      "Katarina",
-      "Samira",
-      "Jayce",
-      "Viego",
-      "Twitch",
-      "Kassadin"
-     ],
-     "champion_is_best": false
-    }
-   ],
-   "core": 3,
-   "items": [
-    "Ionian Boots of Lucidity",
-    "Infinity Edge",
-    "The Collector",
-    "Lord Dominik's Regards",
-    "Navori Flickerblade",
-    "Rapid Firecannon"
-   ],
-   "why": "Super Mega Death Rocket crosses the whole map, and Fey Magic turns everyone it hits into a critter. Ultimate Revolution gives a second rocket right after the first and Ult Bot puts all your haste into R, so you fire map-wide polymorphs on a short cooldown. Can't Touch This makes you invulnerable each time you fire.",
-   "play": "Watch the minimap and snipe whoever is about to escape.",
-   "champion_name": "Jinx",
-   "champion_icon": "icons/champions/222.png",
-   "champion_win_rate": 0.5143,
-   "champion_pick_rate": 0.093,
-   "champion_win_rank": 42,
-   "core_win_rate": 0.4829,
-   "tier": "Pure troll",
-   "core_usual": 0,
-   "core_pick_rate": 0.1556,
-   "sim": {
-    "dps": 802,
-    "survival": 0.417,
-    "best_dps": 1237,
-    "best_survival": 0.667,
-    "pct_of_best": 0.649,
-    "best_items": [
-     "Ionian Boots of Lucidity",
-     "Blade of The Ruined King",
-     "Infinity Edge",
-     "Lord Dominik's Regards",
-     "Runaan's Hurricane",
-     "Serylda's Grudge"
-    ],
-    "best_augments": [
-     "Dual Wield",
-     "Deft",
-     "Mystic Punch",
-     "Jeweled Gauntlet"
     ],
     "items_not_modeled": [],
     "whole_build": false

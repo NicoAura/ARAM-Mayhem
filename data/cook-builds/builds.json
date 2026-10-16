@@ -72,136 +72,26 @@
       "play": "Farm Q stacks like normal, then right-click everyone. Cage still works."
     },
     {
-      "id": "karthus-global-onhit",
-      "champion": "Karthus",
-      "title": "Global On-Hit",
-      "augments": [
-        "Ethereal Weapon",
-        "Jeweled Gauntlet",
-        "Juiced",
-        "Firebrand"
-      ],
-      "core": 2,
-      "items": [
-        "Sorcerer's Shoes",
-        "Nashor's Tooth",
-        "Blade of The Ruined King",
-        "Kraken Slayer",
-        "Wit's End",
-        "Rabadon's Deathcap"
-      ],
-      "why": "Ethereal Weapon makes abilities apply on-hit effects, and Requiem hits every enemy champion on the map. So one R procs BotRK, Kraken Slayer, Wit's End, Nashor's, Juiced and a stack of Firebrand's burn on all five at once, from your fountain. Jeweled Gauntlet lets Requiem crit too.",
-      "play": "Buy marksman items on a mage. Press R from anywhere."
-    },
-    {
-      "id": "anivia-blizzard-engine",
-      "champion": "Anivia",
-      "title": "Blizzard Engine",
+      "id": "blitzcrank-hook-line-kraken",
+      "champion": "Blitzcrank",
+      "title": "Hook, Line and Kraken",
       "augments": [
         "Ethereal Weapon",
         "Mystic Punch",
-        "Infernal Conduit",
-        "Recursion"
-      ],
-      "core": 2,
-      "items": [
-        "Sorcerer's Shoes",
-        "Nashor's Tooth",
-        "Liandry's Torment",
-        "Rylai's Crystal Scepter",
-        "Rabadon's Deathcap",
-        "Void Staff"
-      ],
-      "why": "Glacial Storm damages everyone inside it over and over. With Ethereal Weapon each enemy in the storm triggers your on-hit effects once a second, and Mystic Punch turns every on-hit into 1.25 seconds off your cooldowns. Three enemies in the storm should take almost four seconds off Q and E every second, so Flash Frost and Frostbite never stop.",
-      "play": "Drop R on their team and keep throwing Q and E into it."
-    },
-    {
-      "id": "teemo-critical-shrooms",
-      "champion": "Teemo",
-      "title": "Critical Shrooms",
-      "augments": [
-        "Vulnerability",
-        "It's Critical",
-        "Zealot",
-        "Infernal Conduit"
+        "Juiced",
+        "Firebrand"
       ],
       "core": 3,
       "items": [
         "Berserker's Greaves",
         "Nashor's Tooth",
-        "Liandry's Torment",
-        "Infinity Edge",
-        "Blade of The Ruined King",
-        "Riftmaker"
-      ],
-      "why": "Vulnerability lets damage over time and item effects crit. Teemo's whole kit is damage over time, so every tick of Toxic Shot, every shroom and every Liandry's and Nashor's proc can crit. It's Critical and Zealot stack the crit chance, so the shrooms crit too.",
-      "play": "Plant shrooms, watch the yellow numbers."
-    },
-    {
-      "id": "tristana-bowling",
-      "champion": "Tristana",
-      "title": "Yordle Bowling",
-      "augments": [
-        "Chain Reaction",
-        "Fey Magic",
-        "Scopiest Weapons",
-        "Typhoon"
-      ],
-      "core": 2,
-      "items": [
-        "Berserker's Greaves",
-        "Infinity Edge",
         "Kraken Slayer",
-        "Lord Dominik's Regards",
-        "Runaan's Hurricane",
-        "Yun Tal Wildarrows"
+        "Blade of The Ruined King",
+        "Wit's End",
+        "Guinsoo's Rageblade"
       ],
-      "why": "Buster Shot knocks its target back a long way. Fey Magic turns the target into a critter first, and Chain Reaction makes it a bowling ball: when the knocked-back champion hits another champion, both get knocked up and take damage, and hitting a wall knocks them up even longer.",
-      "play": "Line up a critter with their team, or with a wall, and R."
-    },
-    {
-      "id": "blitzcrank-hook-storm",
-      "champion": "Blitzcrank",
-      "title": "Hook Storm",
-      "augments": [
-        "Overloaded",
-        "Spell Split",
-        "Echo Cast",
-        "Archmage"
-      ],
-      "core": 3,
-      "items": [
-        "Ionian Boots of Lucidity",
-        "Rod of Ages",
-        "Liandry's Torment",
-        "Rylai's Crystal Scepter",
-        "Sunfire Aegis",
-        "Warmog's Armor"
-      ],
-      "why": "With these on Rocket Grab, Overloaded resets the hook every time you use W, E or R, and Echo Cast sends a clone that fires a second hook. Spell Split then breaks each hook into two when it hits or reaches max range. That's up to four grabs flying out per hook.",
-      "play": "Q, E, Q, W, Q, R, Q. Somebody is getting pulled."
-    },
-    {
-      "id": "jinx-critter-rocket",
-      "champion": "Jinx",
-      "title": "Critter Rocket",
-      "augments": [
-        "Fey Magic",
-        "Ultimate Revolution",
-        "Ult Bot",
-        "Can't Touch This"
-      ],
-      "core": 3,
-      "items": [
-        "Ionian Boots of Lucidity",
-        "Infinity Edge",
-        "The Collector",
-        "Lord Dominik's Regards",
-        "Navori Flickerblade",
-        "Rapid Firecannon"
-      ],
-      "why": "Super Mega Death Rocket crosses the whole map, and Fey Magic turns everyone it hits into a critter. Ultimate Revolution gives a second rocket right after the first and Ult Bot puts all your haste into R, so you fire map-wide polymorphs on a short cooldown. Can't Touch This makes you invulnerable each time you fire.",
-      "play": "Watch the minimap and snipe whoever is about to escape."
+      "why": "Ethereal Weapon makes Rocket Grab apply on-hit effects, so the hook lands like a fully built attack-speed carry's auto: Blade of the Ruined King takes a chunk of current health, Kraken Slayer, Wit's End, Nashor's and Juiced all proc, and Firebrand starts a burn before the target has even arrived. Mystic Punch then turns that on-hit into cooldown back on the hook. The support robot is now the team's on-hit ADC, and his best attack has 1,100 range.",
+      "play": "Turn on Overdrive, hook someone, then Power Fist them as they land so they eat two rounds of on-hit. Pop Static Field to proc everything on everyone nearby, and keep auto-attacking until Mystic Punch hands the hook back."
     }
   ]
 }

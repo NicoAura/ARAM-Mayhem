@@ -1,7 +1,7 @@
 # The Kitchen (cook builds)
 
-Troll builds for ARAM Mayhem built on strange augment interactions (abilities that apply
-on-hit effects, damage over time that crits, champions who swap their range), each checked
+Troll builds for ARAM Mayhem built on strange augment interactions (a hook that applies
+on-hit effects, an artillery mage gone melee, champions who swap their range), each checked
 against China-server win rates and the all-champion damage simulator. The folder
 is a website tab through `site-tab.json`.
 
