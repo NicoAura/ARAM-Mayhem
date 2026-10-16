@@ -6,9 +6,7 @@
 <!-- replay-page-start -->
 <title>Mayhem Fight Replay</title>
 <meta name="claude:viewport-fit-sides" content="cover">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="/assets/fonts/fonts.css">
 <style>
 /* Same look as the website (web/): cool grey page, white cards with hairline borders, blue accent,
    Bricolage Grotesque headings over Geist and Geist Mono; light and dark follow the system.
@@ -39,7 +37,7 @@
 * { box-sizing: border-box; }
 html, body { background: var(--abyss); color: var(--frost); }
 body { margin: 0; font: 14px/1.5 var(--body); }
-.wrap { max-width: 1240px; margin: 0 auto; padding-block: 40px 48px;
+.wrap { margin: 0 auto; padding-block: 40px 48px;
   padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
   display: grid; gap: 16px; }
 header { display: flex; flex-wrap: wrap; align-items: end; gap: 12px 24px; justify-content: space-between; }
@@ -248,12 +246,12 @@ fieldset select { width: 100%; min-width: 0; font-size: 13px; padding: 6px 8px; 
   <p class="note">The simulator is in beta: an experiment whose results can shift as the model changes. This is one typical fight (the median of 200) from the simulator, using the build it found best. Some champions' numbers are approximate, and passives are mostly missing.
   The champion models, animations and icons belong to Riot Games. This project isn't endorsed by Riot Games and doesn't reflect the views or opinions of Riot Games or anyone officially involved in producing or managing League of Legends.</p>
 </div>
-<script type="importmap">{"imports": {"three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
-  "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"}}</script>
-<script>window.REPLAY_VERSION = "26";</script>
-<script src="replay.js?v=26"></script>
-<script type="module" src="models3d.js?v=26"></script>
-<script src="sim-panel.js?v=26"></script>
+<script type="importmap">{"imports": {"three": "/assets/lib/three-0.160.0/build/three.module.js",
+  "three/addons/": "/assets/lib/three-0.160.0/examples/jsm/"}}</script>
+<script>window.REPLAY_VERSION = "27";</script>
+<script src="replay.js?v=27"></script>
+<script type="module" src="models3d.js?v=27"></script>
+<script src="sim-panel.js?v=27"></script>
 <!-- replay-page-end -->
 </body>
 </html>
