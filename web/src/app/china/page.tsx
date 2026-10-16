@@ -69,6 +69,7 @@ export default function ChinaPage() {
           initialSort={{ key: "win_rate", desc: true }}
           searchKey="name"
           searchLabel="Find a champion"
+          urlTab=""
         />
       ),
     },
@@ -96,7 +97,7 @@ export default function ChinaPage() {
         <DataTable
           columns={[
             { key: "name", label: "Augment", format: "text" },
-            { key: "tier", label: "Tier", format: "text" },
+            { key: "tier", label: "Tier", format: "tier" },
             { key: "win_rate", label: "Win rate", format: "pct" },
             { key: "pick_rate", label: "Pick rate", format: "pct" },
           ]}
@@ -109,6 +110,7 @@ export default function ChinaPage() {
           initialSort={{ key: "win_rate", desc: true }}
           searchKey="name"
           searchLabel="Find an augment"
+          urlTab="augments"
         />
       ),
     });

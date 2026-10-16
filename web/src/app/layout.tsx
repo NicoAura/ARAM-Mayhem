@@ -1,13 +1,16 @@
 import type { Metadata, Viewport } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Bricolage_Grotesque, Geist, Geist_Mono } from "next/font/google";
 import Link from "next/link";
 import MobileTabBar from "@/components/MobileTabBar";
 import NavLinks from "@/components/NavLinks";
+import SearchPalette from "@/components/SearchPalette";
+import { searchItems } from "@/lib/highlights";
 import { allTabs } from "@/lib/tabs";
 import "./globals.css";
 
 const sans = Geist({ subsets: ["latin"], variable: "--font-sans" });
 const mono = Geist_Mono({ subsets: ["latin"], variable: "--font-mono" });
+const display = Bricolage_Grotesque({ subsets: ["latin"], weight: ["600", "700"], variable: "--font-display" });
 
 export const metadata: Metadata = {
   title: "DeepARAM",
@@ -17,8 +20,8 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   viewportFit: "cover",
   themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#fafafa" },
-    { media: "(prefers-color-scheme: dark)", color: "#0a0a0a" },
+    { media: "(prefers-color-scheme: light)", color: "#f4f6f8" },
+    { media: "(prefers-color-scheme: dark)", color: "#090b0f" },
   ],
 };
 
@@ -33,16 +36,22 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${sans.variable} ${mono.variable}`} suppressHydrationWarning>
+    <html lang="en" className={`${sans.variable} ${mono.variable} ${display.variable}`} suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: DEVICE_SCRIPT }} />
       </head>
       <body>
         <header className="site-header">
-          <Link href="/" className="brand">
-            DeepARAM
-          </Link>
-          <NavLinks tabs={allTabs().map(({ href, label }) => ({ href, label }))} />
+          <div className="site-header-inner">
+            <Link href="/" className="brand">
+              <i aria-hidden="true" />
+              <span>
+                Deep<b>ARAM</b>
+              </span>
+            </Link>
+            <NavLinks tabs={[{ href: "/", label: "Home" }, ...allTabs().map(({ href, label }) => ({ href, label }))]} />
+            <SearchPalette items={searchItems()} />
+          </div>
         </header>
         <main>{children}</main>
         <footer className="site-footer">

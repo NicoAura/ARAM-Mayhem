@@ -1,12 +1,12 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import championNames from "@/data/champion-names.json";
 
 export type Column = {
   key: string;
   label: string;
-  format?: "pct" | "num" | "int" | "sec" | "text" | "champion";
+  format?: "pct" | "num" | "int" | "sec" | "text" | "champion" | "tier";
   sortable?: boolean;
 };
 
@@ -17,7 +17,8 @@ const NAMES = championNames as Record<string, string>;
 // Search matches champion ids ("MonkeyKing") and display names ("Wukong") alike.
 function searchText(v: Row[string]) {
   const raw = String(v ?? "");
-  return `${raw} ${raw.split(" ").map((w) => NAMES[w] ?? "").join(" ")}`.toLowerCase();
+  const names = raw.split(" ").map((w) => NAMES[w] ?? w.replace(/([a-z])([A-Z])/g, "$1 $2"));
+  return `${raw} ${names.join(" ")}`.toLowerCase();
 }
 
 const DDRAGON = "https://ddragon.leagueoflegends.com/cdn/16.20.1/img/champion";
@@ -60,16 +61,26 @@ export default function DataTable({
   initialSort,
   searchKey,
   searchLabel = "Search",
+  urlTab,
 }: {
   columns: Column[];
   rows: Row[];
   initialSort: { key: string; desc: boolean };
   searchKey?: string;
   searchLabel?: string;
+  // Fill the search from ?q= when the page's ?tab= names this table's tab ("" = the default tab).
+  urlTab?: string;
 }) {
   const [sort, setSort] = useState(initialSort);
   const [query, setQuery] = useState("");
   const [shown, setShown] = useState(PAGE);
+
+  useEffect(() => {
+    if (urlTab === undefined) return;
+    const p = new URLSearchParams(location.search);
+    const q = p.get("q");
+    if (q && (p.get("tab") ?? "") === urlTab) setQuery(q);
+  }, [urlTab]);
 
   const sorted = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -107,7 +118,7 @@ export default function DataTable({
             <tr>
               <th className="num">#</th>
               {columns.map((c) => (
-                <th key={c.key} className={c.format && c.format !== "text" && c.format !== "champion" ? "num" : ""}>
+                <th key={c.key} className={c.format && !["text", "champion", "tier"].includes(c.format) ? "num" : ""}>
                   {c.sortable === false ? (
                     c.label
                   ) : (
@@ -125,8 +136,14 @@ export default function DataTable({
               <tr key={i}>
                 <td className="num muted-cell">{i + 1}</td>
                 {columns.map((c) => (
-                  <td key={c.key} className={c.format && c.format !== "text" && c.format !== "champion" ? "num" : ""}>
-                    {c.format === "champion" ? <Champion id={String(r[c.key])} /> : show(r[c.key], c.format)}
+                  <td key={c.key} className={c.format && !["text", "champion", "tier"].includes(c.format) ? "num" : ""}>
+                    {c.format === "champion" ? (
+                      <Champion id={String(r[c.key])} />
+                    ) : c.format === "tier" && r[c.key] ? (
+                      <span className={`chip tier-${String(r[c.key]).toLowerCase()}`}>{r[c.key]}</span>
+                    ) : (
+                      show(r[c.key], c.format)
+                    )}
                   </td>
                 ))}
               </tr>

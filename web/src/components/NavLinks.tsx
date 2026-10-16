@@ -8,7 +8,7 @@ export default function NavLinks({ tabs }: { tabs: { href: string; label: string
   return (
     <nav className="nav">
       {tabs.map((t) => (
-        <Link key={t.href} href={t.href} aria-current={pathname.startsWith(t.href) ? "page" : undefined}>
+        <Link key={t.href} href={t.href} aria-current={(t.href === "/" ? pathname === "/" : pathname.startsWith(t.href)) ? "page" : undefined}>
           {t.label}
         </Link>
       ))}
