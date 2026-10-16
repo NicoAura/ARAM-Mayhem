@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import championNames from "@/data/champion-names.json";
+import ChampionPanel, { hasPanel } from "./ChampionPanel";
 
 export type Column = {
   key: string;
@@ -56,7 +57,15 @@ function Named({ src, name }: { src: string; name: string }) {
   );
 }
 
-const Champion = ({ id }: { id: string }) => <Named src={`/icons/champions/${id}.webp`} name={NAMES[id] ?? id.replace(/([a-z])([A-Z])/g, "$1 $2")} />;
+function Champion({ id, onOpen }: { id: string; onOpen: (id: string) => void }) {
+  const named = <Named src={`/icons/champions/${id}.webp`} name={NAMES[id] ?? id.replace(/([a-z])([A-Z])/g, "$1 $2")} />;
+  if (!hasPanel(id)) return named;
+  return (
+    <button type="button" className="champ-open" onClick={() => onOpen(id)} title="Splash, pick quote and abilities">
+      {named}
+    </button>
+  );
+}
 
 // Sortable, searchable table. Rows are shown a page at a time.
 export default function DataTable({
@@ -78,6 +87,7 @@ export default function DataTable({
   const [sort, setSort] = useState(initialSort);
   const [query, setQuery] = useState("");
   const [shown, setShown] = useState(PAGE);
+  const [panel, setPanel] = useState<string | null>(null);
 
   useEffect(() => {
     if (urlTab === undefined) return;
@@ -103,6 +113,7 @@ export default function DataTable({
 
   return (
     <div className="data-table">
+      {panel && <ChampionPanel key={panel} alias={panel} onClose={() => setPanel(null)} />}
       {searchKey && (
         <input
           className="table-search"
@@ -142,7 +153,7 @@ export default function DataTable({
                 {columns.map((c) => (
                   <td key={c.key} className={c.format && !["text", "champion", "augment", "tier"].includes(c.format) ? "num" : ""}>
                     {c.format === "champion" ? (
-                      <Champion id={String(r[c.key])} />
+                      <Champion id={String(r[c.key])} onOpen={setPanel} />
                     ) : c.format === "augment" ? (
                       <Named src={`/icons/augments/${r[c.iconKey ?? "id"]}.webp`} name={String(r[c.key] ?? "")} />
                     ) : c.format === "tier" && r[c.key] ? (

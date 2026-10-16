@@ -3,6 +3,7 @@
 The icons are the League client's own files, as CommunityDragon extracts them from each patch:
 - champions/<Alias>.webp, from the client's champion-icons (Alias as in data/cn/champions.csv, e.g. MonkeyKing)
 - augments/<id>.webp, from each Mayhem (KIWI) augment's small icon (id as in data/cn/augments.csv)
+and writes src/data/champion-ids.json (alias → the client's numeric champion id).
 
 Each icon is resized to 64x64 WebP so the whole set stays small.
 
@@ -53,6 +54,10 @@ def main():
         if c["id"] > 0:
             n += save(f"{GD}/champion-icons/{c['id']}.png", os.path.join(OUT, "champions", c["alias"] + ".webp"), force)
     print(f"champions: {n} new of {sum(c['id'] > 0 for c in champs)}")
+    # Alias → numeric id, for the champion panel's client files (splash, pick quote, abilities).
+    ids = {c["alias"]: c["id"] for c in sorted(champs, key=lambda c: c["alias"]) if c["id"] > 0}
+    with open(os.path.join(HERE, "..", "src", "data", "champion-ids.json"), "w") as f:
+        json.dump(ids, f, indent=0)
 
     kiwi = json.loads(fetch(CD + "/game/maps/modespecificdata/kiwi.bin.json"))
     augs = [e for e in kiwi.values() if isinstance(e, dict) and e.get("AugmentPlatformId") and e.get("AugmentSmallIconPath")]
