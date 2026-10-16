@@ -2596,6 +2596,7 @@ html[data-motion="reduce"] *::after {
 .riot-fields label {
   display: flex;
   flex-direction: column;
+  min-width: 0;
   gap: 0.3rem;
   color: var(--muted);
   font-size: 0.8125rem;
@@ -2637,12 +2638,14 @@ html[data-motion="reduce"] *::after {
 }
 
 .riot-id-row input[name="riot-name"] {
-  flex: 1;
+  flex: 1 1 0;
+  width: 0;
   padding-left: 0.75rem;
 }
 
 .riot-id-row input[name="riot-tag"] {
   flex: 0 0 4.2rem;
+  width: 4.2rem;
   padding-right: 0.6rem;
 }
 
