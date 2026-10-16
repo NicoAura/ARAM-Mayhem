@@ -37,7 +37,8 @@ export const viewport: Viewport = {
 const DEVICE_SCRIPT = `try{var u=navigator.userAgent;if(/iPhone|iPad|iPod|Android/i.test(u)||(/Macintosh/.test(u)&&navigator.maxTouchPoints>1))document.documentElement.dataset.device="mobile"}catch(e){}`;
 
 // The header's Light / Dark choice, applied before paint so the page doesn't flash the other theme.
-const THEME_SCRIPT = `try{var t=localStorage.getItem(${JSON.stringify(THEME_KEY)});if(t==="light"||t==="dark")document.documentElement.dataset.theme=t}catch(e){}`;
+// New visitors start in dark mode; "system" follows the device.
+const THEME_SCRIPT = `var t="dark";try{t=localStorage.getItem(${JSON.stringify(THEME_KEY)})||"dark"}catch(e){}if(t==="light"||t==="dark")document.documentElement.dataset.theme=t;`;
 
 // The Ko-fi link Nico sets at /admin: a full ko-fi.com link or just the page name.
 function kofiUrl() {
