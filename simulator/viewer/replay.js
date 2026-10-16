@@ -6,6 +6,7 @@
 (() => {
   "use strict";
   const DATA = "replay-data/";
+  const BUST = "?v=" + (window.REPLAY_VERSION || "0");
   const SLOT_COLORS = { Q: "#4fc3f7", W: "#7bd88f", E: "#f4b860", R: "#e66ad2" };
   const TYPE_COLORS = { physical: "#f08a4b", magic: "#7aa2ff", true: "#f4f4f4" };
   const SOURCE_COLORS = ["#c9d6e2", SLOT_COLORS.Q, SLOT_COLORS.W, SLOT_COLORS.E, SLOT_COLORS.R, "#b9a3ff"];
@@ -21,9 +22,9 @@
 
   // ---------- loading ----------
   Promise.all([
-    fetch(DATA + "index.json").then((r) => r.json()),
-    fetch(DATA + "traces.json").then((r) => r.json()),
-    new Promise((ok, fail) => { const im = new Image(); im.onload = () => ok(im); im.onerror = fail; im.src = DATA + "sprites.webp"; }),
+    fetch(DATA + "index.json" + BUST).then((r) => r.json()),
+    fetch(DATA + "traces.json" + BUST).then((r) => r.json()),
+    new Promise((ok, fail) => { const im = new Image(); im.onload = () => ok(im); im.onerror = fail; im.src = DATA + "sprites.webp" + BUST; }),
   ]).then(([idx, tr, im]) => {
     index = idx; traces = tr; sprite = im;
     for (const c of index.champions) byId.set(c.id.toLowerCase(), c);

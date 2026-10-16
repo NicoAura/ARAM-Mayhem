@@ -1,10 +1,11 @@
 // Runs the WebAssembly build of mayhem_sim (make wasm-mayhem) off the page's main thread.
 // Messages in: {id, args}. Messages out: {id, ok, stdout, stderr, trace}.
 "use strict";
-importScripts("replay-data/mayhem_sim.js");
+const BUST = self.location.search;
+importScripts("replay-data/mayhem_sim.js" + BUST);
 
 let ready = MayhemSim({
-  locateFile: (path) => "replay-data/" + path,
+  locateFile: (path) => "replay-data/" + path + BUST,
   print: (s) => { out.push(s); },
   printErr: (s) => { err.push(s); },
 });

@@ -8,12 +8,13 @@ import { MeshoptDecoder } from "three/addons/libs/meshopt_decoder.module.js";
 import { clone as cloneSkinned } from "three/addons/utils/SkeletonUtils.js";
 
 const DATA = "replay-data/models/";
+const BUST = "?v=" + (window.REPLAY_VERSION || "0");
 const HEIGHT = 2.6;              // world units for a champion of average size
 const FALLBACK = { Q: ["attack"], W: ["attack"], E: ["attack"], R: ["attack"], crit: ["attack"],
   stunned: ["idle"], death: ["idle"], attack: ["idle"], run: ["idle"] };
 
 let manifest = null;
-const manifestReady = fetch(DATA + "models.json").then((r) => (r.ok ? r.json() : {})).catch(() => ({}))
+const manifestReady = fetch(DATA + "models.json" + BUST).then((r) => (r.ok ? r.json() : {})).catch(() => ({}))
   .then((m) => { manifest = {}; for (const [k, v] of Object.entries(m)) manifest[k.toLowerCase()] = v; });
 const loader = new GLTFLoader().setMeshoptDecoder(MeshoptDecoder);
 const gltfs = new Map();         // champion id (lower case) -> Promise<gltf | null>
@@ -26,12 +27,12 @@ function loadChampion(id) {
       if (!entry) return null;
       // A ".txt" file is the same .glb in base64, for hosts that only serve text.
       const load = entry.file.endsWith(".txt")
-        ? fetch(DATA + entry.file).then((r) => r.text()).then((b64) => {
+        ? fetch(DATA + entry.file + BUST).then((r) => r.text()).then((b64) => {
           const bin = atob(b64.trim()), bytes = new Uint8Array(bin.length);
           for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
           return loader.parseAsync(bytes.buffer, DATA);
         })
-        : loader.loadAsync(DATA + entry.file);
+        : loader.loadAsync(DATA + entry.file + BUST);
       return load.then((g) => ({ gltf: g, entry })).catch(() => null);
     }));
   }

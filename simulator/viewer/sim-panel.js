@@ -31,7 +31,7 @@
     el.className = "sim-status" + (kind ? " " + kind : "");
   }
   try {
-    worker = new Worker("sim-worker.js");
+    worker = new Worker("sim-worker.js?v=" + (window.REPLAY_VERSION || "0"));
     worker.onmessage = (e) => { const r = pending.get(e.data.id); pending.delete(e.data.id); if (r) r(e.data); };
     worker.onerror = () => status("The simulator couldn't start in this browser. The replays above still work.", "err");
     call(["--list", "--json"]).then((r) => {
