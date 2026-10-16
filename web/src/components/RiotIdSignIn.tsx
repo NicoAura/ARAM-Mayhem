@@ -75,7 +75,7 @@ export default function RiotIdSignIn() {
             Sign out
           </button>
         </div>
-        {profile.ranked.length > 0 && (
+        {(profile.ranked ?? []).length > 0 && (
           <dl className="riot-id-ranks">
             {profile.ranked
               .filter((r) => QUEUES[r.queueType])
