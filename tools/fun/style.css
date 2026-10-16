@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap");
+
 :root {
   color-scheme: light dark;
   --bg: #fafafa;
@@ -6,7 +8,6 @@
   --line: #e5e5e5;
   --hover: #f0f0f0;
   --accent: #b8862e;
-  --mana: #2f6fd6;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -17,7 +18,6 @@
     --line: #262626;
     --hover: #141414;
     --accent: #d9b16a;
-    --mana: #6ea0f2;
     color-scheme: dark;
   }
 }
@@ -31,7 +31,6 @@
   --line: #262626;
   --hover: #141414;
   --accent: #d9b16a;
-  --mana: #6ea0f2;
   color-scheme: dark;
 }
 
@@ -40,7 +39,7 @@
 body {
   background: var(--bg);
   color: var(--fg);
-  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-family: "Geist", system-ui, -apple-system, "Segoe UI", sans-serif;
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
 }
@@ -54,12 +53,14 @@ main {
   gap: 2rem;
 }
 
-h1 { font-size: 2rem; letter-spacing: -0.02em; line-height: 1.15; }
-h2 { font-size: 0.95rem; font-weight: 600; }
+h1 { font-size: 2rem; font-weight: 600; letter-spacing: -0.035em; line-height: 1.1; }
+h2 { font-size: 0.95rem; font-weight: 600; letter-spacing: -0.02em; }
 .muted { color: var(--muted); }
 .small { font-size: 0.85rem; }
-.eyebrow a { color: inherit; }
-.eyebrow { color: var(--accent); font-size: 0.8rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; }
+.eyebrow a { color: inherit; text-decoration: none; }
+.eyebrow a:hover { text-decoration: underline; }
+.eyebrow { color: var(--accent); font-family: "Geist Mono", ui-monospace, Menlo, monospace; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.08em; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 4px; }
 
 .intro { display: flex; gap: 1rem; align-items: flex-start; }
 .intro img { border-radius: 10px; flex: none; }
@@ -78,15 +79,15 @@ section > h2, .row-head { margin-bottom: 0.75rem; }
 }
 .label { display: block; color: var(--muted); font-size: 0.8rem; }
 .big .value { font-size: 3rem; font-weight: 700; letter-spacing: -0.03em; font-variant-numeric: tabular-nums; line-height: 1.1; }
-.big .value.infinite { color: var(--accent); }
+.big .value.infinite { text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 6px; }
 .loop-head { display: flex; justify-content: space-between; font-variant-numeric: tabular-nums; }
 .meter { position: relative; height: 8px; border-radius: 4px; background: var(--hover); margin: 0.4rem 0; overflow: hidden; }
-#gain-bar { height: 100%; width: 0; background: var(--mana); transition: width 0.2s; }
-#gain-bar.full { background: var(--accent); }
-.meter-mark { position: absolute; right: 0; top: 0; bottom: 0; width: 2px; background: var(--accent); }
+#gain-bar { height: 100%; width: 0; background: var(--muted); transition: width 0.2s; }
+#gain-bar.full { background: var(--fg); }
+.meter-mark { position: absolute; right: 0; top: 0; bottom: 0; width: 2px; background: var(--fg); }
 #chart { width: 100%; height: 80px; grid-column: 1 / -1; }
-#chart path.line { fill: none; stroke: var(--mana); stroke-width: 2; vector-effect: non-scaling-stroke; }
-#chart path.area { fill: var(--mana); opacity: 0.12; }
+#chart path.line { fill: none; stroke: var(--fg); stroke-width: 2; vector-effect: non-scaling-stroke; }
+#chart path.area { fill: var(--fg); opacity: 0.06; }
 #chart line.cap { stroke: var(--line); stroke-dasharray: 3 3; vector-effect: non-scaling-stroke; }
 
 .stats { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 0.75rem; }
@@ -94,7 +95,7 @@ section > h2, .row-head { margin-bottom: 0.75rem; }
 .stats dt { color: var(--muted); font-size: 0.8rem; }
 .stats dd { font-weight: 600; font-variant-numeric: tabular-nums; }
 
-input[type="range"] { width: 100%; accent-color: var(--accent); }
+input[type="range"] { width: 100%; accent-color: var(--fg); }
 output { font-weight: 600; font-variant-numeric: tabular-nums; }
 
 .slots { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 0.75rem; }
@@ -103,7 +104,7 @@ output { font-weight: 600; font-variant-numeric: tabular-nums; }
   border: 1px dashed var(--line); background: none; padding: 0; cursor: pointer;
   display: grid; place-items: center; overflow: hidden;
 }
-.slot.filled { border-style: solid; border-color: var(--accent); }
+.slot.filled { border-style: solid; border-color: var(--fg); }
 .slot img { width: 100%; height: 100%; display: block; }
 
 .picker { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 0.4rem; }
@@ -119,7 +120,7 @@ output { font-weight: 600; font-variant-numeric: tabular-nums; }
 /* Augment icons are white line art, so give them a dark tile in both themes. */
 .augs img { background: #1c1c1c; }
 .augs .slot.filled { background: #1c1c1c; }
-.pick.on { border-color: var(--accent); }
+.pick.on { border-color: var(--fg); }
 .pick img { width: 28px; height: 28px; border-radius: 5px; flex: none; }
 .pick .tier { display: block; color: var(--muted); font-size: 0.7rem; }
 
@@ -129,7 +130,7 @@ output { font-weight: 600; font-variant-numeric: tabular-nums; }
   width: 6.5rem; padding: 0.3rem 0.45rem; border: 1px solid var(--line); border-radius: 6px;
   background: var(--bg); color: inherit; font: inherit; font-variant-numeric: tabular-nums;
 }
-.options input[type="checkbox"] { accent-color: var(--accent); width: 1rem; height: 1rem; }
+.options input[type="checkbox"] { accent-color: var(--fg); width: 1rem; height: 1rem; }
 
 .table { width: 100%; border-collapse: collapse; font-size: 0.875rem; font-variant-numeric: tabular-nums; }
 .table th, .table td { text-align: left; padding: 0.4rem 0; border-bottom: 1px solid var(--line); }
@@ -139,9 +140,10 @@ output { font-weight: 600; font-variant-numeric: tabular-nums; }
 .actions { display: flex; gap: 0.5rem; flex-wrap: wrap; }
 button#preset, .actions button {
   font: inherit; font-size: 0.875rem; padding: 0.5rem 0.9rem; border-radius: 8px; cursor: pointer;
-  border: 1px solid var(--accent); background: var(--accent); color: var(--bg);
+  border: 1px solid var(--line); background: none; color: inherit; font-weight: 500;
 }
-.actions button.ghost { background: none; color: inherit; border-color: var(--line); }
+.actions button:hover { background: var(--hover); }
+.actions button.ghost { font-weight: 400; color: var(--muted); }
 footer { max-width: 70ch; }
 
 @media (max-width: 600px) {

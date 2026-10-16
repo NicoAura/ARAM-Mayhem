@@ -9,7 +9,8 @@ from concurrent.futures import ThreadPoolExecutor
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 TOOLS = [("ryze-calculator", "Infinite Ryze", "How far Ryze's AP to Mana loop goes with your items and augments."),
-         ("heartsteel", "Heartsteel Quest", "How much Health a tank snowballs to with Heartsteel and Steel Your Heart.")]
+         ("heartsteel", "Heartsteel Quest", "How much Health a tank snowballs to with Heartsteel and Steel Your Heart."),
+         ("stacking-timer", "Stacking Timer", "How fast Veigar, Nasus, Senna and Smolder stack, and when they hit each goal.")]
 ICON = re.compile(r"https://raw\.communitydragon\.org/[^\"']+?\.png")
 
 
