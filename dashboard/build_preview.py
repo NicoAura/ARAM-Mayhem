@@ -98,7 +98,7 @@ def main():
     page = (
         f"<title>{title}</title>\n"
         '<meta name="claude:viewport-fit-sides" content="cover">\n'
-        '<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600&display=swap">\n'
+        '<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono&display=swap">\n'
         f"<style>\n{(HERE / 'style.css').read_text()}</style>\n"
         f"{body}\n"
         f"<script>window.MAYHEM_PRESET = {json.dumps(preset, separators=(',', ':'))};</script>\n"

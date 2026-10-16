@@ -17,6 +17,7 @@ const state = {
 // A page can ship name tables and an example archive ahead of time (the
 // published preview does, since it can't reach Riot's CDNs).
 const PRESET = window.MAYHEM_PRESET || {};
+try { if (window.self !== window.top && !PRESET.sample) document.documentElement.classList.add("embedded"); } catch (e) { document.documentElement.classList.add("embedded"); }
 Object.assign(state.champNames, PRESET.champNames || {});
 Object.assign(state.augNames, PRESET.augNames || {});
 Object.assign(state.augRarity, PRESET.augRarity || {});
