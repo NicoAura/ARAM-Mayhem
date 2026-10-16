@@ -24,7 +24,7 @@ export const sections = [
   {
     href: "/pbe",
     label: text("tab./pbe.label", "PBE"),
-    body: text("tab./pbe.body", "Mayhem Season 3 changes datamined from the test server."),
+    body: text("tab./pbe.body", "Mayhem Season 3 changes from the test server."),
     pr: 1,
   },
 ];
