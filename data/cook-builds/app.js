@@ -59,6 +59,7 @@
         <div><h3>Items</h3><ul class="items">${b.items.map((i) => `<li>${esc(i)}</li>`).join("")}</ul></div>
       </div>
       <dl class="stats">
+        <div><dt>Usual on ${esc(b.champion_name)}</dt><dd>${b.core_usual} of ${b.core} <small>core augments · picked ${pct(b.core_pick_rate, 0)} of games</small></dd></div>
         <div><dt>${esc(b.champion_name)} in China</dt><dd>${pct(b.champion_win_rate)} <small>#${b.champion_win_rank} of ${data.meta.champion_count} by win rate</small></dd></div>
         ${simStat(b)}
       </dl>
@@ -104,6 +105,7 @@
   const m = data.meta;
   const d = (s) => (s ? `${s.slice(0, 4)}-${s.slice(4, 6)}-${s.slice(6)}` : "?");
   document.getElementById("footer").innerHTML = `
+    <p><b>Only extremely unconventional builds</b> are listed: off-role items, augments almost nobody picks, or augments China doesn't play on that champion. "Usual on" counts the core augments where the champion is on Tencent's best-champion list; pick rate is how often each core augment is taken across all games, averaged.</p>
     <p><b>Lab originals</b> are combos invented for this page rather than taken from players. Some come from searching every item for every champion in the simulator.</p>
     <p><b>Tier</b> is the average China-server win rate of a build's core augments (the ones without the "flex" tag): Secretly strong at 55.5% or more, Holds up from 51.5%, Pure troll below that. China doesn't publish augment win rates per champion, so "best on" marks the champions Tencent lists as best for that augment.</p>
     <p><b>Simulator</b> runs the build in the all-champion teamfight simulator against the simulator's own top build for that champion. When all of a build's augments are in the simulator the whole build is compared; otherwise only the items, both with the top build's augments. Over 100% means these items out-damage the simulator's pick, usually by dying more.</p>

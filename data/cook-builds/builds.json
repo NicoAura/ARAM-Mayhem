@@ -1,185 +1,9 @@
 {
-  "_note": "Hand-written cook builds. build_data.py adds augment text, China win rates and simulator numbers and writes data.js. The first `core` augments decide the build's tier; the rest are flex picks. `augment_text` replaces the generated text for augments whose tooltip numbers the game data doesn't fill in.",
+  "_note": "Hand-written cook builds. build_data.py adds augment text, China win rates and simulator numbers and writes data.js. The first `core` augments decide the build's tier; the rest are flex picks. `augment_text` replaces the generated text for augments whose tooltip numbers the game data doesn't fill in. Only extremely unconventional builds belong here (Nico, 2026-10-16): skip combos China already plays on that champion.",
   "augment_text": {
     "With Haste": "Gain Move Speed equal to a share of your Ability Haste."
   },
   "builds": [
-    {
-      "id": "karthus-death-plan",
-      "champion": "Karthus",
-      "title": "Death Is the Plan",
-      "augments": [
-        "Dive Bomber",
-        "DropBear",
-        "Clown College",
-        "Glass Cannon"
-      ],
-      "core": 3,
-      "items": [
-        "Sorcerer's Shoes",
-        "Liandry's Torment",
-        "Rylai's Crystal Scepter",
-        "Rabadon's Deathcap",
-        "Void Staff",
-        "Cryptbloom"
-      ],
-      "why": "Karthus already keeps casting after he dies. Here every death also sets off a true-damage explosion worth 20% of each nearby enemy's max Health, drops a Tibbers that stuns and chases your killer, and fires a Clown College fear burst. Then the passive lets you keep casting through all of it.",
-      "play": "Walk into the middle of their team, press R, and die on purpose. Glass Cannon makes the dying part faster. Don't buy Zhonya's: that would be cheating."
-    },
-    {
-      "id": "malphite-one-button",
-      "champion": "Malphite",
-      "title": "One Button Malphite",
-      "augments": [
-        "Ult Bot",
-        "Ultimate Revolution",
-        "Stuck In Here With Me",
-        "Fey Magic"
-      ],
-      "core": 3,
-      "items": [
-        "Ionian Boots of Lucidity",
-        "Malignance",
-        "Rabadon's Deathcap",
-        "Shadowflame",
-        "Void Staff",
-        "Zhonya's Hourglass"
-      ],
-      "why": "Ult Bot sends all your Ability Haste to R at 1.5x strength, Ultimate Revolution gives you a second R right after the first, and Stuck In Here With Me adds more Ult Haste and taunts everyone you landed on. Fey Magic then turns them into critters. Q, W and E are decorative.",
-      "play": "Buy every Ability Haste item you can, since it all goes to R. Ult in, ult again, get taunted at, repeat."
-    },
-    {
-      "id": "teemo-microscopic",
-      "champion": "Teemo",
-      "title": "Microscopic Menace",
-      "augments": [
-        "Shrink Engine",
-        "Giant Slayer",
-        "Combusting Interest",
-        "Infernal Conduit"
-      ],
-      "core": 3,
-      "items": [
-        "Sorcerer's Shoes",
-        "Nashor's Tooth",
-        "Liandry's Torment",
-        "Riftmaker",
-        "Rabadon's Deathcap",
-        "Void Staff"
-      ],
-      "why": "Giant Slayer makes Teemo tiny and adds 10 to 30% damage against anything bigger than him, which is everything. Each Shrink Engine takedown shrinks him another 4% and adds 8 Ability Haste, and Combusting Interest pays him gold for every tick of poison. Late game you are mostly a voice line.",
-      "play": "Shroom every bush, poison everyone, and enjoy being hard to click."
-    },
-    {
-      "id": "caitlyn-melee",
-      "champion": "Caitlyn",
-      "title": "Melee Sheriff",
-      "augments": [
-        "Draw Your Sword",
-        "Soul Siphon",
-        "Critical Missile",
-        "Blunt Force"
-      ],
-      "core": 2,
-      "items": [
-        "Berserker's Greaves",
-        "Kraken Slayer",
-        "Infinity Edge",
-        "Blade of The Ruined King",
-        "Sterak's Gage",
-        "Death's Dance"
-      ],
-      "why": "The longest-ranged marksman in the game throws her rifle away for a sword. Draw Your Sword's AD, Health, Attack Speed, Lifesteal and Move Speed all grow with the range you lost, so Caitlyn gets one of the biggest versions of it. It is also the highest win-rate Prismatic augment in China.",
-      "play": "Walk up and hit people. Headshots still work at point-blank range."
-    },
-    {
-      "id": "mundo-healing-hurts",
-      "champion": "DrMundo",
-      "title": "Healing Hurts",
-      "augments": [
-        "Circle of Death",
-        "Goliath",
-        "Tank Engine",
-        "Perseverance"
-      ],
-      "core": 3,
-      "items": [
-        "Plated Steelcaps",
-        "Warmog's Armor",
-        "Spirit Visage",
-        "Heartsteel",
-        "Sunfire Aegis",
-        "Overlord's Bloodmail"
-      ],
-      "why": "Mundo's whole kit is Health regen, and Circle of Death turns 70% of every point of healing and regen into magic damage at the nearest enemy. With Warmog's, Spirit Visage and his R, standing around regenerating is now a damage combo.",
-      "play": "Press R and stand next to someone. Perseverance (more regen) is the flex pick; it has no China stats yet."
-    },
-    {
-      "id": "chogath-kaiju",
-      "champion": "Chogath",
-      "title": "Kaiju",
-      "augments": [
-        "Goliath",
-        "Tank Engine",
-        "Growth Spurt",
-        "Steel Your Heart"
-      ],
-      "core": 3,
-      "items": [
-        "Mercury's Treads",
-        "Heartsteel",
-        "Warmog's Armor",
-        "Titanic Hydra",
-        "Sunfire Aegis",
-        "Jak'Sho, The Protean"
-      ],
-      "why": "Feast, Goliath, Tank Engine and Growth Spurt all make you bigger, and Growth Spurt is a summoner spell whose whole job is to grow and knock everyone up. Steel Your Heart triples your Heartsteel stacks once you reach 300. You will block the camera.",
-      "play": "Feast on everything. The Heartsteel calculator in Fun Tools shows how big the stacks get."
-    },
-    {
-      "id": "hecarim-speed-demon",
-      "champion": "Hecarim",
-      "title": "Speed Demon",
-      "augments": [
-        "Don't Blink",
-        "With Haste",
-        "Leg Day",
-        "Shrink Engine"
-      ],
-      "core": 3,
-      "items": [
-        "Boots of Swiftness",
-        "Trinity Force",
-        "Dead Man's Plate",
-        "Youmuu's Ghostblade",
-        "Spear of Shojin",
-        "Black Cleaver"
-      ],
-      "why": "Don't Blink adds 1% damage per 10 Move Speed you have over your target, and Hecarim's passive already turns bonus Move Speed into AD. Leg Day adds a flat 50 Move Speed and With Haste turns Ability Haste into more. Every source of speed is now damage, twice.",
-      "play": "Never stop running. Pick a target slower than you, which is all of them."
-    },
-    {
-      "id": "ashe-all-in",
-      "champion": "Ashe",
-      "title": "All In on Red",
-      "augments": [
-        "Transmute: Prismatic",
-        "Transmute: Chaos",
-        "Transmute: Gold",
-        "Pandora's Box"
-      ],
-      "core": 3,
-      "items": [
-        "Berserker's Greaves",
-        "Yun Tal Wildarrows",
-        "Infinity Edge",
-        "Runaan's Hurricane",
-        "Lord Dominik's Regards",
-        "Blade of The Ruined King"
-      ],
-      "why": "You never pick an augment yourself. Every slot is a random roll, and Pandora's Box at the end rerolls all of them into random Prismatics. Ashe is on China's best-champion list for all four, so the casino is somehow on your side.",
-      "play": "Take every Transmute you see. Narrate your rolls to your team."
-    },
     {
       "id": "gangplank-king-me",
       "champion": "Gangplank",
@@ -203,28 +27,6 @@
       "play": "Rush a Legendary, find their transport, and become royalty. Then probably lose."
     },
     {
-      "id": "shaco-clown-fiesta",
-      "champion": "Shaco",
-      "title": "Clown Fiesta",
-      "augments": [
-        "Clown College",
-        "Minionmancer",
-        "DropBear",
-        "Dive Bomber"
-      ],
-      "core": 3,
-      "items": [
-        "Sorcerer's Shoes",
-        "Liandry's Torment",
-        "Rylai's Crystal Scepter",
-        "Rabadon's Deathcap",
-        "Shadowflame",
-        "Void Staff"
-      ],
-      "why": "Clown College teaches Shaco Deceive and Backstab, which he already knows, as a second Deceive summoner spell. Minionmancer makes his boxes and clone 40% bigger and stronger, and when he dies he leaves a fear burst, a true-damage explosion and a Tibbers behind.",
-      "play": "Box every bush, Deceive twice, and make your death everyone else's problem."
-    },
-    {
       "id": "malzahar-minion-union",
       "champion": "Malzahar",
       "title": "Minion Union",
@@ -245,50 +47,6 @@
       ],
       "why": "Voidlings come out 40% bigger and stronger, Hand of Baron turns every allied minion near you into a Baron minion, and you get 25% Adaptive Force for the trouble. You are no longer a mage, you are a labor movement.",
       "play": "Stay with the wave and let the army do it."
-    },
-    {
-      "id": "katarina-tea-party",
-      "champion": "Katarina",
-      "title": "Fairy Tea Party",
-      "augments": [
-        "Fey Magic",
-        "Can't Touch This",
-        "Final Form",
-        "Ultimate Unstoppable"
-      ],
-      "core": 4,
-      "items": [
-        "Sorcerer's Shoes",
-        "Stormsurge",
-        "Rabadon's Deathcap",
-        "Shadowflame",
-        "Void Staff",
-        "Zhonya's Hourglass"
-      ],
-      "why": "Every augment triggers on R. Death Lotus turns everyone it hits into a critter for 2 seconds, Can't Touch This makes you invulnerable for 2, Ultimate Unstoppable makes you immune to crowd control for 3, and Final Form adds a max-Health shield, Omnivamp and Move Speed. Nobody can interrupt the spin because nobody has hands.",
-      "play": "Shunpo in, R, and spin until the critters are gone. Katarina is in the top champions for all four."
-    },
-    {
-      "id": "tahm-snowball-main",
-      "champion": "TahmKench",
-      "title": "Snowball Main",
-      "augments": [
-        "Biggest Snowball Ever",
-        "Pinball",
-        "Snowblast",
-        "Holy Snowball"
-      ],
-      "core": 4,
-      "items": [
-        "Plated Steelcaps",
-        "Heartsteel",
-        "Warmog's Armor",
-        "Sunfire Aegis",
-        "Thornmail",
-        "Unending Despair"
-      ],
-      "why": "Four augments, all for Mark/Dash. The snowball is huge and passes through minions, bounces off walls and grows with each bounce, knocks everyone up on the recast, and makes you invulnerable while you fly in. Tahm Kench is near the top for nearly every snowball augment.",
-      "play": "Your real ability bar is one summoner spell. Bank shots off the walls."
     },
     {
       "id": "trundle-theme-park",
@@ -335,28 +93,6 @@
       "play": "Stay low, stay fast, and tell your Soraka to heal someone else. Vampirism has no China stats yet."
     },
     {
-      "id": "soraka-violent-pacifist",
-      "champion": "Soraka",
-      "title": "Violent Pacifist",
-      "augments": [
-        "Circle of Death",
-        "Sonic Boom",
-        "Spirit Bomb",
-        "Wee Woo Wee Woo"
-      ],
-      "core": 4,
-      "items": [
-        "Ionian Boots of Lucidity",
-        "Dawncore",
-        "Moonstone Renewer",
-        "Echoes of Helia",
-        "Redemption",
-        "Spirit Visage"
-      ],
-      "why": "Every heal is an attack. Circle of Death sends 70% of your healing as magic damage at the nearest enemy, Sonic Boom deals true damage and slows around whoever you heal, and Spirit Bomb throws a heal-and-shield bomb at your lowest teammate. Wee Woo Wee Woo makes you faster toward hurt allies.",
-      "play": "Heal everyone. Watch the kill feed."
-    },
-    {
       "id": "leesin-flash-mob",
       "champion": "LeeSin",
       "title": "Flash Mob",
@@ -377,75 +113,6 @@
       ],
       "why": "Every Flash augment at once. Flashy gives Flash 3 charges, Flash 2 adds a second Flash spell with 70 Summoner Haste, and Flashbang makes each one explode and slow. That is four Flashes on call for Insec kicks, and Earthwake leaves a detonating trail behind every Q and W dash in between.",
       "play": "Ward-hop, Flash, kick, Flash, Flash. Nobody will know where you are, including you.",
-      "lab": true
-    },
-    {
-      "id": "garen-beyblade",
-      "champion": "Garen",
-      "title": "Beyblade Garen",
-      "augments": [
-        "Spin To Win",
-        "Echo Cast",
-        "Quickstep",
-        "Blade Waltz"
-      ],
-      "core": 4,
-      "items": [
-        "Berserker's Greaves",
-        "Stridebreaker",
-        "Black Cleaver",
-        "Profane Hydra",
-        "Serylda's Grudge",
-        "Sterak's Gage"
-      ],
-      "why": "Spin To Win makes Judgment bigger, faster and more often. If Echo Cast and Quickstep roll on E, Judgment also sends a spinning clone and dashes you toward your cursor every time you press it. Blade Waltz adds a summoner spell that dashes through enemies eight times. Garen in China is on the best-champion list for all four.",
-      "play": "Hope Echo Cast and Quickstep land on E, then hold the spin and steer with your mouse.",
-      "lab": true
-    },
-    {
-      "id": "singed-prom-king",
-      "champion": "Singed",
-      "title": "Prom King",
-      "augments": [
-        "Prom Queen",
-        "Leg Day",
-        "Escape Plan",
-        "Pat On The Back"
-      ],
-      "core": 4,
-      "items": [
-        "Mercury's Treads",
-        "Rylai's Crystal Scepter",
-        "Liandry's Torment",
-        "Rod of Ages",
-        "Dead Man's Plate",
-        "Warmog's Armor"
-      ],
-      "why": "Every 35 seconds a tiara drops on Singed and he gets Rakan's ultimate, charming everyone he runs past. Leg Day adds 50 Move Speed and Slow Resist, Escape Plan gives a giant shield and 150% Move Speed when he drops low, and every teammate he jogs past pats him for a shield and more speed. Singed is on China's best-champion list for all four.",
-      "play": "Run past your team to collect pats, then run through theirs in your tiara. Leave poison everywhere.",
-      "lab": true
-    },
-    {
-      "id": "tf-autopilot",
-      "champion": "TwistedFate",
-      "title": "Autopilot",
-      "augments": [
-        "Ok Boomerang",
-        "FireFox",
-        "Hextech Soul",
-        "Quantum Computing"
-      ],
-      "core": 3,
-      "items": [
-        "Sorcerer's Shoes",
-        "Cryptbloom",
-        "Horizon Focus",
-        "Rabadon's Deathcap",
-        "Shadowflame",
-        "Void Staff"
-      ],
-      "why": "All four augments fire on their own. A boomerang flies out every 7 seconds, three fox flames orbit and shoot the closest enemy, Hextech Soul chains lightning off your next hit, and Quantum Computing swings a giant slash around you every 30 seconds. Twisted Fate is the top China champion for Ok Boomerang.",
-      "play": "Pick a card and let the augments play the rest. Quantum Computing has no China stats yet.",
       "lab": true
     },
     {
@@ -607,6 +274,52 @@
       ],
       "why": "The simulator's best Taric is half tank and half on-hit: Dual Wield and Deft make him swing fast, and Heavy Hitter and Titanic Hydra make every swing hit for a share of his Heartsteel Health. It beat his best normal build by about a quarter in damage with the same survival.",
       "play": "Stun, then bonk. Bravado keeps the empowered bonks coming.",
+      "lab": true
+    },
+    {
+      "id": "ziggs-melee",
+      "champion": "Ziggs",
+      "title": "Melee Bomb Man",
+      "augments": [
+        "Draw Your Sword",
+        "Dual Wield",
+        "Firebrand",
+        "Juiced"
+      ],
+      "core": 4,
+      "items": [
+        "Berserker's Greaves",
+        "Nashor's Tooth",
+        "Guinsoo's Rageblade",
+        "Blade of The Ruined King",
+        "Wit's End",
+        "Riftmaker"
+      ],
+      "why": "Ziggs gives up his bombs-from-a-mile-away identity and walks up to stab people. Draw Your Sword turns his range into AD, Health, Attack Speed and Lifesteal, and his passive Short Fuse still blows up on his next melee hit. Dual Wield, Firebrand and Juiced pile on-hit magic damage onto every swing.",
+      "play": "Walk at them. Throw a bomb only when you're already standing on them.",
+      "lab": true
+    },
+    {
+      "id": "chogath-tiny",
+      "champion": "Chogath",
+      "title": "Tiny Cho",
+      "augments": [
+        "Giant Slayer",
+        "Shrink Engine",
+        "Shrink Ray",
+        "Escape Plan"
+      ],
+      "core": 3,
+      "items": [
+        "Sorcerer's Shoes",
+        "Liandry's Torment",
+        "Rylai's Crystal Scepter",
+        "Rabadon's Deathcap",
+        "Shadowflame",
+        "Void Staff"
+      ],
+      "why": "Cho'Gath's whole fantasy is growing, so this build shrinks him. Giant Slayer makes him tiny and deals more damage to anyone bigger, Shrink Engine shrinks him further with every takedown, and Shrink Ray shrinks enemies too. Every Feast stack fights the augments, and Escape Plan shrinks him once more when he runs.",
+      "play": "Feast anyway. Watch him stay small.",
       "lab": true
     }
   ]

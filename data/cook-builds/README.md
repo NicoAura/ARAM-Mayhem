@@ -1,7 +1,9 @@
 # Cook builds
 
-Off-meta, meme and troll ARAM Mayhem builds that are fun and still (mostly) work, each
-checked against China-server win rates and the all-champion damage simulator. The folder
+Extremely unconventional troll builds for ARAM Mayhem, each checked against China-server
+win rates and the all-champion damage simulator. Only builds nobody plays belong here: off-role
+items, augments almost nobody picks, or augments China doesn't play on that champion. The page
+shows how many core augments are usual on the champion and how often they're picked. The folder
 is a website tab through `site-tab.json`.
 
 | File | What it is |

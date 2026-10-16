@@ -207,6 +207,9 @@ def main():
             "champion_win_rate": c.get("win_rate"), "champion_pick_rate": c.get("pick_rate"),
             "champion_win_rank": 1 + sum(1 for x in champs.values() if x["win_rate"] > c.get("win_rate", 0)),
             "augments": rows, "core_win_rate": core_wr, "tier": tier(core_wr),
+            # How unconventional: how many core augments China already plays on this champion, and how often they're picked.
+            "core_usual": sum(1 for r in rows if r["core"] and r["champion_is_best"]),
+            "core_pick_rate": round(sum(picks) / len(picks), 4) if (picks := [r["pick_rate"] for r in rows if r["core"] and r["pick_rate"] is not None]) else None,
         })
         if a.sim:
             entry["sim"] = simulate(a.sim, sim_list, b, b["items"], b["augments"])
