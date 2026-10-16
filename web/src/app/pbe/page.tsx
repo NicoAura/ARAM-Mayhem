@@ -53,7 +53,7 @@ export default function PbePage() {
     return (
       <>
         <Intro eyebrow="PBE" title="Mayhem changes on the test server." />
-        <Pending pr={1}>The PBE datamine appears here once it is merged:</Pending>
+        <Pending pr={1}>The PBE changes appear here once they are merged:</Pending>
       </>
     );
   }
@@ -72,7 +72,7 @@ export default function PbePage() {
   return (
     <>
       <Intro eyebrow={`PBE · ${meta.label}`} title={`Mayhem ${meta.label} (${meta.codename}) on the test server.`}>
-        PBE {meta.builds.pbe} compared with live {meta.builds.live}, datamined {meta.dataAsOf}. Augment pool{" "}
+        PBE {meta.builds.pbe} compared with live {meta.builds.live}, from the PBE client files as of {meta.dataAsOf}. Augment pool{" "}
         {meta.augmentPool.live} → {meta.augmentPool.pbe}. {meta.caveat}
       </Intro>
 
