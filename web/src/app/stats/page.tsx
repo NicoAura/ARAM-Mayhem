@@ -4,7 +4,7 @@ import Intro from "@/components/Intro";
 import Pending from "@/components/Pending";
 import { repoHas } from "@/lib/repo-data";
 
-export const metadata: Metadata = { title: "My Stats · ARAM Mayhem" };
+export const metadata: Metadata = { title: "My Stats · DeepARAM" };
 
 export default function StatsPage() {
   return (

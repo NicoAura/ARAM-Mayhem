@@ -13,7 +13,7 @@ export function generateStaticParams() {
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
   const tab = discoverToolTabs().find((t) => t.slug === slug);
-  return { title: tab ? `${tab.label} · ARAM Mayhem` : "ARAM Mayhem" };
+  return { title: tab ? `${tab.label} · DeepARAM` : "DeepARAM" };
 }
 
 export default async function ToolPage({ params }: { params: Promise<{ slug: string }> }) {
