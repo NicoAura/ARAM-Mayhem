@@ -8,9 +8,9 @@ export const sections = [
     pr: 2,
   },
   {
-    href: "/china",
-    label: "China Stats",
-    body: "Champion, augment and duo stats from the Chinese servers, patch by patch.",
+    href: "/tier-list",
+    label: "Tier List",
+    body: "Champion, augment and duo win rates, patch by patch.",
     pr: 5,
   },
   {

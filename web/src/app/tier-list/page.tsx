@@ -6,7 +6,7 @@ import Pending from "@/components/Pending";
 import SubTabs from "@/components/SubTabs";
 import { readRepoCsv, readRepoJson, type CsvRow } from "@/lib/repo-data";
 
-export const metadata: Metadata = { title: "China Stats · DeepARAM" };
+export const metadata: Metadata = { title: "Tier List · DeepARAM" };
 
 type Duos = { meta: { champion_stat_date?: string }; duos: { names: string[]; win_rate: number; pick_rate: number }[] };
 
@@ -41,7 +41,7 @@ function formatDate(yyyymmdd?: string) {
   return `${yyyymmdd.slice(0, 4)}-${yyyymmdd.slice(4, 6)}-${yyyymmdd.slice(6)}`;
 }
 
-export default function ChinaPage() {
+export default function TierListPage() {
   const current = readRepoCsv("data/cn/champions.csv");
   const allTime = readRepoCsv("data/cn/history/all_time.csv");
   const patches = readRepoCsv("data/cn/history/patches.csv");
@@ -51,8 +51,8 @@ export default function ChinaPage() {
   if (!current) {
     return (
       <>
-        <Intro eyebrow="China Stats" title="Mayhem stats from the Chinese servers." />
-        <Pending pr={5}>Champion, augment and duo stats appear here once the China data is merged:</Pending>
+        <Intro eyebrow="Tier List" title="Every Mayhem champion and augment, ranked." />
+        <Pending pr={5}>Champion, augment and duo stats appear here once the stats data is merged:</Pending>
       </>
     );
   }
@@ -96,12 +96,13 @@ export default function ChinaPage() {
       content: (
         <DataTable
           columns={[
-            { key: "name", label: "Augment", format: "text" },
+            { key: "name", label: "Augment", format: "augment", iconKey: "id" },
             { key: "tier", label: "Tier", format: "tier" },
             { key: "win_rate", label: "Win rate", format: "pct" },
             { key: "pick_rate", label: "Pick rate", format: "pct" },
           ]}
           rows={augments.map((a) => ({
+            id: a.augment_id,
             name: names[a.augment_id] ?? a.key.replace(/^ARAM_/, ""),
             tier: a.tier,
             win_rate: num(a.win_rate),
@@ -138,10 +139,10 @@ export default function ChinaPage() {
 
   return (
     <>
-      <Intro eyebrow="China Stats" title="Mayhem stats from the Chinese servers.">
-        From Tencent&apos;s official 101.qq.com. Champions as of {formatDate(duos?.meta.champion_stat_date) || "the latest day"}
-        {latest ? `, patch ${latest.patch} since ${latest.window_start}` : ""}. Tencent doesn&apos;t publish game counts,
-        so all-time numbers weight each patch by pick rate and days.
+      <Intro eyebrow="Tier List" title="Every Mayhem champion and augment, ranked.">
+        Champions as of {formatDate(duos?.meta.champion_stat_date) || "the latest day"}
+        {latest ? `, patch ${latest.patch} since ${latest.window_start}` : ""}. Game counts aren&apos;t published, so all-time
+        numbers weight each patch by pick rate and days.
       </Intro>
       <SubTabs tabs={tabs} />
     </>

@@ -1,6 +1,11 @@
 import type { NextConfig } from "next";
 
-const nextConfig: NextConfig = {};
+const nextConfig: NextConfig = {
+  // The tier list used to live at /china.
+  async redirects() {
+    return [{ source: "/china", destination: "/tier-list", permanent: true }];
+  },
+};
 
 export default nextConfig;
 

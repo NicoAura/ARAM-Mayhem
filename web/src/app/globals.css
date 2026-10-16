@@ -423,7 +423,7 @@ h1 {
 
 .rank a {
   display: grid;
-  grid-template-columns: 1.4rem minmax(0, 1fr) 7.5rem 3.5rem;
+  grid-template-columns: 1.4rem 24px minmax(0, 1fr) 7.5rem 3.5rem;
   align-items: center;
   gap: 0.75rem;
   padding: 0.5rem;
@@ -437,6 +437,36 @@ h1 {
 
 .rank.links a {
   grid-template-columns: minmax(7rem, auto) minmax(0, 1fr) 1rem;
+}
+
+/* Champion and augment icons from the League client (web/scripts/fetch_icons.py). */
+.icon {
+  flex: none;
+  border-radius: 6px;
+  background: var(--raised);
+}
+
+/* Augment icons are light glyphs drawn for the game's dark augment frames. */
+:is(.champ, .rank, .palette) img[src*="/icons/augments/"] {
+  padding: 2px;
+  border-radius: 6px;
+  background: linear-gradient(160deg, #2a3446, #121722);
+}
+
+.bars .rank-name {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.bars .icon {
+  width: 20px;
+  height: 20px;
+}
+
+.palette button img {
+  flex: none;
+  border-radius: 5px;
 }
 
 .rank-i {
@@ -546,7 +576,7 @@ h1 {
 
 .bars div {
   display: grid;
-  grid-template-columns: minmax(0, 7.5rem) minmax(0, 1fr) 4.5rem;
+  grid-template-columns: minmax(0, 9rem) minmax(0, 1fr) 4.5rem;
   align-items: center;
   gap: 0.6rem;
   font-size: 0.84375rem;
@@ -776,7 +806,9 @@ h1 {
 }
 
 .champ img {
+  flex: none;
   border-radius: 7px;
+  background: var(--raised);
 }
 
 .winrate {
@@ -970,7 +1002,7 @@ h1 {
     grid-template-columns: 1fr;
   }
   .rank a {
-    grid-template-columns: 1.4rem minmax(0, 1fr) 3.5rem;
+    grid-template-columns: 1.4rem 24px minmax(0, 1fr) 3.5rem;
   }
   .rank .meter,
   .rank .chip {
