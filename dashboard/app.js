@@ -106,6 +106,7 @@ function normalize(g, owner) {
     id: info.gameId || (g.metadata && g.metadata.matchId),
     time,
     queue: info.queueId,
+    patch: (info.gameVersion || "").split(".").slice(0, 2).join("."),
     duration: dur,
     champId: p.championId,
     champNameRaw: p.championName,
@@ -123,13 +124,12 @@ function normalize(g, owner) {
   };
 }
 
-// Champion and augment names come from Riot's Data Dragon and CommunityDragon.
-// If either is unreachable the page falls back to ids.
+// Champion and augment names come from the live client's game data (as
+// mirrored by CommunityDragon). If it's unreachable the page falls back to ids.
 async function loadNames() {
   try {
-    const vers = await (await fetch("https://ddragon.leagueoflegends.com/api/versions.json")).json();
-    const champs = await (await fetch(`https://ddragon.leagueoflegends.com/cdn/${vers[0]}/data/en_US/champion.json`)).json();
-    for (const c of Object.values(champs.data)) state.champNames[c.key] = c.name;
+    const champs = await (await fetch("https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-summary.json")).json();
+    for (const c of champs) if (c.id > 0) state.champNames[c.id] = c.name;
   } catch (e) { console.warn("champion names unavailable", e); }
   for (const url of [
     "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/cherry-augments.json",
@@ -154,7 +154,16 @@ const RARITY = { kSilver: ["Silver", 1], kGold: ["Gold", 2], kPrismatic: ["Prism
 // ---------- filters ----------
 
 let filtersReady = false;
+// Patches newest first; views default to the newest one in the archive.
+const patchKey = (p) => p.split(".").map((n) => n.padStart(4, "0")).join(".");
+let latestPatch = "";
+
 function setupFilters() {
+  const patches = [...new Set(state.games.map((g) => g.patch).filter(Boolean))].sort((a, b) => patchKey(b).localeCompare(patchKey(a)));
+  latestPatch = patches[0] || "";
+  $("f-patch").innerHTML = '<option value="">All patches</option>' +
+    patches.map((p) => `<option value="${p}">Patch ${p}</option>`).join("");
+  $("f-patch").value = latestPatch;
   const queues = [...new Set(state.games.map((g) => g.queue))].sort();
   const sel = $("f-queue");
   sel.innerHTML = '<option value="">All</option>' +
@@ -166,20 +175,22 @@ function setupFilters() {
   $("account").textContent = `${name ? name + " · " : ""}${state.games.length} games, ${fmtDate(first)} to ${fmtDate(last)}`;
   if (filtersReady) return;
   filtersReady = true;
-  for (const id of ["f-queue", "f-from", "f-to", "f-champ", "f-minaug"]) $(id).addEventListener("input", render);
+  for (const id of ["f-patch", "f-queue", "f-from", "f-to", "f-champ", "f-minaug"]) $(id).addEventListener("input", render);
   $("f-reset").addEventListener("click", () => {
     for (const id of ["f-queue", "f-from", "f-to", "f-champ"]) $(id).value = "";
+    $("f-patch").value = latestPatch;
     render();
   });
 }
 
 function filtered() {
+  const patch = $("f-patch").value;
   const q = $("f-queue").value;
   const from = $("f-from").value ? Date.parse($("f-from").value) : -Infinity;
   const to = $("f-to").value ? Date.parse($("f-to").value) + 86400000 : Infinity;
   const champ = $("f-champ").value.trim().toLowerCase();
   return state.games.filter((g) =>
-    (!q || String(g.queue) === q) && g.time >= from && g.time < to &&
+    (!patch || g.patch === patch) && (!q || String(g.queue) === q) && g.time >= from && g.time < to &&
     (!champ || champName(g).toLowerCase().includes(champ)));
 }
 
@@ -350,8 +361,8 @@ function renderKillMap(games) {
     `<div class="km-key"><i style="background:var(--good)"></i>Kills<b>${kills.length.toLocaleString()}</b></div>` +
     `<div class="km-key"><i style="background:var(--bad)"></i>Deaths<b>${deaths.length.toLocaleString()}</b></div>`;
   let note = `From ${mapped.toLocaleString()} of ${games.length.toLocaleString()} games.`;
-  if (missing) note += " The rest have no positions yet: Sync from League adds them, up to 200 games per sync. Very old games may not have one.";
-  note += " The game doesn't record which map skin was played, so pick one above.";
+  if (missing) note += " The rest have no positions yet: syncing adds them, up to 200 games per sync. Very old games may not have one.";
+  note += " The map skin isn't recorded, so pick one above.";
   $("km-note").textContent = note;
 }
 
@@ -458,7 +469,7 @@ loader.addEventListener("drop", async (e) => {
 const syncBtns = [...document.querySelectorAll(".sync-btn")];
 const syncStatus = $("sync-status");
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
-const OFFLINE_HINT = "Sync needs League open on your Mac and this page opened from importer/Open Mayhem Stats.command.";
+const OFFLINE_HINT = "Sync works when League is open on your Mac and this page is opened from Open Mayhem Stats.command.";
 let helperOnline = false;
 
 function setSyncStatus(text, error = false) {
@@ -483,7 +494,7 @@ async function watchSync() {
   try {
     let s = await syncState();
     while (s.running) {
-      setSyncStatus(s.log.at(-1) || "Talking to the League client…");
+      setSyncStatus(s.log.at(-1) || "Syncing…");
       await sleep(1000);
       s = await syncState();
     }
@@ -500,7 +511,7 @@ async function watchSync() {
   } catch (e) {
     setSyncStatus("Lost contact with the sync helper. Is it still running?", true);
   } finally {
-    for (const b of syncBtns) { b.disabled = false; b.textContent = "Sync from League"; }
+    for (const b of syncBtns) { b.disabled = false; b.textContent = "Sync games"; }
   }
 }
 

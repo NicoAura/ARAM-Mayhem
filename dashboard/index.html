@@ -16,7 +16,7 @@
       <p id="sample-note" class="sample-note" hidden>Showing example games, not real ones. Load your own archive to see your stats.</p>
     </div>
     <div id="actions" class="actions" hidden>
-      <button id="sync" type="button" class="btn primary sync-btn">Sync from League</button>
+      <button id="sync" type="button" class="btn primary sync-btn">Sync games</button>
       <label class="btn">Load archive<input type="file" id="file-2" accept=".json,application/json" hidden></label>
     </div>
   </header>
@@ -25,9 +25,9 @@
   <section id="loader" class="empty">
     <div class="ico" aria-hidden="true">↻</div>
     <h3>No games yet</h3>
-    <p class="sub">Sync from the League client on your computer, or drop a <code>mayhem-backup.json</code> file here. Your games stay in your browser.</p>
+    <p class="sub">Sync your games, or drop a <code>mayhem-backup.json</code> file here. Your games stay in your browser.</p>
     <div class="row">
-      <button type="button" class="btn primary sync-btn">Sync from League</button>
+      <button type="button" class="btn primary sync-btn">Sync games</button>
       <label class="btn">Choose a file<input type="file" id="file" accept=".json,application/json" hidden></label>
     </div>
     <p id="load-error" class="error" hidden></p>
@@ -35,6 +35,9 @@
 
   <main id="stats" hidden>
     <div class="toolbar">
+      <label class="field"><span>Patch</span>
+        <select id="f-patch"><option value="">All patches</option></select>
+      </label>
       <label class="field"><span>Queue</span>
         <select id="f-queue"><option value="">All</option></select>
       </label>

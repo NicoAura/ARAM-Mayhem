@@ -34,6 +34,7 @@ date the API returns, and builds patch and all-time tables in `history/`:
 | `daily/YYYY-MM.csv` | Every day's champion stats; the script only fetches days not already here |
 | `patches.csv` | Each patch's data window (15.21 to now) |
 | `by_patch.csv` | Each champion's whole-patch numbers |
+| `by_patch.json` | The same per patch for the site, with each champion's `weight` (estimated games) and `live` on the newest patch. Combine any set of patches: win rate and `avg_*` averaged by weight, pick rate by patch `days` |
 | `all_time.csv` | Each champion across every patch |
 | `by_month.csv` | Each champion per calendar month |
 | `augments/`, `duos/` | One file per day, written by `fetch_cn.py`; starts 2026-10-15 |

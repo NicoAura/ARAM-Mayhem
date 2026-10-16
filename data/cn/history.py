@@ -187,6 +187,25 @@ def main():
 
     write("patches.csv", patch_rows, list(patch_rows[0]))
     write("by_patch.csv", by_patch, list(by_patch[0]))
+
+    # The same per-patch numbers for the site, with each champion's weight
+    # (estimated games: pick_rate x window days) so any set of patches can be
+    # combined: win rate and the other per-game stats average by weight, pick
+    # rate averages by days. The newest window is the live patch, still filling.
+    champs = defaultdict(list)
+    for r in by_patch:
+        champs[r["patch"]].append({
+            "id": int(r["champion_id"]), "name": r["name"],
+            "weight": round(r["pick_rate"] * r["days"], 5),
+            **{k: r[k] for k in STATS}})
+    site = {"combine": "win_rate and avg_* by weight; pick_rate by patch days",
+            "patches": [{"patch": p["patch"], "released": p["released"].isoformat(),
+                         "last_day": p["last_day"].isoformat(), "days": p["days"],
+                         "live": i == len(patch_rows) - 1}
+                        for i, p in enumerate(patch_rows)],
+            "champions": champs}
+    with open(os.path.join(HIST, "by_patch.json"), "w", encoding="utf-8") as f:
+        json.dump(site, f, ensure_ascii=False, separators=(",", ":"))
     write("all_time.csv", all_time, ["win_rate_rank", "champion_id", "name", "name_cn",
                                      "win_rate", "pick_rate", "est_game_share", "patches",
                                      *STATS[2:]])

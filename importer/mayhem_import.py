@@ -209,7 +209,7 @@ def find_sgp_host(lcu, puuid, token, override=None):
             return host
         except (HttpError, ConnectionError):
             continue
-    raise ImportFailed("Couldn't reach Riot's match history service for your region.")
+    raise ImportFailed("Couldn't reach match history for your region.")
 
 
 def walk_ids(host, puuid, token, tags, known, full):
@@ -377,7 +377,7 @@ def run_import(out, full=False, lockfile=None, sgp_host=None, progress=log):
         ids, stop = walk_ids(host, puuid, token, SGP_ALL_TAGS, known, full)
 
     pending = [i for i in dict.fromkeys(ids) if i not in known]
-    progress(f"Riot lists {len(ids)} matching games; {len(pending)} are new.")
+    progress(f"Found {len(ids)} matching games; {len(pending)} are new.")
 
     added = failed = 0
     try:
@@ -413,7 +413,7 @@ def run_import(out, full=False, lockfile=None, sgp_host=None, progress=log):
     if stop == "page-limit":
         notes.append(f"Stopped at the {SGP_MAX_PAGES}-page safety limit; older games weren't checked.")
     elif stop == "exhausted" and history_window_full(host, puuid, token):
-        notes.append(f"Riot only keeps your last {SGP_HISTORY_CAP} matches (all queues). Older games can't be "
+        notes.append(f"Only your last {SGP_HISTORY_CAP} matches (all queues) can be fetched. Older games can't be "
                      "fetched, but any already in the archive are kept.")
     progress(f"Done: {added} new Mayhem games added, {len(games)} in the archive.")
     for note in notes:
