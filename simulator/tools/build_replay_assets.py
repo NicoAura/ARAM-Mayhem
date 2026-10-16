@@ -27,10 +27,11 @@ import sys
 import urllib.request
 from pathlib import Path
 
-DDRAGON = "https://ddragon.leagueoflegends.com"
+# The client's own champion data and icons (CommunityDragon's latest/ is the live patch).
+ASSET_ROOT = "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/"
 CLIP_CDN = "https://d28xe8vt774jo5.cloudfront.net/champion-abilities"
 ICON = 64
-# Abilities that move the caster (from the Data Dragon descriptions), so the replay can carry
+# Abilities that move the caster (from the client's ability descriptions), so the replay can carry
 # the model to its target and back.
 DASH = re.compile(r"\b(dash(es|ing)?|leaps?|leaping|lunges?|blinks?|jumps?|vaults?|rush(es)?|tumbles?|"
                   r"charges? (forward|toward|at|to)|teleports? (to|behind)|hops?|slides?|surges? forward|flies to|"
@@ -55,6 +56,17 @@ def fetch(url, path):
     tmp.write_bytes(data)
     tmp.rename(path)
     return path
+
+
+def asset_path(client_path):
+    """'/lol-game-data/assets/ASSETS/X.png' -> 'assets/x.png', relative to ASSET_ROOT."""
+    return client_path.replace("/lol-game-data/assets/", "", 1).lstrip("/").lower()
+
+
+def client_champion(key, cache):
+    """Name, title, ability names, descriptions and icon paths from the client's champion file."""
+    p = fetch(f"{ASSET_ROOT}v1/champions/{key}.json", Path(cache) / "gd" / "champions" / f"{key}.json")
+    return json.loads(p.read_text()) if p else None
 
 
 def clip_url(key, slot):
@@ -143,9 +155,7 @@ def main():
     cache, out = Path(args.cache), Path(args.out)
     out.mkdir(parents=True, exist_ok=True)
     pool = json.load(open(args.champions))
-    version = pool["meta"].get("ddragon_version", "16.20.1")
-    full = json.loads(fetch(f"{DDRAGON}/cdn/{version}/data/en_US/championFull.json",
-                            cache / f"championFull-{version}.json").read_text())["data"]
+    version = pool["meta"].get("game_version", "")
 
     combos_path = Path(args.champions).with_name("combos.json")
     combos = json.load(open(combos_path)) if combos_path.exists() else {}
@@ -156,23 +166,23 @@ def main():
             print(f"no trace for {c['id']}, skipped", file=sys.stderr)
             continue
         traces[c["id"]] = json.loads(tpath.read_text())
-        dd = full.get(c["id"])
-        if dd is None:
-            print(f"{c['id']} is not in Data Dragon {version}, skipped", file=sys.stderr)
+        gd = client_champion(c["champion_id"], cache)
+        if gd is None:
+            print(f"{c['id']} has no client champion file, skipped", file=sys.stderr)
             continue
         champs.append({
-            "id": c["id"], "name": c["name"], "key": int(c["champion_id"]), "title": dd.get("title", ""),
+            "id": c["id"], "name": c["name"], "key": int(c["champion_id"]), "title": gd.get("title", ""),
             "role": c.get("role", ""), "combo": combos.get(c["id"], "QWER"),
-            "passive": dd["passive"]["name"],
-            "spells": {s: dd["spells"][i]["name"] for i, s in enumerate(SLOTS)},
-            "dash": "".join(s for i, s in enumerate(SLOTS) if DASH.search(dd["spells"][i]["description"].split(". ")[0])),
-            "_icons": [f"champion/{dd['image']['full']}", f"passive/{dd['passive']['image']['full']}"] +
-                      [f"spell/{dd['spells'][i]['image']['full']}" for i in range(4)],
+            "passive": gd["passive"]["name"],
+            "spells": {s: gd["spells"][i]["name"] for i, s in enumerate(SLOTS)},
+            "dash": "".join(s for i, s in enumerate(SLOTS) if DASH.search(gd["spells"][i]["description"].split(". ")[0])),
+            "_icons": [asset_path(gd["squarePortraitPath"]), asset_path(gd["passive"]["abilityIconPath"])] +
+                      [asset_path(gd["spells"][i]["abilityIconPath"]) for i in range(4)],
         })
 
     # Icon atlas: one row per champion.
     def icon(rel):
-        p = fetch(f"{DDRAGON}/cdn/{version}/img/{rel}", cache / "icons" / version / rel)
+        p = fetch(ASSET_ROOT + rel, cache / "icons" / "client" / rel)
         return Image.open(p).convert("RGBA").resize((ICON, ICON), Image.LANCZOS) if p else None
 
     atlas = Image.new("RGBA", (ICON * 6, ICON * len(champs)), (0, 0, 0, 0))
@@ -183,7 +193,7 @@ def main():
         for col, im in enumerate(icons):
             if im is not None:
                 atlas.paste(im, (col * ICON, row * ICON))
-        c["icons"] = c.pop("_icons")  # Data Dragon paths, for pages without the atlas
+        c["icons"] = c.pop("_icons")  # paths under icon_base, for pages without the atlas
     atlas.save(out / "sprites.webp", quality=88, method=6)
 
     if args.clips:
@@ -199,7 +209,7 @@ def main():
                 print(f"\rclips {done}/{len(champs)} {cid:<14}", end="", file=sys.stderr, flush=True)
         print(file=sys.stderr)
 
-    json.dump({"ddragon_version": version, "icon_size": ICON, "local_clips": args.clips, "clip_cdn": CLIP_CDN,
+    json.dump({"game_version": version, "icon_base": ASSET_ROOT, "icon_size": ICON, "local_clips": args.clips, "clip_cdn": CLIP_CDN,
                "champions": champs}, open(out / "index.json", "w"), separators=(",", ":"))
     json.dump(traces, open(out / "traces.json", "w"), separators=(",", ":"))
     missing = [c["id"] for c in champs if args.clips and not c.get("clip")]

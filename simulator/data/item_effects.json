@@ -1,5 +1,5 @@
 {
- "_note": "Hand-written item passives for the all-champion simulator. tools/build_items.py adds each item's stats from Data Dragon and writes data/items.json. Effect keys are documented in README.md. Values are approx unless marked: Riot's item passives are not in a machine-readable file, so these are this patch's tooltip values as best known and should be checked in game.",
+ "_note": "Hand-written item list for the all-champion simulator: which items exist, their roles and their passives as effect keys. tools/build_items.py adds each item's stats from the game's item bin, replaces the effect values the bin holds (its BIN_EFFECTS table, Mayhem values over ARAM over base) and writes data/items.json. Effect keys are documented in README.md. Values not in the bin are this patch's tooltip values as best known and should be checked in game.",
  "boots": {
   "3006": {"key": "berserkers", "roles": ["ad", "onhit"]},
   "3020": {"key": "sorcerers", "roles": ["ap"]},

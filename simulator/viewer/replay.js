@@ -1,8 +1,7 @@
 // Fight replay for the ARAM Mayhem simulator. Plays a traced fight (mayhem_sim --trace)
 // on a canvas. Fighters are animated 3D models (models3d.js) posed from the timeline, and
-// enemies cast their own abilities; Riot's ability clips are the fallback when your
-// champion has no model.
-// Data comes from replay-data/, built by tools/build_replay_assets.py.
+// enemies cast their own abilities; ability preview clips are the fallback when your
+// champion has no model. Data comes from replay-data/.
 (() => {
   "use strict";
   const DATA = "replay-data/";
@@ -11,12 +10,25 @@
   const TYPE_COLORS = { physical: "#f08a4b", magic: "#7aa2ff", true: "#f4f4f4" };
   const SOURCE_COLORS = ["#c9d6e2", SLOT_COLORS.Q, SLOT_COLORS.W, SLOT_COLORS.E, SLOT_COLORS.R, "#b9a3ff"];
   const SLOT_COL = { P: 1, Q: 2, W: 3, E: 4, R: 5 };
-  const reduceMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  // The site's settings menu (gear) saves {motion, sound, graphics, ...} as JSON under "deeparam-settings"
+  // and fires a "deeparam-settings" event on its page. This viewer is embedded on the same origin, so it
+  // reads the key and listens on the parent page (and for storage events, which cover other tabs).
+  const SETTINGS_KEY = "deeparam-settings";
+  const siteSettings = () => { try { return JSON.parse(localStorage.getItem(SETTINGS_KEY)) || {}; } catch (e) { return {}; } };
+  const onSettings = (fn) => {
+    window.addEventListener("storage", (e) => { if (e.key === SETTINGS_KEY || e.key === null) fn(); });
+    window.addEventListener("deeparam-settings", fn);
+    try { if (window.parent !== window) window.parent.addEventListener("deeparam-settings", fn); } catch (e) { /* not same-origin */ }
+  };
+  const systemReduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const readMotion = () => { const m = siteSettings().motion; return m === "reduce" || (m !== "full" && systemReduce); };
+  let reduceMotion = readMotion();
+  onSettings(() => { reduceMotion = readMotion(); });
   const $ = (id) => document.getElementById(id);
 
   let index = null, traces = null, sprite = null, byId = new Map();
-  // Game art streamed from CommunityDragon (Riot's files, so not in the repo); a page that can't
-  // reach it (the Claude preview) falls back to copies in replay-data/art/ when they're there.
+  // Game art loaded at run time (not in the repo); a page that can't reach it falls back to
+  // copies in replay-data/art/ when they're there.
   const CDRAGON = "https://raw.communitydragon.org/latest/";
   function loadImage(urls, done) {
     if (!urls.length) return;
@@ -32,7 +44,7 @@
   const FLOOR_UNITS_PER_PX = 1100 / 60; // the minimap's bridge is about 60 px across; the lane is 1100 units wide
   const FLOOR_CENTER_X = 650;            // where the map's middle sits on the simulated lane
   const PORO_SPEED = 900, PORO_WIDTH = 420; // match poro_speed and poro_width in data/augments.json
-  // Which abilities move their caster (dash or blink), from the game's spell tags (tools/build_anim_data.py).
+  // Which abilities move their caster (dash or blink), from each spell's tags.
   let anims = {};
   fetch(DATA + "anims.json" + BUST).then((r) => (r.ok ? r.json() : {})).then((a) => {
     for (const [k, v] of Object.entries(a)) anims[k.toLowerCase()] = v;
@@ -64,6 +76,7 @@
     const start = byId.get(fromHash) || byId.get("ahri") || list[0];
     sel.value = start.id;
     load(start.id);
+    loadedAt = performance.now();
     requestAnimationFrame(frame);
     if (window.onReplayData) window.onReplayData(index);
   }).catch((err) => {
@@ -272,13 +285,39 @@
     return s;
   }
 
+  // ---------- graphics quality ----------
+  // The site setting graphics: auto (default), low or high. Auto starts high and drops to
+  // low for the rest of the visit when frames run slow (a phone, an old laptop). Low draws at 1x
+  // pixel ratio, renders the 3D models at a smaller size without antialiasing, skips a few effects
+  // and caps the replay at 30 frames a second.
+  const readQuality = () => { const v = siteSettings().graphics; return v === "low" || v === "high" ? v : "auto"; };
+  let qualitySetting = readQuality(), autoLow = false;
+  const lowQuality = () => qualitySetting === "low" || (qualitySetting === "auto" && autoLow);
+  const pixelRatio = () => (lowQuality() ? 1 : Math.min(2, window.devicePixelRatio || 1));
+  window.replayQuality = () => (lowQuality() ? "low" : "high") + (qualitySetting === "auto" ? " (auto)" : "");
+  // Auto: frame times of the last couple of seconds of playback.
+  let slowSince = 0, slowFrames = 0, slowTime = 0;
+  function watchSpeed(now, ms) {
+    if (qualitySetting !== "auto" || autoLow || ms > 250) return;  // a hidden tab or a load stall isn't slowness
+    if (!slowSince) slowSince = now;
+    slowFrames++; slowTime += ms;
+    if (now - slowSince < 2500) return;
+    if (now - loadedAt > 1500 && slowTime / slowFrames > 1000 / 40) { autoLow = true; qualityChanged(); }
+    slowSince = 0; slowFrames = 0; slowTime = 0;
+  }
+  let loadedAt = 0;
+  function qualityChanged() {
+    trackKey = "";
+  }
+  onSettings(() => { const q = readQuality(); if (q !== qualitySetting) { qualitySetting = q; qualityChanged(); } });
+
   // ---------- drawing helpers ----------
   const arena = $("arena"), ctx = arena.getContext("2d");
   const overlayCanvas = $("arenaOverlay"), overlay = overlayCanvas.getContext("2d");
   const modelCanvas = $("arena3d");
   function iconRow(champId) { const c = byId.get(String(champId).toLowerCase()); return c ? c.row : -1; }
-  // Without the icon atlas (the website doesn't ship Riot art), icons load one by one
-  // from Data Dragon; until one arrives its square stays blank.
+  // Without the icon atlas, icons load one by one from index.icon_base; until one arrives its
+  // square stays blank.
   const ddIcons = new Map();
   function ddImage(row, col) {
     const c = index.champions[row], rel = c && c.icons && c.icons[col];
@@ -286,7 +325,7 @@
     let im = ddIcons.get(rel);
     if (!im) {
       im = new Image(); im.crossOrigin = "anonymous";
-      im.src = "https://ddragon.leagueoflegends.com/cdn/" + index.ddragon_version + "/img/" + rel;
+      im.src = (index.icon_base || "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/") + rel;
       ddIcons.set(rel, im);
     }
     return im;
@@ -295,7 +334,7 @@
     const im = ddImage(row, col);
     return im && im.complete && im.naturalWidth ? im : null;
   }
-  // An icon on its own canvas, drawn again once a Data Dragon icon finishes loading.
+  // An icon on its own canvas, drawn again once its icon finishes loading.
   function paintIcon(c, row, col, size) {
     const g = c.getContext("2d");
     drawIcon(g, row, col, 0, 0, size, false);
@@ -325,7 +364,7 @@
 
   function resize() {
     const r = arena.getBoundingClientRect();
-    const dpr = Math.min(2, window.devicePixelRatio || 1);
+    const dpr = pixelRatio();
     const w = Math.round(r.width * dpr), h = Math.round(r.width * 9 / 16 * dpr);
     if (arena.width !== w || arena.height !== h) { arena.width = w; arena.height = h; overlayCanvas.width = w; overlayCanvas.height = h; }
     return dpr;
@@ -400,7 +439,7 @@
       g.translate(W / 2 + (FLOOR_CENTER_X - cx) * k, H * 0.55);
       g.scale(k * FLOOR_UNITS_PER_PX, k * FLOOR_UNITS_PER_PX);
       g.rotate(Math.PI / 4);
-      g.imageSmoothingQuality = "high";
+      g.imageSmoothingQuality = lowQuality() ? "low" : "high";
       g.drawImage(floorImg, -floorImg.width / 2, -floorImg.height / 2);
       g.restore();
       g.fillStyle = "rgba(8,14,20,.38)"; g.fillRect(0, 0, W, H);  // dimmed so fighters and effects stand out
@@ -467,7 +506,7 @@
         const hop = Math.abs(Math.sin(since * 12 + i * 1.9)) * 8 * u;
         g.save();
         g.beginPath(); g.arc(p.x, p.y - hop, rad, 0, Math.PI * 2); g.closePath();
-        if (poroImg) { g.clip(); g.drawImage(poroImg, p.x - rad, p.y - hop - rad, rad * 2, rad * 2); }
+        if (poroImg && !lowQuality()) { g.clip(); g.drawImage(poroImg, p.x - rad, p.y - hop - rad, rad * 2, rad * 2); }
         else { g.fillStyle = "#f2f6fb"; g.fill(); }
         g.restore();
         g.strokeStyle = "#fff"; g.lineWidth = 2 * u;
@@ -529,7 +568,7 @@
     }
 
     // Who is hurting you: a faint line from each enemy whose reach you're inside.
-    if (world && time > fight.engage && !s.dead) {
+    if (world && time > fight.engage && !s.dead && !lowQuality()) {
       g.strokeStyle = "rgba(240,96,90,.22)"; g.lineWidth = 2 * u;
       for (const en of alive) {
         if (en.died !== null) continue;
@@ -585,7 +624,7 @@
         fighters.push({ key: "e" + en.uid, champ: en.champ, x: p.x, y: p.y, face: -1, dir: world ? look(p, st.me) : null,
           scale: en.uid === s.focus ? 1 : 0.85, visible: en.died === null || time - en.died < 1.6, ...enemyAnim(time, en) });
       }
-      heads = M.frame(fighters, W, H);
+      heads = M.frame(fighters, W, H, lowQuality() ? 0.75 : 1);
     }
     const og = overlay;
     og.setTransform(1, 0, 0, 1, 0, 0);
@@ -645,7 +684,7 @@
       g.globalAlpha = Math.max(0, fade) * born;
       g.fillStyle = "rgba(240,96,90,.25)";
       g.beginPath(); g.arc(p.x, p.y, rr + 5 * u, 0, Math.PI * 2); g.fill();
-      if (en.died !== null) g.filter = "grayscale(1)";
+      if (en.died !== null && !lowQuality()) g.filter = "grayscale(1)";
       drawIcon(g, iconRow(en.champ), 0, p.x - rr, p.y - rr, rr * 2, true);
       g.filter = "none";
       g.strokeStyle = en.uid === s.focus ? "#f0605a" : "rgba(240,96,90,.6)"; g.lineWidth = 3 * u;
@@ -780,12 +819,21 @@
 
   // ---------- timeline ----------
   const track = $("track"), tc = $("trackCanvas"), tg = tc.getContext("2d");
+  // The track is drawn once into a spare canvas (again when the fight, size or quality changes);
+  // each frame only copies it and adds the playhead.
+  const trackCache = document.createElement("canvas"), tcg = trackCache.getContext("2d");
+  let trackKey = "";
   function drawTrack() {
     if (!fight) return;
-    const dpr = Math.min(2, window.devicePixelRatio || 1);
-    const rect = track.getBoundingClientRect();
-    tc.width = Math.round(rect.width * dpr); tc.height = Math.round(rect.height * dpr);
-    const W = tc.width, H = tc.height, X = (s) => (s / fight.duration) * W;
+    const dpr = pixelRatio();
+    const w = Math.round(track.clientWidth * dpr), h = Math.round(track.clientHeight * dpr);
+    if (tc.width !== w || tc.height !== h) { tc.width = w; tc.height = h; }
+    const key = w + "x" + h;
+    if (trackKey === key && trackCache.fight === fight) return;
+    trackKey = key; trackCache.fight = fight;
+    trackCache.width = w; trackCache.height = h;
+    const tg = tcg;
+    const W = w, H = h, X = (s) => (s / fight.duration) * W;
     tg.clearRect(0, 0, W, H);
     tg.fillStyle = "#14171b"; tg.fillRect(0, 0, W, H);
     for (const c of fight.cc) { tg.fillStyle = "rgba(179,136,255,.35)"; tg.fillRect(X(c.t), 0, Math.max(2, X(c.a) - X(c.t)), H); }
@@ -807,6 +855,7 @@
   function drawPlayhead() {
     drawTrack();
     const W = tc.width, H = tc.height, x = (t / fight.duration) * W;
+    tg.drawImage(trackCache, 0, 0);
     tg.fillStyle = "rgba(10,16,23,.45)"; tg.fillRect(x, 0, W - x, H);
     tg.fillStyle = "#ededed"; tg.fillRect(x - 1, 0, 3, H);
   }
@@ -824,7 +873,10 @@
   let modelMode = false;
   function attachModels() {
     const M = window.Models3D;
-    if (!M || M.arena || !M.attach($("arena3d"))) return;
+    // Antialiasing is fixed when the 3D canvas is made: off for low, and for auto on touch screens
+    // (phones have dense screens, where it costs the most and shows the least).
+    const coarse = window.matchMedia && window.matchMedia("(pointer: coarse)").matches;
+    if (!M || M.arena || !M.attach($("arena3d"), qualitySetting === "low" || (qualitySetting === "auto" && coarse))) return;
     if (champ) setupModels();
   }
   window.addEventListener("models3d-ready", attachModels);
@@ -851,11 +903,17 @@
 
   // ---------- ability and death sounds ----------
   // With the 3D models, each cast plays its ability's sound and each death the champion's death sound.
-  // replay-data/sounds/ holds them taken from the game's own sound banks (tools/build_game_sounds.py),
-  // all joined into one file. Without it, casts fall back to the first burst of sound in Riot's
-  // preview video of the ability (tools/build_sounds.py), streamed from Riot's CDN, and deaths are silent.
+  // replay-data/sounds/ holds them all joined into one file. Without it, casts fall back to the first
+  // burst of sound in the ability's preview video, and deaths are silent.
   // Browsers only allow sound after the first click or key.
-  let soundOn = true, gestured = false, soundFiles = {};
+  // On or off follows the site setting sound (on unless it is false); the Sound button changes it too.
+  const readSound = () => siteSettings().sound !== false;
+  const saveSound = () => {
+    try { localStorage.setItem(SETTINGS_KEY, JSON.stringify({ ...siteSettings(), sound: soundOn })); } catch (e) {}
+    try { if (window.parent !== window) window.parent.dispatchEvent(new Event("deeparam-settings")); } catch (e) {}
+  };
+  let soundOn = readSound(), gestured = false, soundFiles = {};
+  onSettings(() => { const on = readSound(); if (on !== soundOn) { soundOn = on; syncSound(); } });
   // Master volume from the slider, 0 to 1, remembered between visits.
   let masterVolume = 0.8;
   try { const v = parseFloat(localStorage.getItem("replayVolume")); if (v >= 0 && v <= 1) masterVolume = v; } catch (e) {}
@@ -901,7 +959,7 @@
     clearTimeout(a.stopTimer);
     a.onplaying = packed ? () => { clearTimeout(a.stopTimer); a.stopTimer = setTimeout(() => a.pause(), packed[1] * 1000); } : null;
   }
-  // The champion's pick quote from the client's champion select, when you choose a champion.
+  // The champion's pick quote, when you choose a champion.
   let pickVoice = null;
   function playPickQuote(c) {
     if (!pickVoice || !soundOn || masterVolume === 0 || !c) return;
@@ -1003,14 +1061,17 @@
   }
   function drawCooldowns(time) {
     for (const b of document.querySelectorAll(".ab")) {
-      const g = b.querySelector(".cd").getContext("2d");
-      g.clearRect(0, 0, 128, 128);
+      const cd = b.querySelector(".cd"), g = cd.getContext("2d");
       let last = null;
       for (const c of fight.casts) if (c.s === b.dataset.slot && c.t <= time) last = c;
       const never = !fight.casts.some((c) => c.s === b.dataset.slot);
+      const p = never ? -1 : !last || time >= last.next ? 2 : (time - last.t) / Math.max(0.01, last.next - last.t);
+      const key = fight === cd.fight ? Math.round(p * 200) : NaN;  // skip a redraw that wouldn't change it
+      if (key === cd.drawn) continue;
+      cd.drawn = Math.round(p * 200); cd.fight = fight;
+      g.clearRect(0, 0, 128, 128);
       if (never) { g.fillStyle = "rgba(10,16,23,.7)"; g.fillRect(0, 0, 128, 128); continue; }
-      if (!last || time >= last.next) continue;
-      const p = (time - last.t) / Math.max(0.01, last.next - last.t);
+      if (p > 1) continue;
       g.fillStyle = "rgba(10,16,23,.65)";
       g.beginPath(); g.moveTo(64, 64); g.arc(64, 64, 100, -Math.PI / 2 + p * Math.PI * 2, Math.PI * 1.5); g.closePath(); g.fill();
     }
@@ -1051,6 +1112,9 @@
       });
     }
     const max = Math.max(1, ...s.bySource);
+    const key = s.bySource.map(Math.round).join();
+    if (box.drawn === key) return;
+    box.drawn = key;
     [...box.children].forEach((row, i) => {
       row.querySelector("i").style.width = (100 * s.bySource[i] / max).toFixed(1) + "%";
       row.querySelector("b").textContent = Math.round(s.bySource[i]).toLocaleString();
@@ -1059,8 +1123,12 @@
 
   // ---------- main loop ----------
   function frame(now) {
+    // Low quality: about 30 frames a second (skip a screen refresh when the last frame was recent).
+    if (lowQuality() && lastFrame && now - lastFrame < 28) { requestAnimationFrame(frame); return; }
     const dt = lastFrame ? Math.min(0.1, (now - lastFrame) / 1000) : 0;
+    if (lastFrame && playing && !document.hidden) watchSpeed(now, now - lastFrame);
     lastFrame = now;
+    window.replayFrames = (window.replayFrames || 0) + 1;
     if (fight) {
       const before = t;
       if (playing && !dragging) {
@@ -1109,13 +1177,14 @@
   });
   $("restart").addEventListener("click", () => { t = 0; shown.clear(); playing = true; $("play").textContent = "Pause"; });
   $("speed").addEventListener("change", (e) => { speed = parseFloat(e.target.value); });
-  $("sound").addEventListener("click", () => { soundOn = !soundOn; syncSound(); });
+  $("sound").addEventListener("click", () => { soundOn = !soundOn; saveSound(); syncSound(); });
+  syncSound();  // the button shows the saved setting from the start
   const volumeInput = $("volume");
   volumeInput.value = Math.round(masterVolume * 100);
   volumeInput.addEventListener("input", () => {
     masterVolume = volumeInput.value / 100;
     try { localStorage.setItem("replayVolume", String(masterVolume)); } catch (e) {}
-    if (masterVolume > 0 && !soundOn) soundOn = true;
+    if (masterVolume > 0 && !soundOn) { soundOn = true; saveSound(); }
     syncSound();
   });
   document.addEventListener("keydown", (e) => {

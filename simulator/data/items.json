@@ -1,8 +1,8 @@
 {
  "meta": {
-  "ddragon_version": "16.20.1",
+  "game_version": "16.20",
   "notes": [
-   "stats: Data Dragon item descriptions (verified). effects: data/item_effects.json (passives; approx unless confidence says otherwise)."
+   "stats: the game's item bin on this patch (verified). effects: data/item_effects.json (passives; approx unless confidence says otherwise), with values the item bin holds (Mayhem over ARAM over base) read from it."
   ]
  },
  "items": {
@@ -30,7 +30,7 @@
     "ap"
    ],
    "stats": {
-    "magic_pen": 12.0
+    "magic_pen": 12
    },
    "effects": {},
    "confidence": "verified"
@@ -61,7 +61,7 @@
     "ad"
    ],
    "stats": {
-    "armor": 25.0
+    "armor": 25
    },
    "effects": {},
    "confidence": "verified"
@@ -77,7 +77,7 @@
     "ap"
    ],
    "stats": {
-    "mr": 20.0
+    "mr": 20
    },
    "effects": {},
    "confidence": "verified"
@@ -91,7 +91,7 @@
     "crit"
    ],
    "stats": {
-    "ad": 75.0,
+    "ad": 75,
     "crit": 0.25,
     "crit_damage": 0.3
    },
@@ -107,9 +107,9 @@
     "crit"
    ],
    "stats": {
-    "ad": 35.0,
-    "armor_pen": 0.35,
-    "crit": 0.25
+    "ad": 35,
+    "crit": 0.25,
+    "armor_pen": 0.35
    },
    "effects": {},
    "confidence": "likely"
@@ -123,9 +123,9 @@
     "crit"
    ],
    "stats": {
-    "ad": 35.0,
-    "armor_pen": 0.3,
-    "crit": 0.25
+    "ad": 35,
+    "crit": 0.25,
+    "armor_pen": 0.3
    },
    "effects": {},
    "confidence": "likely"
@@ -192,7 +192,7 @@
    },
    "effects": {
     "bolts": 2,
-    "bolts_ad": 0.55
+    "bolts_ad": 0.4
    },
    "confidence": "approx"
   },
@@ -206,9 +206,9 @@
     "lethality"
    ],
    "stats": {
-    "ad": 50.0,
-    "lethality": 10.0,
-    "crit": 0.25
+    "ad": 50,
+    "crit": 0.25,
+    "lethality": 10
    },
    "effects": {
     "execute": 0.05
@@ -225,9 +225,9 @@
     "ability_ad"
    ],
    "stats": {
-    "ad": 50.0,
-    "ah": 20.0,
-    "crit": 0.25
+    "ad": 50,
+    "crit": 0.25,
+    "ah": 20
    },
    "effects": {
     "spellblade_base_ad": 1.0,
@@ -245,7 +245,7 @@
     "crit"
    ],
    "stats": {
-    "ad": 50.0,
+    "ad": 50,
     "as": 0.25,
     "crit": 0.25
    },
@@ -264,7 +264,7 @@
     "crit"
    ],
    "stats": {
-    "ad": 50.0,
+    "ad": 50,
     "as": 0.45,
     "crit": 0.25
    },
@@ -281,7 +281,7 @@
     "crit"
    ],
    "stats": {
-    "ad": 55.0,
+    "ad": 55,
     "crit": 0.25
    },
    "effects": {},
@@ -312,9 +312,9 @@
     "tank"
    ],
    "stats": {
-    "hp": 700.0,
     "crit": 0.2,
-    "ah": 10.0
+    "hp": 700,
+    "ah": 10
    },
    "effects": {},
    "confidence": "verified"
@@ -328,12 +328,12 @@
     "onhit"
    ],
    "stats": {
-    "ad": 40.0,
+    "ad": 40,
     "as": 0.25,
     "lifesteal": 0.1
    },
    "effects": {
-    "onhit_cur_hp": 0.1
+    "onhit_cur_hp": 0.06
    },
    "confidence": "likely",
    "note": "ARAM on-hit override, same as the Yunara sim"
@@ -347,7 +347,7 @@
     "onhit"
    ],
    "stats": {
-    "ad": 45.0,
+    "ad": 45,
     "as": 0.4
    },
    "effects": {
@@ -367,8 +367,8 @@
     "ap_onhit"
    ],
    "stats": {
-    "ad": 30.0,
-    "ap": 30.0,
+    "ad": 30,
+    "ap": 30,
     "as": 0.25
    },
    "effects": {
@@ -387,13 +387,13 @@
     "ap"
    ],
    "stats": {
-    "ap": 80.0,
+    "ap": 80,
     "as": 0.5,
-    "ah": 15.0
+    "ah": 15
    },
    "effects": {
     "onhit_magic": 15,
-    "onhit_magic_ap": 0.2
+    "onhit_magic_ap": 0.15
    },
    "confidence": "likely"
   },
@@ -408,7 +408,7 @@
    ],
    "stats": {
     "as": 0.5,
-    "mr": 45.0
+    "mr": 45
    },
    "effects": {
     "onhit_magic": 45
@@ -424,7 +424,7 @@
     "onhit"
    ],
    "stats": {
-    "ad": 30.0,
+    "ad": 30,
     "as": 0.35
    },
    "effects": {
@@ -441,13 +441,13 @@
     "onhit"
    ],
    "stats": {
-    "ad": 45.0,
-    "ap": 45.0,
+    "ad": 45,
+    "ap": 45,
     "as": 0.3
    },
    "effects": {
     "storm_every": 4,
-    "storm_magic": 60
+    "storm_magic": 70
    },
    "confidence": "approx"
   },
@@ -460,7 +460,7 @@
     "ad"
    ],
    "stats": {
-    "ad": 80.0,
+    "ad": 80,
     "lifesteal": 0.15
    },
    "effects": {},
@@ -475,8 +475,8 @@
     "ability_ad"
    ],
    "stats": {
-    "ad": 35.0,
-    "ah": 15.0
+    "ad": 35,
+    "ah": 15
    },
    "effects": {},
    "confidence": "verified"
@@ -491,12 +491,12 @@
     "bruiser"
    ],
    "stats": {
-    "ad": 45.0,
-    "hp": 400.0,
-    "ah": 20.0
+    "ad": 45,
+    "hp": 400,
+    "ah": 20
    },
    "effects": {
-    "armor_shred": 0.24
+    "armor_shred": 0.3
    },
    "confidence": "approx"
   },
@@ -509,9 +509,9 @@
     "bruiser"
    ],
    "stats": {
-    "ad": 40.0,
-    "hp": 400.0,
-    "ah": 10.0
+    "ad": 40,
+    "hp": 400,
+    "ah": 10
    },
    "effects": {},
    "confidence": "verified"
@@ -526,13 +526,13 @@
     "ability_ad"
    ],
    "stats": {
-    "ad": 36.0,
+    "ad": 36,
     "as": 0.3,
-    "hp": 333.0,
-    "ah": 15.0
+    "hp": 333,
+    "ah": 15
    },
    "effects": {
-    "spellblade_base_ad": 2.0,
+    "spellblade_base_ad": 2,
     "spellblade_cd": 1.5
    },
    "confidence": "approx"
@@ -547,8 +547,8 @@
     "ad"
    ],
    "stats": {
-    "ad": 65.0,
-    "ah": 15.0,
+    "ad": 65,
+    "ah": 15,
     "lifesteal": 0.12
    },
    "effects": {
@@ -566,8 +566,8 @@
     "tank"
    ],
    "stats": {
-    "ad": 40.0,
-    "hp": 600.0
+    "ad": 40,
+    "hp": 600
    },
    "effects": {
     "onhit_own_hp": 0.015
@@ -583,9 +583,9 @@
     "lethality"
    ],
    "stats": {
-    "ad": 55.0,
-    "lethality": 18.0,
-    "ah": 10.0
+    "ad": 55,
+    "ah": 10,
+    "lethality": 18
    },
    "effects": {
     "cleave_ad": 0.4
@@ -601,9 +601,9 @@
     "bruiser"
    ],
    "stats": {
-    "ad": 40.0,
+    "ad": 40,
     "as": 0.25,
-    "hp": 450.0
+    "hp": 450
    },
    "effects": {},
    "confidence": "verified"
@@ -618,9 +618,9 @@
     "ad"
    ],
    "stats": {
-    "ad": 60.0,
-    "armor": 50.0,
-    "ah": 15.0
+    "ad": 60,
+    "armor": 50,
+    "ah": 15
    },
    "effects": {},
    "confidence": "verified"
@@ -635,7 +635,7 @@
     "tank"
    ],
    "stats": {
-    "hp": 400.0
+    "hp": 400
    },
    "effects": {},
    "confidence": "verified"
@@ -650,8 +650,8 @@
     "ability_ad"
    ],
    "stats": {
-    "ad": 45.0,
-    "hp": 450.0
+    "ad": 45,
+    "hp": 450
    },
    "effects": {
     "ability_amp": 0.08
@@ -668,8 +668,8 @@
     "bruiser"
    ],
    "stats": {
-    "ad": 60.0,
-    "ah": 15.0
+    "ad": 60,
+    "ah": 15
    },
    "effects": {
     "maxhp_proc": 0.06,
@@ -686,9 +686,9 @@
     "bruiser"
    ],
    "stats": {
-    "ad": 45.0,
-    "hp": 450.0,
-    "ah": 15.0
+    "ad": 45,
+    "hp": 450,
+    "ah": 15
    },
    "effects": {},
    "confidence": "verified"
@@ -702,8 +702,8 @@
     "bruiser"
    ],
    "stats": {
-    "ad": 40.0,
-    "hp": 500.0
+    "ad": 40,
+    "hp": 500
    },
    "effects": {},
    "confidence": "verified"
@@ -717,9 +717,9 @@
     "bruiser"
    ],
    "stats": {
-    "ad": 40.0,
+    "ad": 40,
     "as": 0.2,
-    "hp": 450.0
+    "hp": 450
    },
    "effects": {},
    "confidence": "verified"
@@ -733,8 +733,8 @@
     "bruiser"
    ],
    "stats": {
-    "ad": 30.0,
-    "hp": 550.0
+    "ad": 30,
+    "hp": 550
    },
    "effects": {},
    "confidence": "verified"
@@ -749,9 +749,9 @@
     "bruiser"
    ],
    "stats": {
-    "ad": 60.0,
-    "ah": 15.0,
-    "mr": 40.0
+    "ad": 60,
+    "mr": 40,
+    "ah": 15
    },
    "effects": {},
    "confidence": "verified"
@@ -765,8 +765,8 @@
     "lethality"
    ],
    "stats": {
-    "ad": 55.0,
-    "lethality": 18.0
+    "ad": 55,
+    "lethality": 18
    },
    "effects": {},
    "confidence": "verified"
@@ -780,8 +780,8 @@
     "lethality"
    ],
    "stats": {
-    "ad": 55.0,
-    "lethality": 15.0
+    "ad": 55,
+    "lethality": 15
    },
    "effects": {},
    "confidence": "verified"
@@ -796,9 +796,9 @@
     "ability_ad"
    ],
    "stats": {
-    "ad": 45.0,
-    "armor_pen": 0.35,
-    "ah": 15.0
+    "ad": 45,
+    "ah": 15,
+    "armor_pen": 0.35
    },
    "effects": {},
    "confidence": "verified"
@@ -812,9 +812,9 @@
     "lethality"
    ],
    "stats": {
-    "ad": 55.0,
-    "lethality": 18.0,
-    "ah": 20.0
+    "ad": 55,
+    "ah": 20,
+    "lethality": 18
    },
    "effects": {},
    "confidence": "verified"
@@ -828,9 +828,9 @@
     "lethality"
    ],
    "stats": {
-    "ad": 60.0,
-    "lethality": 18.0,
-    "ah": 15.0
+    "ad": 60,
+    "ah": 15,
+    "lethality": 18
    },
    "effects": {},
    "confidence": "verified"
@@ -844,9 +844,9 @@
     "lethality"
    ],
    "stats": {
-    "ad": 50.0,
-    "lethality": 15.0,
-    "hp": 250.0
+    "ad": 50,
+    "hp": 250,
+    "lethality": 15
    },
    "effects": {},
    "confidence": "verified"
@@ -860,8 +860,8 @@
     "lethality"
    ],
    "stats": {
-    "ad": 50.0,
-    "lethality": 15.0
+    "ad": 50,
+    "lethality": 15
    },
    "effects": {},
    "confidence": "verified"
@@ -875,9 +875,9 @@
     "lethality"
    ],
    "stats": {
-    "ad": 55.0,
-    "lethality": 10.0,
-    "ah": 10.0
+    "ad": 55,
+    "ah": 10,
+    "lethality": 10
    },
    "effects": {},
    "confidence": "verified"
@@ -891,7 +891,7 @@
     "ap"
    ],
    "stats": {
-    "ap": 130.0
+    "ap": 130
    },
    "effects": {
     "ap_amp": 0.3
@@ -907,7 +907,7 @@
     "ap"
    ],
    "stats": {
-    "ap": 95.0,
+    "ap": 95,
     "magic_pen_pct": 0.4
    },
    "effects": {},
@@ -922,9 +922,9 @@
     "ap"
    ],
    "stats": {
-    "ap": 75.0,
-    "magic_pen_pct": 0.3,
-    "ah": 20.0
+    "ap": 75,
+    "ah": 20,
+    "magic_pen_pct": 0.3
    },
    "effects": {},
    "confidence": "verified"
@@ -938,8 +938,8 @@
     "ap"
    ],
    "stats": {
-    "ap": 110.0,
-    "magic_pen": 15.0
+    "ap": 110,
+    "magic_pen": 15
    },
    "effects": {
     "damage_amp": 0.05
@@ -956,11 +956,11 @@
     "ap_tank"
    ],
    "stats": {
-    "ap": 60.0,
-    "hp": 300.0
+    "ap": 60,
+    "hp": 300
    },
    "effects": {
-    "burn_max_hp": 0.02,
+    "burn_max_hp": 0.018,
     "burn_duration": 3
    },
    "confidence": "approx"
@@ -974,8 +974,8 @@
     "ap"
    ],
    "stats": {
-    "ap": 80.0,
-    "ah": 20.0
+    "ap": 80,
+    "ah": 20
    },
    "effects": {
     "burn_flat": 20,
@@ -993,13 +993,13 @@
     "ap"
    ],
    "stats": {
-    "ap": 100.0,
-    "ah": 10.0
+    "ap": 100,
+    "ah": 10
    },
    "effects": {
-    "proc_flat": 100,
-    "proc_ap": 0.1,
-    "proc_cd": 10,
+    "proc_flat": 75,
+    "proc_ap": 0.05,
+    "proc_cd": 12,
     "proc_targets": 4
    },
    "confidence": "approx"
@@ -1013,12 +1013,12 @@
     "ap"
    ],
    "stats": {
-    "ap": 90.0,
-    "magic_pen": 15.0
+    "ap": 90,
+    "magic_pen": 15
    },
    "effects": {
-    "proc_flat": 150,
-    "proc_ap": 0.15,
+    "proc_flat": 125,
+    "proc_ap": 0.1,
     "proc_cd": 30,
     "proc_targets": 1
    },
@@ -1033,8 +1033,8 @@
     "ap"
    ],
    "stats": {
-    "ap": 100.0,
-    "ah": 10.0
+    "ap": 100,
+    "ah": 10
    },
    "effects": {
     "spellblade_base_ad": 0.75,
@@ -1054,12 +1054,12 @@
     "ap_tank"
    ],
    "stats": {
-    "ap": 70.0,
-    "hp": 350.0,
-    "ah": 15.0
+    "ap": 70,
+    "hp": 350,
+    "ah": 15
    },
    "effects": {
-    "damage_amp": 0.06
+    "damage_amp": 0.08
    },
    "confidence": "approx"
   },
@@ -1072,11 +1072,11 @@
     "ap"
    ],
    "stats": {
-    "ap": 75.0,
-    "ah": 25.0
+    "ap": 75,
+    "ah": 25
    },
    "effects": {
-    "damage_amp": 0.07
+    "damage_amp": 0.1
    },
    "confidence": "approx"
   },
@@ -1089,8 +1089,8 @@
     "ap"
    ],
    "stats": {
-    "ap": 90.0,
-    "ah": 15.0
+    "ap": 90,
+    "ah": 15
    },
    "effects": {},
    "confidence": "verified"
@@ -1104,8 +1104,8 @@
     "ap"
    ],
    "stats": {
-    "ap": 70.0,
-    "ah": 25.0
+    "ap": 70,
+    "ah": 25
    },
    "effects": {},
    "confidence": "verified"
@@ -1119,9 +1119,9 @@
     "ap"
    ],
    "stats": {
-    "ap": 70.0,
-    "hp": 350.0,
-    "ah": 25.0
+    "ap": 70,
+    "hp": 350,
+    "ah": 25
    },
    "effects": {},
    "confidence": "verified"
@@ -1135,8 +1135,8 @@
     "ap"
    ],
    "stats": {
-    "ap": 105.0,
-    "armor": 50.0
+    "ap": 105,
+    "armor": 50
    },
    "effects": {},
    "confidence": "verified"
@@ -1150,8 +1150,8 @@
     "ap"
    ],
    "stats": {
-    "ap": 105.0,
-    "mr": 40.0
+    "ap": 105,
+    "mr": 40
    },
    "effects": {},
    "confidence": "verified"
@@ -1165,9 +1165,9 @@
     "ap"
    ],
    "stats": {
-    "ap": 75.0,
-    "hp": 350.0,
-    "ah": 15.0
+    "ap": 75,
+    "hp": 350,
+    "ah": 15
    },
    "effects": {},
    "confidence": "verified"
@@ -1182,8 +1182,8 @@
     "ap_tank"
    ],
    "stats": {
-    "ap": 65.0,
-    "hp": 400.0
+    "ap": 65,
+    "hp": 400
    },
    "effects": {},
    "confidence": "verified"
@@ -1197,14 +1197,14 @@
     "ap"
    ],
    "stats": {
-    "ap": 60.0,
-    "hp": 350.0,
-    "ah": 10.0
+    "ap": 60,
+    "hp": 350,
+    "ah": 10
    },
    "effects": {
-    "active_flat": 125,
+    "active_flat": 135,
     "active_ap": 0.15,
-    "active_cd": 40
+    "active_cd": 50
    },
    "confidence": "approx"
   },
@@ -1218,8 +1218,8 @@
     "ap_onhit"
    ],
    "stats": {
-    "ap": 80.0,
-    "ad": 40.0,
+    "ad": 40,
+    "ap": 80,
     "omnivamp": 0.1
    },
    "effects": {
@@ -1238,8 +1238,8 @@
     "ap"
    ],
    "stats": {
-    "ap": 90.0,
-    "ah": 10.0
+    "ap": 90,
+    "ah": 10
    },
    "effects": {},
    "confidence": "verified"
@@ -1254,9 +1254,9 @@
     "ap_tank"
    ],
    "stats": {
-    "ap": 65.0,
-    "hp": 400.0,
-    "ah": 15.0
+    "ap": 65,
+    "hp": 400,
+    "ah": 15
    },
    "effects": {},
    "confidence": "verified"
@@ -1270,8 +1270,8 @@
     "ap"
    ],
    "stats": {
-    "ap": 45.0,
-    "hp": 350.0
+    "ap": 45,
+    "hp": 350
    },
    "effects": {},
    "confidence": "verified"
@@ -1285,9 +1285,9 @@
     "tank"
    ],
    "stats": {
-    "hp": 350.0,
-    "armor": 50.0,
-    "ah": 10.0
+    "hp": 350,
+    "armor": 50,
+    "ah": 10
    },
    "effects": {
     "aura_flat": 25,
@@ -1304,9 +1304,9 @@
     "tank"
    ],
    "stats": {
-    "hp": 400.0,
-    "mr": 40.0,
-    "ah": 10.0
+    "hp": 400,
+    "mr": 40,
+    "ah": 10
    },
    "effects": {
     "aura_flat": 15,
@@ -1323,7 +1323,7 @@
     "tank"
    ],
    "stats": {
-    "hp": 1300.0
+    "hp": 1300
    },
    "effects": {},
    "confidence": "verified",
@@ -1338,7 +1338,7 @@
     "tank"
    ],
    "stats": {
-    "hp": 1000.0
+    "hp": 1000
    },
    "effects": {},
    "confidence": "verified"
@@ -1352,8 +1352,8 @@
     "tank"
    ],
    "stats": {
-    "hp": 150.0,
-    "armor": 75.0
+    "hp": 150,
+    "armor": 75
    },
    "effects": {},
    "confidence": "verified"
@@ -1367,8 +1367,8 @@
     "tank"
    ],
    "stats": {
-    "hp": 350.0,
-    "armor": 75.0
+    "hp": 350,
+    "armor": 75
    },
    "effects": {},
    "confidence": "verified"
@@ -1382,8 +1382,8 @@
     "tank"
    ],
    "stats": {
-    "hp": 350.0,
-    "armor": 55.0
+    "hp": 350,
+    "armor": 55
    },
    "effects": {},
    "confidence": "verified"
@@ -1397,9 +1397,9 @@
     "tank"
    ],
    "stats": {
-    "hp": 350.0,
-    "armor": 45.0,
-    "mr": 45.0
+    "hp": 350,
+    "armor": 45,
+    "mr": 45
    },
    "effects": {},
    "confidence": "verified"
@@ -1413,8 +1413,8 @@
     "tank"
    ],
    "stats": {
-    "hp": 400.0,
-    "mr": 80.0
+    "hp": 400,
+    "mr": 80
    },
    "effects": {},
    "confidence": "verified"
@@ -1428,9 +1428,9 @@
     "tank"
    ],
    "stats": {
-    "hp": 400.0,
-    "mr": 50.0,
-    "ah": 10.0
+    "hp": 400,
+    "mr": 50,
+    "ah": 10
    },
    "effects": {},
    "confidence": "verified"
@@ -1444,8 +1444,8 @@
     "tank"
    ],
    "stats": {
-    "hp": 400.0,
-    "mr": 55.0
+    "hp": 400,
+    "mr": 55
    },
    "effects": {},
    "confidence": "verified"
@@ -1459,9 +1459,9 @@
     "tank"
    ],
    "stats": {
-    "hp": 400.0,
-    "armor": 50.0,
-    "ah": 15.0
+    "hp": 400,
+    "armor": 50,
+    "ah": 15
    },
    "effects": {},
    "confidence": "verified"
@@ -1475,9 +1475,9 @@
     "tank"
    ],
    "stats": {
-    "hp": 300.0,
-    "armor": 50.0,
-    "ah": 15.0
+    "hp": 300,
+    "armor": 50,
+    "ah": 15
    },
    "effects": {
     "spellblade_base_ad": 1.5,
@@ -1494,8 +1494,8 @@
     "tank"
    ],
    "stats": {
-    "armor": 75.0,
-    "ah": 20.0
+    "armor": 75,
+    "ah": 20
    },
    "effects": {},
    "confidence": "verified"
@@ -1509,9 +1509,9 @@
     "tank"
    ],
    "stats": {
-    "hp": 350.0,
-    "mr": 45.0,
-    "ah": 15.0
+    "hp": 350,
+    "mr": 45,
+    "ah": 15
    },
    "effects": {},
    "confidence": "verified"
