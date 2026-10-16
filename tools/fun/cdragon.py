@@ -5,13 +5,13 @@ BASE = "https://raw.communitydragon.org"
 MANA_PARTS = {"NumberCalculationPart", "NamedDataValueCalculationPart", "AbilityResourceByCoefficientCalculationPart"}
 
 
-def get(url, tries=4):
+def get(url, tries=4, raw=False):
     # CommunityDragon refuses Python's default User-Agent. Retry, since many parallel requests sometimes drop.
     req = urllib.request.Request(url, headers={"User-Agent": "aram-mayhem-fun-tools"})
     for attempt in range(tries):
         try:
             with urllib.request.urlopen(req, timeout=300) as r:
-                return json.load(r)
+                return r.read() if raw else json.load(r)
         except (urllib.error.URLError, ConnectionError):
             if attempt == tries - 1:
                 raise

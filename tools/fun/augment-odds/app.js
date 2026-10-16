@@ -1,6 +1,7 @@
 (function () {
   "use strict";
   const data = window.ODDS_DATA;
+  const art = window.ODDS_ART || {};
   const { compute, roll, TIERS } = window.OddsCalc;
   const $ = (id) => document.getElementById(id);
   const fmt = (n, d = 0) => (n === null || n === undefined ? "never" : n.toLocaleString("en-US", { maximumFractionDigits: d }));
@@ -29,6 +30,23 @@
   function pickButton(a, { on, disabled, click, hit }) {
     return el("button", { class: on || hit ? "pick on" : "pick", title: a.text || a.name, disabled, "aria-pressed": on ? "true" : "false", on: click },
       el("img", { src: a.icon, alt: "", loading: "lazy" }), el("span", {}, a.name, el("span", { class: "tier" }, a.tier + (a.ability ? " · ability" : ""))));
+  }
+
+  // Tooltips keep the game's @placeholders@ and %i:icon% tags; the cards show the words around them.
+  const plain = (t) => (t || "").replace(/@[^@]*@|\{\{[^}]*\}\}/g, "").replace(/%i:[^%]*%/g, "").replace(/\s+([.,:)])/g, "$1").replace(/\s{2,}/g, " ").replace(/\(\s+/g, "(").replace(/\(\)/g, "").trim();
+
+  // One card of an offer, drawn on the game's augment-selection art.
+  function offerCard(a, hit) {
+    const t = a.tier.toLowerCase();
+    // A few augments have no tooltip string, only its key (like GlassCannon_Summary); show nothing for those.
+    const text = /\s/.test(plain(a.text)) ? plain(a.text) : "";
+    const card = el("button", { type: "button", class: `card ${t}${hit ? " hit" : ""}`, title: hit ? "Your augment. Click to stop hunting it" : "Click to hunt this augment",
+      style: `--art:url("${art.card}");--back:url("${art["back_" + t]}");--frame:url("${art["frame_" + t]}")`, on: () => toggle(a) },
+      el("span", { class: "face" },
+        el("span", { class: "emblem" }, ...(a.ability ? [el("span", { class: "frame" })] : []), el("img", { src: a.icon, alt: "" })),
+        el("b", {}, a.name), el("span", { class: "rank" }, a.tier + (a.ability ? " · ability" : "")), el("p", {}, text)));
+    if (hit) card.prepend(el("span", { class: "yours" }, "Wanted"));
+    return card;
   }
 
   function toggle(a) {
@@ -113,7 +131,7 @@
     rolls.count++;
     const hit = offer.some((a) => build.targets.includes(a.key));
     if (hit) rolls.hits++;
-    $("offer").replaceChildren(...offer.map((a) => pickButton(a, { hit: build.targets.includes(a.key), click: () => toggle(a) })));
+    $("offer").replaceChildren(...offer.map((a) => offerCard(a, build.targets.includes(a.key))));
     $("roll-count").textContent = `${fmt(rolls.count)} ${tier} ${rolls.count === 1 ? "offer" : "offers"} rolled, ${fmt(rolls.hits)} with your augment`;
     return hit;
   }
