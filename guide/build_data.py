@@ -226,7 +226,7 @@ def main():
         sets.append({"name": s(k + "Name") or fallback, "bonus": bonus})
 
     out = {
-        "patch": version, "channel": ch,
+        "patch": version,
         "hero": f"{gd}/assets/leagueclient/gamemodeassets/kiwi/kiwi-tutorial-set2.png",
         "queues": [{"id": i, "name": n} for i, n in mayhem_queues],
         "augmentCounts": tier_counts, "maps": maps, "summons": summons, "items": items,
@@ -234,7 +234,7 @@ def main():
         "spellAugments": spell_augments, "itemChanges": item_changes, "augmentSets": sets,
     }
     with open(os.path.join(HERE, "data.js"), "w") as f:
-        f.write("// Generated from CommunityDragon by build_data.py. Do not edit by hand.\n")
+        # no header comment: the file ships to the site, and pages don't say where data comes from
         f.write("window.GUIDE_DATA = " + json.dumps(out, indent=1, ensure_ascii=False) + ";\n")
     print(f"{version}: {len(quests)} quests, {len(challenges)} challenges "
           f"({sum(c['mayhem'] for c in challenges)} count Mayhem), {len(items)} items, pool {tier_counts}")

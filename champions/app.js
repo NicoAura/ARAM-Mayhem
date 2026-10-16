@@ -1,4 +1,3 @@
-// Mayhem Champions: renders data.js (built from the client files by build_data.py).
 // The list is the default view; #Alias opens one champion's page.
 (() => {
   const D = window.CHAMPS_DATA;

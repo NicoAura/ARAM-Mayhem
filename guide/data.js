@@ -1,7 +1,5 @@
-// Generated from CommunityDragon by build_data.py. Do not edit by hand.
 window.GUIDE_DATA = {
  "patch": "16.20.8248524",
- "channel": "latest",
  "hero": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/leagueclient/gamemodeassets/kiwi/kiwi-tutorial-set2.png",
  "queues": [
   {
