@@ -81,8 +81,10 @@ export default function SimulatorPage() {
   return (
     <>
       <Intro eyebrow="Simulator" title={text("page./simulator.title", "Teamfight damage, simulated.")}>
-        Monte Carlo teamfights against enemy teams weighted by Mayhem pick rates, with a build search for every
-        champion. Use it to compare builds for one champion, not to rank champions.
+        <span className="tag">Beta</span>{" "}
+        An experiment: results can shift as the model changes. Monte Carlo teamfights against enemy teams weighted by
+        Mayhem pick rates, with a build search for every champion. Use it to compare builds for one champion, not to
+        rank champions.
       </Intro>
       {tabs.length ? (
         <SubTabs tabs={tabs} />

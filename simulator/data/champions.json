@@ -1,7 +1,7 @@
 {
  "meta": {
-  "built_at": "2026-10-16T03:46:44+00:00",
-  "ddragon_version": "16.20.1",
+  "built_at": "2026-10-16T21:14:36+00:00",
+  "game_version": "16.20",
   "cdragon": "latest",
   "mayhem_balance_patch": "26.19",
   "level": 18,
@@ -14,7 +14,7 @@
   "notes": [
    "Ability damage is parsed from Riot's game data (CommunityDragon) and tooltips: every number tagged as magic, physical or true damage, evaluated at level 18 with max ranks. scaling keys: const, ap, bonus_ad, bonus_hp, bonus_armor, bonus_mr, as (bonus attack speed), crit, lethality.",
    "target is flat or a fraction of the target's max/current/missing health. alt marks numbers that look like alternatives (empowered, maximum, recast) rather than extra hits.",
-   "mayhem holds the ARAM Mayhem damage dealt/taken modifiers and listed changes (aramnerfs.com).",
+   "mayhem holds the server-side ARAM Mayhem modifiers (damage dealt/taken, ability haste, attack speed) from aramnerfs.com; ability values and cooldowns use Riot's own ARAM/Kiwi overrides from each bin.",
    "cn holds 101.qq.com China-server Mayhem stats: damage_share is the average share of the team's damage."
   ]
  },
@@ -29,26 +29,25 @@
    "role": "fighter",
    "ranged": false,
    "stats": {
-    "hp": 650,
-    "hp_per_level": 114,
-    "armor": 38,
+    "hp": 650.0,
+    "hp_per_level": 114.0,
+    "armor": 38.0,
     "armor_per_level": 4.8,
-    "mr": 32,
+    "mr": 32.0,
     "mr_per_level": 2.05,
-    "ad": 60,
-    "ad_per_level": 0,
+    "ad": 60.0,
+    "ad_per_level": 5.0,
     "attack_speed": 0.651,
     "attack_speed_per_level": 0.025,
     "attack_speed_ratio": 0.651,
-    "attack_range": 175,
-    "move_speed": 345
+    "attack_range": 175.0,
+    "move_speed": 345.0
    },
    "mayhem": {
     "damage_dealt": 1.05,
     "damage_taken": 1.0,
     "ability_haste": 0.0,
-    "attack_speed": 0.0,
-    "changes": ""
+    "attack_speed": 0.0
    },
    "cn": {
     "weight": 0.059,
@@ -82,7 +81,7 @@
        "type": "physical",
        "calc": "QDamage",
        "scaling": {
-        "const": 124.0,
+        "const": 200.5,
         "bonus_ad": 0.9
        },
        "target": "flat",
@@ -93,7 +92,7 @@
        "type": "physical",
        "calc": "QEdgeDamage",
        "scaling": {
-        "const": 217.0,
+        "const": 350.875,
         "bonus_ad": 1.575
        },
        "target": "flat",
@@ -127,7 +126,7 @@
        "type": "physical",
        "calc": "WDamage",
        "scaling": {
-        "const": 94.0,
+        "const": 128.0,
         "bonus_ad": 0.4
        },
        "target": "flat",
@@ -198,26 +197,25 @@
    "role": "mage",
    "ranged": true,
    "stats": {
-    "hp": 590,
-    "hp_per_level": 104,
-    "armor": 21,
+    "hp": 590.0,
+    "hp_per_level": 104.0,
+    "armor": 21.0,
     "armor_per_level": 4.2,
-    "mr": 30,
+    "mr": 30.0,
     "mr_per_level": 1.3,
-    "ad": 53,
-    "ad_per_level": 0,
+    "ad": 53.0,
+    "ad_per_level": 3.0,
     "attack_speed": 0.668,
     "attack_speed_per_level": 0.022000000000000002,
     "attack_speed_ratio": 0.625,
-    "attack_range": 550,
-    "move_speed": 330
+    "attack_range": 550.0,
+    "move_speed": 330.0
    },
    "mayhem": {
     "damage_dealt": 1.0,
     "damage_taken": 1.0,
     "ability_haste": 0.0,
-    "attack_speed": 0.0,
-    "changes": "Healing done changed to 0% from -10%"
+    "attack_speed": 0.0
    },
    "cn": {
     "weight": 0.0519,
@@ -401,26 +399,25 @@
    "role": "assassin",
    "ranged": false,
    "stats": {
-    "hp": 600,
-    "hp_per_level": 119,
-    "armor": 23,
+    "hp": 600.0,
+    "hp_per_level": 119.0,
+    "armor": 23.0,
     "armor_per_level": 4.7,
-    "mr": 37,
+    "mr": 37.0,
     "mr_per_level": 2.05,
-    "ad": 62,
-    "ad_per_level": 0,
+    "ad": 62.0,
+    "ad_per_level": 3.3,
     "attack_speed": 0.625,
     "attack_speed_per_level": 0.032,
     "attack_speed_ratio": 0.625,
-    "attack_range": 125,
-    "move_speed": 345
+    "attack_range": 125.0,
+    "move_speed": 345.0
    },
    "mayhem": {
     "damage_dealt": 1.0,
     "damage_taken": 0.95,
     "ability_haste": 0.0,
-    "attack_speed": 0.0,
-    "changes": "Energy regeneration increased by 20%. Tenacity increased by 20%|P|AP ratio|55%|→|65% AP|Q|AP ratio|60%|→|70% AP|R|First dash AP ratio|30%|→|40%; Second dash AP ratio|30%|→|40%; Cooldown|120-60s|→|90-60s"
+    "attack_speed": 0.0
    },
    "cn": {
     "weight": 0.0243,
@@ -454,7 +451,7 @@
        "type": "magic",
        "calc": "Damage",
        "scaling": {
-        "const": 185.3,
+        "const": 221.765,
         "bonus_ad": 0.65,
         "ap": 0.7
        },
@@ -514,7 +511,7 @@
        "type": "magic",
        "calc": "E1Damage",
        "scaling": {
-        "const": 123.6,
+        "const": 140.43,
         "bonus_ad": 0.3,
         "ap": 0.33
        },
@@ -526,7 +523,7 @@
        "type": "magic",
        "calc": "E2DamageCalc",
        "scaling": {
-        "const": 288.4,
+        "const": 327.67,
         "bonus_ad": 0.7,
         "ap": 0.77
        },
@@ -597,7 +594,9 @@
       "ARAM:R1APRatio",
       "ARAM:R2APRatio"
      ],
-     "notes": []
+     "notes": [
+      "ARAM cooldown"
+     ]
     }
    ],
    "parse_quality": "good",
@@ -614,26 +613,25 @@
    "role": "marksman",
    "ranged": true,
    "stats": {
-    "hp": 610,
-    "hp_per_level": 107,
-    "armor": 26,
+    "hp": 610.0,
+    "hp_per_level": 107.0,
+    "armor": 26.0,
     "armor_per_level": 4.7,
-    "mr": 33,
+    "mr": 33.0,
     "mr_per_level": 1.1,
-    "ad": 52,
-    "ad_per_level": 0,
+    "ad": 52.0,
+    "ad_per_level": 3.0,
     "attack_speed": 0.638,
     "attack_speed_per_level": 0.04,
     "attack_speed_ratio": 0.4,
-    "attack_range": 500,
-    "move_speed": 330
+    "attack_range": 500.0,
+    "move_speed": 330.0
    },
    "mayhem": {
     "damage_dealt": 1.0,
     "damage_taken": 1.0,
     "ability_haste": 0.0,
-    "attack_speed": 0.0,
-    "changes": "W|Scoundrel duration|60s|→|10s"
+    "attack_speed": 0.0
    },
    "cn": {
     "weight": 0.0292,
@@ -727,7 +725,7 @@
        "type": "physical",
        "calc": "DamageToDeal",
        "scaling": {
-        "const": 53.0,
+        "const": 65.75,
         "bonus_ad": 0.25
        },
        "target": "flat",
@@ -761,7 +759,7 @@
        "type": "physical",
        "calc": "DamagePerBulletWithCrit",
        "scaling": {
-        "const": 52.8,
+        "const": 60.45,
         "bonus_ad": 0.15
        },
        "target": "flat",
@@ -772,7 +770,7 @@
        "type": "physical",
        "calc": "MaxDamagePerBullet",
        "scaling": {
-        "const": 158.4,
+        "const": 181.35,
         "bonus_ad": 0.45
        },
        "target": "flat",
@@ -800,26 +798,25 @@
    "role": "tank",
    "ranged": false,
    "stats": {
-    "hp": 685,
-    "hp_per_level": 120,
-    "armor": 40,
+    "hp": 685.0,
+    "hp_per_level": 120.0,
+    "armor": 40.0,
     "armor_per_level": 4.7,
-    "mr": 32,
+    "mr": 32.0,
     "mr_per_level": 2.05,
-    "ad": 62,
-    "ad_per_level": 0,
+    "ad": 62.0,
+    "ad_per_level": 3.75,
     "attack_speed": 0.625,
     "attack_speed_per_level": 0.02125,
     "attack_speed_ratio": 0.625,
-    "attack_range": 125,
-    "move_speed": 335
+    "attack_range": 125.0,
+    "move_speed": 335.0
    },
    "mayhem": {
     "damage_dealt": 1.0,
     "damage_taken": 1.05,
     "ability_haste": 0.0,
-    "attack_speed": 0.0,
-    "changes": "Healing done changed to 0% from -20%"
+    "attack_speed": 0.0
    },
    "cn": {
     "weight": 0.0599,
@@ -981,26 +978,25 @@
    "role": "fighter",
    "ranged": false,
    "stats": {
-    "hp": 630,
-    "hp_per_level": 110,
-    "armor": 35,
+    "hp": 630.0,
+    "hp_per_level": 110.0,
+    "armor": 35.0,
     "armor_per_level": 4.9,
-    "mr": 32,
+    "mr": 32.0,
     "mr_per_level": 2.05,
-    "ad": 63,
-    "ad_per_level": 0,
+    "ad": 63.0,
+    "ad_per_level": 3.0,
     "attack_speed": 0.625,
     "attack_speed_per_level": 0.025,
     "attack_speed_ratio": 0.625,
-    "attack_range": 125,
-    "move_speed": 335
+    "attack_range": 125.0,
+    "move_speed": 335.0
    },
    "mayhem": {
     "damage_dealt": 1.0,
     "damage_taken": 1.0,
     "ability_haste": 0.0,
-    "attack_speed": 0.0,
-    "changes": ""
+    "attack_speed": 0.0
    },
    "cn": {
     "weight": 0.0387,
@@ -1207,26 +1203,25 @@
    "role": "tank",
    "ranged": false,
    "stats": {
-    "hp": 685,
-    "hp_per_level": 94,
-    "armor": 33,
-    "armor_per_level": 4,
-    "mr": 32,
+    "hp": 685.0,
+    "hp_per_level": 94.0,
+    "armor": 33.0,
+    "armor_per_level": 4.0,
+    "mr": 32.0,
     "mr_per_level": 2.05,
-    "ad": 57,
-    "ad_per_level": 0,
+    "ad": 57.0,
+    "ad_per_level": 3.8,
     "attack_speed": 0.736,
     "attack_speed_per_level": 0.0218,
     "attack_speed_ratio": 0.638,
-    "attack_range": 125,
-    "move_speed": 335
+    "attack_range": 125.0,
+    "move_speed": 335.0
    },
    "mayhem": {
     "damage_dealt": 1.0,
     "damage_taken": 1.0,
     "ability_haste": 0.0,
-    "attack_speed": 0.0,
-    "changes": ""
+    "attack_speed": 0.0
    },
    "cn": {
     "weight": 0.0569,
@@ -1389,26 +1384,25 @@
    "role": "mage",
    "ranged": true,
    "stats": {
-    "hp": 550,
-    "hp_per_level": 92,
-    "armor": 19,
+    "hp": 550.0,
+    "hp_per_level": 92.0,
+    "armor": 19.0,
     "armor_per_level": 4.1,
-    "mr": 30,
+    "mr": 30.0,
     "mr_per_level": 1.3,
-    "ad": 51,
-    "ad_per_level": 0,
+    "ad": 51.0,
+    "ad_per_level": 3.2,
     "attack_speed": 0.658,
     "attack_speed_per_level": 0.0168,
     "attack_speed_ratio": 0.625,
-    "attack_range": 600,
-    "move_speed": 325
+    "attack_range": 600.0,
+    "move_speed": 325.0
    },
    "mayhem": {
     "damage_dealt": 1.05,
     "damage_taken": 1.0,
     "ability_haste": 0.0,
-    "attack_speed": 0.0,
-    "changes": ""
+    "attack_speed": 0.0
    },
    "cn": {
     "weight": 0.0267,
@@ -1591,26 +1585,25 @@
    "role": "mage",
    "ranged": true,
    "stats": {
-    "hp": 560,
-    "hp_per_level": 96,
-    "armor": 23,
-    "armor_per_level": 4,
-    "mr": 30,
+    "hp": 560.0,
+    "hp_per_level": 96.0,
+    "armor": 23.0,
+    "armor_per_level": 4.0,
+    "mr": 30.0,
     "mr_per_level": 1.3,
-    "ad": 50,
-    "ad_per_level": 0,
+    "ad": 50.0,
+    "ad_per_level": 2.65,
     "attack_speed": 0.61,
     "attack_speed_per_level": 0.013600000000000001,
     "attack_speed_ratio": 0.625,
-    "attack_range": 625,
-    "move_speed": 335
+    "attack_range": 625.0,
+    "move_speed": 335.0
    },
    "mayhem": {
     "damage_dealt": 0.95,
     "damage_taken": 1.0,
     "ability_haste": 0.0,
-    "attack_speed": 0.0,
-    "changes": "Shielding done changed to 0% from -10%"
+    "attack_speed": 0.0
    },
    "cn": {
     "weight": 0.0233,
@@ -1722,7 +1715,7 @@
      ],
      "mode_overrides": [],
      "notes": [
-      "cooldown from Data Dragon"
+      "cooldown from the champion's ability list"
      ]
     },
     {
@@ -1784,26 +1777,25 @@
    "role": "marksman",
    "ranged": true,
    "stats": {
-    "hp": 600,
-    "hp_per_level": 102,
-    "armor": 26,
+    "hp": 600.0,
+    "hp_per_level": 102.0,
+    "armor": 26.0,
     "armor_per_level": 4.2,
-    "mr": 33,
+    "mr": 33.0,
     "mr_per_level": 1.1,
-    "ad": 55,
-    "ad_per_level": 0,
+    "ad": 55.0,
+    "ad_per_level": 2.3,
     "attack_speed": 0.665,
     "attack_speed_per_level": 0.021,
     "attack_speed_ratio": 0.658,
-    "attack_range": 550,
-    "move_speed": 325
+    "attack_range": 550.0,
+    "move_speed": 325.0
    },
    "mayhem": {
     "damage_dealt": 1.0,
     "damage_taken": 1.0,
     "ability_haste": 0.0,
-    "attack_speed": 0.0,
-    "changes": ""
+    "attack_speed": 0.0
    },
    "cn": {
     "weight": 0.043,
@@ -1882,7 +1874,6 @@
      "hits": [],
      "mode_overrides": [],
      "notes": [
-      "cooldown from Data Dragon",
       "cooldown unknown; assumed 8s"
      ]
     },
@@ -1936,26 +1927,25 @@
    "role": "marksman",
    "ranged": true,
    "stats": {
-    "hp": 610,
-    "hp_per_level": 101,
-    "armor": 26,
+    "hp": 610.0,
+    "hp_per_level": 101.0,
+    "armor": 26.0,
     "armor_per_level": 4.6,
-    "mr": 33,
+    "mr": 33.0,
     "mr_per_level": 1.1,
-    "ad": 59,
-    "ad_per_level": 0,
+    "ad": 59.0,
+    "ad_per_level": 3.0,
     "attack_speed": 0.658,
     "attack_speed_per_level": 0.03,
     "attack_speed_ratio": 0.658,
-    "attack_range": 600,
-    "move_speed": 325
+    "attack_range": 600.0,
+    "move_speed": 325.0
    },
    "mayhem": {
     "damage_dealt": 1.0,
     "damage_taken": 1.0,
     "ability_haste": 0.0,
-    "attack_speed": 0.0,
-    "changes": "W|Cooldown|18-4s|→|18-14s"
+    "attack_speed": 0.0
    },
    "cn": {
     "weight": 0.1453,
@@ -1999,7 +1989,7 @@
      ],
      "mode_overrides": [],
      "notes": [
-      "cooldown from Mayhem balance table"
+      "ARAM cooldown"
      ]
     },
     {
@@ -2076,26 +2066,25 @@
    "role": "mage",
    "ranged": true,
    "stats": {
-    "hp": 600,
-    "hp_per_level": 90,
-    "armor": 22,
-    "armor_per_level": 4,
-    "mr": 30,
+    "hp": 600.0,
+    "hp_per_level": 90.0,
+    "armor": 22.0,
+    "armor_per_level": 4.0,
+    "mr": 30.0,
     "mr_per_level": 1.3,
-    "ad": 58,
-    "ad_per_level": 0,
+    "ad": 58.0,
+    "ad_per_level": 3.2,
     "attack_speed": 0.625,
     "attack_speed_per_level": 0.015,
     "attack_speed_ratio": 0.625,
-    "attack_range": 550,
-    "move_speed": 340
+    "attack_range": 550.0,
+    "move_speed": 340.0
    },
    "mayhem": {
     "damage_dealt": 1.0,
     "damage_taken": 1.0,
     "ability_haste": 0.0,
-    "attack_speed": 0.0,
-    "changes": "E|Cooldown|12s|→|14s"
+    "attack_speed": 0.0
    },
    "cn": {
     "weight": 0.1272,
@@ -2217,7 +2206,7 @@
      ],
      "mode_overrides": [],
      "notes": [
-      "cooldown from Mayhem balance table"
+      "ARAM cooldown"
      ]
     },
     {
@@ -2291,26 +2280,25 @@
    "role": "mage",
    "ranged": true,
    "stats": {
-    "hp": 607,
-    "hp_per_level": 110,
-    "armor": 23,
+    "hp": 607.0,
+    "hp_per_level": 110.0,
+    "armor": 23.0,
     "armor_per_level": 4.5,
-    "mr": 32,
+    "mr": 32.0,
     "mr_per_level": 1.3,
-    "ad": 53,
-    "ad_per_level": 0,
+    "ad": 53.0,
+    "ad_per_level": 3.0,
     "attack_speed": 0.668,
     "attack_speed_per_level": 0.02,
     "attack_speed_ratio": 0.668,
-    "attack_range": 550,
-    "move_speed": 335
+    "attack_range": 550.0,
+    "move_speed": 335.0
    },
    "mayhem": {
     "damage_dealt": 1.0,
     "damage_taken": 1.0,
     "ability_haste": 10.0,
-    "attack_speed": 0.0,
-    "changes": "Ability haste increased by 10"
+    "attack_speed": 0.0
    },
    "cn": {
     "weight": 0.0649,
@@ -2471,26 +2459,25 @@
    "role": "mage",
    "ranged": true,
    "stats": {
-    "hp": 575,
-    "hp_per_level": 108,
-    "armor": 25,
-    "armor_per_level": 5,
-    "mr": 30,
+    "hp": 575.0,
+    "hp_per_level": 108.0,
+    "armor": 25.0,
+    "armor_per_level": 5.0,
+    "mr": 30.0,
     "mr_per_level": 1.3,
-    "ad": 56,
-    "ad_per_level": 0,
+    "ad": 56.0,
+    "ad_per_level": 3.5,
     "attack_speed": 0.625,
     "attack_speed_per_level": 0.05,
     "attack_speed_ratio": 0.694,
-    "attack_range": 525,
-    "move_speed": 330
+    "attack_range": 525.0,
+    "move_speed": 330.0
    },
    "mayhem": {
     "damage_dealt": 1.0,
     "damage_taken": 0.95,
     "ability_haste": 20.0,
-    "attack_speed": 0.025,
-    "changes": "Total attack speed increased by 2.5%. Ability haste increased by 20|W|Azir will start the game with one point already ranked in Arise!, allowing him to allocate the other two to his other abilities"
+    "attack_speed": 0.025
    },
    "cn": {
     "weight": 0.0223,
@@ -2655,26 +2642,25 @@
    "role": "support",
    "ranged": true,
    "stats": {
-    "hp": 630,
-    "hp_per_level": 103,
-    "armor": 32,
+    "hp": 630.0,
+    "hp_per_level": 103.0,
+    "armor": 32.0,
     "armor_per_level": 4.7,
-    "mr": 30,
+    "mr": 30.0,
     "mr_per_level": 1.3,
-    "ad": 52,
-    "ad_per_level": 0,
+    "ad": 52.0,
+    "ad_per_level": 3.0,
     "attack_speed": 0.658,
     "attack_speed_per_level": 0.02,
     "attack_speed_ratio": 0.658,
-    "attack_range": 500,
-    "move_speed": 335
+    "attack_range": 500.0,
+    "move_speed": 335.0
    },
    "mayhem": {
     "damage_dealt": 1.15,
     "damage_taken": 0.85,
     "ability_haste": 0.0,
-    "attack_speed": 0.0,
-    "changes": "Healing done increased by 20%|P|Chime spawn rate every|50s|→|30s (initial spawn unchanged)|W|Caretaker's Shrine base bonus movement speed 25/27.5/30/32.5/35%; bonus movement speed AP ratio 7.5% per 100 AP; recharge 8s"
+    "attack_speed": 0.0
    },
    "cn": {
     "weight": 0.0078,
@@ -2811,26 +2797,25 @@
    "role": "fighter",
    "ranged": false,
    "stats": {
-    "hp": 580,
-    "hp_per_level": 105,
-    "armor": 28,
-    "armor_per_level": 5,
-    "mr": 32,
+    "hp": 580.0,
+    "hp_per_level": 105.0,
+    "armor": 28.0,
+    "armor_per_level": 5.0,
+    "mr": 32.0,
     "mr_per_level": 2.05,
-    "ad": 55,
-    "ad_per_level": 0,
+    "ad": 55.0,
+    "ad_per_level": 1.5,
     "attack_speed": 0.67,
     "attack_speed_per_level": 0.0,
     "attack_speed_ratio": 0.67,
-    "attack_range": 150,
-    "move_speed": 340
+    "attack_range": 150.0,
+    "move_speed": 340.0
    },
    "mayhem": {
     "damage_dealt": 1.05,
     "damage_taken": 0.95,
     "ability_haste": 0.0,
-    "attack_speed": 0.0,
-    "changes": "Tenacity increased by 20%|P|Bel'Veth gains|1|→|2 stacks from nearby siege minion deaths|R|Enhanced Void Corals spawn from nearby turrets being destroyed; Void Coral duration|15s|→|40s"
+    "attack_speed": 0.0
    },
    "cn": {
     "weight": 0.0404,
@@ -2864,7 +2849,7 @@
        "type": "physical",
        "calc": "BaseDamage",
        "scaling": {
-        "const": 77.75,
+        "const": 104.525,
         "bonus_ad": 1.05
        },
        "target": "flat",
@@ -2932,7 +2917,7 @@
        "type": "physical",
        "calc": "DamagePerStrike",
        "scaling": {
-        "const": 24.6,
+        "const": 27.66,
         "bonus_ad": 0.12
        },
        "target": "flat",
@@ -2943,7 +2928,7 @@
        "type": "physical",
        "calc": "MaxDamagePerStrikeTooltip",
        "scaling": {
-        "const": 49.2,
+        "const": 55.32,
         "bonus_ad": 0.24
        },
        "target": "flat",
@@ -3016,26 +3001,25 @@
    "role": "tank",
    "ranged": false,
    "stats": {
-    "hp": 600,
-    "hp_per_level": 109,
-    "armor": 37,
+    "hp": 600.0,
+    "hp_per_level": 109.0,
+    "armor": 37.0,
     "armor_per_level": 4.7,
-    "mr": 32,
+    "mr": 32.0,
     "mr_per_level": 2.05,
-    "ad": 62,
-    "ad_per_level": 0,
+    "ad": 62.0,
+    "ad_per_level": 3.5,
     "attack_speed": 0.625,
     "attack_speed_per_level": 0.0113,
     "attack_speed_ratio": 0.625,
-    "attack_range": 125,
-    "move_speed": 325
+    "attack_range": 125.0,
+    "move_speed": 325.0
    },
    "mayhem": {
     "damage_dealt": 1.0,
     "damage_taken": 1.0,
     "ability_haste": 0.0,
-    "attack_speed": 0.0,
-    "changes": ""
+    "attack_speed": 0.0
    },
    "cn": {
     "weight": 0.0819,
@@ -3126,7 +3110,7 @@
        "type": "physical",
        "calc": "TotalDamage",
        "scaling": {
-        "const": 124.0,
+        "const": 243.0,
         "bonus_ad": 2.0,
         "ap": 0.25
        },
@@ -3200,26 +3184,25 @@
    "role": "mage",
    "ranged": true,
    "stats": {
-    "hp": 570,
-    "hp_per_level": 105,
-    "armor": 24,
+    "hp": 570.0,
+    "hp_per_level": 105.0,
+    "armor": 24.0,
     "armor_per_level": 4.2,
-    "mr": 30,
+    "mr": 30.0,
     "mr_per_level": 1.3,
-    "ad": 57,
-    "ad_per_level": 0,
+    "ad": 57.0,
+    "ad_per_level": 3.0,
     "attack_speed": 0.681,
     "attack_speed_per_level": 0.02,
     "attack_speed_ratio": 0.625,
-    "attack_range": 550,
-    "move_speed": 340
+    "attack_range": 550.0,
+    "move_speed": 340.0
    },
    "mayhem": {
     "damage_dealt": 0.95,
     "damage_taken": 1.1,
     "ability_haste": -10.0,
-    "attack_speed": 0.0,
-    "changes": "Ability haste reduced by 10"
+    "attack_speed": 0.0
    },
    "cn": {
     "weight": 0.1352,
@@ -3392,26 +3375,25 @@
    "role": "tank",
    "ranged": false,
    "stats": {
-    "hp": 610,
-    "hp_per_level": 112,
-    "armor": 35,
-    "armor_per_level": 5,
-    "mr": 32,
+    "hp": 610.0,
+    "hp_per_level": 112.0,
+    "armor": 35.0,
+    "armor_per_level": 5.0,
+    "mr": 32.0,
     "mr_per_level": 2.05,
-    "ad": 55,
-    "ad_per_level": 0,
+    "ad": 55.0,
+    "ad_per_level": 3.2,
     "attack_speed": 0.644,
     "attack_speed_per_level": 0.035,
     "attack_speed_ratio": 0.644,
-    "attack_range": 125,
-    "move_speed": 335
+    "attack_range": 125.0,
+    "move_speed": 335.0
    },
    "mayhem": {
     "damage_dealt": 1.0,
     "damage_taken": 1.0,
     "ability_haste": 0.0,
-    "attack_speed": 0.0,
-    "changes": ""
+    "attack_speed": 0.0
    },
    "cn": {
     "weight": 0.017,
@@ -3550,26 +3532,25 @@
    "role": "fighter",
    "ranged": false,
    "stats": {
-    "hp": 625,
-    "hp_per_level": 95,
-    "armor": 30,
+    "hp": 625.0,
+    "hp_per_level": 95.0,
+    "armor": 30.0,
     "armor_per_level": 4.5,
-    "mr": 32,
+    "mr": 32.0,
     "mr_per_level": 2.05,
-    "ad": 60,
-    "ad_per_level": 0,
+    "ad": 60.0,
+    "ad_per_level": 2.5,
     "attack_speed": 0.644,
     "attack_speed_per_level": 0.02,
     "attack_speed_ratio": 0.669,
-    "attack_range": 125,
-    "move_speed": 340
+    "attack_range": 125.0,
+    "move_speed": 340.0
    },
    "mayhem": {
     "damage_dealt": 1.05,
     "damage_taken": 1.0,
     "ability_haste": 0.0,
-    "attack_speed": 0.0,
-    "changes": "Healing done increased by 10%|E|Damage reduction|35%|→|55%"
+    "attack_speed": 0.0
    },
    "cn": {
     "weight": 0.028,
@@ -3640,7 +3621,7 @@
        "type": "physical",
        "calc": "TotalAoEDamage",
        "scaling": {
-        "const": 60.0,
+        "const": 102.5,
         "bonus_ad": 1.0
        },
        "target": "flat",
@@ -3651,7 +3632,7 @@
        "type": "physical",
        "calc": "TotalAttackBonusDamage",
        "scaling": {
-        "const": 128.0,
+        "const": 172.625,
         "bonus_ad": 1.05
        },
        "target": "flat",
@@ -3761,26 +3742,25 @@
    "role": "marksman",
    "ranged": true,
    "stats": {
-    "hp": 580,
-    "hp_per_level": 107,
-    "armor": 27,
+    "hp": 580.0,
+    "hp_per_level": 107.0,
+    "armor": 27.0,
     "armor_per_level": 4.7,
-    "mr": 33,
+    "mr": 33.0,
     "mr_per_level": 1.1,
-    "ad": 62,
-    "ad_per_level": 0,
+    "ad": 62.0,
+    "ad_per_level": 3.8,
     "attack_speed": 0.681,
     "attack_speed_per_level": 0.04,
     "attack_speed_ratio": 0.625,
-    "attack_range": 650,
-    "move_speed": 325
+    "attack_range": 650.0,
+    "move_speed": 325.0
    },
    "mayhem": {
     "damage_dealt": 1.0,
     "damage_taken": 1.0,
     "ability_haste": 0.0,
-    "attack_speed": 0.0,
-    "changes": "Q|AD ratio|125-205%|→|125-185% AD"
+    "attack_speed": 0.0
    },
    "cn": {
     "weight": 0.1297,
@@ -3814,7 +3794,7 @@
        "type": "physical",
        "calc": "InitialDamage",
        "scaling": {
-        "const": 324.7,
+        "const": 444.21,
         "bonus_ad": 1.85
        },
        "target": "flat",
@@ -3825,7 +3805,7 @@
        "type": "physical",
        "calc": "SecondaryDamage",
        "scaling": {
-        "const": 194.82,
+        "const": 266.526,
         "bonus_ad": 1.11
        },
        "target": "flat",
@@ -3960,26 +3940,25 @@
    "role": "fighter",
    "ranged": false,
    "stats": {
-    "hp": 650,
-    "hp_per_level": 99,
-    "armor": 35,
+    "hp": 650.0,
+    "hp_per_level": 99.0,
+    "armor": 35.0,
     "armor_per_level": 4.5,
-    "mr": 32,
+    "mr": 32.0,
     "mr_per_level": 2.05,
-    "ad": 68,
-    "ad_per_level": 0,
+    "ad": 68.0,
+    "ad_per_level": 3.8,
     "attack_speed": 0.644,
     "attack_speed_per_level": 0.025,
     "attack_speed_ratio": 0.644,
-    "attack_range": 125,
-    "move_speed": 340
+    "attack_range": 125.0,
+    "move_speed": 340.0
    },
    "mayhem": {
     "damage_dealt": 1.05,
     "damage_taken": 0.95,
     "ability_haste": 10.0,
-    "attack_speed": 0.0,
-    "changes": "Healing done increased by 20%. Shielding done increased by 10%. Ability haste increased by 10"
+    "attack_speed": 0.0
    },
    "cn": {
     "weight": 0.0147,
@@ -4013,7 +3992,7 @@
        "type": "physical",
        "calc": "BonusDamage",
        "scaling": {
-        "const": 27.2,
+        "const": 53.04,
         "bonus_ad": 0.4
        },
        "target": "flat",
@@ -4024,7 +4003,7 @@
        "type": "physical",
        "calc": "EmpoweredBonusDamage",
        "scaling": {
-        "const": 54.4,
+        "const": 106.08,
         "bonus_ad": 0.8
        },
        "target": "flat",
@@ -4163,26 +4142,25 @@
    "role": "mage",
    "ranged": true,
    "stats": {
-    "hp": 610,
-    "hp_per_level": 98,
-    "armor": 18,
+    "hp": 610.0,
+    "hp_per_level": 98.0,
+    "armor": 18.0,
     "armor_per_level": 4.7,
-    "mr": 32,
+    "mr": 32.0,
     "mr_per_level": 1.3,
-    "ad": 53,
-    "ad_per_level": 0,
+    "ad": 53.0,
+    "ad_per_level": 3.0,
     "attack_speed": 0.647,
     "attack_speed_per_level": 0.015,
     "attack_speed_ratio": 0.647,
-    "attack_range": 550,
-    "move_speed": 335
+    "attack_range": 550.0,
+    "move_speed": 335.0
    },
    "mayhem": {
     "damage_dealt": 1.0,
     "damage_taken": 1.0,
     "ability_haste": 0.0,
-    "attack_speed": 0.0,
-    "changes": ""
+    "attack_speed": 0.0
    },
    "cn": {
     "weight": 0.022,
@@ -4358,26 +4336,25 @@
    "role": "tank",
    "ranged": false,
    "stats": {
-    "hp": 644,
-    "hp_per_level": 94,
-    "armor": 38,
+    "hp": 644.0,
+    "hp_per_level": 94.0,
+    "armor": 38.0,
     "armor_per_level": 4.5,
-    "mr": 32,
+    "mr": 32.0,
     "mr_per_level": 2.05,
-    "ad": 69,
-    "ad_per_level": 0,
+    "ad": 69.0,
+    "ad_per_level": 4.2,
     "attack_speed": 0.658,
     "attack_speed_per_level": 0.0144,
     "attack_speed_ratio": 0.625,
-    "attack_range": 125,
-    "move_speed": 345
+    "attack_range": 125.0,
+    "move_speed": 345.0
    },
    "mayhem": {
     "damage_dealt": 1.0,
     "damage_taken": 0.95,
     "ability_haste": 0.0,
-    "attack_speed": 0.0,
-    "changes": ""
+    "attack_speed": 0.0
    },
    "cn": {
     "weight": 0.0828,
@@ -4542,26 +4519,25 @@
    "role": "marksman",
    "ranged": true,
    "stats": {
-    "hp": 610,
-    "hp_per_level": 100,
-    "armor": 27,
+    "hp": 610.0,
+    "hp_per_level": 100.0,
+    "armor": 27.0,
     "armor_per_level": 4.5,
-    "mr": 33,
+    "mr": 33.0,
     "mr_per_level": 1.1,
-    "ad": 52,
-    "ad_per_level": 0,
+    "ad": 52.0,
+    "ad_per_level": 2.5,
     "attack_speed": 0.644,
     "attack_speed_per_level": 0.027999999999999997,
     "attack_speed_ratio": 0.644,
-    "attack_range": 550,
-    "move_speed": 325
+    "attack_range": 550.0,
+    "move_speed": 325.0
    },
    "mayhem": {
     "damage_dealt": 1.0,
     "damage_taken": 0.95,
     "ability_haste": -20.0,
-    "attack_speed": 0.0,
-    "changes": "Ability haste reduced by 20"
+    "attack_speed": 0.0
    },
    "cn": {
     "weight": 0.0653,
@@ -4739,26 +4715,25 @@
    "role": "fighter",
    "ranged": false,
    "stats": {
-    "hp": 652,
-    "hp_per_level": 114,
-    "armor": 37,
+    "hp": 652.0,
+    "hp_per_level": 114.0,
+    "armor": 37.0,
     "armor_per_level": 5.2,
-    "mr": 32,
+    "mr": 32.0,
     "mr_per_level": 2.05,
-    "ad": 64,
-    "ad_per_level": 0,
+    "ad": 64.0,
+    "ad_per_level": 5.0,
     "attack_speed": 0.625,
     "attack_speed_per_level": 0.01,
     "attack_speed_ratio": 0.625,
-    "attack_range": 175,
-    "move_speed": 340
+    "attack_range": 175.0,
+    "move_speed": 340.0
    },
    "mayhem": {
     "damage_dealt": 1.05,
     "damage_taken": 1.0,
     "ability_haste": 0.0,
-    "attack_speed": 0.0,
-    "changes": ""
+    "attack_speed": 0.0
    },
    "cn": {
     "weight": 0.0744,
@@ -4792,7 +4767,7 @@
        "type": "physical",
        "calc": "BladeDamage",
        "scaling": {
-        "const": 259.6,
+        "const": 378.6,
         "bonus_ad": 1.4
        },
        "target": "flat",
@@ -4803,7 +4778,7 @@
        "type": "physical",
        "calc": "HandleDamage",
        "scaling": {
-        "const": 90.86,
+        "const": 132.51,
         "bonus_ad": 0.49
        },
        "target": "flat",
@@ -4837,7 +4812,7 @@
        "type": "physical",
        "calc": "EmpoweredAttackDamage",
        "scaling": {
-        "const": 102.4,
+        "const": 238.4,
         "bonus_ad": 1.6
        },
        "target": "flat",
@@ -4930,26 +4905,25 @@
    "role": "fighter",
    "ranged": false,
    "stats": {
-    "hp": 640,
-    "hp_per_level": 109,
-    "armor": 31,
+    "hp": 640.0,
+    "hp_per_level": 109.0,
+    "armor": 31.0,
     "armor_per_level": 4.3,
-    "mr": 32,
+    "mr": 32.0,
     "mr_per_level": 2.05,
-    "ad": 57,
-    "ad_per_level": 0,
+    "ad": 57.0,
+    "ad_per_level": 3.0,
     "attack_speed": 0.625,
     "attack_speed_per_level": 0.02,
     "attack_speed_ratio": 0.694,
-    "attack_range": 150,
-    "move_speed": 345
+    "attack_range": 150.0,
+    "move_speed": 345.0
    },
    "mayhem": {
     "damage_dealt": 1.0,
     "damage_taken": 1.0,
     "ability_haste": 0.0,
-    "attack_speed": 0.0,
-    "changes": ""
+    "attack_speed": 0.0
    },
    "cn": {
     "weight": 0.0362,
@@ -5145,26 +5119,25 @@
    "role": "tank",
    "ranged": false,
    "stats": {
-    "hp": 640,
-    "hp_per_level": 103,
-    "armor": 32,
+    "hp": 640.0,
+    "hp_per_level": 103.0,
+    "armor": 32.0,
     "armor_per_level": 4.5,
-    "mr": 29,
+    "mr": 29.0,
     "mr_per_level": 2.3,
-    "ad": 61,
-    "ad_per_level": 0,
+    "ad": 61.0,
+    "ad_per_level": 2.5,
     "attack_speed": 0.67,
     "attack_speed_per_level": 0.033,
     "attack_speed_ratio": 0.625,
-    "attack_range": 125,
-    "move_speed": 345
+    "attack_range": 125.0,
+    "move_speed": 345.0
    },
    "mayhem": {
     "damage_dealt": 0.9,
     "damage_taken": 1.05,
     "ability_haste": 0.0,
-    "attack_speed": 0.0,
-    "changes": "Healing done reduced by 10%"
+    "attack_speed": 0.0
    },
    "cn": {
     "weight": 0.1071,
@@ -5334,26 +5307,25 @@
    "role": "marksman",
    "ranged": true,
    "stats": {
-    "hp": 675,
-    "hp_per_level": 104,
-    "armor": 29,
+    "hp": 675.0,
+    "hp_per_level": 104.0,
+    "armor": 29.0,
     "armor_per_level": 4.5,
-    "mr": 33,
+    "mr": 33.0,
     "mr_per_level": 1.1,
-    "ad": 64,
-    "ad_per_level": 0,
+    "ad": 64.0,
+    "ad_per_level": 3.4,
     "attack_speed": 0.679,
     "attack_speed_per_level": 0.027000000000000003,
     "attack_speed_ratio": 0.679,
-    "attack_range": 550,
-    "move_speed": 330
+    "attack_range": 550.0,
+    "move_speed": 330.0
    },
    "mayhem": {
     "damage_dealt": 1.05,
     "damage_taken": 0.95,
     "ability_haste": 0.0,
-    "attack_speed": 0.0,
-    "changes": "P|Base gold per kill|25|→|40; Stacks lost on death|50%|→|30%"
+    "attack_speed": 0.0
    },
    "cn": {
     "weight": 0.0614,
@@ -5504,26 +5476,25 @@
    "role": "assassin",
    "ranged": false,
    "stats": {
-    "hp": 655,
-    "hp_per_level": 99,
-    "armor": 32,
+    "hp": 655.0,
+    "hp_per_level": 99.0,
+    "armor": 32.0,
     "armor_per_level": 4.2,
-    "mr": 32,
+    "mr": 32.0,
     "mr_per_level": 2.05,
-    "ad": 58,
-    "ad_per_level": 0,
+    "ad": 58.0,
+    "ad_per_level": 3.0,
     "attack_speed": 0.688,
     "attack_speed_per_level": 0.033,
     "attack_speed_ratio": 0.625,
-    "attack_range": 125,
-    "move_speed": 340
+    "attack_range": 125.0,
+    "move_speed": 340.0
    },
    "mayhem": {
     "damage_dealt": 1.05,
     "damage_taken": 1.0,
     "ability_haste": 0.0,
-    "attack_speed": 0.0,
-    "changes": "Tenacity increased by 20%"
+    "attack_speed": 0.0
    },
    "cn": {
     "weight": 0.0725,
@@ -5686,26 +5657,25 @@
    "role": "assassin",
    "ranged": true,
    "stats": {
-    "hp": 620,
-    "hp_per_level": 109,
-    "armor": 30,
+    "hp": 620.0,
+    "hp_per_level": 109.0,
+    "armor": 30.0,
     "armor_per_level": 4.5,
-    "mr": 30,
+    "mr": 30.0,
     "mr_per_level": 1.3,
-    "ad": 55,
-    "ad_per_level": 0,
+    "ad": 55.0,
+    "ad_per_level": 3.0,
     "attack_speed": 0.625,
     "attack_speed_per_level": 0.0175,
     "attack_speed_ratio": 0.625,
-    "attack_range": 550,
-    "move_speed": 330
+    "attack_range": 550.0,
+    "move_speed": 330.0
    },
    "mayhem": {
     "damage_dealt": 1.05,
     "damage_taken": 0.9,
     "ability_haste": 0.0,
-    "attack_speed": 0.0,
-    "changes": "Tenacity increased by 10%"
+    "attack_speed": 0.0
    },
    "cn": {
     "weight": 0.0093,
@@ -5831,26 +5801,25 @@
    "role": "assassin",
    "ranged": false,
    "stats": {
-    "hp": 642,
-    "hp_per_level": 98,
-    "armor": 37,
+    "hp": 642.0,
+    "hp_per_level": 98.0,
+    "armor": 37.0,
     "armor_per_level": 4.7,
-    "mr": 32,
+    "mr": 32.0,
     "mr_per_level": 2.05,
-    "ad": 61,
-    "ad_per_level": 0,
+    "ad": 61.0,
+    "ad_per_level": 3.0,
     "attack_speed": 0.667,
     "attack_speed_per_level": 0.021,
     "attack_speed_ratio": 0.667,
-    "attack_range": 125,
-    "move_speed": 335
+    "attack_range": 125.0,
+    "move_speed": 335.0
    },
    "mayhem": {
     "damage_dealt": 1.1,
     "damage_taken": 0.9,
     "ability_haste": 0.0,
-    "attack_speed": 0.0,
-    "changes": "Tenacity increased by 20%|R|Cooldown|120-80s|→|100-60s"
+    "attack_speed": 0.0
    },
    "cn": {
     "weight": 0.0075,
@@ -6028,7 +5997,7 @@
      ],
      "mode_overrides": [],
      "notes": [
-      "cooldown from Mayhem balance table"
+      "ARAM cooldown"
      ]
     }
    ],
@@ -6046,26 +6015,25 @@
    "role": "marksman",
    "ranged": true,
    "stats": {
-    "hp": 600,
-    "hp_per_level": 102,
-    "armor": 24,
+    "hp": 600.0,
+    "hp_per_level": 102.0,
+    "armor": 24.0,
     "armor_per_level": 4.2,
-    "mr": 33,
+    "mr": 33.0,
     "mr_per_level": 1.1,
-    "ad": 60,
-    "ad_per_level": 0,
+    "ad": 60.0,
+    "ad_per_level": 3.75,
     "attack_speed": 0.625,
     "attack_speed_per_level": 0.025,
     "attack_speed_ratio": 0.625,
-    "attack_range": 550,
-    "move_speed": 325
+    "attack_range": 550.0,
+    "move_speed": 325.0
    },
    "mayhem": {
     "damage_dealt": 1.0,
     "damage_taken": 1.0,
     "ability_haste": 0.0,
-    "attack_speed": 0.0,
-    "changes": ""
+    "attack_speed": 0.0
    },
    "cn": {
     "weight": 0.1129,
@@ -6099,7 +6067,7 @@
        "type": "physical",
        "calc": "Damage",
        "scaling": {
-        "const": 198.0,
+        "const": 280.875,
         "bonus_ad": 1.3,
         "ap": 0.4
        },
@@ -6233,26 +6201,25 @@
    "role": "mage",
    "ranged": true,
    "stats": {
-    "hp": 650,
-    "hp_per_level": 106,
-    "armor": 34,
+    "hp": 650.0,
+    "hp_per_level": 106.0,
+    "armor": 34.0,
     "armor_per_level": 4.7,
-    "mr": 30,
+    "mr": 30.0,
     "mr_per_level": 1.3,
-    "ad": 55,
-    "ad_per_level": 0,
+    "ad": 55.0,
+    "ad_per_level": 2.65,
     "attack_speed": 0.625,
     "attack_speed_per_level": 0.021099999999999997,
     "attack_speed_ratio": 0.625,
-    "attack_range": 480,
-    "move_speed": 335
+    "attack_range": 480.0,
+    "move_speed": 335.0
    },
    "mayhem": {
     "damage_dealt": 1.0,
     "damage_taken": 1.0,
     "ability_haste": 0.0,
-    "attack_speed": 0.0,
-    "changes": ""
+    "attack_speed": 0.0
    },
    "cn": {
     "weight": 0.0419,
@@ -6413,26 +6380,25 @@
    "role": "fighter",
    "ranged": false,
    "stats": {
-    "hp": 620,
-    "hp_per_level": 105,
-    "armor": 33,
+    "hp": 620.0,
+    "hp_per_level": 105.0,
+    "armor": 33.0,
     "armor_per_level": 4.7,
-    "mr": 32,
+    "mr": 32.0,
     "mr_per_level": 2.05,
-    "ad": 66,
-    "ad_per_level": 0,
+    "ad": 66.0,
+    "ad_per_level": 3.3,
     "attack_speed": 0.69,
     "attack_speed_per_level": 0.032,
     "attack_speed_ratio": 0.69,
-    "attack_range": 150,
-    "move_speed": 345
+    "attack_range": 150.0,
+    "move_speed": 345.0
    },
    "mayhem": {
     "damage_dealt": 1.0,
     "damage_taken": 0.95,
     "ability_haste": 0.0,
-    "attack_speed": 0.0,
-    "changes": ""
+    "attack_speed": 0.0
    },
    "cn": {
     "weight": 0.0547,
@@ -6572,26 +6538,25 @@
    "role": "assassin",
    "ranged": false,
    "stats": {
-    "hp": 640,
-    "hp_per_level": 106,
-    "armor": 26,
+    "hp": 640.0,
+    "hp_per_level": 106.0,
+    "armor": 26.0,
     "armor_per_level": 4.6,
-    "mr": 32,
+    "mr": 32.0,
     "mr_per_level": 2.05,
-    "ad": 58,
-    "ad_per_level": 0,
+    "ad": 58.0,
+    "ad_per_level": 3.0,
     "attack_speed": 0.658,
     "attack_speed_per_level": 0.031,
     "attack_speed_ratio": 0.658,
-    "attack_range": 175,
-    "move_speed": 335
+    "attack_range": 175.0,
+    "move_speed": 335.0
    },
    "mayhem": {
     "damage_dealt": 1.0,
     "damage_taken": 1.0,
     "ability_haste": 0.0,
-    "attack_speed": 0.0,
-    "changes": "Tenacity changed to 0% from +10%"
+    "attack_speed": 0.0
    },
    "cn": {
     "weight": 0.078,
@@ -6626,7 +6591,7 @@
        "type": "physical",
        "calc": "TotalDamage",
        "scaling": {
-        "const": 58.0,
+        "const": 109.0,
         "bonus_ad": 1.0
        },
        "target": "flat",
@@ -6788,26 +6753,25 @@
    "role": "tank",
    "ranged": false,
    "stats": {
-    "hp": 600,
-    "hp_per_level": 126,
-    "armor": 24,
+    "hp": 600.0,
+    "hp_per_level": 126.0,
+    "armor": 24.0,
     "armor_per_level": 4.7,
-    "mr": 32,
+    "mr": 32.0,
     "mr_per_level": 2.05,
-    "ad": 59,
-    "ad_per_level": 0,
+    "ad": 59.0,
+    "ad_per_level": 3.5,
     "attack_speed": 0.625,
     "attack_speed_per_level": 0.015,
     "attack_speed_ratio": 0.625,
-    "attack_range": 150,
-    "move_speed": 340
+    "attack_range": 150.0,
+    "move_speed": 340.0
    },
    "mayhem": {
     "damage_dealt": 0.9,
     "damage_taken": 1.05,
     "ability_haste": 0.0,
-    "attack_speed": 0.0,
-    "changes": ""
+    "attack_speed": 0.0
    },
    "cn": {
     "weight": 0.0698,
@@ -7005,26 +6969,25 @@
    "role": "fighter",
    "ranged": false,
    "stats": {
-    "hp": 630,
-    "hp_per_level": 114,
-    "armor": 31,
+    "hp": 630.0,
+    "hp_per_level": 114.0,
+    "armor": 31.0,
     "armor_per_level": 4.7,
-    "mr": 32,
+    "mr": 32.0,
     "mr_per_level": 2.05,
-    "ad": 64,
-    "ad_per_level": 0,
+    "ad": 64.0,
+    "ad_per_level": 4.2,
     "attack_speed": 0.658,
     "attack_speed_per_level": 0.032,
     "attack_speed_ratio": 0.69,
-    "attack_range": 125,
-    "move_speed": 345
+    "attack_range": 125.0,
+    "move_speed": 345.0
    },
    "mayhem": {
     "damage_dealt": 1.05,
     "damage_taken": 1.0,
     "ability_haste": 0.0,
-    "attack_speed": 0.0,
-    "changes": "Q|New Effect: Passively gains 1 Silver Serpents per second"
+    "attack_speed": 0.0
    },
    "cn": {
     "weight": 0.0837,
@@ -7176,26 +7139,25 @@
    "role": "fighter",
    "ranged": false,
    "stats": {
-    "hp": 690,
-    "hp_per_level": 98,
-    "armor": 38,
+    "hp": 690.0,
+    "hp_per_level": 98.0,
+    "armor": 38.0,
     "armor_per_level": 4.2,
-    "mr": 32,
+    "mr": 32.0,
     "mr_per_level": 1.55,
-    "ad": 69,
-    "ad_per_level": 0,
+    "ad": 69.0,
+    "ad_per_level": 4.5,
     "attack_speed": 0.625,
     "attack_speed_per_level": 0.0365,
     "attack_speed_ratio": 0.625,
-    "attack_range": 175,
-    "move_speed": 340
+    "attack_range": 175.0,
+    "move_speed": 340.0
    },
    "mayhem": {
     "damage_dealt": 1.0,
     "damage_taken": 0.95,
     "ability_haste": 0.0,
-    "attack_speed": 0.0,
-    "changes": "W|Bonus resistances on-kill|0.2|→|0.4. Number of enemy kills needed to reach the maximum amount|150|→|75"
+    "attack_speed": 0.0
    },
    "cn": {
     "weight": 0.0771,
@@ -7229,7 +7191,7 @@
        "type": "physical",
        "calc": "TotalDamage",
        "scaling": {
-        "const": 253.5,
+        "const": 368.25,
         "bonus_ad": 1.5
        },
        "target": "flat",
@@ -7265,7 +7227,9 @@
       "Kiwi:ResistGainOnKillTooltip",
       "Kiwi:ShieldHealthRatio"
      ],
-     "notes": []
+     "notes": [
+      "Kiwi cooldown"
+     ]
     },
     {
      "slot": "E",
@@ -7291,7 +7255,7 @@
        "type": "physical",
        "calc": "TotalDamage",
        "scaling": {
-        "const": 363.16,
+        "const": 641.62,
         "bonus_ad": 3.64
        },
        "target": "flat",
@@ -7363,26 +7327,25 @@
    "role": "fighter",
    "ranged": false,
    "stats": {
-    "hp": 540,
-    "hp_per_level": 79,
-    "armor": 32,
+    "hp": 540.0,
+    "hp_per_level": 79.0,
+    "armor": 32.0,
     "armor_per_level": 3.7,
-    "mr": 30,
+    "mr": 30.0,
     "mr_per_level": 1.3,
-    "ad": 60,
-    "ad_per_level": 0,
+    "ad": 60.0,
+    "ad_per_level": 3.2,
     "attack_speed": 0.625,
     "attack_speed_per_level": 0.06,
     "attack_speed_ratio": 0.625,
-    "attack_range": 175,
-    "move_speed": 335
+    "attack_range": 175.0,
+    "move_speed": 335.0
    },
    "mayhem": {
     "damage_dealt": 1.05,
     "damage_taken": 0.95,
     "ability_haste": 0.0,
-    "attack_speed": 0.025,
-    "changes": "Total attack speed increased by 2.5%"
+    "attack_speed": 0.025
    },
    "cn": {
     "weight": 0.0309,
@@ -7522,26 +7485,25 @@
    "role": "fighter",
    "ranged": false,
    "stats": {
-    "hp": 640,
-    "hp_per_level": 115,
-    "armor": 38,
-    "armor_per_level": 5,
-    "mr": 32,
+    "hp": 640.0,
+    "hp_per_level": 115.0,
+    "armor": 38.0,
+    "armor_per_level": 5.0,
+    "mr": 32.0,
     "mr_per_level": 2.05,
-    "ad": 64,
-    "ad_per_level": 0,
+    "ad": 64.0,
+    "ad_per_level": 3.5,
     "attack_speed": 0.675,
     "attack_speed_per_level": 0.020499999999999997,
     "attack_speed_ratio": 0.625,
-    "attack_range": 125,
-    "move_speed": 330
+    "attack_range": 125.0,
+    "move_speed": 330.0
    },
    "mayhem": {
     "damage_dealt": 1.0,
     "damage_taken": 0.95,
     "ability_haste": 0.0,
-    "attack_speed": 0.0,
-    "changes": ""
+    "attack_speed": 0.0
    },
    "cn": {
     "weight": 0.0548,
@@ -7725,26 +7687,25 @@
    "role": "marksman",
    "ranged": true,
    "stats": {
-    "hp": 625,
-    "hp_per_level": 106,
-    "armor": 33,
+    "hp": 625.0,
+    "hp_per_level": 106.0,
+    "armor": 33.0,
     "armor_per_level": 4.6,
-    "mr": 33,
+    "mr": 33.0,
     "mr_per_level": 1.1,
-    "ad": 66,
-    "ad_per_level": 0,
+    "ad": 66.0,
+    "ad_per_level": 4.0,
     "attack_speed": 0.475,
     "attack_speed_per_level": 0.03,
     "attack_speed_ratio": 0.49,
-    "attack_range": 425,
-    "move_speed": 340
+    "attack_range": 425.0,
+    "move_speed": 340.0
    },
    "mayhem": {
     "damage_dealt": 1.0,
     "damage_taken": 1.0,
     "ability_haste": 0.0,
-    "attack_speed": 0.0,
-    "changes": ""
+    "attack_speed": 0.0
    },
    "cn": {
     "weight": 0.1143,
@@ -7916,26 +7877,25 @@
    "role": "fighter",
    "ranged": false,
    "stats": {
-    "hp": 620,
-    "hp_per_level": 115,
-    "armor": 39,
+    "hp": 620.0,
+    "hp_per_level": 115.0,
+    "armor": 39.0,
     "armor_per_level": 4.9,
-    "mr": 32,
+    "mr": 32.0,
     "mr_per_level": 2.05,
-    "ad": 63,
-    "ad_per_level": 0,
+    "ad": 63.0,
+    "ad_per_level": 3.0,
     "attack_speed": 0.69,
     "attack_speed_per_level": 0.0225,
     "attack_speed_ratio": 0.69,
-    "attack_range": 150,
-    "move_speed": 340
+    "attack_range": 150.0,
+    "move_speed": 340.0
    },
    "mayhem": {
     "damage_dealt": 1.0,
     "damage_taken": 1.0,
     "ability_haste": 0.0,
-    "attack_speed": 0.0,
-    "changes": "Q|Final snip AP ratio|35%|→|40% AP|R|Cooldown|120-80s|→|110-70s"
+    "attack_speed": 0.0
    },
    "cn": {
     "weight": 0.0348,
@@ -8105,7 +8065,7 @@
      ],
      "mode_overrides": [],
      "notes": [
-      "cooldown from Mayhem balance table"
+      "ARAM cooldown"
      ]
     }
    ],
@@ -8123,26 +8083,25 @@
    "role": "fighter",
    "ranged": false,
    "stats": {
-    "hp": 625,
-    "hp_per_level": 106,
-    "armor": 32,
+    "hp": 625.0,
+    "hp_per_level": 106.0,
+    "armor": 32.0,
     "armor_per_level": 5.45,
-    "mr": 32,
+    "mr": 32.0,
     "mr_per_level": 2.05,
-    "ad": 66,
-    "ad_per_level": 0,
+    "ad": 66.0,
+    "ad_per_level": 3.7,
     "attack_speed": 0.67,
     "attack_speed_per_level": 0.025,
     "attack_speed_ratio": 0.67,
-    "attack_range": 175,
-    "move_speed": 345
+    "attack_range": 175.0,
+    "move_speed": 345.0
    },
    "mayhem": {
     "damage_dealt": 1.05,
     "damage_taken": 0.9,
     "ability_haste": 10.0,
-    "attack_speed": 0.0,
-    "changes": "Healing done increased by 20%. Ability haste increased by 10|E|Cooldown|20-16s|→|16-12s"
+    "attack_speed": 0.0
    },
    "cn": {
     "weight": 0.1177,
@@ -8265,7 +8224,7 @@
      ],
      "mode_overrides": [],
      "notes": [
-      "cooldown from Mayhem balance table"
+      "ARAM cooldown"
      ]
     },
     {
@@ -8318,26 +8277,25 @@
    "role": "mage",
    "ranged": true,
    "stats": {
-    "hp": 558,
-    "hp_per_level": 105,
-    "armor": 19,
+    "hp": 558.0,
+    "hp_per_level": 105.0,
+    "armor": 19.0,
     "armor_per_level": 4.2,
-    "mr": 30,
+    "mr": 30.0,
     "mr_per_level": 1.3,
-    "ad": 56,
-    "ad_per_level": 0,
+    "ad": 56.0,
+    "ad_per_level": 2.7,
     "attack_speed": 0.658,
     "attack_speed_per_level": 0.013600000000000001,
     "attack_speed_ratio": 0.625,
-    "attack_range": 550,
-    "move_speed": 340
+    "attack_range": 550.0,
+    "move_speed": 340.0
    },
    "mayhem": {
     "damage_dealt": 0.9,
     "damage_taken": 1.1,
     "ability_haste": 0.0,
-    "attack_speed": 0.0,
-    "changes": ""
+    "attack_speed": 0.0
    },
    "cn": {
     "weight": 0.0362,
@@ -8545,26 +8503,25 @@
    "role": "mage",
    "ranged": true,
    "stats": {
-    "hp": 580,
-    "hp_per_level": 109,
-    "armor": 21,
+    "hp": 580.0,
+    "hp_per_level": 109.0,
+    "armor": 21.0,
     "armor_per_level": 4.7,
-    "mr": 30,
+    "mr": 30.0,
     "mr_per_level": 1.3,
-    "ad": 54,
-    "ad_per_level": 0,
+    "ad": 54.0,
+    "ad_per_level": 3.3,
     "attack_speed": 0.69,
     "attack_speed_per_level": 0.025,
     "attack_speed_ratio": 0.658,
-    "attack_range": 550,
-    "move_speed": 330
+    "attack_range": 550.0,
+    "move_speed": 330.0
    },
    "mayhem": {
     "damage_dealt": 0.95,
     "damage_taken": 1.0,
     "ability_haste": 0.0,
-    "attack_speed": 0.0,
-    "changes": "Abilities' damage to minions changed to 100% from 60%"
+    "attack_speed": 0.0
    },
    "cn": {
     "weight": 0.0505,
@@ -8816,26 +8773,25 @@
    "role": "fighter",
    "ranged": false,
    "stats": {
-    "hp": 656,
-    "hp_per_level": 115,
-    "armor": 35,
-    "armor_per_level": 5,
-    "mr": 32,
+    "hp": 656.0,
+    "hp_per_level": 115.0,
+    "armor": 35.0,
+    "armor_per_level": 5.0,
+    "mr": 32.0,
     "mr_per_level": 2.05,
-    "ad": 65,
-    "ad_per_level": 0,
+    "ad": 65.0,
+    "ad_per_level": 5.0,
     "attack_speed": 0.625,
     "attack_speed_per_level": 0.025,
     "attack_speed_ratio": 0.625,
-    "attack_range": 125,
-    "move_speed": 350
+    "attack_range": 125.0,
+    "move_speed": 350.0
    },
    "mayhem": {
     "damage_dealt": 0.95,
     "damage_taken": 1.0,
     "ability_haste": 0.0,
-    "attack_speed": 0.0,
-    "changes": "Healing done changed to -10% from -20%"
+    "attack_speed": 0.0
    },
    "cn": {
     "weight": 0.0459,
@@ -8961,26 +8917,25 @@
    "role": "fighter",
    "ranged": false,
    "stats": {
-    "hp": 630,
-    "hp_per_level": 115,
-    "armor": 36,
+    "hp": 630.0,
+    "hp_per_level": 115.0,
+    "armor": 36.0,
     "armor_per_level": 4.7,
-    "mr": 30,
+    "mr": 30.0,
     "mr_per_level": 2.05,
-    "ad": 65,
-    "ad_per_level": 0,
+    "ad": 65.0,
+    "ad_per_level": 3.5,
     "attack_speed": 0.656,
     "attack_speed_per_level": 0.025,
     "attack_speed_ratio": 0.656,
-    "attack_range": 200,
-    "move_speed": 335
+    "attack_range": 200.0,
+    "move_speed": 335.0
    },
    "mayhem": {
     "damage_dealt": 1.05,
     "damage_taken": 1.0,
     "ability_haste": 20.0,
-    "attack_speed": 0.0,
-    "changes": "Ability haste increased by 20"
+    "attack_speed": 0.0
    },
    "cn": {
     "weight": 0.0169,
@@ -9015,7 +8970,7 @@
        "type": "physical",
        "calc": "ChampionDamage",
        "scaling": {
-        "const": 137.0,
+        "const": 184.6,
         "bonus_ad": 0.8
        },
        "target": "flat",
@@ -9049,7 +9004,7 @@
        "type": "physical",
        "calc": "MinDamageCalc",
        "scaling": {
-        "const": 76.0,
+        "const": 99.8,
         "bonus_ad": 0.4,
         "ap": 0.5
        },
@@ -9061,7 +9016,7 @@
        "type": "physical",
        "calc": "MaxDamageCalc",
        "scaling": {
-        "const": 228.0,
+        "const": 299.4,
         "bonus_ad": 1.2,
         "ap": 1.5
        },
@@ -9167,26 +9122,25 @@
    "role": "support",
    "ranged": true,
    "stats": {
-    "hp": 630,
-    "hp_per_level": 99,
-    "armor": 27,
+    "hp": 630.0,
+    "hp_per_level": 99.0,
+    "armor": 27.0,
     "armor_per_level": 4.7,
-    "mr": 30,
+    "mr": 30.0,
     "mr_per_level": 1.3,
-    "ad": 50,
-    "ad_per_level": 0,
+    "ad": 50.0,
+    "ad_per_level": 3.0,
     "attack_speed": 0.644,
     "attack_speed_per_level": 0.034,
     "attack_speed_ratio": 0.644,
-    "attack_range": 475,
-    "move_speed": 330
+    "attack_range": 475.0,
+    "move_speed": 330.0
    },
    "mayhem": {
     "damage_dealt": 1.0,
     "damage_taken": 1.0,
     "ability_haste": 0.0,
-    "attack_speed": 0.0,
-    "changes": "Shielding done changed to 0% from -20%"
+    "attack_speed": 0.0
    },
    "cn": {
     "weight": 0.0073,
@@ -9361,26 +9315,25 @@
    "role": "support",
    "ranged": true,
    "stats": {
-    "hp": 570,
-    "hp_per_level": 90,
-    "armor": 28,
+    "hp": 570.0,
+    "hp_per_level": 90.0,
+    "armor": 28.0,
     "armor_per_level": 4.5,
-    "mr": 30,
+    "mr": 30.0,
     "mr_per_level": 1.3,
-    "ad": 47,
-    "ad_per_level": 0,
+    "ad": 47.0,
+    "ad_per_level": 2.5,
     "attack_speed": 0.625,
     "attack_speed_per_level": 0.03,
     "attack_speed_ratio": 0.625,
-    "attack_range": 550,
-    "move_speed": 325
+    "attack_range": 550.0,
+    "move_speed": 325.0
    },
    "mayhem": {
     "damage_dealt": 1.0,
     "damage_taken": 1.0,
     "ability_haste": 0.0,
-    "attack_speed": 0.0,
-    "changes": "Healing done changed to 0% from -10%. Shielding done changed to 0% from -5%|Q|Cooldown|14s|→|16s"
+    "attack_speed": 0.0
    },
    "cn": {
     "weight": 0.023,
@@ -9424,7 +9377,7 @@
      ],
      "mode_overrides": [],
      "notes": [
-      "cooldown from Mayhem balance table"
+      "ARAM cooldown"
      ]
     },
     {
@@ -9521,26 +9474,25 @@
    "role": "fighter",
    "ranged": false,
    "stats": {
-    "hp": 640,
-    "hp_per_level": 104,
-    "armor": 36,
+    "hp": 640.0,
+    "hp_per_level": 104.0,
+    "armor": 36.0,
     "armor_per_level": 4.6,
-    "mr": 32,
+    "mr": 32.0,
     "mr_per_level": 2.05,
-    "ad": 64,
-    "ad_per_level": 0,
+    "ad": 64.0,
+    "ad_per_level": 3.0,
     "attack_speed": 0.658,
     "attack_speed_per_level": 0.025,
     "attack_speed_ratio": 0.658,
-    "attack_range": 175,
-    "move_speed": 340
+    "attack_range": 175.0,
+    "move_speed": 340.0
    },
    "mayhem": {
     "damage_dealt": 1.0,
     "damage_taken": 1.0,
     "ability_haste": 0.0,
-    "attack_speed": 0.0,
-    "changes": ""
+    "attack_speed": 0.0
    },
    "cn": {
     "weight": 0.0888,
@@ -9689,26 +9641,25 @@
    "role": "fighter",
    "ranged": false,
    "stats": {
-    "hp": 650,
-    "hp_per_level": 103,
-    "armor": 36,
+    "hp": 650.0,
+    "hp_per_level": 103.0,
+    "armor": 36.0,
     "armor_per_level": 4.2,
-    "mr": 32,
+    "mr": 32.0,
     "mr_per_level": 2.05,
-    "ad": 68,
-    "ad_per_level": 0,
+    "ad": 68.0,
+    "ad_per_level": 4.25,
     "attack_speed": 0.638,
     "attack_speed_per_level": 0.034,
     "attack_speed_ratio": 0.638,
-    "attack_range": 125,
-    "move_speed": 350
+    "attack_range": 125.0,
+    "move_speed": 350.0
    },
    "mayhem": {
     "damage_dealt": 1.05,
     "damage_taken": 0.97,
     "ability_haste": 0.0,
-    "attack_speed": 0.0,
-    "changes": ""
+    "attack_speed": 0.0
    },
    "cn": {
     "weight": 0.0554,
@@ -9893,26 +9844,25 @@
    "role": "fighter",
    "ranged": false,
    "stats": {
-    "hp": 590,
-    "hp_per_level": 109,
-    "armor": 22,
-    "armor_per_level": 5,
-    "mr": 30,
+    "hp": 590.0,
+    "hp_per_level": 109.0,
+    "armor": 22.0,
+    "armor_per_level": 5.0,
+    "mr": 30.0,
     "mr_per_level": 1.3,
-    "ad": 59,
-    "ad_per_level": 0,
+    "ad": 59.0,
+    "ad_per_level": 4.25,
     "attack_speed": 0.658,
     "attack_speed_per_level": 0.03,
     "attack_speed_ratio": 0.658,
-    "attack_range": 125,
-    "move_speed": 335
+    "attack_range": 125.0,
+    "move_speed": 335.0
    },
    "mayhem": {
     "damage_dealt": 1.05,
     "damage_taken": 1.0,
     "ability_haste": 0.0,
-    "attack_speed": 0.0,
-    "changes": ""
+    "attack_speed": 0.0
    },
    "cn": {
     "weight": 0.0864,
@@ -9967,7 +9917,7 @@
      "hits": [],
      "mode_overrides": [],
      "notes": [
-      "cooldown from Data Dragon"
+      "cooldown from the champion's ability list"
      ]
     },
     {
@@ -10029,26 +9979,25 @@
    "role": "marksman",
    "ranged": true,
    "stats": {
-    "hp": 655,
-    "hp_per_level": 107,
-    "armor": 24,
+    "hp": 655.0,
+    "hp_per_level": 107.0,
+    "armor": 24.0,
     "armor_per_level": 4.7,
-    "mr": 33,
+    "mr": 33.0,
     "mr_per_level": 1.1,
-    "ad": 61,
-    "ad_per_level": 0,
+    "ad": 61.0,
+    "ad_per_level": 4.4,
     "attack_speed": 0.625,
     "attack_speed_per_level": 0.0,
     "attack_speed_ratio": 0.625,
-    "attack_range": 550,
-    "move_speed": 330
+    "attack_range": 550.0,
+    "move_speed": 330.0
    },
    "mayhem": {
     "damage_dealt": 0.95,
     "damage_taken": 1.0,
     "ability_haste": 0.0,
-    "attack_speed": 0.0,
-    "changes": ""
+    "attack_speed": 0.0
    },
    "cn": {
     "weight": 0.112,
@@ -10082,7 +10031,7 @@
        "type": "physical",
        "calc": "TotalDamage",
        "scaling": {
-        "const": 189.14,
+        "const": 244.492,
         "bonus_ad": 0.74,
         "ap": 0.6
        },
@@ -10117,7 +10066,7 @@
        "type": "physical",
        "calc": "TotalDamage",
        "scaling": {
-        "const": 240.5,
+        "const": 277.9,
         "bonus_ad": 0.5
        },
        "target": "flat",
@@ -10151,7 +10100,7 @@
        "type": "magic",
        "calc": "TotalDamage",
        "scaling": {
-        "const": 333.2,
+        "const": 422.96,
         "bonus_ad": 1.2,
         "ap": 1.0
        },
@@ -10188,7 +10137,7 @@
        "type": "physical",
        "calc": "DamageCalc",
        "scaling": {
-        "const": 207.25,
+        "const": 225.95,
         "bonus_ad": 0.25
        },
        "target": "flat",
@@ -10199,7 +10148,7 @@
        "type": "physical",
        "calc": "MaxIncreaseCalc",
        "scaling": {
-        "const": 829.0,
+        "const": 903.8,
         "bonus_ad": 1.0
        },
        "target": "flat",
@@ -10224,26 +10173,25 @@
    "role": "marksman",
    "ranged": true,
    "stats": {
-    "hp": 630,
-    "hp_per_level": 105,
-    "armor": 26,
+    "hp": 630.0,
+    "hp_per_level": 105.0,
+    "armor": 26.0,
     "armor_per_level": 4.2,
-    "mr": 33,
+    "mr": 33.0,
     "mr_per_level": 1.1,
-    "ad": 59,
-    "ad_per_level": 0,
+    "ad": 59.0,
+    "ad_per_level": 3.25,
     "attack_speed": 0.625,
     "attack_speed_per_level": 0.01,
     "attack_speed_ratio": 0.625,
-    "attack_range": 525,
-    "move_speed": 325
+    "attack_range": 525.0,
+    "move_speed": 325.0
    },
    "mayhem": {
     "damage_dealt": 0.9,
     "damage_taken": 1.05,
     "ability_haste": 0.0,
-    "attack_speed": 0.0,
-    "changes": ""
+    "attack_speed": 0.0
    },
    "cn": {
     "weight": 0.093,
@@ -10277,7 +10225,7 @@
        "type": "physical",
        "calc": "TotalDamage",
        "scaling": {
-        "const": 292.6,
+        "const": 369.95,
         "bonus_ad": 1.4
        },
        "target": "flat",
@@ -10382,26 +10330,25 @@
    "role": "tank",
    "ranged": false,
    "stats": {
-    "hp": 625,
-    "hp_per_level": 120,
-    "armor": 36,
+    "hp": 625.0,
+    "hp_per_level": 120.0,
+    "armor": 36.0,
     "armor_per_level": 5.2,
-    "mr": 30,
+    "mr": 30.0,
     "mr_per_level": 2.1,
-    "ad": 64,
-    "ad_per_level": 0,
+    "ad": 64.0,
+    "ad_per_level": 3.5,
     "attack_speed": 0.688,
     "attack_speed_per_level": 0.025,
     "attack_speed_ratio": 0.625,
-    "attack_range": 150,
-    "move_speed": 330
+    "attack_range": 150.0,
+    "move_speed": 330.0
    },
    "mayhem": {
     "damage_dealt": 1.05,
     "damage_taken": 1.0,
     "ability_haste": 0.0,
-    "attack_speed": 0.0,
-    "changes": ""
+    "attack_speed": 0.0
    },
    "cn": {
     "weight": 0.0181,
@@ -10481,7 +10428,9 @@
      "mode_overrides": [
       "Kiwi:DamageReduction"
      ],
-     "notes": []
+     "notes": [
+      "Kiwi cooldown"
+     ]
     },
     {
      "slot": "E",
@@ -10568,26 +10517,25 @@
    "role": "marksman",
    "ranged": true,
    "stats": {
-    "hp": 640,
-    "hp_per_level": 102,
-    "armor": 25,
+    "hp": 640.0,
+    "hp_per_level": 102.0,
+    "armor": 25.0,
     "armor_per_level": 4.2,
-    "mr": 33,
+    "mr": 33.0,
     "mr_per_level": 1.1,
-    "ad": 59,
-    "ad_per_level": 0,
+    "ad": 59.0,
+    "ad_per_level": 2.6,
     "attack_speed": 0.644,
     "attack_speed_per_level": 0.018000000000000002,
     "attack_speed_ratio": 0.644,
-    "attack_range": 525,
-    "move_speed": 335
+    "attack_range": 525.0,
+    "move_speed": 335.0
    },
    "mayhem": {
     "damage_dealt": 1.0,
     "damage_taken": 1.0,
     "ability_haste": 0.0,
-    "attack_speed": 0.025,
-    "changes": "Total attack speed increased by 2.5%|Q|Bonus AD ratio|55%|→|65% bonus AD"
+    "attack_speed": 0.025
    },
    "cn": {
     "weight": 0.1134,
@@ -10659,7 +10607,7 @@
        "type": "magic",
        "calc": "TotalDamage",
        "scaling": {
-        "const": 206.7,
+        "const": 264.16,
         "bonus_ad": 1.3,
         "ap": 0.45
        },
@@ -10730,26 +10678,25 @@
    "role": "marksman",
    "ranged": true,
    "stats": {
-    "hp": 560,
-    "hp_per_level": 114,
-    "armor": 24,
+    "hp": 560.0,
+    "hp_per_level": 114.0,
+    "armor": 24.0,
     "armor_per_level": 5.2,
-    "mr": 33,
+    "mr": 33.0,
     "mr_per_level": 1.1,
-    "ad": 57,
-    "ad_per_level": 0,
+    "ad": 57.0,
+    "ad_per_level": 4.75,
     "attack_speed": 0.694,
     "attack_speed_per_level": 0.045,
     "attack_speed_ratio": 0.694,
-    "attack_range": 525,
-    "move_speed": 330
+    "attack_range": 525.0,
+    "move_speed": 330.0
    },
    "mayhem": {
     "damage_dealt": 1.05,
     "damage_taken": 0.95,
     "ability_haste": 0.0,
-    "attack_speed": 0.0,
-    "changes": ""
+    "attack_speed": 0.0
    },
    "cn": {
     "weight": 0.0242,
@@ -10783,7 +10730,7 @@
        "type": "physical",
        "calc": "TotalDamage",
        "scaling": {
-        "const": 329.85,
+        "const": 414.6375,
         "bonus_ad": 1.05
        },
        "target": "flat",
@@ -10841,7 +10788,7 @@
        "type": "physical",
        "calc": "NormalDamage",
        "scaling": {
-        "const": 84.9,
+        "const": 141.425,
         "bonus_ad": 0.7,
         "ap": 0.65
        },
@@ -10853,7 +10800,7 @@
        "type": "physical",
        "calc": "AdditionalDamage",
        "scaling": {
-        "const": 63.5,
+        "const": 103.875,
         "bonus_ad": 0.5,
         "ap": 0.5
        },
@@ -10864,7 +10811,6 @@
      ],
      "mode_overrides": [],
      "notes": [
-      "cooldown from Data Dragon",
       "cooldown unknown; assumed 8s"
      ]
     },
@@ -10905,26 +10851,25 @@
    "role": "mage",
    "ranged": true,
    "stats": {
-    "hp": 630,
-    "hp_per_level": 109,
-    "armor": 28,
-    "armor_per_level": 5,
-    "mr": 30,
+    "hp": 630.0,
+    "hp_per_level": 109.0,
+    "armor": 28.0,
+    "armor_per_level": 5.0,
+    "mr": 30.0,
     "mr_per_level": 1.3,
-    "ad": 49,
-    "ad_per_level": 0,
+    "ad": 49.0,
+    "ad_per_level": 3.0,
     "attack_speed": 0.625,
     "attack_speed_per_level": 0.023,
     "attack_speed_ratio": 0.625,
-    "attack_range": 525,
-    "move_speed": 335
+    "attack_range": 525.0,
+    "move_speed": 335.0
    },
    "mayhem": {
     "damage_dealt": 1.0,
     "damage_taken": 1.0,
     "ability_haste": 0.0,
-    "attack_speed": 0.0,
-    "changes": "Q|Soulflare bonus primary damage 40/100/160/220 (from 40/90/140/190)"
+    "attack_speed": 0.0
    },
    "cn": {
     "weight": 0.0396,
@@ -11062,26 +11007,25 @@
    "role": "mage",
    "ranged": true,
    "stats": {
-    "hp": 620,
-    "hp_per_level": 110,
-    "armor": 21,
+    "hp": 620.0,
+    "hp_per_level": 110.0,
+    "armor": 21.0,
     "armor_per_level": 4.7,
-    "mr": 30,
+    "mr": 30.0,
     "mr_per_level": 1.3,
-    "ad": 46,
-    "ad_per_level": 0,
+    "ad": 46.0,
+    "ad_per_level": 3.25,
     "attack_speed": 0.625,
     "attack_speed_per_level": 0.021099999999999997,
     "attack_speed_ratio": 0.625,
-    "attack_range": 450,
-    "move_speed": 335
+    "attack_range": 450.0,
+    "move_speed": 335.0
    },
    "mayhem": {
     "damage_dealt": 0.93,
     "damage_taken": 1.05,
     "ability_haste": 0.0,
-    "attack_speed": 0.0,
-    "changes": "P|Duration|7s|→|5s"
+    "attack_speed": 0.0
    },
    "cn": {
     "weight": 0.1177,
@@ -11245,26 +11189,25 @@
    "role": "assassin",
    "ranged": false,
    "stats": {
-    "hp": 646,
-    "hp_per_level": 113,
-    "armor": 21,
-    "armor_per_level": 4,
-    "mr": 30,
+    "hp": 646.0,
+    "hp_per_level": 113.0,
+    "armor": 21.0,
+    "armor_per_level": 4.0,
+    "mr": 30.0,
     "mr_per_level": 1.3,
-    "ad": 59,
-    "ad_per_level": 0,
+    "ad": 59.0,
+    "ad_per_level": 3.9,
     "attack_speed": 0.64,
     "attack_speed_per_level": 0.037000000000000005,
     "attack_speed_ratio": 0.64,
-    "attack_range": 150,
-    "move_speed": 335
+    "attack_range": 150.0,
+    "move_speed": 335.0
    },
    "mayhem": {
     "damage_dealt": 1.0,
     "damage_taken": 0.95,
     "ability_haste": 0.0,
-    "attack_speed": 0.0,
-    "changes": "E|Base damage|70-190|→|80-220; AP ratio|70%|→|75% AP"
+    "attack_speed": 0.0
    },
    "cn": {
     "weight": 0.0289,
@@ -11455,26 +11398,25 @@
    "role": "assassin",
    "ranged": false,
    "stats": {
-    "hp": 672,
-    "hp_per_level": 108,
-    "armor": 32,
+    "hp": 672.0,
+    "hp_per_level": 108.0,
+    "armor": 32.0,
     "armor_per_level": 4.7,
-    "mr": 32,
+    "mr": 32.0,
     "mr_per_level": 2.05,
-    "ad": 58,
-    "ad_per_level": 0,
+    "ad": 58.0,
+    "ad_per_level": 3.2,
     "attack_speed": 0.658,
     "attack_speed_per_level": 0.0274,
     "attack_speed_ratio": 0.658,
-    "attack_range": 125,
-    "move_speed": 335
+    "attack_range": 125.0,
+    "move_speed": 335.0
    },
    "mayhem": {
     "damage_dealt": 1.0,
     "damage_taken": 1.0,
     "ability_haste": 10.0,
-    "attack_speed": 0.0,
-    "changes": "Tenacity increased by 20%. Ability haste increased by 10"
+    "attack_speed": 0.0
    },
    "cn": {
     "weight": 0.0807,
@@ -11566,7 +11508,7 @@
        "type": "magic",
        "calc": "TotalDamage",
        "scaling": {
-        "const": 83.2,
+        "const": 104.96,
         "ap": 0.25,
         "bonus_ad": 0.4
        },
@@ -11658,26 +11600,25 @@
    "role": "marksman",
    "ranged": false,
    "stats": {
-    "hp": 670,
-    "hp_per_level": 92,
-    "armor": 26,
+    "hp": 670.0,
+    "hp_per_level": 92.0,
+    "armor": 26.0,
     "armor_per_level": 4.2,
-    "mr": 22,
+    "mr": 22.0,
     "mr_per_level": 1.3,
-    "ad": 50,
-    "ad_per_level": 0,
+    "ad": 50.0,
+    "ad_per_level": 2.5,
     "attack_speed": 0.625,
     "attack_speed_per_level": 0.015,
     "attack_speed_ratio": 0.667,
-    "attack_range": 175,
-    "move_speed": 335
+    "attack_range": 175.0,
+    "move_speed": 335.0
    },
    "mayhem": {
     "damage_dealt": 0.95,
     "damage_taken": 1.1,
     "ability_haste": 0.0,
-    "attack_speed": 0.0,
-    "changes": ""
+    "attack_speed": 0.0
    },
    "cn": {
     "weight": 0.0688,
@@ -11841,26 +11782,25 @@
    "role": "fighter",
    "ranged": false,
    "stats": {
-    "hp": 655,
-    "hp_per_level": 103,
-    "armor": 38,
+    "hp": 655.0,
+    "hp_per_level": 103.0,
+    "armor": 38.0,
     "armor_per_level": 4.5,
-    "mr": 32,
+    "mr": 32.0,
     "mr_per_level": 2.05,
-    "ad": 68,
-    "ad_per_level": 0,
+    "ad": 68.0,
+    "ad_per_level": 3.3,
     "attack_speed": 0.669,
     "attack_speed_per_level": 0.027000000000000003,
     "attack_speed_ratio": 0.669,
-    "attack_range": 175,
-    "move_speed": 340
+    "attack_range": 175.0,
+    "move_speed": 340.0
    },
    "mayhem": {
     "damage_dealt": 1.0,
     "damage_taken": 1.0,
     "ability_haste": 0.0,
-    "attack_speed": 0.0,
-    "changes": "Healing done reduced by 20%. Tenacity increased by 20%|P|Locked form cooldown 1 minute; Shadow Assassin combat timer|8s|→|4s; Transformation no longer restores full health and mana|Q|Bonus AD ratio per hit|85%|→|95% bonus AD; Total bonus AD ratio|170%|→|190% bonus AD|E|Shadow Assassin cooldown|10s|→|7s"
+    "attack_speed": 0.0
    },
    "cn": {
     "weight": 0.0807,
@@ -11981,26 +11921,25 @@
    "role": "mage",
    "ranged": true,
    "stats": {
-    "hp": 580,
-    "hp_per_level": 98,
-    "armor": 29,
+    "hp": 580.0,
+    "hp_per_level": 98.0,
+    "armor": 29.0,
     "armor_per_level": 4.95,
-    "mr": 30,
+    "mr": 30.0,
     "mr_per_level": 1.3,
-    "ad": 48,
-    "ad_per_level": 0,
+    "ad": 48.0,
+    "ad_per_level": 3.75,
     "attack_speed": 0.625,
     "attack_speed_per_level": 0.034,
     "attack_speed_ratio": 0.69,
-    "attack_range": 550,
-    "move_speed": 335
+    "attack_range": 550.0,
+    "move_speed": 335.0
    },
    "mayhem": {
     "damage_dealt": 1.0,
     "damage_taken": 1.0,
     "ability_haste": 0.0,
-    "attack_speed": 0.0,
-    "changes": "Energy regeneration increased by 20%"
+    "attack_speed": 0.0
    },
    "cn": {
     "weight": 0.0221,
@@ -12174,26 +12113,25 @@
    "role": "assassin",
    "ranged": false,
    "stats": {
-    "hp": 643,
-    "hp_per_level": 99,
-    "armor": 32,
+    "hp": 643.0,
+    "hp_per_level": 99.0,
+    "armor": 32.0,
     "armor_per_level": 4.2,
-    "mr": 32,
+    "mr": 32.0,
     "mr_per_level": 2.05,
-    "ad": 60,
-    "ad_per_level": 0,
+    "ad": 60.0,
+    "ad_per_level": 3.1,
     "attack_speed": 0.668,
     "attack_speed_per_level": 0.027000000000000003,
     "attack_speed_ratio": 0.668,
-    "attack_range": 125,
-    "move_speed": 345
+    "attack_range": 125.0,
+    "move_speed": 345.0
    },
    "mayhem": {
     "damage_dealt": 1.1,
     "damage_taken": 0.9,
     "ability_haste": 0.0,
-    "attack_speed": 0.0,
-    "changes": "Healing done increased by 20%. Tenacity increased by 20%"
+    "attack_speed": 0.0
    },
    "cn": {
     "weight": 0.066,
@@ -12307,26 +12245,25 @@
    "role": "marksman",
    "ranged": true,
    "stats": {
-    "hp": 595,
-    "hp_per_level": 104,
-    "armor": 29,
+    "hp": 595.0,
+    "hp_per_level": 104.0,
+    "armor": 29.0,
     "armor_per_level": 4.7,
-    "mr": 33,
+    "mr": 33.0,
     "mr_per_level": 1.1,
-    "ad": 65,
-    "ad_per_level": 0,
+    "ad": 65.0,
+    "ad_per_level": 3.25,
     "attack_speed": 0.625,
     "attack_speed_per_level": 0.035,
     "attack_speed_ratio": 0.625,
-    "attack_range": 500,
-    "move_speed": 325
+    "attack_range": 500.0,
+    "move_speed": 325.0
    },
    "mayhem": {
     "damage_dealt": 1.0,
     "damage_taken": 0.9,
     "ability_haste": 0.0,
-    "attack_speed": 0.025,
-    "changes": "Total attack speed increased by 2.5%"
+    "attack_speed": 0.025
    },
    "cn": {
     "weight": 0.0348,
@@ -12502,26 +12439,25 @@
    "role": "fighter",
    "ranged": false,
    "stats": {
-    "hp": 410,
-    "hp_per_level": 84,
-    "armor": 35,
+    "hp": 410.0,
+    "hp_per_level": 84.0,
+    "armor": 35.0,
     "armor_per_level": 5.2,
-    "mr": 28,
+    "mr": 28.0,
     "mr_per_level": 2.05,
-    "ad": 65,
-    "ad_per_level": 0,
+    "ad": 65.0,
+    "ad_per_level": 3.5,
     "attack_speed": 0.625,
     "attack_speed_per_level": 0.035,
     "attack_speed_ratio": 0.625,
-    "attack_range": 125,
-    "move_speed": 345
+    "attack_range": 125.0,
+    "move_speed": 345.0
    },
    "mayhem": {
     "damage_dealt": 1.05,
     "damage_taken": 1.0,
     "ability_haste": 0.0,
-    "attack_speed": 0.0,
-    "changes": "P|Skaarl: while at the allied fountain, generates 25 Courage every 0.25s"
+    "attack_speed": 0.0
    },
    "cn": {
     "weight": 0.0082,
@@ -12708,26 +12644,25 @@
    "role": "marksman",
    "ranged": true,
    "stats": {
-    "hp": 635,
-    "hp_per_level": 99,
-    "armor": 24,
+    "hp": 635.0,
+    "hp_per_level": 99.0,
+    "armor": 24.0,
     "armor_per_level": 4.45,
-    "mr": 33,
+    "mr": 33.0,
     "mr_per_level": 1.1,
-    "ad": 61,
-    "ad_per_level": 0,
+    "ad": 61.0,
+    "ad_per_level": 3.1,
     "attack_speed": 0.665,
     "attack_speed_per_level": 0.0265,
     "attack_speed_ratio": 0.665,
-    "attack_range": 500,
-    "move_speed": 330
+    "attack_range": 500.0,
+    "move_speed": 330.0
    },
    "mayhem": {
     "damage_dealt": 0.9,
     "damage_taken": 1.1,
     "ability_haste": 0.0,
-    "attack_speed": 0.0,
-    "changes": "Q|Resistances reduction|16-32%|→|15-27%|W|Target health ratio|3-6%|→|2.5-4.5% of target's maximum health"
+    "attack_speed": 0.0
    },
    "cn": {
     "weight": 0.0416,
@@ -12894,26 +12829,25 @@
    "role": "assassin",
    "ranged": true,
    "stats": {
-    "hp": 598,
-    "hp_per_level": 108,
-    "armor": 22,
+    "hp": 598.0,
+    "hp_per_level": 108.0,
+    "armor": 22.0,
     "armor_per_level": 4.2,
-    "mr": 30,
+    "mr": 30.0,
     "mr_per_level": 1.3,
-    "ad": 55,
-    "ad_per_level": 0,
+    "ad": 55.0,
+    "ad_per_level": 2.2,
     "attack_speed": 0.658,
     "attack_speed_per_level": 0.015,
     "attack_speed_ratio": 0.625,
-    "attack_range": 525,
-    "move_speed": 340
+    "attack_range": 525.0,
+    "move_speed": 340.0
    },
    "mayhem": {
     "damage_dealt": 1.1,
     "damage_taken": 0.9,
     "ability_haste": 20.0,
-    "attack_speed": 0.0,
-    "changes": "Ability haste increased by 20"
+    "attack_speed": 0.0
    },
    "cn": {
     "weight": 0.0305,
@@ -13143,26 +13077,25 @@
    "role": "fighter",
    "ranged": false,
    "stats": {
-    "hp": 645,
-    "hp_per_level": 108,
-    "armor": 36,
+    "hp": 645.0,
+    "hp_per_level": 108.0,
+    "armor": 36.0,
     "armor_per_level": 4.5,
-    "mr": 32,
+    "mr": 32.0,
     "mr_per_level": 2.05,
-    "ad": 66,
-    "ad_per_level": 0,
+    "ad": 66.0,
+    "ad_per_level": 3.4,
     "attack_speed": 0.651,
     "attack_speed_per_level": 0.03,
     "attack_speed_ratio": 0.651,
-    "attack_range": 125,
-    "move_speed": 345
+    "attack_range": 125.0,
+    "move_speed": 345.0
    },
    "mayhem": {
     "damage_dealt": 1.05,
     "damage_taken": 0.95,
     "ability_haste": 0.0,
-    "attack_speed": 0.0,
-    "changes": "Healing done increased by 10%. Shielding done increased by 20%. Energy regeneration increased by 20%"
+    "attack_speed": 0.0
    },
    "cn": {
     "weight": 0.067,
@@ -13269,7 +13202,7 @@
        "type": "magic",
        "calc": "InitialDamage",
        "scaling": {
-        "const": 194.4,
+        "const": 246.42,
         "bonus_ad": 0.9
        },
        "target": "flat",
@@ -13350,26 +13283,25 @@
    "role": "tank",
    "ranged": false,
    "stats": {
-    "hp": 646,
-    "hp_per_level": 101,
-    "armor": 43,
+    "hp": 646.0,
+    "hp_per_level": 101.0,
+    "armor": 43.0,
     "armor_per_level": 4.8,
-    "mr": 32,
+    "mr": 32.0,
     "mr_per_level": 2.05,
-    "ad": 60,
-    "ad_per_level": 0,
+    "ad": 60.0,
+    "ad_per_level": 3.0,
     "attack_speed": 0.625,
     "attack_speed_per_level": 0.028999999999999998,
     "attack_speed_ratio": 0.625,
-    "attack_range": 125,
-    "move_speed": 335
+    "attack_range": 125.0,
+    "move_speed": 335.0
    },
    "mayhem": {
     "damage_dealt": 0.95,
     "damage_taken": 1.05,
     "ability_haste": 0.0,
-    "attack_speed": 0.0,
-    "changes": ""
+    "attack_speed": 0.0
    },
    "cn": {
     "weight": 0.0552,
@@ -13532,26 +13464,25 @@
    "role": "fighter",
    "ranged": true,
    "stats": {
-    "hp": 605,
-    "hp_per_level": 105,
-    "armor": 24,
+    "hp": 605.0,
+    "hp_per_level": 105.0,
+    "armor": 24.0,
     "armor_per_level": 4.5,
-    "mr": 32,
+    "mr": 32.0,
     "mr_per_level": 1.55,
-    "ad": 61,
-    "ad_per_level": 0,
+    "ad": 61.0,
+    "ad_per_level": 3.1,
     "attack_speed": 0.625,
     "attack_speed_per_level": 0.027000000000000003,
     "attack_speed_ratio": 0.625,
-    "attack_range": 325,
-    "move_speed": 330
+    "attack_range": 325.0,
+    "move_speed": 330.0
    },
    "mayhem": {
     "damage_dealt": 0.95,
     "damage_taken": 1.05,
     "ability_haste": 0.0,
-    "attack_speed": 0.0,
-    "changes": "E|Cooldown|12s|→|18-14s"
+    "attack_speed": 0.0
    },
    "cn": {
     "weight": 0.1037,
@@ -13687,7 +13618,7 @@
      ],
      "mode_overrides": [],
      "notes": [
-      "cooldown from Mayhem balance table"
+      "ARAM cooldown"
      ]
     },
     {
@@ -13738,26 +13669,25 @@
    "role": "mage",
    "ranged": true,
    "stats": {
-    "hp": 620,
-    "hp_per_level": 110,
-    "armor": 22,
+    "hp": 620.0,
+    "hp_per_level": 110.0,
+    "armor": 22.0,
     "armor_per_level": 4.2,
-    "mr": 30,
+    "mr": 30.0,
     "mr_per_level": 1.3,
-    "ad": 55,
-    "ad_per_level": 0,
+    "ad": 55.0,
+    "ad_per_level": 2.7,
     "attack_speed": 0.656,
     "attack_speed_per_level": 0.015,
     "attack_speed_ratio": 0.625,
-    "attack_range": 550,
-    "move_speed": 325
+    "attack_range": 550.0,
+    "move_speed": 325.0
    },
    "mayhem": {
     "damage_dealt": 0.95,
     "damage_taken": 1.05,
     "ability_haste": 0.0,
-    "attack_speed": 0.0,
-    "changes": ""
+    "attack_speed": 0.0
    },
    "cn": {
     "weight": 0.0267,
@@ -13920,26 +13850,25 @@
    "role": "assassin",
    "ranged": false,
    "stats": {
-    "hp": 620,
-    "hp_per_level": 109,
-    "armor": 32,
+    "hp": 620.0,
+    "hp_per_level": 109.0,
+    "armor": 32.0,
     "armor_per_level": 4.2,
-    "mr": 32,
+    "mr": 32.0,
     "mr_per_level": 2.05,
-    "ad": 58,
-    "ad_per_level": 0,
+    "ad": 58.0,
+    "ad_per_level": 3.0,
     "attack_speed": 0.688,
     "attack_speed_per_level": 0.033,
     "attack_speed_ratio": 0.625,
-    "attack_range": 125,
-    "move_speed": 340
+    "attack_range": 125.0,
+    "move_speed": 340.0
    },
    "mayhem": {
     "damage_dealt": 1.05,
     "damage_taken": 0.95,
     "ability_haste": 0.0,
-    "attack_speed": 0.0,
-    "changes": "Tenacity changed to +20% from 0%"
+    "attack_speed": 0.0
    },
    "cn": {
     "weight": 0.0272,
@@ -14062,7 +13991,7 @@
      ],
      "mode_overrides": [],
      "notes": [
-      "cooldown from Data Dragon"
+      "cooldown from the champion's ability list"
      ]
     },
     {
@@ -14114,26 +14043,25 @@
    "role": "marksman",
    "ranged": true,
    "stats": {
-    "hp": 641,
-    "hp_per_level": 100,
-    "armor": 28,
+    "hp": 641.0,
+    "hp_per_level": 100.0,
+    "armor": 28.0,
     "armor_per_level": 4.2,
-    "mr": 33,
+    "mr": 33.0,
     "mr_per_level": 1.1,
-    "ad": 60,
-    "ad_per_level": 0,
+    "ad": 60.0,
+    "ad_per_level": 2.9,
     "attack_speed": 0.638,
     "attack_speed_per_level": 0.025,
     "attack_speed_ratio": 0.638,
-    "attack_range": 500,
-    "move_speed": 335
+    "attack_range": 500.0,
+    "move_speed": 335.0
    },
    "mayhem": {
     "damage_dealt": 1.0,
     "damage_taken": 0.95,
     "ability_haste": 10.0,
-    "attack_speed": 0.0,
-    "changes": "Tenacity increased by 20%. Ability haste increased by 10"
+    "attack_speed": 0.0
    },
    "cn": {
     "weight": 0.128,
@@ -14258,7 +14186,7 @@
        "type": "physical",
        "calc": "DamagePerBullet",
        "scaling": {
-        "const": 60.0,
+        "const": 72.325,
         "bonus_ad": 0.25,
         "ap": 0.15
        },
@@ -14298,26 +14226,25 @@
    "role": "support",
    "ranged": true,
    "stats": {
-    "hp": 565,
-    "hp_per_level": 92,
-    "armor": 26,
+    "hp": 565.0,
+    "hp_per_level": 92.0,
+    "armor": 26.0,
     "armor_per_level": 4.6,
-    "mr": 30,
+    "mr": 30.0,
     "mr_per_level": 1.3,
-    "ad": 47,
-    "ad_per_level": 0,
+    "ad": 47.0,
+    "ad_per_level": 2.6,
     "attack_speed": 0.625,
     "attack_speed_per_level": 0.0225,
     "attack_speed_ratio": 0.625,
-    "attack_range": 550,
-    "move_speed": 330
+    "attack_range": 550.0,
+    "move_speed": 330.0
    },
    "mayhem": {
     "damage_dealt": 1.0,
     "damage_taken": 1.0,
     "ability_haste": 0.0,
-    "attack_speed": 0.0,
-    "changes": ""
+    "attack_speed": 0.0
    },
    "cn": {
     "weight": 0.0149,
@@ -14466,26 +14393,25 @@
    "role": "mage",
    "ranged": true,
    "stats": {
-    "hp": 580,
-    "hp_per_level": 99,
-    "armor": 21,
+    "hp": 580.0,
+    "hp_per_level": 99.0,
+    "armor": 21.0,
     "armor_per_level": 5.2,
-    "mr": 30,
+    "mr": 30.0,
     "mr_per_level": 1.3,
-    "ad": 54,
-    "ad_per_level": 0,
+    "ad": 54.0,
+    "ad_per_level": 3.3,
     "attack_speed": 0.669,
     "attack_speed_per_level": 0.03,
     "attack_speed_ratio": 0.625,
-    "attack_range": 550,
-    "move_speed": 330
+    "attack_range": 550.0,
+    "move_speed": 330.0
    },
    "mayhem": {
     "damage_dealt": 0.9,
     "damage_taken": 1.1,
     "ability_haste": 0.0,
-    "attack_speed": 0.0,
-    "changes": "Shielding done reduced by 10%|R|Cooldown|60-40s|→|80-60s"
+    "attack_speed": 0.0
    },
    "cn": {
     "weight": 0.0602,
@@ -14529,7 +14455,7 @@
      ],
      "mode_overrides": [],
      "notes": [
-      "cooldown from Data Dragon"
+      "cooldown from the champion's ability list"
      ]
     },
     {
@@ -14621,7 +14547,7 @@
      ],
      "mode_overrides": [],
      "notes": [
-      "cooldown from Mayhem balance table"
+      "ARAM cooldown"
      ]
     }
    ],
@@ -14639,26 +14565,25 @@
    "role": "tank",
    "ranged": false,
    "stats": {
-    "hp": 665,
-    "hp_per_level": 104,
-    "armor": 40,
+    "hp": 665.0,
+    "hp_per_level": 104.0,
+    "armor": 40.0,
     "armor_per_level": 4.95,
-    "mr": 28,
+    "mr": 28.0,
     "mr_per_level": 2.05,
-    "ad": 62,
-    "ad_per_level": 0,
+    "ad": 62.0,
+    "ad_per_level": 4.0,
     "attack_speed": 0.736,
     "attack_speed_per_level": 0.034,
     "attack_speed_ratio": 0.638,
-    "attack_range": 125,
-    "move_speed": 335
+    "attack_range": 125.0,
+    "move_speed": 335.0
    },
    "mayhem": {
     "damage_dealt": 1.0,
     "damage_taken": 1.0,
     "ability_haste": 0.0,
-    "attack_speed": 0.0,
-    "changes": ""
+    "attack_speed": 0.0
    },
    "cn": {
     "weight": 0.0993,
@@ -14834,26 +14759,25 @@
    "role": "mage",
    "ranged": true,
    "stats": {
-    "hp": 580,
-    "hp_per_level": 101,
-    "armor": 18,
+    "hp": 580.0,
+    "hp_per_level": 101.0,
+    "armor": 18.0,
     "armor_per_level": 4.7,
-    "mr": 30,
+    "mr": 30.0,
     "mr_per_level": 1.3,
-    "ad": 55,
-    "ad_per_level": 0,
+    "ad": 55.0,
+    "ad_per_level": 3.0,
     "attack_speed": 0.625,
     "attack_speed_per_level": 0.015,
     "attack_speed_ratio": 0.625,
-    "attack_range": 500,
-    "move_speed": 335
+    "attack_range": 500.0,
+    "move_speed": 335.0
    },
    "mayhem": {
     "damage_dealt": 0.9,
     "damage_taken": 1.1,
     "ability_haste": 0.0,
-    "attack_speed": 0.0,
-    "changes": "Abilities' damage to minions changed to 100% from 60%"
+    "attack_speed": 0.0
    },
    "cn": {
     "weight": 0.068,
@@ -15027,26 +14951,25 @@
    "role": "tank",
    "ranged": false,
    "stats": {
-    "hp": 665,
-    "hp_per_level": 109,
-    "armor": 35,
+    "hp": 665.0,
+    "hp_per_level": 109.0,
+    "armor": 35.0,
     "armor_per_level": 5.2,
-    "mr": 32,
+    "mr": 32.0,
     "mr_per_level": 2.05,
-    "ad": 64,
-    "ad_per_level": 0,
+    "ad": 64.0,
+    "ad_per_level": 3.3,
     "attack_speed": 0.8,
     "attack_speed_per_level": 0.02125,
     "attack_speed_ratio": 0.695,
-    "attack_range": 125,
-    "move_speed": 335
+    "attack_range": 125.0,
+    "move_speed": 335.0
    },
    "mayhem": {
     "damage_dealt": 0.95,
     "damage_taken": 1.0,
     "ability_haste": 0.0,
-    "attack_speed": 0.0,
-    "changes": "P|Cooldown reduction|4s|→|3s|Q|Cooldown|7-5s|→|8-6s|E|AP ratio|25%|→|20% AP; Total enhanced AP ratio|50%|→|40% AP"
+    "attack_speed": 0.0
    },
    "cn": {
     "weight": 0.0815,
@@ -15090,7 +15013,7 @@
      ],
      "mode_overrides": [],
      "notes": [
-      "cooldown from Mayhem balance table"
+      "ARAM cooldown"
      ]
     },
     {
@@ -15227,26 +15150,25 @@
    "role": "fighter",
    "ranged": false,
    "stats": {
-    "hp": 640,
-    "hp_per_level": 105,
-    "armor": 33,
-    "armor_per_level": 5,
-    "mr": 32,
+    "hp": 640.0,
+    "hp_per_level": 105.0,
+    "armor": 33.0,
+    "armor_per_level": 5.0,
+    "mr": 32.0,
     "mr_per_level": 2.05,
-    "ad": 65,
-    "ad_per_level": 0,
+    "ad": 65.0,
+    "ad_per_level": 2.5,
     "attack_speed": 0.679,
     "attack_speed_per_level": 0.025,
     "attack_speed_ratio": 0.679,
-    "attack_range": 175,
-    "move_speed": 355
+    "attack_range": 175.0,
+    "move_speed": 355.0
    },
    "mayhem": {
     "damage_dealt": 1.0,
     "damage_taken": 1.0,
     "ability_haste": 0.0,
-    "attack_speed": 0.0,
-    "changes": ""
+    "attack_speed": 0.0
    },
    "cn": {
     "weight": 0.1074,
@@ -15281,7 +15203,7 @@
        "type": "physical",
        "calc": "TotalDamage",
        "scaling": {
-        "const": 145.5,
+        "const": 175.25,
         "bonus_ad": 0.7
        },
        "target": "flat",
@@ -15292,7 +15214,7 @@
        "type": "physical",
        "calc": "SubesquentDamage",
        "scaling": {
-        "const": 36.375,
+        "const": 43.8125,
         "bonus_ad": 0.175
        },
        "target": "flat",
@@ -15303,7 +15225,7 @@
        "type": "physical",
        "calc": "SingleTotalDamage",
        "scaling": {
-        "const": 254.625,
+        "const": 306.6875,
         "bonus_ad": 1.225
        },
        "target": "flat",
@@ -15335,7 +15257,7 @@
      "hits": [],
      "mode_overrides": [],
      "notes": [
-      "cooldown from Data Dragon"
+      "cooldown from the champion's ability list"
      ]
     },
     {
@@ -15410,26 +15332,25 @@
    "role": "mage",
    "ranged": true,
    "stats": {
-    "hp": 630,
-    "hp_per_level": 99,
-    "armor": 21,
+    "hp": 630.0,
+    "hp_per_level": 99.0,
+    "armor": 21.0,
     "armor_per_level": 5.2,
-    "mr": 30,
+    "mr": 30.0,
     "mr_per_level": 1.3,
-    "ad": 54,
-    "ad_per_level": 0,
+    "ad": 54.0,
+    "ad_per_level": 3.3,
     "attack_speed": 0.625,
     "attack_speed_per_level": 0.025,
     "attack_speed_ratio": 0.625,
-    "attack_range": 550,
-    "move_speed": 330
+    "attack_range": 550.0,
+    "move_speed": 330.0
    },
    "mayhem": {
     "damage_dealt": 1.0,
     "damage_taken": 1.0,
     "ability_haste": -10.0,
-    "attack_speed": 0.0,
-    "changes": "Ability haste reduced by 10|W|Cooldown|38-26s|→|45-41s"
+    "attack_speed": 0.0
    },
    "cn": {
     "weight": 0.0841,
@@ -15516,7 +15437,7 @@
      "hits": [],
      "mode_overrides": [],
      "notes": [
-      "cooldown from Mayhem balance table"
+      "ARAM cooldown"
      ]
     },
     {
@@ -15625,26 +15546,25 @@
    "role": "support",
    "ranged": true,
    "stats": {
-    "hp": 560,
-    "hp_per_level": 88,
-    "armor": 26,
+    "hp": 560.0,
+    "hp_per_level": 88.0,
+    "armor": 26.0,
     "armor_per_level": 4.6,
-    "mr": 30,
+    "mr": 30.0,
     "mr_per_level": 1.3,
-    "ad": 48,
-    "ad_per_level": 0,
+    "ad": 48.0,
+    "ad_per_level": 3.2,
     "attack_speed": 0.625,
     "attack_speed_per_level": 0.03,
     "attack_speed_ratio": 0.625,
-    "attack_range": 525,
-    "move_speed": 330
+    "attack_range": 525.0,
+    "move_speed": 330.0
    },
    "mayhem": {
     "damage_dealt": 1.0,
     "damage_taken": 1.0,
     "ability_haste": 0.0,
-    "attack_speed": 0.0,
-    "changes": "Ability haste changed to 0 from -10. Healing done changed to 0% from -5%. Shielding done changed to 0% from -10%"
+    "attack_speed": 0.0
    },
    "cn": {
     "weight": 0.0166,
@@ -15688,7 +15608,7 @@
      ],
      "mode_overrides": [],
      "notes": [
-      "cooldown from Data Dragon"
+      "cooldown from the champion's ability list"
      ]
     },
     {
@@ -15774,26 +15694,25 @@
    "role": "marksman",
    "ranged": true,
    "stats": {
-    "hp": 625,
-    "hp_per_level": 100,
-    "armor": 25,
-    "armor_per_level": 4,
-    "mr": 33,
+    "hp": 625.0,
+    "hp_per_level": 100.0,
+    "armor": 25.0,
+    "armor_per_level": 4.0,
+    "mr": 33.0,
     "mr_per_level": 1.1,
-    "ad": 55,
-    "ad_per_level": 0,
+    "ad": 55.0,
+    "ad_per_level": 2.4,
     "attack_speed": 0.656,
     "attack_speed_per_level": 0.03,
     "attack_speed_ratio": 0.656,
-    "attack_range": 550,
-    "move_speed": 325
+    "attack_range": 550.0,
+    "move_speed": 325.0
    },
    "mayhem": {
     "damage_dealt": 0.95,
     "damage_taken": 1.0,
     "ability_haste": 0.0,
-    "attack_speed": 0.0,
-    "changes": ""
+    "attack_speed": 0.0
    },
    "cn": {
     "weight": 0.1392,
@@ -15827,7 +15746,7 @@
        "type": "physical",
        "calc": "TotalDamageTooltip",
        "scaling": {
-        "const": 175.0,
+        "const": 215.8,
         "bonus_ad": 1.0,
         "ap": 0.35
        },
@@ -15839,7 +15758,7 @@
        "type": "physical",
        "calc": "TotalDamageCrit",
        "scaling": {
-        "const": 87.5,
+        "const": 107.9,
         "bonus_ad": 0.5,
         "ap": 0.175
        },
@@ -15943,7 +15862,7 @@
        "type": "physical",
        "calc": "PhysicalDamagePerWave",
        "scaling": {
-        "const": 73.0,
+        "const": 97.48,
         "bonus_ad": 0.6,
         "ap": 0.25
        },
@@ -15955,7 +15874,7 @@
        "type": "physical",
        "calc": "TotalPhysicalDamage",
        "scaling": {
-        "const": 1314.0,
+        "const": 1754.64,
         "bonus_ad": 10.8,
         "ap": 4.5
        },
@@ -15967,7 +15886,7 @@
        "type": "physical",
        "calc": "CritDamagePerWave",
        "scaling": {
-        "const": 51.1,
+        "const": 68.236,
         "bonus_ad": 0.42,
         "ap": 0.175
        },
@@ -15996,26 +15915,25 @@
    "role": "fighter",
    "ranged": false,
    "stats": {
-    "hp": 645,
-    "hp_per_level": 104,
-    "armor": 37,
+    "hp": 645.0,
+    "hp_per_level": 104.0,
+    "armor": 37.0,
     "armor_per_level": 4.2,
-    "mr": 32,
+    "mr": 32.0,
     "mr_per_level": 2.05,
-    "ad": 61,
-    "ad_per_level": 0,
+    "ad": 61.0,
+    "ad_per_level": 4.0,
     "attack_speed": 0.625,
     "attack_speed_per_level": 0.01,
     "attack_speed_ratio": 0.625,
-    "attack_range": 175,
-    "move_speed": 335
+    "attack_range": 175.0,
+    "move_speed": 335.0
    },
    "mayhem": {
     "damage_dealt": 1.0,
     "damage_taken": 1.0,
     "ability_haste": 0.0,
-    "attack_speed": 0.0,
-    "changes": ""
+    "attack_speed": 0.0
    },
    "cn": {
     "weight": 0.0799,
@@ -16167,26 +16085,25 @@
    "role": "support",
    "ranged": true,
    "stats": {
-    "hp": 630,
-    "hp_per_level": 104,
-    "armor": 25,
+    "hp": 630.0,
+    "hp_per_level": 104.0,
+    "armor": 25.0,
     "armor_per_level": 4.2,
-    "mr": 30,
+    "mr": 30.0,
     "mr_per_level": 1.3,
-    "ad": 56,
-    "ad_per_level": 0,
+    "ad": 56.0,
+    "ad_per_level": 3.5,
     "attack_speed": 0.625,
     "attack_speed_per_level": 0.015300000000000001,
     "attack_speed_ratio": 0.625,
-    "attack_range": 450,
-    "move_speed": 335
+    "attack_range": 450.0,
+    "move_speed": 335.0
    },
    "mayhem": {
     "damage_dealt": 0.95,
     "damage_taken": 1.0,
     "ability_haste": 0.0,
-    "attack_speed": 0.0,
-    "changes": ""
+    "attack_speed": 0.0
    },
    "cn": {
     "weight": 0.1112,
@@ -16230,7 +16147,7 @@
      ],
      "mode_overrides": [],
      "notes": [
-      "cooldown from Data Dragon"
+      "cooldown from the champion's ability list"
      ]
     },
     {
@@ -16360,26 +16277,25 @@
    "role": "assassin",
    "ranged": false,
    "stats": {
-    "hp": 610,
-    "hp_per_level": 105,
-    "armor": 28,
+    "hp": 610.0,
+    "hp_per_level": 105.0,
+    "armor": 28.0,
     "armor_per_level": 4.2,
-    "mr": 32,
+    "mr": 32.0,
     "mr_per_level": 2.05,
-    "ad": 55,
-    "ad_per_level": 0,
+    "ad": 55.0,
+    "ad_per_level": 2.0,
     "attack_speed": 0.663,
     "attack_speed_per_level": 0.021,
     "attack_speed_ratio": 0.625,
-    "attack_range": 125,
-    "move_speed": 340
+    "attack_range": 125.0,
+    "move_speed": 340.0
    },
    "mayhem": {
     "damage_dealt": 1.1,
     "damage_taken": 1.0,
     "ability_haste": 10.0,
-    "attack_speed": 0.0,
-    "changes": "Ability haste increased by 10"
+    "attack_speed": 0.0
    },
    "cn": {
     "weight": 0.0285,
@@ -16436,7 +16352,7 @@
        "type": "physical",
        "calc": "BonusAD",
        "scaling": {
-        "const": 11.0,
+        "const": 17.8,
         "bonus_ad": 0.2
        },
        "target": "flat",
@@ -16554,26 +16470,25 @@
    "role": "support",
    "ranged": true,
    "stats": {
-    "hp": 560,
-    "hp_per_level": 88,
-    "armor": 29,
+    "hp": 560.0,
+    "hp_per_level": 88.0,
+    "armor": 29.0,
     "armor_per_level": 5.2,
-    "mr": 30,
+    "mr": 30.0,
     "mr_per_level": 1.3,
-    "ad": 54,
-    "ad_per_level": 0,
+    "ad": 54.0,
+    "ad_per_level": 3.1,
     "attack_speed": 0.644,
     "attack_speed_per_level": 0.026099999999999998,
     "attack_speed_ratio": 0.644,
-    "attack_range": 550,
-    "move_speed": 335
+    "attack_range": 550.0,
+    "move_speed": 335.0
    },
    "mayhem": {
     "damage_dealt": 1.0,
     "damage_taken": 1.0,
     "ability_haste": 0.0,
-    "attack_speed": 0.0,
-    "changes": ""
+    "attack_speed": 0.0
    },
    "cn": {
     "weight": 0.0192,
@@ -16651,7 +16566,7 @@
      ],
      "mode_overrides": [],
      "notes": [
-      "cooldown from Data Dragon"
+      "cooldown from the champion's ability list"
      ]
     },
     {
@@ -16737,26 +16652,25 @@
    "role": "fighter",
    "ranged": false,
    "stats": {
-    "hp": 650,
-    "hp_per_level": 104,
-    "armor": 34,
+    "hp": 650.0,
+    "hp_per_level": 104.0,
+    "armor": 34.0,
     "armor_per_level": 4.7,
-    "mr": 32,
+    "mr": 32.0,
     "mr_per_level": 2.05,
-    "ad": 67,
-    "ad_per_level": 0,
+    "ad": 67.0,
+    "ad_per_level": 4.0,
     "attack_speed": 0.638,
     "attack_speed_per_level": 0.0348,
     "attack_speed_ratio": 0.638,
-    "attack_range": 125,
-    "move_speed": 350
+    "attack_range": 125.0,
+    "move_speed": 350.0
    },
    "mayhem": {
     "damage_dealt": 1.0,
     "damage_taken": 1.0,
     "ability_haste": 0.0,
-    "attack_speed": 0.0,
-    "changes": "Q|Per-kill stacks|3|→|6; Per-large-kill stacks|12|→|24"
+    "attack_speed": 0.0
    },
    "cn": {
     "weight": 0.0654,
@@ -16790,7 +16704,7 @@
        "type": "physical",
        "calc": "TotalDamage",
        "scaling": {
-        "const": 177.0,
+        "const": 245.0,
         "bonus_ad": 1.0
        },
        "target": "flat",
@@ -16922,26 +16836,25 @@
    "role": "tank",
    "ranged": false,
    "stats": {
-    "hp": 646,
-    "hp_per_level": 100,
-    "armor": 39,
+    "hp": 646.0,
+    "hp_per_level": 100.0,
+    "armor": 39.0,
     "armor_per_level": 4.95,
-    "mr": 32,
+    "mr": 32.0,
     "mr_per_level": 2.05,
-    "ad": 58,
-    "ad_per_level": 0,
+    "ad": 58.0,
+    "ad_per_level": 3.3,
     "attack_speed": 0.706,
     "attack_speed_per_level": 0.01,
     "attack_speed_ratio": 0.612,
-    "attack_range": 175,
-    "move_speed": 325
+    "attack_range": 175.0,
+    "move_speed": 325.0
    },
    "mayhem": {
     "damage_dealt": 1.0,
     "damage_taken": 1.0,
     "ability_haste": 0.0,
-    "attack_speed": 0.0,
-    "changes": ""
+    "attack_speed": 0.0
    },
    "cn": {
     "weight": 0.0627,
@@ -17115,26 +17028,25 @@
    "role": "mage",
    "ranged": true,
    "stats": {
-    "hp": 610,
-    "hp_per_level": 104,
-    "armor": 21,
+    "hp": 610.0,
+    "hp_per_level": 104.0,
+    "armor": 21.0,
     "armor_per_level": 5.2,
-    "mr": 30,
+    "mr": 30.0,
     "mr_per_level": 1.3,
-    "ad": 48,
-    "ad_per_level": 0,
+    "ad": 48.0,
+    "ad_per_level": 2.5,
     "attack_speed": 0.625,
     "attack_speed_per_level": 0.035,
     "attack_speed_ratio": 0.67,
-    "attack_range": 550,
-    "move_speed": 340
+    "attack_range": 550.0,
+    "move_speed": 340.0
    },
    "mayhem": {
     "damage_dealt": 1.0,
     "damage_taken": 1.0,
     "ability_haste": 0.0,
-    "attack_speed": 0.0,
-    "changes": ""
+    "attack_speed": 0.0
    },
    "cn": {
     "weight": 0.0259,
@@ -17307,26 +17219,25 @@
    "role": "assassin",
    "ranged": true,
    "stats": {
-    "hp": 610,
-    "hp_per_level": 109,
-    "armor": 32,
-    "armor_per_level": 5,
-    "mr": 30,
+    "hp": 610.0,
+    "hp_per_level": 109.0,
+    "armor": 32.0,
+    "armor_per_level": 5.0,
+    "mr": 30.0,
     "mr_per_level": 1.45,
-    "ad": 58,
-    "ad_per_level": 0,
+    "ad": 58.0,
+    "ad_per_level": 3.5,
     "attack_speed": 0.638,
     "attack_speed_per_level": 0.0322,
     "attack_speed_ratio": 0.638,
-    "attack_range": 525,
-    "move_speed": 335
+    "attack_range": 525.0,
+    "move_speed": 335.0
    },
    "mayhem": {
     "damage_dealt": 1.1,
     "damage_taken": 1.0,
     "ability_haste": 0.0,
-    "attack_speed": 0.0,
-    "changes": ""
+    "attack_speed": 0.0
    },
    "cn": {
     "weight": 0.0672,
@@ -17476,26 +17387,25 @@
    "role": "fighter",
    "ranged": false,
    "stats": {
-    "hp": 570,
-    "hp_per_level": 101,
-    "armor": 27,
+    "hp": 570.0,
+    "hp_per_level": 101.0,
+    "armor": 27.0,
     "armor_per_level": 4.2,
-    "mr": 32,
+    "mr": 32.0,
     "mr_per_level": 2.05,
-    "ad": 58,
-    "ad_per_level": 0,
+    "ad": 58.0,
+    "ad_per_level": 2.0,
     "attack_speed": 0.697,
     "attack_speed_per_level": 0.0125,
     "attack_speed_ratio": 0.67,
-    "attack_range": 225,
-    "move_speed": 340
+    "attack_range": 225.0,
+    "move_speed": 340.0
    },
    "mayhem": {
     "damage_dealt": 1.0,
     "damage_taken": 1.0,
     "ability_haste": 0.0,
-    "attack_speed": 0.0,
-    "changes": ""
+    "attack_speed": 0.0
    },
    "cn": {
     "weight": 0.009,
@@ -17529,7 +17439,7 @@
        "type": "physical",
        "calc": "DamageCalc",
        "scaling": {
-        "const": 98.0,
+        "const": 132.0,
         "bonus_ad": 1.0
        },
        "target": "flat",
@@ -17663,26 +17573,25 @@
    "role": "fighter",
    "ranged": false,
    "stats": {
-    "hp": 640,
-    "hp_per_level": 109,
-    "armor": 36,
+    "hp": 640.0,
+    "hp_per_level": 109.0,
+    "armor": 36.0,
     "armor_per_level": 4.2,
-    "mr": 32,
+    "mr": 32.0,
     "mr_per_level": 1.55,
-    "ad": 62,
-    "ad_per_level": 0,
+    "ad": 62.0,
+    "ad_per_level": 2.6,
     "attack_speed": 0.721,
     "attack_speed_per_level": 0.027000000000000003,
     "attack_speed_ratio": 0.721,
-    "attack_range": 125,
-    "move_speed": 345
+    "attack_range": 125.0,
+    "move_speed": 345.0
    },
    "mayhem": {
     "damage_dealt": 1.1,
     "damage_taken": 0.9,
     "ability_haste": 0.0,
-    "attack_speed": 0.0,
-    "changes": "Healing done increased by 20%"
+    "attack_speed": 0.0
    },
    "cn": {
     "weight": 0.0324,
@@ -17844,26 +17753,25 @@
    "role": "tank",
    "ranged": false,
    "stats": {
-    "hp": 610,
-    "hp_per_level": 90,
-    "armor": 29,
+    "hp": 610.0,
+    "hp_per_level": 90.0,
+    "armor": 29.0,
     "armor_per_level": 4.2,
-    "mr": 32,
+    "mr": 32.0,
     "mr_per_level": 2.05,
-    "ad": 61,
-    "ad_per_level": 0,
+    "ad": 61.0,
+    "ad_per_level": 3.0,
     "attack_speed": 0.625,
     "attack_speed_per_level": 0.0225,
     "attack_speed_ratio": 0.625,
-    "attack_range": 125,
-    "move_speed": 345
+    "attack_range": 125.0,
+    "move_speed": 345.0
    },
    "mayhem": {
     "damage_dealt": 1.1,
     "damage_taken": 0.9,
     "ability_haste": 0.0,
-    "attack_speed": 0.0,
-    "changes": "Healing done increased by 10%. Shielding done increased by 20%. Tenacity increased by 20%|Q|Non-champion heal AP ratio|90%|→|110% AP|W|Minimum AP ratio|80%|→|67% AP; Maximum AP ratio|135%|→|200% AP"
+    "attack_speed": 0.0
    },
    "cn": {
     "weight": 0.0273,
@@ -18053,26 +17961,25 @@
    "role": "fighter",
    "ranged": false,
    "stats": {
-    "hp": 645,
-    "hp_per_level": 119,
-    "armor": 35,
+    "hp": 645.0,
+    "hp_per_level": 119.0,
+    "armor": 35.0,
     "armor_per_level": 4.2,
-    "mr": 32,
+    "mr": 32.0,
     "mr_per_level": 2.05,
-    "ad": 68,
-    "ad_per_level": 0,
+    "ad": 68.0,
+    "ad_per_level": 4.7,
     "attack_speed": 0.72,
     "attack_speed_per_level": 0.027000000000000003,
     "attack_speed_ratio": 0.694,
-    "attack_range": 125,
-    "move_speed": 350
+    "attack_range": 125.0,
+    "move_speed": 350.0
    },
    "mayhem": {
     "damage_dealt": 1.05,
     "damage_taken": 1.0,
     "ability_haste": 0.0,
-    "attack_speed": 0.0,
-    "changes": ""
+    "attack_speed": 0.0
    },
    "cn": {
     "weight": 0.0156,
@@ -18163,7 +18070,7 @@
        "type": "true",
        "calc": "TotalDamage",
        "scaling": {
-        "const": 284.0,
+        "const": 323.95,
         "bonus_ad": 0.5
        },
        "target": "flat",
@@ -18212,26 +18119,25 @@
    "role": "mage",
    "ranged": true,
    "stats": {
-    "hp": 565,
-    "hp_per_level": 110,
-    "armor": 20,
+    "hp": 565.0,
+    "hp_per_level": 110.0,
+    "armor": 20.0,
     "armor_per_level": 4.2,
-    "mr": 26,
+    "mr": 26.0,
     "mr_per_level": 1.3,
-    "ad": 44,
-    "ad_per_level": 0,
+    "ad": 44.0,
+    "ad_per_level": 2.6,
     "attack_speed": 0.658,
     "attack_speed_per_level": 0.035,
     "attack_speed_ratio": 0.658,
-    "attack_range": 525,
-    "move_speed": 325
+    "attack_range": 525.0,
+    "move_speed": 325.0
    },
    "mayhem": {
     "damage_dealt": 1.0,
     "damage_taken": 1.0,
     "ability_haste": 0.0,
-    "attack_speed": 0.0,
-    "changes": ""
+    "attack_speed": 0.0
    },
    "cn": {
     "weight": 0.0324,
@@ -18392,26 +18298,25 @@
    "role": "tank",
    "ranged": false,
    "stats": {
-    "hp": 660,
-    "hp_per_level": 109,
-    "armor": 33,
+    "hp": 660.0,
+    "hp_per_level": 109.0,
+    "armor": 33.0,
     "armor_per_level": 5.2,
-    "mr": 32,
+    "mr": 32.0,
     "mr_per_level": 2.05,
-    "ad": 69,
-    "ad_per_level": 0,
+    "ad": 69.0,
+    "ad_per_level": 3.5,
     "attack_speed": 0.625,
     "attack_speed_per_level": 0.02,
     "attack_speed_ratio": 0.625,
-    "attack_range": 175,
-    "move_speed": 335
+    "attack_range": 175.0,
+    "move_speed": 335.0
    },
    "mayhem": {
     "damage_dealt": 0.9,
     "damage_taken": 1.05,
     "ability_haste": 0.0,
-    "attack_speed": 0.0,
-    "changes": "P|Living Forge cooldown 90–10s (based on level)"
+    "attack_speed": 0.0
    },
    "cn": {
     "weight": 0.0553,
@@ -18445,7 +18350,7 @@
        "type": "physical",
        "calc": "TotalDamage",
        "scaling": {
-        "const": 195.9,
+        "const": 261.35,
         "bonus_ad": 1.1
        },
        "target": "flat",
@@ -18596,26 +18501,25 @@
    "role": "fighter",
    "ranged": false,
    "stats": {
-    "hp": 650,
-    "hp_per_level": 109,
-    "armor": 40,
+    "hp": 650.0,
+    "hp_per_level": 109.0,
+    "armor": 40.0,
     "armor_per_level": 4.95,
-    "mr": 28,
+    "mr": 28.0,
     "mr_per_level": 2.05,
-    "ad": 64,
-    "ad_per_level": 0,
+    "ad": 64.0,
+    "ad_per_level": 3.3,
     "attack_speed": 0.658,
     "attack_speed_per_level": 0.029500000000000002,
     "attack_speed_ratio": 0.658,
-    "attack_range": 175,
-    "move_speed": 345
+    "attack_range": 175.0,
+    "move_speed": 345.0
    },
    "mayhem": {
     "damage_dealt": 1.0,
     "damage_taken": 1.0,
     "ability_haste": 0.0,
-    "attack_speed": 0.0,
-    "changes": ""
+    "attack_speed": 0.0
    },
    "cn": {
     "weight": 0.0556,
@@ -18718,7 +18622,7 @@
        "type": "physical",
        "calc": "EmpoweredDamageMultCalcModified",
        "scaling": {
-        "const": 105.6,
+        "const": 198.165,
         "bonus_ad": 1.65
        },
        "target": "flat",
@@ -18752,7 +18656,7 @@
        "type": "physical",
        "calc": "DamageCalc",
        "scaling": {
-        "const": 64.0,
+        "const": 120.1,
         "bonus_ad": 1.0
        },
        "target": "flat",
@@ -18813,26 +18717,25 @@
    "role": "tank",
    "ranged": false,
    "stats": {
-    "hp": 610,
-    "hp_per_level": 110,
-    "armor": 35,
-    "armor_per_level": 5,
-    "mr": 32,
+    "hp": 610.0,
+    "hp_per_level": 110.0,
+    "armor": 35.0,
+    "armor_per_level": 5.0,
+    "mr": 32.0,
     "mr_per_level": 2.05,
-    "ad": 56,
-    "ad_per_level": 0,
+    "ad": 56.0,
+    "ad_per_level": 4.0,
     "attack_speed": 0.658,
     "attack_speed_per_level": 0.025,
     "attack_speed_ratio": 0.625,
-    "attack_range": 125,
-    "move_speed": 345
+    "attack_range": 125.0,
+    "move_speed": 345.0
    },
    "mayhem": {
     "damage_dealt": 1.0,
     "damage_taken": 1.0,
     "ability_haste": 0.0,
-    "attack_speed": 0.0,
-    "changes": ""
+    "attack_speed": 0.0
    },
    "cn": {
     "weight": 0.0351,
@@ -19029,26 +18932,25 @@
    "role": "support",
    "ranged": false,
    "stats": {
-    "hp": 670,
-    "hp_per_level": 110,
-    "armor": 37,
+    "hp": 670.0,
+    "hp_per_level": 110.0,
+    "armor": 37.0,
     "armor_per_level": 4.7,
-    "mr": 32,
+    "mr": 32.0,
     "mr_per_level": 2.05,
-    "ad": 62,
-    "ad_per_level": 0,
+    "ad": 62.0,
+    "ad_per_level": 2.0,
     "attack_speed": 0.667,
     "attack_speed_per_level": 0.025,
     "attack_speed_ratio": 0.667,
-    "attack_range": 150,
-    "move_speed": 330
+    "attack_range": 150.0,
+    "move_speed": 330.0
    },
    "mayhem": {
     "damage_dealt": 1.1,
     "damage_taken": 0.9,
     "ability_haste": 0.0,
-    "attack_speed": 0.0,
-    "changes": "Tenacity increased by 20%"
+    "attack_speed": 0.0
    },
    "cn": {
     "weight": 0.051,
@@ -19210,26 +19112,25 @@
    "role": "assassin",
    "ranged": false,
    "stats": {
-    "hp": 590,
-    "hp_per_level": 115,
-    "armor": 31,
+    "hp": 590.0,
+    "hp_per_level": 115.0,
+    "armor": 31.0,
     "armor_per_level": 4.5,
-    "mr": 32,
+    "mr": 32.0,
     "mr_per_level": 2.05,
-    "ad": 64,
-    "ad_per_level": 0,
+    "ad": 64.0,
+    "ad_per_level": 3.1,
     "attack_speed": 0.688,
     "attack_speed_per_level": 0.021,
     "attack_speed_ratio": 0.625,
-    "attack_range": 150,
-    "move_speed": 335
+    "attack_range": 150.0,
+    "move_speed": 335.0
    },
    "mayhem": {
     "damage_dealt": 1.1,
     "damage_taken": 0.9,
     "ability_haste": 20.0,
-    "attack_speed": 0.0,
-    "changes": "Tenacity increased by 20%. Ability haste increased by 20|W|New Effect: Targeting a Health Relic on Howling Abyss grants the River Element"
+    "attack_speed": 0.0
    },
    "cn": {
     "weight": 0.0293,
@@ -19405,26 +19306,25 @@
    "role": "marksman",
    "ranged": true,
    "stats": {
-    "hp": 565,
-    "hp_per_level": 107,
-    "armor": 28,
+    "hp": 565.0,
+    "hp_per_level": 107.0,
+    "armor": 28.0,
     "armor_per_level": 4.7,
-    "mr": 33,
+    "mr": 33.0,
     "mr_per_level": 1.1,
-    "ad": 59,
-    "ad_per_level": 0,
+    "ad": 59.0,
+    "ad_per_level": 3.2,
     "attack_speed": 0.668,
     "attack_speed_per_level": 0.031,
     "attack_speed_ratio": 0.668,
-    "attack_range": 525,
-    "move_speed": 330
+    "attack_range": 525.0,
+    "move_speed": 330.0
    },
    "mayhem": {
     "damage_dealt": 1.1,
     "damage_taken": 0.9,
     "ability_haste": 0.0,
-    "attack_speed": 0.025,
-    "changes": "Total attack speed increased by 2.5%. Tenacity increased by 20%"
+    "attack_speed": 0.025
    },
    "cn": {
     "weight": 0.0236,
@@ -19575,26 +19475,25 @@
    "role": "support",
    "ranged": true,
    "stats": {
-    "hp": 610,
-    "hp_per_level": 99,
-    "armor": 30,
+    "hp": 610.0,
+    "hp_per_level": 99.0,
+    "armor": 30.0,
     "armor_per_level": 4.9,
-    "mr": 32,
+    "mr": 32.0,
     "mr_per_level": 2.05,
-    "ad": 62,
-    "ad_per_level": 0,
+    "ad": 62.0,
+    "ad_per_level": 3.5,
     "attack_speed": 0.635,
     "attack_speed_per_level": 0.03,
     "attack_speed_ratio": 0.635,
-    "attack_range": 300,
-    "move_speed": 335
+    "attack_range": 300.0,
+    "move_speed": 335.0
    },
    "mayhem": {
     "damage_dealt": 1.0,
     "damage_taken": 0.95,
     "ability_haste": 10.0,
-    "attack_speed": 0.0,
-    "changes": "Ability haste increased by 10"
+    "attack_speed": 0.0
    },
    "cn": {
     "weight": 0.0113,
@@ -19747,26 +19646,25 @@
    "role": "tank",
    "ranged": false,
    "stats": {
-    "hp": 645,
-    "hp_per_level": 100,
-    "armor": 35,
+    "hp": 645.0,
+    "hp_per_level": 100.0,
+    "armor": 35.0,
     "armor_per_level": 4.5,
-    "mr": 32,
+    "mr": 32.0,
     "mr_per_level": 2.05,
-    "ad": 65,
-    "ad_per_level": 0,
+    "ad": 65.0,
+    "ad_per_level": 2.75,
     "attack_speed": 0.7,
     "attack_speed_per_level": 0.02215,
     "attack_speed_ratio": 0.625,
-    "attack_range": 125,
-    "move_speed": 335
+    "attack_range": 125.0,
+    "move_speed": 335.0
    },
    "mayhem": {
     "damage_dealt": 1.0,
     "damage_taken": 1.0,
     "ability_haste": 0.0,
-    "attack_speed": 0.0,
-    "changes": ""
+    "attack_speed": 0.0
    },
    "cn": {
     "weight": 0.0211,
@@ -19919,26 +19817,25 @@
    "role": "fighter",
    "ranged": false,
    "stats": {
-    "hp": 600,
-    "hp_per_level": 99,
-    "armor": 35,
+    "hp": 600.0,
+    "hp_per_level": 99.0,
+    "armor": 35.0,
     "armor_per_level": 4.5,
-    "mr": 32,
+    "mr": 32.0,
     "mr_per_level": 2.05,
-    "ad": 62,
-    "ad_per_level": 0,
+    "ad": 62.0,
+    "ad_per_level": 3.0,
     "attack_speed": 0.667,
     "attack_speed_per_level": 0.02,
     "attack_speed_ratio": 0.667,
-    "attack_range": 175,
-    "move_speed": 340
+    "attack_range": 175.0,
+    "move_speed": 340.0
    },
    "mayhem": {
     "damage_dealt": 1.05,
     "damage_taken": 0.9,
     "ability_haste": 0.0,
-    "attack_speed": 0.0,
-    "changes": ""
+    "attack_speed": 0.0
    },
    "cn": {
     "weight": 0.007,
@@ -19973,7 +19870,7 @@
        "type": "physical",
        "calc": "TotalDamageTooltip",
        "scaling": {
-        "const": 31.0,
+        "const": 56.5,
         "bonus_ad": 0.5
        },
        "target": "flat",
@@ -20079,26 +19976,25 @@
    "role": "tank",
    "ranged": false,
    "stats": {
-    "hp": 620,
-    "hp_per_level": 104,
-    "armor": 30,
-    "armor_per_level": 4,
-    "mr": 28,
+    "hp": 620.0,
+    "hp_per_level": 104.0,
+    "armor": 30.0,
+    "armor_per_level": 4.0,
+    "mr": 28.0,
     "mr_per_level": 1.8,
-    "ad": 55,
-    "ad_per_level": 0,
+    "ad": 55.0,
+    "ad_per_level": 3.0,
     "attack_speed": 0.625,
     "attack_speed_per_level": 0.02,
     "attack_speed_ratio": 0.625,
-    "attack_range": 175,
-    "move_speed": 315
+    "attack_range": 175.0,
+    "move_speed": 315.0
    },
    "mayhem": {
     "damage_dealt": 0.95,
     "damage_taken": 1.0,
     "ability_haste": 0.0,
-    "attack_speed": 0.0,
-    "changes": "Shielding done reduced by 10%"
+    "attack_speed": 0.0
    },
    "cn": {
     "weight": 0.055,
@@ -20165,7 +20061,7 @@
      "hits": [],
      "mode_overrides": [],
      "notes": [
-      "cooldown from Data Dragon"
+      "cooldown from the champion's ability list"
      ]
     },
     {
@@ -20239,26 +20135,25 @@
    "role": "support",
    "ranged": true,
    "stats": {
-    "hp": 545,
-    "hp_per_level": 94,
-    "armor": 27,
+    "hp": 545.0,
+    "hp_per_level": 94.0,
+    "armor": 27.0,
     "armor_per_level": 4.7,
-    "mr": 30,
+    "mr": 30.0,
     "mr_per_level": 1.3,
-    "ad": 49,
-    "ad_per_level": 0,
+    "ad": 49.0,
+    "ad_per_level": 3.0,
     "attack_speed": 0.625,
     "attack_speed_per_level": 0.021099999999999997,
     "attack_speed_ratio": 0.625,
-    "attack_range": 550,
-    "move_speed": 330
+    "attack_range": 550.0,
+    "move_speed": 330.0
    },
    "mayhem": {
     "damage_dealt": 1.0,
     "damage_taken": 1.05,
     "ability_haste": 0.0,
-    "attack_speed": 0.0,
-    "changes": "Shielding done changed to 0% from -20%"
+    "attack_speed": 0.0
    },
    "cn": {
     "weight": 0.0174,
@@ -20407,26 +20302,25 @@
    "role": "fighter",
    "ranged": false,
    "stats": {
-    "hp": 660,
-    "hp_per_level": 111,
-    "armor": 35,
+    "hp": 660.0,
+    "hp_per_level": 111.0,
+    "armor": 35.0,
     "armor_per_level": 5.2,
-    "mr": 28,
+    "mr": 28.0,
     "mr_per_level": 2.05,
-    "ad": 69,
-    "ad_per_level": 0,
+    "ad": 69.0,
+    "ad_per_level": 4.15,
     "attack_speed": 0.665,
     "attack_speed_per_level": 0.0275,
     "attack_speed_ratio": 0.665,
-    "attack_range": 125,
-    "move_speed": 345
+    "attack_range": 125.0,
+    "move_speed": 345.0
    },
    "mayhem": {
     "damage_dealt": 1.0,
     "damage_taken": 1.0,
     "ability_haste": 0.0,
-    "attack_speed": 0.0,
-    "changes": "Healing done increased by 10%"
+    "attack_speed": 0.0
    },
    "cn": {
     "weight": 0.0224,
@@ -20505,7 +20399,7 @@
        "type": "physical",
        "calc": "BasicTotalDamage",
        "scaling": {
-        "const": 233.5,
+        "const": 339.325,
         "bonus_ad": 1.5
        },
        "target": "flat",
@@ -20516,7 +20410,7 @@
        "type": "physical",
        "calc": "EmpTotalDamage",
        "scaling": {
-        "const": 350.25,
+        "const": 508.9875,
         "bonus_ad": 2.25
        },
        "target": "flat",
@@ -20623,26 +20517,25 @@
    "role": "assassin",
    "ranged": false,
    "stats": {
-    "hp": 590,
-    "hp_per_level": 104,
-    "armor": 34,
+    "hp": 590.0,
+    "hp_per_level": 104.0,
+    "armor": 34.0,
     "armor_per_level": 4.2,
-    "mr": 32,
+    "mr": 32.0,
     "mr_per_level": 2.05,
-    "ad": 68,
-    "ad_per_level": 0,
+    "ad": 68.0,
+    "ad_per_level": 3.0,
     "attack_speed": 0.667,
     "attack_speed_per_level": 0.03,
     "attack_speed_ratio": 0.667,
-    "attack_range": 125,
-    "move_speed": 345
+    "attack_range": 125.0,
+    "move_speed": 345.0
    },
    "mayhem": {
     "damage_dealt": 1.05,
     "damage_taken": 0.92,
     "ability_haste": 0.0,
-    "attack_speed": 0.0,
-    "changes": "Tenacity increased by 20%|Q|Unempowered AD ratio|5%|→|10-25% AD; Empowered AD ratio|20%|→|40% AD|E|Bonus AD ratio|80%|→|100% bonus AD|R|Cooldown|100-80s|→|90-70s"
+    "attack_speed": 0.0
    },
    "cn": {
     "weight": 0.0602,
@@ -20676,7 +20569,7 @@
        "type": "physical",
        "calc": "QTotalDamage",
        "scaling": {
-        "const": 245.0,
+        "const": 308.75,
         "bonus_ad": 1.25
        },
        "target": "flat",
@@ -20687,7 +20580,7 @@
        "type": "physical",
        "calc": "EmpoweredQTotalDamage",
        "scaling": {
-        "const": 335.2,
+        "const": 406.6,
         "bonus_ad": 1.4
        },
        "target": "flat",
@@ -20827,7 +20720,7 @@
        "type": "physical",
        "calc": "BonusDamage",
        "scaling": {
-        "const": 68.0,
+        "const": 119.0,
         "bonus_ad": 1.0
        },
        "target": "flat",
@@ -20837,7 +20730,7 @@
      ],
      "mode_overrides": [],
      "notes": [
-      "cooldown from Mayhem balance table"
+      "ARAM cooldown"
      ]
     }
    ],
@@ -20855,26 +20748,25 @@
    "role": "fighter",
    "ranged": false,
    "stats": {
-    "hp": 630,
-    "hp_per_level": 100,
-    "armor": 33,
+    "hp": 630.0,
+    "hp_per_level": 100.0,
+    "armor": 33.0,
     "armor_per_level": 4.4,
-    "mr": 32,
+    "mr": 32.0,
     "mr_per_level": 2.05,
-    "ad": 64,
-    "ad_per_level": 0,
+    "ad": 64.0,
+    "ad_per_level": 3.0,
     "attack_speed": 0.625,
     "attack_speed_per_level": 0.035,
     "attack_speed_ratio": 0.625,
-    "attack_range": 125,
-    "move_speed": 340
+    "attack_range": 125.0,
+    "move_speed": 340.0
    },
    "mayhem": {
     "damage_dealt": 1.05,
     "damage_taken": 0.92,
     "ability_haste": 0.0,
-    "attack_speed": 0.0,
-    "changes": ""
+    "attack_speed": 0.0
    },
    "cn": {
     "weight": 0.028,
@@ -21012,7 +20904,7 @@
        "type": "physical",
        "calc": "BonusAD",
        "scaling": {
-        "const": 12.8,
+        "const": 23.0,
         "bonus_ad": 0.2
        },
        "target": "flat",
@@ -21060,26 +20952,25 @@
    "role": "fighter",
    "ranged": false,
    "stats": {
-    "hp": 640,
-    "hp_per_level": 105,
-    "armor": 36,
+    "hp": 640.0,
+    "hp_per_level": 105.0,
+    "armor": 36.0,
     "armor_per_level": 4.7,
-    "mr": 28,
+    "mr": 28.0,
     "mr_per_level": 1.55,
-    "ad": 64,
-    "ad_per_level": 0,
+    "ad": 64.0,
+    "ad_per_level": 3.2,
     "attack_speed": 0.644,
     "attack_speed_per_level": 0.018500000000000003,
     "attack_speed_ratio": 0.644,
-    "attack_range": 125,
-    "move_speed": 345
+    "attack_range": 125.0,
+    "move_speed": 345.0
    },
    "mayhem": {
     "damage_dealt": 1.0,
     "damage_taken": 1.0,
     "ability_haste": 0.0,
-    "attack_speed": 0.0,
-    "changes": ""
+    "attack_speed": 0.0
    },
    "cn": {
     "weight": 0.057,
@@ -21253,26 +21144,25 @@
    "role": "mage",
    "ranged": true,
    "stats": {
-    "hp": 620,
-    "hp_per_level": 124,
-    "armor": 22,
+    "hp": 620.0,
+    "hp_per_level": 124.0,
+    "armor": 22.0,
     "armor_per_level": 4.7,
-    "mr": 32,
+    "mr": 32.0,
     "mr_per_level": 1.3,
-    "ad": 55,
-    "ad_per_level": 0,
+    "ad": 55.0,
+    "ad_per_level": 3.0,
     "attack_speed": 0.658,
     "attack_speed_per_level": 0.021099999999999997,
     "attack_speed_ratio": 0.625,
-    "attack_range": 550,
-    "move_speed": 340
+    "attack_range": 550.0,
+    "move_speed": 340.0
    },
    "mayhem": {
     "damage_dealt": 1.0,
     "damage_taken": 1.0,
     "ability_haste": 0.0,
-    "attack_speed": 0.0,
-    "changes": ""
+    "attack_speed": 0.0
    },
    "cn": {
     "weight": 0.1109,
@@ -21429,26 +21319,25 @@
    "role": "marksman",
    "ranged": true,
    "stats": {
-    "hp": 630,
-    "hp_per_level": 108,
-    "armor": 26,
+    "hp": 630.0,
+    "hp_per_level": 108.0,
+    "armor": 26.0,
     "armor_per_level": 4.7,
-    "mr": 33,
+    "mr": 33.0,
     "mr_per_level": 1.1,
-    "ad": 57,
-    "ad_per_level": 0,
+    "ad": 57.0,
+    "ad_per_level": 3.0,
     "attack_speed": 0.658,
     "attack_speed_per_level": 0.033,
     "attack_speed_ratio": 0.658,
-    "attack_range": 500,
-    "move_speed": 335
+    "attack_range": 500.0,
+    "move_speed": 335.0
    },
    "mayhem": {
     "damage_dealt": 1.0,
     "damage_taken": 1.0,
     "ability_haste": 0.0,
-    "attack_speed": 0.0,
-    "changes": ""
+    "attack_speed": 0.0
    },
    "cn": {
     "weight": 0.0592,
@@ -21482,7 +21371,7 @@
        "type": "physical",
        "calc": "DamageCalc",
        "scaling": {
-        "const": 82.7,
+        "const": 138.8,
         "bonus_ad": 1.1
        },
        "target": "flat",
@@ -21493,7 +21382,7 @@
        "type": "physical",
        "calc": "DamageCalc",
        "scaling": {
-        "const": 82.7,
+        "const": 138.8,
         "bonus_ad": 1.1
        },
        "target": "flat",
@@ -21596,7 +21485,7 @@
        "type": "physical",
        "calc": "DamageCalc",
        "scaling": {
-        "const": 77.1,
+        "const": 92.4,
         "bonus_ad": 0.3
        },
        "target": "flat",
@@ -21621,26 +21510,25 @@
    "role": "tank",
    "ranged": false,
    "stats": {
-    "hp": 630,
-    "hp_per_level": 114,
-    "armor": 34,
+    "hp": 630.0,
+    "hp_per_level": 114.0,
+    "armor": 34.0,
     "armor_per_level": 5.45,
-    "mr": 32,
+    "mr": 32.0,
     "mr_per_level": 2.05,
-    "ad": 66,
-    "ad_per_level": 0,
+    "ad": 66.0,
+    "ad_per_level": 4.0,
     "attack_speed": 0.688,
     "attack_speed_per_level": 0.035,
     "attack_speed_ratio": 0.625,
-    "attack_range": 150,
-    "move_speed": 340
+    "attack_range": 150.0,
+    "move_speed": 340.0
    },
    "mayhem": {
     "damage_dealt": 1.0,
     "damage_taken": 1.0,
     "ability_haste": 0.0,
-    "attack_speed": 0.0,
-    "changes": ""
+    "attack_speed": 0.0
    },
    "cn": {
     "weight": 0.0414,
@@ -21827,26 +21715,25 @@
    "role": "support",
    "ranged": true,
    "stats": {
-    "hp": 530,
-    "hp_per_level": 89,
-    "armor": 25,
-    "armor_per_level": 4,
-    "mr": 33,
+    "hp": 530.0,
+    "hp_per_level": 89.0,
+    "armor": 25.0,
+    "armor_per_level": 4.0,
+    "mr": 33.0,
     "mr_per_level": 1.1,
-    "ad": 50,
-    "ad_per_level": 0,
+    "ad": 50.0,
+    "ad_per_level": 0.0,
     "attack_speed": 0.625,
     "attack_speed_per_level": 0.026000000000000002,
     "attack_speed_ratio": 0.4,
-    "attack_range": 600,
-    "move_speed": 330
+    "attack_range": 600.0,
+    "move_speed": 330.0
    },
    "mayhem": {
     "damage_dealt": 1.0,
     "damage_taken": 1.05,
     "ability_haste": 0.0,
-    "attack_speed": 0.0,
-    "changes": ""
+    "attack_speed": 0.0
    },
    "cn": {
     "weight": 0.0896,
@@ -21998,26 +21885,25 @@
    "role": "support",
    "ranged": true,
    "stats": {
-    "hp": 570,
-    "hp_per_level": 95,
-    "armor": 26,
+    "hp": 570.0,
+    "hp_per_level": 95.0,
+    "armor": 26.0,
     "armor_per_level": 4.2,
-    "mr": 30,
+    "mr": 30.0,
     "mr_per_level": 1.3,
-    "ad": 50,
-    "ad_per_level": 0,
+    "ad": 50.0,
+    "ad_per_level": 3.0,
     "attack_speed": 0.669,
     "attack_speed_per_level": 0.02,
     "attack_speed_ratio": 0.625,
-    "attack_range": 525,
-    "move_speed": 330
+    "attack_range": 525.0,
+    "move_speed": 330.0
    },
    "mayhem": {
     "damage_dealt": 1.0,
     "damage_taken": 1.2,
     "ability_haste": 0.0,
-    "attack_speed": 0.0,
-    "changes": "Ability haste changed to 0 from -20"
+    "attack_speed": 0.0
    },
    "cn": {
     "weight": 0.0699,
@@ -22178,26 +22064,25 @@
    "role": "fighter",
    "ranged": false,
    "stats": {
-    "hp": 670,
-    "hp_per_level": 114,
-    "armor": 33,
+    "hp": 670.0,
+    "hp_per_level": 114.0,
+    "armor": 33.0,
     "armor_per_level": 4.7,
-    "mr": 28,
+    "mr": 28.0,
     "mr_per_level": 2.05,
-    "ad": 60,
-    "ad_per_level": 0,
+    "ad": 60.0,
+    "ad_per_level": 4.0,
     "attack_speed": 0.625,
     "attack_speed_per_level": 0.0175,
     "attack_speed_ratio": 0.625,
-    "attack_range": 125,
-    "move_speed": 340
+    "attack_range": 125.0,
+    "move_speed": 340.0
    },
    "mayhem": {
     "damage_dealt": 1.0,
     "damage_taken": 1.0,
     "ability_haste": 0.0,
-    "attack_speed": 0.0,
-    "changes": "P|Health regeneration is halved|W|Grit cap|50%|→|35% maximum health; Damage base Grit ratio|25%|→|20%; Cooldown|18-12s|→|18-14s"
+    "attack_speed": 0.0
    },
    "cn": {
     "weight": 0.1131,
@@ -22246,7 +22131,7 @@
      "slot": "W",
      "name": "SettW",
      "rank": 5,
-     "cooldown": 12.0,
+     "cooldown": 14.0,
      "cast_time": 0.75,
      "targeting": "Location",
      "area": "aoe",
@@ -22276,7 +22161,9 @@
       "ARAM:StoredHealth",
       "ARAM:DamageConversionBase"
      ],
-     "notes": []
+     "notes": [
+      "ARAM cooldown"
+     ]
     },
     {
      "slot": "E",
@@ -22301,7 +22188,7 @@
        "type": "physical",
        "calc": "DamageCalc",
        "scaling": {
-        "const": 166.0,
+        "const": 206.8,
         "bonus_ad": 0.6
        },
        "target": "flat",
@@ -22362,26 +22249,25 @@
    "role": "assassin",
    "ranged": false,
    "stats": {
-    "hp": 630,
-    "hp_per_level": 99,
-    "armor": 30,
-    "armor_per_level": 4,
-    "mr": 32,
+    "hp": 630.0,
+    "hp_per_level": 99.0,
+    "armor": 30.0,
+    "armor_per_level": 4.0,
+    "mr": 32.0,
     "mr_per_level": 2.05,
-    "ad": 63,
-    "ad_per_level": 0,
+    "ad": 63.0,
+    "ad_per_level": 3.0,
     "attack_speed": 0.694,
     "attack_speed_per_level": 0.03,
     "attack_speed_ratio": 0.694,
-    "attack_range": 125,
-    "move_speed": 345
+    "attack_range": 125.0,
+    "move_speed": 345.0
    },
    "mayhem": {
     "damage_dealt": 1.05,
     "damage_taken": 1.0,
     "ability_haste": 0.0,
-    "attack_speed": 0.0,
-    "changes": "P|Bonus AD ratio|20%|→|40% bonus AD|Q|Bonus AD ratio|60%|→|85% bonus AD; Cooldown|13-11s|→|12-8s|W|Limited to 6 Boxes active|E|Bonus AD ratio|80%|→|100% bonus AD"
+    "attack_speed": 0.0
    },
    "cn": {
     "weight": 0.1091,
@@ -22396,7 +22282,7 @@
      "slot": "Q",
      "name": "Deceive",
      "rank": 5,
-     "cooldown": 11.0,
+     "cooldown": 8.0,
      "cast_time": 0.25,
      "targeting": "Location",
      "area": "aoe",
@@ -22427,7 +22313,9 @@
      "mode_overrides": [
       "ARAM:BonusADRatio"
      ],
-     "notes": []
+     "notes": [
+      "ARAM cooldown"
+     ]
     },
     {
      "slot": "W",
@@ -22595,26 +22483,25 @@
    "role": "tank",
    "ranged": false,
    "stats": {
-    "hp": 610,
-    "hp_per_level": 99,
-    "armor": 34,
+    "hp": 610.0,
+    "hp_per_level": 99.0,
+    "armor": 34.0,
     "armor_per_level": 4.2,
-    "mr": 32,
+    "mr": 32.0,
     "mr_per_level": 2.05,
-    "ad": 64,
-    "ad_per_level": 0,
+    "ad": 64.0,
+    "ad_per_level": 3.0,
     "attack_speed": 0.751,
     "attack_speed_per_level": 0.03,
     "attack_speed_ratio": 0.651,
-    "attack_range": 125,
-    "move_speed": 340
+    "attack_range": 125.0,
+    "move_speed": 340.0
    },
    "mayhem": {
     "damage_dealt": 0.95,
     "damage_taken": 1.05,
     "ability_haste": 0.0,
-    "attack_speed": 0.0,
-    "changes": ""
+    "attack_speed": 0.0
    },
    "cn": {
     "weight": 0.047,
@@ -22764,26 +22651,25 @@
    "role": "fighter",
    "ranged": false,
    "stats": {
-    "hp": 625,
-    "hp_per_level": 95,
-    "armor": 35,
-    "armor_per_level": 4,
-    "mr": 32,
+    "hp": 625.0,
+    "hp_per_level": 95.0,
+    "armor": 35.0,
+    "armor_per_level": 4.0,
+    "mr": 32.0,
     "mr_per_level": 2.05,
-    "ad": 62,
-    "ad_per_level": 0,
+    "ad": 62.0,
+    "ad_per_level": 4.0,
     "attack_speed": 0.638,
     "attack_speed_per_level": 0.02,
     "attack_speed_ratio": 0.638,
-    "attack_range": 150,
-    "move_speed": 350
+    "attack_range": 150.0,
+    "move_speed": 350.0
    },
    "mayhem": {
     "damage_dealt": 1.0,
     "damage_taken": 1.0,
     "ability_haste": 0.0,
-    "attack_speed": 0.0,
-    "changes": "P|Alternative Innate: While alive, Shyvana gains 1.5 bonus armor, 1.5 bonus magic resistance, and 0.2 bonus Fury regeneration whenever a large minion dies within 1400 units of her, or when she is healed by a health relic's area of effect on the enemy's side of the map|R|Dragon's Descent: Dragon Fury generation per damaging attack or ability 2.5"
+    "attack_speed": 0.0
    },
    "cn": {
     "weight": 0.0383,
@@ -22817,7 +22703,7 @@
        "type": "physical",
        "calc": "Calc_Damage",
        "scaling": {
-        "const": 98.2,
+        "const": 173.0,
         "bonus_ad": 1.1,
         "ap": 0.3
        },
@@ -22829,7 +22715,7 @@
        "type": "true",
        "calc": "Calc_Dragon_Form_Damage",
        "scaling": {
-        "const": 147.3,
+        "const": 259.5,
         "bonus_ad": 1.65,
         "ap": 0.45
        },
@@ -22966,7 +22852,6 @@
       "Kiwi:Fury_Generation"
      ],
      "notes": [
-      "cooldown from Data Dragon",
       "cooldown unknown; assumed 90s",
       "hand override: Dragon's Descent is gated by Fury, not a cooldown; roughly once a fight"
      ]
@@ -22986,26 +22871,25 @@
    "role": "tank",
    "ranged": false,
    "stats": {
-    "hp": 650,
-    "hp_per_level": 96,
-    "armor": 34,
+    "hp": 650.0,
+    "hp_per_level": 96.0,
+    "armor": 34.0,
     "armor_per_level": 4.2,
-    "mr": 32,
+    "mr": 32.0,
     "mr_per_level": 2.05,
-    "ad": 63,
-    "ad_per_level": 0,
+    "ad": 63.0,
+    "ad_per_level": 3.4,
     "attack_speed": 0.7,
     "attack_speed_per_level": 0.019,
     "attack_speed_ratio": 0.625,
-    "attack_range": 125,
-    "move_speed": 345
+    "attack_range": 125.0,
+    "move_speed": 345.0
    },
    "mayhem": {
     "damage_dealt": 1.0,
     "damage_taken": 1.0,
     "ability_haste": 0.0,
-    "attack_speed": 0.0,
-    "changes": "P|Bonus movement speed per stack|25%|→|20%; Cooldown per target|8s|→|10s"
+    "attack_speed": 0.0
    },
    "cn": {
     "weight": 0.0797,
@@ -23048,9 +22932,7 @@
       }
      ],
      "mode_overrides": [],
-     "notes": [
-      "cooldown from Data Dragon"
-     ]
+     "notes": []
     },
     {
      "slot": "W",
@@ -23155,26 +23037,25 @@
    "role": "tank",
    "ranged": false,
    "stats": {
-    "hp": 655,
-    "hp_per_level": 87,
-    "armor": 36,
+    "hp": 655.0,
+    "hp_per_level": 87.0,
+    "armor": 36.0,
     "armor_per_level": 4.2,
-    "mr": 32,
+    "mr": 32.0,
     "mr_per_level": 2.05,
-    "ad": 68,
-    "ad_per_level": 0,
+    "ad": 68.0,
+    "ad_per_level": 4.0,
     "attack_speed": 0.679,
     "attack_speed_per_level": 0.013000000000000001,
     "attack_speed_ratio": 0.679,
-    "attack_range": 175,
-    "move_speed": 345
+    "attack_range": 175.0,
+    "move_speed": 345.0
    },
    "mayhem": {
     "damage_dealt": 0.9,
     "damage_taken": 1.0,
     "ability_haste": -10.0,
-    "attack_speed": 0.0,
-    "changes": "Ability haste reduced by 10|P|Life steal|100%|→|50%|W|Bonus health per lesser unit kill|4|→|3; Bonus health per greater unit kill|15|→|8; Shield health ratio|8-16%|→|6-10% maximum health"
+    "attack_speed": 0.0
    },
    "cn": {
     "weight": 0.0801,
@@ -23208,7 +23089,7 @@
        "type": "physical",
        "calc": "MinDamageTotal",
        "scaling": {
-        "const": 144.4,
+        "const": 198.8,
         "bonus_ad": 0.8
        },
        "target": "flat",
@@ -23350,26 +23231,25 @@
    "role": "marksman",
    "ranged": true,
    "stats": {
-    "hp": 600,
-    "hp_per_level": 104,
-    "armor": 30,
-    "armor_per_level": 4,
-    "mr": 33,
+    "hp": 600.0,
+    "hp_per_level": 104.0,
+    "armor": 30.0,
+    "armor_per_level": 4.0,
+    "mr": 33.0,
     "mr_per_level": 1.1,
-    "ad": 60,
-    "ad_per_level": 0,
+    "ad": 60.0,
+    "ad_per_level": 2.5,
     "attack_speed": 0.625,
     "attack_speed_per_level": 0.016,
     "attack_speed_ratio": 0.625,
-    "attack_range": 500,
-    "move_speed": 335
+    "attack_range": 500.0,
+    "move_speed": 335.0
    },
    "mayhem": {
     "damage_dealt": 0.93,
     "damage_taken": 1.05,
     "ability_haste": 0.0,
-    "attack_speed": 0.0,
-    "changes": "Q|Cooldown|10-8s|→|14-10s"
+    "attack_speed": 0.0
    },
    "cn": {
     "weight": 0.0565,
@@ -23414,8 +23294,8 @@
      ],
      "mode_overrides": [],
      "notes": [
-      "unsupported stat 9",
-      "cooldown from Mayhem balance table"
+      "ARAM cooldown",
+      "unsupported stat 9"
      ]
     },
     {
@@ -23442,7 +23322,7 @@
        "type": "physical",
        "calc": "BounceDamage",
        "scaling": {
-        "const": 30.0,
+        "const": 51.25,
         "bonus_ad": 0.5
        },
        "target": "flat",
@@ -23513,26 +23393,25 @@
    "role": "tank",
    "ranged": false,
    "stats": {
-    "hp": 630,
-    "hp_per_level": 110,
-    "armor": 33,
+    "hp": 630.0,
+    "hp_per_level": 110.0,
+    "armor": 33.0,
     "armor_per_level": 4.5,
-    "mr": 32,
+    "mr": 32.0,
     "mr_per_level": 2.05,
-    "ad": 63,
-    "ad_per_level": 0,
+    "ad": 63.0,
+    "ad_per_level": 5.0,
     "attack_speed": 0.625,
     "attack_speed_per_level": 0.02,
     "attack_speed_ratio": 0.625,
-    "attack_range": 150,
-    "move_speed": 335
+    "attack_range": 150.0,
+    "move_speed": 335.0
    },
    "mayhem": {
     "damage_dealt": 1.05,
     "damage_taken": 0.95,
     "ability_haste": 0.0,
-    "attack_speed": 0.0,
-    "changes": "E|Ixtal's Impact cooldown 18/17/16/15/14s"
+    "attack_speed": 0.0
    },
    "cn": {
     "weight": 0.02,
@@ -23627,7 +23506,7 @@
      "slot": "E",
      "name": "SkarnerE",
      "rank": 5,
-     "cooldown": 18.0,
+     "cooldown": 14.0,
      "cast_time": 0.25,
      "targeting": "Direction",
      "area": "line",
@@ -23656,7 +23535,9 @@
       }
      ],
      "mode_overrides": [],
-     "notes": []
+     "notes": [
+      "Kiwi cooldown"
+     ]
     },
     {
      "slot": "R",
@@ -23707,26 +23588,25 @@
    "role": "marksman",
    "ranged": true,
    "stats": {
-    "hp": 575,
-    "hp_per_level": 100,
-    "armor": 24,
-    "armor_per_level": 4,
-    "mr": 33,
+    "hp": 575.0,
+    "hp_per_level": 100.0,
+    "armor": 24.0,
+    "armor_per_level": 4.0,
+    "mr": 33.0,
     "mr_per_level": 1.1,
-    "ad": 58,
-    "ad_per_level": 0,
+    "ad": 58.0,
+    "ad_per_level": 2.3,
     "attack_speed": 0.638,
     "attack_speed_per_level": 0.04,
     "attack_speed_ratio": 0.638,
-    "attack_range": 550,
-    "move_speed": 330
+    "attack_range": 550.0,
+    "move_speed": 330.0
    },
    "mayhem": {
     "damage_dealt": 1.0,
     "damage_taken": 1.0,
     "ability_haste": 0.0,
-    "attack_speed": 0.0,
-    "changes": "Ability haste changed to 0 from -10"
+    "attack_speed": 0.0
    },
    "cn": {
     "weight": 0.1262,
@@ -23863,7 +23743,7 @@
        "type": "physical",
        "calc": "DamagePerHit",
        "scaling": {
-        "const": 47.4,
+        "const": 59.13,
         "bonus_ad": 0.3
        },
        "target": "flat",
@@ -23936,26 +23816,25 @@
    "role": "support",
    "ranged": true,
    "stats": {
-    "hp": 550,
-    "hp_per_level": 91,
-    "armor": 26,
+    "hp": 550.0,
+    "hp_per_level": 91.0,
+    "armor": 26.0,
     "armor_per_level": 4.2,
-    "mr": 30,
+    "mr": 30.0,
     "mr_per_level": 1.3,
-    "ad": 49,
-    "ad_per_level": 0,
+    "ad": 49.0,
+    "ad_per_level": 3.0,
     "attack_speed": 0.644,
     "attack_speed_per_level": 0.023,
     "attack_speed_ratio": 0.644,
-    "attack_range": 550,
-    "move_speed": 325
+    "attack_range": 550.0,
+    "move_speed": 325.0
    },
    "mayhem": {
     "damage_dealt": 1.0,
     "damage_taken": 1.0,
     "ability_haste": 0.0,
-    "attack_speed": 0.0,
-    "changes": "P|Maximum Accelerando stacks|120|→|60; Maximum basic ability haste|60|→|30|Q|Hymn of Valor cooldown 8s (from 10)|W|Aria of Perseverance heal AP ratio 30% AP (from 20%); shield AP ratio 25% AP (from 20%)"
+    "attack_speed": 0.0
    },
    "cn": {
     "weight": 0.0291,
@@ -23970,7 +23849,7 @@
      "slot": "Q",
      "name": "SonaQ",
      "rank": 5,
-     "cooldown": 8.0,
+     "cooldown": 10.0,
      "cast_time": 0.25,
      "targeting": "SelfAoe",
      "area": "aoe",
@@ -24020,13 +23899,15 @@
       }
      ],
      "mode_overrides": [],
-     "notes": []
+     "notes": [
+      "ARAM cooldown"
+     ]
     },
     {
      "slot": "W",
      "name": "SonaW",
      "rank": 5,
-     "cooldown": 10.0,
+     "cooldown": 13.0,
      "cast_time": 0.25,
      "targeting": "SelfAoe",
      "area": "aoe",
@@ -24046,7 +23927,7 @@
       "ARAM:HealRatio"
      ],
      "notes": [
-      "cooldown from Data Dragon"
+      "ARAM cooldown"
      ]
     },
     {
@@ -24120,26 +24001,25 @@
    "role": "support",
    "ranged": true,
    "stats": {
-    "hp": 605,
-    "hp_per_level": 88,
-    "armor": 32,
-    "armor_per_level": 5,
-    "mr": 30,
+    "hp": 605.0,
+    "hp_per_level": 88.0,
+    "armor": 32.0,
+    "armor_per_level": 5.0,
+    "mr": 30.0,
     "mr_per_level": 1.3,
-    "ad": 50,
-    "ad_per_level": 0,
+    "ad": 50.0,
+    "ad_per_level": 3.0,
     "attack_speed": 0.625,
     "attack_speed_per_level": 0.021400000000000002,
     "attack_speed_ratio": 0.625,
-    "attack_range": 550,
-    "move_speed": 325
+    "attack_range": 550.0,
+    "move_speed": 325.0
    },
    "mayhem": {
     "damage_dealt": 1.0,
     "damage_taken": 1.0,
     "ability_haste": 0.0,
-    "attack_speed": 0.0,
-    "changes": "Healing done changed to 0% from +5%|Q|Total heal|60-120|→|75-135; Heal AP ratio|30%|→|40% AP|W|Health cost|10%|→|5% maximum health;"
+    "attack_speed": 0.0
    },
    "cn": {
     "weight": 0.0371,
@@ -24293,26 +24173,25 @@
    "role": "mage",
    "ranged": true,
    "stats": {
-    "hp": 595,
-    "hp_per_level": 99,
-    "armor": 23,
+    "hp": 595.0,
+    "hp_per_level": 99.0,
+    "armor": 23.0,
     "armor_per_level": 4.7,
-    "mr": 34,
+    "mr": 34.0,
     "mr_per_level": 1.55,
-    "ad": 58,
-    "ad_per_level": 0,
+    "ad": 58.0,
+    "ad_per_level": 2.7,
     "attack_speed": 0.625,
     "attack_speed_per_level": 0.021099999999999997,
     "attack_speed_ratio": 0.625,
-    "attack_range": 525,
-    "move_speed": 330
+    "attack_range": 525.0,
+    "move_speed": 330.0
    },
    "mayhem": {
     "damage_dealt": 1.0,
     "damage_taken": 1.05,
     "ability_haste": 0.0,
-    "attack_speed": 0.0,
-    "changes": "Healing done changed to -10% from -20%"
+    "attack_speed": 0.0
    },
    "cn": {
     "weight": 0.1042,
@@ -24508,26 +24387,25 @@
    "role": "mage",
    "ranged": false,
    "stats": {
-    "hp": 600,
-    "hp_per_level": 122,
-    "armor": 29,
+    "hp": 600.0,
+    "hp_per_level": 122.0,
+    "armor": 29.0,
     "armor_per_level": 5.2,
-    "mr": 32,
+    "mr": 32.0,
     "mr_per_level": 2.55,
-    "ad": 61,
-    "ad_per_level": 0,
+    "ad": 61.0,
+    "ad_per_level": 3.0,
     "attack_speed": 0.645,
     "attack_speed_per_level": 0.035,
     "attack_speed_ratio": 0.645,
-    "attack_range": 175,
-    "move_speed": 340
+    "attack_range": 175.0,
+    "move_speed": 340.0
    },
    "mayhem": {
     "damage_dealt": 1.05,
     "damage_taken": 1.0,
     "ability_haste": 0.0,
-    "attack_speed": 0.0,
-    "changes": ""
+    "attack_speed": 0.0
    },
    "cn": {
     "weight": 0.0762,
@@ -24690,26 +24568,25 @@
    "role": "mage",
    "ranged": true,
    "stats": {
-    "hp": 583,
-    "hp_per_level": 100,
-    "armor": 25,
-    "armor_per_level": 4,
-    "mr": 30,
+    "hp": 583.0,
+    "hp_per_level": 100.0,
+    "armor": 25.0,
+    "armor_per_level": 4.0,
+    "mr": 30.0,
     "mr_per_level": 1.3,
-    "ad": 54,
-    "ad_per_level": 0,
+    "ad": 54.0,
+    "ad_per_level": 2.9,
     "attack_speed": 0.658,
     "attack_speed_per_level": 0.02,
     "attack_speed_ratio": 0.625,
-    "attack_range": 550,
-    "move_speed": 330
+    "attack_range": 550.0,
+    "move_speed": 330.0
    },
    "mayhem": {
     "damage_dealt": 1.05,
     "damage_taken": 1.0,
     "ability_haste": 5.0,
-    "attack_speed": 0.0,
-    "changes": "Ability haste increased by 5"
+    "attack_speed": 0.0
    },
    "cn": {
     "weight": 0.0593,
@@ -24760,7 +24637,7 @@
      "slot": "W",
      "name": "SyndraW",
      "rank": 5,
-     "cooldown": 8.0,
+     "cooldown": 7.0,
      "cast_time": 0.25,
      "targeting": "Location",
      "area": "aoe",
@@ -24776,7 +24653,9 @@
      },
      "hits": [],
      "mode_overrides": [],
-     "notes": []
+     "notes": [
+      "ARAM cooldown"
+     ]
     },
     {
      "slot": "E",
@@ -24883,26 +24762,25 @@
    "role": "tank",
    "ranged": false,
    "stats": {
-    "hp": 640,
-    "hp_per_level": 103,
-    "armor": 39,
+    "hp": 640.0,
+    "hp_per_level": 103.0,
+    "armor": 39.0,
     "armor_per_level": 4.7,
-    "mr": 32,
+    "mr": 32.0,
     "mr_per_level": 2.05,
-    "ad": 56,
-    "ad_per_level": 0,
+    "ad": 56.0,
+    "ad_per_level": 3.2,
     "attack_speed": 0.658,
     "attack_speed_per_level": 0.025,
     "attack_speed_ratio": 0.658,
-    "attack_range": 175,
-    "move_speed": 335
+    "attack_range": 175.0,
+    "move_speed": 335.0
    },
    "mayhem": {
     "damage_dealt": 1.0,
     "damage_taken": 1.0,
     "ability_haste": 0.0,
-    "attack_speed": 0.0,
-    "changes": ""
+    "attack_speed": 0.0
    },
    "cn": {
     "weight": 0.1287,
@@ -25047,7 +24925,6 @@
      ],
      "mode_overrides": [],
      "notes": [
-      "cooldown from Data Dragon",
       "cooldown unknown; assumed 90s",
       "hand override: Devour's cooldown is not in the spell record (120/100/80)"
      ]
@@ -25067,26 +24944,25 @@
    "role": "mage",
    "ranged": true,
    "stats": {
-    "hp": 550,
-    "hp_per_level": 104,
-    "armor": 18,
+    "hp": 550.0,
+    "hp_per_level": 104.0,
+    "armor": 18.0,
     "armor_per_level": 4.7,
-    "mr": 28,
+    "mr": 28.0,
     "mr_per_level": 1.3,
-    "ad": 58,
-    "ad_per_level": 0,
+    "ad": 58.0,
+    "ad_per_level": 3.3,
     "attack_speed": 0.658,
     "attack_speed_per_level": 0.013600000000000001,
     "attack_speed_ratio": 0.625,
-    "attack_range": 525,
-    "move_speed": 330
+    "attack_range": 525.0,
+    "move_speed": 330.0
    },
    "mayhem": {
     "damage_dealt": 1.0,
     "damage_taken": 1.0,
     "ability_haste": 0.0,
-    "attack_speed": 0.0,
-    "changes": ""
+    "attack_speed": 0.0
    },
    "cn": {
     "weight": 0.0211,
@@ -25246,26 +25122,25 @@
    "role": "assassin",
    "ranged": false,
    "stats": {
-    "hp": 658,
-    "hp_per_level": 109,
-    "armor": 30,
+    "hp": 658.0,
+    "hp_per_level": 109.0,
+    "armor": 30.0,
     "armor_per_level": 4.7,
-    "mr": 36,
+    "mr": 36.0,
     "mr_per_level": 2.05,
-    "ad": 68,
-    "ad_per_level": 0,
+    "ad": 68.0,
+    "ad_per_level": 3.1,
     "attack_speed": 0.625,
     "attack_speed_per_level": 0.028999999999999998,
     "attack_speed_ratio": 0.625,
-    "attack_range": 125,
-    "move_speed": 335
+    "attack_range": 125.0,
+    "move_speed": 335.0
    },
    "mayhem": {
     "damage_dealt": 1.05,
     "damage_taken": 0.95,
     "ability_haste": 0.0,
-    "attack_speed": 0.0,
-    "changes": "Tenacity increased by 20%|Q|Bonus AD ratio|100%|→|115% bonus AD|W|Outgoing bonus AD ratio|40%|→|50% bonus AD; Incoming bonus AD ratio|90%|→|100% bonus AD|E|Per-wall cooldown 10 to 6s|R|Cooldown|100-60s|→|80-60s"
+    "attack_speed": 0.0
    },
    "cn": {
     "weight": 0.0459,
@@ -25397,7 +25272,6 @@
       "ARAM:WallCD"
      ],
      "notes": [
-      "cooldown from Data Dragon",
       "cooldown unknown; assumed 8s"
      ]
     },
@@ -25445,7 +25319,7 @@
      ],
      "mode_overrides": [],
      "notes": [
-      "cooldown from Mayhem balance table"
+      "ARAM cooldown"
      ]
     }
    ],
@@ -25463,26 +25337,25 @@
    "role": "support",
    "ranged": false,
    "stats": {
-    "hp": 645,
-    "hp_per_level": 99,
-    "armor": 40,
+    "hp": 645.0,
+    "hp_per_level": 99.0,
+    "armor": 40.0,
     "armor_per_level": 4.3,
-    "mr": 28,
+    "mr": 28.0,
     "mr_per_level": 2.05,
-    "ad": 55,
-    "ad_per_level": 0,
+    "ad": 55.0,
+    "ad_per_level": 3.5,
     "attack_speed": 0.625,
     "attack_speed_per_level": 0.02,
     "attack_speed_ratio": 0.625,
-    "attack_range": 150,
-    "move_speed": 340
+    "attack_range": 150.0,
+    "move_speed": 340.0
    },
    "mayhem": {
     "damage_dealt": 1.0,
     "damage_taken": 1.1,
     "ability_haste": 0.0,
-    "attack_speed": 0.0,
-    "changes": ""
+    "attack_speed": 0.0
    },
    "cn": {
     "weight": 0.0139,
@@ -25611,26 +25484,25 @@
    "role": "marksman",
    "ranged": true,
    "stats": {
-    "hp": 615,
-    "hp_per_level": 104,
-    "armor": 24,
+    "hp": 615.0,
+    "hp_per_level": 104.0,
+    "armor": 24.0,
     "armor_per_level": 4.5,
-    "mr": 30,
+    "mr": 30.0,
     "mr_per_level": 1.3,
-    "ad": 54,
-    "ad_per_level": 0,
+    "ad": 54.0,
+    "ad_per_level": 3.0,
     "attack_speed": 0.69,
     "attack_speed_per_level": 0.0338,
     "attack_speed_ratio": 0.69,
-    "attack_range": 500,
-    "move_speed": 330
+    "attack_range": 500.0,
+    "move_speed": 330.0
    },
    "mayhem": {
     "damage_dealt": 0.95,
     "damage_taken": 1.1,
     "ability_haste": 0.0,
-    "attack_speed": 0.0,
-    "changes": "Ability haste changed to 0 from -10|R|Noxious Trap damage dealt to minions 100% (from 66%)"
+    "attack_speed": 0.0
    },
    "cn": {
     "weight": 0.1385,
@@ -25745,7 +25617,6 @@
      ],
      "mode_overrides": [],
      "notes": [
-      "cooldown from Data Dragon",
       "cooldown unknown; assumed 8s",
       "hand override: Toxic Shot is on-hit"
      ],
@@ -25807,26 +25678,25 @@
    "role": "support",
    "ranged": true,
    "stats": {
-    "hp": 620,
-    "hp_per_level": 120,
-    "armor": 33,
-    "armor_per_level": 0,
-    "mr": 30,
+    "hp": 620.0,
+    "hp_per_level": 120.0,
+    "armor": 33.0,
+    "armor_per_level": 0.0,
+    "mr": 30.0,
     "mr_per_level": 1.55,
-    "ad": 56,
-    "ad_per_level": 0,
+    "ad": 56.0,
+    "ad_per_level": 2.2,
     "attack_speed": 0.625,
     "attack_speed_per_level": 0.035,
     "attack_speed_ratio": 0.625,
-    "attack_range": 450,
-    "move_speed": 330
+    "attack_range": 450.0,
+    "move_speed": 330.0
    },
    "mayhem": {
     "damage_dealt": 1.0,
     "damage_taken": 1.0,
     "ability_haste": 0.0,
-    "attack_speed": 0.0,
-    "changes": "P|Stacks per soul|1|→|2"
+    "attack_speed": 0.0
    },
    "cn": {
     "weight": 0.059,
@@ -25876,7 +25746,7 @@
      "slot": "W",
      "name": "ThreshW",
      "rank": 5,
-     "cooldown": 17.0,
+     "cooldown": 15.0,
      "cast_time": 0.25,
      "targeting": "Area",
      "area": "aoe",
@@ -25892,7 +25762,9 @@
      },
      "hits": [],
      "mode_overrides": [],
-     "notes": []
+     "notes": [
+      "Kiwi cooldown"
+     ]
     },
     {
      "slot": "E",
@@ -25925,7 +25797,7 @@
        "type": "magic",
        "calc": "PAttackDamageMax",
        "scaling": {
-        "const": 117.6,
+        "const": 196.14,
         "bonus_ad": 2.1
        },
        "target": "flat",
@@ -25998,26 +25870,25 @@
    "role": "marksman",
    "ranged": true,
    "stats": {
-    "hp": 640,
-    "hp_per_level": 102,
-    "armor": 30,
-    "armor_per_level": 4,
-    "mr": 33,
+    "hp": 640.0,
+    "hp_per_level": 102.0,
+    "armor": 30.0,
+    "armor_per_level": 4.0,
+    "mr": 33.0,
     "mr_per_level": 1.1,
-    "ad": 60,
-    "ad_per_level": 0,
+    "ad": 60.0,
+    "ad_per_level": 3.4,
     "attack_speed": 0.656,
     "attack_speed_per_level": 0.015,
     "attack_speed_ratio": 0.694,
-    "attack_range": 550,
-    "move_speed": 325
+    "attack_range": 550.0,
+    "move_speed": 325.0
    },
    "mayhem": {
     "damage_dealt": 1.0,
     "damage_taken": 1.0,
     "ability_haste": 0.0,
-    "attack_speed": 0.0,
-    "changes": ""
+    "attack_speed": 0.0
    },
    "cn": {
     "weight": 0.0849,
@@ -26196,26 +26067,25 @@
    "role": "fighter",
    "ranged": false,
    "stats": {
-    "hp": 650,
-    "hp_per_level": 110,
-    "armor": 37,
+    "hp": 650.0,
+    "hp_per_level": 110.0,
+    "armor": 37.0,
     "armor_per_level": 4.5,
-    "mr": 32,
+    "mr": 32.0,
     "mr_per_level": 2.05,
-    "ad": 68,
-    "ad_per_level": 0,
+    "ad": 68.0,
+    "ad_per_level": 4.5,
     "attack_speed": 0.67,
     "attack_speed_per_level": 0.028999999999999998,
     "attack_speed_ratio": 0.67,
-    "attack_range": 175,
-    "move_speed": 350
+    "attack_range": 175.0,
+    "move_speed": 350.0
    },
    "mayhem": {
     "damage_dealt": 1.0,
     "damage_taken": 1.0,
     "ability_haste": 0.0,
-    "attack_speed": 0.0,
-    "changes": ""
+    "attack_speed": 0.0
    },
    "cn": {
     "weight": 0.1057,
@@ -26249,7 +26119,7 @@
        "type": "physical",
        "calc": "TotalDamage",
        "scaling": {
-        "const": 195.4,
+        "const": 313.975,
         "bonus_ad": 1.55
        },
        "target": "flat",
@@ -26373,26 +26243,25 @@
    "role": "fighter",
    "ranged": false,
    "stats": {
-    "hp": 696,
-    "hp_per_level": 108,
-    "armor": 33,
+    "hp": 696.0,
+    "hp_per_level": 108.0,
+    "armor": 33.0,
     "armor_per_level": 4.8,
-    "mr": 32,
+    "mr": 32.0,
     "mr_per_level": 2.05,
-    "ad": 66,
-    "ad_per_level": 0,
+    "ad": 66.0,
+    "ad_per_level": 4.5,
     "attack_speed": 0.67,
     "attack_speed_per_level": 0.034,
     "attack_speed_ratio": 0.725,
-    "attack_range": 175,
-    "move_speed": 345
+    "attack_range": 175.0,
+    "move_speed": 345.0
    },
    "mayhem": {
     "damage_dealt": 1.1,
     "damage_taken": 0.9,
     "ability_haste": 0.0,
-    "attack_speed": 0.0,
-    "changes": "Healing done increased by 20%"
+    "attack_speed": 0.0
    },
    "cn": {
     "weight": 0.0731,
@@ -26522,26 +26391,25 @@
    "role": "mage",
    "ranged": true,
    "stats": {
-    "hp": 604,
-    "hp_per_level": 108,
-    "armor": 24,
+    "hp": 604.0,
+    "hp_per_level": 108.0,
+    "armor": 24.0,
     "armor_per_level": 4.35,
-    "mr": 30,
+    "mr": 30.0,
     "mr_per_level": 1.3,
-    "ad": 52,
-    "ad_per_level": 0,
+    "ad": 52.0,
+    "ad_per_level": 2.5,
     "attack_speed": 0.625,
     "attack_speed_per_level": 0.025,
     "attack_speed_ratio": 0.651,
-    "attack_range": 525,
-    "move_speed": 330
+    "attack_range": 525.0,
+    "move_speed": 330.0
    },
    "mayhem": {
     "damage_dealt": 1.0,
     "damage_taken": 1.0,
     "ability_haste": 0.0,
-    "attack_speed": 0.0,
-    "changes": ""
+    "attack_speed": 0.0
    },
    "cn": {
     "weight": 0.1163,
@@ -26610,10 +26478,10 @@
        "type": "magic",
        "calc": "BlueDamage",
        "scaling": {
-        "const": 172.0,
+        "const": 214.5,
         "bonus_ad": 1.0,
         "ap": 1.0,
-        "crit": 98.9
+        "crit": 123.3375
        },
        "target": "flat",
        "per_second": false,
@@ -26623,10 +26491,10 @@
        "type": "magic",
        "calc": "RedDamage",
        "scaling": {
-        "const": 142.0,
+        "const": 184.5,
         "bonus_ad": 1.0,
         "ap": 0.7,
-        "crit": 49.7
+        "crit": 64.575
        },
        "target": "flat",
        "per_second": false,
@@ -26636,10 +26504,10 @@
        "type": "magic",
        "calc": "GoldDamage",
        "scaling": {
-        "const": 97.0,
+        "const": 139.5,
         "bonus_ad": 1.0,
         "ap": 0.5,
-        "crit": 24.25
+        "crit": 34.875
        },
        "target": "flat",
        "per_second": false,
@@ -26684,7 +26552,6 @@
      ],
      "mode_overrides": [],
      "notes": [
-      "cooldown from Data Dragon",
       "cooldown unknown; assumed 8s",
       "hand override: Stacked Deck procs on every 4th attack"
      ],
@@ -26727,26 +26594,25 @@
    "role": "marksman",
    "ranged": true,
    "stats": {
-    "hp": 630,
-    "hp_per_level": 98,
-    "armor": 27,
-    "armor_per_level": 4,
-    "mr": 33,
+    "hp": 630.0,
+    "hp_per_level": 98.0,
+    "armor": 27.0,
+    "armor_per_level": 4.0,
+    "mr": 33.0,
     "mr_per_level": 1.1,
-    "ad": 59,
-    "ad_per_level": 0,
+    "ad": 59.0,
+    "ad_per_level": 3.0,
     "attack_speed": 0.679,
     "attack_speed_per_level": 0.03,
     "attack_speed_ratio": 0.679,
-    "attack_range": 550,
-    "move_speed": 330
+    "attack_range": 550.0,
+    "move_speed": 330.0
    },
    "mayhem": {
     "damage_dealt": 1.0,
     "damage_taken": 1.0,
     "ability_haste": 0.0,
-    "attack_speed": 0.0,
-    "changes": ""
+    "attack_speed": 0.0
    },
    "cn": {
     "weight": 0.0826,
@@ -26913,26 +26779,25 @@
    "role": "fighter",
    "ranged": false,
    "stats": {
-    "hp": 664,
-    "hp_per_level": 92,
-    "armor": 31,
+    "hp": 664.0,
+    "hp_per_level": 92.0,
+    "armor": 31.0,
     "armor_per_level": 4.7,
-    "mr": 32,
+    "mr": 32.0,
     "mr_per_level": 2.05,
-    "ad": 62,
-    "ad_per_level": 0,
+    "ad": 62.0,
+    "ad_per_level": 4.0,
     "attack_speed": 0.65,
     "attack_speed_per_level": 0.03,
     "attack_speed_ratio": 0.65,
-    "attack_range": 125,
-    "move_speed": 350
+    "attack_range": 125.0,
+    "move_speed": 350.0
    },
    "mayhem": {
     "damage_dealt": 1.0,
     "damage_taken": 1.0,
     "ability_haste": 0.0,
-    "attack_speed": 0.0,
-    "changes": ""
+    "attack_speed": 0.0
    },
    "cn": {
     "weight": 0.0671,
@@ -27119,26 +26984,25 @@
    "role": "fighter",
    "ranged": true,
    "stats": {
-    "hp": 655,
-    "hp_per_level": 102,
-    "armor": 36,
-    "armor_per_level": 5,
-    "mr": 32,
+    "hp": 655.0,
+    "hp_per_level": 102.0,
+    "armor": 36.0,
+    "armor_per_level": 5.0,
+    "mr": 32.0,
     "mr_per_level": 2.05,
-    "ad": 63,
-    "ad_per_level": 0,
+    "ad": 63.0,
+    "ad_per_level": 4.0,
     "attack_speed": 0.625,
     "attack_speed_per_level": 0.0375,
     "attack_speed_ratio": 0.625,
-    "attack_range": 350,
-    "move_speed": 330
+    "attack_range": 350.0,
+    "move_speed": 330.0
    },
    "mayhem": {
     "damage_dealt": 1.0,
     "damage_taken": 1.0,
     "ability_haste": 0.0,
-    "attack_speed": 0.0,
-    "changes": ""
+    "attack_speed": 0.0
    },
    "cn": {
     "weight": 0.0428,
@@ -27172,7 +27036,7 @@
        "type": "physical",
        "calc": "TotalDamage",
        "scaling": {
-        "const": 249.1,
+        "const": 296.7,
         "bonus_ad": 0.7
        },
        "target": "flat",
@@ -27206,7 +27070,7 @@
        "type": "physical",
        "calc": "DamagePerShot",
        "scaling": {
-        "const": 33.42,
+        "const": 56.54,
         "bonus_ad": 0.34
        },
        "target": "flat",
@@ -27216,7 +27080,7 @@
      ],
      "mode_overrides": [],
      "notes": [
-      "cooldown from Data Dragon",
+      "cooldown from the champion's ability list",
       "cooldown unknown; assumed 8s"
      ]
     },
@@ -27304,26 +27168,25 @@
    "role": "marksman",
    "ranged": true,
    "stats": {
-    "hp": 600,
-    "hp_per_level": 105,
-    "armor": 24,
-    "armor_per_level": 4,
-    "mr": 33,
+    "hp": 600.0,
+    "hp_per_level": 105.0,
+    "armor": 24.0,
+    "armor_per_level": 4.0,
+    "mr": 33.0,
     "mr_per_level": 1.1,
-    "ad": 59,
-    "ad_per_level": 0,
+    "ad": 59.0,
+    "ad_per_level": 3.4,
     "attack_speed": 0.658,
     "attack_speed_per_level": 0.035,
     "attack_speed_ratio": 0.658,
-    "attack_range": 575,
-    "move_speed": 330
+    "attack_range": 575.0,
+    "move_speed": 330.0
    },
    "mayhem": {
     "damage_dealt": 1.0,
     "damage_taken": 1.0,
     "ability_haste": 0.0,
-    "attack_speed": 0.0,
-    "changes": ""
+    "attack_speed": 0.0
    },
    "cn": {
     "weight": 0.0794,
@@ -27541,26 +27404,25 @@
    "role": "marksman",
    "ranged": true,
    "stats": {
-    "hp": 580,
-    "hp_per_level": 98,
-    "armor": 23,
+    "hp": 580.0,
+    "hp_per_level": 98.0,
+    "armor": 23.0,
     "armor_per_level": 4.6,
-    "mr": 33,
+    "mr": 33.0,
     "mr_per_level": 1.1,
-    "ad": 60,
-    "ad_per_level": 0,
+    "ad": 60.0,
+    "ad_per_level": 2.35,
     "attack_speed": 0.658,
     "attack_speed_per_level": 0.027999999999999997,
     "attack_speed_ratio": 0.67,
-    "attack_range": 550,
-    "move_speed": 330
+    "attack_range": 550.0,
+    "move_speed": 330.0
    },
    "mayhem": {
     "damage_dealt": 1.0,
     "damage_taken": 1.0,
     "ability_haste": 0.0,
-    "attack_speed": 0.0,
-    "changes": ""
+    "attack_speed": 0.0
    },
    "cn": {
     "weight": 0.1142,
@@ -27595,7 +27457,7 @@
        "type": "physical",
        "calc": "ADRatioBonus",
        "scaling": {
-        "const": 69.0,
+        "const": 114.9425,
         "bonus_ad": 1.15,
         "ap": 0.5
        },
@@ -27639,7 +27501,6 @@
      ],
      "mode_overrides": [],
      "notes": [
-      "cooldown from Data Dragon",
       "cooldown unknown; assumed 8s",
       "hand override: Silver Bolts procs on every 3rd hit"
      ],
@@ -27738,26 +27599,25 @@
    "role": "mage",
    "ranged": true,
    "stats": {
-    "hp": 580,
-    "hp_per_level": 108,
-    "armor": 18,
+    "hp": 580.0,
+    "hp_per_level": 108.0,
+    "armor": 18.0,
     "armor_per_level": 5.2,
-    "mr": 32,
+    "mr": 32.0,
     "mr_per_level": 1.3,
-    "ad": 52,
-    "ad_per_level": 0,
+    "ad": 52.0,
+    "ad_per_level": 2.7,
     "attack_speed": 0.625,
     "attack_speed_per_level": 0.022400000000000003,
     "attack_speed_ratio": 0.625,
-    "attack_range": 550,
-    "move_speed": 340
+    "attack_range": 550.0,
+    "move_speed": 340.0
    },
    "mayhem": {
     "damage_dealt": 0.93,
     "damage_taken": 1.1,
     "ability_haste": 0.0,
-    "attack_speed": 0.0,
-    "changes": "P|Stacks per champion takedown|5|→|3|E|Cooldown|20-14s|→|23-17s"
+    "attack_speed": 0.0
    },
    "cn": {
     "weight": 0.0778,
@@ -27835,7 +27695,6 @@
      ],
      "mode_overrides": [],
      "notes": [
-      "cooldown from Data Dragon",
       "cooldown unknown; assumed 8s",
       "hand override: Dark Matter's cooldown is not in the spell record"
      ]
@@ -27861,7 +27720,7 @@
      "hits": [],
      "mode_overrides": [],
      "notes": [
-      "cooldown from Mayhem balance table"
+      "ARAM cooldown"
      ]
     },
     {
@@ -27913,26 +27772,25 @@
    "role": "mage",
    "ranged": true,
    "stats": {
-    "hp": 590,
-    "hp_per_level": 102,
-    "armor": 22,
+    "hp": 590.0,
+    "hp_per_level": 102.0,
+    "armor": 22.0,
     "armor_per_level": 4.7,
-    "mr": 30,
+    "mr": 30.0,
     "mr_per_level": 1.3,
-    "ad": 55,
-    "ad_per_level": 0,
+    "ad": 55.0,
+    "ad_per_level": 3.1416,
     "attack_speed": 0.643,
     "attack_speed_per_level": 0.0159,
     "attack_speed_ratio": 0.625,
-    "attack_range": 525,
-    "move_speed": 340
+    "attack_range": 525.0,
+    "move_speed": 340.0
    },
    "mayhem": {
     "damage_dealt": 0.95,
     "damage_taken": 1.05,
     "ability_haste": 0.0,
-    "attack_speed": 0.0,
-    "changes": ""
+    "attack_speed": 0.0
    },
    "cn": {
     "weight": 0.0642,
@@ -28106,26 +27964,25 @@
    "role": "mage",
    "ranged": true,
    "stats": {
-    "hp": 590,
-    "hp_per_level": 104,
-    "armor": 23,
+    "hp": 590.0,
+    "hp_per_level": 104.0,
+    "armor": 23.0,
     "armor_per_level": 4.45,
-    "mr": 28,
+    "mr": 28.0,
     "mr_per_level": 1.3,
-    "ad": 54,
-    "ad_per_level": 0,
+    "ad": 54.0,
+    "ad_per_level": 2.75,
     "attack_speed": 0.669,
     "attack_speed_per_level": 0.01,
     "attack_speed_ratio": 0.625,
-    "attack_range": 550,
-    "move_speed": 335
+    "attack_range": 550.0,
+    "move_speed": 335.0
    },
    "mayhem": {
     "damage_dealt": 0.95,
     "damage_taken": 1.0,
     "ability_haste": 0.0,
-    "attack_speed": 0.0,
-    "changes": ""
+    "attack_speed": 0.0
    },
    "cn": {
     "weight": 0.0196,
@@ -28276,26 +28133,25 @@
    "role": "fighter",
    "ranged": false,
    "stats": {
-    "hp": 655,
-    "hp_per_level": 105,
-    "armor": 30,
+    "hp": 655.0,
+    "hp_per_level": 105.0,
+    "armor": 30.0,
     "armor_per_level": 4.7,
-    "mr": 32,
+    "mr": 32.0,
     "mr_per_level": 2.05,
-    "ad": 61,
-    "ad_per_level": 0,
+    "ad": 61.0,
+    "ad_per_level": 3.9,
     "attack_speed": 0.644,
     "attack_speed_per_level": 0.02,
     "attack_speed_ratio": 0.644,
-    "attack_range": 125,
-    "move_speed": 340
+    "attack_range": 125.0,
+    "move_speed": 340.0
    },
    "mayhem": {
     "damage_dealt": 1.05,
     "damage_taken": 0.95,
     "ability_haste": 0.0,
-    "attack_speed": 0.0,
-    "changes": ""
+    "attack_speed": 0.0
    },
    "cn": {
     "weight": 0.0279,
@@ -28374,7 +28230,6 @@
      ],
      "mode_overrides": [],
      "notes": [
-      "cooldown from Data Dragon",
       "cooldown unknown; assumed 8s",
       "hand override: Denting Blows procs on every 3rd hit"
      ],
@@ -28403,7 +28258,7 @@
        "type": "physical",
        "calc": "TotalDamageTooltip",
        "scaling": {
-        "const": 157.1,
+        "const": 230.03,
         "bonus_ad": 1.1,
         "ap": 1.0
        },
@@ -28467,26 +28322,25 @@
    "role": "fighter",
    "ranged": false,
    "stats": {
-    "hp": 630,
-    "hp_per_level": 109,
-    "armor": 34,
+    "hp": 630.0,
+    "hp_per_level": 109.0,
+    "armor": 34.0,
     "armor_per_level": 4.6,
-    "mr": 32,
+    "mr": 32.0,
     "mr_per_level": 2.05,
-    "ad": 57,
-    "ad_per_level": 0,
+    "ad": 57.0,
+    "ad_per_level": 4.0,
     "attack_speed": 0.658,
     "attack_speed_per_level": 0.0275,
     "attack_speed_ratio": 0.658,
-    "attack_range": 200,
-    "move_speed": 345
+    "attack_range": 200.0,
+    "move_speed": 345.0
    },
    "mayhem": {
     "damage_dealt": 1.05,
     "damage_taken": 1.0,
     "ability_haste": 0.0,
-    "attack_speed": 0.0,
-    "changes": ""
+    "attack_speed": 0.0
    },
    "cn": {
     "weight": 0.0462,
@@ -28520,7 +28374,7 @@
        "type": "physical",
        "calc": "SecondAttackDamage",
        "scaling": {
-        "const": 11.4,
+        "const": 25.0,
         "bonus_ad": 0.2,
         "ap": 0.15
        },
@@ -28532,7 +28386,7 @@
        "type": "physical",
        "calc": "TotalDamage",
        "scaling": {
-        "const": 124.9,
+        "const": 172.5,
         "bonus_ad": 0.7
        },
        "target": "flat",
@@ -28626,7 +28480,7 @@
        "type": "physical",
        "calc": "TotalDamage",
        "scaling": {
-        "const": 68.4,
+        "const": 150.0,
         "bonus_ad": 1.2
        },
        "target": "flat",
@@ -28637,7 +28491,7 @@
        "type": "physical",
        "calc": "TotalDamage",
        "scaling": {
-        "const": 68.4,
+        "const": 150.0,
         "bonus_ad": 1.2
        },
        "target": "flat",
@@ -28664,26 +28518,25 @@
    "role": "mage",
    "ranged": true,
    "stats": {
-    "hp": 600,
-    "hp_per_level": 100,
-    "armor": 23,
+    "hp": 600.0,
+    "hp_per_level": 100.0,
+    "armor": 23.0,
     "armor_per_level": 4.4,
-    "mr": 30,
+    "mr": 30.0,
     "mr_per_level": 1.3,
-    "ad": 53,
-    "ad_per_level": 0,
+    "ad": 53.0,
+    "ad_per_level": 3.0,
     "attack_speed": 0.658,
     "attack_speed_per_level": 0.021099999999999997,
     "attack_speed_ratio": 0.658,
-    "attack_range": 525,
-    "move_speed": 335
+    "attack_range": 525.0,
+    "move_speed": 335.0
    },
    "mayhem": {
     "damage_dealt": 1.0,
     "damage_taken": 1.0,
     "ability_haste": 0.0,
-    "attack_speed": 0.0,
-    "changes": "P|Stacks per takedown|20|→|8; Stacks per large minion|10|→|5; New Effect: Passively generates 1 stack every 5s"
+    "attack_speed": 0.0
    },
    "cn": {
     "weight": 0.0502,
@@ -28728,7 +28581,7 @@
        "type": "magic",
        "calc": "AttackTotalDMG",
        "scaling": {
-        "const": 173.0,
+        "const": 224.0,
         "ap": 0.5,
         "bonus_ad": 1.0
        },
@@ -28870,26 +28723,25 @@
    "role": "mage",
    "ranged": true,
    "stats": {
-    "hp": 600,
-    "hp_per_level": 110,
-    "armor": 24,
+    "hp": 600.0,
+    "hp_per_level": 110.0,
+    "armor": 24.0,
     "armor_per_level": 4.5,
-    "mr": 30,
+    "mr": 30.0,
     "mr_per_level": 1.3,
-    "ad": 55,
-    "ad_per_level": 0,
+    "ad": 55.0,
+    "ad_per_level": 3.0,
     "attack_speed": 0.658,
     "attack_speed_per_level": 0.02,
     "attack_speed_ratio": 0.658,
-    "attack_range": 450,
-    "move_speed": 330
+    "attack_range": 450.0,
+    "move_speed": 330.0
    },
    "mayhem": {
     "damage_dealt": 1.0,
     "damage_taken": 1.0,
     "ability_haste": 0.0,
-    "attack_speed": 0.0,
-    "changes": "Healing done changed to 0% from -10%"
+    "attack_speed": 0.0
    },
    "cn": {
     "weight": 0.065,
@@ -29075,26 +28927,25 @@
    "role": "fighter",
    "ranged": false,
    "stats": {
-    "hp": 650,
-    "hp_per_level": 104,
-    "armor": 35,
+    "hp": 650.0,
+    "hp_per_level": 104.0,
+    "armor": 35.0,
     "armor_per_level": 5.2,
-    "mr": 32,
+    "mr": 32.0,
     "mr_per_level": 2.05,
-    "ad": 65,
-    "ad_per_level": 0,
+    "ad": 65.0,
+    "ad_per_level": 3.5,
     "attack_speed": 0.625,
     "attack_speed_per_level": 0.02,
     "attack_speed_ratio": 0.7,
-    "attack_range": 150,
-    "move_speed": 340
+    "attack_range": 150.0,
+    "move_speed": 340.0
    },
    "mayhem": {
     "damage_dealt": 1.0,
     "damage_taken": 1.0,
     "ability_haste": 0.0,
-    "attack_speed": 0.0,
-    "changes": "E|Sky Splitter shield health ratio 14% maximum health (from 11%)"
+    "attack_speed": 0.0
    },
    "cn": {
     "weight": 0.0414,
@@ -29128,7 +28979,7 @@
        "type": "physical",
        "calc": "CalculatedDamage",
        "scaling": {
-        "const": 115.0,
+        "const": 174.5,
         "bonus_ad": 2.6
        },
        "target": "flat",
@@ -29162,7 +29013,7 @@
        "type": "physical",
        "calc": "TotalDamage",
        "scaling": {
-        "const": 176.5,
+        "const": 241.95,
         "bonus_ad": 1.1,
         "bonus_hp": 0.06
        },
@@ -29174,7 +29025,7 @@
        "type": "physical",
        "calc": "EmpoweredDamage",
        "scaling": {
-        "const": 176.5,
+        "const": 241.95,
         "bonus_ad": 1.1,
         "bonus_hp": 0.06
        },
@@ -29282,26 +29133,25 @@
    "role": "fighter",
    "ranged": false,
    "stats": {
-    "hp": 620,
-    "hp_per_level": 99,
-    "armor": 33,
+    "hp": 620.0,
+    "hp_per_level": 99.0,
+    "armor": 33.0,
     "armor_per_level": 4.4,
-    "mr": 32,
+    "mr": 32.0,
     "mr_per_level": 2.05,
-    "ad": 65,
-    "ad_per_level": 0,
+    "ad": 65.0,
+    "ad_per_level": 2.5,
     "attack_speed": 0.638,
     "attack_speed_per_level": 0.02,
     "attack_speed_ratio": 0.638,
-    "attack_range": 125,
-    "move_speed": 335
+    "attack_range": 125.0,
+    "move_speed": 335.0
    },
    "mayhem": {
     "damage_dealt": 1.05,
     "damage_taken": 0.95,
     "ability_haste": 0.0,
-    "attack_speed": 0.0,
-    "changes": "Q|Cooldown|8-6s|→|6s at all ranks"
+    "attack_speed": 0.0
    },
    "cn": {
     "weight": 0.0214,
@@ -29335,7 +29185,7 @@
        "type": "magic",
        "calc": "BaseBiteDamage",
        "scaling": {
-        "const": 78.0,
+        "const": 129.0,
         "bonus_ad": 1.2,
         "ap": 1.0
        },
@@ -29356,7 +29206,7 @@
      ],
      "mode_overrides": [],
      "notes": [
-      "cooldown from Mayhem balance table"
+      "ARAM cooldown"
      ]
     },
     {
@@ -29454,26 +29304,25 @@
    "role": "fighter",
    "ranged": false,
    "stats": {
-    "hp": 610,
-    "hp_per_level": 99,
-    "armor": 31,
+    "hp": 610.0,
+    "hp_per_level": 99.0,
+    "armor": 31.0,
     "armor_per_level": 4.7,
-    "mr": 28,
+    "mr": 28.0,
     "mr_per_level": 2.05,
-    "ad": 66,
-    "ad_per_level": 0,
+    "ad": 66.0,
+    "ad_per_level": 3.5,
     "attack_speed": 0.69,
     "attack_speed_per_level": 0.03,
     "attack_speed_ratio": 0.658,
-    "attack_range": 175,
-    "move_speed": 340
+    "attack_range": 175.0,
+    "move_speed": 340.0
    },
    "mayhem": {
     "damage_dealt": 1.0,
     "damage_taken": 1.0,
     "ability_haste": 0.0,
-    "attack_speed": 0.0,
-    "changes": "W|Cooldown|22-18s|→|20-16s|R|Cooldown|130-90s|→|140-100s"
+    "attack_speed": 0.0
    },
    "cn": {
     "weight": 0.0478,
@@ -29540,7 +29389,7 @@
      "hits": [],
      "mode_overrides": [],
      "notes": [
-      "cooldown from Mayhem balance table"
+      "ARAM cooldown"
      ]
     },
     {
@@ -29602,7 +29451,7 @@
        "type": "physical",
        "calc": "TotalDamageTT",
        "scaling": {
-        "const": 181.5,
+        "const": 345.125,
         "bonus_ad": 2.75
        },
        "target": "flat",
@@ -29622,7 +29471,7 @@
      ],
      "mode_overrides": [],
      "notes": [
-      "cooldown from Mayhem balance table"
+      "ARAM cooldown"
      ]
     }
    ],
@@ -29639,26 +29488,25 @@
    "role": "marksman",
    "ranged": true,
    "stats": {
-    "hp": 630,
-    "hp_per_level": 107,
-    "armor": 25,
+    "hp": 630.0,
+    "hp_per_level": 107.0,
+    "armor": 25.0,
     "armor_per_level": 4.2,
-    "mr": 33,
+    "mr": 33.0,
     "mr_per_level": 1.1,
-    "ad": 60,
-    "ad_per_level": 0,
+    "ad": 60.0,
+    "ad_per_level": 3.5,
     "attack_speed": 0.658,
     "attack_speed_per_level": 0.039,
     "attack_speed_ratio": 0.658,
-    "attack_range": 525,
-    "move_speed": 330
+    "attack_range": 525.0,
+    "move_speed": 330.0
    },
    "mayhem": {
     "damage_dealt": 1.0,
     "damage_taken": 1.0,
     "ability_haste": 0.0,
-    "attack_speed": 0.0,
-    "changes": "Total attack speed changed to 0% from +3%"
+    "attack_speed": 0.0
    },
    "cn": {
     "weight": 0.0461,
@@ -29821,26 +29669,25 @@
    "role": "mage",
    "ranged": true,
    "stats": {
-    "hp": 575,
-    "hp_per_level": 106,
-    "armor": 22,
+    "hp": 575.0,
+    "hp_per_level": 106.0,
+    "armor": 22.0,
     "armor_per_level": 4.7,
-    "mr": 30,
+    "mr": 30.0,
     "mr_per_level": 1.3,
-    "ad": 55,
-    "ad_per_level": 0,
+    "ad": 55.0,
+    "ad_per_level": 3.0,
     "attack_speed": 0.658,
     "attack_speed_per_level": 0.013600000000000001,
     "attack_speed_ratio": 0.625,
-    "attack_range": 525,
-    "move_speed": 340
+    "attack_range": 525.0,
+    "move_speed": 340.0
    },
    "mayhem": {
     "damage_dealt": 0.93,
     "damage_taken": 1.05,
     "ability_haste": 0.0,
-    "attack_speed": 0.0,
-    "changes": ""
+    "attack_speed": 0.0
    },
    "cn": {
     "weight": 0.0642,
@@ -30025,26 +29872,25 @@
    "role": "fighter",
    "ranged": false,
    "stats": {
-    "hp": 620,
-    "hp_per_level": 106,
-    "armor": 35,
+    "hp": 620.0,
+    "hp_per_level": 106.0,
+    "armor": 35.0,
     "armor_per_level": 4.4,
-    "mr": 32,
+    "mr": 32.0,
     "mr_per_level": 2.05,
-    "ad": 63,
-    "ad_per_level": 0,
+    "ad": 63.0,
+    "ad_per_level": 3.0,
     "attack_speed": 0.645,
     "attack_speed_per_level": 0.035,
     "attack_speed_ratio": 0.645,
-    "attack_range": 175,
-    "move_speed": 345
+    "attack_range": 175.0,
+    "move_speed": 345.0
    },
    "mayhem": {
     "damage_dealt": 1.0,
     "damage_taken": 1.0,
     "ability_haste": 0.0,
-    "attack_speed": 0.0,
-    "changes": ""
+    "attack_speed": 0.0
    },
    "cn": {
     "weight": 0.084,
@@ -30112,7 +29958,7 @@
        "type": "physical",
        "calc": "SlashDamage",
        "scaling": {
-        "const": 88.9,
+        "const": 104.2,
         "bonus_ad": 0.3
        },
        "target": "flat",
@@ -30123,7 +29969,7 @@
        "type": "physical",
        "calc": "ThrustDamage",
        "scaling": {
-        "const": 246.7,
+        "const": 292.6,
         "bonus_ad": 0.9,
         "ap": 0.65
        },
@@ -30220,26 +30066,25 @@
    "role": "fighter",
    "ranged": false,
    "stats": {
-    "hp": 590,
-    "hp_per_level": 110,
-    "armor": 32,
+    "hp": 590.0,
+    "hp_per_level": 110.0,
+    "armor": 32.0,
     "armor_per_level": 4.6,
-    "mr": 32,
+    "mr": 32.0,
     "mr_per_level": 2.05,
-    "ad": 60,
-    "ad_per_level": 0,
+    "ad": 60.0,
+    "ad_per_level": 2.5,
     "attack_speed": 0.697,
     "attack_speed_per_level": 0.035,
     "attack_speed_ratio": 0.67,
-    "attack_range": 175,
-    "move_speed": 345
+    "attack_range": 175.0,
+    "move_speed": 345.0
    },
    "mayhem": {
     "damage_dealt": 1.0,
     "damage_taken": 1.0,
     "ability_haste": 0.0,
-    "attack_speed": 0.025,
-    "changes": "Total attack speed increased by 2.5%|W|Cooldown|25-17s|→|27-19s"
+    "attack_speed": 0.025
    },
    "cn": {
     "weight": 0.1076,
@@ -30273,7 +30118,7 @@
        "type": "physical",
        "calc": "TotalDamage",
        "scaling": {
-        "const": 183.0,
+        "const": 227.625,
         "bonus_ad": 1.05
        },
        "target": "flat",
@@ -30305,7 +30150,7 @@
      "hits": [],
      "mode_overrides": [],
      "notes": [
-      "cooldown from Mayhem balance table"
+      "ARAM cooldown"
      ]
     },
     {
@@ -30409,26 +30254,25 @@
    "role": "fighter",
    "ranged": false,
    "stats": {
-    "hp": 620,
-    "hp_per_level": 105,
-    "armor": 33,
+    "hp": 620.0,
+    "hp_per_level": 105.0,
+    "armor": 33.0,
     "armor_per_level": 4.6,
-    "mr": 32,
+    "mr": 32.0,
     "mr_per_level": 2.05,
-    "ad": 62,
-    "ad_per_level": 0,
+    "ad": 62.0,
+    "ad_per_level": 2.0,
     "attack_speed": 0.625,
     "attack_speed_per_level": 0.035,
     "attack_speed_ratio": 0.625,
-    "attack_range": 175,
-    "move_speed": 345
+    "attack_range": 175.0,
+    "move_speed": 345.0
    },
    "mayhem": {
     "damage_dealt": 1.05,
     "damage_taken": 0.97,
     "ability_haste": 0.0,
-    "attack_speed": 0.025,
-    "changes": "Total attack speed increased by 2.5%"
+    "attack_speed": 0.025
    },
    "cn": {
     "weight": 0.0828,
@@ -30463,7 +30307,7 @@
        "type": "physical",
        "calc": "QDamage",
        "scaling": {
-        "const": 193.2,
+        "const": 230.6,
         "bonus_ad": 1.1
        },
        "target": "flat",
@@ -30474,7 +30318,7 @@
        "type": "physical",
        "calc": "QDamage",
        "scaling": {
-        "const": 193.2,
+        "const": 230.6,
         "bonus_ad": 1.1
        },
        "target": "flat",
@@ -30611,26 +30455,25 @@
    "role": "fighter",
    "ranged": false,
    "stats": {
-    "hp": 650,
-    "hp_per_level": 114,
-    "armor": 36,
+    "hp": 650.0,
+    "hp_per_level": 114.0,
+    "armor": 36.0,
     "armor_per_level": 4.5,
-    "mr": 32,
+    "mr": 32.0,
     "mr_per_level": 2.05,
-    "ad": 62,
-    "ad_per_level": 0,
+    "ad": 62.0,
+    "ad_per_level": 5.0,
     "attack_speed": 0.625,
     "attack_speed_per_level": 0.02,
     "attack_speed_ratio": 0.625,
-    "attack_range": 175,
-    "move_speed": 340
+    "attack_range": 175.0,
+    "move_speed": 340.0
    },
    "mayhem": {
     "damage_dealt": 1.0,
     "damage_taken": 1.0,
     "ability_haste": 0.0,
-    "attack_speed": 0.0,
-    "changes": "P|Deaths required for a grave 5 at all levels|Q|AD ratio|50%|→|30% AD; Heal health ratio|6-10%|→|4-8% of his missing health"
+    "attack_speed": 0.0
    },
    "cn": {
     "weight": 0.0088,
@@ -30665,7 +30508,7 @@
        "type": "physical",
        "calc": "BonusDamage",
        "scaling": {
-        "const": 128.6,
+        "const": 154.1,
         "bonus_ad": 0.3
        },
        "target": "flat",
@@ -30781,26 +30624,25 @@
    "role": "marksman",
    "ranged": true,
    "stats": {
-    "hp": 590,
-    "hp_per_level": 110,
-    "armor": 25,
+    "hp": 590.0,
+    "hp_per_level": 110.0,
+    "armor": 25.0,
     "armor_per_level": 4.4,
-    "mr": 33,
+    "mr": 33.0,
     "mr_per_level": 1.1,
-    "ad": 55,
-    "ad_per_level": 0,
+    "ad": 55.0,
+    "ad_per_level": 3.0,
     "attack_speed": 0.65,
     "attack_speed_per_level": 0.02,
     "attack_speed_ratio": 0.65,
-    "attack_range": 575,
-    "move_speed": 325
+    "attack_range": 575.0,
+    "move_speed": 325.0
    },
    "mayhem": {
     "damage_dealt": 1.0,
     "damage_taken": 1.0,
     "ability_haste": 0.0,
-    "attack_speed": 0.0,
-    "changes": "E|Regular bonus movement speed 40 to 60%|R|Cooldown|100-80s|→|80-60s"
+    "attack_speed": 0.0
    },
    "cn": {
     "weight": 0.0679,
@@ -30856,7 +30698,7 @@
        "type": "physical",
        "calc": "Calc_Damage_Spread",
        "scaling": {
-        "const": 16.5,
+        "const": 31.8,
         "bonus_ad": 0.3
        },
        "target": "flat",
@@ -30866,7 +30708,6 @@
      ],
      "mode_overrides": [],
      "notes": [
-      "cooldown from Data Dragon",
       "cooldown unknown; assumed 8s",
       "hand override: Q's passive is on-hit (the Yunara simulator models her fully)"
      ],
@@ -30918,7 +30759,7 @@
      ],
      "mode_overrides": [],
      "notes": [
-      "cooldown from Data Dragon"
+      "cooldown from the champion's ability list"
      ]
     },
     {
@@ -30968,7 +30809,7 @@
      "hits": [],
      "mode_overrides": [],
      "notes": [
-      "cooldown from Mayhem balance table"
+      "ARAM cooldown"
      ]
     }
    ],
@@ -30986,26 +30827,25 @@
    "role": "support",
    "ranged": true,
    "stats": {
-    "hp": 500,
-    "hp_per_level": 69,
-    "armor": 25,
+    "hp": 500.0,
+    "hp_per_level": 69.0,
+    "armor": 25.0,
     "armor_per_level": 4.2,
-    "mr": 25,
+    "mr": 25.0,
     "mr_per_level": 1.1,
-    "ad": 49,
-    "ad_per_level": 0,
+    "ad": 49.0,
+    "ad_per_level": 3.1,
     "attack_speed": 0.625,
     "attack_speed_per_level": 0.01,
     "attack_speed_ratio": 0.625,
-    "attack_range": 425,
-    "move_speed": 330
+    "attack_range": 425.0,
+    "move_speed": 330.0
    },
    "mayhem": {
     "damage_dealt": 1.0,
     "damage_taken": 1.0,
     "ability_haste": 0.0,
-    "attack_speed": 0.0,
-    "changes": ""
+    "attack_speed": 0.0
    },
    "cn": {
     "weight": 0.0274,
@@ -31094,7 +30934,6 @@
      "hits": [],
      "mode_overrides": [],
      "notes": [
-      "cooldown from Data Dragon",
       "cooldown unknown; assumed 8s"
      ]
     },
@@ -31182,26 +31021,25 @@
    "role": "fighter",
    "ranged": false,
    "stats": {
-    "hp": 640,
-    "hp_per_level": 114,
-    "armor": 36,
-    "armor_per_level": 5,
-    "mr": 32,
+    "hp": 640.0,
+    "hp_per_level": 114.0,
+    "armor": 36.0,
+    "armor_per_level": 5.0,
+    "mr": 32.0,
     "mr_per_level": 2.05,
-    "ad": 63,
-    "ad_per_level": 0,
+    "ad": 63.0,
+    "ad_per_level": 4.0,
     "attack_speed": 0.625,
     "attack_speed_per_level": 0.025,
     "attack_speed_ratio": 0.625,
-    "attack_range": 175,
-    "move_speed": 345
+    "attack_range": 175.0,
+    "move_speed": 345.0
    },
    "mayhem": {
     "damage_dealt": 1.0,
     "damage_taken": 1.0,
     "ability_haste": 0.0,
-    "attack_speed": 0.0,
-    "changes": ""
+    "attack_speed": 0.0
    },
    "cn": {
     "weight": 0.0247,
@@ -31408,26 +31246,25 @@
    "role": "tank",
    "ranged": false,
    "stats": {
-    "hp": 685,
-    "hp_per_level": 109,
-    "armor": 33,
+    "hp": 685.0,
+    "hp_per_level": 109.0,
+    "armor": 33.0,
     "armor_per_level": 5.2,
-    "mr": 32,
+    "mr": 32.0,
     "mr_per_level": 2.05,
-    "ad": 60,
-    "ad_per_level": 0,
+    "ad": 60.0,
+    "ad_per_level": 3.4,
     "attack_speed": 0.736,
     "attack_speed_per_level": 0.016,
     "attack_speed_ratio": 0.638,
-    "attack_range": 175,
-    "move_speed": 340
+    "attack_range": 175.0,
+    "move_speed": 340.0
    },
    "mayhem": {
     "damage_dealt": 1.0,
     "damage_taken": 0.96,
     "ability_haste": 0.0,
-    "attack_speed": 0.0,
-    "changes": "Healing done increased by 10%"
+    "attack_speed": 0.0
    },
    "cn": {
     "weight": 0.0221,
@@ -31623,26 +31460,25 @@
    "role": "assassin",
    "ranged": false,
    "stats": {
-    "hp": 654,
-    "hp_per_level": 99,
-    "armor": 32,
+    "hp": 654.0,
+    "hp_per_level": 99.0,
+    "armor": 32.0,
     "armor_per_level": 4.7,
-    "mr": 29,
+    "mr": 29.0,
     "mr_per_level": 2.05,
-    "ad": 63,
-    "ad_per_level": 0,
+    "ad": 63.0,
+    "ad_per_level": 3.4,
     "attack_speed": 0.651,
     "attack_speed_per_level": 0.033,
     "attack_speed_ratio": 0.651,
-    "attack_range": 125,
-    "move_speed": 345
+    "attack_range": 125.0,
+    "move_speed": 345.0
    },
    "mayhem": {
     "damage_dealt": 1.05,
     "damage_taken": 0.95,
     "ability_haste": 0.0,
-    "attack_speed": 0.0,
-    "changes": "Energy regeneration increased by 20%. Tenacity increased by 20%"
+    "attack_speed": 0.0
    },
    "cn": {
     "weight": 0.0821,
@@ -31778,7 +31614,7 @@
        "type": "physical",
        "calc": "RCalculatedDamage",
        "scaling": {
-        "const": 63.0,
+        "const": 120.8,
         "bonus_ad": 1.0
        },
        "target": "flat",
@@ -31803,26 +31639,25 @@
    "role": "marksman",
    "ranged": true,
    "stats": {
-    "hp": 600,
-    "hp_per_level": 110,
-    "armor": 24,
+    "hp": 600.0,
+    "hp_per_level": 110.0,
+    "armor": 24.0,
     "armor_per_level": 4.2,
-    "mr": 33,
+    "mr": 33.0,
     "mr_per_level": 1.1,
-    "ad": 56,
-    "ad_per_level": 0,
+    "ad": 56.0,
+    "ad_per_level": 2.0,
     "attack_speed": 0.658,
     "attack_speed_per_level": 0.02,
     "attack_speed_ratio": 0.625,
-    "attack_range": 550,
-    "move_speed": 330
+    "attack_range": 550.0,
+    "move_speed": 330.0
    },
    "mayhem": {
     "damage_dealt": 1.1,
     "damage_taken": 0.95,
     "ability_haste": 0.0,
-    "attack_speed": 0.0,
-    "changes": "Q|Zeri will start the game with one point already allocated in Burst Fire!, allowing her to allocate the other two to her other abilities|E|Cooldown|24-18s|→|20-16s"
+    "attack_speed": 0.0
    },
    "cn": {
     "weight": 0.0216,
@@ -31856,7 +31691,7 @@
        "type": "physical",
        "calc": "ActiveDamageThatCanCrit",
        "scaling": {
-        "const": 99.6,
+        "const": 137.0,
         "bonus_ad": 1.1
        },
        "target": "flat",
@@ -31866,7 +31701,6 @@
      ],
      "mode_overrides": [],
      "notes": [
-      "cooldown from Data Dragon",
       "cooldown unknown; assumed 8s",
       "hand override: Burst Fire replaces her attacks"
      ],
@@ -31895,7 +31729,7 @@
        "type": "physical",
        "calc": "TotalDamage",
        "scaling": {
-        "const": 246.0,
+        "const": 280.0,
         "bonus_ad": 1.0,
         "ap": 0.5
        },
@@ -31907,7 +31741,7 @@
        "type": "physical",
        "calc": "WallDamage",
        "scaling": {
-        "const": 123.0,
+        "const": 140.0,
         "bonus_ad": 0.5,
         "ap": 0.25
        },
@@ -31955,8 +31789,8 @@
      ],
      "mode_overrides": [],
      "notes": [
-      "unsupported stat 9",
-      "cooldown from Mayhem balance table"
+      "ARAM cooldown",
+      "unsupported stat 9"
      ]
     },
     {
@@ -31994,7 +31828,7 @@
        "type": "physical",
        "calc": "ChainPhysicalDamage",
        "scaling": {
-        "const": 22.4,
+        "const": 36.0,
         "bonus_ad": 0.4
        },
        "target": "flat",
@@ -32019,26 +31853,25 @@
    "role": "mage",
    "ranged": true,
    "stats": {
-    "hp": 606,
-    "hp_per_level": 106,
-    "armor": 21,
+    "hp": 606.0,
+    "hp_per_level": 106.0,
+    "armor": 21.0,
     "armor_per_level": 4.7,
-    "mr": 30,
+    "mr": 30.0,
     "mr_per_level": 1.3,
-    "ad": 55,
-    "ad_per_level": 0,
+    "ad": 55.0,
+    "ad_per_level": 3.1,
     "attack_speed": 0.656,
     "attack_speed_per_level": 0.02,
     "attack_speed_ratio": 0.656,
-    "attack_range": 550,
-    "move_speed": 325
+    "attack_range": 550.0,
+    "move_speed": 325.0
    },
    "mayhem": {
     "damage_dealt": 0.9,
     "damage_taken": 1.2,
     "ability_haste": 0.0,
-    "attack_speed": 0.0,
-    "changes": "Abilities' damage to minions changed to 100% from 60%|P|Damage to structures 150%|Q|AP ratio|60-80%|→|60-70% AP|W|Tower execute threshold 12.5 to 22.5% of turret's maximum health|E|First hit AP ratio|25-45%|→|25-35% AP; Field duration 7s"
+    "attack_speed": 0.0
    },
    "cn": {
     "weight": 0.0517,
@@ -32219,26 +32052,25 @@
    "role": "support",
    "ranged": true,
    "stats": {
-    "hp": 574,
-    "hp_per_level": 96,
-    "armor": 24,
-    "armor_per_level": 5,
-    "mr": 30,
+    "hp": 574.0,
+    "hp_per_level": 96.0,
+    "armor": 24.0,
+    "armor_per_level": 5.0,
+    "mr": 30.0,
     "mr_per_level": 1.3,
-    "ad": 52,
-    "ad_per_level": 0,
+    "ad": 52.0,
+    "ad_per_level": 3.0,
     "attack_speed": 0.658,
     "attack_speed_per_level": 0.0213,
     "attack_speed_ratio": 0.625,
-    "attack_range": 550,
-    "move_speed": 335
+    "attack_range": 550.0,
+    "move_speed": 335.0
    },
    "mayhem": {
     "damage_dealt": 1.0,
     "damage_taken": 1.0,
     "ability_haste": 0.0,
-    "attack_speed": 0.0,
-    "changes": "P|Cooldown|120s|→|90s|W|Cooldown|14-6s|→|13-5s|E|Cooldown|15s|→|13s|R|Heal AP ratio|200%|→|250% AP"
+    "attack_speed": 0.0
    },
    "cn": {
     "weight": 0.0476,
@@ -32304,7 +32136,7 @@
      "hits": [],
      "mode_overrides": [],
      "notes": [
-      "cooldown from Mayhem balance table"
+      "ARAM cooldown"
      ]
     },
     {
@@ -32328,7 +32160,7 @@
      "hits": [],
      "mode_overrides": [],
      "notes": [
-      "cooldown from Mayhem balance table"
+      "ARAM cooldown"
      ]
     },
     {
@@ -32369,26 +32201,25 @@
    "role": "mage",
    "ranged": true,
    "stats": {
-    "hp": 630,
-    "hp_per_level": 106,
-    "armor": 21,
+    "hp": 630.0,
+    "hp_per_level": 106.0,
+    "armor": 21.0,
     "armor_per_level": 4.7,
-    "mr": 30,
+    "mr": 30.0,
     "mr_per_level": 1.3,
-    "ad": 58,
-    "ad_per_level": 0,
+    "ad": 58.0,
+    "ad_per_level": 3.3,
     "attack_speed": 0.658,
     "attack_speed_per_level": 0.025,
     "attack_speed_ratio": 0.625,
-    "attack_range": 550,
-    "move_speed": 340
+    "attack_range": 550.0,
+    "move_speed": 340.0
    },
    "mayhem": {
     "damage_dealt": 1.1,
     "damage_taken": 0.95,
     "ability_haste": 0.0,
-    "attack_speed": 0.0,
-    "changes": ""
+    "attack_speed": 0.0
    },
    "cn": {
     "weight": 0.0222,
@@ -32552,26 +32383,25 @@
    "role": "mage",
    "ranged": true,
    "stats": {
-    "hp": 574,
-    "hp_per_level": 93,
-    "armor": 29,
+    "hp": 574.0,
+    "hp_per_level": 93.0,
+    "armor": 29.0,
     "armor_per_level": 4.2,
-    "mr": 30,
+    "mr": 30.0,
     "mr_per_level": 1.3,
-    "ad": 53,
-    "ad_per_level": 0,
+    "ad": 53.0,
+    "ad_per_level": 3.2,
     "attack_speed": 0.681,
     "attack_speed_per_level": 0.021099999999999997,
     "attack_speed_ratio": 0.625,
-    "attack_range": 575,
-    "move_speed": 340
+    "attack_range": 575.0,
+    "move_speed": 340.0
    },
    "mayhem": {
     "damage_dealt": 0.9,
     "damage_taken": 1.05,
     "ability_haste": -10.0,
-    "attack_speed": 0.0,
-    "changes": "Ability haste reduced by 10|Balance data reflects the official|League of Legends patch notes|and is updated each patch.|About|Privacy Policy|Terms of Use|Contact|aramnerfs.com is not endorsed by Riot Games and does not reflect the views or opinions of Riot Games or anyone officially involved in producing or managing Riot Games properties. Riot Games and all associated properties are trademarks or registered trademarks of Riot Games, Inc.|Buy me a skin"
+    "attack_speed": 0.0
    },
    "cn": {
     "weight": 0.0457,

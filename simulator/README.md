@@ -81,10 +81,10 @@ make test                     # both test suites
 
 `tools/build_champion_pool.py` writes `data/champions.json` from:
 
-- Data Dragon 16.20.1 for base stats and cooldown fallbacks.
-- CommunityDragon champion bins for ability values, damage formulas, cooldowns and ammo. Riot's own per-mode values (`DataValuesModeOverride`, ARAM then Kiwi = Mayhem) are applied on top.
+- The client's champion list and per-champion game data (CommunityDragon `latest`, live 16.20) for roles, cooldown fallbacks and icons.
+- CommunityDragon champion bins for base stats (`CharacterRecord`), ability values, damage formulas, cooldowns and ammo. Riot's own per-mode values (`DataValuesModeOverride`, ARAM then Kiwi = Mayhem) are applied on top, and so is the Mayhem cooldown override (`{f9c2333e}`).
 - The CommunityDragon string table for ability tooltips. Damage tags (`<magicDamage>`, `<physicalDamage>`, `<trueDamage>`) say which formulas deal damage and of what type. Heals, shields and minion or monster damage are skipped.
-- aramnerfs.com/mayhem for the Mayhem balance table (damage dealt and taken, ability haste, attack speed, cooldown changes). It lists absolute Mayhem values, so they replace the regular ARAM ones.
+- aramnerfs.com/mayhem only for the server-side Mayhem modifiers the client files don't carry (damage dealt and taken, ability haste, attack speed). It lists absolute Mayhem values, so they replace the regular ARAM ones. Cooldown changes come from the bins above.
 - `data/cn/champions.json` (101.qq.com) for role, damage share and damage taken.
 
 Each champion gets a `parse_quality` of good, partial or none (currently 138 / 32 / 3). Abilities the parser gets wrong are fixed in `data/champion_overrides.json`, each with a reason. To rebuild: `python3 tools/build_champion_pool.py` and `python3 tools/build_items.py` (downloads are cached in `~/.cache/aram-mayhem-sim`).
@@ -103,7 +103,7 @@ Settings: `start_distance`, `enemy_spread` (fight), `dodge_chance` 0.75, `reacti
 
 ## Items and augments
 
-`data/item_effects.json` is hand-written: which items exist, which roles they suit, and their passives as effect keys. `tools/build_items.py` adds each item's stats from Data Dragon and writes `data/items.json`. Item passive values are tooltip values as best known and should be checked in game. Effect keys:
+`data/item_effects.json` is hand-written: which items exist, which roles they suit, and their passives as effect keys. `tools/build_items.py` reads each item's name, cost and stats from the game's own item data on the live patch, and the passive numbers the item bin holds (`mDataValues`, with Riot's ARAM and then Mayhem overrides applied) replace the hand-written values; its `BIN_EFFECTS` table lists which effect key comes from which value. It writes `data/items.json`. The remaining passive values (for example Kraken's damage, Titanic's on-hit, Shojin's amp and Sunfire's aura) are tooltip values as best known and should be checked in game. Effect keys:
 
 | Key | Meaning |
 |---|---|
@@ -121,7 +121,7 @@ Settings: `start_distance`, `enemy_spread` (fight), `dodge_chance` 0.75, `reacti
 | `proc_*`, `active_*` | Luden's-style procs and active items |
 | `aura_flat`, `aura_bonus_hp` | Sunfire-style aura damage per second |
 
-`data/augments.json` has 14 Mayhem augments with Riot's Kiwi ids and Arena level-1 values. Some (Erosion, Tank Engine) are approximations. **Poro Stampede** (a quest augment) is modeled as already completed with 20 Poros fed: its Poro Charge spell fires 3 waves of Poros down the lane once per fight, each a wide, slow skillshot dealing 100-200 (by level) + 20 per Poro fed as physical damage, half to champions already hit (values from `kiwi.bin`; `poros_fed` in the augment changes the waves).
+`data/augments.json` has 14 Mayhem augments with Riot's Kiwi ids. Which augments are modeled and their effect keys are hand-written; `tools/build_augments.py` fills each augment's name, rarity and values from the live patch's `kiwi.bin` (the augment spell's DataValues and calculations) through an explicit per-augment mapping, and prints every value it changes. Values with no client equivalent stay hand-written with a note: Erosion assumes 15 stacks on average, Tank Engine 10 takedowns, and Witchful Thinking keeps 60 AP because the client is ambiguous (its tooltip shows 20-80 by level, its DataValue says 70). **Poro Stampede** (a quest augment) is modeled as already completed with 20 Poros fed: its Poro Charge spell fires 3 waves of Poros down the lane once per fight, each a wide, slow skillshot dealing 100-200 (by level) + 20 per Poro fed as physical damage, half to champions already hit (`poros_fed` in the augment changes the waves; the waves' length, width and spacing are estimates).
 
 ## Optimizer
 
@@ -147,7 +147,7 @@ cd viewer && python3 -m http.server  # then open http://localhost:8000/#Ahri
 ./mayhem_sim --champ Jinx --trace jinx.json   # one champion's trace
 ```
 
-The replay shown is the median-DPS fight out of the first 200 for the best build, so it is a typical fight rather than a lucky one. `--trace` records the same fight the simulator scores (recording never changes the random draws; `make test` checks this). In `viewer/replay-data/`, the simulator's own output is committed so the website can show it: `index.json`, `traces.json`, `best-builds.json` and the WebAssembly engine. The icon atlas, clips and built models are not, because they belong to Riot Games. Without them the viewer loads each icon from Data Dragon and each model straight from modelviewer.lol (the full file, about 17 MB per champion, picking its clips in the browser), so the website works without any Riot files in the repo. After changing the viewer or its data, bump `REPLAY_VERSION` and the `?v=` tags in `viewer/index.html` so browsers fetch the new files.
+The replay shown is the median-DPS fight out of the first 200 for the best build, so it is a typical fight rather than a lucky one. `--trace` records the same fight the simulator scores (recording never changes the random draws; `make test` checks this). In `viewer/replay-data/`, the simulator's own output is committed so the website can show it: `index.json`, `traces.json`, `best-builds.json` and the WebAssembly engine. The icon atlas, clips and built models are not, because they belong to Riot Games. Without them the viewer loads each icon from the client's asset paths on CommunityDragon and each model straight from modelviewer.lol (the full file, about 17 MB per champion, picking its clips in the browser), so the website works without any Riot files in the repo. After changing the viewer or its data, bump `REPLAY_VERSION` and the `?v=` tags in `viewer/index.html` so browsers fetch the new files.
 
 **Sounds.** With the models, each cast plays that ability's sound and each death the champion's death sound, yours at full volume and the enemies' quieter; the Sound button turns them off, and browsers only allow sound after the first click or key press. `tools/build_game_sounds.py` (run by `make replay SOUNDS=1`) takes them from a local League install: each champion's Wwise banks name their events after the spell (`Play_sfx_Ahri_AhriQ_OnCast`, `Play_vo_Ahri_Spell3DQCast`, `Play_vo_Ahri_Death3D`), so every slot gets its own sound effect mixed with its voice line. It writes `viewer/replay-data/sounds/sounds.m4a` and `sounds.json` (Riot audio, not committed). It needs `pip install cdtb zstandard xxhash`, `cdtb fetch-hashes` once, and vgmstream-cli to decode the banks; `--dry-run` prints the events chosen for each champion. A few spells whose events don't carry the spell's name are mapped by hand in `EVENT_ALIASES`. Without those files the page falls back to `tools/build_sounds.py`: the first burst of sound in Riot's ability preview video, streamed from Riot's CDN, which is sometimes the wrong action, and no death sounds.
 

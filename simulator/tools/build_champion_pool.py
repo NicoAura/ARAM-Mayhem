@@ -2,13 +2,17 @@
 """Build data/champions.json: every champion's stats and ability damage for the
 all-champion ARAM Mayhem simulator.
 
-Sources (all fetched live, then cached):
-  - Riot Data Dragon: champion list and base stats.
-  - CommunityDragon: each champion's game data (ability values, scalings,
-    cooldowns, targeting) and the English string table (tooltips, which say
-    whether a number is magic, physical or true damage).
-  - aramnerfs.com/mayhem: ARAM Mayhem per-champion damage dealt/taken and
-    other balance changes.
+Sources (all fetched live, then cached; CommunityDragon's latest/ is the live patch):
+  - The client's champion list (champion-summary.json) and per-champion game
+    data (v1/champions/{id}.json: roles, cooldown fallbacks).
+  - Each champion's bin: base stats (CharacterRecord), ability values,
+    scalings, cooldowns, targeting, and Riot's own ARAM/Mayhem (Kiwi) overrides
+    of ability values and cooldowns.
+  - The English string table (tooltips, which say whether a number is magic,
+    physical or true damage).
+  - aramnerfs.com/mayhem, only for the per-champion modifiers Riot applies on
+    the server and ships in no client file: damage dealt/taken, ability haste
+    and attack speed.
   - simulator/data/cn_enemy_pool.json (built by build_enemy_pool.py): role,
     CC rating and China-server Mayhem damage shares, used to check results.
 
@@ -43,8 +47,9 @@ DEFAULT_OUT = os.path.join(DATA, "champions.json")
 DEFAULT_POOL = os.path.join(DATA, "cn_enemy_pool.json")
 DEFAULT_CACHE = os.path.join(os.path.expanduser("~"), ".cache", "aram-mayhem-sim")
 
-DDRAGON = "https://ddragon.leagueoflegends.com"
 CDRAGON = "https://raw.communitydragon.org/latest"
+GAME_DATA = CDRAGON + "/plugins/rcp-be-lol-game-data/global/default/v1"
+CONTENT_METADATA = CDRAGON + "/content-metadata.json"
 STRINGTABLE = CDRAGON + "/game/en_us/data/menu/en_us/lol.stringtable.json"
 CHAMP_BIN = CDRAGON + "/game/data/characters/{c}/{c}.bin.json"
 MAYHEM_BALANCE = "https://www.aramnerfs.com/mayhem"
@@ -71,6 +76,8 @@ ALT_WORDS = ("up to", "increased to", "instead", "empowered", "maximum of", "min
 SKIP_CALC = re.compile(r"minion|monster|structure|turret|tower|heal|shield", re.I)
 # Mode layers in Riot's DataValuesModeOverride, applied in order.
 MODE_LAYERS = ("ARAM", "Kiwi")
+# Per-mode cooldowns sit under this hashed key in each spell, with the same ARAM/Kiwi layers.
+COOLDOWN_OVERRIDE = "{f9c2333e}"
 
 
 def log(*a):
@@ -399,6 +406,12 @@ def parse_spell(slot, spell_obj, strings, base_stats, attack_range=125):
                          "per_second": per_second, "alt": alt})
 
     cooldown = spell.get("cooldownTime") or [0.0] * 7
+    for mode in MODE_LAYERS:
+        mode_cd = ((spell.get(COOLDOWN_OVERRIDE) or {}).get(mode) or {}).get("value")
+        if mode_cd:
+            if mode_cd != cooldown:
+                notes.add(f"{mode} cooldown")
+            cooldown = mode_cd
     cd = float(cooldown[min(rank, len(cooldown) - 1)])
     recharge = spell.get("mAmmoRechargeTime") or []
     if recharge and float(recharge[min(rank, len(recharge) - 1)]) > cd:
@@ -537,15 +550,13 @@ def parse_mayhem_balance(page):
         rest = t[m.end():end].strip("|")
         pctv = lambda s: float(s.replace("%", "").replace("+", "")) / 100.0 if re.match(r"^[+-]?[0-9.]+%$", s) else 0.0
         entry = {"damage_dealt": round(1 + pctv(m.group(2)), 4), "damage_taken": round(1 + pctv(m.group(3)), 4),
-                 "ability_haste": 0.0, "attack_speed": 0.0, "cooldowns": {}, "changes": rest}
+                 "ability_haste": 0.0, "attack_speed": 0.0}
         ah = re.search(r"Ability haste (increased|reduced) by ([0-9.]+)", rest)
         if ah:
             entry["ability_haste"] = float(ah.group(2)) * (1 if ah.group(1) == "increased" else -1)
         asp = re.search(r"Total attack speed (increased|reduced) by ([0-9.]+)%", rest)
         if asp:
             entry["attack_speed"] = float(asp.group(2)) / 100 * (1 if asp.group(1) == "increased" else -1)
-        for cm in re.finditer(r"(?:^|\|)([QWER])\|Cooldown\|[^|]+\|→\|([0-9.]+)(?:-([0-9.]+))?s", rest):
-            entry["cooldowns"][cm.group(1)] = [float(cm.group(2)), float(cm.group(3) or cm.group(2))]
         out[norm(m.group(1))] = entry
     return out, (patch.group(1) if patch else "")
 
@@ -554,11 +565,15 @@ def norm(name):
     return re.sub(r"[^a-z]", "", name.lower())
 
 
-def rank_cooldown(lo_hi, slot):
-    lo, hi = lo_hi
-    ranks = 3 if slot == "R" else 5
-    # "20-14s": first value is rank 1, second is max rank.
-    return hi if ranks > 1 else lo
+def record_stat(record, *names):
+    """A base stat from the champion's CharacterRecord (plain number or {baseValue})."""
+    for n in names:
+        v = record.get(n)
+        if isinstance(v, dict):
+            v = v.get("baseValue")
+        if v is not None:
+            return round(float(v), 4)
+    return 0.0
 
 
 # ---------------------------------------------------------------------------
@@ -574,9 +589,14 @@ def main():
     args = ap.parse_args()
     cache = args.cache
 
-    version = json.loads(fetch(DDRAGON + "/api/versions.json", cache))[0]
-    champs = json.loads(fetch(f"{DDRAGON}/cdn/{version}/data/en_US/champion.json", cache, f"champion-{version}.json"))["data"]
-    log(f"Data Dragon {version}: {len(champs)} champions")
+    version = ".".join(json.loads(fetch(CONTENT_METADATA, cache, "content-metadata.json"))["version"].split(".")[:2])
+    summary = json.loads(fetch(GAME_DATA + "/champion-summary.json", cache, f"gd/{version}/champion-summary.json"))
+    # Ids from 60000 up are mode copies (e.g. Jade); -1 is "None".
+    # The client spells one alias differently from everywhere else (FiddleSticks).
+    alias = lambda a: "Fiddlesticks" if a == "FiddleSticks" else a  # noqa: E731
+    champs = {alias(c["alias"]): {"id": alias(c["alias"]), "name": c["name"], "key": str(c["id"])}
+              for c in summary if 0 < c["id"] < 10000}
+    log(f"game version {version}: {len(champs)} champions")
     strings = {k.lower(): v for k, v in json.loads(fetch(STRINGTABLE, cache, "stringtable.json"))["entries"].items()}
     balance, balance_patch = parse_mayhem_balance(fetch(MAYHEM_BALANCE, cache, "mayhem-balance.html"))
     log(f"Mayhem balance table (patch {balance_patch}): {len(balance)} champions")
@@ -595,6 +615,9 @@ def main():
     todo = [c for c in champs.values() if not only or norm(c["id"]) in only or norm(c["name"]) in only]
 
     def load(c):
+        detail = json.loads(fetch(f"{GAME_DATA}/champions/{c['key']}.json", cache, f"gd/{version}/champions/{c['key']}.json"))
+        c["tags"] = [r.capitalize() for r in detail.get("roles") or []]
+        c["spells"] = detail.get("spells") or []
         return c, json.loads(fetch(CHAMP_BIN.format(c=c["id"].lower()), cache, f"bins/{c['id'].lower()}.json"))
 
     with ThreadPoolExecutor(8) as ex:
@@ -603,15 +626,26 @@ def main():
     out = []
     for c, bin_data in sorted(loaded, key=lambda x: x[0]["name"]):
         cid = int(c["key"])
-        s = c["stats"]
+        record = next((v for k, v in bin_data.items() if isinstance(v, dict) and v.get("__type") == "CharacterRecord"
+                       and k.lower().endswith("/root")), {})
+        st = lambda *n: record_stat(record, *n)  # noqa: E731
+        s = {
+            "hp": st("baseHPModifiable", "baseHP"), "hpperlevel": st("hpPerLevelModifiable", "hpPerLevel"),
+            "armor": st("baseArmorModifiable", "baseArmor"), "armorperlevel": st("armorPerLevelModifiable", "armorPerLevel"),
+            "spellblock": st("baseMR", "baseSpellBlock"), "spellblockperlevel": st("mrPerLevel", "spellBlockPerLevel"),
+            "attackdamage": st("baseDamageModifiable", "baseDamage"),
+            "attackdamageperlevel": st("damagePerLevelModifiable", "damagePerLevel"),
+            "attackspeed": st("attackSpeedModifiable", "attackSpeed"),
+            "attackspeedperlevel": st("attackSpeedPerLevelModifiable", "attackSpeedPerLevel"),
+            "attackrange": st("attackRangeModifiable", "attackRange"),
+            "movespeed": st("baseMoveSpeedModifiable", "baseMoveSpeed"),
+        }
         base = {
             "ad": level_stat(s["attackdamage"], s["attackdamageperlevel"]),
             "hp": level_stat(s["hp"], s["hpperlevel"]),
             "armor": level_stat(s["armor"], s["armorperlevel"]),
             "mr": level_stat(s["spellblock"], s["spellblockperlevel"]),
         }
-        record = next((v for k, v in bin_data.items() if isinstance(v, dict) and v.get("__type") == "CharacterRecord"
-                       and k.lower().endswith("/root")), {})
         spell_paths = record.get("spells") or []
         abilities, notes = [], []
         for slot, path in zip("QWER", spell_paths):
@@ -621,13 +655,12 @@ def main():
                 continue
             abilities.append(parse_spell(slot, obj, strings, base, s["attackrange"]))
         if any(a["cooldown"] <= 0 for a in abilities):
-            # A few abilities keep their cooldown outside the spell record; Data Dragon has it.
-            detail = json.loads(fetch(f"{DDRAGON}/cdn/{version}/data/en_US/champion/{c['id']}.json", cache,
-                                      f"ddragon/{version}/{c['id']}.json"))["data"][c["id"]]["spells"]
-            for a, sp in zip(abilities, detail):
-                if a["cooldown"] <= 0 and sp.get("cooldown"):
-                    a["cooldown"] = float(sp["cooldown"][min(a["rank"], len(sp["cooldown"])) - 1])
-                    a["notes"].append("cooldown from Data Dragon")
+            # A few abilities keep their cooldown outside the spell record; the client's champion data has it.
+            for a, sp in zip(abilities, c["spells"]):
+                cds = sp.get("cooldownCoefficients") or []
+                if a["cooldown"] <= 0 and any(cds):
+                    a["cooldown"] = float(cds[min(a["rank"], len(cds)) - 1])
+                    a["notes"].append("cooldown from the champion's ability list")
 
         for a in abilities:
             if a["cooldown"] < 1.0 and not (a["hits"] and all(h["per_second"] for h in a["hits"])):
@@ -650,14 +683,8 @@ def main():
                 a["geometry"]["move"] = move  # "dash" or "blink": the caster travels with the ability
 
         bal = balance.get(norm(c["name"])) or balance.get(norm(c["id"]))
-        if bal:
-            for slot, lohi in bal["cooldowns"].items():
-                for a in abilities:
-                    if a["slot"] == slot:
-                        a["cooldown"] = rank_cooldown(lohi, slot)
-                        a["notes"].append("cooldown from Mayhem balance table")
-        else:
-            notes.append("not in the Mayhem balance table; no modifiers applied")
+        if not bal:
+            notes.append("no Mayhem damage dealt/taken modifiers listed")
 
         damaging = sum(1 for a in abilities if a["hits"])
         flagged = sum(1 for a in abilities for n in a["notes"] if "ignored" in n or "unsupported" in n)
@@ -686,7 +713,6 @@ def main():
                 "damage_taken": (bal or {}).get("damage_taken", 1.0),
                 "ability_haste": (bal or {}).get("ability_haste", 0.0),
                 "attack_speed": (bal or {}).get("attack_speed", 0.0),
-                "changes": (bal or {}).get("changes", ""),
             },
             "cn": {k: p[k] for k in ("weight", "damage_share", "damage_taken_share", "win_rate", "cc", "phys_share")} if p else None,
             "abilities": abilities,
@@ -706,7 +732,7 @@ def main():
     doc = {
         "meta": {
             "built_at": dt.datetime.now(dt.timezone.utc).isoformat(timespec="seconds"),
-            "ddragon_version": version,
+            "game_version": version,
             "cdragon": "latest",
             "mayhem_balance_patch": balance_patch,
             "level": LEVEL,
@@ -717,7 +743,8 @@ def main():
                 "bonus_hp, bonus_armor, bonus_mr, as (bonus attack speed), crit, lethality.",
                 "target is flat or a fraction of the target's max/current/missing health. alt marks numbers that look like "
                 "alternatives (empowered, maximum, recast) rather than extra hits.",
-                "mayhem holds the ARAM Mayhem damage dealt/taken modifiers and listed changes (aramnerfs.com).",
+                "mayhem holds the server-side ARAM Mayhem modifiers (damage dealt/taken, ability haste, attack speed) "
+                "from aramnerfs.com; ability values and cooldowns use Riot's own ARAM/Kiwi overrides from each bin.",
                 "cn holds 101.qq.com China-server Mayhem stats: damage_share is the average share of the team's damage.",
             ],
         },

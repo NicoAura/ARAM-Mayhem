@@ -45,6 +45,7 @@ body { margin: 0; font: 14px/1.5 var(--body); }
 header { display: flex; flex-wrap: wrap; align-items: end; gap: 12px 24px; justify-content: space-between; }
 h1 { font: 700 clamp(26px, 3.2vw, 32px)/1.1 var(--display); letter-spacing: -.025em; margin: 0; text-wrap: balance; }
 .eyebrow { font: 500 11.5px/1 var(--mono); letter-spacing: .06em; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; }
+.beta { display: inline-block; margin-left: 6px; padding: 3px 7px; border: 1px solid var(--accent); border-radius: 999px; color: var(--accent); letter-spacing: .06em; vertical-align: 1px; }
 .picker { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
 label.lbl { font: 500 11px/1 var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
 select, button { font: 500 14px var(--body); color: var(--frost); background: transparent; border: 1px solid var(--line);
@@ -152,7 +153,7 @@ fieldset select { width: 100%; min-width: 0; font-size: 13px; padding: 6px 8px; 
 <div class="wrap">
   <header>
     <div>
-      <div class="eyebrow">ARAM Mayhem simulator · fight replay</div>
+      <div class="eyebrow">ARAM Mayhem simulator · fight replay <span class="beta" title="Experimental">Beta</span></div>
       <h1 id="title">Loading replays…</h1>
     </div>
     <div class="picker">
@@ -241,15 +242,15 @@ fieldset select { width: 100%; min-width: 0; font-size: 13px; padding: 6px 8px; 
     </div>
   </section>
 
-  <p class="note">This is one typical fight (the median of 200) from the simulator, using the build it found best. Some champions' numbers are approximate, and passives are mostly missing.
+  <p class="note">The simulator is in beta: an experiment whose results can shift as the model changes. This is one typical fight (the median of 200) from the simulator, using the build it found best. Some champions' numbers are approximate, and passives are mostly missing.
   The champion models, animations and icons belong to Riot Games. This project isn't endorsed by Riot Games and doesn't reflect the views or opinions of Riot Games or anyone officially involved in producing or managing League of Legends.</p>
 </div>
 <script type="importmap">{"imports": {"three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
   "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"}}</script>
-<script>window.REPLAY_VERSION = "23";</script>
-<script src="replay.js?v=23"></script>
-<script type="module" src="models3d.js?v=23"></script>
-<script src="sim-panel.js?v=23"></script>
+<script>window.REPLAY_VERSION = "24";</script>
+<script src="replay.js?v=24"></script>
+<script type="module" src="models3d.js?v=24"></script>
+<script src="sim-panel.js?v=24"></script>
 <!-- replay-page-end -->
 </body>
 </html>

@@ -1,4 +1,4 @@
-// Runs the WebAssembly build of mayhem_sim (make wasm-mayhem) off the page's main thread.
+// Runs the simulator's WebAssembly engine off the page's main thread.
 // Messages in: {id, args}. Messages out: {id, ok, stdout, stderr, trace}.
 "use strict";
 const BUST = self.location.search;

@@ -1,6 +1,6 @@
 // Picks the animation clips the fight replay plays from a champion model's clip names.
-// Shared by the viewer (models3d.js, for models loaded straight from modelviewer.lol) and
-// tools/build_models.mjs (which keeps only these clips in the built models).
+// Shared by the viewer (models3d.js, for full models loaded at run time) and the model builder
+// (which keeps only these clips).
 //
 // Names vary by champion (Spell4 vs Spell4_NoMove, Idle1 vs Idle_Base, Zed_idle1.anm,
 // PunkGenius_Idle01.anm), so exact names are tried first, then the same words after a

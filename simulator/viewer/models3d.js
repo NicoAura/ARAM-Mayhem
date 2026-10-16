@@ -1,8 +1,7 @@
 // 3D champion models for the fight replay (three.js). Each fighter in the arena is an
 // animated model posed from the simulated timeline (cast, attack, stunned, death, idle), with
-// the game's own clip order for each ability and idle variations (replay-data/anims.json). Models come from
-// replay-data/models/, built by tools/build_models.mjs; a champion with no built model (the
-// website, which doesn't ship Riot art) loads the full model from modelviewer.lol instead,
+// each ability's clips in order and idle variations (replay-data/anims.json). Models come from
+// replay-data/models/; a champion with no model there loads the full model at run time instead,
 // picking its clips here the same way. If WebGL or a model is missing,
 // replay.js keeps drawing the 2D portraits.
 import * as THREE from "three";
@@ -22,7 +21,7 @@ const manifestReady = fetch(DATA + "models.json" + BUST).then((r) => (r.ok ? r.j
   .then((m) => { manifest = {}; for (const [k, v] of Object.entries(m)) manifest[k.toLowerCase()] = v; });
 const keysReady = fetch("replay-data/index.json" + BUST).then((r) => r.json())
   .then((idx) => new Map(idx.champions.map((c) => [c.id.toLowerCase(), { id: c.id, key: c.key }]))).catch(() => new Map());
-// How each champion animates, from the game's animation graphs (tools/build_anim_data.py):
+// How each champion animates:
 // idle variations, death, and each ability's clips in order, one list per successive cast.
 let anims = {};
 const animsReady = fetch("replay-data/anims.json" + BUST).then((r) => (r.ok ? r.json() : {})).catch(() => ({}))
@@ -240,8 +239,8 @@ class Actor {
   duration(role) { const c = this.clip(role); return c ? c.duration : 0; }
 }
 
-function makeRenderer(canvas) {
-  const r = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+function makeRenderer(canvas, antialias) {
+  const r = new THREE.WebGLRenderer({ canvas, antialias, alpha: true });
   r.setClearColor(0x000000, 0);
   r.outputColorSpace = THREE.SRGBColorSpace;
   return r;
@@ -254,9 +253,10 @@ const api = {
   pendingKeys: new Set(),
   preview: null,
 
-  attach(arenaCanvas) {
+  // low: no antialiasing (a WebGL canvas keeps the choice it was made with).
+  attach(arenaCanvas, low) {
     try {
-      this.arena = { renderer: makeRenderer(arenaCanvas), scene: new THREE.Scene(),
+      this.arena = { renderer: makeRenderer(arenaCanvas, !low), scene: new THREE.Scene(),
         camera: new THREE.OrthographicCamera(-8, 8, 4.5, -4.5, 0.1, 100) };
       this.arena.camera.position.set(0, 11, 11);
       this.arena.camera.lookAt(0, 0, 0);
@@ -307,12 +307,14 @@ const api = {
 
   // fighters: [{key, champ, x, y, face: 1 | -1, dir?: {x, y}, role, t, loop, visible}] in device px.
   // Returns {key: {x, y}}, the point above each loaded model's head, so the 2D overlay can place HP bars.
-  frame(fighters, W, H) {
+  // scale < 1 renders the models smaller and lets the page stretch them (cheaper on slow devices).
+  frame(fighters, W, H, scale = 1) {
     const out = {};
     if (!this.ok) return out;
     const { renderer, scene, camera } = this.arena;
     const cw = renderer.domElement.width, ch = renderer.domElement.height;
-    if (cw !== W || ch !== H) renderer.setSize(W, H, false);
+    const rw = Math.round(W * scale), rh = Math.round(H * scale);
+    if (cw !== rw || ch !== rh) renderer.setSize(rw, rh, false);
     // Keep the floor 16 units wide whatever the canvas shape.
     const aspect = H / W;
     camera.left = -8; camera.right = 8; camera.top = 8 * aspect; camera.bottom = -8 * aspect;
