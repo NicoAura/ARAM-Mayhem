@@ -1,4 +1,4 @@
-name: China Mayhem stats
+name: Mayhem stats
 
 on:
   schedule:
@@ -32,6 +32,6 @@ jobs:
           if git diff --cached --quiet; then
             echo "No new data"
           else
-            git commit -m "Update China Mayhem stats ($(date -u +%Y-%m-%d))"
+            git commit -m "Update Mayhem stats ($(date -u +%Y-%m-%d))"
             git push
           fi

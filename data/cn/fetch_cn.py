@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Fetch Chinese-server (Tencent) ARAM Mayhem stats from the official 101.qq.com backend.
+"""Fetch ARAM Mayhem stats from the official 101.qq.com (Tencent) backend.
 
 These are the same endpoints the official LOL strategy site (https://101.qq.com/)
 calls for its "海克斯大乱斗" (Hextech/Mayhem) rankings. No login is needed.
@@ -149,7 +149,7 @@ def main():
     for d in duos:
         d["names"] = [champ_name(c)[0] for c in d["champion_ids"]]
 
-    meta = {"source": "101.qq.com (Tencent, official)", "server": "China",
+    meta = {"source": "101.qq.com (Tencent, official)", "server": "Tencent",
             "champion_stat_date": date,
             "augment_stat_date": aug_payload.get("dtstatdate", ""),
             "fetched_at": dt.datetime.now(dt.timezone.utc).isoformat(timespec="seconds")}

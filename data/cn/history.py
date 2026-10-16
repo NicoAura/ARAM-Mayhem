@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build the full China-server Mayhem champion history, patch by patch.
+"""Build the full Mayhem champion history, patch by patch.
 
 Tencent serves champion stats for every day since 2025-11-02. Each day's numbers
 are cumulative since the current patch's data window opened, and they reset when

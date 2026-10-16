@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Filter China-server Mayhem champion stats by patch, month or date range.
+"""Filter Mayhem champion stats by patch, month or date range.
 
 Works offline from data/cn/history/ (built by history.py).
 
