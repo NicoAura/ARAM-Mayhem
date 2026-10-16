@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import Link from "next/link";
 import championIds from "@/data/champion-ids.json";
 import { loadSettings } from "@/lib/settings";
 
@@ -157,6 +158,9 @@ export default function ChampionPanel({
             onEnded={() => setPlaying(false)}
           />
           {error && <p className="admin-status error">{error}</p>}
+          <Link className="inline-link" href={`/tools/champions#${alias}`}>
+            Champion page →
+          </Link>
           <ul className="champ-abilities">
             {abilities.map((a) => (
               <li key={a.spellKey}>
