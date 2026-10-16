@@ -1,281 +1,9 @@
 {
-  "_note": "Hand-written cook builds. build_data.py adds augment text, China win rates and simulator numbers and writes data.js. The first `core` augments decide the build's tier; the rest are flex picks. `augment_text` replaces the generated text for augments whose tooltip numbers the game data doesn't fill in. Only extremely unconventional builds belong here (Nico, 2026-10-16): skip combos China already plays on that champion.",
+  "_note": "Hand-written cook builds. Every build flips what its champion is known for (Nico, 2026-10-16: keep only builds like Melee Bomb Man Ziggs). build_data.py adds augment text, China win rates and simulator numbers and writes data.js. The first `core` augments decide the build's tier; the rest are flex picks. `augment_text` replaces the generated text for augments whose tooltip numbers the game data doesn't fill in.",
   "augment_text": {
     "With Haste": "Gain Move Speed equal to a share of your Ability Haste."
   },
   "builds": [
-    {
-      "id": "gangplank-king-me",
-      "champion": "Gangplank",
-      "title": "King of the Bridge",
-      "augments": [
-        "King Me",
-        "Donation",
-        "Upgrade Collector",
-        "Yowch, My Coins!"
-      ],
-      "core": 1,
-      "items": [
-        "Ionian Boots of Lucidity",
-        "The Collector",
-        "Infinity Edge",
-        "Essence Reaver",
-        "Navori Flickerblade",
-        "Lord Dominik's Regards"
-      ],
-      "why": "King Me has the lowest win rate of any augment in China at about 33%. To trigger it you ride the enemy team's transport while holding a Legendary item, and only then do you get Kinged with an upgraded item and a free Prismatic. The other three are pure gold, because a pirate king needs a treasury.",
-      "play": "Rush a Legendary, find their transport, and become royalty. Then probably lose."
-    },
-    {
-      "id": "malzahar-minion-union",
-      "champion": "Malzahar",
-      "title": "Minion Union",
-      "augments": [
-        "Minionmancer",
-        "Hand of Baron",
-        "Infernal Conduit",
-        "Ice Cold"
-      ],
-      "core": 2,
-      "items": [
-        "Sorcerer's Shoes",
-        "Liandry's Torment",
-        "Rylai's Crystal Scepter",
-        "Malignance",
-        "Rabadon's Deathcap",
-        "Void Staff"
-      ],
-      "why": "Voidlings come out 40% bigger and stronger, Hand of Baron turns every allied minion near you into a Baron minion, and you get 25% Adaptive Force for the trouble. You are no longer a mage, you are a labor movement.",
-      "play": "Stay with the wave and let the army do it."
-    },
-    {
-      "id": "trundle-theme-park",
-      "champion": "Trundle",
-      "title": "Trundle Theme Park",
-      "augments": [
-        "Poro Stampede",
-        "Spin Me Right Round",
-        "Terrain'd",
-        "Pat On The Back"
-      ],
-      "core": 4,
-      "items": [
-        "Mercury's Treads",
-        "Blade of The Ruined King",
-        "Sundered Sky",
-        "Sterak's Gage",
-        "Spirit Visage",
-        "Dead Man's Plate"
-      ],
-      "why": "Trundle is on China's best-champion list for all four. Feed Poros until you unlock a Poro Charge summoner spell, swing around your own pillar on a grappling hook, make the pillar burn everyone near it, and collect shields from teammates patting you on the back.",
-      "play": "Feed the Poros first. Poro Stampede is one of the least-picked augments in the mode for a reason."
-    },
-    {
-      "id": "vladimir-strict-vampire",
-      "champion": "Vladimir",
-      "title": "Strict Vampire",
-      "augments": [
-        "Vampirism",
-        "Ominous Pact",
-        "Warlock Juicebox",
-        "Goredrink"
-      ],
-      "core": 2,
-      "items": [
-        "Sorcerer's Shoes",
-        "Riftmaker",
-        "Cosmic Drive",
-        "Rabadon's Deathcap",
-        "Spirit Visage",
-        "Void Staff"
-      ],
-      "why": "Vampirism bans healing from allies and Health regen in exchange for 25% Omnivamp, and Ominous Pact adds 20% more Omnivamp, 50% Move Speed and Ability Power the lower your Health gets, while every cast costs 5% of your current Health. Goredrink and Warlock Juicebox stack even more Omnivamp on top. You only eat what you kill.",
-      "play": "Stay low, stay fast, and tell your Soraka to heal someone else. Vampirism has no China stats yet."
-    },
-    {
-      "id": "leesin-flash-mob",
-      "champion": "LeeSin",
-      "title": "Flash Mob",
-      "augments": [
-        "Flashy",
-        "Flash 2",
-        "Flashbang",
-        "Earthwake"
-      ],
-      "core": 3,
-      "items": [
-        "Berserker's Greaves",
-        "Black Cleaver",
-        "Lord Dominik's Regards",
-        "Profane Hydra",
-        "Serylda's Grudge",
-        "Umbral Glaive"
-      ],
-      "why": "Every Flash augment at once. Flashy gives Flash 3 charges, Flash 2 adds a second Flash spell with 70 Summoner Haste, and Flashbang makes each one explode and slow. That is four Flashes on call for Insec kicks, and Earthwake leaves a detonating trail behind every Q and W dash in between.",
-      "play": "Ward-hop, Flash, kick, Flash, Flash. Nobody will know where you are, including you.",
-      "lab": true
-    },
-    {
-      "id": "zilean-time-loop",
-      "champion": "Zilean",
-      "title": "Time Loop",
-      "augments": [
-        "Ult Bot",
-        "Ultimate Revolution",
-        "Recursion",
-        "Archmage"
-      ],
-      "core": 2,
-      "items": [
-        "Ionian Boots of Lucidity",
-        "Malignance",
-        "Cosmic Drive",
-        "Horizon Focus",
-        "Shadowflame",
-        "Rabadon's Deathcap"
-      ],
-      "why": "Ult Bot sends all Ability Haste to R at 1.5x, Recursion's 60 haste and every haste item go there too, and Ultimate Revolution gives a second Chronoshift right after the first. Your team gets two revives on a short cooldown. Archmage keeps Q and W refunding each other since they get no haste of their own.",
-      "play": "Chronoshift whoever is about to die, then the next person. Save nothing.",
-      "lab": true
-    },
-    {
-      "id": "ezreal-mana-tank",
-      "champion": "Ezreal",
-      "title": "Mana Tank",
-      "augments": [
-        "Mind to Matter",
-        "Overflow",
-        "Upgrade Sheen",
-        "Mystic Punch"
-      ],
-      "core": 3,
-      "items": [
-        "Ionian Boots of Lucidity",
-        "Manamune",
-        "Trinity Force",
-        "Archangel's Staff",
-        "Rod of Ages",
-        "Frozen Heart"
-      ],
-      "why": "Mind to Matter gives Health equal to half your Mana, and Overflow doubles your Mana costs but makes your damage scale with max Mana. Stack Muramana, Seraph's, Rod of Ages and Frozen Heart and Ezreal turns into a frontline that throws Mystic Shots. Ezreal is on China's best list for both mana augments and Upgrade Sheen.",
-      "play": "Q everything, Spellblade everything, and stand closer than an Ezreal should.",
-      "lab": true
-    },
-    {
-      "id": "sona-heavy-metal",
-      "champion": "Sona",
-      "title": "Heavy Metal",
-      "augments": [
-        "Heavy Hitter",
-        "Goliath",
-        "Tank Engine",
-        "Sonata"
-      ],
-      "core": 3,
-      "items": [
-        "Plated Steelcaps",
-        "Heartsteel",
-        "Warmog's Armor",
-        "Titanic Hydra",
-        "Sunfire Aegis",
-        "Jak'Sho, The Protean"
-      ],
-      "why": "Sona as a giant tank. Goliath and Tank Engine stack size and Health, Heavy Hitter makes every Power Chord hit for a share of that Health, and Sonata plays her heal and speed songs automatically every 10 seconds, so she never has to press W or E.",
-      "play": "Walk up, Q, auto. The band plays itself.",
-      "lab": true
-    },
-    {
-      "id": "mf-net-zero",
-      "champion": "MissFortune",
-      "title": "Net Zero",
-      "augments": [
-        "Goliath",
-        "Giant Slayer",
-        "Celestial Body",
-        "Glass Cannon"
-      ],
-      "core": 4,
-      "items": [
-        "Berserker's Greaves",
-        "Blade of The Ruined King",
-        "Infinity Edge",
-        "Lord Dominik's Regards",
-        "Mortal Reminder",
-        "Runaan's Hurricane"
-      ],
-      "why": "Every augment cancels another one. Goliath makes you big and Giant Slayer makes you tiny. Celestial Body adds 1,500 Health and cuts your damage 10%, and Glass Cannon cuts 30% of your Health for extra true damage. Miss Fortune is on China's list for Giant Slayer and Glass Cannon, which is the only reason she was picked.",
-      "play": "Play normal Miss Fortune. Nobody will be able to tell what changed.",
-      "lab": true
-    },
-    {
-      "id": "karma-marksman",
-      "champion": "Karma",
-      "title": "Marksman Karma",
-      "augments": [
-        "Dual Wield",
-        "Deft",
-        "Heavy Hitter",
-        "Erosion"
-      ],
-      "core": 4,
-      "items": [
-        "Berserker's Greaves",
-        "Blade of The Ruined King",
-        "Infinity Edge",
-        "Lord Dominik's Regards",
-        "Runaan's Hurricane",
-        "Yun Tal Wildarrows"
-      ],
-      "why": "The simulator's biggest surprise. Searching every item for every champion, its best Karma build was a full crit marksman build, at 2.4x the damage of its best mage build and with better survival. The simulator doesn't model enchanter shields or Mantra, so take it with salt, but these are the simulator's own augment picks.",
-      "play": "Buy Berserker's and right-click. RQ to Mantra your own damage if you remember.",
-      "lab": true
-    },
-    {
-      "id": "skarner-lethality",
-      "champion": "Skarner",
-      "title": "Glass Scorpion",
-      "augments": [
-        "Mystic Punch",
-        "Goliath",
-        "Jeweled Gauntlet",
-        "It's Critical"
-      ],
-      "core": 4,
-      "items": [
-        "Ionian Boots of Lucidity",
-        "Axiom Arc",
-        "Black Cleaver",
-        "Lord Dominik's Regards",
-        "Serylda's Grudge",
-        "Umbral Glaive"
-      ],
-      "why": "Another simulator find: a full lethality Skarner did 1.36x the damage of its best tank build. The catch is he survived a third of fights instead of more than half, so the tank gets deleted after grabbing someone.",
-      "play": "R the carry into your team and hope your team is there.",
-      "lab": true
-    },
-    {
-      "id": "taric-bonk",
-      "champion": "Taric",
-      "title": "Bonk Taric",
-      "augments": [
-        "Dual Wield",
-        "Heavy Hitter",
-        "Deft",
-        "Tank Engine"
-      ],
-      "core": 4,
-      "items": [
-        "Berserker's Greaves",
-        "Blade of The Ruined King",
-        "Heartsteel",
-        "Hollow Radiance",
-        "Sunfire Aegis",
-        "Titanic Hydra"
-      ],
-      "why": "The simulator's best Taric is half tank and half on-hit: Dual Wield and Deft make him swing fast, and Heavy Hitter and Titanic Hydra make every swing hit for a share of his Heartsteel Health. It beat his best normal build by about a quarter in damage with the same survival.",
-      "play": "Stun, then bonk. Bravado keeps the empowered bonks coming.",
-      "lab": true
-    },
     {
       "id": "ziggs-melee",
       "champion": "Ziggs",
@@ -296,31 +24,161 @@
         "Riftmaker"
       ],
       "why": "Ziggs gives up his bombs-from-a-mile-away identity and walks up to stab people. Draw Your Sword turns his range into AD, Health, Attack Speed and Lifesteal, and his passive Short Fuse still blows up on his next melee hit. Dual Wield, Firebrand and Juiced pile on-hit magic damage onto every swing.",
-      "play": "Walk at them. Throw a bomb only when you're already standing on them.",
-      "lab": true
+      "play": "Walk at them. Throw a bomb only when you're already standing on them."
     },
     {
-      "id": "chogath-tiny",
-      "champion": "Chogath",
-      "title": "Tiny Cho",
+      "id": "darius-sniper",
+      "champion": "Darius",
+      "title": "Noxian Sniper",
       "augments": [
-        "Giant Slayer",
-        "Shrink Engine",
-        "Shrink Ray",
-        "Escape Plan"
+        "Scoped Weapons",
+        "Scopier Weapons",
+        "Scopiest Weapons",
+        "Typhoon"
       ],
       "core": 3,
+      "items": [
+        "Berserker's Greaves",
+        "Kraken Slayer",
+        "Blade of The Ruined King",
+        "Guinsoo's Rageblade",
+        "Wit's End",
+        "Sterak's Gage"
+      ],
+      "why": "The reverse of Melee Bomb Man. Melee champions get more from the range augments than ranged ones (75, 150 and 250), so all three together add 475 range and put Darius's autos at 650, the same as Caitlyn's. He stacks Hemorrhage from across the fight, and Typhoon fires a second shot at another target.",
+      "play": "Stand at the back and auto. Walk up only to Guillotine whoever has five stacks."
+    },
+    {
+      "id": "veigar-marksman",
+      "champion": "Veigar",
+      "title": "Tiny Marksman",
+      "augments": [
+        "escAPADe",
+        "Dual Wield",
+        "Critical Rhythm",
+        "It's Critical"
+      ],
+      "core": 4,
+      "items": [
+        "Berserker's Greaves",
+        "Rabadon's Deathcap",
+        "Infinity Edge",
+        "Kraken Slayer",
+        "Lord Dominik's Regards",
+        "Phantom Dancer"
+      ],
+      "why": "Veigar's whole game is stacking infinite Ability Power. escAPADe turns every point of it into 0.6 bonus AD (plus 15% more AD), so his Q stacks and even Rabadon's Deathcap now feed his auto attacks. Dual Wield, Critical Rhythm and It's Critical make him a crit marksman with a yordle hat.",
+      "play": "Farm Q stacks like normal, then right-click everyone. Cage still works."
+    },
+    {
+      "id": "soraka-sniper",
+      "champion": "Soraka",
+      "title": "Starchild Sniper",
+      "augments": [
+        "Scopiest Weapons",
+        "Dual Wield",
+        "Deft",
+        "It's Critical"
+      ],
+      "core": 4,
+      "items": [
+        "Berserker's Greaves",
+        "Yun Tal Wildarrows",
+        "Infinity Edge",
+        "Runaan's Hurricane",
+        "Lord Dominik's Regards",
+        "Blade of The Ruined King"
+      ],
+      "why": "The healer stops healing and becomes the team's marksman. Scopiest Weapons adds 150 range on top of her 550, Dual Wield and Deft make her shoot fast, and the full crit build does the rest. The simulator's item search keeps finding that enchanters out-damage their normal builds with crit items.",
+      "play": "Silence them with E, then auto from 700 range. W is for emergencies only."
+    },
+    {
+      "id": "karthus-no-requiem",
+      "champion": "Karthus",
+      "title": "No Requiem",
+      "augments": [
+        "Back To Basics",
+        "Infernal Conduit",
+        "Recursion",
+        "Magic Missile"
+      ],
+      "core": 1,
       "items": [
         "Sorcerer's Shoes",
         "Liandry's Torment",
         "Rylai's Crystal Scepter",
         "Rabadon's Deathcap",
-        "Shadowflame",
-        "Void Staff"
+        "Void Staff",
+        "Cryptbloom"
       ],
-      "why": "Cho'Gath's whole fantasy is growing, so this build shrinks him. Giant Slayer makes him tiny and deals more damage to anyone bigger, Shrink Engine shrinks him further with every takedown, and Shrink Ray shrinks enemies too. Every Feast stack fights the augments, and Escape Plan shrinks him once more when he runs.",
-      "play": "Feast anyway. Watch him stay small.",
-      "lab": true
+      "why": "Karthus is the map-wide ultimate, and Back To Basics seals it for good. In return his Q, W and E deal 35% more damage with 70 Ability Haste, and Infernal Conduit, Recursion and Magic Missile turn Lay Waste into a nonstop burning machine gun.",
+      "play": "Spam Q. When your team pings for Requiem, tell them it's sealed."
+    },
+    {
+      "id": "mundo-no-regen",
+      "champion": "DrMundo",
+      "title": "Mundo Can't Regen",
+      "augments": [
+        "Vampirism",
+        "Ominous Pact",
+        "Goredrink",
+        "Warlock Juicebox"
+      ],
+      "core": 2,
+      "items": [
+        "Plated Steelcaps",
+        "Ravenous Hydra",
+        "Titanic Hydra",
+        "Sterak's Gage",
+        "Death's Dance",
+        "Riftmaker"
+      ],
+      "why": "Mundo's identity is Health regen, and Vampirism turns all of it off: no regen, no healing from allies, and his ultimate's regen does nothing. He lives on Omnivamp instead (25% from Vampirism, more from Goredrink, Juicebox and Ominous Pact), and Ominous Pact makes every cast cost Health.",
+      "play": "Hit things to stay alive. Don't press R expecting it to help."
+    },
+    {
+      "id": "teemo-giant",
+      "champion": "Teemo",
+      "title": "Giant Teemo",
+      "augments": [
+        "Goliath",
+        "Tank Engine",
+        "Heavy Hitter",
+        "Celestial Body"
+      ],
+      "core": 4,
+      "items": [
+        "Plated Steelcaps",
+        "Heartsteel",
+        "Warmog's Armor",
+        "Titanic Hydra",
+        "Sunfire Aegis",
+        "Jak'Sho, The Protean"
+      ],
+      "why": "The tiny scout who hides in bushes is now the biggest thing on the map. Goliath and Tank Engine grow him, Celestial Body adds 1,500 Health, and Heavy Hitter makes every dart hit for a share of it. He can no longer hide anywhere.",
+      "play": "Walk down the middle of the lane. Shrooms are still invisible; you are not."
+    },
+    {
+      "id": "malphite-paper",
+      "champion": "Malphite",
+      "title": "Paper Malphite",
+      "augments": [
+        "Glass Cannon",
+        "Giant Slayer",
+        "It's Critical",
+        "Critical Rhythm"
+      ],
+      "core": 4,
+      "items": [
+        "Berserker's Greaves",
+        "Yun Tal Wildarrows",
+        "Infinity Edge",
+        "Phantom Dancer",
+        "Lord Dominik's Regards",
+        "Bloodthirster"
+      ],
+      "why": "The armor-stacking rock buys zero armor. Glass Cannon cuts 30% of his Health for extra true damage, Giant Slayer makes him tiny, and the full crit build turns his autos into the damage. His ultimate is still a knock-up, it just comes from a pebble.",
+      "play": "Unstoppable Force into their backline, then auto. Don't get hit."
     }
   ]
 }

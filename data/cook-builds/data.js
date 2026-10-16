@@ -9,1519 +9,6 @@ window.COOK_DATA = {
  },
  "builds": [
   {
-   "id": "gangplank-king-me",
-   "champion": "Gangplank",
-   "title": "King of the Bridge",
-   "augments": [
-    {
-     "name": "King Me",
-     "rarity": "Prismatic",
-     "text": "The first time you take the enemy transport with a Legendary Item you become Kinged, upgrading your item and gaining a random Prismatic Augment.",
-     "core": true,
-     "icon": "icons/augments/king-me.png",
-     "win_rate": 0.3273,
-     "pick_rate": 0.0373,
-     "win_rank": 211,
-     "best_champions": [
-      "AurelionSol",
-      "TahmKench",
-      "Ashe",
-      "Gangplank",
-      "Graves",
-      "Jhin"
-     ],
-     "champion_is_best": true
-    },
-    {
-     "name": "Donation",
-     "rarity": "Gold",
-     "text": "Receive 1750 Gold. Thanks chat! :)",
-     "core": false,
-     "icon": "icons/augments/donation.png",
-     "win_rate": 0.5619,
-     "pick_rate": 0.2703,
-     "win_rank": 35,
-     "best_champions": [
-      "Ashe",
-      "MasterYi",
-      "Karthus",
-      "Zed",
-      "AurelionSol",
-      "Yasuo"
-     ],
-     "champion_is_best": false
-    },
-    {
-     "name": "Upgrade Collector",
-     "rarity": "Silver",
-     "text": "Executing enemies with The Collector's Passive increases execute threshold by 0.5% and grant additional 50 Gold. Gain 250 Gold.",
-     "core": false,
-     "icon": "icons/augments/upgrade-collector.png",
-     "win_rate": 0.536,
-     "pick_rate": 0.3268,
-     "win_rank": 63,
-     "best_champions": [
-      "Graves",
-      "Jhin",
-      "Caitlyn",
-      "Lucian",
-      "Jinx",
-      "Gangplank"
-     ],
-     "champion_is_best": true
-    },
-    {
-     "name": "Yowch, My Coins!",
-     "rarity": "Gold",
-     "text": "On takedown, enemy champions drop coins nearby, which you and your allies can collect. Each is worth 15 gold.",
-     "core": false,
-     "icon": "icons/augments/yowch-my-coins.png",
-     "win_rate": 0.5048,
-     "pick_rate": 0.1014,
-     "win_rank": 129,
-     "best_champions": [
-      "Ashe",
-      "Karthus",
-      "AurelionSol",
-      "Teemo",
-      "Trundle",
-      "Brand"
-     ],
-     "champion_is_best": false
-    }
-   ],
-   "core": 1,
-   "items": [
-    "Ionian Boots of Lucidity",
-    "The Collector",
-    "Infinity Edge",
-    "Essence Reaver",
-    "Navori Flickerblade",
-    "Lord Dominik's Regards"
-   ],
-   "why": "King Me has the lowest win rate of any augment in China at about 33%. To trigger it you ride the enemy team's transport while holding a Legendary item, and only then do you get Kinged with an upgraded item and a free Prismatic. The other three are pure gold, because a pirate king needs a treasury.",
-   "play": "Rush a Legendary, find their transport, and become royalty. Then probably lose.",
-   "champion_name": "Gangplank",
-   "champion_icon": "icons/champions/41.png",
-   "champion_win_rate": 0.5045,
-   "champion_pick_rate": 0.0837,
-   "champion_win_rank": 57,
-   "core_win_rate": 0.3273,
-   "tier": "Pure troll",
-   "core_usual": 1,
-   "core_pick_rate": 0.0373,
-   "sim": {
-    "dps": 639,
-    "survival": 0.503,
-    "best_dps": 563,
-    "best_survival": 0.959,
-    "pct_of_best": 1.135,
-    "best_items": [
-     "Ionian Boots of Lucidity",
-     "Heartsteel",
-     "Hollow Radiance",
-     "Guinsoo's Rageblade",
-     "Sunfire Aegis",
-     "Titanic Hydra"
-    ],
-    "best_augments": [
-     "Heavy Hitter",
-     "Dual Wield",
-     "Tank Engine",
-     "Deft"
-    ],
-    "items_not_modeled": [],
-    "whole_build": false
-   }
-  },
-  {
-   "id": "malzahar-minion-union",
-   "champion": "Malzahar",
-   "title": "Minion Union",
-   "augments": [
-    {
-     "name": "Minionmancer",
-     "rarity": "Gold",
-     "text": "Your summons gain 40% increased size, health, and damage.",
-     "core": true,
-     "icon": "icons/augments/minionmancer.png",
-     "win_rate": 0.5044,
-     "pick_rate": 0.0627,
-     "win_rank": 132,
-     "best_champions": [
-      "Zyra",
-      "Heimerdinger",
-      "Malzahar",
-      "Shaco",
-      "Maokai",
-      "Naafiri"
-     ],
-     "champion_is_best": true
-    },
-    {
-     "name": "Hand of Baron",
-     "rarity": "Prismatic",
-     "text": "Gain 25% Adaptive Force. Nearby allied minions are greatly empowered.",
-     "core": true,
-     "icon": "icons/augments/hand-of-baron.png",
-     "win_rate": 0.541,
-     "pick_rate": 0.0456,
-     "win_rank": 56,
-     "best_champions": [
-      "AurelionSol",
-      "Ryze",
-      "Jhin",
-      "TwistedFate",
-      "Morgana",
-      "MissFortune"
-     ],
-     "champion_is_best": false
-    },
-    {
-     "name": "Infernal Conduit",
-     "rarity": "Prismatic",
-     "text": "Your Abilities apply stacking Burn that deals damage over time. Your Burn effects reduce your basic Ability Cooldowns.",
-     "core": false,
-     "icon": "icons/augments/infernal-conduit.png",
-     "win_rate": 0.5725,
-     "pick_rate": 0.2363,
-     "win_rank": 23,
-     "best_champions": [
-      "Brand",
-      "AurelionSol",
-      "Lillia",
-      "Morgana",
-      "Malzahar",
-      "Teemo"
-     ],
-     "champion_is_best": true
-    },
-    {
-     "name": "Ice Cold",
-     "rarity": "Silver",
-     "text": "Your Slowing effects reduce Movement Speed by an extra 75.",
-     "core": false,
-     "icon": "icons/augments/ice-cold.png",
-     "win_rate": 0.5317,
-     "pick_rate": 0.2759,
-     "win_rank": 75,
-     "best_champions": [
-      "AurelionSol",
-      "Brand",
-      "Morgana",
-      "Malzahar",
-      "Singed",
-      "Teemo"
-     ],
-     "champion_is_best": true
-    }
-   ],
-   "core": 2,
-   "items": [
-    "Sorcerer's Shoes",
-    "Liandry's Torment",
-    "Rylai's Crystal Scepter",
-    "Malignance",
-    "Rabadon's Deathcap",
-    "Void Staff"
-   ],
-   "why": "Voidlings come out 40% bigger and stronger, Hand of Baron turns every allied minion near you into a Baron minion, and you get 25% Adaptive Force for the trouble. You are no longer a mage, you are a labor movement.",
-   "play": "Stay with the wave and let the army do it.",
-   "champion_name": "Malzahar",
-   "champion_icon": "icons/champions/90.png",
-   "champion_win_rate": 0.5156,
-   "champion_pick_rate": 0.068,
-   "champion_win_rank": 40,
-   "core_win_rate": 0.5227,
-   "tier": "Holds up",
-   "core_usual": 1,
-   "core_pick_rate": 0.0542,
-   "sim": {
-    "dps": 864,
-    "survival": 0.614,
-    "best_dps": 1112,
-    "best_survival": 0.52,
-    "pct_of_best": 0.778,
-    "best_items": [
-     "Sorcerer's Shoes",
-     "Blackfire Torch",
-     "Liandry's Torment",
-     "Rabadon's Deathcap",
-     "Shadowflame",
-     "Void Staff"
-    ],
-    "best_augments": [
-     "Mystic Punch",
-     "Eureka",
-     "Infernal Conduit",
-     "Goliath"
-    ],
-    "items_not_modeled": [],
-    "whole_build": false
-   }
-  },
-  {
-   "id": "trundle-theme-park",
-   "champion": "Trundle",
-   "title": "Trundle Theme Park",
-   "augments": [
-    {
-     "name": "Poro Stampede",
-     "rarity": "Prismatic",
-     "text": "QUEST: Gather Poro Snax and feed Poros. REWARD: Gain the Poro Charge Summoner Spell, which launches waves of Poros at the enemy team. Additional waves unlock per Quest Level.\"Oho! Look how charming they are!\" — Poro Herder",
-     "core": true,
-     "icon": "icons/augments/poro-stampede.png",
-     "win_rate": 0.4351,
-     "pick_rate": 0.0118,
-     "win_rank": 209,
-     "best_champions": [
-      "Trundle",
-      "TahmKench",
-      "MissFortune",
-      "Morgana",
-      "Teemo",
-      "TwistedFate"
-     ],
-     "champion_is_best": true
-    },
-    {
-     "name": "Spin Me Right Round",
-     "rarity": "Silver",
-     "text": "Replace a Summoner Spell with Heroic Swing. Heroic Swing fires a grappling hook, sticking into terrain, after which you can Recast to swing around it. While swinging, automatically Attack the nearest enemy. Colliding with an enemy champion or Recasting ends the swing.",
-     "core": true,
-     "icon": "icons/augments/spin-me-right-round.png",
-     "win_rate": 0.4504,
-     "pick_rate": 0.0325,
-     "win_rank": 207,
-     "best_champions": [
-      "TahmKench",
-      "Blitzcrank",
-      "Trundle",
-      "Ashe",
-      "Sion",
-      "Thresh"
-     ],
-     "champion_is_best": true
-    },
-    {
-     "name": "Terrain'd",
-     "rarity": "Gold",
-     "text": "Your chosen ability deals damage in an area around it.",
-     "core": true,
-     "icon": "icons/augments/terrain-d.png",
-     "win_rate": 0.5208,
-     "pick_rate": 0.0515,
-     "win_rank": 106,
-     "best_champions": [
-      "Trundle",
-      "JarvanIV",
-      "Anivia",
-      "Ornn",
-      "Azir",
-      "Taliyah"
-     ],
-     "champion_is_best": true
-    },
-    {
-     "name": "Pat On The Back",
-     "rarity": "Gold",
-     "text": "Allies encourage you when you walk past, granting you a Shield and Movement Speed.",
-     "core": true,
-     "icon": "icons/augments/pat-on-the-back.png",
-     "win_rate": 0.4785,
-     "pick_rate": 0.0379,
-     "win_rank": 191,
-     "best_champions": [
-      "Singed",
-      "Hecarim",
-      "Lillia",
-      "Trundle",
-      "DrMundo",
-      "TahmKench"
-     ],
-     "champion_is_best": true
-    }
-   ],
-   "core": 4,
-   "items": [
-    "Mercury's Treads",
-    "Blade of The Ruined King",
-    "Sundered Sky",
-    "Sterak's Gage",
-    "Spirit Visage",
-    "Dead Man's Plate"
-   ],
-   "why": "Trundle is on China's best-champion list for all four. Feed Poros until you unlock a Poro Charge summoner spell, swing around your own pillar on a grappling hook, make the pillar burn everyone near it, and collect shields from teammates patting you on the back.",
-   "play": "Feed the Poros first. Poro Stampede is one of the least-picked augments in the mode for a reason.",
-   "champion_name": "Trundle",
-   "champion_icon": "icons/champions/48.png",
-   "champion_win_rate": 0.5045,
-   "champion_pick_rate": 0.1057,
-   "champion_win_rank": 57,
-   "core_win_rate": 0.4712,
-   "tier": "Pure troll",
-   "core_usual": 4,
-   "core_pick_rate": 0.0334,
-   "sim": {
-    "dps": 396,
-    "survival": 0.698,
-    "best_dps": 1111,
-    "best_survival": 0.382,
-    "pct_of_best": 0.356,
-    "best_items": [
-     "Ionian Boots of Lucidity",
-     "Black Cleaver",
-     "Profane Hydra",
-     "Ravenous Hydra",
-     "Serylda's Grudge",
-     "Umbral Glaive"
-    ],
-    "best_augments": [
-     "Mystic Punch",
-     "Deft",
-     "Dual Wield",
-     "Jeweled Gauntlet"
-    ],
-    "items_not_modeled": [],
-    "whole_build": false
-   }
-  },
-  {
-   "id": "vladimir-strict-vampire",
-   "champion": "Vladimir",
-   "title": "Strict Vampire",
-   "augments": [
-    {
-     "name": "Vampirism",
-     "rarity": "Gold",
-     "text": "You cannot be healed by allies or gain Health Regen. Gain 25% Omnivamp.",
-     "core": true,
-     "icon": "icons/augments/vampirism.png",
-     "win_rate": null,
-     "pick_rate": null,
-     "win_rank": null,
-     "best_champions": [],
-     "champion_is_best": false
-    },
-    {
-     "name": "Ominous Pact",
-     "rarity": "Prismatic",
-     "text": "Gain Ability Power, 50% Movement Speed, and 20% Omnivamp based on missing Health. Spell casts cost 5% of your current Health. Max benefit at 30% Health.",
-     "core": true,
-     "icon": "icons/augments/ominous-pact.png",
-     "win_rate": 0.5037,
-     "pick_rate": 0.0836,
-     "win_rank": 134,
-     "best_champions": [
-      "Lillia",
-      "Singed",
-      "AurelionSol",
-      "Vladimir",
-      "Ryze",
-      "Swain"
-     ],
-     "champion_is_best": true
-    },
-    {
-     "name": "Warlock Juicebox",
-     "rarity": "Gold",
-     "text": "Gain Omnivamp.",
-     "core": false,
-     "icon": "icons/augments/warlock-juicebox.png",
-     "win_rate": 0.5969,
-     "pick_rate": 0.4385,
-     "win_rank": 9,
-     "best_champions": [
-      "Ryze",
-      "AurelionSol",
-      "Lillia",
-      "Brand",
-      "Swain",
-      "Sylas"
-     ],
-     "champion_is_best": false
-    },
-    {
-     "name": "Goredrink",
-     "rarity": "Silver",
-     "text": "Gain 15% Omnivamp.",
-     "core": false,
-     "icon": "icons/augments/goredrink.png",
-     "win_rate": 0.5605,
-     "pick_rate": 0.3998,
-     "win_rank": 36,
-     "best_champions": [
-      "Graves",
-      "Swain",
-      "Lucian",
-      "Kayn",
-      "Mordekaiser",
-      "Smolder"
-     ],
-     "champion_is_best": false
-    }
-   ],
-   "core": 2,
-   "items": [
-    "Sorcerer's Shoes",
-    "Riftmaker",
-    "Cosmic Drive",
-    "Rabadon's Deathcap",
-    "Spirit Visage",
-    "Void Staff"
-   ],
-   "why": "Vampirism bans healing from allies and Health regen in exchange for 25% Omnivamp, and Ominous Pact adds 20% more Omnivamp, 50% Move Speed and Ability Power the lower your Health gets, while every cast costs 5% of your current Health. Goredrink and Warlock Juicebox stack even more Omnivamp on top. You only eat what you kill.",
-   "play": "Stay low, stay fast, and tell your Soraka to heal someone else. Vampirism has no China stats yet.",
-   "champion_name": "Vladimir",
-   "champion_icon": "icons/champions/8.png",
-   "champion_win_rate": 0.477,
-   "champion_pick_rate": 0.065,
-   "champion_win_rank": 118,
-   "core_win_rate": 0.5037,
-   "tier": "Pure troll",
-   "core_usual": 1,
-   "core_pick_rate": 0.0836,
-   "sim": {
-    "dps": 1409,
-    "survival": 0.518,
-    "best_dps": 1501,
-    "best_survival": 0.317,
-    "pct_of_best": 0.939,
-    "best_items": [
-     "Sorcerer's Shoes",
-     "Blackfire Torch",
-     "Cryptbloom",
-     "Liandry's Torment",
-     "Shadowflame",
-     "Void Staff"
-    ],
-    "best_augments": [
-     "Mystic Punch",
-     "Eureka",
-     "Goliath",
-     "Deft"
-    ],
-    "items_not_modeled": [],
-    "whole_build": false
-   }
-  },
-  {
-   "id": "leesin-flash-mob",
-   "champion": "LeeSin",
-   "title": "Flash Mob",
-   "augments": [
-    {
-     "name": "Flashy",
-     "rarity": "Gold",
-     "text": "Your Flash has 3 charges. After 120 seconds, regain all charges.",
-     "core": true,
-     "icon": "icons/augments/flashy.png",
-     "win_rate": 0.5162,
-     "pick_rate": 0.1729,
-     "win_rank": 112,
-     "best_champions": [
-      "Sett",
-      "Kayn",
-      "LeeSin",
-      "Darius",
-      "Malphite",
-      "Graves"
-     ],
-     "champion_is_best": true
-    },
-    {
-     "name": "Flash 2",
-     "rarity": "Silver",
-     "text": "Gain a second Flash Summoner Spell and 70 Summoner Haste.",
-     "core": true,
-     "icon": "icons/augments/flash-2.png",
-     "win_rate": 0.4619,
-     "pick_rate": 0.0066,
-     "win_rank": 204,
-     "best_champions": [
-      "Sett",
-      "Blitzcrank",
-      "LeeSin",
-      "Darius",
-      "Malphite",
-      "Kayn"
-     ],
-     "champion_is_best": true
-    },
-    {
-     "name": "Flashbang",
-     "rarity": "Silver",
-     "text": "Your Flash causes an explosion that damages and Slows (resets on death).",
-     "core": true,
-     "icon": "icons/augments/flashbang.png",
-     "win_rate": 0.485,
-     "pick_rate": 0.007,
-     "win_rank": 176,
-     "best_champions": [
-      "Sett",
-      "LeeSin",
-      "Blitzcrank",
-      "Malphite",
-      "Kayn",
-      "Darius"
-     ],
-     "champion_is_best": true
-    },
-    {
-     "name": "Earthwake",
-     "rarity": "Prismatic",
-     "text": "Your dash, blink, or teleport Abilities leave behind a trail that detonates after 0.75 second.",
-     "core": false,
-     "icon": "icons/augments/earthwake.png",
-     "win_rate": 0.4943,
-     "pick_rate": 0.0279,
-     "win_rank": 156,
-     "best_champions": [
-      "Yasuo",
-      "Ambessa",
-      "LeeSin",
-      "Pyke",
-      "Fizz",
-      "JarvanIV"
-     ],
-     "champion_is_best": true
-    }
-   ],
-   "core": 3,
-   "items": [
-    "Berserker's Greaves",
-    "Black Cleaver",
-    "Lord Dominik's Regards",
-    "Profane Hydra",
-    "Serylda's Grudge",
-    "Umbral Glaive"
-   ],
-   "why": "Every Flash augment at once. Flashy gives Flash 3 charges, Flash 2 adds a second Flash spell with 70 Summoner Haste, and Flashbang makes each one explode and slow. That is four Flashes on call for Insec kicks, and Earthwake leaves a detonating trail behind every Q and W dash in between.",
-   "play": "Ward-hop, Flash, kick, Flash, Flash. Nobody will know where you are, including you.",
-   "lab": true,
-   "champion_name": "Lee Sin",
-   "champion_icon": "icons/champions/64.png",
-   "champion_win_rate": 0.4439,
-   "champion_pick_rate": 0.067,
-   "champion_win_rank": 168,
-   "core_win_rate": 0.4877,
-   "tier": "Pure troll",
-   "core_usual": 3,
-   "core_pick_rate": 0.0622,
-   "sim": {
-    "dps": 1203,
-    "survival": 0.408,
-    "best_dps": 1193,
-    "best_survival": 0.714,
-    "pct_of_best": 1.009,
-    "best_items": [
-     "Ionian Boots of Lucidity",
-     "Black Cleaver",
-     "Blade of The Ruined King",
-     "Profane Hydra",
-     "Ravenous Hydra",
-     "Serylda's Grudge"
-    ],
-    "best_augments": [
-     "Mystic Punch",
-     "Dual Wield",
-     "Deft",
-     "It's Critical"
-    ],
-    "items_not_modeled": [],
-    "whole_build": false
-   }
-  },
-  {
-   "id": "zilean-time-loop",
-   "champion": "Zilean",
-   "title": "Time Loop",
-   "augments": [
-    {
-     "name": "Ult Bot",
-     "rarity": "Prismatic",
-     "text": "Your Ability Haste only applies to your Ultimate, but is 50% more effective. Gain 100 Ability Haste.",
-     "core": true,
-     "icon": "icons/augments/ult-bot.png",
-     "win_rate": 0.4703,
-     "pick_rate": 0.1634,
-     "win_rank": 196,
-     "best_champions": [
-      "Karthus",
-      "Teemo",
-      "Ashe",
-      "Malphite",
-      "Gangplank",
-      "Lucian"
-     ],
-     "champion_is_best": false
-    },
-    {
-     "name": "Ultimate Revolution",
-     "rarity": "Prismatic",
-     "text": "Refresh your Ultimate after casting it (75 seconds Cooldown or reset on death).",
-     "core": true,
-     "icon": "icons/augments/ultimate-revolution.png",
-     "win_rate": 0.4892,
-     "pick_rate": 0.1871,
-     "win_rank": 171,
-     "best_champions": [
-      "Karthus",
-      "Malphite",
-      "Ashe",
-      "Chogath",
-      "Lucian",
-      "Brand"
-     ],
-     "champion_is_best": false
-    },
-    {
-     "name": "Recursion",
-     "rarity": "Gold",
-     "text": "Gain 60 Ability Haste.",
-     "core": false,
-     "icon": "icons/augments/recursion.png",
-     "win_rate": 0.612,
-     "pick_rate": 0.6098,
-     "win_rank": 3,
-     "best_champions": [
-      "Teemo",
-      "Karthus",
-      "Ashe",
-      "Hecarim",
-      "Brand",
-      "AurelionSol"
-     ],
-     "champion_is_best": false
-    },
-    {
-     "name": "Archmage",
-     "rarity": "Prismatic",
-     "text": "Casting a spell refunds another random spell's cost by 30% of the original spell's Cooldown.",
-     "core": false,
-     "icon": "icons/augments/archmage.png",
-     "win_rate": 0.5288,
-     "pick_rate": 0.3505,
-     "win_rank": 84,
-     "best_champions": [
-      "Teemo",
-      "MissFortune",
-      "Ashe",
-      "Zilean",
-      "Brand",
-      "Morgana"
-     ],
-     "champion_is_best": true
-    }
-   ],
-   "core": 2,
-   "items": [
-    "Ionian Boots of Lucidity",
-    "Malignance",
-    "Cosmic Drive",
-    "Horizon Focus",
-    "Shadowflame",
-    "Rabadon's Deathcap"
-   ],
-   "why": "Ult Bot sends all Ability Haste to R at 1.5x, Recursion's 60 haste and every haste item go there too, and Ultimate Revolution gives a second Chronoshift right after the first. Your team gets two revives on a short cooldown. Archmage keeps Q and W refunding each other since they get no haste of their own.",
-   "play": "Chronoshift whoever is about to die, then the next person. Save nothing.",
-   "lab": true,
-   "champion_name": "Zilean",
-   "champion_icon": "icons/champions/26.png",
-   "champion_win_rate": 0.5224,
-   "champion_pick_rate": 0.0476,
-   "champion_win_rank": 28,
-   "core_win_rate": 0.4798,
-   "tier": "Pure troll",
-   "core_usual": 0,
-   "core_pick_rate": 0.1752,
-   "sim": {
-    "dps": 636,
-    "survival": 0.517,
-    "best_dps": 931,
-    "best_survival": 0.509,
-    "pct_of_best": 0.683,
-    "best_items": [
-     "Ionian Boots of Lucidity",
-     "Blackfire Torch",
-     "Liandry's Torment",
-     "Nashor's Tooth",
-     "Shadowflame",
-     "Void Staff"
-    ],
-    "best_augments": [
-     "Mystic Punch",
-     "Eureka",
-     "Deft",
-     "Dual Wield"
-    ],
-    "items_not_modeled": [],
-    "whole_build": false
-   }
-  },
-  {
-   "id": "ezreal-mana-tank",
-   "champion": "Ezreal",
-   "title": "Mana Tank",
-   "augments": [
-    {
-     "name": "Mind to Matter",
-     "rarity": "Silver",
-     "text": "Gain Health.",
-     "core": true,
-     "icon": "icons/augments/mind-to-matter.png",
-     "win_rate": 0.5306,
-     "pick_rate": 0.1969,
-     "win_rank": 78,
-     "best_champions": [
-      "Ryze",
-      "Swain",
-      "Veigar",
-      "Blitzcrank",
-      "Kassadin",
-      "Ezreal"
-     ],
-     "champion_is_best": true
-    },
-    {
-     "name": "Overflow",
-     "rarity": "Gold",
-     "text": "Your Mana costs double. Your Ability Heals, Shields, and damage are more effective.",
-     "core": true,
-     "icon": "icons/augments/overflow.png",
-     "win_rate": 0.5173,
-     "pick_rate": 0.1179,
-     "win_rank": 108,
-     "best_champions": [
-      "Ryze",
-      "Ezreal",
-      "Karthus",
-      "Gangplank",
-      "Jayce",
-      "Hecarim"
-     ],
-     "champion_is_best": true
-    },
-    {
-     "name": "Upgrade Sheen",
-     "rarity": "Gold",
-     "text": "Your Spellblade effects deal additional damage and heal you for a percent of the target's health. Additionally, gain 250 Gold.",
-     "core": true,
-     "icon": "icons/augments/upgrade-sheen.png",
-     "win_rate": 0.5167,
-     "pick_rate": 0.1661,
-     "win_rank": 109,
-     "best_champions": [
-      "Ezreal",
-      "Smolder",
-      "XinZhao",
-      "Ekko",
-      "Gangplank",
-      "Fizz"
-     ],
-     "champion_is_best": true
-    },
-    {
-     "name": "Mystic Punch",
-     "rarity": "Prismatic",
-     "text": "On-Hit reduce the cooldown of your abilities by 1.25 seconds.",
-     "core": false,
-     "icon": "icons/augments/mystic-punch.png",
-     "win_rate": 0.5562,
-     "pick_rate": 0.278,
-     "win_rank": 41,
-     "best_champions": [
-      "Yasuo",
-      "MasterYi",
-      "Hecarim",
-      "Yone",
-      "Smolder",
-      "Fiora"
-     ],
-     "champion_is_best": false
-    }
-   ],
-   "core": 3,
-   "items": [
-    "Ionian Boots of Lucidity",
-    "Manamune",
-    "Trinity Force",
-    "Archangel's Staff",
-    "Rod of Ages",
-    "Frozen Heart"
-   ],
-   "why": "Mind to Matter gives Health equal to half your Mana, and Overflow doubles your Mana costs but makes your damage scale with max Mana. Stack Muramana, Seraph's, Rod of Ages and Frozen Heart and Ezreal turns into a frontline that throws Mystic Shots. Ezreal is on China's best list for both mana augments and Upgrade Sheen.",
-   "play": "Q everything, Spellblade everything, and stand closer than an Ezreal should.",
-   "lab": true,
-   "champion_name": "Ezreal",
-   "champion_icon": "icons/champions/81.png",
-   "champion_win_rate": 0.4703,
-   "champion_pick_rate": 0.1129,
-   "champion_win_rank": 133,
-   "core_win_rate": 0.5215,
-   "tier": "Holds up",
-   "core_usual": 3,
-   "core_pick_rate": 0.1603,
-   "sim": {
-    "dps": 580,
-    "survival": 0.67,
-    "best_dps": 1174,
-    "best_survival": 0.49,
-    "pct_of_best": 0.494,
-    "best_items": [
-     "Sorcerer's Shoes",
-     "Blackfire Torch",
-     "Liandry's Torment",
-     "Nashor's Tooth",
-     "Shadowflame",
-     "Void Staff"
-    ],
-    "best_augments": [
-     "Mystic Punch",
-     "Eureka",
-     "Infernal Conduit",
-     "Jeweled Gauntlet"
-    ],
-    "items_not_modeled": [],
-    "whole_build": false
-   }
-  },
-  {
-   "id": "sona-heavy-metal",
-   "champion": "Sona",
-   "title": "Heavy Metal",
-   "augments": [
-    {
-     "name": "Heavy Hitter",
-     "rarity": "Silver",
-     "text": "Your Attacks deal additional physical damage.",
-     "core": true,
-     "icon": "icons/augments/heavy-hitter.png",
-     "win_rate": 0.5805,
-     "pick_rate": 0.3657,
-     "win_rank": 16,
-     "best_champions": [
-      "TahmKench",
-      "DrMundo",
-      "Sett",
-      "Sion",
-      "Chogath",
-      "Ornn"
-     ],
-     "champion_is_best": false
-    },
-    {
-     "name": "Goliath",
-     "rarity": "Prismatic",
-     "text": "Become large, gaining 35% Health and 15% Adaptive Force.",
-     "core": true,
-     "icon": "icons/augments/goliath.png",
-     "win_rate": 0.5749,
-     "pick_rate": 0.3324,
-     "win_rank": 21,
-     "best_champions": [
-      "TahmKench",
-      "DrMundo",
-      "Sett",
-      "Sion",
-      "Chogath",
-      "Swain"
-     ],
-     "champion_is_best": false
-    },
-    {
-     "name": "Tank Engine",
-     "rarity": "Gold",
-     "text": "On takedown, gain a stack that grants 5% increased size and 5% max Health. Lose 65% of stacks on death.",
-     "core": true,
-     "icon": "icons/augments/tank-engine.png",
-     "win_rate": 0.6023,
-     "pick_rate": 0.4306,
-     "win_rank": 6,
-     "best_champions": [
-      "TahmKench",
-      "DrMundo",
-      "Sett",
-      "Swain",
-      "Sion",
-      "Chogath"
-     ],
-     "champion_is_best": false
-    },
-    {
-     "name": "Sonata",
-     "rarity": "Gold",
-     "text": "Every 10 seconds, automatically cast the Aria of Perseverence and Song of Celerity in an alternating melody. Aria of Perseverence heals nearby allies and grants a temporary shielding aura. Song of Celerity grants a temporary aura that provides bonus Movement Speed.",
-     "core": false,
-     "icon": "icons/augments/sonata.png",
-     "win_rate": 0.5371,
-     "pick_rate": 0.04,
-     "win_rank": 61,
-     "best_champions": [
-      "Yuumi",
-      "Sona",
-      "Soraka",
-      "Karma",
-      "Janna",
-      "Seraphine"
-     ],
-     "champion_is_best": true
-    }
-   ],
-   "core": 3,
-   "items": [
-    "Plated Steelcaps",
-    "Heartsteel",
-    "Warmog's Armor",
-    "Titanic Hydra",
-    "Sunfire Aegis",
-    "Jak'Sho, The Protean"
-   ],
-   "why": "Sona as a giant tank. Goliath and Tank Engine stack size and Health, Heavy Hitter makes every Power Chord hit for a share of that Health, and Sonata plays her heal and speed songs automatically every 10 seconds, so she never has to press W or E.",
-   "play": "Walk up, Q, auto. The band plays itself.",
-   "lab": true,
-   "champion_name": "Sona",
-   "champion_icon": "icons/champions/37.png",
-   "champion_win_rate": 0.5234,
-   "champion_pick_rate": 0.0291,
-   "champion_win_rank": 26,
-   "core_win_rate": 0.5859,
-   "tier": "Secretly strong",
-   "core_usual": 0,
-   "core_pick_rate": 0.3762,
-   "sim": {
-    "dps": 326,
-    "survival": 0.995,
-    "best_dps": 755,
-    "best_survival": 0.488,
-    "pct_of_best": 0.432,
-    "best_items": [
-     "Ionian Boots of Lucidity",
-     "Blackfire Torch",
-     "Cryptbloom",
-     "Liandry's Torment",
-     "Shadowflame",
-     "Void Staff"
-    ],
-    "best_augments": [
-     "Mystic Punch",
-     "Goliath",
-     "Eureka",
-     "Deft"
-    ],
-    "items_not_modeled": [],
-    "whole_build": false
-   }
-  },
-  {
-   "id": "mf-net-zero",
-   "champion": "MissFortune",
-   "title": "Net Zero",
-   "augments": [
-    {
-     "name": "Goliath",
-     "rarity": "Prismatic",
-     "text": "Become large, gaining 35% Health and 15% Adaptive Force.",
-     "core": true,
-     "icon": "icons/augments/goliath.png",
-     "win_rate": 0.5749,
-     "pick_rate": 0.3324,
-     "win_rank": 21,
-     "best_champions": [
-      "TahmKench",
-      "DrMundo",
-      "Sett",
-      "Sion",
-      "Chogath",
-      "Swain"
-     ],
-     "champion_is_best": false
-    },
-    {
-     "name": "Giant Slayer",
-     "rarity": "Prismatic",
-     "text": "Become tiny, gain 20% Movement Speed, and deal between 10% and 30% bonus damage to champions based on how much larger they are than you.",
-     "core": true,
-     "icon": "icons/augments/giant-slayer.png",
-     "win_rate": 0.5655,
-     "pick_rate": 0.2829,
-     "win_rank": 28,
-     "best_champions": [
-      "Jhin",
-      "Caitlyn",
-      "Lucian",
-      "MissFortune",
-      "Lillia",
-      "Draven"
-     ],
-     "champion_is_best": true
-    },
-    {
-     "name": "Celestial Body",
-     "rarity": "Gold",
-     "text": "Gain 1500 Health, but you deal 10% less damage.",
-     "core": true,
-     "icon": "icons/augments/celestial-body.png",
-     "win_rate": 0.5466,
-     "pick_rate": 0.2719,
-     "win_rank": 50,
-     "best_champions": [
-      "DrMundo",
-      "TahmKench",
-      "Sett",
-      "Sion",
-      "Chogath",
-      "Nautilus"
-     ],
-     "champion_is_best": false
-    },
-    {
-     "name": "Glass Cannon",
-     "rarity": "Prismatic",
-     "text": "Reduce max Health by 30%. Deal extra damage as true damage.",
-     "core": true,
-     "icon": "icons/augments/glass-cannon.png",
-     "win_rate": 0.443,
-     "pick_rate": 0.0445,
-     "win_rank": 208,
-     "best_champions": [
-      "Karthus",
-      "MissFortune",
-      "Ashe",
-      "Teemo",
-      "Jayce",
-      "Kaisa"
-     ],
-     "champion_is_best": true
-    }
-   ],
-   "core": 4,
-   "items": [
-    "Berserker's Greaves",
-    "Blade of The Ruined King",
-    "Infinity Edge",
-    "Lord Dominik's Regards",
-    "Mortal Reminder",
-    "Runaan's Hurricane"
-   ],
-   "why": "Every augment cancels another one. Goliath makes you big and Giant Slayer makes you tiny. Celestial Body adds 1,500 Health and cuts your damage 10%, and Glass Cannon cuts 30% of your Health for extra true damage. Miss Fortune is on China's list for Giant Slayer and Glass Cannon, which is the only reason she was picked.",
-   "play": "Play normal Miss Fortune. Nobody will be able to tell what changed.",
-   "lab": true,
-   "champion_name": "Miss Fortune",
-   "champion_icon": "icons/champions/21.png",
-   "champion_win_rate": 0.5097,
-   "champion_pick_rate": 0.1392,
-   "champion_win_rank": 49,
-   "core_win_rate": 0.5325,
-   "tier": "Holds up",
-   "core_usual": 2,
-   "core_pick_rate": 0.2329,
-   "sim": {
-    "dps": 1668,
-    "survival": 0.857,
-    "best_dps": 1668,
-    "best_survival": 0.857,
-    "pct_of_best": 1.0,
-    "best_items": [
-     "Berserker's Greaves",
-     "Blade of The Ruined King",
-     "Infinity Edge",
-     "Lord Dominik's Regards",
-     "Mortal Reminder",
-     "Runaan's Hurricane"
-    ],
-    "best_augments": [
-     "Dual Wield",
-     "Deft",
-     "Jeweled Gauntlet",
-     "Mystic Punch"
-    ],
-    "items_not_modeled": [],
-    "whole_build": false
-   }
-  },
-  {
-   "id": "karma-marksman",
-   "champion": "Karma",
-   "title": "Marksman Karma",
-   "augments": [
-    {
-     "name": "Dual Wield",
-     "rarity": "Prismatic",
-     "text": "When you Attack, fire a bolt that deals 40% damage and applies your On-Hit effects at 40% effectiveness. Gain 10% total Attack Speed.",
-     "core": true,
-     "icon": "icons/augments/dual-wield.png",
-     "win_rate": 0.5643,
-     "pick_rate": 0.2686,
-     "win_rank": 31,
-     "best_champions": [
-      "Vayne",
-      "Caitlyn",
-      "Jinx",
-      "Tristana",
-      "Twitch",
-      "Yunara"
-     ],
-     "champion_is_best": false
-    },
-    {
-     "name": "Deft",
-     "rarity": "Silver",
-     "text": "Gain 60% Attack Speed.",
-     "core": true,
-     "icon": "icons/augments/deft.png",
-     "win_rate": 0.5568,
-     "pick_rate": 0.3135,
-     "win_rank": 40,
-     "best_champions": [
-      "Vayne",
-      "Jinx",
-      "Caitlyn",
-      "Tristana",
-      "Twitch",
-      "Yone"
-     ],
-     "champion_is_best": false
-    },
-    {
-     "name": "Heavy Hitter",
-     "rarity": "Silver",
-     "text": "Your Attacks deal additional physical damage.",
-     "core": true,
-     "icon": "icons/augments/heavy-hitter.png",
-     "win_rate": 0.5805,
-     "pick_rate": 0.3657,
-     "win_rank": 16,
-     "best_champions": [
-      "TahmKench",
-      "DrMundo",
-      "Sett",
-      "Sion",
-      "Chogath",
-      "Ornn"
-     ],
-     "champion_is_best": false
-    },
-    {
-     "name": "Erosion",
-     "rarity": "Silver",
-     "text": "Damaging enemies shreds 1.5% Armor and Magic Resist for 4s, up to % at 20 stacks.",
-     "core": true,
-     "icon": "icons/augments/erosion.png",
-     "win_rate": 0.5325,
-     "pick_rate": 0.2166,
-     "win_rank": 71,
-     "best_champions": [
-      "Brand",
-      "Morgana",
-      "Teemo",
-      "Malzahar",
-      "MissFortune",
-      "Ashe"
-     ],
-     "champion_is_best": false
-    }
-   ],
-   "core": 4,
-   "items": [
-    "Berserker's Greaves",
-    "Blade of The Ruined King",
-    "Infinity Edge",
-    "Lord Dominik's Regards",
-    "Runaan's Hurricane",
-    "Yun Tal Wildarrows"
-   ],
-   "why": "The simulator's biggest surprise. Searching every item for every champion, its best Karma build was a full crit marksman build, at 2.4x the damage of its best mage build and with better survival. The simulator doesn't model enchanter shields or Mantra, so take it with salt, but these are the simulator's own augment picks.",
-   "play": "Buy Berserker's and right-click. RQ to Mantra your own damage if you remember.",
-   "lab": true,
-   "champion_name": "Karma",
-   "champion_icon": "icons/champions/43.png",
-   "champion_win_rate": 0.4774,
-   "champion_pick_rate": 0.0396,
-   "champion_win_rank": 117,
-   "core_win_rate": 0.5585,
-   "tier": "Secretly strong",
-   "core_usual": 0,
-   "core_pick_rate": 0.2911,
-   "sim": {
-    "dps": 1255,
-    "survival": 0.883,
-    "best_dps": 527,
-    "best_survival": 0.697,
-    "pct_of_best": 2.381,
-    "best_items": [
-     "Sorcerer's Shoes",
-     "Nashor's Tooth",
-     "Guinsoo's Rageblade",
-     "Shadowflame",
-     "Void Staff",
-     "Wit's End"
-    ],
-    "best_augments": [
-     "Dual Wield",
-     "Heavy Hitter",
-     "Deft",
-     "Goliath"
-    ],
-    "items_not_modeled": [],
-    "whole_build": true
-   }
-  },
-  {
-   "id": "skarner-lethality",
-   "champion": "Skarner",
-   "title": "Glass Scorpion",
-   "augments": [
-    {
-     "name": "Mystic Punch",
-     "rarity": "Prismatic",
-     "text": "On-Hit reduce the cooldown of your abilities by 1.25 seconds.",
-     "core": true,
-     "icon": "icons/augments/mystic-punch.png",
-     "win_rate": 0.5562,
-     "pick_rate": 0.278,
-     "win_rank": 41,
-     "best_champions": [
-      "Yasuo",
-      "MasterYi",
-      "Hecarim",
-      "Yone",
-      "Smolder",
-      "Fiora"
-     ],
-     "champion_is_best": false
-    },
-    {
-     "name": "Goliath",
-     "rarity": "Prismatic",
-     "text": "Become large, gaining 35% Health and 15% Adaptive Force.",
-     "core": true,
-     "icon": "icons/augments/goliath.png",
-     "win_rate": 0.5749,
-     "pick_rate": 0.3324,
-     "win_rank": 21,
-     "best_champions": [
-      "TahmKench",
-      "DrMundo",
-      "Sett",
-      "Sion",
-      "Chogath",
-      "Swain"
-     ],
-     "champion_is_best": false
-    },
-    {
-     "name": "Jeweled Gauntlet",
-     "rarity": "Prismatic",
-     "text": "Your Abilities can Critically Strike. Gain % Crit Chance.",
-     "core": true,
-     "icon": "icons/augments/jeweled-gauntlet.png",
-     "win_rate": 0.5726,
-     "pick_rate": 0.5175,
-     "win_rank": 22,
-     "best_champions": [
-      "Smolder",
-      "Lucian",
-      "Jayce",
-      "Ezreal",
-      "AurelionSol",
-      "TwistedFate"
-     ],
-     "champion_is_best": false
-    },
-    {
-     "name": "It's Critical",
-     "rarity": "Gold",
-     "text": "Gain 50% Crit chance.",
-     "core": true,
-     "icon": "icons/augments/it-s-critical.png",
-     "win_rate": 0.5228,
-     "pick_rate": 0.16,
-     "win_rank": 98,
-     "best_champions": [
-      "Jhin",
-      "Graves",
-      "Yasuo",
-      "Caitlyn",
-      "Yone",
-      "Vayne"
-     ],
-     "champion_is_best": false
-    }
-   ],
-   "core": 4,
-   "items": [
-    "Ionian Boots of Lucidity",
-    "Axiom Arc",
-    "Black Cleaver",
-    "Lord Dominik's Regards",
-    "Serylda's Grudge",
-    "Umbral Glaive"
-   ],
-   "why": "Another simulator find: a full lethality Skarner did 1.36x the damage of its best tank build. The catch is he survived a third of fights instead of more than half, so the tank gets deleted after grabbing someone.",
-   "play": "R the carry into your team and hope your team is there.",
-   "lab": true,
-   "champion_name": "Skarner",
-   "champion_icon": "icons/champions/72.png",
-   "champion_win_rate": 0.4815,
-   "champion_pick_rate": 0.02,
-   "champion_win_rank": 111,
-   "core_win_rate": 0.5566,
-   "tier": "Secretly strong",
-   "core_usual": 0,
-   "core_pick_rate": 0.322,
-   "sim": {
-    "dps": 1228,
-    "survival": 0.335,
-    "best_dps": 905,
-    "best_survival": 0.581,
-    "pct_of_best": 1.357,
-    "best_items": [
-     "Ionian Boots of Lucidity",
-     "Black Cleaver",
-     "Blackfire Torch",
-     "Liandry's Torment",
-     "Riftmaker",
-     "Sunfire Aegis"
-    ],
-    "best_augments": [
-     "Mystic Punch",
-     "Eureka",
-     "Tank Engine",
-     "Witchful Thinking"
-    ],
-    "items_not_modeled": [],
-    "whole_build": true
-   }
-  },
-  {
-   "id": "taric-bonk",
-   "champion": "Taric",
-   "title": "Bonk Taric",
-   "augments": [
-    {
-     "name": "Dual Wield",
-     "rarity": "Prismatic",
-     "text": "When you Attack, fire a bolt that deals 40% damage and applies your On-Hit effects at 40% effectiveness. Gain 10% total Attack Speed.",
-     "core": true,
-     "icon": "icons/augments/dual-wield.png",
-     "win_rate": 0.5643,
-     "pick_rate": 0.2686,
-     "win_rank": 31,
-     "best_champions": [
-      "Vayne",
-      "Caitlyn",
-      "Jinx",
-      "Tristana",
-      "Twitch",
-      "Yunara"
-     ],
-     "champion_is_best": false
-    },
-    {
-     "name": "Heavy Hitter",
-     "rarity": "Silver",
-     "text": "Your Attacks deal additional physical damage.",
-     "core": true,
-     "icon": "icons/augments/heavy-hitter.png",
-     "win_rate": 0.5805,
-     "pick_rate": 0.3657,
-     "win_rank": 16,
-     "best_champions": [
-      "TahmKench",
-      "DrMundo",
-      "Sett",
-      "Sion",
-      "Chogath",
-      "Ornn"
-     ],
-     "champion_is_best": false
-    },
-    {
-     "name": "Deft",
-     "rarity": "Silver",
-     "text": "Gain 60% Attack Speed.",
-     "core": true,
-     "icon": "icons/augments/deft.png",
-     "win_rate": 0.5568,
-     "pick_rate": 0.3135,
-     "win_rank": 40,
-     "best_champions": [
-      "Vayne",
-      "Jinx",
-      "Caitlyn",
-      "Tristana",
-      "Twitch",
-      "Yone"
-     ],
-     "champion_is_best": false
-    },
-    {
-     "name": "Tank Engine",
-     "rarity": "Gold",
-     "text": "On takedown, gain a stack that grants 5% increased size and 5% max Health. Lose 65% of stacks on death.",
-     "core": true,
-     "icon": "icons/augments/tank-engine.png",
-     "win_rate": 0.6023,
-     "pick_rate": 0.4306,
-     "win_rank": 6,
-     "best_champions": [
-      "TahmKench",
-      "DrMundo",
-      "Sett",
-      "Swain",
-      "Sion",
-      "Chogath"
-     ],
-     "champion_is_best": false
-    }
-   ],
-   "core": 4,
-   "items": [
-    "Berserker's Greaves",
-    "Blade of The Ruined King",
-    "Heartsteel",
-    "Hollow Radiance",
-    "Sunfire Aegis",
-    "Titanic Hydra"
-   ],
-   "why": "The simulator's best Taric is half tank and half on-hit: Dual Wield and Deft make him swing fast, and Heavy Hitter and Titanic Hydra make every swing hit for a share of his Heartsteel Health. It beat his best normal build by about a quarter in damage with the same survival.",
-   "play": "Stun, then bonk. Bravado keeps the empowered bonks coming.",
-   "lab": true,
-   "champion_name": "Taric",
-   "champion_icon": "icons/champions/44.png",
-   "champion_win_rate": 0.4919,
-   "champion_pick_rate": 0.0139,
-   "champion_win_rank": 83,
-   "core_win_rate": 0.576,
-   "tier": "Secretly strong",
-   "core_usual": 0,
-   "core_pick_rate": 0.3446,
-   "sim": {
-    "dps": 526,
-    "survival": 0.767,
-    "best_dps": 419,
-    "best_survival": 0.748,
-    "pct_of_best": 1.256,
-    "best_items": [
-     "Sorcerer's Shoes",
-     "Heartsteel",
-     "Hollow Radiance",
-     "Liandry's Torment",
-     "Sunfire Aegis",
-     "Void Staff"
-    ],
-    "best_augments": [
-     "Tank Engine",
-     "Mystic Punch",
-     "Heavy Hitter",
-     "Goliath"
-    ],
-    "items_not_modeled": [],
-    "whole_build": true
-   }
-  },
-  {
    "id": "ziggs-melee",
    "champion": "Ziggs",
    "title": "Melee Bomb Man",
@@ -1614,7 +101,6 @@ window.COOK_DATA = {
    ],
    "why": "Ziggs gives up his bombs-from-a-mile-away identity and walks up to stab people. Draw Your Sword turns his range into AD, Health, Attack Speed and Lifesteal, and his passive Short Fuse still blows up on his next melee hit. Dual Wield, Firebrand and Juiced pile on-hit magic damage onto every swing.",
    "play": "Walk at them. Throw a bomb only when you're already standing on them.",
-   "lab": true,
    "champion_name": "Ziggs",
    "champion_icon": "icons/champions/115.png",
    "champion_win_rate": 0.4862,
@@ -1649,10 +135,778 @@ window.COOK_DATA = {
    }
   },
   {
-   "id": "chogath-tiny",
-   "champion": "Chogath",
-   "title": "Tiny Cho",
+   "id": "darius-sniper",
+   "champion": "Darius",
+   "title": "Noxian Sniper",
    "augments": [
+    {
+     "name": "Scoped Weapons",
+     "rarity": "Silver",
+     "text": "Gain Attack Range.",
+     "core": true,
+     "icon": "icons/augments/scoped-weapons.png",
+     "win_rate": 0.5111,
+     "pick_rate": 0.201,
+     "win_rank": 122,
+     "best_champions": [
+      "Caitlyn",
+      "Vayne",
+      "Jinx",
+      "Kayle",
+      "Tristana",
+      "Senna"
+     ],
+     "champion_is_best": false
+    },
+    {
+     "name": "Scopier Weapons",
+     "rarity": "Gold",
+     "text": "Gain Attack Range.",
+     "core": true,
+     "icon": "icons/augments/scopier-weapons.png",
+     "win_rate": 0.5531,
+     "pick_rate": 0.2934,
+     "win_rank": 44,
+     "best_champions": [
+      "Caitlyn",
+      "Vayne",
+      "Kayle",
+      "Jinx",
+      "Senna",
+      "Tristana"
+     ],
+     "champion_is_best": false
+    },
+    {
+     "name": "Scopiest Weapons",
+     "rarity": "Prismatic",
+     "text": "Gain Attack Range.",
+     "core": true,
+     "icon": "icons/augments/scopiest-weapons.png",
+     "win_rate": 0.5281,
+     "pick_rate": 0.1789,
+     "win_rank": 85,
+     "best_champions": [
+      "Caitlyn",
+      "Jinx",
+      "Vayne",
+      "Kayle",
+      "Tristana",
+      "Senna"
+     ],
+     "champion_is_best": false
+    },
+    {
+     "name": "Typhoon",
+     "rarity": "Silver",
+     "text": "Your Attacks shoot a missile at an additional target, dealing 30% damage and applying On-Hit effects.",
+     "core": false,
+     "icon": "icons/augments/typhoon.png",
+     "win_rate": 0.5087,
+     "pick_rate": 0.1815,
+     "win_rank": 125,
+     "best_champions": [
+      "Jinx",
+      "Vayne",
+      "Caitlyn",
+      "Senna",
+      "Tristana",
+      "Yunara"
+     ],
+     "champion_is_best": false
+    }
+   ],
+   "core": 3,
+   "items": [
+    "Berserker's Greaves",
+    "Kraken Slayer",
+    "Blade of The Ruined King",
+    "Guinsoo's Rageblade",
+    "Wit's End",
+    "Sterak's Gage"
+   ],
+   "why": "The reverse of Melee Bomb Man. Melee champions get more from the range augments than ranged ones (75, 150 and 250), so all three together add 475 range and put Darius's autos at 650, the same as Caitlyn's. He stacks Hemorrhage from across the fight, and Typhoon fires a second shot at another target.",
+   "play": "Stand at the back and auto. Walk up only to Guillotine whoever has five stacks.",
+   "champion_name": "Darius",
+   "champion_icon": "icons/champions/122.png",
+   "champion_win_rate": 0.4782,
+   "champion_pick_rate": 0.0744,
+   "champion_win_rank": 114,
+   "core_win_rate": 0.5308,
+   "tier": "Holds up",
+   "core_usual": 0,
+   "core_pick_rate": 0.2244,
+   "sim": {
+    "dps": 544,
+    "survival": 0.427,
+    "best_dps": 1181,
+    "best_survival": 0.338,
+    "pct_of_best": 0.461,
+    "best_items": [
+     "Ionian Boots of Lucidity",
+     "Axiom Arc",
+     "Black Cleaver",
+     "Profane Hydra",
+     "Serylda's Grudge",
+     "Umbral Glaive"
+    ],
+    "best_augments": [
+     "Mystic Punch",
+     "Deft",
+     "Goliath",
+     "Jeweled Gauntlet"
+    ],
+    "items_not_modeled": [],
+    "whole_build": false
+   }
+  },
+  {
+   "id": "veigar-marksman",
+   "champion": "Veigar",
+   "title": "Tiny Marksman",
+   "augments": [
+    {
+     "name": "escAPADe",
+     "rarity": "Silver",
+     "text": "Convert Ability Power to Bonus Attack Damage. Gain 15% Attack Damage.",
+     "core": true,
+     "icon": "icons/augments/escapade.png",
+     "win_rate": 0.5353,
+     "pick_rate": 0.217,
+     "win_rank": 65,
+     "best_champions": [
+      "Graves",
+      "Jhin",
+      "Ezreal",
+      "Jayce",
+      "Smolder",
+      "Caitlyn"
+     ],
+     "champion_is_best": false
+    },
+    {
+     "name": "Dual Wield",
+     "rarity": "Prismatic",
+     "text": "When you Attack, fire a bolt that deals 40% damage and applies your On-Hit effects at 40% effectiveness. Gain 10% total Attack Speed.",
+     "core": true,
+     "icon": "icons/augments/dual-wield.png",
+     "win_rate": 0.5643,
+     "pick_rate": 0.2686,
+     "win_rank": 31,
+     "best_champions": [
+      "Vayne",
+      "Caitlyn",
+      "Jinx",
+      "Tristana",
+      "Twitch",
+      "Yunara"
+     ],
+     "champion_is_best": false
+    },
+    {
+     "name": "Critical Rhythm",
+     "rarity": "Gold",
+     "text": "Your basic Attack stacks 6% Attack Speed on Critical Strikes up to 10 stacks. Gain 25% Crit chance.",
+     "core": true,
+     "icon": "icons/augments/critical-rhythm.png",
+     "win_rate": 0.5427,
+     "pick_rate": 0.2475,
+     "win_rank": 54,
+     "best_champions": [
+      "Caitlyn",
+      "Jinx",
+      "Vayne",
+      "Yasuo",
+      "Yone",
+      "Tristana"
+     ],
+     "champion_is_best": false
+    },
+    {
+     "name": "It's Critical",
+     "rarity": "Gold",
+     "text": "Gain 50% Crit chance.",
+     "core": true,
+     "icon": "icons/augments/it-s-critical.png",
+     "win_rate": 0.5228,
+     "pick_rate": 0.16,
+     "win_rank": 98,
+     "best_champions": [
+      "Jhin",
+      "Graves",
+      "Yasuo",
+      "Caitlyn",
+      "Yone",
+      "Vayne"
+     ],
+     "champion_is_best": false
+    }
+   ],
+   "core": 4,
+   "items": [
+    "Berserker's Greaves",
+    "Rabadon's Deathcap",
+    "Infinity Edge",
+    "Kraken Slayer",
+    "Lord Dominik's Regards",
+    "Phantom Dancer"
+   ],
+   "why": "Veigar's whole game is stacking infinite Ability Power. escAPADe turns every point of it into 0.6 bonus AD (plus 15% more AD), so his Q stacks and even Rabadon's Deathcap now feed his auto attacks. Dual Wield, Critical Rhythm and It's Critical make him a crit marksman with a yordle hat.",
+   "play": "Farm Q stacks like normal, then right-click everyone. Cage still works.",
+   "champion_name": "Veigar",
+   "champion_icon": "icons/champions/45.png",
+   "champion_win_rate": 0.5022,
+   "champion_pick_rate": 0.0778,
+   "champion_win_rank": 61,
+   "core_win_rate": 0.5413,
+   "tier": "Holds up",
+   "core_usual": 0,
+   "core_pick_rate": 0.2233,
+   "sim": {
+    "dps": 818,
+    "survival": 0.398,
+    "best_dps": 1579,
+    "best_survival": 0.462,
+    "pct_of_best": 0.518,
+    "best_items": [
+     "Sorcerer's Shoes",
+     "Cryptbloom",
+     "Liandry's Torment",
+     "Rabadon's Deathcap",
+     "Shadowflame",
+     "Void Staff"
+    ],
+    "best_augments": [
+     "Eureka",
+     "Mystic Punch",
+     "Deft",
+     "Dual Wield"
+    ],
+    "items_not_modeled": [],
+    "whole_build": false
+   }
+  },
+  {
+   "id": "soraka-sniper",
+   "champion": "Soraka",
+   "title": "Starchild Sniper",
+   "augments": [
+    {
+     "name": "Scopiest Weapons",
+     "rarity": "Prismatic",
+     "text": "Gain Attack Range.",
+     "core": true,
+     "icon": "icons/augments/scopiest-weapons.png",
+     "win_rate": 0.5281,
+     "pick_rate": 0.1789,
+     "win_rank": 85,
+     "best_champions": [
+      "Caitlyn",
+      "Jinx",
+      "Vayne",
+      "Kayle",
+      "Tristana",
+      "Senna"
+     ],
+     "champion_is_best": false
+    },
+    {
+     "name": "Dual Wield",
+     "rarity": "Prismatic",
+     "text": "When you Attack, fire a bolt that deals 40% damage and applies your On-Hit effects at 40% effectiveness. Gain 10% total Attack Speed.",
+     "core": true,
+     "icon": "icons/augments/dual-wield.png",
+     "win_rate": 0.5643,
+     "pick_rate": 0.2686,
+     "win_rank": 31,
+     "best_champions": [
+      "Vayne",
+      "Caitlyn",
+      "Jinx",
+      "Tristana",
+      "Twitch",
+      "Yunara"
+     ],
+     "champion_is_best": false
+    },
+    {
+     "name": "Deft",
+     "rarity": "Silver",
+     "text": "Gain 60% Attack Speed.",
+     "core": true,
+     "icon": "icons/augments/deft.png",
+     "win_rate": 0.5568,
+     "pick_rate": 0.3135,
+     "win_rank": 40,
+     "best_champions": [
+      "Vayne",
+      "Jinx",
+      "Caitlyn",
+      "Tristana",
+      "Twitch",
+      "Yone"
+     ],
+     "champion_is_best": false
+    },
+    {
+     "name": "It's Critical",
+     "rarity": "Gold",
+     "text": "Gain 50% Crit chance.",
+     "core": true,
+     "icon": "icons/augments/it-s-critical.png",
+     "win_rate": 0.5228,
+     "pick_rate": 0.16,
+     "win_rank": 98,
+     "best_champions": [
+      "Jhin",
+      "Graves",
+      "Yasuo",
+      "Caitlyn",
+      "Yone",
+      "Vayne"
+     ],
+     "champion_is_best": false
+    }
+   ],
+   "core": 4,
+   "items": [
+    "Berserker's Greaves",
+    "Yun Tal Wildarrows",
+    "Infinity Edge",
+    "Runaan's Hurricane",
+    "Lord Dominik's Regards",
+    "Blade of The Ruined King"
+   ],
+   "why": "The healer stops healing and becomes the team's marksman. Scopiest Weapons adds 150 range on top of her 550, Dual Wield and Deft make her shoot fast, and the full crit build does the rest. The simulator's item search keeps finding that enchanters out-damage their normal builds with crit items.",
+   "play": "Silence them with E, then auto from 700 range. W is for emergencies only.",
+   "champion_name": "Soraka",
+   "champion_icon": "icons/champions/16.png",
+   "champion_win_rate": 0.495,
+   "champion_pick_rate": 0.0371,
+   "champion_win_rank": 75,
+   "core_win_rate": 0.543,
+   "tier": "Holds up",
+   "core_usual": 0,
+   "core_pick_rate": 0.2303,
+   "sim": {
+    "dps": 954,
+    "survival": 0.724,
+    "best_dps": 1221,
+    "best_survival": 0.551,
+    "pct_of_best": 0.781,
+    "best_items": [
+     "Sorcerer's Shoes",
+     "Blackfire Torch",
+     "Liandry's Torment",
+     "Nashor's Tooth",
+     "Shadowflame",
+     "Void Staff"
+    ],
+    "best_augments": [
+     "Mystic Punch",
+     "Eureka",
+     "Deft",
+     "Goliath"
+    ],
+    "items_not_modeled": [],
+    "whole_build": false
+   }
+  },
+  {
+   "id": "karthus-no-requiem",
+   "champion": "Karthus",
+   "title": "No Requiem",
+   "augments": [
+    {
+     "name": "Back To Basics",
+     "rarity": "Prismatic",
+     "text": "Your Ultimate Ability is sealed. Gain 35% Ability Damage, Healing, Shielding, and 70 Ability Haste.",
+     "core": true,
+     "icon": "icons/augments/back-to-basics.png",
+     "win_rate": 0.5786,
+     "pick_rate": 0.2894,
+     "win_rank": 18,
+     "best_champions": [
+      "Ryze",
+      "TwistedFate",
+      "Gangplank",
+      "Smolder",
+      "TahmKench",
+      "Morgana"
+     ],
+     "champion_is_best": false
+    },
+    {
+     "name": "Infernal Conduit",
+     "rarity": "Prismatic",
+     "text": "Your Abilities apply stacking Burn that deals damage over time. Your Burn effects reduce your basic Ability Cooldowns.",
+     "core": false,
+     "icon": "icons/augments/infernal-conduit.png",
+     "win_rate": 0.5725,
+     "pick_rate": 0.2363,
+     "win_rank": 23,
+     "best_champions": [
+      "Brand",
+      "AurelionSol",
+      "Lillia",
+      "Morgana",
+      "Malzahar",
+      "Teemo"
+     ],
+     "champion_is_best": false
+    },
+    {
+     "name": "Recursion",
+     "rarity": "Gold",
+     "text": "Gain 60 Ability Haste.",
+     "core": false,
+     "icon": "icons/augments/recursion.png",
+     "win_rate": 0.612,
+     "pick_rate": 0.6098,
+     "win_rank": 3,
+     "best_champions": [
+      "Teemo",
+      "Karthus",
+      "Ashe",
+      "Hecarim",
+      "Brand",
+      "AurelionSol"
+     ],
+     "champion_is_best": true
+    },
+    {
+     "name": "Magic Missile",
+     "rarity": "Gold",
+     "text": "Dealing Ability damage fires 3 missiles at each enemy hit, each dealing up to 1% max Health true damage based on distance traveled.",
+     "core": false,
+     "icon": "icons/augments/magic-missile.png",
+     "win_rate": 0.5447,
+     "pick_rate": 0.2945,
+     "win_rank": 52,
+     "best_champions": [
+      "Brand",
+      "TwistedFate",
+      "MissFortune",
+      "Teemo",
+      "Morgana",
+      "Karthus"
+     ],
+     "champion_is_best": true
+    }
+   ],
+   "core": 1,
+   "items": [
+    "Sorcerer's Shoes",
+    "Liandry's Torment",
+    "Rylai's Crystal Scepter",
+    "Rabadon's Deathcap",
+    "Void Staff",
+    "Cryptbloom"
+   ],
+   "why": "Karthus is the map-wide ultimate, and Back To Basics seals it for good. In return his Q, W and E deal 35% more damage with 70 Ability Haste, and Infernal Conduit, Recursion and Magic Missile turn Lay Waste into a nonstop burning machine gun.",
+   "play": "Spam Q. When your team pings for Requiem, tell them it's sealed.",
+   "champion_name": "Karthus",
+   "champion_icon": "icons/champions/30.png",
+   "champion_win_rate": 0.4861,
+   "champion_pick_rate": 0.1177,
+   "champion_win_rank": 95,
+   "core_win_rate": 0.5786,
+   "tier": "Secretly strong",
+   "core_usual": 0,
+   "core_pick_rate": 0.2894,
+   "sim": {
+    "dps": 1274,
+    "survival": 0.548,
+    "best_dps": 1528,
+    "best_survival": 0.762,
+    "pct_of_best": 0.834,
+    "best_items": [
+     "Sorcerer's Shoes",
+     "Cryptbloom",
+     "Hextech Gunblade",
+     "Rabadon's Deathcap",
+     "Shadowflame",
+     "Void Staff"
+    ],
+    "best_augments": [
+     "Eureka",
+     "Mystic Punch",
+     "Goliath",
+     "Witchful Thinking"
+    ],
+    "items_not_modeled": [],
+    "whole_build": false
+   }
+  },
+  {
+   "id": "mundo-no-regen",
+   "champion": "DrMundo",
+   "title": "Mundo Can't Regen",
+   "augments": [
+    {
+     "name": "Vampirism",
+     "rarity": "Gold",
+     "text": "You cannot be healed by allies or gain Health Regen. Gain 25% Omnivamp.",
+     "core": true,
+     "icon": "icons/augments/vampirism.png",
+     "win_rate": null,
+     "pick_rate": null,
+     "win_rank": null,
+     "best_champions": [],
+     "champion_is_best": false
+    },
+    {
+     "name": "Ominous Pact",
+     "rarity": "Prismatic",
+     "text": "Gain Ability Power, 50% Movement Speed, and 20% Omnivamp based on missing Health. Spell casts cost 5% of your current Health. Max benefit at 30% Health.",
+     "core": true,
+     "icon": "icons/augments/ominous-pact.png",
+     "win_rate": 0.5037,
+     "pick_rate": 0.0836,
+     "win_rank": 134,
+     "best_champions": [
+      "Lillia",
+      "Singed",
+      "AurelionSol",
+      "Vladimir",
+      "Ryze",
+      "Swain"
+     ],
+     "champion_is_best": false
+    },
+    {
+     "name": "Goredrink",
+     "rarity": "Silver",
+     "text": "Gain 15% Omnivamp.",
+     "core": false,
+     "icon": "icons/augments/goredrink.png",
+     "win_rate": 0.5605,
+     "pick_rate": 0.3998,
+     "win_rank": 36,
+     "best_champions": [
+      "Graves",
+      "Swain",
+      "Lucian",
+      "Kayn",
+      "Mordekaiser",
+      "Smolder"
+     ],
+     "champion_is_best": false
+    },
+    {
+     "name": "Warlock Juicebox",
+     "rarity": "Gold",
+     "text": "Gain Omnivamp.",
+     "core": false,
+     "icon": "icons/augments/warlock-juicebox.png",
+     "win_rate": 0.5969,
+     "pick_rate": 0.4385,
+     "win_rank": 9,
+     "best_champions": [
+      "Ryze",
+      "AurelionSol",
+      "Lillia",
+      "Brand",
+      "Swain",
+      "Sylas"
+     ],
+     "champion_is_best": false
+    }
+   ],
+   "core": 2,
+   "items": [
+    "Plated Steelcaps",
+    "Ravenous Hydra",
+    "Titanic Hydra",
+    "Sterak's Gage",
+    "Death's Dance",
+    "Riftmaker"
+   ],
+   "why": "Mundo's identity is Health regen, and Vampirism turns all of it off: no regen, no healing from allies, and his ultimate's regen does nothing. He lives on Omnivamp instead (25% from Vampirism, more from Goredrink, Juicebox and Ominous Pact), and Ominous Pact makes every cast cost Health.",
+   "play": "Hit things to stay alive. Don't press R expecting it to help.",
+   "champion_name": "Dr. Mundo",
+   "champion_icon": "icons/champions/36.png",
+   "champion_win_rate": 0.4932,
+   "champion_pick_rate": 0.1071,
+   "champion_win_rank": 79,
+   "core_win_rate": 0.5037,
+   "tier": "Pure troll",
+   "core_usual": 0,
+   "core_pick_rate": 0.0836,
+   "sim": {
+    "dps": 275,
+    "survival": 0.481,
+    "best_dps": 543,
+    "best_survival": 0.741,
+    "pct_of_best": 0.507,
+    "best_items": [
+     "Ionian Boots of Lucidity",
+     "Black Cleaver",
+     "Heartsteel",
+     "Hollow Radiance",
+     "Sunfire Aegis",
+     "Titanic Hydra"
+    ],
+    "best_augments": [
+     "Tank Engine",
+     "Mystic Punch",
+     "Goliath",
+     "Dual Wield"
+    ],
+    "items_not_modeled": [],
+    "whole_build": false
+   }
+  },
+  {
+   "id": "teemo-giant",
+   "champion": "Teemo",
+   "title": "Giant Teemo",
+   "augments": [
+    {
+     "name": "Goliath",
+     "rarity": "Prismatic",
+     "text": "Become large, gaining 35% Health and 15% Adaptive Force.",
+     "core": true,
+     "icon": "icons/augments/goliath.png",
+     "win_rate": 0.5749,
+     "pick_rate": 0.3324,
+     "win_rank": 21,
+     "best_champions": [
+      "TahmKench",
+      "DrMundo",
+      "Sett",
+      "Sion",
+      "Chogath",
+      "Swain"
+     ],
+     "champion_is_best": false
+    },
+    {
+     "name": "Tank Engine",
+     "rarity": "Gold",
+     "text": "On takedown, gain a stack that grants 5% increased size and 5% max Health. Lose 65% of stacks on death.",
+     "core": true,
+     "icon": "icons/augments/tank-engine.png",
+     "win_rate": 0.6023,
+     "pick_rate": 0.4306,
+     "win_rank": 6,
+     "best_champions": [
+      "TahmKench",
+      "DrMundo",
+      "Sett",
+      "Swain",
+      "Sion",
+      "Chogath"
+     ],
+     "champion_is_best": false
+    },
+    {
+     "name": "Heavy Hitter",
+     "rarity": "Silver",
+     "text": "Your Attacks deal additional physical damage.",
+     "core": true,
+     "icon": "icons/augments/heavy-hitter.png",
+     "win_rate": 0.5805,
+     "pick_rate": 0.3657,
+     "win_rank": 16,
+     "best_champions": [
+      "TahmKench",
+      "DrMundo",
+      "Sett",
+      "Sion",
+      "Chogath",
+      "Ornn"
+     ],
+     "champion_is_best": false
+    },
+    {
+     "name": "Celestial Body",
+     "rarity": "Gold",
+     "text": "Gain 1500 Health, but you deal 10% less damage.",
+     "core": true,
+     "icon": "icons/augments/celestial-body.png",
+     "win_rate": 0.5466,
+     "pick_rate": 0.2719,
+     "win_rank": 50,
+     "best_champions": [
+      "DrMundo",
+      "TahmKench",
+      "Sett",
+      "Sion",
+      "Chogath",
+      "Nautilus"
+     ],
+     "champion_is_best": false
+    }
+   ],
+   "core": 4,
+   "items": [
+    "Plated Steelcaps",
+    "Heartsteel",
+    "Warmog's Armor",
+    "Titanic Hydra",
+    "Sunfire Aegis",
+    "Jak'Sho, The Protean"
+   ],
+   "why": "The tiny scout who hides in bushes is now the biggest thing on the map. Goliath and Tank Engine grow him, Celestial Body adds 1,500 Health, and Heavy Hitter makes every dart hit for a share of it. He can no longer hide anywhere.",
+   "play": "Walk down the middle of the lane. Shrooms are still invisible; you are not.",
+   "champion_name": "Teemo",
+   "champion_icon": "icons/champions/17.png",
+   "champion_win_rate": 0.5356,
+   "champion_pick_rate": 0.1385,
+   "champion_win_rank": 16,
+   "core_win_rate": 0.5761,
+   "tier": "Secretly strong",
+   "core_usual": 0,
+   "core_pick_rate": 0.3501,
+   "sim": {
+    "dps": 345,
+    "survival": 0.992,
+    "best_dps": 1142,
+    "best_survival": 0.513,
+    "pct_of_best": 0.302,
+    "best_items": [
+     "Berserker's Greaves",
+     "Blade of The Ruined King",
+     "Nashor's Tooth",
+     "Rabadon's Deathcap",
+     "Shadowflame",
+     "Void Staff"
+    ],
+    "best_augments": [
+     "Dual Wield",
+     "Deft",
+     "Mystic Punch",
+     "Eureka"
+    ],
+    "items_not_modeled": [],
+    "whole_build": false
+   }
+  },
+  {
+   "id": "malphite-paper",
+   "champion": "Malphite",
+   "title": "Paper Malphite",
+   "augments": [
+    {
+     "name": "Glass Cannon",
+     "rarity": "Prismatic",
+     "text": "Reduce max Health by 30%. Deal extra damage as true damage.",
+     "core": true,
+     "icon": "icons/augments/glass-cannon.png",
+     "win_rate": 0.443,
+     "pick_rate": 0.0445,
+     "win_rank": 208,
+     "best_champions": [
+      "Karthus",
+      "MissFortune",
+      "Ashe",
+      "Teemo",
+      "Jayce",
+      "Kaisa"
+     ],
+     "champion_is_best": false
+    },
     {
      "name": "Giant Slayer",
      "rarity": "Prismatic",
@@ -1673,92 +927,72 @@ window.COOK_DATA = {
      "champion_is_best": false
     },
     {
-     "name": "Shrink Engine",
+     "name": "It's Critical",
      "rarity": "Gold",
-     "text": "Takedowns makes you smaller and grant Ability Haste and Movement Speed. Lose 65% stacks on death.",
+     "text": "Gain 50% Crit chance.",
      "core": true,
-     "icon": "icons/augments/shrink-engine.png",
-     "win_rate": 0.6144,
-     "pick_rate": 0.5664,
-     "win_rank": 2,
+     "icon": "icons/augments/it-s-critical.png",
+     "win_rate": 0.5228,
+     "pick_rate": 0.16,
+     "win_rank": 98,
      "best_champions": [
-      "Teemo",
-      "Ashe",
-      "MissFortune",
-      "Lillia",
-      "Morgana",
-      "Brand"
-     ],
-     "champion_is_best": false
-    },
-    {
-     "name": "Shrink Ray",
-     "rarity": "Gold",
-     "text": "Your Attacks reduce an enemy's damage by 15% for 3 seconds. Damage Reduced:",
-     "core": true,
-     "icon": "icons/augments/shrink-ray.png",
-     "win_rate": 0.4816,
-     "pick_rate": 0.1206,
-     "win_rank": 186,
-     "best_champions": [
-      "Ashe",
+      "Jhin",
+      "Graves",
+      "Yasuo",
       "Caitlyn",
-      "Senna",
-      "Jinx",
-      "Kayle",
-      "Katarina"
+      "Yone",
+      "Vayne"
      ],
      "champion_is_best": false
     },
     {
-     "name": "Escape Plan",
-     "rarity": "Silver",
-     "text": "Gain a massive decaying Shield, decaying 150% Movement Speed, and a decaying shrink effect upon reaching 35% Health (75 seconds Cooldown).",
-     "core": false,
-     "icon": "icons/augments/escape-plan.png",
-     "win_rate": 0.5717,
-     "pick_rate": 0.386,
-     "win_rank": 25,
+     "name": "Critical Rhythm",
+     "rarity": "Gold",
+     "text": "Your basic Attack stacks 6% Attack Speed on Critical Strikes up to 10 stacks. Gain 25% Crit chance.",
+     "core": true,
+     "icon": "icons/augments/critical-rhythm.png",
+     "win_rate": 0.5427,
+     "pick_rate": 0.2475,
+     "win_rank": 54,
      "best_champions": [
-      "TahmKench",
-      "DrMundo",
-      "Singed",
-      "Sett",
-      "Swain",
-      "Trundle"
+      "Caitlyn",
+      "Jinx",
+      "Vayne",
+      "Yasuo",
+      "Yone",
+      "Tristana"
      ],
      "champion_is_best": false
     }
    ],
-   "core": 3,
+   "core": 4,
    "items": [
-    "Sorcerer's Shoes",
-    "Liandry's Torment",
-    "Rylai's Crystal Scepter",
-    "Rabadon's Deathcap",
-    "Shadowflame",
-    "Void Staff"
+    "Berserker's Greaves",
+    "Yun Tal Wildarrows",
+    "Infinity Edge",
+    "Phantom Dancer",
+    "Lord Dominik's Regards",
+    "Bloodthirster"
    ],
-   "why": "Cho'Gath's whole fantasy is growing, so this build shrinks him. Giant Slayer makes him tiny and deals more damage to anyone bigger, Shrink Engine shrinks him further with every takedown, and Shrink Ray shrinks enemies too. Every Feast stack fights the augments, and Escape Plan shrinks him once more when he runs.",
-   "play": "Feast anyway. Watch him stay small.",
-   "lab": true,
-   "champion_name": "Cho'Gath",
-   "champion_icon": "icons/champions/31.png",
-   "champion_win_rate": 0.473,
-   "champion_pick_rate": 0.0828,
-   "champion_win_rank": 124,
-   "core_win_rate": 0.5538,
+   "why": "The armor-stacking rock buys zero armor. Glass Cannon cuts 30% of his Health for extra true damage, Giant Slayer makes him tiny, and the full crit build turns his autos into the damage. His ultimate is still a knock-up, it just comes from a pebble.",
+   "play": "Unstoppable Force into their backline, then auto. Don't get hit.",
+   "champion_name": "Malphite",
+   "champion_icon": "icons/champions/54.png",
+   "champion_win_rate": 0.4711,
+   "champion_pick_rate": 0.0993,
+   "champion_win_rank": 131,
+   "core_win_rate": 0.5185,
    "tier": "Holds up",
    "core_usual": 0,
-   "core_pick_rate": 0.3233,
+   "core_pick_rate": 0.1837,
    "sim": {
-    "dps": 1317,
-    "survival": 0.324,
-    "best_dps": 1424,
-    "best_survival": 0.258,
-    "pct_of_best": 0.925,
+    "dps": 492,
+    "survival": 0.497,
+    "best_dps": 1144,
+    "best_survival": 0.429,
+    "pct_of_best": 0.43,
     "best_items": [
-     "Sorcerer's Shoes",
+     "Ionian Boots of Lucidity",
      "Blackfire Torch",
      "Liandry's Torment",
      "Rabadon's Deathcap",
@@ -1766,10 +1000,10 @@ window.COOK_DATA = {
      "Void Staff"
     ],
     "best_augments": [
-     "Eureka",
      "Mystic Punch",
-     "Infernal Conduit",
-     "Goliath"
+     "Eureka",
+     "Goliath",
+     "Infernal Conduit"
     ],
     "items_not_modeled": [],
     "whole_build": false
