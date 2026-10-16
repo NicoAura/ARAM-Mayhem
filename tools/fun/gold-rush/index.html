@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Gold Rush</title>
+  <meta name="description" content="How fast you finish a full build in ARAM Mayhem, and how much time gold augments save.">
+  <link rel="stylesheet" href="../style.css">
+  <style>
+    #chart { height: 140px; overflow: visible; }
+    #chart path.base { fill: none; stroke: var(--muted); stroke-width: 1.5; stroke-dasharray: 4 3; vector-effect: non-scaling-stroke; }
+    .chart-wrap { grid-column: 1 / -1; }
+    #chart-marks, #chart-axis { position: relative; margin: 0 14px; }
+    #chart-marks { height: 44px; }
+    #chart-marks img { position: absolute; width: 22px; height: 22px; border-radius: 4px; transform: translateX(-50%); border: 1px solid var(--fg); }
+    #chart-axis { height: 1.2rem; font-size: 0.75rem; color: var(--muted); }
+    #chart-axis span { position: absolute; transform: translateX(-50%); white-space: nowrap; }
+    #chart-axis span:first-child { transform: none; }
+    .chart-wrap svg { display: block; padding: 0 14px; box-sizing: content-box; width: calc(100% - 28px); }
+    .legend { display: flex; gap: 1.25rem; flex-wrap: wrap; margin-top: 0.4rem; }
+    .legend span::before { content: ""; display: inline-block; width: 18px; margin-right: 0.4rem; vertical-align: middle; border-top: 2px solid var(--fg); }
+    .legend #legend-base::before { border-top: 2px dashed var(--muted); }
+    .stats dd.muted { font-weight: 400; }
+    .table-scroll { overflow-x: auto; }
+    .table th + th, .table td + td { padding-left: 0.75rem; }
+  </style>
+</head>
+<body>
+  <main>
+    <header class="intro">
+      <img id="hero-icon" alt="" width="56" height="56">
+      <div>
+        <p class="eyebrow"><a href="../index.html">Fun Tools</a> · ARAM Mayhem</p>
+        <h1>Gold Rush</h1>
+        <p class="muted">Pick up to six items in the order you buy them and the Mayhem augments that pay gold. See the minute each item is done and how much sooner the augments get you there. <span id="patch"></span></p>
+      </div>
+    </header>
+
+    <section class="result" aria-live="polite">
+      <div class="big">
+        <span class="label">Full build done at</span>
+        <span id="done" class="value">–</span>
+      </div>
+      <div class="loop">
+        <div class="loop-head">
+          <span class="label">Gold augments save</span>
+          <span id="saved">–</span>
+        </div>
+        <div class="meter"><div id="gain-bar"></div></div>
+        <p id="saved-note" class="muted small"></p>
+      </div>
+      <div class="chart-wrap">
+        <div id="chart-marks"></div>
+        <svg id="chart" viewBox="0 0 300 120" preserveAspectRatio="none" role="img" aria-label="Gold earned over time"></svg>
+        <div id="chart-axis"></div>
+        <p class="legend muted small"><span>Gold earned</span><span id="legend-base">Without gold augments</span></p>
+      </div>
+      <dl id="stats" class="stats"></dl>
+    </section>
+
+    <section>
+      <h2>Buy order</h2>
+      <div class="table-scroll"><table id="order" class="table"></table></div>
+    </section>
+
+    <section>
+      <div class="row-head">
+        <h2>Items</h2>
+        <span id="item-count" class="muted small"></span>
+      </div>
+      <div id="item-slots" class="slots"></div>
+      <input id="item-search" class="search" type="search" placeholder="Search items" aria-label="Search items" autocomplete="off">
+      <div id="item-picker" class="picker"></div>
+    </section>
+
+    <section>
+      <div class="row-head">
+        <h2>Gold augments</h2>
+        <span class="muted small">Up to 4</span>
+      </div>
+      <div id="aug-slots" class="slots augs"></div>
+      <div id="aug-picker" class="picker augs"></div>
+    </section>
+
+    <section>
+      <h2>Income</h2>
+      <div id="options" class="options"></div>
+    </section>
+
+    <section>
+      <h2>What the augments pay</h2>
+      <div class="table-scroll"><table id="aug-table" class="table"></table></div>
+    </section>
+
+    <section class="actions">
+      <button id="preset" type="button">Load the fastest build</button>
+      <button id="reset" type="button" class="ghost">Clear</button>
+      <button id="share" type="button" class="ghost">Copy link</button>
+    </section>
+
+    <footer class="muted small">
+      Numbers come from the game files via CommunityDragon: <span id="source">Mayhem's starting gold, passive gold, kill and minion gold</span>, item prices and the augment values.
+      Assist gold is not in the files in a readable form, so it is a best guess you can change.
+      Kills, assists, last hits and augment procs are steady rates you set, starting at 1:00.
+      Each item is done when your gold covers its full price; components and selling are not modeled.
+      Left out: first blood, kill streak bounties, minion gold growth over time, gold from nearby minion deaths and stat anvils.
+      Upgrade augments only pay once you own their item, and a free component from a quest counts toward the next item built from it.
+    </footer>
+  </main>
+
+  <script src="data.js"></script>
+  <script src="calc.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
