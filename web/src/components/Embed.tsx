@@ -3,11 +3,21 @@
 import { useEffect, useRef, useState } from "react";
 import { THEME_EVENT, themeDocument } from "@/lib/theme";
 
+// The site fills the window, so embedded pages' own width caps are lifted too.
+const FULL_WIDTH = "body,main,.wrap{max-width:none!important}";
+function fullWidth(doc: Document) {
+  if (doc.getElementById("deeparam-full-width")) return;
+  const style = doc.createElement("style");
+  style.id = "deeparam-full-width";
+  style.textContent = FULL_WIDTH;
+  doc.head.append(style);
+}
+
 // Same-origin iframe that grows to fit its page, so the embedded tool scrolls with the site.
 export default function Embed({
   src,
   title,
-  minHeight = 600,
+  minHeight = 0,
 }: {
   src: string;
   title: string;
@@ -32,6 +42,7 @@ export default function Embed({
       const doc = frame.contentDocument;
       if (!doc?.body) return;
       themeDocument(doc, document.documentElement.dataset.theme);
+      fullWidth(doc);
       const fit = () =>
         setHeight(Math.max(minHeight, doc.documentElement.scrollHeight));
       fit();

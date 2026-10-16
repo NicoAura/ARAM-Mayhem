@@ -110,14 +110,18 @@ input {
   border-radius: 6px;
 }
 
+/* The site uses the whole window; only the side gutter grows on wide screens. */
 main,
 .site-footer,
 .site-header-inner {
   width: 100%;
-  max-width: 1120px;
   margin: 0 auto;
-  padding-left: max(1.25rem, env(safe-area-inset-left, 0px));
-  padding-right: max(1.25rem, env(safe-area-inset-right, 0px));
+  padding-left: max(clamp(1.25rem, 3vw, 3.5rem), env(safe-area-inset-left, 0px));
+  padding-right: max(clamp(1.25rem, 3vw, 3.5rem), env(safe-area-inset-right, 0px));
+}
+
+main {
+  flex: 1;
 }
 
 /* Header */
@@ -679,9 +683,12 @@ h1 {
 }
 
 /* Embedded tools from other folders in the repo */
+/* An embedded tab is at least as tall as the window below the header (dvh: phone toolbars). */
 .embed iframe {
   display: block;
   width: 100%;
+  min-height: calc(100vh - 12rem);
+  min-height: calc(100dvh - 12rem);
   border: 1px solid var(--line);
   border-radius: var(--r);
   background: var(--surface);
