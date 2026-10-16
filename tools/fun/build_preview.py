@@ -17,12 +17,14 @@ ICON = re.compile(r"https://raw\.communitydragon\.org/[^\"']+?\.png")
 
 def fetch(url):
     req = urllib.request.Request(url, headers={"User-Agent": "aram-mayhem-fun-tools"})
-    try:
-        with urllib.request.urlopen(req, timeout=120) as r:
-            return url, "data:image/png;base64," + base64.b64encode(r.read()).decode()
-    except Exception as e:  # a missing icon just shows the empty frame
-        print("icon failed:", url, e)
-        return url, ""
+    for attempt in range(3):
+        try:
+            with urllib.request.urlopen(req, timeout=120) as r:
+                return url, "data:image/png;base64," + base64.b64encode(r.read()).decode()
+        except Exception as e:  # a missing icon just shows the empty frame
+            if attempt == 2:
+                print("icon failed:", url, e)
+    return url, ""
 
 
 def read(path):
