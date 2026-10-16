@@ -609,3 +609,242 @@ h1 {
     transition: none !important;
   }
 }
+
+/* Mobile layout: only on iOS and Android devices (set by the script in layout.tsx).
+   Desktop browsers never get it, whatever their window size. */
+.tabbar,
+.sheet,
+.sheet-scrim {
+  display: none;
+}
+
+html[data-device="mobile"] {
+  --tabbar-h: 58px;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html[data-device="mobile"] body {
+  padding-bottom: calc(var(--tabbar-h) + env(safe-area-inset-bottom, 0px));
+}
+
+html[data-device="mobile"] body::before {
+  content: "";
+  position: fixed;
+  inset: 0 0 auto;
+  height: env(safe-area-inset-top, 0px);
+  z-index: 30;
+  background: var(--bg);
+}
+
+html[data-device="mobile"] .site-header,
+html[data-device="mobile"] main,
+html[data-device="mobile"] .site-footer {
+  padding-left: max(1rem, env(safe-area-inset-left, 0px));
+  padding-right: max(1rem, env(safe-area-inset-right, 0px));
+}
+
+html[data-device="mobile"] .site-header {
+  position: sticky;
+  top: env(safe-area-inset-top, 0px);
+  z-index: 20;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  height: 48px;
+  padding-top: 0;
+  padding-bottom: 0;
+  max-width: none;
+  background: color-mix(in srgb, var(--bg) 85%, transparent);
+  -webkit-backdrop-filter: saturate(1.4) blur(14px);
+  backdrop-filter: saturate(1.4) blur(14px);
+  border-bottom: 1px solid var(--line);
+}
+
+html[data-device="mobile"] .site-header .nav {
+  display: none;
+}
+
+html[data-device="mobile"] .brand {
+  font-size: 1.0625rem;
+}
+
+html[data-device="mobile"] main {
+  padding-top: 1.75rem;
+  padding-bottom: 2.5rem;
+}
+
+html[data-device="mobile"] .intro {
+  margin-bottom: 2rem;
+}
+
+html[data-device="mobile"] h1 {
+  font-size: clamp(1.75rem, 8vw, 2.25rem);
+}
+
+html[data-device="mobile"] .index-row {
+  grid-template-columns: 2.25rem 1fr 1.5rem;
+  row-gap: 0.25rem;
+  padding-top: 1.1rem;
+  padding-bottom: 1.1rem;
+}
+
+html[data-device="mobile"] .index-body {
+  grid-column: 2;
+  grid-row: 2;
+}
+
+html[data-device="mobile"] .defs > div {
+  grid-template-columns: 1fr;
+}
+
+/* In-page tabs become a scrollable row of pills */
+html[data-device="mobile"] .subtab-list {
+  gap: 0.4rem;
+  border-bottom: 0;
+  margin-left: calc(-1 * max(1rem, env(safe-area-inset-left, 0px)));
+  margin-right: calc(-1 * max(1rem, env(safe-area-inset-right, 0px)));
+  padding: 0 max(1rem, env(safe-area-inset-right, 0px)) 0 max(1rem, env(safe-area-inset-left, 0px));
+}
+
+html[data-device="mobile"] .subtab-list button {
+  margin: 0;
+  padding: 0.45rem 0.9rem;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  font-size: 0.875rem;
+}
+
+html[data-device="mobile"] .subtab-list button[aria-selected="true"] {
+  border-color: var(--fg);
+  background: var(--fg);
+  color: var(--bg);
+}
+
+/* Tables: full-width search (16px stops iOS zooming in), first column pinned while scrolling */
+html[data-device="mobile"] .table-search {
+  max-width: none;
+  font-size: 16px;
+  padding: 0.7rem 0.9rem;
+  border-radius: 10px;
+}
+
+html[data-device="mobile"] .table-scroll {
+  margin-left: calc(-1 * max(1rem, env(safe-area-inset-left, 0px)));
+  margin-right: calc(-1 * max(1rem, env(safe-area-inset-right, 0px)));
+  -webkit-overflow-scrolling: touch;
+}
+
+html[data-device="mobile"] .data-table th,
+html[data-device="mobile"] .data-table td {
+  padding: 0.7rem 0.6rem;
+}
+
+html[data-device="mobile"] .data-table th:first-child,
+html[data-device="mobile"] .data-table td:first-child {
+  position: sticky;
+  left: 0;
+  z-index: 1;
+  padding-left: max(1rem, env(safe-area-inset-left, 0px));
+  background: var(--bg);
+  box-shadow: 1px 0 0 var(--line);
+}
+
+html[data-device="mobile"] .show-more {
+  width: 100%;
+  padding: 0.75rem;
+}
+
+html[data-device="mobile"] .embed-open {
+  display: block;
+  padding: 0.75rem;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  text-align: center;
+  color: var(--fg);
+}
+
+html[data-device="mobile"] .site-footer {
+  padding-bottom: 1.5rem;
+}
+
+/* Bottom tab bar */
+html[data-device="mobile"] .tabbar {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 40;
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 1fr;
+  height: calc(var(--tabbar-h) + env(safe-area-inset-bottom, 0px));
+  padding: 0 env(safe-area-inset-right, 0px) env(safe-area-inset-bottom, 0px) env(safe-area-inset-left, 0px);
+  background: color-mix(in srgb, var(--bg) 88%, transparent);
+  -webkit-backdrop-filter: saturate(1.4) blur(16px);
+  backdrop-filter: saturate(1.4) blur(16px);
+  border-top: 1px solid var(--line);
+}
+
+html[data-device="mobile"] .tabbar a,
+html[data-device="mobile"] .tabbar button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  border: 0;
+  background: none;
+  color: var(--muted);
+  font: inherit;
+  font-size: 0.6875rem;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+html[data-device="mobile"] .tabbar [aria-current="page"] {
+  color: var(--fg);
+}
+
+html[data-device="mobile"] .tabbar [aria-current="page"] svg {
+  color: var(--accent);
+}
+
+html[data-device="mobile"] .sheet-scrim {
+  display: block;
+  position: fixed;
+  inset: 0;
+  z-index: 35;
+  border: 0;
+  background: rgb(0 0 0 / 0.35);
+}
+
+html[data-device="mobile"] .sheet:not([hidden]) {
+  display: grid;
+  position: fixed;
+  left: max(0.75rem, env(safe-area-inset-left, 0px));
+  right: max(0.75rem, env(safe-area-inset-right, 0px));
+  bottom: calc(var(--tabbar-h) + env(safe-area-inset-bottom, 0px) + 0.5rem);
+  z-index: 36;
+  padding: 0.4rem;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: var(--bg);
+  box-shadow: 0 16px 40px rgb(0 0 0 / 0.25);
+  animation: rise 0.25s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+html[data-device="mobile"] .sheet a {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.9rem 1rem;
+  border-radius: 10px;
+  font-weight: 500;
+}
+
+html[data-device="mobile"] .sheet a[aria-current="page"] {
+  background: var(--hover);
+}
+
+html[data-device="mobile"] .sheet a span {
+  color: var(--muted);
+}
