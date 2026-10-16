@@ -2,10 +2,10 @@
 """Bundle the dashboard into one self-contained page for the published preview.
 
 The preview can't load Riot's CDNs at runtime, so this inlines the CSS and JS,
-the champion and augment name tables, and an example archive of generated
-games (labelled as examples on the page). Usage:
+and the champion and augment name tables. --sample adds an archive of generated
+example games (labelled as examples on the page). Usage:
 
-    python3 dashboard/build_preview.py OUT.html
+    python3 dashboard/build_preview.py OUT.html [--sample]
 """
 
 import json
@@ -88,9 +88,10 @@ def main():
         "champNames": champ_names,
         "augNames": aug_names,
         "augRarity": aug_rarity,
-        "sample": sample_archive(champ_names, aug_names, aug_rarity,
-                                 set(get_json(MAYHEM_AUGMENTS)["descriptions"])),
     }
+    if "--sample" in sys.argv:  # example games, off unless asked for
+        preset["sample"] = sample_archive(champ_names, aug_names, aug_rarity,
+                                          set(get_json(MAYHEM_AUGMENTS)["descriptions"]))
     html = (HERE / "index.html").read_text()
     body = re.search(r"<body>(.*)</body>", html, re.S).group(1)
     body = body.replace('<script src="app.js"></script>', "")

@@ -356,11 +356,13 @@ loader.addEventListener("drop", async (e) => {
 // ---------- sync ----------
 // `python3 importer/mayhem_import.py --serve` hosts this page and exposes
 // api/sync, which pulls new games from the running League client into the
-// archive. The button only appears when that helper answers.
+// archive. Opened any other way, the button explains how to get there.
 
 const syncBtn = $("sync");
 const syncStatus = $("sync-status");
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+const OFFLINE_HINT = "Sync needs League open on your Mac and this page opened from importer/Open Mayhem Stats.command.";
+let helperOnline = false;
 
 function setSyncStatus(text, error = false) {
   syncStatus.textContent = text || "";
@@ -407,6 +409,10 @@ async function watchSync() {
 }
 
 syncBtn.addEventListener("click", async () => {
+  if (!helperOnline) {
+    // the helper may have been started since the page loaded
+    try { await syncState(); helperOnline = true; } catch (e) { return setSyncStatus(OFFLINE_HINT); }
+  }
   setSyncStatus("Starting…");
   try {
     const res = await fetch("api/sync", { method: "POST", headers: { "X-Mayhem": "1" } });
@@ -418,13 +424,17 @@ syncBtn.addEventListener("click", async () => {
 });
 
 async function setupSync() {
-  if (PRESET.sample || location.protocol === "file:") return;
+  if (PRESET.sample) return;
+  $("sync-row").hidden = false;
+  if (location.protocol === "file:") return setSyncStatus(OFFLINE_HINT);
   try {
     const s = await syncState();
-    $("sync-row").hidden = false;
+    helperOnline = true;
     if (!state.games.length) setSyncStatus("No archive yet. Sync to pull your games from the League client.");
     if (s.running) watchSync();
-  } catch (e) { /* plain static hosting: no helper, no button */ }
+  } catch (e) {
+    setSyncStatus(state.games.length ? "" : "Sync from League, or load an archive file below.");
+  }
 }
 
 // When served next to a data file (e.g. `python3 -m http.server` in this
@@ -432,10 +442,11 @@ async function setupSync() {
 (async () => {
   if (PRESET.sample) return loadText(JSON.stringify(PRESET.sample), { sample: true });
   const path = new URLSearchParams(location.search).get("data") || "data/mayhem-backup.json";
-  if (location.protocol === "file:") return;
-  try {
-    const res = await fetch(path);
-    if (res.ok) await loadText(await res.text());
-  } catch (e) { /* no bundled data; wait for the file picker */ }
+  if (location.protocol !== "file:") {
+    try {
+      const res = await fetch(path);
+      if (res.ok) await loadText(await res.text());
+    } catch (e) { /* no bundled data; wait for the file picker */ }
+  }
   setupSync();
 })();
