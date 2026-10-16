@@ -840,7 +840,7 @@
       $("clipVideo").hidden = ok;
       $("clipNote").textContent = ok
         ? "Click an ability (or press Q, W, E, R) and your champion casts it in the arena."
-        : "No model for this champion yet, so casts play Riot's ability preview instead.";
+        : "No model for this champion yet, so casts play the ability's preview instead.";
     });
   }
   // Ability button or key: the model's animation, or the clip without a model.
@@ -937,7 +937,7 @@
     else video.removeAttribute("src");
     showCaption("Q");
     video.pause();
-    if (!modelMode) $("clipNote").textContent = "Each cast plays Riot's official preview of that ability. Click an ability to watch it again.";
+    if (!modelMode) $("clipNote").textContent = "Each cast plays the official preview of that ability. Click an ability to watch it again.";
   }
   function clipUrl(slot) {
     const k = String(champ.key).padStart(4, "0");
@@ -963,7 +963,7 @@
     };
     if (index.local_clips) {
       const seg = champ.clip && champ.clip[slot];
-      if (!seg) { video.pause(); showFallback("Riot has no preview clip for this ability."); return; }
+      if (!seg) { video.pause(); showFallback("There's no preview clip for this ability."); return; }
       fb.hidden = true;
       clipState.start = seg[0]; clipState.end = seg[0] + seg[1] - 0.05;
       video.currentTime = seg[0];
