@@ -3,6 +3,8 @@
    behind the icon, and the tier's ability frame. Art is from the client
    (game/assets/ux/kiwi/augments/augmentselection), copied to public/augment-card. */
 
+import { localAsset } from "@/lib/assets";
+
 export type Tier = "silver" | "gold" | "prismatic";
 
 const tierOf = (t?: string): Tier => (t === "silver" || t === "prismatic" ? t : "gold");
@@ -29,7 +31,7 @@ export default function AugmentCard({
     <article className={`aug-card aug-${t}${removed ? " aug-removed" : ""}${compact ? " aug-compact" : ""}`}>
       <div className="aug-art" aria-hidden>
         <img className="aug-back" src={`/augment-card/back-${t}.png`} alt="" />
-        <img className="aug-icon" src={icon ?? `/augment-card/generic-${t}.png`} alt="" loading="lazy" />
+        <img className="aug-icon" src={localAsset(icon) ?? `/augment-card/generic-${t}.png`} alt="" loading="lazy" />
         <img className="aug-frame" src={`/augment-card/frame-${t}.png`} alt="" />
       </div>
       <div className="aug-text">

@@ -2,7 +2,7 @@
 // site can serve them: the stats dashboard, the simulator's replay viewer, and any
 // folder with a site-tab.json (see src/lib/tabs.ts). Missing sources are skipped and
 // the matching tab explains what it is waiting for.
-import { cpSync, existsSync, mkdirSync, readdirSync, readFileSync, rmSync } from "node:fs";
+import { cpSync, existsSync, mkdirSync, readdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -43,6 +43,35 @@ for (const { name, from, exclude = [] } of embeds) {
     continue;
   }
   const skip = exclude.map((d) => join(from, d));
-  cpSync(from, join(out, name), { recursive: true, filter: (src) => !skip.some((d) => src === d || src.startsWith(d + "/")) });
+  // Build scripts and notes stay in the repo; only the pages and their data are published.
+  const tooling = (src) => /\.(py|md)$/.test(src) || src.includes("/__pycache__");
+  cpSync(from, join(out, name), { recursive: true, filter: (src) => !tooling(src) && !skip.some((d) => src === d || src.startsWith(d + "/")) });
   console.log(`sync-embeds: copied ${name}`);
 }
+
+// Every image, sound, model, font and script the pages use is mirrored in public/assets/ (scripts/fetch_assets.py),
+// so links to the outside copies are pointed at the site's own. Pages that already use /assets/ are left as they are.
+const LOCAL = [
+  [/https:\/\/raw\.communitydragon\.org\//g, "/assets/cd/"],
+  [/https:\/\/ddragon\.leagueoflegends\.com\/cdn\//g, "/assets/dd/"],
+  [/https:\/\/d28xe8vt774jo5\.cloudfront\.net\/champion-abilities/g, "/assets/clips"],
+  [/https:\/\/cdn\.modelviewer\.lol\/lol\/models/g, "/assets/models"],
+  [/https:\/\/cdn\.jsdelivr\.net\/npm\/three@0\.160\.0\//g, "/assets/lib/three@0.160.0/"],
+  [/<link[^>]+rel="preconnect"[^>]+fonts\.g(?:oogleapis|static)\.com[^>]*>\s*/g, ""],
+  [/https:\/\/fonts\.googleapis\.com\/css2\?[^"')\s]+/g, "/assets/fonts/fonts.css"],
+];
+const TEXT = /\.(html|js|mjs|css|json)$/;
+function localize(dir) {
+  let changed = 0;
+  for (const d of readdirSync(dir, { withFileTypes: true })) {
+    const p = join(dir, d.name);
+    if (d.isDirectory()) changed += localize(p);
+    else if (TEXT.test(d.name)) {
+      const before = readFileSync(p, "utf8");
+      const after = LOCAL.reduce((s, [re, to]) => s.replace(re, to), before);
+      if (after !== before) (writeFileSync(p, after), changed++);
+    }
+  }
+  return changed;
+}
+if (existsSync(join(web, "public", "assets", "manifest.json"))) console.log(`sync-embeds: pointed ${localize(out)} files at /assets`);
