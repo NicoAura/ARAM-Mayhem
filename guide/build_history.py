@@ -79,6 +79,11 @@ def extract(patch):
     return out
 
 
+def site_paths(text):
+    """Point asset URLs at the site's own copies (/assets/cd/<channel>/<path, lower case>)."""
+    return re.sub(re.escape(BASE) + r"/([^\s\"']+)", lambda m: "/assets/cd/" + m.group(1).lower(), text)
+
+
 def main():
     listing = get(f"{BASE}/json/") or []
     patches = sorted({tuple(map(int, x["name"].split("."))) for x in listing if re.fullmatch(r"\d+\.\d+", x["name"])})
@@ -133,7 +138,7 @@ def main():
     }
     with open(os.path.join(HERE, "history.js"), "w") as f:
         # no header comment: the file ships to the site, and pages don't say where data comes from
-        f.write("window.GUIDE_HISTORY = " + json.dumps(out, ensure_ascii=False, separators=(",", ":")) + ";\n")
+        f.write("window.GUIDE_HISTORY = " + site_paths(json.dumps(out, ensure_ascii=False, separators=(",", ":"))) + ";\n")
     print(f"{len(events)} patches with changes, {len(used)} augments touched")
 
 

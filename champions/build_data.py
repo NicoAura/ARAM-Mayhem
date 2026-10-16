@@ -147,6 +147,12 @@ def load_build(cid):
         "mates": [{"id": m["id"], "win": m["win_rate"], "pick": m["pick_rate"]} for m in b.get("partners") or []][:5],
     }
 
+
+def site_paths(text):
+    """Point asset URLs at the site's own copies (/assets/cd/<channel>/<path, lower case>)."""
+    return re.sub(re.escape(BASE) + r"/([^\s\"']+)", lambda m: "/assets/cd/" + m.group(1).lower(), text)
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--channel", default="latest")
@@ -234,7 +240,7 @@ def main():
           f" {sum(1 for c in champions if c['builds'])} champions with build stats; {len(tier)} tier rows")
     with open(os.path.join(HERE, "data.js"), "w") as f:
         # no header comment: the file ships to the site, and pages don't say where data comes from
-        f.write("window.CHAMPS_DATA = " + json.dumps(out, ensure_ascii=False, separators=(",", ":")) + ";\n")
+        f.write("window.CHAMPS_DATA = " + site_paths(json.dumps(out, ensure_ascii=False, separators=(",", ":"))) + ";\n")
 
 
 if __name__ == "__main__":

@@ -1,7 +1,7 @@
 /* DeepARAM reference theme for pages embedded in the site (dashboard/, simulator/viewer/,
    tools/fun/, data/cook-builds/). Copy this into your page's stylesheet.
    Cool neutrals with a glacial blue accent; the prismatic gradient is the one flourish. */
-@import url("https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap");
+@import url("/assets/fonts/fonts.css");
 
 :root {
   color-scheme: light;
@@ -85,7 +85,7 @@ tbody tr:hover { background: var(--hover); }
 .meter i { display: block; height: 100%; border-radius: inherit; background: var(--accent); }
 
 /* ---- Mayhem Guide ---- */
-main { max-width: 1120px; margin: 0 auto; padding: 16px; display: grid; gap: 1rem; }
+main { padding: 16px; display: grid; gap: 1rem; }
 .muted { color: var(--muted); }
 .small { font-size: 13px; }
 .nav { display: flex; flex-wrap: wrap; gap: 0.75rem; align-items: center; justify-content: space-between; }

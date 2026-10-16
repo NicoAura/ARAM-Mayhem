@@ -1,6 +1,6 @@
 window.GUIDE_DATA = {
  "patch": "16.20.8248524",
- "hero": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/leagueclient/gamemodeassets/kiwi/kiwi-tutorial-set2.png",
+ "hero": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/leagueclient/gamemodeassets/kiwi/kiwi-tutorial-set2.png",
  "queues": [
   {
    "id": 2400,
@@ -47,91 +47,91 @@ window.GUIDE_DATA = {
  "maps": [
   {
    "name": "Howling Abyss",
-   "minimap": "https://raw.communitydragon.org/latest/game/assets/maps/info/map12/2dlevelminimap.png"
+   "minimap": "/assets/cd/latest/game/assets/maps/info/map12/2dlevelminimap.png"
   },
   {
    "name": "Koeshin's Crossing",
-   "minimap": "https://raw.communitydragon.org/latest/game/assets/maps/info/map12/2dlevelminimap_bloom.png"
+   "minimap": "/assets/cd/latest/game/assets/maps/info/map12/2dlevelminimap_bloom.png"
   },
   {
    "name": "Butcher's Bridge",
-   "minimap": "https://raw.communitydragon.org/latest/game/assets/maps/info/map12/2dlevelminimap_bilgewater2.png"
+   "minimap": "/assets/cd/latest/game/assets/maps/info/map12/2dlevelminimap_bilgewater2.png"
   },
   {
    "name": "Bridge of Progress",
-   "minimap": "https://raw.communitydragon.org/latest/game/assets/maps/info/map12/2dlevelminimap_crepe.png"
+   "minimap": "/assets/cd/latest/game/assets/maps/info/map12/2dlevelminimap_crepe.png"
   }
  ],
  "summons": [
   {
    "name": "Poro King",
    "text": "A Mayhem version of the Poro King, with its own King Poro model in blue and red team colors.",
-   "icon": "https://raw.communitydragon.org/latest/game/assets/characters/kiwi_poroking/hud/kiwi_poroking_circle.png"
+   "icon": "/assets/cd/latest/game/assets/characters/kiwi_poroking/hud/kiwi_poroking_circle.png"
   },
   {
    "name": "Tibbers",
    "text": "A Mayhem copy of Annie's bear. Its spell is named \"Summon: Tibbers\".",
-   "icon": "https://raw.communitydragon.org/latest/game/assets/characters/kiwi_tibbers/hud/bear_circle.png"
+   "icon": "/assets/cd/latest/game/assets/characters/kiwi_tibbers/hud/bear_circle.png"
   },
   {
    "name": "Viego Soul",
    "text": "A Mayhem companion unit that reuses Senna's soul model.",
-   "icon": "https://raw.communitydragon.org/latest/game/assets/characters/kiwi_viegosoul/hud/kiwi_viegosoul_circle.png"
+   "icon": "/assets/cd/latest/game/assets/characters/kiwi_viegosoul/hud/kiwi_viegosoul_circle.png"
   }
  ],
  "items": [
   {
    "id": 550001,
    "name": "Healthbar Splash: Blue",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/kiwi/kiwi_550001.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/kiwi/kiwi_550001.png",
    "text": ""
   },
   {
    "id": 550002,
    "name": "Healthbar Splash: Orange",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/kiwi/kiwi_550002.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/kiwi/kiwi_550002.png",
    "text": ""
   },
   {
    "id": 550003,
    "name": "Healthbar Splash: Green",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/kiwi/kiwi_550003.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/kiwi/kiwi_550003.png",
    "text": ""
   },
   {
    "id": 550004,
    "name": "Healthbar Splash: Pink",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/kiwi/kiwi_550004.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/kiwi/kiwi_550004.png",
    "text": ""
   },
   {
    "id": 550006,
    "name": "Healthbar Splash: Rainbow",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/kiwi/kiwi_550006.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/kiwi/kiwi_550006.png",
    "text": ""
   },
   {
    "id": 550005,
    "name": "Healthbar Cleanup: Reset Color",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/kiwi/kiwi_550005.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/kiwi/kiwi_550005.png",
    "text": ""
   },
   {
    "id": 550007,
    "name": "Party Favor",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/kiwi/kiwi_550007.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/kiwi/kiwi_550007.png",
    "text": ""
   },
   {
    "id": 226668,
    "name": "Ultra Hydra",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/kiwi/aram_ultimatehydra_64.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/kiwi/aram_ultimatehydra_64.png",
    "text": "200 Attack Damage\n 25 Ability Haste\n 25 Lethality\n 1000 Health\n 15% Omnivamp\n\n Ultra Hydra (0s)\nOn active, enhance your next basic attack to deal physical damage to enemies around you and to enemies behind the target. Ul"
   },
   {
    "id": 223069,
    "name": "Void Immolation",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/223069_kiwi_voidimmolation.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/223069_kiwi_voidimmolation.png",
    "text": "1000 Health\n 100 Armor\n 80 Magic Resist\n 25 Ability Haste\n 200% Base Health Regen\n\nImmolate\nAfter taking or dealing damage, deal magic damage per second to nearby enemies for 5 seconds. \n\nDesolate\nKilling an enemy deals "
   }
  ],
@@ -142,7 +142,7 @@ window.GUIDE_DATA = {
    "augmentId": 2108,
    "tier": "Silver",
    "inPool": true,
-   "icon": "https://raw.communitydragon.org/latest/game/assets/ux/cherry/augments/icons/firstaidkit_large.png",
+   "icon": "/assets/cd/latest/game/assets/ux/cherry/augments/icons/firstaidkit_large.png",
    "milestones": [
     {
      "need": 3000,
@@ -158,7 +158,7 @@ window.GUIDE_DATA = {
    "augmentId": 2103,
    "tier": "Gold",
    "inPool": true,
-   "icon": "https://raw.communitydragon.org/latest/game/assets/ux/cherry/augments/icons/skilledsniper_large.png",
+   "icon": "/assets/cd/latest/game/assets/ux/cherry/augments/icons/skilledsniper_large.png",
    "milestones": [
     {
      "need": 15,
@@ -176,7 +176,7 @@ window.GUIDE_DATA = {
    "augmentId": 2102,
    "tier": "Gold",
    "inPool": true,
-   "icon": "https://raw.communitydragon.org/latest/game/assets/ux/kiwi/augments/icons/shakennotstirred_large.png",
+   "icon": "/assets/cd/latest/game/assets/ux/kiwi/augments/icons/shakennotstirred_large.png",
    "milestones": [
     {
      "need": 1500,
@@ -202,7 +202,7 @@ window.GUIDE_DATA = {
    "augmentId": 2100,
    "tier": "Gold",
    "inPool": true,
-   "icon": "https://raw.communitydragon.org/latest/game/assets/ux/kiwi/augments/icons/genericabilityaugmenticon_gold.png",
+   "icon": "/assets/cd/latest/game/assets/ux/kiwi/augments/icons/genericabilityaugmenticon_gold.png",
    "milestones": [
     {
      "need": 10,
@@ -223,7 +223,7 @@ window.GUIDE_DATA = {
    "augmentId": 2116,
    "tier": "Gold",
    "inPool": true,
-   "icon": "https://raw.communitydragon.org/latest/game/assets/ux/cherry/augments/icons/lightemup_large.png",
+   "icon": "/assets/cd/latest/game/assets/ux/cherry/augments/icons/lightemup_large.png",
    "milestones": [
     {
      "need": 10,
@@ -239,7 +239,7 @@ window.GUIDE_DATA = {
    "augmentId": 1152,
    "tier": "Gold",
    "inPool": true,
-   "icon": "https://raw.communitydragon.org/latest/game/assets/ux/cherry/augments/icons/quest_steelyourheart_large.png",
+   "icon": "/assets/cd/latest/game/assets/ux/cherry/augments/icons/quest_steelyourheart_large.png",
    "milestones": [
     {
      "need": 300,
@@ -255,7 +255,7 @@ window.GUIDE_DATA = {
    "augmentId": 1361,
    "tier": "Prismatic",
    "inPool": true,
-   "icon": "https://raw.communitydragon.org/latest/game/assets/ux/kiwi/augments/icons/quest_voidimmolation_large.png",
+   "icon": "/assets/cd/latest/game/assets/ux/kiwi/augments/icons/quest_voidimmolation_large.png",
    "milestones": [
     {
      "need": 2,
@@ -271,7 +271,7 @@ window.GUIDE_DATA = {
    "augmentId": 2055,
    "tier": "Prismatic",
    "inPool": true,
-   "icon": "https://raw.communitydragon.org/latest/game/assets/ux/cherry/augments/icons/aim_for_the_head_large.png",
+   "icon": "/assets/cd/latest/game/assets/ux/cherry/augments/icons/aim_for_the_head_large.png",
    "milestones": [
     {
      "need": 50,
@@ -312,7 +312,7 @@ window.GUIDE_DATA = {
    "augmentId": 2046,
    "tier": "Prismatic",
    "inPool": true,
-   "icon": "https://raw.communitydragon.org/latest/game/assets/ux/kiwi/augments/icons/poroking_large.png",
+   "icon": "/assets/cd/latest/game/assets/ux/kiwi/augments/icons/poroking_large.png",
    "milestones": [
     {
      "need": 5,
@@ -375,7 +375,7 @@ window.GUIDE_DATA = {
    "augmentId": 2141,
    "tier": "Prismatic",
    "inPool": true,
-   "icon": "https://raw.communitydragon.org/latest/game/assets/ux/kiwi/augments/icons/ultrahydra_large.png",
+   "icon": "/assets/cd/latest/game/assets/ux/kiwi/augments/icons/ultrahydra_large.png",
    "milestones": [
     {
      "need": 3,
@@ -391,7 +391,7 @@ window.GUIDE_DATA = {
    "augmentId": 1154,
    "tier": "Prismatic",
    "inPool": true,
-   "icon": "https://raw.communitydragon.org/latest/game/assets/ux/kiwi/augments/icons/quest_urfschampion_large.png",
+   "icon": "/assets/cd/latest/game/assets/ux/kiwi/augments/icons/quest_urfschampion_large.png",
    "milestones": [
     {
      "need": 18,
@@ -407,7 +407,7 @@ window.GUIDE_DATA = {
    "augmentId": 1156,
    "tier": "Prismatic",
    "inPool": true,
-   "icon": "https://raw.communitydragon.org/latest/game/assets/ux/cherry/augments/icons/quest_woogletswitchcap_large.png",
+   "icon": "/assets/cd/latest/game/assets/ux/cherry/augments/icons/quest_woogletswitchcap_large.png",
    "milestones": [
     {
      "need": 2,
@@ -462,7 +462,7 @@ window.GUIDE_DATA = {
      "reward": false
     }
    ],
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/challenges/config/101101/tokens/challenger.png"
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/challenges/config/101101/tokens/challenger.png"
   },
   {
    "id": 101102,
@@ -477,7 +477,7 @@ window.GUIDE_DATA = {
      "reward": false
     }
    ],
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/challenges/config/101102/tokens/master.png"
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/challenges/config/101102/tokens/master.png"
   },
   {
    "id": 101103,
@@ -522,7 +522,7 @@ window.GUIDE_DATA = {
      "reward": false
     }
    ],
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/challenges/config/101103/tokens/challenger.png"
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/challenges/config/101103/tokens/challenger.png"
   },
   {
    "id": 101104,
@@ -567,7 +567,7 @@ window.GUIDE_DATA = {
      "reward": false
     }
    ],
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/challenges/config/101104/tokens/master.png"
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/challenges/config/101104/tokens/master.png"
   },
   {
    "id": 101105,
@@ -612,7 +612,7 @@ window.GUIDE_DATA = {
      "reward": false
     }
    ],
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/challenges/config/101105/tokens/master.png"
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/challenges/config/101105/tokens/master.png"
   },
   {
    "id": 101106,
@@ -652,7 +652,7 @@ window.GUIDE_DATA = {
      "reward": false
     }
    ],
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/challenges/config/101106/tokens/challenger.png"
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/challenges/config/101106/tokens/challenger.png"
   },
   {
    "id": 101107,
@@ -707,7 +707,7 @@ window.GUIDE_DATA = {
      "reward": false
     }
    ],
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/challenges/config/101107/tokens/challenger.png"
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/challenges/config/101107/tokens/challenger.png"
   },
   {
    "id": 101108,
@@ -747,7 +747,7 @@ window.GUIDE_DATA = {
      "reward": false
     }
    ],
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/challenges/config/101108/tokens/challenger.png"
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/challenges/config/101108/tokens/challenger.png"
   },
   {
    "id": 101201,
@@ -802,7 +802,7 @@ window.GUIDE_DATA = {
      "reward": false
     }
    ],
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/challenges/config/101201/tokens/challenger.png"
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/challenges/config/101201/tokens/challenger.png"
   },
   {
    "id": 101202,
@@ -857,7 +857,7 @@ window.GUIDE_DATA = {
      "reward": false
     }
    ],
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/challenges/config/101202/tokens/challenger.png"
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/challenges/config/101202/tokens/challenger.png"
   },
   {
    "id": 101203,
@@ -912,7 +912,7 @@ window.GUIDE_DATA = {
      "reward": false
     }
    ],
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/challenges/config/101203/tokens/challenger.png"
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/challenges/config/101203/tokens/challenger.png"
   },
   {
    "id": 101204,
@@ -957,7 +957,7 @@ window.GUIDE_DATA = {
      "reward": false
     }
    ],
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/challenges/config/101204/tokens/master.png"
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/challenges/config/101204/tokens/master.png"
   },
   {
    "id": 101205,
@@ -1007,7 +1007,7 @@ window.GUIDE_DATA = {
      "reward": false
     }
    ],
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/challenges/config/101205/tokens/challenger.png"
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/challenges/config/101205/tokens/challenger.png"
   },
   {
    "id": 101206,
@@ -1022,7 +1022,7 @@ window.GUIDE_DATA = {
      "reward": true
     }
    ],
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/challenges/config/101206/tokens/bronze.png"
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/challenges/config/101206/tokens/bronze.png"
   },
   {
    "id": 101301,
@@ -1067,7 +1067,7 @@ window.GUIDE_DATA = {
      "reward": false
     }
    ],
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/challenges/config/101301/tokens/master.png"
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/challenges/config/101301/tokens/master.png"
   },
   {
    "id": 101302,
@@ -1122,7 +1122,7 @@ window.GUIDE_DATA = {
      "reward": false
     }
    ],
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/challenges/config/101302/tokens/challenger.png"
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/challenges/config/101302/tokens/challenger.png"
   },
   {
    "id": 101303,
@@ -1177,7 +1177,7 @@ window.GUIDE_DATA = {
      "reward": false
     }
    ],
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/challenges/config/101303/tokens/challenger.png"
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/challenges/config/101303/tokens/challenger.png"
   },
   {
    "id": 101304,
@@ -1217,7 +1217,7 @@ window.GUIDE_DATA = {
      "reward": false
     }
    ],
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/challenges/config/101304/tokens/challenger.png"
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/challenges/config/101304/tokens/challenger.png"
   },
   {
    "id": 101305,
@@ -1272,7 +1272,7 @@ window.GUIDE_DATA = {
      "reward": false
     }
    ],
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/challenges/config/101305/tokens/challenger.png"
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/challenges/config/101305/tokens/challenger.png"
   },
   {
    "id": 101306,
@@ -1297,7 +1297,7 @@ window.GUIDE_DATA = {
      "reward": false
     }
    ],
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/challenges/config/101306/tokens/master.png"
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/challenges/config/101306/tokens/master.png"
   },
   {
    "id": 101307,
@@ -1352,7 +1352,7 @@ window.GUIDE_DATA = {
      "reward": false
     }
    ],
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/challenges/config/101307/tokens/challenger.png"
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/challenges/config/101307/tokens/challenger.png"
   }
  ],
  "rules": {
@@ -1402,49 +1402,49 @@ window.GUIDE_DATA = {
    "name": "Barrier",
    "cooldown": 180,
    "text": "Gain a brief Shield.",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/data/spells/icons2d/summonerbarrier.png"
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/data/spells/icons2d/summonerbarrier.png"
   },
   {
    "name": "Clarity",
    "cooldown": 240,
    "text": "Restores your and ally champion's Mana.",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/data/spells/icons2d/summonermana.png"
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/data/spells/icons2d/summonermana.png"
   },
   {
    "name": "Cleanse",
    "cooldown": 240,
    "text": "Removes all disables (excluding suppression and airborne) and summoner spell debuffs affecting your champion and gives Tenacity.",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/data/spells/icons2d/summoner_boost.png"
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/data/spells/icons2d/summoner_boost.png"
   },
   {
    "name": "Flash",
    "cooldown": 300,
    "text": "Teleports you a short distance toward your cursor.",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/data/spells/icons2d/summoner_flash.png"
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/data/spells/icons2d/summoner_flash.png"
   },
   {
    "name": "Ghost",
    "cooldown": 240,
    "text": "Gain Move Speed and ignore unit collision for the duration.",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/data/spells/icons2d/summoner_haste.png"
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/data/spells/icons2d/summoner_haste.png"
   },
   {
    "name": "Heal",
    "cooldown": 240,
    "text": "Restores Health and grants Move Speed to you and target allied champion.",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/data/spells/icons2d/summoner_heal.png"
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/data/spells/icons2d/summoner_heal.png"
   },
   {
    "name": "Ignite",
    "cooldown": 180,
    "text": "Deals true damage over time to target enemy champion and reduces healing effects on them for the duration.",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/data/spells/icons2d/summonerignite.png"
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/data/spells/icons2d/summonerignite.png"
   },
   {
    "name": "Mark",
    "cooldown": 80,
    "text": "Throw a snowball in a straight line at your enemies. If it hits an enemy, they become marked, granting True Sight, and your champion can quickly travel to the marked target as a follow up.",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/data/spells/icons2d/summoner_mark.png"
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/data/spells/icons2d/summoner_mark.png"
   }
  ],
  "spellAugments": [
@@ -1452,21 +1452,21 @@ window.GUIDE_DATA = {
    "name": "Poro Stampede",
    "id": 2046,
    "tier": "Prismatic",
-   "icon": "https://raw.communitydragon.org/latest/game/assets/ux/kiwi/augments/icons/questporocharge_small.png",
+   "icon": "/assets/cd/latest/game/assets/ux/kiwi/augments/icons/questporocharge_small.png",
    "text": "QUEST: Gather Poro Snax and feed Poros.\n\nREWARD: Gain the Poro Charge Summoner Spell, which launches waves of Poros at the enemy team. Additional waves unlock per Quest Level."
   },
   {
    "name": "Dimension Shift",
    "id": 2063,
    "tier": "Prismatic",
-   "icon": "https://raw.communitydragon.org/latest/game/assets/ux/kiwi/augments/icons/whenthedarknesscomes_small.png",
+   "icon": "/assets/cd/latest/game/assets/ux/kiwi/augments/icons/whenthedarknesscomes_small.png",
    "text": "Gain the When the Darkness Comes Summoner Spell. Create a zone that transports everyone inside of it to another dimension."
   },
   {
    "name": "Flash 2",
    "id": 1348,
    "tier": "Silver",
-   "icon": "https://raw.communitydragon.org/latest/game/assets/ux/kiwi/augments/icons/flash2_small.png",
+   "icon": "/assets/cd/latest/game/assets/ux/kiwi/augments/icons/flash2_small.png",
    "text": "Gain a second Flash Summoner Spell and Summoner Haste."
   }
  ],
@@ -1474,7 +1474,7 @@ window.GUIDE_DATA = {
   {
    "id": 3003,
    "name": "Archangel's Staff",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3003_mage_t3_archangelstaff.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3003_mage_t3_archangelstaff.png",
    "changes": [
     {
      "name": "ManaPerCharge",
@@ -1486,7 +1486,7 @@ window.GUIDE_DATA = {
   {
    "id": 6333,
    "name": "Death's Dance",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/6333_fighter_t3_deathsdance.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/6333_fighter_t3_deathsdance.png",
    "changes": [
     {
      "name": "BonusADRatio",
@@ -1498,7 +1498,7 @@ window.GUIDE_DATA = {
   {
    "id": 6692,
    "name": "Eclipse",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/6692_assassin_t4_eclipse.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/6692_assassin_t4_eclipse.png",
    "changes": [
     {
      "name": "MeleeShieldADRatio",
@@ -1510,7 +1510,7 @@ window.GUIDE_DATA = {
   {
    "id": 3814,
    "name": "Edge of Night",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3814_assassin_t3_edgeofnight.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3814_assassin_t3_edgeofnight.png",
    "changes": [
     {
      "name": "Cooldown",
@@ -1522,7 +1522,7 @@ window.GUIDE_DATA = {
   {
    "id": 1521,
    "name": "Fortification",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/34.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/34.png",
    "changes": [
     {
      "name": "DamageReductionPer",
@@ -1539,7 +1539,7 @@ window.GUIDE_DATA = {
   {
    "id": 3084,
    "name": "Heartsteel",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3084_tank_t4_heartsteel.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3084_tank_t4_heartsteel.png",
    "changes": [
     {
      "name": "DamageToMaxHealthRatio",
@@ -1551,7 +1551,7 @@ window.GUIDE_DATA = {
   {
    "id": 3155,
    "name": "Hexdrinker",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3155_fighter_t2_hexdrinker.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3155_fighter_t2_hexdrinker.png",
    "changes": [
     {
      "name": "Cooldown",
@@ -1563,7 +1563,7 @@ window.GUIDE_DATA = {
   {
    "id": 6697,
    "name": "Hubris",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/6697_hubris.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/6697_hubris.png",
    "changes": [
     {
      "name": "ADPerStatue",
@@ -1585,7 +1585,7 @@ window.GUIDE_DATA = {
   {
    "id": 6673,
    "name": "Immortal Shieldbow",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/6673_marksman_t4_crimsonshieldbow.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/6673_marksman_t4_crimsonshieldbow.png",
    "changes": [
     {
      "name": "Cooldown",
@@ -1597,7 +1597,7 @@ window.GUIDE_DATA = {
   {
    "id": 6672,
    "name": "Kraken Slayer",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/6672_marksman_t4_behemothslayer.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/6672_marksman_t4_behemothslayer.png",
    "changes": [
     {
      "name": "RangedDamageMultiplier",
@@ -1609,7 +1609,7 @@ window.GUIDE_DATA = {
   {
    "id": 6653,
    "name": "Liandry's Torment",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/6653_mage_t4_liandrysanguish.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/6653_mage_t4_liandrysanguish.png",
    "changes": [
     {
      "name": "BurnPercentHealthDamage",
@@ -1621,7 +1621,7 @@ window.GUIDE_DATA = {
   {
    "id": 3190,
    "name": "Locket of the Iron Solari",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3190_enchanter_t4_locketofironsolari.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3190_enchanter_t4_locketofironsolari.png",
    "changes": [
     {
      "name": "Cooldown",
@@ -1633,7 +1633,7 @@ window.GUIDE_DATA = {
   {
    "id": 3118,
    "name": "Malignance",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3118_malignance.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3118_malignance.png",
    "changes": [
     {
      "name": "APRatio",
@@ -1650,7 +1650,7 @@ window.GUIDE_DATA = {
   {
    "id": 3004,
    "name": "Manamune",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3004_marksman_t3_manamune.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3004_marksman_t3_manamune.png",
    "changes": [
     {
      "name": "ManaPerCharge",
@@ -1662,7 +1662,7 @@ window.GUIDE_DATA = {
   {
    "id": 3156,
    "name": "Maw of Malmortius",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3156_fighter_t3_mawofmalmortius.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3156_fighter_t3_mawofmalmortius.png",
    "changes": [
     {
      "name": "Cooldown",
@@ -1674,7 +1674,7 @@ window.GUIDE_DATA = {
   {
    "id": 2525,
    "name": "Protoplasm Harness",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/2525_tanklifeline.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/2525_tanklifeline.png",
    "changes": [
     {
      "name": "Cooldown",
@@ -1686,7 +1686,7 @@ window.GUIDE_DATA = {
   {
    "id": 3143,
    "name": "Randuin's Omen",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3143_tank_t3_randuinsomen.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3143_tank_t3_randuinsomen.png",
    "changes": [
     {
      "name": "Cooldown",
@@ -1698,7 +1698,7 @@ window.GUIDE_DATA = {
   {
    "id": 3074,
    "name": "Ravenous Hydra",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3074_fighter_t3_ravenoushydra.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3074_fighter_t3_ravenoushydra.png",
    "changes": [
     {
      "name": "ActiveADRatio",
@@ -1710,7 +1710,7 @@ window.GUIDE_DATA = {
   {
    "id": 6657,
    "name": "Rod of Ages",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/6657_mage_t4_rodofages.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/6657_mage_t4_rodofages.png",
    "changes": [
     {
      "name": "SecondsPerStack",
@@ -1722,7 +1722,7 @@ window.GUIDE_DATA = {
   {
    "id": 3040,
    "name": "Seraph's Embrace",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3048_mage_t3_seraphsembrace.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3048_mage_t3_seraphsembrace.png",
    "changes": [
     {
      "name": "LifelineCooldown",
@@ -1739,7 +1739,7 @@ window.GUIDE_DATA = {
   {
    "id": 2065,
    "name": "Shurelya's Battlesong",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/2065_tank_t4_shurelyasbattlesong.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/2065_tank_t4_shurelyasbattlesong.png",
    "changes": [
     {
      "name": "ActiveCooldown",
@@ -1756,7 +1756,7 @@ window.GUIDE_DATA = {
   {
    "id": 3087,
    "name": "Statikk Shiv",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3087_statikk_shiv.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3087_statikk_shiv.png",
    "changes": [
     {
      "name": "ChainDamage",
@@ -1768,7 +1768,7 @@ window.GUIDE_DATA = {
   {
    "id": 3053,
    "name": "Sterak's Gage",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3053_steraks_gage.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3053_steraks_gage.png",
    "changes": [
     {
      "name": "BaseShieldRatio",
@@ -1785,7 +1785,7 @@ window.GUIDE_DATA = {
   {
    "id": 6631,
    "name": "Stridebreaker",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/6631_fighter_t4_stridebreaker.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/6631_fighter_t4_stridebreaker.png",
    "changes": [
     {
      "name": "ADRatio",
@@ -1802,7 +1802,7 @@ window.GUIDE_DATA = {
   {
    "id": 3070,
    "name": "Tear of the Goddess",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3070_all_t1_tearofthegoddess.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3070_all_t1_tearofthegoddess.png",
    "changes": [
     {
      "name": "ManaPerCharge",
@@ -1814,7 +1814,7 @@ window.GUIDE_DATA = {
   {
    "id": 1503,
    "name": "Warden's Eye",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/096_eye_of_the_observer.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/096_eye_of_the_observer.png",
    "changes": [
     {
      "name": "TrueSightRadius",
@@ -1826,7 +1826,7 @@ window.GUIDE_DATA = {
   {
    "id": 3083,
    "name": "Warmog's Armor",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3083_tank_t3_warmogs.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3083_tank_t3_warmogs.png",
    "changes": [
     {
      "name": "OOCTimer",
@@ -1838,7 +1838,7 @@ window.GUIDE_DATA = {
   {
    "id": 3119,
    "name": "Winter's Approach",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3119_wintersapproach.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3119_wintersapproach.png",
    "changes": [
     {
      "name": "ManaPerCharge",
@@ -1850,7 +1850,7 @@ window.GUIDE_DATA = {
   {
    "id": 3142,
    "name": "Youmuu's Ghostblade",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3142_assassin_t3_youmuusghostblade.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3142_assassin_t3_youmuusghostblade.png",
    "changes": [
     {
      "name": "MeleeItemCalcValueB",
@@ -1872,7 +1872,7 @@ window.GUIDE_DATA = {
   {
    "id": 3032,
    "name": "Yun Tal Wildarrows",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3032_yuntalwildarrows.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3032_yuntalwildarrows.png",
    "changes": [
     {
      "name": "CritPerStackMelee",
