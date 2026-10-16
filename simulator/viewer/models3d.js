@@ -1,14 +1,12 @@
 // 3D champion models for the fight replay (three.js). Each fighter in the arena is an
 // animated model posed from the simulated timeline (cast, attack, stunned, death, idle), with
 // each ability's clips in order and idle variations (replay-data/anims.json). Models come from
-// replay-data/models/; a champion with no model there loads the full model at run time instead,
-// picking its clips here the same way. If WebGL or a model is missing,
+// replay-data/models/ when built there, else the website's /assets/models/. If WebGL or a model is missing,
 // replay.js keeps drawing the 2D portraits.
 import * as THREE from "three";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 import { MeshoptDecoder } from "three/addons/libs/meshopt_decoder.module.js";
 import { clone as cloneSkinned } from "three/addons/utils/SkeletonUtils.js";
-import { pickClips } from "./clips.js";
 
 const DATA = "replay-data/models/";
 const BUST = "?v=" + (window.REPLAY_VERSION || "0");
@@ -16,29 +14,23 @@ const HEIGHT = 2.6;              // world units for a champion of average size
 const FALLBACK = { Q: ["attack"], W: ["attack"], E: ["attack"], R: ["attack"], crit: ["attack"],
   stunned: ["idle"], death: ["idle"], attack: ["idle"], run: ["idle"] };
 
-let manifest = null;
-const manifestReady = fetch(DATA + "models.json" + BUST).then((r) => (r.ok ? r.json() : {})).catch(() => ({}))
-  .then((m) => { manifest = {}; for (const [k, v] of Object.entries(m)) manifest[k.toLowerCase()] = v; });
-const keysReady = fetch("replay-data/index.json" + BUST).then((r) => r.json())
-  .then((idx) => new Map(idx.champions.map((c) => [c.id.toLowerCase(), { id: c.id, key: c.key }]))).catch(() => new Map());
+// Models built next to the page (replay-data/models/) win; otherwise the website's copies in /assets/models/.
+const SITE = "/assets/models/";
+let manifest = null, modelBase = DATA;
+const readManifest = (dir) => fetch(dir + "models.json" + BUST).then((r) => (r.ok ? r.json() : null)).catch(() => null);
+const manifestReady = readManifest(DATA).then((m) => m || (modelBase = SITE, readManifest(SITE))).then((m) => {
+  manifest = {};
+  for (const [k, v] of Object.entries(m || {})) manifest[k.toLowerCase()] = v;
+});
 // How each champion animates:
 // idle variations, death, and each ability's clips in order, one list per successive cast.
 let anims = {};
 const animsReady = fetch("replay-data/anims.json" + BUST).then((r) => (r.ok ? r.json() : {})).catch(() => ({}))
   .then((a) => { for (const [k, v] of Object.entries(a)) anims[k.toLowerCase()] = v; });
-const SOURCE = "https://cdn.modelviewer.lol/lol/models";
 const FADE = 0.15;               // seconds to blend from one clip into the next
 const LOOPS = /loop|channel|_idle$|hold/i;
 const loader = new GLTFLoader().setMeshoptDecoder(MeshoptDecoder);
 
-function loadRemote(key) {
-  return keysReady.then((keys) => {
-    const c = keys.get(key);
-    if (!c) return null;
-    return loader.loadAsync(`${SOURCE}/${key}/${c.key * 1000}/model.glb`)
-      .then((g) => ({ gltf: g, entry: pickClips(g.animations.map((a) => a.name)) }));
-  });
-}
 const gltfs = new Map();         // champion id (lower case) -> Promise<gltf | null>
 
 function loadChampion(id) {
@@ -46,15 +38,15 @@ function loadChampion(id) {
   if (!gltfs.has(key)) {
     gltfs.set(key, Promise.all([manifestReady, animsReady]).then(() => {
       const entry = manifest[key];
-      if (!entry) return loadRemote(key).then((g) => g && { ...g, anim: anims[key] }).catch(() => null);
+      if (!entry) return null;
       // A ".txt" file is the same .glb in base64, for hosts that only serve text.
       const load = entry.file.endsWith(".txt")
-        ? fetch(DATA + entry.file + BUST).then((r) => r.text()).then((b64) => {
+        ? fetch(modelBase + entry.file + BUST).then((r) => r.text()).then((b64) => {
           const bin = atob(b64.trim()), bytes = new Uint8Array(bin.length);
           for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
-          return loader.parseAsync(bytes.buffer, DATA);
+          return loader.parseAsync(bytes.buffer, modelBase);
         })
-        : loader.loadAsync(DATA + entry.file + BUST);
+        : loader.loadAsync(modelBase + entry.file + BUST);
       return load.then((g) => ({ gltf: g, entry, anim: anims[key] })).catch(() => null);
     }));
   }

@@ -29,7 +29,7 @@
   let index = null, traces = null, sprite = null, byId = new Map();
   // Game art loaded at run time (not in the repo); a page that can't reach it falls back to
   // copies in replay-data/art/ when they're there.
-  const CDRAGON = "https://raw.communitydragon.org/latest/";
+  const CDRAGON = "/assets/cd/latest/";
   function loadImage(urls, done) {
     if (!urls.length) return;
     const im = new Image();
@@ -325,7 +325,7 @@
     let im = ddIcons.get(rel);
     if (!im) {
       im = new Image(); im.crossOrigin = "anonymous";
-      im.src = (index.icon_base || "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/") + rel;
+      im.src = (index.icon_base || CDRAGON + "plugins/rcp-be-lol-game-data/global/default/") + rel;
       ddIcons.set(rel, im);
     }
     return im;
