@@ -152,7 +152,7 @@ export default function Home() {
           </div>
           <div className="rank links">
             {[
-              { href: "/stats", label: "My Stats", body: "Your own games, synced from the League client" },
+              { href: "/stats", label: "My Stats", body: "Your own Mayhem games" },
               ...tools.map((t) => ({ href: t.href, label: t.label, body: t.body })),
               { href: "/pbe", label: "PBE", body: "Every Season 3 change on the test server" },
             ].map((l) => (

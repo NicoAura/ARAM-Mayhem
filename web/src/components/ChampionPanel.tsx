@@ -38,7 +38,7 @@ export default function ChampionPanel({ alias, onClose }: { alias: string; onClo
     fetch(`${GAME_DATA}/v1/champions/${id}.json`)
       .then((r) => (r.ok ? r.json() : Promise.reject(new Error(String(r.status)))))
       .then((c: Champ) => live && setChamp(c))
-      .catch(() => live && setError("Couldn't load this champion's client files."));
+      .catch(() => live && setError("Couldn't load this champion."));
     return () => {
       live = false;
     };
