@@ -50,6 +50,24 @@ champion's games in a patch are estimated as pick rate × window days, which ass
 about the same number of games each day. `est_game_share` is the champion's share of all
 champion slots.
 
+## Champion builds
+
+`builds.py` fetches each champion's Mayhem build page data (`fuwen_hero_rank?championid=N`)
+and writes `builds/<champion_id>.json`, plus `builds/index.json` listing them. The API only
+serves the newest day, so the daily run overwrites these files. Rates are fractions (0.52 = 52%).
+
+| Key | What it holds |
+| --- | --- |
+| `augments.all/silver/gold/prismatic` | Most picked augments: `id`, `pick_rate`, `grade` (S/A/B). No win rate is published here |
+| `skills[]` | Skill max orders (`max_order` like Q,E,W) with `pick_rate`, `win_rate`, and `orders[]`: the common level 1 to 15 sequences |
+| `items.starting`, `items.boots` | Starting items and boots: `items` (ids), `pick_rate`, `win_rate` |
+| `items.core` | Three-item cores |
+| `items.other` | Other finished items, one each |
+| `items.full_builds` | Most common six-item builds |
+| `partners[]` | Best teammates: `id`, `win_rate`, `pick_rate` |
+
+Mayhem has no rune pages, and this endpoint has no summoner spell data.
+
 ## Filtering by patch, month or dates
 
 `history/by_patch.csv` and `history/by_month.csv` are ready-made splits. For anything

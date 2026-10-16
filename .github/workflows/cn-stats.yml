@@ -22,6 +22,8 @@ jobs:
           python-version: "3.12"
       - name: Fetch current snapshot
         run: python3 data/cn/fetch_cn.py
+      - name: Fetch each champion's builds
+        run: python3 data/cn/builds.py
       - name: Append new days and rebuild history
         run: python3 data/cn/history.py
       - name: Commit changes
