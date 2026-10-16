@@ -225,3 +225,4 @@ __marimo__/
 # Personal match archives
 dashboard/data/
 !web/public/assets/lib/
+!web/public/assets/lib/three-0.160.0/build/

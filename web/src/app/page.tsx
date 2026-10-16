@@ -3,7 +3,7 @@ import { text } from "@/lib/content";
 import { statsDate, counts, augmentPool, kitchenBuilds, livePatch, liveTiers, topAugments, topDps } from "@/lib/highlights";
 import { AugmentRoll, ChampionJump, KitchenPick, TierSnapshot } from "@/components/HomeWidgets";
 import { BETA } from "@/lib/beta";
-import { navPages } from "@/lib/tabs";
+import { KITCHEN, navPages } from "@/lib/tabs";
 
 // eslint-disable-next-line @next/next/no-img-element
 const Icon = ({ src }: { src: string }) => <img className="icon" src={src} alt="" width={24} height={24} loading="lazy" />;
@@ -82,8 +82,8 @@ export default function Home() {
         {builds.length > 0 && (
           <section className="card span-5 feature">
             <div className="card-head">
-              <h2>From The Kitchen</h2>
-              <Link href="/tools/kitchen">More →</Link>
+              <h2>Cook builds from The Lab</h2>
+              <Link href={KITCHEN}>More →</Link>
             </div>
             <KitchenPick builds={builds} />
           </section>

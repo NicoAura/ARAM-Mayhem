@@ -7,9 +7,11 @@ const nextConfig: NextConfig = {
       ["/china", "/tier-list"],
       ["/simulator", "/tools/simulator"],
       ["/tools/champions", "/champions"],
-      ["/tools/guide", "/guide"],
+      ["/tools/guide", "/info"],
+      ["/guide", "/info"],
       ["/tools/fun", "/tools/lab"],
-      ["/tools/cook-builds", "/tools/kitchen"],
+      ["/tools/cook-builds", "/tools/lab#kitchen"],
+      ["/tools/kitchen", "/tools/lab#kitchen"],
     ].map(([source, destination]) => ({ source, destination, permanent: true }));
   },
 };

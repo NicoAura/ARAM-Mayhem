@@ -8,7 +8,7 @@ Where things land (the full map, for the other tabs, is /mnt/project-files/websi
   cdn.modelviewer.lol/lol/models/<id>/<n>/model.glb -> /assets/models/<id>/<n>/model.glb + models.json
                                                   (slimmed: the replay's clips only, 512 px WebP textures)
   Google Fonts (Bricolage Grotesque, Geist, Geist Mono) -> /assets/fonts/fonts.css
-  three.js 0.160.0 (the replay's 3D)           -> /assets/lib/three@0.160.0/{build,examples/jsm}/...
+  three.js 0.160.0 (the replay's 3D)           -> /assets/lib/three-0.160.0/{build,examples/jsm}/...
 Player profile icons (5,000+) aren't mirrored; the site serves them at /assets/profile-icon/<id>.jpg.
 
 What gets fetched: every such URL written anywhere in the repo's pages and data, plus the sets pages build
@@ -191,7 +191,7 @@ def fetch_three():
         if rel in seen:
             continue
         seen.add(rel)
-        dst = os.path.join(OUT, "lib", "three@0.160.0", rel)
+        dst = os.path.join(OUT, "lib", "three-0.160.0", rel)
         if os.path.exists(dst):
             body = open(dst, "rb").read()
         else:
@@ -203,7 +203,7 @@ def fetch_three():
             spec = spec.decode()
             if spec.startswith("."):
                 todo.append(os.path.normpath(os.path.join(os.path.dirname(rel), spec)))
-    print(f"three.js: {len(seen)} files (import map: \"three\" -> /assets/lib/three@0.160.0/build/three.module.js)")
+    print(f"three.js: {len(seen)} files (import map: \"three\" -> /assets/lib/three-0.160.0/build/three.module.js)")
 
 
 def replay_index():

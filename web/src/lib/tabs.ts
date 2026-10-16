@@ -16,13 +16,17 @@ export type ToolTab = Tab & { slug: string; entry: string; order: number; folder
 const SKIP = new Set(["web", "node_modules", ".git", ".github"]);
 
 // Where each embedded folder (by slug) is published. Anything not listed goes in the Tools menu.
+// The Kitchen's cook builds are part of The Lab now (KITCHEN), so its folder is no tab of its own.
+export const KITCHEN = "/tools/lab#kitchen";
+const HIDDEN = new Set(["cook-builds"]);
 const ROUTES: Record<string, string> = {
   champions: "/champions",
-  guide: "/guide",
+  guide: "/info",
   fun: "/tools/lab",
-  "cook-builds": "/tools/kitchen",
 };
 export const toolHref = (slug: string) => ROUTES[slug] ?? `/tools/${slug}`;
+// Tab names the site sets regardless of the folder's own label.
+const LABELS: Record<string, string> = { guide: "Info" };
 
 export function discoverToolTabs(): ToolTab[] {
   const root = repoPath("");
@@ -32,14 +36,14 @@ export function discoverToolTabs(): ToolTab[] {
       if (!d.isDirectory() || d.name.startsWith(".") || SKIP.has(d.name)) continue;
       const folder = join(dir, d.name);
       const manifest = join(folder, "site-tab.json");
-      if (existsSync(manifest)) {
+      if (existsSync(manifest) && !HIDDEN.has(d.name)) {
         try {
           const m = JSON.parse(readFileSync(manifest, "utf8"));
           const slug = String(m.slug ?? d.name).toLowerCase().replace(/[^a-z0-9-]+/g, "-");
           found.push({
             slug,
             href: toolHref(slug),
-            label: String(m.label ?? d.name),
+            label: LABELS[slug] ?? String(m.label ?? d.name),
             body: String(m.description ?? ""),
             entry: String(m.entry ?? "index.html"),
             order: Number(m.order ?? 100),
@@ -64,15 +68,14 @@ const pick = (href: string): NavItem[] => {
   return t ? [{ href: t.href, label: t.label, body: t.body }] : [];
 };
 
-/** The header's tabs: Tier List, Champions, Guide, a Tools menu (Simulator, The Lab, The Kitchen, ...), PBE.
- *  My Stats sits behind the account button instead. */
+/** The header's tabs: Tier List, Info, a Tools menu (Simulator, The Lab, The Kitchen, ...), PBE.
+ *  My Stats sits behind the account button; champion pages (/champions#Name) open from the Tier List and search. */
 export function navItems(): NavItem[] {
   const more = discoverToolTabs().filter((t) => t.href.startsWith("/tools/") && t.href !== "/tools/simulator");
   const tools = [...pick("/tools/simulator"), ...more.flatMap((t) => pick(t.href))];
   return [
     ...pick("/tier-list"),
-    ...pick("/champions"),
-    ...pick("/guide"),
+    ...pick("/info"),
     ...(tools.length ? [{ href: "/tools", label: "Tools", children: tools }] : []),
     ...pick("/pbe"),
   ];

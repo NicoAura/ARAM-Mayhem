@@ -1,7 +1,7 @@
 import ToolPage, { toolMetadata } from "@/components/ToolPage";
 
-export const metadata = toolMetadata("/guide");
+export const metadata = toolMetadata("/info");
 
 export default function Page() {
-  return <ToolPage href="/guide" />;
+  return <ToolPage href="/info" />;
 }
