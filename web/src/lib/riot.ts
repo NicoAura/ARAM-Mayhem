@@ -27,7 +27,7 @@ export async function riotFetch<T>(
   path: string,
   revalidate = 300,
 ): Promise<T> {
-  const res = await fetch(`https://${host}.api.riotgames.com${path}`, {
+  const res = await fetch(`https://${PLATFORM_HOST[host as Platform] ?? host}.api.riotgames.com${path}`, {
     headers: { "X-Riot-Token": apiKey() },
     next: { revalidate },
   });
@@ -40,8 +40,9 @@ export async function riotFetch<T>(
 export type Account = { puuid: string; gameName: string; tagLine: string };
 
 export function getAccountByRiotId(region: Region, gameName: string, tagLine: string) {
+  // account-v1 only answers on americas, asia and europe; SEA players' accounts are on asia.
   return riotFetch<Account>(
-    region,
+    region === "sea" ? "asia" : region,
     `/riot/account/v1/accounts/by-riot-id/${encodeURIComponent(gameName)}/${encodeURIComponent(tagLine)}`,
   );
 }
@@ -50,10 +51,13 @@ export function getAccountByRiotId(region: Region, gameName: string, tagLine: st
 export const PLATFORMS = {
   na1: "americas", br1: "americas", la1: "americas", la2: "americas",
   euw1: "europe", eun1: "europe", tr1: "europe", ru: "europe",
+  me1: "europe",
   kr: "asia", jp1: "asia",
-  oc1: "sea", sg2: "sea", tw2: "sea", vn2: "sea",
+  oc1: "sea", sg2: "sea", ph2: "sea", th2: "sea", tw2: "sea", vn2: "sea",
 } as const satisfies Record<string, Region>;
 export type Platform = keyof typeof PLATFORMS;
+// PH and TH merged into the SEA server, so their lookups go to sg2.
+const PLATFORM_HOST: Partial<Record<Platform, string>> = { ph2: "sg2", th2: "sg2" };
 
 export type ChallengeProgress = { challenges: { challengeId: number; level: string; value: number; percentile: number }[] };
 
