@@ -236,7 +236,7 @@
     } else if (single) {
       g.drawImage(single, x, y, size, size);
     } else {
-      g.fillStyle = "#24364a"; g.fillRect(x, y, size, size);
+      g.fillStyle = "#262626"; g.fillRect(x, y, size, size);
     }
     g.restore();
   }
@@ -520,7 +520,7 @@
 
   function floatText(g, text, x, y, alpha, color, size) {
     g.globalAlpha = Math.max(0, Math.min(1, alpha));
-    g.font = `700 ${size}px "Chakra Petch", system-ui, sans-serif`;
+    g.font = `600 ${size}px "Geist Mono", ui-monospace, monospace`;
     g.textAlign = "center";
     g.lineWidth = Math.max(2, size / 6); g.strokeStyle = "rgba(0,0,0,.8)"; g.strokeText(text, x, y);
     g.fillStyle = color; g.fillText(text, x, y);
@@ -536,7 +536,7 @@
     tc.width = Math.round(rect.width * dpr); tc.height = Math.round(rect.height * dpr);
     const W = tc.width, H = tc.height, X = (s) => (s / fight.duration) * W;
     tg.clearRect(0, 0, W, H);
-    tg.fillStyle = "#172331"; tg.fillRect(0, 0, W, H);
+    tg.fillStyle = "#14171b"; tg.fillRect(0, 0, W, H);
     for (const c of fight.cc) { tg.fillStyle = "rgba(179,136,255,.35)"; tg.fillRect(X(c.t), 0, Math.max(2, X(c.a) - X(c.t)), H); }
     // Your HP line.
     tg.strokeStyle = "#f0605a"; tg.lineWidth = 1.5 * dpr; tg.beginPath();
@@ -551,13 +551,13 @@
     tg.fillStyle = "#f4f4f4";
     for (const k of fight.kills) { tg.beginPath(); tg.arc(X(k.t), H * 0.1, 3 * dpr, 0, Math.PI * 2); tg.fill(); }
     if (fight.death) { tg.fillStyle = "#f0605a"; tg.fillRect(X(fight.death.t) - dpr, 0, 2 * dpr, H); }
-    tg.fillStyle = "rgba(143,211,255,.5)"; tg.fillRect(X(fight.engage), 0, dpr, H);
+    tg.fillStyle = "rgba(237,237,237,.45)"; tg.fillRect(X(fight.engage), 0, dpr, H);
   }
   function drawPlayhead() {
     drawTrack();
     const W = tc.width, H = tc.height, x = (t / fight.duration) * W;
     tg.fillStyle = "rgba(10,16,23,.45)"; tg.fillRect(x, 0, W - x, H);
-    tg.fillStyle = "#8fd3ff"; tg.fillRect(x - 1, 0, 3, H);
+    tg.fillStyle = "#ededed"; tg.fillRect(x - 1, 0, 3, H);
   }
   function seek(ev) {
     const r = track.getBoundingClientRect();
