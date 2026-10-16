@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { pageMeta } from "@/lib/meta";
 import Embed from "@/components/Embed";
 import Intro from "@/components/Intro";
 import { text } from "@/lib/content";
@@ -6,7 +7,7 @@ import Pending from "@/components/Pending";
 import RiotIdSignIn from "@/components/RiotIdSignIn";
 import { repoHas } from "@/lib/repo-data";
 
-export const metadata: Metadata = { title: "My Stats · DeepARAM" };
+export const metadata: Metadata = pageMeta("/stats", "My Stats", "Your own ARAM Mayhem games: win rate, champions, augments and recent matches.");
 
 export default function StatsPage() {
   return (

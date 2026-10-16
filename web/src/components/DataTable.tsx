@@ -142,7 +142,11 @@ export default function DataTable({
             <tr>
               <th className="num">#</th>
               {columns.map((c) => (
-                <th key={c.key} className={c.format && !["text", "champion", "augment", "tier"].includes(c.format) ? "num" : ""}>
+                <th
+                  key={c.key}
+                  className={c.format && !["text", "champion", "augment", "tier"].includes(c.format) ? "num" : ""}
+                  aria-sort={c.sortable !== false && sort.key === (c.sortKey ?? c.key) ? (sort.desc ? "descending" : "ascending") : undefined}
+                >
                   {c.sortable === false ? (
                     c.label
                   ) : (
@@ -150,7 +154,6 @@ export default function DataTable({
                       type="button"
                       onClick={() => toggle(c.sortKey ?? c.key)}
                       title={c.hint}
-                      aria-sort={sort.key === (c.sortKey ?? c.key) ? (sort.desc ? "descending" : "ascending") : undefined}
                     >
                       {c.label}
                       {c.hint && <span className="col-hint" aria-hidden="true">?</span>}

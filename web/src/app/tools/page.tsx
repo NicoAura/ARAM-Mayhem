@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
+import { pageMeta } from "@/lib/meta";
 import Link from "next/link";
 import Intro from "@/components/Intro";
 import { BETA } from "@/lib/beta";
 import { navItems } from "@/lib/tabs";
 
-export const metadata: Metadata = { title: "Tools · DeepARAM" };
+export const metadata: Metadata = pageMeta("/tools", "Tools", "ARAM Mayhem simulators, calculators and build experiments.");
 
 // The Tools menu as a page, for phones and for links to /tools.
 export default function ToolsPage() {
