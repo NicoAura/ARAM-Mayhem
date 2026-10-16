@@ -598,11 +598,12 @@
     else playClip(slot);
   }
 
-  // ---------- ability sounds ----------
-  // With the 3D models, each cast plays its ability's sound: the first burst of sound in
-  // Riot's preview video of it (found by tools/build_sounds.py), streamed from Riot's CDN.
-  // Sandboxed pages, which can't load outside media, use replay-data/sounds/sounds.mp3,
-  // all the sounds joined into one file, instead. Browsers only allow sound after the first click or key.
+  // ---------- ability and death sounds ----------
+  // With the 3D models, each cast plays its ability's sound and each death the champion's death sound.
+  // replay-data/sounds/ holds them taken from the game's own sound banks (tools/build_game_sounds.py),
+  // all joined into one file. Without it, casts fall back to the first burst of sound in Riot's
+  // preview video of the ability (tools/build_sounds.py), streamed from Riot's CDN, and deaths are silent.
+  // Browsers only allow sound after the first click or key.
   let soundOn = true, gestured = false, soundFiles = {};
   fetch(DATA + "sounds/sounds.json" + BUST).then((r) => (r.ok ? r.json() : {})).then((m) => { soundFiles = m; }).catch(() => {});
   // A few audio players reused round robin. Each is started once inside the first click or
@@ -627,17 +628,21 @@
     }
   }
   function playSound(c, slot, volume) {
-    if (!soundOn || !gestured || !voices.length || !c || !c.sound || !c.sound[slot]) return;
-    const [start, len] = c.sound[slot];
+    if (!soundOn || !gestured || !voices.length || !c) return;
     const packed = soundFiles.clips && soundFiles.clips[c.id] && soundFiles.clips[c.id][slot];
+    const video = !soundFiles.clips && slot !== "D" && c.sound && c.sound[slot];
+    if (!packed && !video) return;
     const k = String(c.key).padStart(4, "0");
     const a = voices[nextVoice++ % voices.length];
     a.pause();
     a.src = packed ? `${DATA}sounds/${soundFiles.file}${BUST}#t=${packed[0]},${packed[0] + packed[1]}`
-      : `${index.clip_cdn}/${k}/ability_${k}_${slot}1.webm#t=${start},${start + len}`;
+      : `${index.clip_cdn}/${k}/ability_${k}_${slot}1.webm#t=${video[0]},${video[0] + video[1]}`;
     a.volume = volume * 0.8;
     const p = a.play();
     if (p && p.catch) p.catch(() => {});
+    // Media fragments stop late in some browsers; end the clip on time so it never runs into the next one.
+    clearTimeout(a.stopTimer);
+    a.onplaying = packed ? () => { clearTimeout(a.stopTimer); a.stopTimer = setTimeout(() => a.pause(), packed[1] * 1000); } : null;
   }
   function syncSound() {
     video.muted = !(soundOn && gestured);
@@ -799,6 +804,11 @@
               const sp = fight.spawns.get(uid);
               playSound(sp && byId.get(String(sp.x).toLowerCase()), c.s, 0.45);
             }
+          if (fight.death && fight.death.t > before && fight.death.t <= t) playSound(champ, "D", 1);
+          for (const k of fight.kills) if (k.t > before && k.t <= t) {
+            const sp = fight.spawns.get(k.u);
+            playSound(sp && byId.get(String(sp.x).toLowerCase()), "D", 0.6);
+          }
         }
       }
       const s = drawArena(t, reduceMotion ? 0 : dt);
