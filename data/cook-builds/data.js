@@ -385,6 +385,510 @@ window.COOK_DATA = {
     "items_not_modeled": [],
     "whole_build": false
    }
+  },
+  {
+   "id": "kayle-grounded",
+   "champion": "Kayle",
+   "title": "Grounded",
+   "augments": [
+    {
+     "name": "Draw Your Sword",
+     "rarity": "Prismatic",
+     "text": "You are now melee. Gain 24% Attack Damage, 24% Health, 20% Attack Speed, 20% Lifesteal, and 20% Move Speed (each further increased based on Attack Range lost).",
+     "core": true,
+     "icon": "icons/augments/draw-your-sword.png",
+     "win_rate": 0.6114,
+     "pick_rate": 0.1606,
+     "win_rank": 4,
+     "best_champions": [
+      "Graves",
+      "Caitlyn",
+      "Ezreal",
+      "Samira",
+      "Corki",
+      "Lucian"
+     ],
+     "champion_is_best": false
+    },
+    {
+     "name": "Goliath",
+     "rarity": "Prismatic",
+     "text": "Become large, gaining 35% Health and 15% Adaptive Force.",
+     "core": true,
+     "icon": "icons/augments/goliath.png",
+     "win_rate": 0.5749,
+     "pick_rate": 0.3324,
+     "win_rank": 21,
+     "best_champions": [
+      "TahmKench",
+      "DrMundo",
+      "Sett",
+      "Sion",
+      "Chogath",
+      "Swain"
+     ],
+     "champion_is_best": false
+    },
+    {
+     "name": "Heavy Hitter",
+     "rarity": "Silver",
+     "text": "Your Attacks deal additional physical damage.",
+     "core": false,
+     "icon": "icons/augments/heavy-hitter.png",
+     "win_rate": 0.5805,
+     "pick_rate": 0.3657,
+     "win_rank": 16,
+     "best_champions": [
+      "TahmKench",
+      "DrMundo",
+      "Sett",
+      "Sion",
+      "Chogath",
+      "Ornn"
+     ],
+     "champion_is_best": false
+    },
+    {
+     "name": "Tank Engine",
+     "rarity": "Gold",
+     "text": "On takedown, gain a stack that grants 5% increased size and 5% max Health. Lose 65% of stacks on death.",
+     "core": false,
+     "icon": "icons/augments/tank-engine.png",
+     "win_rate": 0.6023,
+     "pick_rate": 0.4306,
+     "win_rank": 6,
+     "best_champions": [
+      "TahmKench",
+      "DrMundo",
+      "Sett",
+      "Swain",
+      "Sion",
+      "Chogath"
+     ],
+     "champion_is_best": false
+    }
+   ],
+   "core": 2,
+   "items": [
+    "Plated Steelcaps",
+    "Nashor's Tooth",
+    "Guinsoo's Rageblade",
+    "Heartsteel",
+    "Sunfire Aegis",
+    "Titanic Hydra"
+   ],
+   "why": "Kayle spends the early game as a weak melee champion waiting to ascend into a ranged carry. Draw Your Sword sets her to melee range for good, which should keep her from ever getting the range, and pays her back with AD, Health, Attack Speed and Lifesteal. Goliath and Heavy Hitter turn the angel into a giant frontline bruiser.",
+   "play": "Skip the ascension. Walk in front and hit things with your sword.",
+   "champion_name": "Kayle",
+   "champion_icon": "icons/champions/10.png",
+   "champion_win_rate": 0.5502,
+   "champion_pick_rate": 0.0688,
+   "champion_win_rank": 9,
+   "core_win_rate": 0.5932,
+   "tier": "Secretly strong",
+   "core_usual": 0,
+   "core_pick_rate": 0.2465,
+   "sim": {
+    "dps": 384,
+    "survival": 0.832,
+    "best_dps": 850,
+    "best_survival": 0.412,
+    "pct_of_best": 0.452,
+    "best_items": [
+     "Sorcerer's Shoes",
+     "Blackfire Torch",
+     "Liandry's Torment",
+     "Nashor's Tooth",
+     "Shadowflame",
+     "Void Staff"
+    ],
+    "best_augments": [
+     "Mystic Punch",
+     "Eureka",
+     "Infernal Conduit",
+     "Goliath"
+    ],
+    "items_not_modeled": [],
+    "whole_build": false
+   }
+  },
+  {
+   "id": "nasus-sniper",
+   "champion": "Nasus",
+   "title": "Long-Range Siphon",
+   "augments": [
+    {
+     "name": "Scoped Weapons",
+     "rarity": "Silver",
+     "text": "Gain Attack Range.",
+     "core": true,
+     "icon": "icons/augments/scoped-weapons.png",
+     "win_rate": 0.5111,
+     "pick_rate": 0.201,
+     "win_rank": 122,
+     "best_champions": [
+      "Caitlyn",
+      "Vayne",
+      "Jinx",
+      "Kayle",
+      "Tristana",
+      "Senna"
+     ],
+     "champion_is_best": false
+    },
+    {
+     "name": "Scopier Weapons",
+     "rarity": "Gold",
+     "text": "Gain Attack Range.",
+     "core": true,
+     "icon": "icons/augments/scopier-weapons.png",
+     "win_rate": 0.5531,
+     "pick_rate": 0.2934,
+     "win_rank": 44,
+     "best_champions": [
+      "Caitlyn",
+      "Vayne",
+      "Kayle",
+      "Jinx",
+      "Senna",
+      "Tristana"
+     ],
+     "champion_is_best": false
+    },
+    {
+     "name": "Scopiest Weapons",
+     "rarity": "Prismatic",
+     "text": "Gain Attack Range.",
+     "core": true,
+     "icon": "icons/augments/scopiest-weapons.png",
+     "win_rate": 0.5281,
+     "pick_rate": 0.1789,
+     "win_rank": 85,
+     "best_champions": [
+      "Caitlyn",
+      "Jinx",
+      "Vayne",
+      "Kayle",
+      "Tristana",
+      "Senna"
+     ],
+     "champion_is_best": false
+    },
+    {
+     "name": "Stackosaurus Rex",
+     "rarity": "Silver",
+     "text": "When you gain permanent Stacks of an Ability, gain 100% more!",
+     "core": false,
+     "icon": "icons/augments/stackosaurus-rex.png",
+     "win_rate": 0.5649,
+     "pick_rate": 0.0858,
+     "win_rank": 30,
+     "best_champions": [
+      "AurelionSol",
+      "Smolder",
+      "Veigar",
+      "Senna",
+      "Chogath",
+      "Nasus"
+     ],
+     "champion_is_best": true
+    }
+   ],
+   "core": 3,
+   "items": [
+    "Ionian Boots of Lucidity",
+    "Trinity Force",
+    "Spear of Shojin",
+    "Black Cleaver",
+    "Sterak's Gage",
+    "Spirit Visage"
+   ],
+   "why": "Siphoning Strike is an empowered auto attack, and the three Scope augments give a melee champion 475 range, so Nasus stacks Q from 600 range. Stackosaurus Rex doubles every stack he earns. The dog farms from across the lane like a marksman.",
+   "play": "Last-hit every minion with Q from max range. Walk up only when the stacks are big.",
+   "champion_name": "Nasus",
+   "champion_icon": "icons/champions/75.png",
+   "champion_win_rate": 0.487,
+   "champion_pick_rate": 0.0654,
+   "champion_win_rank": 92,
+   "core_win_rate": 0.5308,
+   "tier": "Holds up",
+   "core_usual": 0,
+   "core_pick_rate": 0.2244,
+   "sim": {
+    "dps": 554,
+    "survival": 0.62,
+    "best_dps": 1002,
+    "best_survival": 0.556,
+    "pct_of_best": 0.552,
+    "best_items": [
+     "Ionian Boots of Lucidity",
+     "Black Cleaver",
+     "Blade of The Ruined King",
+     "Ravenous Hydra",
+     "Serylda's Grudge",
+     "Trinity Force"
+    ],
+    "best_augments": [
+     "Mystic Punch",
+     "Dual Wield",
+     "It's Critical",
+     "Jeweled Gauntlet"
+    ],
+    "items_not_modeled": [],
+    "whole_build": false
+   }
+  },
+  {
+   "id": "jinx-caster",
+   "champion": "Jinx",
+   "title": "Rocket Spammer",
+   "augments": [
+    {
+     "name": "Purist - Caster",
+     "rarity": "Silver",
+     "text": "Gain percent cooldown reduction and convert all of your Attack Speed into Ability Haste.",
+     "core": true,
+     "icon": "icons/augments/purist-caster.png",
+     "win_rate": 0.5414,
+     "pick_rate": 0.4196,
+     "win_rank": 55,
+     "best_champions": [
+      "Teemo",
+      "Karthus",
+      "MissFortune",
+      "Brand",
+      "Jayce",
+      "Ashe"
+     ],
+     "champion_is_best": false
+    },
+    {
+     "name": "Jeweled Gauntlet",
+     "rarity": "Prismatic",
+     "text": "Your Abilities can Critically Strike. Gain % Crit Chance.",
+     "core": false,
+     "icon": "icons/augments/jeweled-gauntlet.png",
+     "win_rate": 0.5726,
+     "pick_rate": 0.5175,
+     "win_rank": 22,
+     "best_champions": [
+      "Smolder",
+      "Lucian",
+      "Jayce",
+      "Ezreal",
+      "AurelionSol",
+      "TwistedFate"
+     ],
+     "champion_is_best": false
+    },
+    {
+     "name": "Skilled Sniper",
+     "rarity": "Gold",
+     "text": "Snipe an enemy with a non-Ultimate Ability refunds 80% Cooldown (65% for periodic Abilities). Snipe - Damage enemies over 600 distance away",
+     "core": false,
+     "icon": "icons/augments/skilled-sniper.png",
+     "win_rate": 0.5307,
+     "pick_rate": 0.2647,
+     "win_rank": 77,
+     "best_champions": [
+      "MissFortune",
+      "Jayce",
+      "TwistedFate",
+      "Morgana",
+      "Mel",
+      "Smolder"
+     ],
+     "champion_is_best": false
+    },
+    {
+     "name": "Infinite Recursion",
+     "rarity": "Prismatic",
+     "text": "Gain 60 Ability Haste, plus 3 Ability Haste per takedown. Current Ability Haste:",
+     "core": false,
+     "icon": "icons/augments/infinite-recursion.png",
+     "win_rate": 0.5993,
+     "pick_rate": 0.3258,
+     "win_rank": 7,
+     "best_champions": [
+      "AurelionSol",
+      "MissFortune",
+      "Karthus",
+      "Teemo",
+      "Brand",
+      "Smolder"
+     ],
+     "champion_is_best": false
+    }
+   ],
+   "core": 1,
+   "items": [
+    "Ionian Boots of Lucidity",
+    "Youmuu's Ghostblade",
+    "Axiom Arc",
+    "Serylda's Grudge",
+    "Black Cleaver",
+    "Lord Dominik's Regards"
+   ],
+   "why": "Jinx is an attack speed marksman, and Purist - Caster converts all of her Attack Speed into Ability Haste (0.65 per 1%). Her minigun stacks and Get Excited's huge Attack Speed burst become haste, so she stops attacking fast and spams Zap!, Chompers and Super Mega Death Rocket instead.",
+   "play": "Get a takedown, then spam W and R while Get Excited lasts.",
+   "champion_name": "Jinx",
+   "champion_icon": "icons/champions/222.png",
+   "champion_win_rate": 0.5143,
+   "champion_pick_rate": 0.093,
+   "champion_win_rank": 42,
+   "core_win_rate": 0.5414,
+   "tier": "Holds up",
+   "core_usual": 0,
+   "core_pick_rate": 0.4196,
+   "sim": {
+    "dps": 1004,
+    "survival": 0.506,
+    "best_dps": 1237,
+    "best_survival": 0.667,
+    "pct_of_best": 0.811,
+    "best_items": [
+     "Ionian Boots of Lucidity",
+     "Blade of The Ruined King",
+     "Infinity Edge",
+     "Lord Dominik's Regards",
+     "Runaan's Hurricane",
+     "Serylda's Grudge"
+    ],
+    "best_augments": [
+     "Dual Wield",
+     "Deft",
+     "Mystic Punch",
+     "Jeweled Gauntlet"
+    ],
+    "items_not_modeled": [],
+    "whole_build": false
+   }
+  },
+  {
+   "id": "jax-mage",
+   "champion": "Jax",
+   "title": "Grandmaster Mage",
+   "augments": [
+    {
+     "name": "ADAPt",
+     "rarity": "Silver",
+     "text": "Convert Bonus Attack Damage to Ability Power. Gain 15% Ability Power.",
+     "core": true,
+     "icon": "icons/augments/adapt.png",
+     "win_rate": 0.5585,
+     "pick_rate": 0.4456,
+     "win_rank": 38,
+     "best_champions": [
+      "Ryze",
+      "Karthus",
+      "Brand",
+      "TwistedFate",
+      "Teemo",
+      "Veigar"
+     ],
+     "champion_is_best": false
+    },
+    {
+     "name": "Marksmage",
+     "rarity": "Gold",
+     "text": "Your Attacks deal additional physical damage equal to 75% Ability Power.",
+     "core": true,
+     "icon": "icons/augments/marksmage.png",
+     "win_rate": 0.53,
+     "pick_rate": 0.2129,
+     "win_rank": 79,
+     "best_champions": [
+      "Kayle",
+      "Sylas",
+      "Ekko",
+      "Kaisa",
+      "Fizz",
+      "TwistedFate"
+     ],
+     "champion_is_best": false
+    },
+    {
+     "name": "Dual Wield",
+     "rarity": "Prismatic",
+     "text": "When you Attack, fire a bolt that deals 40% damage and applies your On-Hit effects at 40% effectiveness. Gain 10% total Attack Speed.",
+     "core": false,
+     "icon": "icons/augments/dual-wield.png",
+     "win_rate": 0.5643,
+     "pick_rate": 0.2686,
+     "win_rank": 31,
+     "best_champions": [
+      "Vayne",
+      "Caitlyn",
+      "Jinx",
+      "Tristana",
+      "Twitch",
+      "Yunara"
+     ],
+     "champion_is_best": false
+    },
+    {
+     "name": "Witchful Thinking",
+     "rarity": "Silver",
+     "text": "Gain Ability Power.",
+     "core": false,
+     "icon": "icons/augments/witchful-thinking.png",
+     "win_rate": 0.5261,
+     "pick_rate": 0.2949,
+     "win_rank": 89,
+     "best_champions": [
+      "Karthus",
+      "Teemo",
+      "Mel",
+      "TwistedFate",
+      "Brand",
+      "Nidalee"
+     ],
+     "champion_is_best": false
+    }
+   ],
+   "core": 2,
+   "items": [
+    "Berserker's Greaves",
+    "Blade of The Ruined King",
+    "Guinsoo's Rageblade",
+    "Nashor's Tooth",
+    "Rabadon's Deathcap",
+    "Riftmaker"
+   ],
+   "why": "The reverse of Tiny Marksman. ADAPt turns every point of Jax's bonus AD into 1.67 AP, so his BotRK and Rageblade become mage items, and Marksmage adds a share of that AP to every auto. W, E and R scale with AP, so the lamp post becomes a magic staff.",
+   "play": "Build like an AD Jax, play like an AP Jax. Hop on the carry and empower everything.",
+   "champion_name": "Jax",
+   "champion_icon": "icons/champions/24.png",
+   "champion_win_rate": 0.5065,
+   "champion_pick_rate": 0.0554,
+   "champion_win_rank": 52,
+   "core_win_rate": 0.5443,
+   "tier": "Holds up",
+   "core_usual": 0,
+   "core_pick_rate": 0.3292,
+   "sim": {
+    "dps": 957,
+    "survival": 0.412,
+    "best_dps": 1430,
+    "best_survival": 0.323,
+    "pct_of_best": 0.669,
+    "best_items": [
+     "Sorcerer's Shoes",
+     "Cryptbloom",
+     "Lich Bane",
+     "Rabadon's Deathcap",
+     "Shadowflame",
+     "Void Staff"
+    ],
+    "best_augments": [
+     "Eureka",
+     "Mystic Punch",
+     "Goliath",
+     "Infernal Conduit"
+    ],
+    "items_not_modeled": [],
+    "whole_build": false
+   }
   }
  ]
 };

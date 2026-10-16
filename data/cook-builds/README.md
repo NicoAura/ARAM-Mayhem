@@ -1,4 +1,4 @@
-# Cook builds
+# The Kitchen (cook builds)
 
 Troll builds for ARAM Mayhem that flip what a champion is known for (an artillery mage
 gone melee, a melee fighter turned sniper), each checked against China-server win rates and
