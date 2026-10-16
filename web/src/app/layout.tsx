@@ -18,7 +18,7 @@ const display = Bricolage_Grotesque({ subsets: ["latin"], weight: ["600", "700"]
 
 export const metadata: Metadata = {
   title: "DeepARAM",
-  description: "DeepARAM: ARAM Mayhem stats, damage simulator and PBE changes",
+  description: "DeepARAM: ARAM Mayhem stats for the current patch and a damage simulator",
 };
 
 export const viewport: Viewport = {

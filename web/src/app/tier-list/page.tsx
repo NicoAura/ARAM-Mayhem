@@ -140,7 +140,7 @@ export default function TierListPage() {
 
   return (
     <>
-      <Intro eyebrow="Tier List" title={text("page./tier-list.title", "Every Mayhem champion and augment, ranked.")}>
+      <Intro eyebrow={latest ? `Tier List · Patch ${latest.patch}` : "Tier List"} title={text("page./tier-list.title", "Every Mayhem champion and augment, ranked.")}>
         Champions as of {formatDate(duos?.meta.champion_stat_date) || "the latest day"}
         {latest ? `, patch ${latest.patch} since ${latest.window_start}` : ""}. Game counts aren&apos;t published, so all-time
         numbers weight each patch by pick rate and days.

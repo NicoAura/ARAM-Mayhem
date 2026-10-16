@@ -38,11 +38,8 @@ export function statsDate() {
   return d && d.length === 8 ? new Date(`${d.slice(0, 4)}-${d.slice(4, 6)}-${d.slice(6)}T00:00:00Z`) : null;
 }
 
-type Pbe = {
-  meta: { label: string; augmentCounts: { added: number; removed: number } };
-  headliners: { list: { name: string; effect: string }[] };
-};
-export const pbeSummary = () => readRepoJson<Pbe>("data/pbe/kiwi-s3.json");
+/** The live patch the current stats cover, like "16.20". PBE data stays on the PBE tab. */
+export const livePatch = () => readRepoCsv("data/cn/history/patches.csv")?.at(-1)?.patch ?? null;
 
 type Builds = { builds: { champion: string; title: string; augments: string[]; why: string }[] };
 export const kitchenBuild = () => readRepoJson<Builds>("data/cook-builds/builds.json")?.builds[0] ?? null;
