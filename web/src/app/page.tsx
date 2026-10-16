@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { text } from "@/lib/content";
 import { statsDate, counts, kitchenBuild, pbeSummary, toolTabs, topAugments, topChampions, topDps } from "@/lib/highlights";
 
 // eslint-disable-next-line @next/next/no-img-element
@@ -24,8 +25,8 @@ export default function Home() {
         <p className="eyebrow">
           ARAM Mayhem{date ? ` · Stats from ${date.toLocaleDateString("en-US", { month: "short", day: "numeric", timeZone: "UTC" })}` : ""}
         </p>
-        <h1>Every Mayhem pick, measured.</h1>
-        <p className="lede">Win rates for every champion and augment, a fight simulator for every champion, and Season 3 changes from the test server.</p>
+        <h1>{text("home.title", "Every Mayhem pick, measured.")}</h1>
+        <p className="lede">{text("home.lede")}</p>
         <div className="stat-row">
           <div>
             <b>{n.champions}</b>

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import DataTable, { type Row } from "@/components/DataTable";
 import Embed from "@/components/Embed";
 import Intro from "@/components/Intro";
+import { text } from "@/lib/content";
 import Pending from "@/components/Pending";
 import SubTabs from "@/components/SubTabs";
 import { readRepoJson, repoHas } from "@/lib/repo-data";
@@ -26,7 +27,7 @@ export default function SimulatorPage() {
   if (!repoHas(`${VIEWER}/index.html`) && !repoHas("simulator/README.md")) {
     return (
       <>
-        <Intro eyebrow="Simulator" title="Teamfight damage, simulated." />
+        <Intro eyebrow="Simulator" title={text("page./simulator.title", "Teamfight damage, simulated.")} />
         <Pending pr={4}>The simulator appears here once it is merged:</Pending>
       </>
     );
@@ -79,7 +80,7 @@ export default function SimulatorPage() {
 
   return (
     <>
-      <Intro eyebrow="Simulator" title="Teamfight damage, simulated.">
+      <Intro eyebrow="Simulator" title={text("page./simulator.title", "Teamfight damage, simulated.")}>
         Monte Carlo teamfights against enemy teams drawn from real Mayhem pick rates, with a build search for every
         champion. Use it to compare builds for one champion, not to rank champions.
       </Intro>

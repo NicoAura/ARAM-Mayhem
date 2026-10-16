@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import augmentNames from "@/data/augment-names.json";
 import DataTable, { type Column, type Row } from "@/components/DataTable";
 import Intro from "@/components/Intro";
+import { text } from "@/lib/content";
 import Pending from "@/components/Pending";
 import SubTabs from "@/components/SubTabs";
 import { readRepoCsv, readRepoJson, type CsvRow } from "@/lib/repo-data";
@@ -51,7 +52,7 @@ export default function TierListPage() {
   if (!current) {
     return (
       <>
-        <Intro eyebrow="Tier List" title="Every Mayhem champion and augment, ranked." />
+        <Intro eyebrow="Tier List" title={text("page./tier-list.title", "Every Mayhem champion and augment, ranked.")} />
         <Pending pr={5}>Champion, augment and duo stats appear here once the stats data is merged:</Pending>
       </>
     );
@@ -139,7 +140,7 @@ export default function TierListPage() {
 
   return (
     <>
-      <Intro eyebrow="Tier List" title="Every Mayhem champion and augment, ranked.">
+      <Intro eyebrow="Tier List" title={text("page./tier-list.title", "Every Mayhem champion and augment, ranked.")}>
         Champions as of {formatDate(duos?.meta.champion_stat_date) || "the latest day"}
         {latest ? `, patch ${latest.patch} since ${latest.window_start}` : ""}. Game counts aren&apos;t published, so all-time
         numbers weight each patch by pick rate and days.
