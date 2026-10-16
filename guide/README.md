@@ -7,6 +7,10 @@ The site's **Guide** tab (`/tools/guide`): how ARAM Mayhem works, read from the 
 - **Challenges**: the permanent ARAM challenges with every tier threshold, marked by whether they count Mayhem
   games (queue 2400 in `queueIds`). A Riot ID lookup appears once the site has a `/api/riot/challenges` route
   that returns Riot's `lol/challenges/v1/player-data/{puuid}` (`challenges: [{challengeId, level, value, percentile}]`).
+- **Rules**: Mayhem's mode-wide settings from map12.bin (`Kiwi_Balance`, `Kiwi_OnFireBuff`, `Kiwi_ComboBreaker`,
+  `ARAM_Augment_Manager`), the summoner spells allowed in Mayhem, and augments that add one.
+- **Items**: items whose `DataValuesModeOverride` (Kiwi, else ARAM) differs from Summoner's Rift, from items.cdtb.bin.
+- **Archive**: features from past Mayhem seasons. Augment Sets: names and bonus text still in the string table.
 - **Maps & extras**: the Howling Abyss map skins (minimaps), Mayhem-only items and Mayhem-only units.
 
 Rebuild after a patch: `python3 -m pip install xxhash && python3 guide/build_data.py` (writes `data.js`).
