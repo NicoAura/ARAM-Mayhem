@@ -1,0 +1,774 @@
+{
+  "meta": {
+    "mode": "ARAM: Mayhem",
+    "codename": "Kiwi",
+    "series": "Kiwi_S3",
+    "label": "Season 3",
+    "source": "PBE datamine via CommunityDragon (PBE vs live client data); the locally installed PBE client is on the same build",
+    "dataAsOf": "2026-10-16",
+    "caveat": "PBE content can change before release.",
+    "augmentPool": {
+      "live": 223,
+      "pbe": 249
+    },
+    "augmentCounts": {
+      "added": 40,
+      "removed": 14
+    },
+    "chinaPoolChanged": false,
+    "notes": [
+      "The 40th new augment is the generic Pentakill augment (GoH_PentakillAug_Generic). It has no name in the data; its tooltip says it Empowers one basic ability, and a second ability (ultimate included) at level 18.",
+      "Some tooltips use placeholders the data does not fill in (for example exact Attack Speed amounts), so some descriptions leave out numbers.",
+      "aram.bin changes are keybind config only, not per-champion ARAM balance. Per-champion ARAM damage/healing modifiers were not found in the data.",
+      "Champion arrays are listed for ranks 1-5 (basic abilities) or 1-3 (ultimates). Mode-specific values for Arena, URF and other modes are excluded.",
+      "Build 16.21.8284168 (2026-10-16) reverted the Caitlyn passive crit nerf, extended the Qiyana Q nerf to unenchanted Q, and made Fruitify step up at levels 7, 11 and 15 instead of scaling smoothly."
+    ],
+    "builds": {
+      "pbe": "16.21.8284168",
+      "live": "16.20.8248524"
+    }
+  },
+  "fame": {
+    "summary": "Earn Fame to unlock bands in order. Each band has its own in-game objectives, member dialogue and six rewards. The final reward is \"Welcome to the band!\".",
+    "rewardsPerBand": 6,
+    "bands": [
+      {
+        "id": "pentakill",
+        "name": "Pentakill",
+        "unlockFame": 0,
+        "members": [
+          "Mordekaiser",
+          "Sona",
+          "Karthus",
+          "Yorick",
+          "Olaf"
+        ],
+        "sampleObjectives": [
+          "Dance mid",
+          "45 takedowns",
+          "45 → 65 skillshots",
+          "8 → 12 Snowball hits"
+        ]
+      },
+      {
+        "id": "heartsteel",
+        "name": "HEARTSTEEL",
+        "unlockFame": 1000,
+        "members": [
+          "Ezreal",
+          "Kayn",
+          "Yone",
+          "Sett",
+          "Aphelios",
+          "K'Sante"
+        ],
+        "sampleObjectives": [
+          "15 takedowns within 3s of dashing",
+          "Heal 3k → 6k",
+          "5k → 7k augment damage"
+        ]
+      },
+      {
+        "id": "true-damage",
+        "name": "True Damage",
+        "unlockFame": 3200,
+        "members": [
+          "Akali",
+          "Ekko",
+          "Qiyana",
+          "Senna",
+          "Yasuo"
+        ],
+        "sampleObjectives": [
+          "Reroll 6 augments",
+          "Gain 5k bonus HP",
+          "300 → 400 bonus AD/AP"
+        ]
+      },
+      {
+        "id": "kda",
+        "name": "K/DA",
+        "unlockFame": 5800,
+        "members": [
+          "Ahri",
+          "Evelynn",
+          "Kai'Sa",
+          "Akali"
+        ],
+        "sampleObjectives": [
+          "Emote mid-Snowball dash",
+          "200% bonus AS",
+          "4k → 6k ult damage"
+        ]
+      },
+      {
+        "id": "worlds",
+        "name": "Worlds",
+        "unlockFame": 8800,
+        "lockedUntilPatch": "26.22",
+        "members": [
+          "Mordekaiser",
+          "Evelynn",
+          "Akali",
+          "K'Sante",
+          "a Poro"
+        ],
+        "sampleObjectives": [
+          "15k crit damage",
+          "250 bonus MS",
+          "10 → 12 team multi-kills"
+        ]
+      }
+    ],
+    "relatedCosmetics": "True Damage \"Know My Name\" skins and per-band Prospect/Member icons look like rewards for this track (inferred, not confirmed).",
+    "superstarRank": {
+      "summary": "Fame also raises your Superstar Rank (10 milestones on its own track) and unlocks bands plus Audition Missions, which must be completed within a single game.",
+      "rankNames": {
+        "Recognized": 1000,
+        "Lowkey Famous": 3200,
+        "Headliner": 5800
+      }
+    }
+  },
+  "augments": {
+    "added": [
+      {
+        "name": "HEAVY",
+        "tier": "gold",
+        "set": "Pentakill",
+        "description": "Empowers Q: +20 Ability Haste and +10% damage, healing and shielding."
+      },
+      {
+        "name": "POWER",
+        "tier": "gold",
+        "set": "Pentakill",
+        "description": "Empowers W: +20 Ability Haste and +10% damage, healing and shielding."
+      },
+      {
+        "name": "THRASH",
+        "tier": "gold",
+        "set": "Pentakill",
+        "description": "Empowers E: +20 Ability Haste and +10% damage, healing and shielding."
+      },
+      {
+        "name": "DOOM",
+        "tier": "gold",
+        "set": "Pentakill",
+        "description": "Empowers R: +20 Ability Haste and +10% damage, healing and shielding."
+      },
+      {
+        "name": "Pentakill (Generic)",
+        "tier": "gold",
+        "set": "Pentakill",
+        "id": "GoH_PentakillAug_Generic",
+        "description": "Empower one of your basic Abilities (+20 Ability Haste, +10% damage, healing and shielding). At level 18, Empower another Ability, including your ultimate."
+      },
+      {
+        "name": "Big Shot",
+        "tier": "prismatic",
+        "description": "+35% Crit Damage and +25% bonus AD; 75% of your Attack Speed is converted to Crit Damage."
+      },
+      {
+        "name": "Totentanz",
+        "tier": "prismatic",
+        "description": "Summoner spell that blinks you forward and makes you Unkillable. If you don't get a takedown within 5 seconds, you die."
+      },
+      {
+        "name": "Group Hug",
+        "tier": "prismatic",
+        "description": "A heal or shield also recasts on two nearby allies."
+      },
+      {
+        "name": "Mosh Monster",
+        "tier": "prismatic",
+        "description": "Casting the ability gives +300–750 HP and slows nearby enemies; takedowns make it stronger permanently."
+      },
+      {
+        "name": "Third Times the Harm",
+        "tier": "prismatic",
+        "description": "Every third attack deals true damage that grows permanently."
+      },
+      {
+        "name": "Bouncing Bees",
+        "tier": "prismatic",
+        "description": "After an ability, your next attack bounces. Quest rewards +30 AD and extra bounces."
+      },
+      {
+        "name": "Get Jinxed",
+        "tier": "gold",
+        "description": "Summoner spell that lets you ride a Jinx rocket."
+      },
+      {
+        "name": "Brass Blast",
+        "tier": "gold",
+        "description": "Summoner spell that charges a trumpet knockback."
+      },
+      {
+        "name": "BEES!!!",
+        "tier": "gold",
+        "description": "Ability hits periodically launch a beehive."
+      },
+      {
+        "name": "Salvation",
+        "tier": "gold",
+        "description": "Near-lethal damage releases a shockwave that heals your team."
+      },
+      {
+        "name": "Heavy Is The Crown",
+        "tier": "gold",
+        "description": "AD, AP and AS that grow with takedowns, at the cost of Move Speed; you lose half your stacks on death."
+      },
+      {
+        "name": "Weapon of Destiny",
+        "tier": "gold",
+        "description": "Your first Legendary item grows with takedowns."
+      },
+      {
+        "name": "Upgrade Stormsurge",
+        "tier": "gold",
+        "description": "Squall always explodes, and you get 500 gold."
+      },
+      {
+        "name": "Arcane Axiom",
+        "tier": "gold",
+        "description": null
+      },
+      {
+        "name": "Armored Impact",
+        "tier": "gold",
+        "description": null
+      },
+      {
+        "name": "CRIMSON COBALT",
+        "tier": "gold",
+        "description": null
+      },
+      {
+        "name": "Double Time",
+        "tier": "gold",
+        "description": null
+      },
+      {
+        "name": "Enchanting Butterflies",
+        "tier": "gold",
+        "description": null
+      },
+      {
+        "name": "Jeweled Bracelet",
+        "tier": "gold",
+        "description": null
+      },
+      {
+        "name": "Recoil",
+        "tier": "gold",
+        "description": null
+      },
+      {
+        "name": "Sap Magic",
+        "tier": "gold",
+        "description": null
+      },
+      {
+        "name": "Still Here",
+        "tier": "gold",
+        "description": null
+      },
+      {
+        "name": "Take'em Down Down Down",
+        "tier": "gold",
+        "description": null
+      },
+      {
+        "name": "The Boom and the Bass",
+        "tier": "gold",
+        "description": null
+      },
+      {
+        "name": "Tickle Monster",
+        "tier": "gold",
+        "description": null
+      },
+      {
+        "name": "Lich Brain",
+        "tier": "silver",
+        "description": "30 AP + 4% of bonus HP as AP."
+      },
+      {
+        "name": "Ultimate Recursion",
+        "tier": "silver",
+        "description": "+50 Ultimate Haste."
+      },
+      {
+        "name": "Blue Barrier",
+        "tier": "silver",
+        "description": null
+      },
+      {
+        "name": "Flow of Spirit",
+        "tier": "silver",
+        "description": null
+      },
+      {
+        "name": "Fruitify",
+        "tier": "silver",
+        "description": "Takedowns burst into Fruit: 3 at level 1, +1 at levels 7, 11 and 15. Each Fruit restores 6% max Health and 6% max Mana (or 10 Energy, Fury, Rage or Courage)."
+      },
+      {
+        "name": "Gift of the Drowned",
+        "tier": "silver",
+        "description": null
+      },
+      {
+        "name": "Hands off the Talent",
+        "tier": "silver",
+        "description": null
+      },
+      {
+        "name": "Lonely Warrior",
+        "tier": "silver",
+        "description": null
+      },
+      {
+        "name": "No Mana No Problem",
+        "tier": "silver",
+        "description": null
+      },
+      {
+        "name": "Sound Barrier",
+        "tier": "silver",
+        "description": null
+      }
+    ],
+    "removed": [
+      {
+        "name": "Drop Bear",
+        "tier": "prismatic"
+      },
+      {
+        "name": "Dropkick",
+        "tier": "prismatic"
+      },
+      {
+        "name": "Fan the Hammer",
+        "tier": "prismatic"
+      },
+      {
+        "name": "High Roller",
+        "tier": "prismatic"
+      },
+      {
+        "name": "Dimension Shift",
+        "tier": "prismatic"
+      },
+      {
+        "name": "Poro Stampede",
+        "tier": "prismatic"
+      },
+      {
+        "name": "Ult Bot",
+        "tier": "prismatic"
+      },
+      {
+        "name": "Spiritual Purification",
+        "tier": "gold"
+      },
+      {
+        "name": "Yowch My Coins!",
+        "tier": "gold"
+      },
+      {
+        "name": "Combusting Interest",
+        "tier": "gold"
+      },
+      {
+        "name": "Hide on Bush",
+        "tier": "gold"
+      },
+      {
+        "name": "Critical Missile",
+        "tier": "gold"
+      },
+      {
+        "name": "Our Healing",
+        "tier": "gold"
+      },
+      {
+        "name": "Crit 'n Cast",
+        "tier": "silver"
+      }
+    ],
+    "changed": [
+      {
+        "name": "Echo Cast",
+        "changes": [
+          {
+            "stat": "Clone duration",
+            "live": "7s",
+            "pbe": "4s"
+          }
+        ],
+        "direction": "nerf"
+      },
+      {
+        "name": "Jeweled Gauntlet",
+        "changes": [
+          {
+            "stat": "Tooltip crit damage",
+            "live": "145% total damage",
+            "pbe": "45% increased damage"
+          }
+        ],
+        "direction": "none",
+        "note": "Underlying Crit Damage value is unchanged (1.45). Only the tooltip wording changed, and it now tracks damage dealt to champions."
+      },
+      {
+        "name": "Spirit Bomb",
+        "changes": [
+          {
+            "stat": "Missile targeting flags",
+            "live": "32767 (all unit types)",
+            "pbe": "1"
+          }
+        ],
+        "direction": "unclear",
+        "note": "The bomb's missile now hits a narrower set of units. The exact unit type isn't labeled in the data."
+      },
+      {
+        "name": "Infernal Soul",
+        "changes": [
+          {
+            "stat": "Tooltip tracker",
+            "live": "Damage Dealt",
+            "pbe": "Damage Dealt to Champions"
+          }
+        ],
+        "direction": "none"
+      },
+      {
+        "name": "Snap Back",
+        "changes": [
+          {
+            "stat": "Enabled flag",
+            "live": "not set",
+            "pbe": "false"
+          }
+        ],
+        "direction": "unclear",
+        "note": "Still listed in the Mayhem pool, but marked disabled. May be turned off at release."
+      },
+      {
+        "name": "Sneakerhead",
+        "changes": [
+          {
+            "stat": "Enabled flag",
+            "live": "not set",
+            "pbe": "false"
+          }
+        ],
+        "direction": "unclear",
+        "note": "Still listed in the Mayhem pool, but marked disabled. May be turned off at release."
+      }
+    ]
+  },
+  "championOverrides": [
+    {
+      "champion": "Varus",
+      "ability": "Q",
+      "live": "150% bonus AD at max charge",
+      "pbe": "90% bonus AD, scaling up with charge (about 153% bonus AD at max charge)",
+      "note": "Follows the base-game Q rework below."
+    },
+    {
+      "champion": "Lee Sin",
+      "ability": "W",
+      "live": "Shield 80/140/200/260/320 (+80% AP)",
+      "pbe": "Shield 80 at all ranks (+80% AP)",
+      "direction": "nerf",
+      "note": "Mayhem-only override. Could be a data mistake; worth re-checking on the next PBE build."
+    }
+  ],
+  "headliners": {
+    "summary": "New per-match \"Headliner\" system (internally Guest of Honor). Each Mayhem match features one Headliner that adds game-wide bonuses and effects. Replaces the old \"Quest Augments\" menu section.",
+    "list": [
+      {
+        "id": "Pentakill",
+        "name": "Pentakill",
+        "effect": "Grants the Pentakill augments, which Empower an ability (+20 Ability Haste, +10% damage, healing and shielding)."
+      },
+      {
+        "id": "Heartsteel",
+        "name": "HEARTSTEEL",
+        "effect": "Members put Stickers on some augment offers. Picking a stickered augment grants a member-specific bonus.",
+        "stickers": {
+          "Sett": "+30 Health per level",
+          "Yone": "+40% Attack Speed and +20 Ability Haste",
+          "Kayn": "+5% Omnivamp",
+          "Aphelios": "2 Stat Anvils",
+          "Ezreal": "+4 AD and +4 AP per level",
+          "K'Sante": "+1 level instantly and +1 level cap"
+        }
+      },
+      {
+        "id": "KDA",
+        "name": "K/DA",
+        "effect": "K/DA throws Photocards during the match. Collecting the full set grants an extra augment."
+      },
+      {
+        "id": "Bees",
+        "name": "Bees",
+        "effect": "Honey and Bees fly across the map. Honey gives your team 25 gold and heals you for 20% max Health. A Bee hit deals 15% max Health true damage.",
+        "constants": {
+          "honeyGold": 25,
+          "gigaHoneyGold": 100,
+          "honeyHeal": "20% max HP + 25 per level",
+          "gigaHoneyHeal": "40% max HP + 50 per level"
+        }
+      },
+      {
+        "id": "Disco",
+        "name": "Disco",
+        "effect": "Dance on the Dance Floor until the Disco Ball drops, which grants everyone 1,000 gold."
+      },
+      {
+        "id": "CommandLine",
+        "name": "Command Line",
+        "effect": "\"Hacked Rerolls\" improve your augments. Voice lines also mention hacked merch stalls.",
+        "note": "Exact effect not spelled out in the strings."
+      },
+      {
+        "id": "CafeCuties",
+        "name": "Cafe Cuties",
+        "effect": "Hands out treats that grant decaying bonus Move Speed. Health Relics are empowered: +20% missing Health restored and 25% decaying Move Speed for 6s.",
+        "note": "The Health Relic link to Cafe Cuties is inferred from the strings."
+      },
+      {
+        "id": "TrueDamage",
+        "name": "True Damage",
+        "effect": null,
+        "note": "Listed as a Headliner, but its in-game effect wasn't found in the strings."
+      }
+    ]
+  },
+  "championChanges": {
+    "summary": "Base champion changes on PBE. They apply in Mayhem unless a Mayhem override replaces the value (none of these are overridden except Varus Q and Lee Sin W above).",
+    "list": [
+      {
+        "champion": "Azir",
+        "changes": [
+          "Resource stat (hash-named field) 40 → 50 (unclear which stat)"
+        ]
+      },
+      {
+        "champion": "Caitlyn",
+        "changes": [
+          "Q base damage 50/90/130/170/210 → 50/95/140/185/230",
+          "Passive headshot bonus at level breakpoints +20% → +10%"
+        ]
+      },
+      {
+        "champion": "Darius",
+        "changes": [
+          "Q cooldown 9/8/7/6/5s → 9/7.75/6.5/5.25/4s"
+        ]
+      },
+      {
+        "champion": "Jinx",
+        "changes": [
+          "Base Health 630 → 610",
+          "AD per level 3.25 → 3"
+        ]
+      },
+      {
+        "champion": "Lee Sin",
+        "changes": [
+          "W cooldown 7s → 8s",
+          "R base damage 175/400/625 → 150/350/550"
+        ]
+      },
+      {
+        "champion": "Locke",
+        "changes": [
+          "Resource stat (hash-named field) 70 → 60",
+          "Q ammo cooldown reset 20–35% → 10–40%",
+          "W mana cost 55–75 → 65–85",
+          "W heal cap 150–450 → 100–500 (level 1 → 18)",
+          "W additional heal starts at 20 instead of 40",
+          "E on-hit damage 40/50/60/70/80 → 40/55/70/85/100",
+          "E on-hit ratio 40% → 50%"
+        ]
+      },
+      {
+        "champion": "Miss Fortune",
+        "changes": [
+          "E damage per second 35/50/65/80/95 → 45/60/75/90/105",
+          "R crit damage multiplier 30% → 45%"
+        ]
+      },
+      {
+        "champion": "Nidalee",
+        "changes": [
+          "Cougar Pounce damage 55/100/145/190 → 50/90/130/170",
+          "Primal Surge bonus Attack Speed 30–70% → 20–60%"
+        ]
+      },
+      {
+        "champion": "Nunu & Willump",
+        "changes": [
+          "R base damage 625/925/1275 → 750/1100/1450"
+        ]
+      },
+      {
+        "champion": "Orianna",
+        "changes": [
+          "Q AP ratio 55% → 60%",
+          "W AP ratio 80% → 85%"
+        ]
+      },
+      {
+        "champion": "Qiyana",
+        "changes": [
+          "Q base damage 80/110/140/170/200 → 70/100/130/160/190, now for both enchanted and unenchanted Q"
+        ]
+      },
+      {
+        "champion": "Rammus",
+        "changes": [
+          "W bonus Armor/MR 30/37.5/45/52.5/60% → 30/35/40/45/50%",
+          "W flat bonus Armor 27/32/37/42/47 → 25/30/35/40/45"
+        ]
+      },
+      {
+        "champion": "Ryze",
+        "changes": [
+          "Q Move Speed 28/32/36/40/44% → 30/35/40/45/50%",
+          "W AP ratio 60% → 70%",
+          "R Overload damage bonus 40/65/90% → 40/70/100%"
+        ]
+      },
+      {
+        "champion": "Sion",
+        "changes": [
+          "Health per level 87 → 95",
+          "R max damage 400/800/1200 → 450/900/1350",
+          "R max damage AD ratio 120% → 180%"
+        ]
+      },
+      {
+        "champion": "Taliyah",
+        "changes": [
+          "E base damage 60/105/150/195/240 → 70/115/160/205/250",
+          "E detonation damage 25/40/55/70/85 → 30/45/60/75/90",
+          "E AP ratio 60% → 70%"
+        ]
+      },
+      {
+        "champion": "Tristana",
+        "changes": [
+          "Q Attack Speed 60/75/90/105/120% → 40/60/80/100/120%"
+        ]
+      },
+      {
+        "champion": "Varus",
+        "changes": [
+          "Q reworked: 50/95/140/185/230 + 80% bonus AD, up to +70% with charge (was 80/150/220/290/360 + 120% bonus AD at max charge)",
+          "W on-hit 4/13/22/31/40 → 4/10/16/22/28, on-hit AP ratio 25% → 30%",
+          "W Blight %HP per stack 3/3.5/4/4.5/5% → 2.5/3/3.5/4/4.5%",
+          "W empowered Q %HP damage 6/8/10/12/14% → 6/7/8/9/10%",
+          "W cooldown refund per Blight stack 13% → 11%"
+        ]
+      },
+      {
+        "champion": "Vel'Koz",
+        "changes": [
+          "Passive AP ratio 60% → 65%",
+          "Passive max base damage 180 → 205"
+        ]
+      },
+      {
+        "champion": "Viktor",
+        "changes": [
+          "Base Move Speed 335 → 330",
+          "Q shield 40–140 → 30–130 (by level)",
+          "Q shield AP ratio 25% → 20%"
+        ]
+      },
+      {
+        "champion": "Wukong",
+        "changes": [
+          "Base Health regen 0.7 → 1.1",
+          "Passive bonus Armor start 6 → 4.5"
+        ]
+      },
+      {
+        "champion": "Xin Zhao",
+        "changes": [
+          "Q bonus AD ratio 40% → 45%",
+          "E permanent Attack Speed conversion value 5 → 4"
+        ]
+      },
+      {
+        "champion": "Yone",
+        "changes": [
+          "Q AD ratio 110% → 105%"
+        ]
+      },
+      {
+        "champion": "Yuumi",
+        "changes": [
+          "E cast range 25,000 → 500"
+        ]
+      },
+      {
+        "champion": "Zyra",
+        "changes": [
+          "W seed recharge time 18/16/14/12/10s → 16/14.5/13/11.5/10s"
+        ]
+      }
+    ]
+  },
+  "itemChanges": {
+    "summary": "Changes to items in the Mayhem shop. Runes and summoner mutators are unchanged.",
+    "list": [
+      {
+        "item": "Dawncore",
+        "changes": [
+          "AP per 100% base mana regen 10 → 15"
+        ]
+      },
+      {
+        "item": "Gluttonous Greaves",
+        "changes": [
+          "Combine cost 700 → 800 gold"
+        ]
+      },
+      {
+        "item": "Hubris (ARAM version)",
+        "changes": [
+          "Values restructured into melee vs ranged multipliers. Resulting numbers look the same: 15 AD base and 2 AD per statue melee, about 10 and 1 ranged."
+        ]
+      },
+      {
+        "item": "Party Favor",
+        "changes": [
+          "Removed from the consumables quick-buy and from the item data, along with the Healthbar Splash cosmetics"
+        ]
+      },
+      {
+        "item": "Poro-Snax",
+        "changes": [
+          "New Disco Ball variant icon (cosmetic)"
+        ]
+      }
+    ],
+    "outsideMayhemShop": [
+      "Bastionbreaker: Lethality 22 → 18, Shaped Charge damage 50 → 40 (not in the Mayhem item list)"
+    ]
+  },
+  "modeChanges": [
+    "Health Relics are added to the Mayhem map's character list (they tie in with the Cafe Cuties Headliner).",
+    "New champion augment tags: each champion gets excluded and build tags, and a new AugmentFilters data set is loaded for Mayhem. Augment offers likely get tailored to the champion's kit.",
+    "Mayhem gets its own audio feature on the Bloom map skin (BloomKiwi).",
+    "Bot difficulty constants changed (AI level-up health penalty 0.7 → 0.99, max HP penalty 0.65 → 0.99). This only matters in games with bots.",
+    "Menu copy: the mode is pitched as \"THIS IS MAYHEM\" and \"JOURNEY TO STARDOM\"; the old \"Quest Augments\" section is now \"HEADLINERS\"."
+  ]
+}
