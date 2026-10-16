@@ -535,6 +535,8 @@ private:
     const Bag* spellblade_ = nullptr;
     std::vector<Proc> abilityProcs_, attackProcs_, actives_;
     Proc missile_, kraken_, storm_, eclipse_;
+    const Bag* poro_ = nullptr;  // Poro Stampede: the Poro Charge summoner spell
+    double poroReady_ = 0;
     bool hasMissile_ = false, hasKraken_ = false, hasStorm_ = false, hasEclipse_ = false;
 
     // fight
@@ -596,6 +598,7 @@ private:
             if (get(f, "kraken_every") > 0) { hasKraken_ = true; kraken_.fx = &f; }
             if (get(f, "storm_every") > 0) { hasStorm_ = true; storm_.fx = &f; }
             if (get(f, "maxhp_proc_cd") > 0) { hasEclipse_ = true; eclipse_.fx = &f; }
+            if (get(f, "poro_cd") > 0) poro_ = &f;
         }
         const double g = levelScale(sc_.level);
         baseAd_ = ch_.ad + ch_.adG * g;
@@ -1213,6 +1216,40 @@ private:
         }
     }
 
+    // Poro Charge (Poro Stampede's quest reward): waves of Poros charge down the lane at the enemy
+    // team, one more wave per feeding milestone. Each wave is a wide, slow skillshot that can be
+    // dodged; a champion already hit takes reduced damage from later waves.
+    void poroCharge() {
+        const Bag& f = *poro_;
+        const double fed = get(f, "poros_fed");
+        int waves = 0;
+        for (double need : {5, 12, 20, 30, 44, 63, 90, 129, 187, 275}) waves += fed >= need;
+        if (!waves) return;
+        const double lv = (sc_.level - 1) / 17.0;
+        const double dmg = get(f, "poro_min") + (get(f, "poro_max") - get(f, "poro_min")) * lv + get(f, "poro_per_fed") * fed;
+        Ability a;
+        a.castTime = 0.25;
+        a.geo.shape = Shape::Line;
+        a.geo.range = get(f, "poro_range");
+        a.geo.width = get(f, "poro_width");
+        a.geo.speed = get(f, "poro_speed");
+        std::vector<int> hitBefore;
+        for (int w = 0; w < waves && hasPrimary(); ++w) {
+            const Shot shot = shoot(a);
+            if (trace_) {
+                TraceEvent ev;
+                ev.t = t_ + w * get(f, "poro_wave_gap"); ev.kind = "poro"; ev.amount = w + 1; ev.flag = shot.primaryHit;
+                ev.x = shot.aim.x; ev.y = shot.aim.y; ev.flight = shot.flight;
+                record(ev);
+            }
+            for (Enemy* e : shot.hits) {
+                const bool again = std::find(hitBefore.begin(), hitBefore.end(), e->uid) != hitBefore.end();
+                deal(e, dmg * (again ? get(f, "poro_repeat") : 1.0), DamageType::Physical, SrcItems);
+                if (!again) hitBefore.push_back(e->uid);
+            }
+        }
+    }
+
     // Navori and Mystic Punch: attacks shorten ability cooldowns.
     void reduceCooldowns(double flat, double pct, bool includeR) {
         for (size_t i = 0; i < readyAt_.size(); ++i) {
@@ -1394,6 +1431,10 @@ Result Fight::run() {
                 p.readyAt = t_ + get(*p.fx, "active_cd");
                 deal(&P(), get(*p.fx, "active_flat") + get(*p.fx, "active_ap") * ap_, DamageType::Magic, SrcItems);
             }
+        }
+        if (poro_ && t_ >= poroReady_ && hasPrimary() && distTo(P()) <= 0.8 * get(*poro_, "poro_range")) {
+            poroReady_ = t_ + get(*poro_, "poro_cd");
+            poroCharge();
         }
         if (!hasPrimary()) continue;
 

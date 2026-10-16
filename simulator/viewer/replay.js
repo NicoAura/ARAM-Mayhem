@@ -15,6 +15,23 @@
   const $ = (id) => document.getElementById(id);
 
   let index = null, traces = null, sprite = null, byId = new Map();
+  // Game art streamed from CommunityDragon (Riot's files, so not in the repo); a page that can't
+  // reach it (the Claude preview) falls back to copies in replay-data/art/ when they're there.
+  const CDRAGON = "https://raw.communitydragon.org/latest/";
+  function loadImage(urls, done) {
+    if (!urls.length) return;
+    const im = new Image();
+    im.onload = () => done(im);
+    im.onerror = () => loadImage(urls.slice(1), done);
+    im.src = urls[0];
+  }
+  // The Howling Abyss from above (the game's minimap art) as the arena floor, and a Poro for Poro Charge.
+  let floorImg = null, poroImg = null;
+  loadImage([CDRAGON + "game/assets/maps/info/map12/2dlevelminimap.png", DATA + "art/floor.png"], (im) => { floorImg = im; });
+  loadImage([CDRAGON + "game/assets/spells/icons2d/porocharge_quest2.png", DATA + "art/poro.png"], (im) => { poroImg = im; });
+  const FLOOR_UNITS_PER_PX = 1100 / 60; // the minimap's bridge is about 60 px across; the lane is 1100 units wide
+  const FLOOR_CENTER_X = 650;            // where the map's middle sits on the simulated lane
+  const PORO_SPEED = 900, PORO_WIDTH = 420; // match poro_speed and poro_width in data/augments.json
   // Which abilities move their caster (dash or blink), from the game's spell tags (tools/build_anim_data.py).
   let anims = {};
   fetch(DATA + "anims.json" + BUST).then((r) => (r.ok ? r.json() : {})).then((a) => {
@@ -85,7 +102,7 @@
     const ev = tr.events;
     const f = { duration: tr.fight.duration, engage: tr.fight.engage_at, maxHp: tr.fight.max_hp, events: ev,
       casts: [], attacks: [], procs: [], cc: [], kills: [], self: [], spawns: new Map(), focus: [], numbers: [],
-      damage: [], death: null, pos: [], geo: {} };
+      damage: [], death: null, pos: [], geo: {}, poros: [] };
     for (const a of tr.abilities || []) f.geo[a.slot] = a;
     let lastNum = null;
     for (const e of ev) {
@@ -110,6 +127,7 @@
           break;
         }
         case "focus": f.focus.push(e); break;
+        case "poro": f.poros.push(e); break;
         case "damage": {
           f.damage.push(e);
           // Merge ticks that land together on one target so numbers stay readable.
@@ -128,6 +146,7 @@
     // Traces from the positional simulator say where everyone stands; older ones don't.
     f.positional = f.pos.length > 1;
     if (f.positional) for (const c of f.casts) c.from = worldAt(f, c.land).me;
+    if (f.positional) for (const w of f.poros) w.from = worldAt(f, w.t).me;
     // Crits on attacks: tag the matching damage number.
     for (const a of f.attacks) if (a.f) {
       const n = f.numbers.find((n) => n.u === a.u && Math.abs(n.t - a.t) < 1e-6 && n.src === 0);
@@ -373,13 +392,27 @@
     const grd = g.createLinearGradient(0, 0, 0, H);
     grd.addColorStop(0, "#0e1822"); grd.addColorStop(1, "#0a1118");
     g.fillStyle = grd; g.fillRect(0, 0, W, H);
-    g.fillStyle = "#13212e"; g.fillRect(0, H * 0.18, W, H * 0.74);
-    g.strokeStyle = "rgba(143,211,255,.08)"; g.lineWidth = 2 * u;
-    // With positions the stripes scroll with the view, so you can see the fight move along the lane.
-    const step = world ? 200 * view.k : 80 * u, shift = world ? -((view.cx * view.k) % step) : 0;
-    for (let x = -H + shift; x < W + step; x += step) { g.beginPath(); g.moveTo(x, H * 0.18); g.lineTo(x + H * 0.74, H * 0.92); g.stroke(); }
-    g.strokeStyle = "rgba(143,211,255,.25)"; g.lineWidth = 3 * u;
-    g.beginPath(); g.moveTo(0, H * 0.18); g.lineTo(W, H * 0.18); g.moveTo(0, H * 0.92); g.lineTo(W, H * 0.92); g.stroke();
+    if (floorImg) {
+      // The real map, turned so its lane runs left to right (your base on the left), scaled so
+      // the bridge is the simulated lane, and scrolling with the view.
+      const k = world ? view.k : (H * 0.74) / (2 * LANE), cx = world ? view.cx : FLOOR_CENTER_X;
+      g.save();
+      g.translate(W / 2 + (FLOOR_CENTER_X - cx) * k, H * 0.55);
+      g.scale(k * FLOOR_UNITS_PER_PX, k * FLOOR_UNITS_PER_PX);
+      g.rotate(Math.PI / 4);
+      g.imageSmoothingQuality = "high";
+      g.drawImage(floorImg, -floorImg.width / 2, -floorImg.height / 2);
+      g.restore();
+      g.fillStyle = "rgba(8,14,20,.38)"; g.fillRect(0, 0, W, H);  // dimmed so fighters and effects stand out
+    } else {
+      g.fillStyle = "#13212e"; g.fillRect(0, H * 0.18, W, H * 0.74);
+      g.strokeStyle = "rgba(143,211,255,.08)"; g.lineWidth = 2 * u;
+      // With positions the stripes scroll with the view, so you can see the fight move along the lane.
+      const step = world ? 200 * view.k : 80 * u, shift = world ? -((view.cx * view.k) % step) : 0;
+      for (let x = -H + shift; x < W + step; x += step) { g.beginPath(); g.moveTo(x, H * 0.18); g.lineTo(x + H * 0.74, H * 0.92); g.stroke(); }
+      g.strokeStyle = "rgba(143,211,255,.25)"; g.lineWidth = 3 * u;
+      g.beginPath(); g.moveTo(0, H * 0.18); g.lineTo(W, H * 0.18); g.moveTo(0, H * 0.92); g.lineTo(W, H * 0.92); g.stroke();
+    }
 
     const alive = [...s.enemies.values()].filter((e) => e.died === null || time - e.died < 0.8);
     const others = alive.filter((e) => e.uid !== s.focus).sort((a, b) => a.uid - b.uid);
@@ -417,6 +450,30 @@
           g.beginPath(); g.arc(x, y, (a.f ? 7 : 4.5) * u, 0, Math.PI * 2); g.fill();
         }
       } else if (Math.abs(age) < 0.15) lunge = Math.max(lunge, 1 - Math.abs(age) / 0.15);
+    }
+
+    // Poro Charge (Poro Stampede): each wave is a row of Poros running down the lane.
+    for (const w of fight.poros) {
+      if (!w.from || !world) continue;
+      const dx = w.ax - w.from.x, dy = w.ay - w.from.y, len = Math.hypot(dx, dy) || 1;
+      const since = time - w.t, travel = len / PORO_SPEED;
+      if (since < 0 || since > travel + 0.3) continue;
+      const ux = dx / len, uy = dy / len, d = Math.min(len, since * PORO_SPEED);
+      g.globalAlpha = since > travel ? 1 - (since - travel) / 0.3 : 1;
+      const rad = Math.max(10 * u, 70 * view.k), n = 5;
+      for (let i = 0; i < n; i++) {
+        const off = (i + 0.5 - n / 2) * (PORO_WIDTH / n);
+        const p = scr({ x: w.from.x + ux * d - uy * off, y: w.from.y + uy * d + ux * off });
+        const hop = Math.abs(Math.sin(since * 12 + i * 1.9)) * 8 * u;
+        g.save();
+        g.beginPath(); g.arc(p.x, p.y - hop, rad, 0, Math.PI * 2); g.closePath();
+        if (poroImg) { g.clip(); g.drawImage(poroImg, p.x - rad, p.y - hop - rad, rad * 2, rad * 2); }
+        else { g.fillStyle = "#f2f6fb"; g.fill(); }
+        g.restore();
+        g.strokeStyle = "#fff"; g.lineWidth = 2 * u;
+        g.beginPath(); g.arc(p.x, p.y - hop, rad, 0, Math.PI * 2); g.stroke();
+      }
+      g.globalAlpha = 1;
     }
 
     // Ability casts.
@@ -823,6 +880,9 @@
       if (p && p.catch) p.catch(() => {});
       voices.push(a);
     }
+    pickVoice = new Audio(silent);
+    const p = pickVoice.play();
+    if (p && p.catch) p.catch(() => {});
   }
   function playSound(c, slot, volume) {
     if (!soundOn || !gestured || !voices.length || !c) return;
@@ -841,11 +901,25 @@
     clearTimeout(a.stopTimer);
     a.onplaying = packed ? () => { clearTimeout(a.stopTimer); a.stopTimer = setTimeout(() => a.pause(), packed[1] * 1000); } : null;
   }
+  // The champion's pick quote from the client's champion select, when you choose a champion.
+  let pickVoice = null;
+  function playPickQuote(c) {
+    if (!pickVoice || !soundOn || masterVolume === 0 || !c) return;
+    const path = `plugins/rcp-be-lol-game-data/global/default/v1/champion-choose-vo/${c.key}.ogg`;
+    const urls = [CDRAGON + path, `${DATA}pick/${c.key}.ogg`];
+    let i = 0;
+    pickVoice.pause();
+    pickVoice.onerror = () => { if (++i < urls.length) { pickVoice.src = urls[i]; pickVoice.play().catch(() => {}); } };
+    pickVoice.src = urls[0];
+    pickVoice.volume = masterVolume;
+    pickVoice.play().catch(() => {});
+  }
   function syncSound() {
     video.muted = !(soundOn && gestured) || masterVolume === 0;
     video.volume = masterVolume;
     for (const a of voices) if (!a.paused) a.volume = Math.min(a.volume, masterVolume);
     if (!soundOn) for (const a of voices) a.pause();
+    if (pickVoice) { pickVoice.volume = Math.min(pickVoice.volume, masterVolume); if (!soundOn) pickVoice.pause(); }
     const b = $("sound");
     b.textContent = soundOn ? "Sound on" : "Sound off";
     b.setAttribute("aria-pressed", String(soundOn));
@@ -1020,11 +1094,11 @@
   }
 
   // ---------- controls ----------
-  $("champ").addEventListener("change", (e) => load(e.target.value));
+  $("champ").addEventListener("change", (e) => { load(e.target.value); playPickQuote(champ); });
   $("rand").addEventListener("click", () => {
     const opts = $("champ").options;
     const pick = opts[Math.floor(Math.random() * opts.length)].value;
-    $("champ").value = pick; load(pick);
+    $("champ").value = pick; load(pick); playPickQuote(champ);
   });
   $("play").addEventListener("click", () => {
     if (!fight) return;
