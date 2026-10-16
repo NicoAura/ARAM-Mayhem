@@ -5,7 +5,7 @@ window.STACKING_DATA = {
   {
    "alias": "Veigar",
    "name": "Veigar",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/45.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/45.png",
    "stackName": "Phenomenal Evil",
    "unit": "AP",
    "perStack": 1.0,
@@ -33,7 +33,7 @@ window.STACKING_DATA = {
   {
    "alias": "Nasus",
    "name": "Nasus",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/75.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/75.png",
    "stackName": "Siphoning Strike",
    "unit": "Q damage",
    "perStack": 1.0,
@@ -61,7 +61,7 @@ window.STACKING_DATA = {
   {
    "alias": "Senna",
    "name": "Senna",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/235.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/235.png",
    "stackName": "Mist",
    "unit": "AD",
    "perStack": 0.75,
@@ -83,7 +83,7 @@ window.STACKING_DATA = {
   {
    "alias": "Smolder",
    "name": "Smolder",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/901.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/901.png",
    "stackName": "Dragon Practice",
    "unit": "Q damage",
    "perStack": 0.25,
@@ -123,7 +123,7 @@ window.STACKING_DATA = {
    "id": 1390,
    "name": "Phenomenal Evil",
    "tier": "Gold",
-   "icon": "https://raw.communitydragon.org/latest/game/assets/ux/kiwi/augments/icons/aram_phenomenalevil_small.png",
+   "icon": "/assets/cd/latest/game/assets/ux/kiwi/augments/icons/aram_phenomenalevil_small.png",
    "values": {
     "ProcCooldown": 1.0,
     "StartingAPIfSecondAugment": 40.0,

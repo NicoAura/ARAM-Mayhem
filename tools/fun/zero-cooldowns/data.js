@@ -5,7 +5,7 @@ window.COOLDOWN_DATA = {
   {
    "alias": "Aatrox",
    "name": "Aatrox",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/266.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/266.png",
    "spells": [
     {
      "key": "Q",
@@ -56,7 +56,7 @@ window.COOLDOWN_DATA = {
   {
    "alias": "Ahri",
    "name": "Ahri",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/103.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/103.png",
    "spells": [
     {
      "key": "Q",
@@ -107,7 +107,7 @@ window.COOLDOWN_DATA = {
   {
    "alias": "Akali",
    "name": "Akali",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/84.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/84.png",
    "spells": [
     {
      "key": "Q",
@@ -158,7 +158,7 @@ window.COOLDOWN_DATA = {
   {
    "alias": "Akshan",
    "name": "Akshan",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/166.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/166.png",
    "spells": [
     {
      "key": "Q",
@@ -209,7 +209,7 @@ window.COOLDOWN_DATA = {
   {
    "alias": "Alistar",
    "name": "Alistar",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/12.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/12.png",
    "spells": [
     {
      "key": "Q",
@@ -260,7 +260,7 @@ window.COOLDOWN_DATA = {
   {
    "alias": "Ambessa",
    "name": "Ambessa",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/799.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/799.png",
    "spells": [
     {
      "key": "Q",
@@ -311,7 +311,7 @@ window.COOLDOWN_DATA = {
   {
    "alias": "Amumu",
    "name": "Amumu",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/32.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/32.png",
    "spells": [
     {
      "key": "Q",
@@ -362,7 +362,7 @@ window.COOLDOWN_DATA = {
   {
    "alias": "Anivia",
    "name": "Anivia",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/34.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/34.png",
    "spells": [
     {
      "key": "Q",
@@ -413,7 +413,7 @@ window.COOLDOWN_DATA = {
   {
    "alias": "Annie",
    "name": "Annie",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/1.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/1.png",
    "spells": [
     {
      "key": "Q",
@@ -464,7 +464,7 @@ window.COOLDOWN_DATA = {
   {
    "alias": "Aphelios",
    "name": "Aphelios",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/523.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/523.png",
    "spells": [
     {
      "key": "Q",
@@ -515,7 +515,7 @@ window.COOLDOWN_DATA = {
   {
    "alias": "Ashe",
    "name": "Ashe",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/22.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/22.png",
    "spells": [
     {
      "key": "Q",
@@ -566,7 +566,7 @@ window.COOLDOWN_DATA = {
   {
    "alias": "AurelionSol",
    "name": "Aurelion Sol",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/136.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/136.png",
    "spells": [
     {
      "key": "Q",
@@ -617,7 +617,7 @@ window.COOLDOWN_DATA = {
   {
    "alias": "Aurora",
    "name": "Aurora",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/893.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/893.png",
    "spells": [
     {
      "key": "Q",
@@ -668,7 +668,7 @@ window.COOLDOWN_DATA = {
   {
    "alias": "Azir",
    "name": "Azir",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/268.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/268.png",
    "spells": [
     {
      "key": "Q",
@@ -719,7 +719,7 @@ window.COOLDOWN_DATA = {
   {
    "alias": "Bard",
    "name": "Bard",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/432.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/432.png",
    "spells": [
     {
      "key": "Q",
@@ -770,7 +770,7 @@ window.COOLDOWN_DATA = {
   {
    "alias": "Belveth",
    "name": "Bel'Veth",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/200.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/200.png",
    "spells": [
     {
      "key": "Q",
@@ -821,7 +821,7 @@ window.COOLDOWN_DATA = {
   {
    "alias": "Blitzcrank",
    "name": "Blitzcrank",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/53.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/53.png",
    "spells": [
     {
      "key": "Q",
@@ -872,7 +872,7 @@ window.COOLDOWN_DATA = {
   {
    "alias": "Brand",
    "name": "Brand",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/63.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/63.png",
    "spells": [
     {
      "key": "Q",
@@ -923,7 +923,7 @@ window.COOLDOWN_DATA = {
   {
    "alias": "Braum",
    "name": "Braum",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/201.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/201.png",
    "spells": [
     {
      "key": "Q",
@@ -974,7 +974,7 @@ window.COOLDOWN_DATA = {
   {
    "alias": "Briar",
    "name": "Briar",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/233.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/233.png",
    "spells": [
     {
      "key": "Q",
@@ -1025,7 +1025,7 @@ window.COOLDOWN_DATA = {
   {
    "alias": "Caitlyn",
    "name": "Caitlyn",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/51.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/51.png",
    "spells": [
     {
      "key": "Q",
@@ -1076,7 +1076,7 @@ window.COOLDOWN_DATA = {
   {
    "alias": "Camille",
    "name": "Camille",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/164.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/164.png",
    "spells": [
     {
      "key": "Q",
@@ -1127,7 +1127,7 @@ window.COOLDOWN_DATA = {
   {
    "alias": "Cassiopeia",
    "name": "Cassiopeia",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/69.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/69.png",
    "spells": [
     {
      "key": "Q",
@@ -1178,7 +1178,7 @@ window.COOLDOWN_DATA = {
   {
    "alias": "Chogath",
    "name": "Cho'Gath",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/31.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/31.png",
    "spells": [
     {
      "key": "Q",
@@ -1229,7 +1229,7 @@ window.COOLDOWN_DATA = {
   {
    "alias": "Corki",
    "name": "Corki",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/42.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/42.png",
    "spells": [
     {
      "key": "Q",
@@ -1280,7 +1280,7 @@ window.COOLDOWN_DATA = {
   {
    "alias": "Darius",
    "name": "Darius",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/122.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/122.png",
    "spells": [
     {
      "key": "Q",
@@ -1331,7 +1331,7 @@ window.COOLDOWN_DATA = {
   {
    "alias": "Diana",
    "name": "Diana",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/131.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/131.png",
    "spells": [
     {
      "key": "Q",
@@ -1382,7 +1382,7 @@ window.COOLDOWN_DATA = {
   {
    "alias": "DrMundo",
    "name": "Dr. Mundo",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/36.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/36.png",
    "spells": [
     {
      "key": "Q",
@@ -1433,7 +1433,7 @@ window.COOLDOWN_DATA = {
   {
    "alias": "Draven",
    "name": "Draven",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/119.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/119.png",
    "spells": [
     {
      "key": "Q",
@@ -1484,7 +1484,7 @@ window.COOLDOWN_DATA = {
   {
    "alias": "Ekko",
    "name": "Ekko",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/245.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/245.png",
    "spells": [
     {
      "key": "Q",
@@ -1535,7 +1535,7 @@ window.COOLDOWN_DATA = {
   {
    "alias": "Elise",
    "name": "Elise",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/60.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/60.png",
    "spells": [
     {
      "key": "Q",
@@ -1586,7 +1586,7 @@ window.COOLDOWN_DATA = {
   {
    "alias": "Evelynn",
    "name": "Evelynn",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/28.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/28.png",
    "spells": [
     {
      "key": "Q",
@@ -1637,7 +1637,7 @@ window.COOLDOWN_DATA = {
   {
    "alias": "Ezreal",
    "name": "Ezreal",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/81.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/81.png",
    "spells": [
     {
      "key": "Q",
@@ -1688,7 +1688,7 @@ window.COOLDOWN_DATA = {
   {
    "alias": "FiddleSticks",
    "name": "Fiddlesticks",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/9.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/9.png",
    "spells": [
     {
      "key": "Q",
@@ -1739,7 +1739,7 @@ window.COOLDOWN_DATA = {
   {
    "alias": "Fiora",
    "name": "Fiora",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/114.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/114.png",
    "spells": [
     {
      "key": "Q",
@@ -1790,7 +1790,7 @@ window.COOLDOWN_DATA = {
   {
    "alias": "Fizz",
    "name": "Fizz",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/105.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/105.png",
    "spells": [
     {
      "key": "Q",
@@ -1841,7 +1841,7 @@ window.COOLDOWN_DATA = {
   {
    "alias": "Galio",
    "name": "Galio",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/3.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/3.png",
    "spells": [
     {
      "key": "Q",
@@ -1892,7 +1892,7 @@ window.COOLDOWN_DATA = {
   {
    "alias": "Gangplank",
    "name": "Gangplank",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/41.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/41.png",
    "spells": [
     {
      "key": "Q",
@@ -1943,7 +1943,7 @@ window.COOLDOWN_DATA = {
   {
    "alias": "Garen",
    "name": "Garen",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/86.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/86.png",
    "spells": [
     {
      "key": "Q",
@@ -1994,7 +1994,7 @@ window.COOLDOWN_DATA = {
   {
    "alias": "Gnar",
    "name": "Gnar",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/150.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/150.png",
    "spells": [
     {
      "key": "Q",
@@ -2045,7 +2045,7 @@ window.COOLDOWN_DATA = {
   {
    "alias": "Gragas",
    "name": "Gragas",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/79.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/79.png",
    "spells": [
     {
      "key": "Q",
@@ -2096,7 +2096,7 @@ window.COOLDOWN_DATA = {
   {
    "alias": "Graves",
    "name": "Graves",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/104.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/104.png",
    "spells": [
     {
      "key": "Q",
@@ -2147,7 +2147,7 @@ window.COOLDOWN_DATA = {
   {
    "alias": "Gwen",
    "name": "Gwen",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/887.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/887.png",
    "spells": [
     {
      "key": "Q",
@@ -2198,7 +2198,7 @@ window.COOLDOWN_DATA = {
   {
    "alias": "Hecarim",
    "name": "Hecarim",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/120.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/120.png",
    "spells": [
     {
      "key": "Q",
@@ -2249,7 +2249,7 @@ window.COOLDOWN_DATA = {
   {
    "alias": "Heimerdinger",
    "name": "Heimerdinger",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/74.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/74.png",
    "spells": [
     {
      "key": "Q",
@@ -2300,7 +2300,7 @@ window.COOLDOWN_DATA = {
   {
    "alias": "Hwei",
    "name": "Hwei",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/910.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/910.png",
    "spells": [
     {
      "key": "Q",
@@ -2351,7 +2351,7 @@ window.COOLDOWN_DATA = {
   {
    "alias": "Illaoi",
    "name": "Illaoi",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/420.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/420.png",
    "spells": [
     {
      "key": "Q",
@@ -2402,7 +2402,7 @@ window.COOLDOWN_DATA = {
   {
    "alias": "Irelia",
    "name": "Irelia",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/39.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/39.png",
    "spells": [
     {
      "key": "Q",
@@ -2453,7 +2453,7 @@ window.COOLDOWN_DATA = {
   {
    "alias": "Ivern",
    "name": "Ivern",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/427.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/427.png",
    "spells": [
     {
      "key": "Q",
@@ -2504,7 +2504,7 @@ window.COOLDOWN_DATA = {
   {
    "alias": "Janna",
    "name": "Janna",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/40.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/40.png",
    "spells": [
     {
      "key": "Q",
@@ -2555,7 +2555,7 @@ window.COOLDOWN_DATA = {
   {
    "alias": "JarvanIV",
    "name": "Jarvan IV",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/59.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/59.png",
    "spells": [
     {
      "key": "Q",
@@ -2606,7 +2606,7 @@ window.COOLDOWN_DATA = {
   {
    "alias": "Jax",
    "name": "Jax",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/24.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/24.png",
    "spells": [
     {
      "key": "Q",
@@ -2657,7 +2657,7 @@ window.COOLDOWN_DATA = {
   {
    "alias": "Jayce",
    "name": "Jayce",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/126.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/126.png",
    "spells": [
     {
      "key": "Q",
@@ -2708,7 +2708,7 @@ window.COOLDOWN_DATA = {
   {
    "alias": "Jhin",
    "name": "Jhin",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/202.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/202.png",
    "spells": [
     {
      "key": "Q",
@@ -2759,7 +2759,7 @@ window.COOLDOWN_DATA = {
   {
    "alias": "Jinx",
    "name": "Jinx",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/222.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/222.png",
    "spells": [
     {
      "key": "Q",
@@ -2810,7 +2810,7 @@ window.COOLDOWN_DATA = {
   {
    "alias": "KSante",
    "name": "K'Sante",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/897.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/897.png",
    "spells": [
     {
      "key": "Q",
@@ -2861,7 +2861,7 @@ window.COOLDOWN_DATA = {
   {
    "alias": "Kaisa",
    "name": "Kai'Sa",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/145.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/145.png",
    "spells": [
     {
      "key": "Q",
@@ -2912,7 +2912,7 @@ window.COOLDOWN_DATA = {
   {
    "alias": "Kalista",
    "name": "Kalista",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/429.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/429.png",
    "spells": [
     {
      "key": "Q",
@@ -2963,7 +2963,7 @@ window.COOLDOWN_DATA = {
   {
    "alias": "Karma",
    "name": "Karma",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/43.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/43.png",
    "spells": [
     {
      "key": "Q",
@@ -3014,7 +3014,7 @@ window.COOLDOWN_DATA = {
   {
    "alias": "Karthus",
    "name": "Karthus",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/30.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/30.png",
    "spells": [
     {
      "key": "Q",
@@ -3065,7 +3065,7 @@ window.COOLDOWN_DATA = {
   {
    "alias": "Kassadin",
    "name": "Kassadin",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/38.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/38.png",
    "spells": [
     {
      "key": "Q",
@@ -3116,7 +3116,7 @@ window.COOLDOWN_DATA = {
   {
    "alias": "Katarina",
    "name": "Katarina",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/55.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/55.png",
    "spells": [
     {
      "key": "Q",
@@ -3167,7 +3167,7 @@ window.COOLDOWN_DATA = {
   {
    "alias": "Kayle",
    "name": "Kayle",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/10.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/10.png",
    "spells": [
     {
      "key": "Q",
@@ -3218,7 +3218,7 @@ window.COOLDOWN_DATA = {
   {
    "alias": "Kayn",
    "name": "Kayn",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/141.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/141.png",
    "spells": [
     {
      "key": "Q",
@@ -3269,7 +3269,7 @@ window.COOLDOWN_DATA = {
   {
    "alias": "Kennen",
    "name": "Kennen",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/85.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/85.png",
    "spells": [
     {
      "key": "Q",
@@ -3320,7 +3320,7 @@ window.COOLDOWN_DATA = {
   {
    "alias": "Khazix",
    "name": "Kha'Zix",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/121.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/121.png",
    "spells": [
     {
      "key": "Q",
@@ -3371,7 +3371,7 @@ window.COOLDOWN_DATA = {
   {
    "alias": "Kindred",
    "name": "Kindred",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/203.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/203.png",
    "spells": [
     {
      "key": "Q",
@@ -3422,7 +3422,7 @@ window.COOLDOWN_DATA = {
   {
    "alias": "Kled",
    "name": "Kled",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/240.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/240.png",
    "spells": [
     {
      "key": "Q",
@@ -3473,7 +3473,7 @@ window.COOLDOWN_DATA = {
   {
    "alias": "KogMaw",
    "name": "Kog'Maw",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/96.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/96.png",
    "spells": [
     {
      "key": "Q",
@@ -3524,7 +3524,7 @@ window.COOLDOWN_DATA = {
   {
    "alias": "Leblanc",
    "name": "LeBlanc",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/7.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/7.png",
    "spells": [
     {
      "key": "Q",
@@ -3575,7 +3575,7 @@ window.COOLDOWN_DATA = {
   {
    "alias": "LeeSin",
    "name": "Lee Sin",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/64.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/64.png",
    "spells": [
     {
      "key": "Q",
@@ -3626,7 +3626,7 @@ window.COOLDOWN_DATA = {
   {
    "alias": "Leona",
    "name": "Leona",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/89.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/89.png",
    "spells": [
     {
      "key": "Q",
@@ -3677,7 +3677,7 @@ window.COOLDOWN_DATA = {
   {
    "alias": "Lillia",
    "name": "Lillia",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/876.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/876.png",
    "spells": [
     {
      "key": "Q",
@@ -3728,7 +3728,7 @@ window.COOLDOWN_DATA = {
   {
    "alias": "Lissandra",
    "name": "Lissandra",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/127.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/127.png",
    "spells": [
     {
      "key": "Q",
@@ -3779,7 +3779,7 @@ window.COOLDOWN_DATA = {
   {
    "alias": "Locke",
    "name": "Locke",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/805.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/805.png",
    "spells": [
     {
      "key": "Q",
@@ -3830,7 +3830,7 @@ window.COOLDOWN_DATA = {
   {
    "alias": "Lucian",
    "name": "Lucian",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/236.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/236.png",
    "spells": [
     {
      "key": "Q",
@@ -3881,7 +3881,7 @@ window.COOLDOWN_DATA = {
   {
    "alias": "Lulu",
    "name": "Lulu",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/117.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/117.png",
    "spells": [
     {
      "key": "Q",
@@ -3932,7 +3932,7 @@ window.COOLDOWN_DATA = {
   {
    "alias": "Lux",
    "name": "Lux",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/99.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/99.png",
    "spells": [
     {
      "key": "Q",
@@ -3983,7 +3983,7 @@ window.COOLDOWN_DATA = {
   {
    "alias": "Malphite",
    "name": "Malphite",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/54.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/54.png",
    "spells": [
     {
      "key": "Q",
@@ -4034,7 +4034,7 @@ window.COOLDOWN_DATA = {
   {
    "alias": "Malzahar",
    "name": "Malzahar",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/90.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/90.png",
    "spells": [
     {
      "key": "Q",
@@ -4085,7 +4085,7 @@ window.COOLDOWN_DATA = {
   {
    "alias": "Maokai",
    "name": "Maokai",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/57.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/57.png",
    "spells": [
     {
      "key": "Q",
@@ -4136,7 +4136,7 @@ window.COOLDOWN_DATA = {
   {
    "alias": "MasterYi",
    "name": "Master Yi",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/11.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/11.png",
    "spells": [
     {
      "key": "Q",
@@ -4187,7 +4187,7 @@ window.COOLDOWN_DATA = {
   {
    "alias": "Mel",
    "name": "Mel",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/800.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/800.png",
    "spells": [
     {
      "key": "Q",
@@ -4238,7 +4238,7 @@ window.COOLDOWN_DATA = {
   {
    "alias": "Milio",
    "name": "Milio",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/902.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/902.png",
    "spells": [
     {
      "key": "Q",
@@ -4289,7 +4289,7 @@ window.COOLDOWN_DATA = {
   {
    "alias": "MissFortune",
    "name": "Miss Fortune",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/21.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/21.png",
    "spells": [
     {
      "key": "Q",
@@ -4340,7 +4340,7 @@ window.COOLDOWN_DATA = {
   {
    "alias": "Mordekaiser",
    "name": "Mordekaiser",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/82.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/82.png",
    "spells": [
     {
      "key": "Q",
@@ -4391,7 +4391,7 @@ window.COOLDOWN_DATA = {
   {
    "alias": "Morgana",
    "name": "Morgana",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/25.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/25.png",
    "spells": [
     {
      "key": "Q",
@@ -4442,7 +4442,7 @@ window.COOLDOWN_DATA = {
   {
    "alias": "Naafiri",
    "name": "Naafiri",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/950.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/950.png",
    "spells": [
     {
      "key": "Q",
@@ -4493,7 +4493,7 @@ window.COOLDOWN_DATA = {
   {
    "alias": "Nami",
    "name": "Nami",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/267.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/267.png",
    "spells": [
     {
      "key": "Q",
@@ -4544,7 +4544,7 @@ window.COOLDOWN_DATA = {
   {
    "alias": "Nasus",
    "name": "Nasus",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/75.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/75.png",
    "spells": [
     {
      "key": "Q",
@@ -4595,7 +4595,7 @@ window.COOLDOWN_DATA = {
   {
    "alias": "Nautilus",
    "name": "Nautilus",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/111.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/111.png",
    "spells": [
     {
      "key": "Q",
@@ -4646,7 +4646,7 @@ window.COOLDOWN_DATA = {
   {
    "alias": "Neeko",
    "name": "Neeko",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/518.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/518.png",
    "spells": [
     {
      "key": "Q",
@@ -4697,7 +4697,7 @@ window.COOLDOWN_DATA = {
   {
    "alias": "Nidalee",
    "name": "Nidalee",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/76.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/76.png",
    "spells": [
     {
      "key": "Q",
@@ -4748,7 +4748,7 @@ window.COOLDOWN_DATA = {
   {
    "alias": "Nilah",
    "name": "Nilah",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/895.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/895.png",
    "spells": [
     {
      "key": "Q",
@@ -4799,7 +4799,7 @@ window.COOLDOWN_DATA = {
   {
    "alias": "Nocturne",
    "name": "Nocturne",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/56.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/56.png",
    "spells": [
     {
      "key": "Q",
@@ -4850,7 +4850,7 @@ window.COOLDOWN_DATA = {
   {
    "alias": "Nunu",
    "name": "Nunu & Willump",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/20.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/20.png",
    "spells": [
     {
      "key": "Q",
@@ -4901,7 +4901,7 @@ window.COOLDOWN_DATA = {
   {
    "alias": "Olaf",
    "name": "Olaf",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/2.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/2.png",
    "spells": [
     {
      "key": "Q",
@@ -4952,7 +4952,7 @@ window.COOLDOWN_DATA = {
   {
    "alias": "Orianna",
    "name": "Orianna",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/61.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/61.png",
    "spells": [
     {
      "key": "Q",
@@ -5003,7 +5003,7 @@ window.COOLDOWN_DATA = {
   {
    "alias": "Ornn",
    "name": "Ornn",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/516.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/516.png",
    "spells": [
     {
      "key": "Q",
@@ -5054,7 +5054,7 @@ window.COOLDOWN_DATA = {
   {
    "alias": "Pantheon",
    "name": "Pantheon",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/80.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/80.png",
    "spells": [
     {
      "key": "Q",
@@ -5105,7 +5105,7 @@ window.COOLDOWN_DATA = {
   {
    "alias": "Poppy",
    "name": "Poppy",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/78.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/78.png",
    "spells": [
     {
      "key": "Q",
@@ -5156,7 +5156,7 @@ window.COOLDOWN_DATA = {
   {
    "alias": "Pyke",
    "name": "Pyke",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/555.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/555.png",
    "spells": [
     {
      "key": "Q",
@@ -5207,7 +5207,7 @@ window.COOLDOWN_DATA = {
   {
    "alias": "Qiyana",
    "name": "Qiyana",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/246.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/246.png",
    "spells": [
     {
      "key": "Q",
@@ -5258,7 +5258,7 @@ window.COOLDOWN_DATA = {
   {
    "alias": "Quinn",
    "name": "Quinn",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/133.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/133.png",
    "spells": [
     {
      "key": "Q",
@@ -5309,7 +5309,7 @@ window.COOLDOWN_DATA = {
   {
    "alias": "Rakan",
    "name": "Rakan",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/497.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/497.png",
    "spells": [
     {
      "key": "Q",
@@ -5360,7 +5360,7 @@ window.COOLDOWN_DATA = {
   {
    "alias": "Rammus",
    "name": "Rammus",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/33.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/33.png",
    "spells": [
     {
      "key": "Q",
@@ -5411,7 +5411,7 @@ window.COOLDOWN_DATA = {
   {
    "alias": "RekSai",
    "name": "Rek'Sai",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/421.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/421.png",
    "spells": [
     {
      "key": "Q",
@@ -5462,7 +5462,7 @@ window.COOLDOWN_DATA = {
   {
    "alias": "Rell",
    "name": "Rell",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/526.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/526.png",
    "spells": [
     {
      "key": "Q",
@@ -5513,7 +5513,7 @@ window.COOLDOWN_DATA = {
   {
    "alias": "Renata",
    "name": "Renata Glasc",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/888.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/888.png",
    "spells": [
     {
      "key": "Q",
@@ -5564,7 +5564,7 @@ window.COOLDOWN_DATA = {
   {
    "alias": "Renekton",
    "name": "Renekton",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/58.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/58.png",
    "spells": [
     {
      "key": "Q",
@@ -5615,7 +5615,7 @@ window.COOLDOWN_DATA = {
   {
    "alias": "Rengar",
    "name": "Rengar",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/107.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/107.png",
    "spells": [
     {
      "key": "Q",
@@ -5666,7 +5666,7 @@ window.COOLDOWN_DATA = {
   {
    "alias": "Riven",
    "name": "Riven",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/92.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/92.png",
    "spells": [
     {
      "key": "Q",
@@ -5717,7 +5717,7 @@ window.COOLDOWN_DATA = {
   {
    "alias": "Rumble",
    "name": "Rumble",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/68.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/68.png",
    "spells": [
     {
      "key": "Q",
@@ -5768,7 +5768,7 @@ window.COOLDOWN_DATA = {
   {
    "alias": "Ryze",
    "name": "Ryze",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/13.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/13.png",
    "spells": [
     {
      "key": "Q",
@@ -5819,7 +5819,7 @@ window.COOLDOWN_DATA = {
   {
    "alias": "Samira",
    "name": "Samira",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/360.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/360.png",
    "spells": [
     {
      "key": "Q",
@@ -5870,7 +5870,7 @@ window.COOLDOWN_DATA = {
   {
    "alias": "Sejuani",
    "name": "Sejuani",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/113.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/113.png",
    "spells": [
     {
      "key": "Q",
@@ -5921,7 +5921,7 @@ window.COOLDOWN_DATA = {
   {
    "alias": "Senna",
    "name": "Senna",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/235.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/235.png",
    "spells": [
     {
      "key": "Q",
@@ -5972,7 +5972,7 @@ window.COOLDOWN_DATA = {
   {
    "alias": "Seraphine",
    "name": "Seraphine",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/147.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/147.png",
    "spells": [
     {
      "key": "Q",
@@ -6023,7 +6023,7 @@ window.COOLDOWN_DATA = {
   {
    "alias": "Sett",
    "name": "Sett",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/875.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/875.png",
    "spells": [
     {
      "key": "Q",
@@ -6074,7 +6074,7 @@ window.COOLDOWN_DATA = {
   {
    "alias": "Shaco",
    "name": "Shaco",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/35.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/35.png",
    "spells": [
     {
      "key": "Q",
@@ -6125,7 +6125,7 @@ window.COOLDOWN_DATA = {
   {
    "alias": "Shen",
    "name": "Shen",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/98.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/98.png",
    "spells": [
     {
      "key": "Q",
@@ -6176,7 +6176,7 @@ window.COOLDOWN_DATA = {
   {
    "alias": "Shyvana",
    "name": "Shyvana",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/102.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/102.png",
    "spells": [
     {
      "key": "Q",
@@ -6227,7 +6227,7 @@ window.COOLDOWN_DATA = {
   {
    "alias": "Singed",
    "name": "Singed",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/27.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/27.png",
    "spells": [
     {
      "key": "Q",
@@ -6278,7 +6278,7 @@ window.COOLDOWN_DATA = {
   {
    "alias": "Sion",
    "name": "Sion",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/14.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/14.png",
    "spells": [
     {
      "key": "Q",
@@ -6329,7 +6329,7 @@ window.COOLDOWN_DATA = {
   {
    "alias": "Sivir",
    "name": "Sivir",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/15.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/15.png",
    "spells": [
     {
      "key": "Q",
@@ -6380,7 +6380,7 @@ window.COOLDOWN_DATA = {
   {
    "alias": "Skarner",
    "name": "Skarner",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/72.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/72.png",
    "spells": [
     {
      "key": "Q",
@@ -6431,7 +6431,7 @@ window.COOLDOWN_DATA = {
   {
    "alias": "Smolder",
    "name": "Smolder",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/901.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/901.png",
    "spells": [
     {
      "key": "Q",
@@ -6482,7 +6482,7 @@ window.COOLDOWN_DATA = {
   {
    "alias": "Sona",
    "name": "Sona",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/37.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/37.png",
    "spells": [
     {
      "key": "Q",
@@ -6533,7 +6533,7 @@ window.COOLDOWN_DATA = {
   {
    "alias": "Soraka",
    "name": "Soraka",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/16.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/16.png",
    "spells": [
     {
      "key": "Q",
@@ -6584,7 +6584,7 @@ window.COOLDOWN_DATA = {
   {
    "alias": "Swain",
    "name": "Swain",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/50.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/50.png",
    "spells": [
     {
      "key": "Q",
@@ -6635,7 +6635,7 @@ window.COOLDOWN_DATA = {
   {
    "alias": "Sylas",
    "name": "Sylas",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/517.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/517.png",
    "spells": [
     {
      "key": "Q",
@@ -6686,7 +6686,7 @@ window.COOLDOWN_DATA = {
   {
    "alias": "Syndra",
    "name": "Syndra",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/134.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/134.png",
    "spells": [
     {
      "key": "Q",
@@ -6737,7 +6737,7 @@ window.COOLDOWN_DATA = {
   {
    "alias": "TahmKench",
    "name": "Tahm Kench",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/223.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/223.png",
    "spells": [
     {
      "key": "Q",
@@ -6788,7 +6788,7 @@ window.COOLDOWN_DATA = {
   {
    "alias": "Taliyah",
    "name": "Taliyah",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/163.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/163.png",
    "spells": [
     {
      "key": "Q",
@@ -6839,7 +6839,7 @@ window.COOLDOWN_DATA = {
   {
    "alias": "Talon",
    "name": "Talon",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/91.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/91.png",
    "spells": [
     {
      "key": "Q",
@@ -6890,7 +6890,7 @@ window.COOLDOWN_DATA = {
   {
    "alias": "Taric",
    "name": "Taric",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/44.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/44.png",
    "spells": [
     {
      "key": "Q",
@@ -6941,7 +6941,7 @@ window.COOLDOWN_DATA = {
   {
    "alias": "Teemo",
    "name": "Teemo",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/17.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/17.png",
    "spells": [
     {
      "key": "Q",
@@ -6992,7 +6992,7 @@ window.COOLDOWN_DATA = {
   {
    "alias": "Thresh",
    "name": "Thresh",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/412.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/412.png",
    "spells": [
     {
      "key": "Q",
@@ -7043,7 +7043,7 @@ window.COOLDOWN_DATA = {
   {
    "alias": "Tristana",
    "name": "Tristana",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/18.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/18.png",
    "spells": [
     {
      "key": "Q",
@@ -7094,7 +7094,7 @@ window.COOLDOWN_DATA = {
   {
    "alias": "Trundle",
    "name": "Trundle",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/48.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/48.png",
    "spells": [
     {
      "key": "Q",
@@ -7145,7 +7145,7 @@ window.COOLDOWN_DATA = {
   {
    "alias": "Tryndamere",
    "name": "Tryndamere",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/23.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/23.png",
    "spells": [
     {
      "key": "Q",
@@ -7196,7 +7196,7 @@ window.COOLDOWN_DATA = {
   {
    "alias": "TwistedFate",
    "name": "Twisted Fate",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/4.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/4.png",
    "spells": [
     {
      "key": "Q",
@@ -7247,7 +7247,7 @@ window.COOLDOWN_DATA = {
   {
    "alias": "Twitch",
    "name": "Twitch",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/29.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/29.png",
    "spells": [
     {
      "key": "Q",
@@ -7298,7 +7298,7 @@ window.COOLDOWN_DATA = {
   {
    "alias": "Udyr",
    "name": "Udyr",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/77.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/77.png",
    "spells": [
     {
      "key": "Q",
@@ -7349,7 +7349,7 @@ window.COOLDOWN_DATA = {
   {
    "alias": "Urgot",
    "name": "Urgot",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/6.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/6.png",
    "spells": [
     {
      "key": "Q",
@@ -7400,7 +7400,7 @@ window.COOLDOWN_DATA = {
   {
    "alias": "Varus",
    "name": "Varus",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/110.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/110.png",
    "spells": [
     {
      "key": "Q",
@@ -7451,7 +7451,7 @@ window.COOLDOWN_DATA = {
   {
    "alias": "Vayne",
    "name": "Vayne",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/67.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/67.png",
    "spells": [
     {
      "key": "Q",
@@ -7502,7 +7502,7 @@ window.COOLDOWN_DATA = {
   {
    "alias": "Veigar",
    "name": "Veigar",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/45.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/45.png",
    "spells": [
     {
      "key": "Q",
@@ -7553,7 +7553,7 @@ window.COOLDOWN_DATA = {
   {
    "alias": "Velkoz",
    "name": "Vel'Koz",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/161.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/161.png",
    "spells": [
     {
      "key": "Q",
@@ -7604,7 +7604,7 @@ window.COOLDOWN_DATA = {
   {
    "alias": "Vex",
    "name": "Vex",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/711.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/711.png",
    "spells": [
     {
      "key": "Q",
@@ -7655,7 +7655,7 @@ window.COOLDOWN_DATA = {
   {
    "alias": "Vi",
    "name": "Vi",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/254.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/254.png",
    "spells": [
     {
      "key": "Q",
@@ -7706,7 +7706,7 @@ window.COOLDOWN_DATA = {
   {
    "alias": "Viego",
    "name": "Viego",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/234.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/234.png",
    "spells": [
     {
      "key": "Q",
@@ -7757,7 +7757,7 @@ window.COOLDOWN_DATA = {
   {
    "alias": "Viktor",
    "name": "Viktor",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/112.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/112.png",
    "spells": [
     {
      "key": "Q",
@@ -7808,7 +7808,7 @@ window.COOLDOWN_DATA = {
   {
    "alias": "Vladimir",
    "name": "Vladimir",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/8.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/8.png",
    "spells": [
     {
      "key": "Q",
@@ -7859,7 +7859,7 @@ window.COOLDOWN_DATA = {
   {
    "alias": "Volibear",
    "name": "Volibear",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/106.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/106.png",
    "spells": [
     {
      "key": "Q",
@@ -7910,7 +7910,7 @@ window.COOLDOWN_DATA = {
   {
    "alias": "Warwick",
    "name": "Warwick",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/19.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/19.png",
    "spells": [
     {
      "key": "Q",
@@ -7961,7 +7961,7 @@ window.COOLDOWN_DATA = {
   {
    "alias": "MonkeyKing",
    "name": "Wukong",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/62.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/62.png",
    "spells": [
     {
      "key": "Q",
@@ -8012,7 +8012,7 @@ window.COOLDOWN_DATA = {
   {
    "alias": "Xayah",
    "name": "Xayah",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/498.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/498.png",
    "spells": [
     {
      "key": "Q",
@@ -8063,7 +8063,7 @@ window.COOLDOWN_DATA = {
   {
    "alias": "Xerath",
    "name": "Xerath",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/101.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/101.png",
    "spells": [
     {
      "key": "Q",
@@ -8114,7 +8114,7 @@ window.COOLDOWN_DATA = {
   {
    "alias": "XinZhao",
    "name": "Xin Zhao",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/5.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/5.png",
    "spells": [
     {
      "key": "Q",
@@ -8165,7 +8165,7 @@ window.COOLDOWN_DATA = {
   {
    "alias": "Yasuo",
    "name": "Yasuo",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/157.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/157.png",
    "spells": [
     {
      "key": "Q",
@@ -8216,7 +8216,7 @@ window.COOLDOWN_DATA = {
   {
    "alias": "Yone",
    "name": "Yone",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/777.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/777.png",
    "spells": [
     {
      "key": "Q",
@@ -8267,7 +8267,7 @@ window.COOLDOWN_DATA = {
   {
    "alias": "Yorick",
    "name": "Yorick",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/83.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/83.png",
    "spells": [
     {
      "key": "Q",
@@ -8318,7 +8318,7 @@ window.COOLDOWN_DATA = {
   {
    "alias": "Yunara",
    "name": "Yunara",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/804.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/804.png",
    "spells": [
     {
      "key": "Q",
@@ -8369,7 +8369,7 @@ window.COOLDOWN_DATA = {
   {
    "alias": "Yuumi",
    "name": "Yuumi",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/350.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/350.png",
    "spells": [
     {
      "key": "Q",
@@ -8420,7 +8420,7 @@ window.COOLDOWN_DATA = {
   {
    "alias": "Zaahen",
    "name": "Zaahen",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/904.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/904.png",
    "spells": [
     {
      "key": "Q",
@@ -8471,7 +8471,7 @@ window.COOLDOWN_DATA = {
   {
    "alias": "Zac",
    "name": "Zac",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/154.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/154.png",
    "spells": [
     {
      "key": "Q",
@@ -8522,7 +8522,7 @@ window.COOLDOWN_DATA = {
   {
    "alias": "Zed",
    "name": "Zed",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/238.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/238.png",
    "spells": [
     {
      "key": "Q",
@@ -8573,7 +8573,7 @@ window.COOLDOWN_DATA = {
   {
    "alias": "Zeri",
    "name": "Zeri",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/221.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/221.png",
    "spells": [
     {
      "key": "Q",
@@ -8624,7 +8624,7 @@ window.COOLDOWN_DATA = {
   {
    "alias": "Ziggs",
    "name": "Ziggs",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/115.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/115.png",
    "spells": [
     {
      "key": "Q",
@@ -8675,7 +8675,7 @@ window.COOLDOWN_DATA = {
   {
    "alias": "Zilean",
    "name": "Zilean",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/26.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/26.png",
    "spells": [
     {
      "key": "Q",
@@ -8726,7 +8726,7 @@ window.COOLDOWN_DATA = {
   {
    "alias": "Zoe",
    "name": "Zoe",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/142.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/142.png",
    "spells": [
     {
      "key": "Q",
@@ -8777,7 +8777,7 @@ window.COOLDOWN_DATA = {
   {
    "alias": "Zyra",
    "name": "Zyra",
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/143.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-icons/143.png",
    "spells": [
     {
      "key": "Q",
@@ -8831,7 +8831,7 @@ window.COOLDOWN_DATA = {
    "id": 3118,
    "name": "Malignance",
    "price": 2700,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3118_malignance.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3118_malignance.png",
    "ap": 90.0,
    "mana": 600.0,
    "hp": 0.0,
@@ -8848,7 +8848,7 @@ window.COOLDOWN_DATA = {
    "id": 3073,
    "name": "Experimental Hexplate",
    "price": 3000,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3073_hexaegis.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3073_hexaegis.png",
    "ap": 0.0,
    "mana": 0.0,
    "hp": 450.0,
@@ -8865,7 +8865,7 @@ window.COOLDOWN_DATA = {
    "id": 2512,
    "name": "Fiendhunter Bolts",
    "price": 2650,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/2512_adcallin.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/2512_adcallin.png",
    "ap": 0.0,
    "mana": 0.0,
    "hp": 0.0,
@@ -8882,7 +8882,7 @@ window.COOLDOWN_DATA = {
    "id": 3003,
    "name": "Archangel's Staff",
    "price": 2900,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3003_mage_t3_archangelstaff.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3003_mage_t3_archangelstaff.png",
    "ap": 70.0,
    "mana": 600.0,
    "hp": 0.0,
@@ -8899,7 +8899,7 @@ window.COOLDOWN_DATA = {
    "id": 4629,
    "name": "Cosmic Drive",
    "price": 3000,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/4629_mage_t3_cosmicdrive.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/4629_mage_t3_cosmicdrive.png",
    "ap": 70.0,
    "mana": 0.0,
    "hp": 350.0,
@@ -8914,7 +8914,7 @@ window.COOLDOWN_DATA = {
    "id": 4628,
    "name": "Horizon Focus",
    "price": 2700,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/4628_mage_t3_horizonfocus.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/4628_mage_t3_horizonfocus.png",
    "ap": 75.0,
    "mana": 0.0,
    "hp": 0.0,
@@ -8929,7 +8929,7 @@ window.COOLDOWN_DATA = {
    "id": 3161,
    "name": "Spear of Shojin",
    "price": 3100,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3161_fighter_t3_spearofshojin.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3161_fighter_t3_spearofshojin.png",
    "ap": 0.0,
    "mana": 0.0,
    "hp": 450.0,
@@ -8946,7 +8946,7 @@ window.COOLDOWN_DATA = {
    "id": 4016,
    "name": "Wordless Promise",
    "price": 2500,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/4016_wordlesspromise.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/4016_wordlesspromise.png",
    "ap": 50.0,
    "mana": 0.0,
    "hp": 0.0,
@@ -8961,7 +8961,7 @@ window.COOLDOWN_DATA = {
    "id": 3050,
    "name": "Zeke's Convergence",
    "price": 2200,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3050_enchanter_t3_zekesconvergence.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3050_enchanter_t3_zekesconvergence.png",
    "ap": 0.0,
    "mana": 0.0,
    "hp": 300.0,
@@ -8978,7 +8978,7 @@ window.COOLDOWN_DATA = {
    "id": 6696,
    "name": "Axiom Arc",
    "price": 2750,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/6696_axiomarc.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/6696_axiomarc.png",
    "ap": 0.0,
    "mana": 0.0,
    "hp": 0.0,
@@ -8993,7 +8993,7 @@ window.COOLDOWN_DATA = {
    "id": 3071,
    "name": "Black Cleaver",
    "price": 3000,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3071_fighter_t3_blackcleaver.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3071_fighter_t3_blackcleaver.png",
    "ap": 0.0,
    "mana": 0.0,
    "hp": 400.0,
@@ -9009,7 +9009,7 @@ window.COOLDOWN_DATA = {
    "id": 2503,
    "name": "Blackfire Torch",
    "price": 2800,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/2503_blackfiretorch64.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/2503_blackfiretorch64.png",
    "ap": 80.0,
    "mana": 600.0,
    "hp": 0.0,
@@ -9024,7 +9024,7 @@ window.COOLDOWN_DATA = {
    "id": 3137,
    "name": "Cryptbloom",
    "price": 3000,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3137_cryptbloom.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3137_cryptbloom.png",
    "ap": 75.0,
    "mana": 0.0,
    "hp": 0.0,
@@ -9039,7 +9039,7 @@ window.COOLDOWN_DATA = {
    "id": 2510,
    "name": "Dusk and Dawn",
    "price": 3100,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/2510_apfightersheen.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/2510_apfightersheen.png",
    "ap": 60.0,
    "mana": 0.0,
    "hp": 300.0,
@@ -9055,7 +9055,7 @@ window.COOLDOWN_DATA = {
    "id": 6620,
    "name": "Echoes of Helia",
    "price": 2200,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/6620_echoes_of_helia.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/6620_echoes_of_helia.png",
    "ap": 35.0,
    "mana": 0.0,
    "hp": 200.0,
@@ -9070,7 +9070,7 @@ window.COOLDOWN_DATA = {
    "id": 3508,
    "name": "Essence Reaver",
    "price": 3050,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3508_marksman_t3_essencereaver.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3508_marksman_t3_essencereaver.png",
    "ap": 0.0,
    "mana": 0.0,
    "hp": 0.0,
@@ -9086,7 +9086,7 @@ window.COOLDOWN_DATA = {
    "id": 3110,
    "name": "Frozen Heart",
    "price": 2500,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3110_tank_t3_frozenheart.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3110_tank_t3_frozenheart.png",
    "ap": 0.0,
    "mana": 400.0,
    "hp": 0.0,
@@ -9101,7 +9101,7 @@ window.COOLDOWN_DATA = {
    "id": 6617,
    "name": "Moonstone Renewer",
    "price": 2200,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/6617_enchanter_t4_moonstonerenewer.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/6617_enchanter_t4_moonstonerenewer.png",
    "ap": 25.0,
    "mana": 0.0,
    "hp": 200.0,
@@ -9116,7 +9116,7 @@ window.COOLDOWN_DATA = {
    "id": 2525,
    "name": "Protoplasm Harness",
    "price": 2600,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/2525_tanklifeline.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/2525_tanklifeline.png",
    "ap": 0.0,
    "mana": 0.0,
    "hp": 600.0,
@@ -9132,7 +9132,7 @@ window.COOLDOWN_DATA = {
    "id": 4643,
    "name": "Vigilant Wardstone",
    "price": 2300,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/4643_enchanter_t3_vigilantsightstone.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/4643_enchanter_t3_vigilantsightstone.png",
    "ap": 0.0,
    "mana": 0.0,
    "hp": 250.0,
@@ -9147,7 +9147,7 @@ window.COOLDOWN_DATA = {
    "id": 228002,
    "name": "Wooglet's Witchcap",
    "price": 6000,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3385_forge_wooglets_witchcap.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3385_forge_wooglets_witchcap.png",
    "ap": 300.0,
    "mana": 0.0,
    "hp": 0.0,
@@ -9164,7 +9164,7 @@ window.COOLDOWN_DATA = {
    "id": 8020,
    "name": "Abyssal Mask",
    "price": 2650,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/8020_tank_t3_abyssalmask.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/8020_tank_t3_abyssalmask.png",
    "ap": 0.0,
    "mana": 0.0,
    "hp": 350.0,
@@ -9179,7 +9179,7 @@ window.COOLDOWN_DATA = {
    "id": 2524,
    "name": "Bandlepipes",
    "price": 2300,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/2524_tankasaura.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/2524_tankasaura.png",
    "ap": 0.0,
    "mana": 0.0,
    "hp": 200.0,
@@ -9194,7 +9194,7 @@ window.COOLDOWN_DATA = {
    "id": 2520,
    "name": "Bastionbreaker",
    "price": 3000,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/2520_adassassingameender.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/2520_adassassingameender.png",
    "ap": 0.0,
    "mana": 0.0,
    "hp": 0.0,
@@ -9209,7 +9209,7 @@ window.COOLDOWN_DATA = {
    "id": 4010,
    "name": "Bloodletter's Curse",
    "price": 2500,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/8010_bloodletterscurse.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/8010_bloodletterscurse.png",
    "ap": 60.0,
    "mana": 0.0,
    "hp": 350.0,
@@ -9225,7 +9225,7 @@ window.COOLDOWN_DATA = {
    "id": 6609,
    "name": "Chempunk Chainsword",
    "price": 3000,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/6609_fighter_t3_chempunkchainsword.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/6609_fighter_t3_chempunkchainsword.png",
    "ap": 0.0,
    "mana": 0.0,
    "hp": 450.0,
@@ -9240,7 +9240,7 @@ window.COOLDOWN_DATA = {
    "id": 6333,
    "name": "Death's Dance",
    "price": 3300,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/6333_fighter_t3_deathsdance.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/6333_fighter_t3_deathsdance.png",
    "ap": 0.0,
    "mana": 0.0,
    "hp": 0.0,
@@ -9255,7 +9255,7 @@ window.COOLDOWN_DATA = {
    "id": 6692,
    "name": "Eclipse",
    "price": 2900,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/6692_assassin_t4_eclipse.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/6692_assassin_t4_eclipse.png",
    "ap": 0.0,
    "mana": 0.0,
    "hp": 0.0,
@@ -9270,7 +9270,7 @@ window.COOLDOWN_DATA = {
    "id": 6662,
    "name": "Iceborn Gauntlet",
    "price": 2900,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/6662_tank_t3_iceborngauntlet.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/6662_tank_t3_iceborngauntlet.png",
    "ap": 0.0,
    "mana": 0.0,
    "hp": 300.0,
@@ -9286,7 +9286,7 @@ window.COOLDOWN_DATA = {
    "id": 4005,
    "name": "Imperial Mandate",
    "price": 2400,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/4005_enchanter_t4_imperialmandate.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/4005_enchanter_t4_imperialmandate.png",
    "ap": 60.0,
    "mana": 0.0,
    "hp": 0.0,
@@ -9301,7 +9301,7 @@ window.COOLDOWN_DATA = {
    "id": 3004,
    "name": "Manamune",
    "price": 2900,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3004_marksman_t3_manamune.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3004_marksman_t3_manamune.png",
    "ap": 0.0,
    "mana": 500.0,
    "hp": 0.0,
@@ -9317,7 +9317,7 @@ window.COOLDOWN_DATA = {
    "id": 3156,
    "name": "Maw of Malmortius",
    "price": 3100,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3156_fighter_t3_mawofmalmortius.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3156_fighter_t3_mawofmalmortius.png",
    "ap": 0.0,
    "mana": 0.0,
    "hp": 0.0,
@@ -9332,7 +9332,7 @@ window.COOLDOWN_DATA = {
    "id": 3222,
    "name": "Mikael's Blessing",
    "price": 2300,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3222_enchanter_t3_mikaelsblessing.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3222_enchanter_t3_mikaelsblessing.png",
    "ap": 0.0,
    "mana": 0.0,
    "hp": 250.0,
@@ -9347,7 +9347,7 @@ window.COOLDOWN_DATA = {
    "id": 3165,
    "name": "Morellonomicon",
    "price": 2850,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3165_mage_t3_morellonomicon.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3165_mage_t3_morellonomicon.png",
    "ap": 75.0,
    "mana": 0.0,
    "hp": 350.0,
@@ -9362,7 +9362,7 @@ window.COOLDOWN_DATA = {
    "id": 3115,
    "name": "Nashor's Tooth",
    "price": 2900,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3115_mage_t3_nashorstooth.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3115_mage_t3_nashorstooth.png",
    "ap": 80.0,
    "mana": 0.0,
    "hp": 0.0,
@@ -9377,7 +9377,7 @@ window.COOLDOWN_DATA = {
    "id": 3074,
    "name": "Ravenous Hydra",
    "price": 3300,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3074_fighter_t3_ravenoushydra.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3074_fighter_t3_ravenoushydra.png",
    "ap": 0.0,
    "mana": 0.0,
    "hp": 0.0,
@@ -9393,7 +9393,7 @@ window.COOLDOWN_DATA = {
    "id": 3107,
    "name": "Redemption",
    "price": 2300,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3107_enchanter_t3_redemption.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3107_enchanter_t3_redemption.png",
    "ap": 30.0,
    "mana": 0.0,
    "hp": 0.0,
@@ -9408,7 +9408,7 @@ window.COOLDOWN_DATA = {
    "id": 4633,
    "name": "Riftmaker",
    "price": 3100,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/4633_mage_t4_riftmaker.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/4633_mage_t4_riftmaker.png",
    "ap": 70.0,
    "mana": 0.0,
    "hp": 350.0,
@@ -9423,7 +9423,7 @@ window.COOLDOWN_DATA = {
    "id": 3430,
    "name": "Rite Of Ruin",
    "price": 2500,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3430_riteofruin.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3430_riteofruin.png",
    "ap": 50.0,
    "mana": 0.0,
    "hp": 0.0,
@@ -9438,7 +9438,7 @@ window.COOLDOWN_DATA = {
    "id": 6694,
    "name": "Serylda's Grudge",
    "price": 3000,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/6694_assasin_t3_seryldasgrudge.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/6694_assasin_t3_seryldasgrudge.png",
    "ap": 0.0,
    "mana": 0.0,
    "hp": 0.0,
@@ -9453,7 +9453,7 @@ window.COOLDOWN_DATA = {
    "id": 2065,
    "name": "Shurelya's Battlesong",
    "price": 2200,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/2065_tank_t4_shurelyasbattlesong.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/2065_tank_t4_shurelyasbattlesong.png",
    "ap": 50.0,
    "mana": 0.0,
    "hp": 0.0,
@@ -9468,7 +9468,7 @@ window.COOLDOWN_DATA = {
    "id": 4011,
    "name": "Sword of Blossoming Dawn",
    "price": 2500,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/4011_swordofblossomingdawn.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/4011_swordofblossomingdawn.png",
    "ap": 45.0,
    "mana": 0.0,
    "hp": 200.0,
@@ -9483,7 +9483,7 @@ window.COOLDOWN_DATA = {
    "id": 3078,
    "name": "Trinity Force",
    "price": 3333,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3078_fighter_t4_trinityforce.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3078_fighter_t4_trinityforce.png",
    "ap": 0.0,
    "mana": 0.0,
    "hp": 333.0,
@@ -9499,7 +9499,7 @@ window.COOLDOWN_DATA = {
    "id": 3179,
    "name": "Umbral Glaive",
    "price": 2800,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3179_assassin_t3_umbralglaive.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3179_assassin_t3_umbralglaive.png",
    "ap": 0.0,
    "mana": 0.0,
    "hp": 0.0,
@@ -9514,7 +9514,7 @@ window.COOLDOWN_DATA = {
    "id": 2502,
    "name": "Unending Despair",
    "price": 2800,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/2502_unendingdespair.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/2502_unendingdespair.png",
    "ap": 0.0,
    "mana": 0.0,
    "hp": 400.0,
@@ -9529,7 +9529,7 @@ window.COOLDOWN_DATA = {
    "id": 3119,
    "name": "Winter's Approach",
    "price": 2400,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3119_wintersapproach.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3119_wintersapproach.png",
    "ap": 0.0,
    "mana": 500.0,
    "hp": 550.0,
@@ -9546,7 +9546,7 @@ window.COOLDOWN_DATA = {
    "id": 2522,
    "name": "Actualizer",
    "price": 2800,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/2522_manaactive.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/2522_manaactive.png",
    "ap": 90.0,
    "mana": 300.0,
    "hp": 0.0,
@@ -9561,7 +9561,7 @@ window.COOLDOWN_DATA = {
    "id": 3039,
    "name": "Atma's Reckoning",
    "price": 2900,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3005_fighter_t3_atmasreckoning.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3005_fighter_t3_atmasreckoning.png",
    "ap": 0.0,
    "mana": 0.0,
    "hp": 700.0,
@@ -9576,7 +9576,7 @@ window.COOLDOWN_DATA = {
    "id": 3128,
    "name": "Deathfire Grasp",
    "price": 2900,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3128_deathfire_grasp.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3128_deathfire_grasp.png",
    "ap": 120.0,
    "mana": 0.0,
    "hp": 0.0,
@@ -9589,7 +9589,7 @@ window.COOLDOWN_DATA = {
    "id": 3152,
    "name": "Hextech Rocketbelt",
    "price": 2650,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3152_mage_t4_hextechrocketbelt.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3152_mage_t4_hextechrocketbelt.png",
    "ap": 60.0,
    "mana": 0.0,
    "hp": 350.0,
@@ -9604,7 +9604,7 @@ window.COOLDOWN_DATA = {
    "id": 6664,
    "name": "Hollow Radiance",
    "price": 2800,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/6664_hollowradiance.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/6664_hollowradiance.png",
    "ap": 0.0,
    "mana": 0.0,
    "hp": 400.0,
@@ -9620,7 +9620,7 @@ window.COOLDOWN_DATA = {
    "id": 6697,
    "name": "Hubris",
    "price": 2800,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/6697_hubris.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/6697_hubris.png",
    "ap": 0.0,
    "mana": 0.0,
    "hp": 0.0,
@@ -9635,7 +9635,7 @@ window.COOLDOWN_DATA = {
    "id": 4402,
    "name": "Innervating Locket",
    "price": 2950,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3032_innervating_locket.project_jade.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3032_innervating_locket.project_jade.png",
    "ap": 0.0,
    "mana": 300.0,
    "hp": 400.0,
@@ -9651,7 +9651,7 @@ window.COOLDOWN_DATA = {
    "id": 3158,
    "name": "Ionian Boots of Lucidity",
    "price": 900,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3158_class_t2_ionianbootsoflucidity.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3158_class_t2_ionianbootsoflucidity.png",
    "ap": 0.0,
    "mana": 0.0,
    "hp": 0.0,
@@ -9667,7 +9667,7 @@ window.COOLDOWN_DATA = {
    "id": 3109,
    "name": "Knight's Vow",
    "price": 2300,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3109_tank_t3_knightsvow.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3109_tank_t3_knightsvow.png",
    "ap": 0.0,
    "mana": 0.0,
    "hp": 200.0,
@@ -9682,7 +9682,7 @@ window.COOLDOWN_DATA = {
    "id": 3100,
    "name": "Lich Bane",
    "price": 2900,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3100_mage_t3_lichbane.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3100_mage_t3_lichbane.png",
    "ap": 100.0,
    "mana": 0.0,
    "hp": 0.0,
@@ -9698,7 +9698,7 @@ window.COOLDOWN_DATA = {
    "id": 3190,
    "name": "Locket of the Iron Solari",
    "price": 2200,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3190_enchanter_t4_locketofironsolari.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3190_enchanter_t4_locketofironsolari.png",
    "ap": 0.0,
    "mana": 0.0,
    "hp": 200.0,
@@ -9713,7 +9713,7 @@ window.COOLDOWN_DATA = {
    "id": 6655,
    "name": "Luden's Echo",
    "price": 2750,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/6655_mage_t4_ludenstempest.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/6655_mage_t4_ludenstempest.png",
    "ap": 100.0,
    "mana": 600.0,
    "hp": 0.0,
@@ -9728,7 +9728,7 @@ window.COOLDOWN_DATA = {
    "id": 6698,
    "name": "Profane Hydra",
    "price": 2850,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/6698_profanehydra.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/6698_profanehydra.png",
    "ap": 0.0,
    "mana": 0.0,
    "hp": 0.0,
@@ -9744,7 +9744,7 @@ window.COOLDOWN_DATA = {
    "id": 3065,
    "name": "Spirit Visage",
    "price": 2700,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3065_tank_t3_spiritvisage.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3065_tank_t3_spiritvisage.png",
    "ap": 0.0,
    "mana": 0.0,
    "hp": 400.0,
@@ -9759,7 +9759,7 @@ window.COOLDOWN_DATA = {
    "id": 6616,
    "name": "Staff of Flowing Water",
    "price": 2250,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3744_enchanter_t3_staffofflowingwater.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3744_enchanter_t3_staffofflowingwater.png",
    "ap": 35.0,
    "mana": 0.0,
    "hp": 0.0,
@@ -9774,7 +9774,7 @@ window.COOLDOWN_DATA = {
    "id": 6610,
    "name": "Sundered Sky",
    "price": 3100,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/6610_sunderedsky.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/6610_sunderedsky.png",
    "ap": 0.0,
    "mana": 0.0,
    "hp": 400.0,
@@ -9789,7 +9789,7 @@ window.COOLDOWN_DATA = {
    "id": 3068,
    "name": "Sunfire Aegis",
    "price": 2800,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3068_tank_t4_sunfireaegis.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3068_tank_t4_sunfireaegis.png",
    "ap": 0.0,
    "mana": 0.0,
    "hp": 350.0,
@@ -9805,7 +9805,7 @@ window.COOLDOWN_DATA = {
    "id": 6699,
    "name": "Voltaic Cyclosword",
    "price": 3000,
-   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/6699_voltaiccyclosword.png",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/6699_voltaiccyclosword.png",
    "ap": 0.0,
    "mana": 0.0,
    "hp": 0.0,
@@ -9823,7 +9823,7 @@ window.COOLDOWN_DATA = {
    "id": 1068,
    "name": "Recursion",
    "tier": "Gold",
-   "icon": "https://raw.communitydragon.org/latest/game/assets/ux/cherry/augments/icons/recursion_small.png",
+   "icon": "/assets/cd/latest/game/assets/ux/cherry/augments/icons/recursion_small.png",
    "values": {
     "AbilityHaste": 60.0
    },
@@ -9834,7 +9834,7 @@ window.COOLDOWN_DATA = {
    "id": 1388,
    "name": "Infinite Recursion",
    "tier": "Prismatic",
-   "icon": "https://raw.communitydragon.org/latest/game/assets/ux/kiwi/augments/icons/infiniterecursion_small.png",
+   "icon": "/assets/cd/latest/game/assets/ux/kiwi/augments/icons/infiniterecursion_small.png",
    "values": {
     "HastePerStack": 3.0,
     "StartingHaste": 60.0,
@@ -9847,7 +9847,7 @@ window.COOLDOWN_DATA = {
    "id": 1053,
    "name": "Mad Scientist",
    "tier": "Prismatic",
-   "icon": "https://raw.communitydragon.org/latest/game/assets/ux/cherry/augments/icons/madscientist_small.png",
+   "icon": "/assets/cd/latest/game/assets/ux/cherry/augments/icons/madscientist_small.png",
    "values": {
     "ADAmp": 0.30000001192092896,
     "APAmp": 0.30000001192092896,
@@ -9863,7 +9863,7 @@ window.COOLDOWN_DATA = {
    "id": 1004,
    "name": "Back To Basics",
    "tier": "Prismatic",
-   "icon": "https://raw.communitydragon.org/latest/game/assets/ux/cherry/augments/icons/backtobasics_small.png",
+   "icon": "/assets/cd/latest/game/assets/ux/cherry/augments/icons/backtobasics_small.png",
    "values": {
     "DamageAmp": 0.3499999940395355,
     "HealingAmp": 0.3499999940395355,
@@ -9877,7 +9877,7 @@ window.COOLDOWN_DATA = {
    "id": 1030,
    "name": "Eureka",
    "tier": "Prismatic",
-   "icon": "https://raw.communitydragon.org/latest/game/assets/ux/cherry/augments/icons/eureka_small.png",
+   "icon": "/assets/cd/latest/game/assets/ux/cherry/augments/icons/eureka_small.png",
    "values": {
     "APToHasteConversion": 0.30000001192092896
    },
@@ -9888,7 +9888,7 @@ window.COOLDOWN_DATA = {
    "id": 2024,
    "name": "Crit 'n Cast",
    "tier": "Silver",
-   "icon": "https://raw.communitydragon.org/latest/game/assets/ux/kiwi/augments/icons/critncast_small.png",
+   "icon": "/assets/cd/latest/game/assets/ux/kiwi/augments/icons/critncast_small.png",
    "values": {
     "CritToHasteConversion": 0.4000000059604645,
     "MaxLevel": 2.0
@@ -9900,7 +9900,7 @@ window.COOLDOWN_DATA = {
    "id": 2018,
    "name": "Purist - Caster",
    "tier": "Silver",
-   "icon": "https://raw.communitydragon.org/latest/game/assets/ux/kiwi/augments/icons/puristcaster_small.png",
+   "icon": "/assets/cd/latest/game/assets/ux/kiwi/augments/icons/puristcaster_small.png",
    "values": {
     "Haste_Per_AS": 0.6499999761581421,
     "MaxLevel": 1.0
@@ -9912,7 +9912,7 @@ window.COOLDOWN_DATA = {
    "id": 1373,
    "name": "Shrink Engine",
    "tier": "Gold",
-   "icon": "https://raw.communitydragon.org/latest/game/assets/ux/kiwi/augments/icons/shrinkengine_small.png",
+   "icon": "/assets/cd/latest/game/assets/ux/kiwi/augments/icons/shrinkengine_small.png",
    "values": {
     "SizeReductionPerStack": 0.03999999910593033,
     "MoveSpeedAmpPerStack": 0.009999999776482582,
@@ -9928,7 +9928,7 @@ window.COOLDOWN_DATA = {
    "id": 1103,
    "name": "Bread And Butter",
    "tier": "Gold",
-   "icon": "https://raw.communitydragon.org/latest/game/assets/ux/kiwi/augments/icons/genericabilityaugmenticon_gold.png",
+   "icon": "/assets/cd/latest/game/assets/ux/kiwi/augments/icons/genericabilityaugmenticon_gold.png",
    "values": {
     "QAbilityHaste": 100.0,
     "QReducedAbilityHaste": 100.0
@@ -9940,7 +9940,7 @@ window.COOLDOWN_DATA = {
    "id": 1150,
    "name": "Bread And Jam",
    "tier": "Gold",
-   "icon": "https://raw.communitydragon.org/latest/game/assets/ux/kiwi/augments/icons/genericabilityaugmenticon_gold.png",
+   "icon": "/assets/cd/latest/game/assets/ux/kiwi/augments/icons/genericabilityaugmenticon_gold.png",
    "values": {
     "WAbilityHaste": 100.0
    },
@@ -9951,7 +9951,7 @@ window.COOLDOWN_DATA = {
    "id": 1151,
    "name": "Bread and Cheese",
    "tier": "Gold",
-   "icon": "https://raw.communitydragon.org/latest/game/assets/ux/kiwi/augments/icons/genericabilityaugmenticon_gold.png",
+   "icon": "/assets/cd/latest/game/assets/ux/kiwi/augments/icons/genericabilityaugmenticon_gold.png",
    "values": {
     "EAbilityHaste": 100.0
    },
@@ -9962,7 +9962,7 @@ window.COOLDOWN_DATA = {
    "id": 1019,
    "name": "Dashing",
    "tier": "Prismatic",
-   "icon": "https://raw.communitydragon.org/latest/game/assets/ux/cherry/augments/icons/dashing_small.png",
+   "icon": "/assets/cd/latest/game/assets/ux/cherry/augments/icons/dashing_small.png",
    "values": {
     "Haste": 175.0
    },
@@ -9973,7 +9973,7 @@ window.COOLDOWN_DATA = {
    "id": 2118,
    "name": "Ult Bot",
    "tier": "Prismatic",
-   "icon": "https://raw.communitydragon.org/latest/game/assets/ux/kiwi/augments/icons/skipthebasic_small.png",
+   "icon": "/assets/cd/latest/game/assets/ux/kiwi/augments/icons/skipthebasic_small.png",
    "values": {
     "Haste": 100.0,
     "BasicHaste": 0.5
@@ -9985,7 +9985,7 @@ window.COOLDOWN_DATA = {
    "id": 1349,
    "name": "Ultimate Awakening",
    "tier": "Prismatic",
-   "icon": "https://raw.communitydragon.org/latest/game/assets/ux/kiwi/augments/icons/zerohour_small.png",
+   "icon": "/assets/cd/latest/game/assets/ux/kiwi/augments/icons/zerohour_small.png",
    "values": {
     "Cooldown": 20.0,
     "AH": 30.0,
@@ -9999,7 +9999,7 @@ window.COOLDOWN_DATA = {
    "id": 1413,
    "name": "Stuck In Here With Me",
    "tier": "Prismatic",
-   "icon": "https://raw.communitydragon.org/latest/game/assets/ux/kiwi/augments/icons/stuckinherewithme_small.png",
+   "icon": "/assets/cd/latest/game/assets/ux/kiwi/augments/icons/stuckinherewithme_small.png",
    "values": {
     "TauntRadius": 500.0,
     "TauntDuration": 2.0,
@@ -10015,7 +10015,7 @@ window.COOLDOWN_DATA = {
    "id": 2134,
    "name": "Surge Field",
    "tier": "Prismatic",
-   "icon": "https://raw.communitydragon.org/latest/game/assets/ux/kiwi/augments/icons/surgefield_small.png",
+   "icon": "/assets/cd/latest/game/assets/ux/kiwi/augments/icons/surgefield_small.png",
    "values": {
     "Buff_Duration": 6.0,
     "Radius": 300.0,
