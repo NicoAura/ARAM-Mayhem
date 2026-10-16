@@ -2,7 +2,7 @@
  "_note": "Mayhem augments the all-champion simulator models: the ones whose effect fits a generic kit. Ids, names, rarities and values are the live patch's client files (kiwi.bin, each augment's spell DataValues and calculations), filled in by tools/build_augments.py. confidence is verified when every value is read from the client and approx when one rests on an assumption the note states. Effect keys are the same as items (README.md).",
  "augments": {
   "deft": {"id": 1022, "name": "Deft", "rarity": "silver", "stats": {"as": 0.6}, "confidence": "verified"},
-  "witchful_thinking": {"id": 1097, "name": "Witchful Thinking", "rarity": "silver", "stats": {"ap": 60}, "confidence": "approx", "note": "AP kept at the earlier hand value: the client tooltip shows 20-80 AP by level (calculation AP) while the spell's DataValue APFlat is 70; which one the game grants is unclear"},
+  "witchful_thinking": {"id": 1097, "name": "Witchful Thinking", "rarity": "silver", "stats": {}, "effects": {"ap_min": 20, "ap_max": 80}, "confidence": "verified", "note": "20-80 AP by level, as the tooltip shows (confirmed in game); the spell's unused DataValue APFlat is 70"},
   "heavy_hitter": {"id": 1181, "name": "Heavy Hitter", "rarity": "silver", "effects": {"onhit_own_hp": 0.035}, "confidence": "verified"},
   "erosion": {"id": 1028, "name": "Erosion", "rarity": "silver", "effects": {"armor_shred": 0.225, "mr_shred": 0.225}, "confidence": "approx", "note": "1.5% Armor and Magic Resist shred per stack for 4 s, up to 20 stacks; 15 stacks assumed as the mid-fight average"},
   "its_critical": {"id": 1047, "name": "It's Critical", "rarity": "gold", "stats": {"crit": 0.5}, "confidence": "verified"},

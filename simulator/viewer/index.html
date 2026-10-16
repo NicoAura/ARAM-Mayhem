@@ -108,6 +108,7 @@ button:hover, select:hover { background: var(--hover); }
 .sim { display: grid; gap: 14px; }
 .sim-head { display: flex; flex-wrap: wrap; gap: 8px 12px; align-items: center; }
 .sim-head h2 { margin: 0 auto 0 0; }
+.sim-head .patch { display: inline-flex; gap: 6px; align-items: center; color: var(--muted); font-size: 13px; }
 .sim-status { color: var(--muted); font-size: 13px; min-height: 20px; }
 .sim-status.err { color: var(--hp-low); }
 .sim-status.busy::before { content: ""; display: inline-block; width: 10px; height: 10px; margin-right: 8px; border-radius: 50%;
@@ -206,6 +207,8 @@ fieldset select { width: 100%; min-width: 0; font-size: 13px; padding: 6px 8px; 
   <section class="card sim" id="sim">
     <div class="sim-head">
       <h2>Change the simulation</h2>
+      <label class="patch" title="The test server's upcoming patch">Patch
+        <select id="patchSel" disabled><option value="live">Live</option><option value="pbe">PBE (test server)</option></select></label>
       <button id="runBuild" class="primary" type="button" disabled>Simulate this build</button>
       <button id="findBest" type="button" disabled>Find the best build</button>
       <button id="resetAll" type="button" disabled>Reset to defaults</button>
@@ -247,10 +250,10 @@ fieldset select { width: 100%; min-width: 0; font-size: 13px; padding: 6px 8px; 
 </div>
 <script type="importmap">{"imports": {"three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
   "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"}}</script>
-<script>window.REPLAY_VERSION = "24";</script>
-<script src="replay.js?v=24"></script>
-<script type="module" src="models3d.js?v=24"></script>
-<script src="sim-panel.js?v=24"></script>
+<script>window.REPLAY_VERSION = "25";</script>
+<script src="replay.js?v=25"></script>
+<script type="module" src="models3d.js?v=25"></script>
+<script src="sim-panel.js?v=25"></script>
 <!-- replay-page-end -->
 </body>
 </html>

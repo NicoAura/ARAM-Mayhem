@@ -28,10 +28,17 @@ import time
 import urllib.request
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-OUT = os.path.join(HERE, "..", "data", "augments.json")
-DEFAULT_CACHE = os.path.join(os.path.expanduser("~"), ".cache", "aram-mayhem-sim")
+# --pbe builds the PBE (test server) patch instead, into data/pbe/, for the simulator's optional
+# PBE mode. The live patch stays the default everywhere.
+PBE = "--pbe" in sys.argv
+if PBE:
+    sys.argv.remove("--pbe")
+OUT = os.path.join(HERE, "..", "data", "pbe" if PBE else "", "augments.json")
+# The PBE file starts from the live one (same augments and hand-written values) the first time.
+SOURCE = OUT if os.path.exists(OUT) else os.path.join(HERE, "..", "data", "augments.json")
+DEFAULT_CACHE = os.path.join(os.path.expanduser("~"), ".cache", "aram-mayhem-sim", "pbe" if PBE else "")
 
-CDRAGON = "https://raw.communitydragon.org/latest"
+CDRAGON = "https://raw.communitydragon.org/" + ("pbe" if PBE else "latest")
 CONTENT_METADATA = CDRAGON + "/content-metadata.json"
 KIWI_BIN = CDRAGON + "/game/maps/modespecificdata/kiwi.bin.json"
 AUGMENT_LIST = CDRAGON + "/plugins/rcp-be-lol-game-data/global/default/v1/cherry-augments.json"
@@ -140,8 +147,8 @@ def missile_speed(suffix):
 # meaning and units clearly match the simulator's key; the rest stay hand-written.
 MAPPING = {
     "deft": {"stats.as": dv("AttackSpeed")},                       # bonus attack speed, fraction
-    # Witchful Thinking: the tooltip shows the calculation AP (20-80 by level), but the spell also
-    # has a DataValue APFlat = 70 the tooltip doesn't use; not sure which the game grants.
+    # Witchful Thinking: 20-80 AP by level from the tooltip's calculation (confirmed in game), kept by
+    # hand as ap_min/ap_max; the spell's DataValue APFlat = 70 isn't what the game grants.
     "witchful_thinking": {},
     "heavy_hitter": {"effects.onhit_own_hp": dv("HealthPercent")},  # share of own max HP on hit
     "erosion": {
@@ -187,9 +194,8 @@ MAPPING = {
 # Notes for values that stay hand-written or for client numbers the sim doesn't model.
 # {name} placeholders are filled from the augment's DataValues.
 NOTES = {
-    "witchful_thinking": "AP kept at the earlier hand value: the client tooltip shows 20-80 AP by level "
-                         "(calculation AP) while the spell's DataValue APFlat is {APFlat:g}; which one the game "
-                         "grants is unclear",
+    "witchful_thinking": "20-80 AP by level, as the tooltip shows (confirmed in game); the spell's unused "
+                         "DataValue APFlat is {APFlat:g}",
     "erosion": "{Shred_pct:g}% Armor and Magic Resist shred per stack for {ShredDuration:g} s, up to {MaxStacks:g} "
                "stacks; " + f"{EROSION_STACKS} stacks assumed as the mid-fight average",
     "tank_engine": "{MaxHPIncrement_pct:g}% max Health per takedown, {PercentOfStacksLost_pct:g}% of stacks lost on "
@@ -257,17 +263,21 @@ def main():
     kiwi = fetch(KIWI_BIN, args.cache, "kiwi.bin.json", args.refresh)
     names = {a["id"]: a for a in fetch(AUGMENT_LIST, args.cache, "cherry-augments.json", args.refresh)}
     patch = meta.get("version", "?")
-    print(f"live patch {patch}")
+    print(f"{'PBE' if PBE else 'live'} patch {patch}")
 
     by_id = {a["AugmentPlatformId"]: a for a in kiwi.values()
              if isinstance(a, dict) and a.get("__type") == "AugmentData" and a.get("AugmentPlatformId")}
 
-    with open(OUT) as f:
+    with open(SOURCE) as f:
         doc = json.load(f)
 
     changes, unmapped = [], []
-    for key, aug in doc["augments"].items():
+    for key, aug in list(doc["augments"].items()):
         entry = by_id.get(aug["id"])
+        if not entry and PBE:  # taken out on the PBE patch
+            print(f"{key}: augment id {aug['id']} is not on the PBE patch, left out")
+            del doc["augments"][key]
+            continue
         if not entry:
             raise SystemExit(f"{key}: augment id {aug['id']} is not in the live kiwi.bin")
         spell = Spell(kiwi, entry["RootSpell"])
@@ -303,7 +313,7 @@ def main():
             g, e = k.split(".")
             if e not in (aug.get(g) or {}):
                 raise SystemExit(f"{key}: MAPPING has {k}, which the augment doesn't use")
-        assumed = key in ("erosion", "tank_engine", "poro_stampede", "witchful_thinking")
+        assumed = key in ("erosion", "tank_engine", "poro_stampede")
         if hand:
             unmapped.append(f"{key}: {', '.join(hand)}")
 

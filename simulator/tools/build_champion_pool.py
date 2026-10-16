@@ -42,12 +42,17 @@ import urllib.request
 from concurrent.futures import ThreadPoolExecutor
 
 HERE = os.path.dirname(os.path.abspath(__file__))
+# --pbe builds the PBE (test server) patch instead, into data/pbe/, for the simulator's optional
+# PBE mode. The live patch stays the default everywhere.
+PBE = "--pbe" in sys.argv
+if PBE:
+    sys.argv.remove("--pbe")
 DATA = os.path.join(HERE, "..", "data")
-DEFAULT_OUT = os.path.join(DATA, "champions.json")
+DEFAULT_OUT = os.path.join(DATA, "pbe" if PBE else "", "champions.json")
 DEFAULT_POOL = os.path.join(DATA, "cn_enemy_pool.json")
-DEFAULT_CACHE = os.path.join(os.path.expanduser("~"), ".cache", "aram-mayhem-sim")
+DEFAULT_CACHE = os.path.join(os.path.expanduser("~"), ".cache", "aram-mayhem-sim", "pbe" if PBE else "")
 
-CDRAGON = "https://raw.communitydragon.org/latest"
+CDRAGON = "https://raw.communitydragon.org/" + ("pbe" if PBE else "latest")
 GAME_DATA = CDRAGON + "/plugins/rcp-be-lol-game-data/global/default/v1"
 CONTENT_METADATA = CDRAGON + "/content-metadata.json"
 STRINGTABLE = CDRAGON + "/game/en_us/data/menu/en_us/lol.stringtable.json"
@@ -733,7 +738,7 @@ def main():
         "meta": {
             "built_at": dt.datetime.now(dt.timezone.utc).isoformat(timespec="seconds"),
             "game_version": version,
-            "cdragon": "latest",
+            "cdragon": "pbe" if PBE else "latest",
             "mayhem_balance_patch": balance_patch,
             "level": LEVEL,
             "ranks": RANKS,

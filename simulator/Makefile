@@ -47,7 +47,8 @@ wasm-mayhem: $(CHAMP_SRC) $(CHAMP_HDR)
 		-sMODULARIZE -sEXPORT_NAME=MayhemSim -sALLOW_MEMORY_GROWTH -sENVIRONMENT=worker,web,node \
 		-sINVOKE_RUN=0 -sEXIT_RUNTIME=0 -sEXPORTED_RUNTIME_METHODS=callMain,FS \
 		--embed-file data/mayhem_rules.json --embed-file data/champions.json --embed-file data/items.json \
-		--embed-file data/augments.json --embed-file data/cn_enemy_pool.json --embed-file data/combos.json
+		--embed-file data/augments.json --embed-file data/cn_enemy_pool.json --embed-file data/combos.json \
+		--embed-file data/pbe
 
 # Fight replays for viewer/: one traced fight per champion, plus Riot's icons and
 # ability clips (CLIPS=--clips stores shrunk clips locally instead of streaming them).

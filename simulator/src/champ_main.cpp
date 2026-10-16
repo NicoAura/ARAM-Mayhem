@@ -39,6 +39,8 @@ Usage: mayhem_sim [options]
   --seed N            RNG seed
   --threads N         worker threads (default: all cores)
   --rules PATH        rules file (default )" MAYHEM_DEFAULT_RULES R"()
+  --game-data DIR     champions, items and augments from DIR instead of next to the
+                      rules file (data/pbe: the PBE patch)
   --json              print results as JSON
   --trace FILE        with --champ: also write one typical fight (the median-DPS
                       one of 200) of the best or given build, for the animated replay
@@ -259,7 +261,7 @@ double spearman(std::vector<double> a, std::vector<double> b) {
 }  // namespace
 
 int main(int argc, char** argv) {
-    std::string rulesPath = MAYHEM_DEFAULT_RULES, champName, kitName;
+    std::string rulesPath = MAYHEM_DEFAULT_RULES, gameDir, champName, kitName;
     std::vector<std::string> items, augs;
     bool all = false, asJson = false, list = false, customBuild = false, anyItems = false;
     std::string tracePath, traceDir, combo;
@@ -280,6 +282,7 @@ int main(int argc, char** argv) {
         };
         if (a == "--help" || a == "-h") { usage(); return 0; }
         else if (a == "--rules") rulesPath = next();
+        else if (a == "--game-data") gameDir = next();
         else if (a == "--champ") champName = next();
         else if (a == "--kit") kitName = next();
         else if (a == "--items") { items = splitList(next()); customBuild = true; }
@@ -309,7 +312,7 @@ int main(int argc, char** argv) {
 
     Library lib;
     try {
-        lib = Library::load(rulesPath, settings);
+        lib = Library::load(rulesPath, settings, gameDir);
         lib.enemyTeam = team;
         if (!combo.empty()) {
             if (champName.empty()) throw std::runtime_error("--combo needs --champ");

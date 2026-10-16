@@ -89,6 +89,8 @@ make test                     # both test suites
 
 Each champion gets a `parse_quality` of good, partial or none (currently 138 / 32 / 3). Abilities the parser gets wrong are fixed in `data/champion_overrides.json`, each with a reason. To rebuild: `python3 tools/build_champion_pool.py` and `python3 tools/build_items.py` (downloads are cached in `~/.cache/aram-mayhem-sim`).
 
+**PBE patch.** Everything defaults to the live patch. `--pbe` on `build_champion_pool.py`, `build_items.py` and `build_augments.py` builds the PBE (test server) patch into `data/pbe/` instead (same hand-written effects and overrides, the Mayhem balance table stays live, augments missing on PBE are left out). `mayhem_sim --game-data data/pbe` runs on it, and the replay's "Change the simulation" panel has a Live/PBE switch that does the same in the browser. The precomputed best builds and replays stay live.
+
 ## Positions and movement
 
 Fights are played on a 2D lane: x runs along it, y across it (±550 units). You start at the origin and the enemy team 1300 units away, spread 250 apart. Every 0.05 s everyone moves:
