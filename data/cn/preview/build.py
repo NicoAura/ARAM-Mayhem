@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build the China Mayhem stats preview page (one self-contained HTML file).
+"""Build the Mayhem Stats preview page (one self-contained HTML file).
 
 Usage: python3 data/cn/preview/build.py OUT.html
 Reads data/cn/history/ and the current augment/duo snapshots, and inlines them
