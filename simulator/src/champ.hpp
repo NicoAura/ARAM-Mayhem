@@ -34,12 +34,29 @@ struct Hit {
     Bag scaling;          // const, ap, bonus_ad, bonus_hp, bonus_armor, bonus_mr, as, crit, lethality
 };
 
+// Where an ability reaches and what it covers on the ground, in game units
+// (data/champions.json "geometry", read from the game's aiming indicators).
+enum class Shape { Single, Line, Circle, Cone };
+enum class Move { None, Dash, Blink };
+struct Geometry {
+    Shape shape = Shape::Single;
+    double range = 0;      // how far from the caster it can be aimed (0 with onSelf: centred on the caster)
+    double radius = 0;     // circle radius
+    double width = 0;      // line width
+    double angle = 0;      // cone angle, degrees
+    double speed = 0;      // missile speed; 0 lands at once
+    bool onSelf = false;   // centred on the caster
+    bool selfBuff = false; // no area of its own: its damage lands through the champion's attacks
+    bool stops = false;    // a line that stops at the first champion it hits
+    Move move = Move::None;
+};
+
 struct Ability {
     char slot = 'Q';
     std::string name;
     double cooldown = 10, castTime = 0.25, duration = 0;
     Area area = Area::Single;
-    double hitChance = 1.0;
+    Geometry geo;
     bool aura = false;  // per-second damage on a toggle or very short cooldown: always on
     int onhitEvery = 0; // > 0: a passive that procs on every Nth attack instead of a cast
     std::vector<Hit> hits;
@@ -54,7 +71,8 @@ struct ChampionKit {
     double damageDealt = 1, damageTaken = 1, mayhemAh = 0, mayhemAs = 0;
     bool hasCn = false;
     double cnDamageShare = 0.2, cnTakenShare = 0.2, cnWeight = 0, cnWinRate = 0.5;
-    double attackRange = 125;
+    double attackRange = 125, moveSpeed = 335;
+    double reach = 0;  // how far its damage reaches: attack range, or its abilities' typical range
     double apRatios = 0, adRatios = 0;  // summed ability scalings, to tell AP from AD kits
     std::string combo;  // recommended cast order, e.g. "EQRW" (data/combos.json); empty = by damage
     std::vector<Ability> abilities;
@@ -70,11 +88,17 @@ struct Effect {
 
 struct Rules {
     double critMult = 2.0, critOverflowAd = 0.45, asCap = 5.0;
-    double extraHitWeight = 0.5, skillshotHit = 0.8, aoeSecondaryHit = 0.6, lineSecondaryHit = 0.3;
+    double extraHitWeight = 0.5;
     double castMin = 0.15, castMax = 0.6, minCooldown = 0.75, dotDuration = 3.0, spellbladeWindow = 10.0;
-    // Share of the time a champion can actually attack (in range, target reachable),
-    // by attack range. Abilities aren't affected.
-    double uptimeMelee = 0.6, uptimeShort = 0.7, uptimeLong = 0.8;
+    // Positions: whether a skillshot lands comes from where everyone stands and moves.
+    double dodgeChance = 0.5;   // chance an enemy sees a skillshot coming and sidesteps
+    double reactionTime = 0.25; // seconds before a dodging enemy starts moving
+    double aimLead = 0.5;       // how far ahead of a moving target skillshots are aimed (0-1)
+    double hitbox = 65;         // champion radius, game units
+    double laneHalfWidth = 550; // the Howling Abyss lane, game units from its middle
+    // Enemies only hurt you while in reach, so their damage while in reach is scaled
+    // up to keep a fight's total about where real games put it.
+    double inRangeBoost = 1.0;
     double comboOrder = 1;  // 1: cast in each champion's recommended combo order; 0: by damage
 };
 
@@ -126,14 +150,15 @@ enum Source : int { SrcAttack = 0, SrcQ, SrcW, SrcE, SrcR, SrcItems, SrcCount };
 extern const char* const kSourceNames[SrcCount];
 
 struct Result {
-    double duration = 0, totalDamage = 0, primaryDamage = 0, timeAlive = 0;
+    double duration = 0, totalDamage = 0, primaryDamage = 0, timeAlive = 0, damageTaken = 0;
+    double exposure = 0;  // share of the enemies' damage that could reach you, averaged over the fight
     int kills = 0;
     bool died = false;
     std::array<double, SrcCount> bySource{};
 };
 
 // One moment of a traced fight, for the animated replay. kind is one of:
-// cc, spawn, focus, cast, attack, proc, damage, kill, self, death, end.
+// cc, spawn, focus, cast, attack, proc, damage, kill, self, death, end, pos.
 struct TraceEvent {
     double t = 0;
     std::string kind;
@@ -144,6 +169,9 @@ struct TraceEvent {
     double amount = 0;        // damage dealt; cast time for casts; cc end time for cc
     double hp = 0, maxHp = 0; // enemy HP after the event, or the champion's own HP for self/death
     bool flag = false;        // crit for attacks, the main target was hit for casts
+    double x = 0, y = 0;      // casts: where it was aimed
+    double flight = 0;        // casts: seconds the missile flies
+    std::vector<double> pos;  // pos: uid, x, y for everyone standing (uid -1 is the champion)
 };
 
 struct FightTrace {
@@ -164,6 +192,7 @@ struct Summary {
     int trials = 0;
     double meanDps = 0, ci95 = 0, p5 = 0, median = 0, p95 = 0;
     double singleTargetDps = 0, killsPerMinute = 0, survivalRate = 0, meanTimeAlive = 0;
+    double damageTakenPerSec = 0;  // damage you take per second alive, after your resists
     std::array<double, SrcCount> shareBySource{};
 };
 Summary summarize(const std::vector<Result>& results);

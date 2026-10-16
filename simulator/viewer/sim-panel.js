@@ -4,7 +4,7 @@
   "use strict";
   const $ = (id) => document.getElementById(id);
   const DUMMY_KEYS = ["fixed_target", "target_hp", "target_armor", "target_mr"];
-  const isModelKey = (k) => k.includes("hit_chance") || k.startsWith("attack_uptime");
+  const isModelKey = (k) => ["dodge_chance", "reaction_time", "aim_lead"].includes(k);
   const ENEMY_STATS = [
     ["hp", "HP", 1], ["armor", "Armor", 1], ["mr", "MR", 1], ["damage_share", "Dmg share", 0.01],
   ];
@@ -180,7 +180,7 @@
     l.textContent = words;
     const inp = document.createElement("input");
     inp.type = "number"; inp.id = id;
-    inp.step = Math.abs(s.default) <= 1 && s.key !== "level" && s.key !== "clump_max" ? 0.05 : s.default >= 100 ? 10 : 1;
+    inp.step = Math.abs(s.default) <= 1 && s.key !== "level" ? 0.05 : s.default >= 100 ? 10 : 1;
     inp.value = fieldValues[s.key] !== undefined ? fieldValues[s.key] : s.default;
     const mark = () => wrap.classList.toggle("changed", Math.abs(parseFloat(inp.value) - s.default) > 1e-9);
     inp.addEventListener("input", () => {

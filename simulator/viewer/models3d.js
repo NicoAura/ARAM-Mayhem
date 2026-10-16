@@ -305,7 +305,7 @@ const api = {
     return { x: (p.x + 1) / 2 * W, y: (1 - p.y) / 2 * H };
   },
 
-  // fighters: [{key, champ, x, y, face: 1 | -1, role, t, loop, visible}] in device px.
+  // fighters: [{key, champ, x, y, face: 1 | -1, dir?: {x, y}, role, t, loop, visible}] in device px.
   // Returns {key: {x, y}}, the point above each loaded model's head, so the 2D overlay can place HP bars.
   frame(fighters, W, H) {
     const out = {};
@@ -339,7 +339,8 @@ const api = {
       const a = entry.actor;
       a.group.visible = f.visible !== false;
       a.group.position.copy(this.toWorld(f.x, f.y, W, H));
-      a.group.rotation.y = f.face > 0 ? Math.PI / 2 : -Math.PI / 2;
+      // Facing: toward a screen direction when given (screen down is toward the camera), else left or right.
+      a.group.rotation.y = f.dir && (f.dir.x || f.dir.y) ? Math.atan2(f.dir.x, f.dir.y) : f.face > 0 ? Math.PI / 2 : -Math.PI / 2;
       a.group.scale.setScalar(f.scale || 1);
       let { role, t, loop, n } = f;
       if (f.key === "me" && this.preview) {

@@ -53,6 +53,7 @@ LEVEL = 18
 RANKS = {"Q": 5, "W": 5, "E": 5, "R": 3}
 DEFAULT_COOLDOWN, DEFAULT_R_COOLDOWN = 8.0, 90.0
 DEFAULT_OVERRIDES = os.path.join(DATA, "champion_overrides.json")
+DEFAULT_ANIMS = os.path.join(HERE, "..", "viewer", "replay-data", "anims.json")
 YUNARA_ID = 804
 
 # Stat ids used by the game's ability formulas (mStat). Inferred from how
@@ -317,7 +318,7 @@ def round_lin(lin):
     return {k: round(v, 4) for k, v in lin.items() if abs(v) > 1e-9}
 
 
-def parse_spell(slot, spell_obj, strings, base_stats):
+def parse_spell(slot, spell_obj, strings, base_stats, attack_range=125):
     spell = spell_obj.get("mSpell") or {}
     rank = RANKS[slot]
     notes = set()
@@ -407,6 +408,7 @@ def parse_spell(slot, spell_obj, strings, base_stats):
     durations = [v for k, v in ev.values.items() if "duration" in k and v]
     duration = float(durations[0][min(rank, len(durations[0]) - 1)]) if durations else 0.0
     targeting = (spell.get("mTargetingTypeData") or {}).get("__type", "")
+    area = "aoe" if targeting in AOE_TARGETING else "line" if targeting in LINE_TARGETING else "single"
     return {
         "slot": slot,
         "name": spell_obj.get("mScriptName", ""),
@@ -414,12 +416,95 @@ def parse_spell(slot, spell_obj, strings, base_stats):
         "cooldown": round(cd, 3),
         "cast_time": round(float(spell.get("mCastTime", 0.25) or 0.25), 3),
         "targeting": targeting,
-        "area": "aoe" if targeting in AOE_TARGETING else "line" if targeting in LINE_TARGETING else "single",
+        "area": area,
         "duration": round(duration, 3),
+        "geometry": parse_geometry(spell, slot, area, attack_range),
         "hits": hits,
         "mode_overrides": ev.mode_overrides,
         "notes": sorted(notes),
     }
+
+
+def per_level(v, rank):
+    """A FloatPerSpellLevel or plain number at this rank (lists start at rank 0)."""
+    if isinstance(v, dict):
+        vals = v.get("mPerLevelValues")
+        return float(vals[min(rank, len(vals) - 1)]) if vals else None
+    if isinstance(v, list):
+        return float(v[min(rank, len(v) - 1)]) if v else None
+    if isinstance(v, (int, float)):
+        return float(v)
+    return None
+
+
+SELF_TARGETING = {"Self", "SelfAoe"}
+FAKE_RANGE = 5000  # castRange 25000 (or 10000) means "aimed anywhere"; the targeter has the real range
+
+
+def parse_geometry(spell, slot, area, attack_range):
+    """Where an ability reaches and what it covers, in game units, from the targeter
+    the game draws when aiming it (mTargeterDefinitions), falling back to the spell's
+    own cast range, radius and line width. Missile speed 0 means it lands at once."""
+    rank = RANKS[slot]
+    targeting = (spell.get("mTargetingTypeData") or {}).get("__type", "")
+    targeters = ((spell.get("mClientData") or {}).get("mTargeterDefinitions")) or []
+    by_type = {}
+    for t in targeters:
+        by_type.setdefault(t.get("__type", ""), t)
+    line, aoe, cone = by_type.get("TargeterDefinitionLine"), by_type.get("TargeterDefinitionAoe"), by_type.get("TargeterDefinitionCone")
+    rng = by_type.get("TargeterDefinitionRange")
+    arc = by_type.get("TargeterDefinitionArc")
+    missile = (spell.get("mMissileSpec") or {})
+    speed = per_level((missile.get("movementComponent") or {}).get("mSpeed"), rank) or 0.0
+    if speed < 300:
+        speed = per_level(spell.get("missileSpeed"), rank) or 0.0
+    if speed < 300 or speed > 6000:
+        speed = 0.0
+    cast_range = per_level(spell.get("castRangeDisplayOverride"), rank) or per_level(spell.get("castRange"), rank) or 0.0
+    anywhere = cast_range >= FAKE_RANGE
+    if anywhere:
+        cast_range = 0.0
+
+    g = {"shape": "single", "range": 0.0, "radius": 0.0, "width": 0.0, "angle": 0.0, "speed": round(speed),
+         "on_self": targeting in SELF_TARGETING}
+    if cone:
+        g.update(shape="cone", range=per_level(cone.get("coneRange"), rank) or cast_range,
+                 angle=per_level(cone.get("coneAngleDegrees"), rank) or 45.0)
+    elif line and area == "line" or line and not aoe:
+        width = per_level(line.get("lineWidth"), rank) or per_level(spell.get("mLineWidth"), rank) or \
+            per_level(missile.get("mMissileWidth"), rank) or 80.0
+        g.update(shape="line", range=per_level(line.get("overrideBaseRange"), rank) or cast_range, width=width)
+    elif aoe or arc or area == "aoe":
+        t = aoe or arc or {}
+        radius = per_level(t.get("overrideRadius"), rank) or per_level(spell.get("castRadius"), rank) or 0.0
+        reach = per_level(t.get("constraintRange"), rank) or cast_range
+        if g["on_self"]:
+            radius = radius or reach
+            reach = 0.0
+        if g["on_self"] and radius < 150:
+            # No real area (a placeholder castRadius): a self buff whose damage lands
+            # through the champion's attacks, so it reaches whatever they can attack.
+            g.update(shape="single", range=float(attack_range), self_buff=True)
+        else:
+            g.update(shape="circle", range=reach, radius=radius or 300.0)
+    if rng and per_level(rng.get("overrideBaseRange"), rank):
+        g["range"] = max(g["range"], per_level(rng.get("overrideBaseRange"), rank))
+    if g["shape"] == "single" and g["on_self"]:
+        g.update(range=float(attack_range), self_buff=True)
+    elif g["shape"] == "single":
+        g["range"] = cast_range if 0 < cast_range < FAKE_RANGE else 0.0
+    if not g["range"] and not (g["on_self"] and g["shape"] in ("circle", "single")):
+        # Nothing usable: melee-ish abilities reach a little past the attack, others a typical cast range.
+        if anywhere and g["shape"] in ("line", "circle"):
+            g["range"] = 1500.0 if g["shape"] == "line" else 900.0  # long-range or global: far, but fought nearby
+        else:
+            g["range"] = max(attack_range + 100, 600.0) if g["shape"] != "single" or attack_range >= 300 else attack_range + 50
+        g["range_guessed"] = True
+    if g["on_self"]:
+        g["speed"] = 0
+    for k in ("range", "radius", "width", "angle"):
+        g[k] = round(float(g[k]), 1)
+    return g
 
 
 def find_spell(bin_data, path):
@@ -485,6 +570,7 @@ def main():
     ap.add_argument("--cache", default=DEFAULT_CACHE)
     ap.add_argument("--only", default="", help="comma-separated champion names (for debugging)")
     ap.add_argument("--overrides", default=DEFAULT_OVERRIDES, help="hand fixes per champion and ability")
+    ap.add_argument("--anims", default=DEFAULT_ANIMS, help="anims.json with which abilities dash or blink")
     args = ap.parse_args()
     cache = args.cache
 
@@ -500,6 +586,10 @@ def main():
     with open(args.overrides, encoding="utf-8") as f:
         overrides = {k: v for k, v in json.load(f).items() if not k.startswith("_")}
     cn = {int(e["champion_id"]): e for e in pool["enemies"]}
+    anims = {}
+    if os.path.exists(args.anims):
+        with open(args.anims, encoding="utf-8") as f:
+            anims = json.load(f)
 
     only = {norm(x) for x in args.only.split(",") if x}
     todo = [c for c in champs.values() if not only or norm(c["id"]) in only or norm(c["name"]) in only]
@@ -529,7 +619,7 @@ def main():
             if obj is None:
                 notes.append(f"{slot}: spell data not found")
                 continue
-            abilities.append(parse_spell(slot, obj, strings, base))
+            abilities.append(parse_spell(slot, obj, strings, base, s["attackrange"]))
         if any(a["cooldown"] <= 0 for a in abilities):
             # A few abilities keep their cooldown outside the spell record; Data Dragon has it.
             detail = json.loads(fetch(f"{DDRAGON}/cdn/{version}/data/en_US/champion/{c['id']}.json", cache,
@@ -548,10 +638,16 @@ def main():
             for a in abilities:
                 if a["slot"] == slot:
                     for k, v in fix.items():
-                        if k != "why":
+                        if k == "geometry":
+                            a["geometry"].update(v)
+                        elif k != "why":
                             a[k] = v
                     a["notes"].append("hand override: " + fix.get("why", ""))
         abilities = [a for a in abilities if not a.get("skip")]
+        for a in abilities:
+            move = (anims.get(c["id"], {}).get(a["slot"]) or {}).get("move")
+            if move and "move" not in a["geometry"]:
+                a["geometry"]["move"] = move  # "dash" or "blink": the caster travels with the ability
 
         bal = balance.get(norm(c["name"])) or balance.get(norm(c["id"]))
         if bal:
@@ -583,6 +679,7 @@ def main():
                 "attack_speed_ratio": round(float((record.get("attackSpeedRatioModifiable") or {}).get("baseValue")
                                                   or s["attackspeed"]), 4),
                 "attack_range": s["attackrange"],
+                "move_speed": s["movespeed"],
             },
             "mayhem": {
                 "damage_dealt": (bal or {}).get("damage_dealt", 1.0),

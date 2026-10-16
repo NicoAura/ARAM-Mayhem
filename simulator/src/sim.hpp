@@ -52,6 +52,8 @@ struct EnemyProfile {
     double cc = 0;             // crowd-control rating (1-3) when known
     double physShare = 0.5;    // share of the champion's damage that is physical
     double damageShare = 0.2;  // average share of their team's damage (0.2 = 1 of 5)
+    double moveSpeed = 340;    // all-champion sim: how fast they move
+    double reach = 550;        // all-champion sim: how far their damage reaches
 };
 
 struct Scenario {
@@ -81,6 +83,8 @@ struct Scenario {
     // Damage aimed at Yunara (before her armor and MR), and when it starts.
     double enemyDpsMean = 500, enemyDpsSd = 200, enemyPhysShare = 0.55;
     double engageMin = 2, engageMax = 6;
+    // All-champion sim: how far away the enemy team starts and how spread out it stands.
+    double startDistance = 1300, enemySpread = 250;
 
     static Scenario fromJson(const json::Value& s);
     // Replaces the enemy team with a champion pool built by tools/build_enemy_pool.py

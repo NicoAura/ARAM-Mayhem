@@ -136,7 +136,8 @@ bool writeTrace(const Library& lib, const ChampionKit& c, const Build& b, const 
         const Ability& a = c.abilities[i];
         o << (i ? ", " : "") << "{\"slot\": \"" << a.slot << "\", \"name\": " << jsonStr(a.name)
           << ", \"cooldown\": " << num(a.cooldown) << ", \"passive\": " << (a.aura || a.onhitEvery > 0 ? "true" : "false")
-          << "}";
+          << ", \"range\": " << num(a.geo.range) << ", \"radius\": " << num(a.geo.radius)
+          << ", \"width\": " << num(a.geo.width) << ", \"angle\": " << num(a.geo.angle) << "}";
     }
     o << "],\n \"summary\": " << summaryJson(summary);
     o << ",\n \"fight\": {\"trial\": " << trial << ", \"seed\": " << sc.seed << ", \"duration\": " << num(tr.result.duration)
@@ -158,6 +159,12 @@ bool writeTrace(const Library& lib, const ChampionKit& c, const Build& b, const 
         if (e.kind == "spawn" || e.kind == "damage" || e.kind == "kill" || e.kind == "self" || e.kind == "death")
             o << ", \"hp\": " << num(e.hp) << ", \"max\": " << num(e.maxHp);
         if (e.flag) o << ", \"f\": 1";
+        if (e.kind == "cast") o << ", \"ax\": " << std::lround(e.x) << ", \"ay\": " << std::lround(e.y) << ", \"fl\": " << num(e.flight);
+        if (!e.pos.empty()) {
+            o << ", \"p\": [";  // uid, x, y for everyone standing; uid -1 is the champion
+            for (size_t j = 0; j < e.pos.size(); ++j) o << (j ? "," : "") << std::lround(e.pos[j]);
+            o << "]";
+        }
         o << "}";
     }
     o << "\n]}\n";
@@ -174,9 +181,9 @@ std::string summaryJson(const Summary& s) {
     std::snprintf(buf, sizeof buf,
                   "{\"mean_dps\": %.1f, \"ci95\": %.1f, \"p5\": %.1f, \"median\": %.1f, \"p95\": %.1f, "
                   "\"single_target_dps\": %.1f, \"kills_per_minute\": %.3f, \"survival_rate\": %.4f, "
-                  "\"time_alive\": %.2f, \"share_by_source\": {",
+                  "\"time_alive\": %.2f, \"damage_taken_per_s\": %.1f, \"share_by_source\": {",
                   s.meanDps, s.ci95, s.p5, s.median, s.p95, s.singleTargetDps, s.killsPerMinute, s.survivalRate,
-                  s.meanTimeAlive);
+                  s.meanTimeAlive, s.damageTakenPerSec);
     std::string out = buf;
     for (int i = 0; i < SrcCount; ++i) {
         std::snprintf(buf, sizeof buf, "%s\"%s\": %.4f", i ? ", " : "", kSourceNames[i], s.shareBySource[i]);
@@ -346,12 +353,10 @@ int main(int argc, char** argv) {
             {"level", sc.level}, {"fight_mean", sc.fightMean}, {"fight_sd", sc.fightSd}, {"fight_min", sc.fightMin},
             {"fight_max", sc.fightMax}, {"engage_min", sc.engageMin}, {"engage_max", sc.engageMax},
             {"enemy_damage_scale", 1}, {"cc_scale", 1}, {"cc_min", sc.ccMin}, {"cc_max", sc.ccMax},
-            {"clump_max", sc.clumpMax}, {"clump_chance", sc.clumpChance}, {"r_ready_chance", sc.rReadyChance},
+            {"start_distance", sc.startDistance}, {"enemy_spread", sc.enemySpread}, {"r_ready_chance", sc.rReadyChance},
             {"retarget_delay", sc.retargetDelay}, {"fixed_target", 0}, {"target_hp", sc.targetHp},
-            {"target_armor", sc.targetArmor}, {"target_mr", sc.targetMr}, {"skillshot_hit_chance", r.skillshotHit},
-            {"aoe_secondary_hit_chance", r.aoeSecondaryHit}, {"line_secondary_hit_chance", r.lineSecondaryHit},
-            {"attack_uptime_melee", r.uptimeMelee}, {"attack_uptime_short_range", r.uptimeShort},
-            {"attack_uptime_long_range", r.uptimeLong}, {"combo_order", r.comboOrder}};
+            {"target_armor", sc.targetArmor}, {"target_mr", sc.targetMr}, {"dodge_chance", r.dodgeChance},
+            {"reaction_time", r.reactionTime}, {"aim_lead", r.aimLead}, {"combo_order", r.comboOrder}};
         std::printf("],\n \"settings\": [");
         bool first = true;
         for (const auto& [k, desc] : Library::settingKeys()) {

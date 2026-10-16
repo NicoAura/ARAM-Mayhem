@@ -85,7 +85,8 @@
     const ev = tr.events;
     const f = { duration: tr.fight.duration, engage: tr.fight.engage_at, maxHp: tr.fight.max_hp, events: ev,
       casts: [], attacks: [], procs: [], cc: [], kills: [], self: [], spawns: new Map(), focus: [], numbers: [],
-      damage: [], death: null };
+      damage: [], death: null, pos: [], geo: {} };
+    for (const a of tr.abilities || []) f.geo[a.slot] = a;
     let lastNum = null;
     for (const e of ev) {
       switch (e.k) {
@@ -97,6 +98,17 @@
         case "self": f.self.push(e); break;
         case "death": f.death = e; f.self.push(e); break;
         case "spawn": f.spawns.set(e.u, e); break;
+        case "pos": {
+          // Where everyone stands: uid, x, y triples in game units; uid -1 is you.
+          const m = new Map();
+          let me = null;
+          for (let i = 0; i + 2 < e.p.length; i += 3) {
+            if (e.p[i] === -1) me = { x: e.p[i + 1], y: e.p[i + 2] };
+            else m.set(e.p[i], { x: e.p[i + 1], y: e.p[i + 2] });
+          }
+          if (me) f.pos.push({ t: e.t, me, m });
+          break;
+        }
         case "focus": f.focus.push(e); break;
         case "damage": {
           f.damage.push(e);
@@ -113,6 +125,9 @@
     for (const list of Object.values(bySlot))
       list.forEach((c, i) => { c.next = i + 1 < list.length ? list[i + 1].t : f.duration; c.land = c.t + (c.a || 0); c.n = i; });
     f.enemyCasts = enemyCasts(f);
+    // Traces from the positional simulator say where everyone stands; older ones don't.
+    f.positional = f.pos.length > 1;
+    if (f.positional) for (const c of f.casts) c.from = worldAt(f, c.land).me;
     // Crits on attacks: tag the matching damage number.
     for (const a of f.attacks) if (a.f) {
       const n = f.numbers.find((n) => n.u === a.u && Math.abs(n.t - a.t) < 1e-6 && n.src === 0);
@@ -175,6 +190,35 @@
     let cast = null;
     for (const c of fight.enemyCasts.get(uid) || []) { if (c.t > time) break; cast = c; }
     return cast && time - cast.t < castWindow("e" + uid, cast) ? cast : null;
+  }
+
+  // Where everyone stands at time t (game units), between the recorded snapshots.
+  function worldAt(f, time) {
+    const P = f.pos;
+    let lo = 0, hi = P.length - 1;
+    if (time <= P[0].t) return P[0];
+    if (time >= P[hi].t) return P[hi];
+    while (hi - lo > 1) { const mid = (lo + hi) >> 1; if (P[mid].t <= time) lo = mid; else hi = mid; }
+    const a = P[lo], b = P[hi], k = (time - a.t) / Math.max(1e-6, b.t - a.t);
+    const mix = (p, q) => (q ? { x: p.x + (q.x - p.x) * k, y: p.y + (q.y - p.y) * k } : p);
+    const m = new Map();
+    for (const [u, p] of a.m) m.set(u, mix(p, b.m.get(u)));
+    for (const [u, p] of b.m) if (!m.has(u) && k > 0.5) m.set(u, p);
+    return { t: time, me: mix(a.me, b.me), m };
+  }
+  // The lane on screen: its width fills the arena's floor; the view follows the fight.
+  const LANE = 550;
+  const cam = { x: null };
+  function camera(W, H, world, focus, dt) {
+    const k = (H * 0.74) / (2 * LANE);
+    const f = focus >= 0 && world.m.get(focus);
+    let want = f ? (world.me.x * 0.55 + f.x * 0.45) : world.me.x + 300;
+    const half = W / 2 / k;
+    // Keep you on screen with a margin.
+    want = Math.min(Math.max(want, world.me.x - half + 160), world.me.x + half - 160);
+    if (cam.x === null || dt <= 0 || dt > 0.5) cam.x = want;
+    else cam.x += (want - cam.x) * (1 - Math.exp(-dt * 3));
+    return { k, cx: cam.x, sx: (p) => W / 2 + (p.x - cam.x) * k, sy: (p) => H * 0.55 + p.y * k };
   }
 
   // ---------- state at time t ----------
@@ -320,6 +364,9 @@
     // Scale: bigger shapes on narrow screens so portraits stay readable on a phone.
     const W = arena.width, H = arena.height, u = W / dpr < 600 ? W / 760 : W / 1280;
     const s = stateAt(time);
+    const world = fight.positional ? worldAt(fight, time) : null;
+    const view = world ? camera(W, H, world, s.focus, dt) : null;
+    const scr = (p) => ({ x: view.sx(p), y: view.sy(p) });
     // Ground: the Howling Abyss bridge.
     const g = ctx;
     g.setTransform(1, 0, 0, 1, 0, 0);
@@ -328,17 +375,27 @@
     g.fillStyle = grd; g.fillRect(0, 0, W, H);
     g.fillStyle = "#13212e"; g.fillRect(0, H * 0.18, W, H * 0.74);
     g.strokeStyle = "rgba(143,211,255,.08)"; g.lineWidth = 2 * u;
-    for (let x = -H; x < W; x += 80 * u) { g.beginPath(); g.moveTo(x, H * 0.18); g.lineTo(x + H * 0.74, H * 0.92); g.stroke(); }
+    // With positions the stripes scroll with the view, so you can see the fight move along the lane.
+    const step = world ? 200 * view.k : 80 * u, shift = world ? -((view.cx * view.k) % step) : 0;
+    for (let x = -H + shift; x < W + step; x += step) { g.beginPath(); g.moveTo(x, H * 0.18); g.lineTo(x + H * 0.74, H * 0.92); g.stroke(); }
     g.strokeStyle = "rgba(143,211,255,.25)"; g.lineWidth = 3 * u;
     g.beginPath(); g.moveTo(0, H * 0.18); g.lineTo(W, H * 0.18); g.moveTo(0, H * 0.92); g.lineTo(W, H * 0.92); g.stroke();
 
     const alive = [...s.enemies.values()].filter((e) => e.died === null || time - e.died < 0.8);
     const others = alive.filter((e) => e.uid !== s.focus).sort((a, b) => a.uid - b.uid);
-    const st = seats(W, H, Math.max(1, others.length));
+    const st = world ? { me: scr(world.me), front: scr(world.me), back: [] } : seats(W, H, Math.max(1, others.length));
     const target = (en) => (en.uid === s.focus ? st.front : st.back[others.indexOf(en)] || st.back[0]);
     for (const en of alive) {
-      const want = target(en);
       let d = shown.get(en.uid);
+      if (world) {
+        // Real positions: exactly where the simulation put them (a fallen enemy stays where it fell).
+        const w = world.m.get(en.uid);
+        if (w) { const p = scr(w); if (!d) { d = {}; shown.set(en.uid, d); } d.x = p.x; d.y = p.y; d.wx = w.x; d.wy = w.y; }
+        else if (d && d.wx !== undefined) { d.x = view.sx({ x: d.wx }); d.y = view.sy({ y: d.wy }); }
+        else if (!d) { d = { x: st.me.x, y: st.me.y }; shown.set(en.uid, d); }
+        continue;
+      }
+      const want = target(en);
       if (!d || dt <= 0 || dt > 0.5) { d = { x: want.x, y: want.y }; shown.set(en.uid, d); }
       else { const k = 1 - Math.exp(-dt * 8); d.x += (want.x - d.x) * k; d.y += (want.y - d.y) * k; }
     }
@@ -364,7 +421,7 @@
 
     // Ability casts.
     for (const c of fight.casts) {
-      const age = time - c.land;
+      const age = time - c.land - (world ? c.fl || 0 : 0);  // since it landed
       if (time < c.t || age > 0.6) continue;
       const col = SLOT_COLORS[c.s] || "#fff";
       const to = c.u >= 0 ? posOf(c.u) : st.front;
@@ -376,7 +433,9 @@
         g.beginPath(); g.arc(st.me.x, st.me.y, R + 10 * u, -Math.PI / 2, -Math.PI / 2 + p * Math.PI * 2); g.stroke();
       }
       const fly = 0.2;
-      if (c.x === "aoe") {
+      if (world && c.from && ["line", "circle", "cone", "self"].includes(c.x)) {
+        drawShape(g, c, time, col, scr, view.k, u);
+      } else if (c.x === "aoe") {
         if (age > -0.1) {
           const p = ease((age + 0.1) / 0.5);
           g.strokeStyle = col; g.globalAlpha = 1 - p * 0.9; g.lineWidth = 6 * u;
@@ -412,13 +471,27 @@
       if (miss && age > 0 && age < 0.6) floatText(overlay, "MISS", to.x, to.y - r - 30 * u - age * 40 * u, 1 - age / 0.6, "#c9d6e2", 18 * u);
     }
 
+    // Who is hurting you: a faint line from each enemy whose reach you're inside.
+    if (world && time > fight.engage && !s.dead) {
+      g.strokeStyle = "rgba(240,96,90,.22)"; g.lineWidth = 2 * u;
+      for (const en of alive) {
+        if (en.died !== null) continue;
+        const w = world.m.get(en.uid), sp = fight.spawns.get(en.uid);
+        if (!w || !sp) continue;
+        if (Math.hypot(w.x - world.me.x, w.y - world.me.y) > (sp.a || 550) + 130) continue;
+        const p = posOf(en.uid);
+        g.beginPath(); g.moveTo(p.x, p.y); g.lineTo(st.me.x, st.me.y); g.stroke();
+      }
+    }
+
     // Fighters: 3D models when they're loaded (models3d.js), otherwise portraits.
-    let meX = st.me.x + (posOf(s.focus).x - st.me.x) * 0.25 * lunge, meY = st.me.y;
+    const lungeTo = posOf(s.focus);
+    let meX = st.me.x + (lungeTo.x - st.me.x) * (world ? 0.12 : 0.25) * lunge, meY = st.me.y + (world ? (lungeTo.y - st.me.y) * 0.12 * lunge : 0);
     // Dashes and blinks carry your model toward your target.
     // A later cast doesn't cancel the move (Zed's E right after his R stays at the target).
     let myCast = null, myTravel = 0;
     for (const c of fight.casts) {
-      if (c.t > time) break;
+      if (c.t > time || world) break;  // with positions, dashes are already in where you stand
       const m = s.dead ? 0 : travel(moveOf(champ.id, c.s), time - c.t);
       if (m > myTravel) { myTravel = m; myCast = c; }
     }
@@ -430,21 +503,29 @@
     }
     const blinks = [];
     if (myMove === "blink" && myCast) blinks.push({ k: time - myCast.t, a: st.me, b: { x: meX, y: meY } });
+    if (world)  // a blink: a flash where you left and where you landed
+      for (const c of fight.casts) {
+        if (c.t > time) break;
+        if (time - c.land > 0.3 || moveOf(champ.id, c.s) !== "blink") continue;
+        blinks.push({ k: time - c.land, a: scr(worldAt(fight, c.t).me), b: scr(c.from), once: true });
+      }
     const M = window.Models3D && window.Models3D.ok ? window.Models3D : null;
     let heads = {};
     if (M) {
-      const fighters = [{ key: "me", champ: champ.id, x: meX, y: meY, face: 1, ...myAnim(time, s) }];
+      const look = (a, b) => ({ x: b.x - a.x, y: b.y - a.y });
+      const fighters = [{ key: "me", champ: champ.id, x: meX, y: meY, face: 1,
+        dir: world && s.focus >= 0 ? look(st.me, posOf(s.focus)) : null, ...myAnim(time, s) }];
       for (const en of alive) {
         let p = posOf(en.uid);
         const ec = en.died === null ? enemyCastAt(en.uid, time) : null;
-        const em = ec && moveOf(en.champ, ec.s);
+        const em = ec && !world && moveOf(en.champ, ec.s);
         const et = em ? travel(em, time - ec.t) : 0;
         if (et > 0) {
           const q = { x: p.x + (st.me.x - p.x) * et, y: p.y + (st.me.y - p.y) * et };
           if (em === "blink") blinks.push({ k: time - ec.t, a: p, b: q });
           p = q;
         }
-        fighters.push({ key: "e" + en.uid, champ: en.champ, x: p.x, y: p.y, face: -1,
+        fighters.push({ key: "e" + en.uid, champ: en.champ, x: p.x, y: p.y, face: -1, dir: world ? look(p, st.me) : null,
           scale: en.uid === s.focus ? 1 : 0.85, visible: en.died === null || time - en.died < 1.6, ...enemyAnim(time, en) });
       }
       heads = M.frame(fighters, W, H);
@@ -454,7 +535,7 @@
     og.clearRect(0, 0, W, H);
     // Blinks: a flash where the caster leaves and where they land, and again on the way back.
     for (const b of blinks) {
-      for (const [age, from, to] of [[b.k, b.a, b.b], [b.k - 0.85, b.b, b.a]]) {
+      for (const [age, from, to] of b.once ? [[b.k, b.a, b.b]] : [[b.k, b.a, b.b], [b.k - 0.85, b.b, b.a]]) {
         if (age < 0 || age > 0.3) continue;
         og.globalAlpha = 1 - age / 0.3; og.strokeStyle = "#e9f3ff"; og.lineWidth = 2.5 * u;
         for (const p of [from, to]) { og.beginPath(); og.ellipse(p.x, p.y, (18 + age * 90) * u, (7 + age * 35) * u, 0, 0, Math.PI * 2); og.stroke(); }
@@ -578,6 +659,57 @@
     $("dmg").textContent = Math.round(s.damage).toLocaleString();
     $("state").textContent = s.dead ? "Slain" : s.cc ? "Crowd controlled" : "";
     return s;
+  }
+
+  // One of your abilities drawn to scale where it was aimed: a line's path and missile,
+  // a circle landing after its missile flies, a cone, or a ring around you.
+  function drawShape(g, c, time, col, scr, k, u) {
+    const geo = fight.geo[c.s] || {};
+    const from = scr(c.from), aim = scr({ x: c.ax, y: c.ay });
+    const fl = c.fl || 0, since = time - c.land, hitAge = since - fl;
+    const dx = aim.x - from.x, dy = aim.y - from.y, dl = Math.hypot(dx, dy) || 1;
+    if (since < 0) return;
+    g.save();
+    g.strokeStyle = col; g.fillStyle = col;
+    if (c.x === "line") {
+      const span = fl > 0 ? fl * 1.25 : 0.15, p = Math.min(1, since / span), fade = since > span ? 1 - (since - span) / 0.3 : 1;
+      if (fade > 0) {
+        const w = Math.max(3 * u, (geo.width || 80) * k);
+        g.globalAlpha = 0.16 * fade; g.lineWidth = w;
+        g.beginPath(); g.moveTo(from.x, from.y); g.lineTo(aim.x, aim.y); g.stroke();
+        const hx = from.x + dx * p, hy = from.y + dy * p;
+        g.globalAlpha = fade; g.lineWidth = Math.max(5 * u, w * 0.7); g.lineCap = "round";
+        g.beginPath(); g.moveTo(hx - (dx / dl) * 50 * u * Math.min(1, p * 4), hy - (dy / dl) * 50 * u * Math.min(1, p * 4)); g.lineTo(hx, hy); g.stroke();
+      }
+    } else if (c.x === "circle") {
+      const rad = Math.max(8 * u, (geo.radius || 250) * k);
+      if (hitAge < 0) {
+        // In flight: the landing spot outlined, the missile on its way.
+        const p = since / Math.max(0.05, fl);
+        g.globalAlpha = 0.5; g.lineWidth = 2 * u; g.setLineDash([6 * u, 6 * u]);
+        g.beginPath(); g.arc(aim.x, aim.y, rad, 0, Math.PI * 2); g.stroke(); g.setLineDash([]);
+        g.globalAlpha = 1; g.beginPath(); g.arc(from.x + dx * p, from.y + dy * p, 9 * u, 0, Math.PI * 2); g.fill();
+      } else if (hitAge < 0.5) {
+        const p = ease(hitAge / 0.5);
+        g.globalAlpha = 0.28 * (1 - p); g.beginPath(); g.arc(aim.x, aim.y, rad, 0, Math.PI * 2); g.fill();
+        g.globalAlpha = 1 - p; g.lineWidth = 4 * u; g.beginPath(); g.arc(aim.x, aim.y, rad * (0.9 + 0.15 * p), 0, Math.PI * 2); g.stroke();
+      }
+    } else if (c.x === "cone") {
+      if (since < 0.45) {
+        const p = ease(since / 0.45), a0 = Math.atan2(dy, dx), half = ((geo.angle || 45) * Math.PI) / 360;
+        const rad = Math.max(20 * u, (geo.range || 600) * k);
+        g.globalAlpha = 0.3 * (1 - p);
+        g.beginPath(); g.moveTo(from.x, from.y); g.arc(from.x, from.y, rad * (0.6 + 0.4 * p), a0 - half, a0 + half); g.closePath(); g.fill();
+        g.globalAlpha = 1 - p; g.lineWidth = 3 * u; g.stroke();
+      }
+    } else if (c.x === "self") {
+      if (since < 0.5) {
+        const p = ease(since / 0.5), rad = Math.max(20 * u, (geo.radius || 300) * k);
+        g.globalAlpha = 0.25 * (1 - p); g.beginPath(); g.arc(from.x, from.y, rad, 0, Math.PI * 2); g.fill();
+        g.globalAlpha = 1 - p; g.lineWidth = 4 * u; g.beginPath(); g.arc(from.x, from.y, rad * (0.7 + 0.3 * p), 0, Math.PI * 2); g.stroke();
+      }
+    }
+    g.restore();
   }
 
   function floatText(g, text, x, y, alpha, color, size) {
