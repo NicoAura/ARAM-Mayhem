@@ -1218,3 +1218,149 @@ html[data-device="mobile"] .sheet a[aria-current="page"] {
 html[data-device="mobile"] .sheet a span {
   color: var(--muted);
 }
+
+/* Announcement bar (text set at /admin) */
+.site-banner {
+  margin: 0;
+  padding: 0.6rem max(1.25rem, env(safe-area-inset-right, 0px)) 0.6rem max(1.25rem, env(safe-area-inset-left, 0px));
+  background: var(--raised);
+  border-bottom: 1px solid var(--line);
+  text-align: center;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+/* Site editor (/admin) */
+.btn {
+  height: 38px;
+  padding: 0 1rem;
+  border: 0;
+  border-radius: 999px;
+  background: var(--fg);
+  color: var(--bg);
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.btn.ghost {
+  border: 1px solid var(--line);
+  background: var(--surface);
+  color: var(--fg);
+}
+
+.btn:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+.admin-login {
+  display: grid;
+  gap: 0.5rem;
+  max-width: 420px;
+}
+
+.admin-row {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.admin {
+  display: grid;
+  gap: 1rem;
+}
+
+.admin-group {
+  display: grid;
+  gap: 1rem;
+}
+
+.admin-group h2 {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.admin-field {
+  display: grid;
+  gap: 0.35rem;
+  min-width: 0;
+}
+
+.admin-field label,
+.admin-login label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--muted);
+  font-size: 0.8125rem;
+  font-weight: 500;
+}
+
+.admin input,
+.admin textarea,
+.admin-login input {
+  width: 100%;
+  min-width: 0;
+  padding: 0.55rem 0.75rem;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--surface);
+  color: var(--fg);
+  font: inherit;
+  font-size: 0.9375rem;
+  resize: vertical;
+}
+
+.admin-login input {
+  flex: 1;
+}
+
+.admin-dot {
+  padding: 0.05rem 0.45rem;
+  border-radius: 999px;
+  background: var(--accent);
+  color: var(--bg);
+  font: 600 0.6875rem var(--mono);
+}
+
+.admin-hint {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.75rem;
+}
+
+.admin-bar {
+  position: sticky;
+  bottom: calc(0.75rem + env(safe-area-inset-bottom, 0px));
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: var(--surface);
+  box-shadow: 0 8px 30px rgb(0 0 0 / 0.12);
+}
+
+.admin-bar .admin-status {
+  flex: 1 1 200px;
+}
+
+.admin-status {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.875rem;
+}
+
+.admin-status.error {
+  color: #c2364a;
+}
+
+.admin-status.ok {
+  color: var(--accent);
+}
+
+html[data-device="mobile"] .admin-bar {
+  bottom: calc(76px + env(safe-area-inset-bottom, 0px));
+}

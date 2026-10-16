@@ -4,6 +4,7 @@ import Link from "next/link";
 import MobileTabBar from "@/components/MobileTabBar";
 import NavLinks from "@/components/NavLinks";
 import SearchPalette from "@/components/SearchPalette";
+import { text } from "@/lib/content";
 import { searchItems } from "@/lib/highlights";
 import { allTabs } from "@/lib/tabs";
 import "./globals.css";
@@ -53,11 +54,9 @@ export default function RootLayout({
             <SearchPalette items={searchItems()} />
           </div>
         </header>
+        {text("banner") && <p className="site-banner">{text("banner")}</p>}
         <main>{children}</main>
-        <footer className="site-footer">
-          DeepARAM isn&apos;t endorsed by Riot Games and doesn&apos;t reflect the views or opinions of Riot
-          Games or anyone officially involved in producing or managing Riot Games properties.
-        </footer>
+        <footer className="site-footer">{text("footer")}</footer>
         <MobileTabBar tabs={allTabs().map(({ href, label }) => ({ href, label }))} />
       </body>
     </html>
