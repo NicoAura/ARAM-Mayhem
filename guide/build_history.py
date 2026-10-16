@@ -38,6 +38,21 @@ def get(url, tries=4):
         time.sleep(2 ** attempt)
 
 
+def exists(url):
+    req = urllib.request.Request(url, method="HEAD", headers={"User-Agent": "deeparam-guide"})
+    for attempt in range(4):
+        try:
+            with urllib.request.urlopen(req, timeout=60):
+                return True
+        except urllib.error.HTTPError as e:
+            if e.code in (403, 404):
+                return False
+        except (urllib.error.URLError, ConnectionError):
+            pass
+        time.sleep(2 ** attempt)
+    return True
+
+
 def extract(patch):
     """One patch's augments: {platform id: {tier, values, inPool, name, icon}}."""
     path = os.path.join(CACHE, f"{patch}.json")
@@ -128,6 +143,10 @@ def main():
     events.reverse()
 
     first, last = snaps[0], snaps[-1]
+    # a retired augment's icon can be gone from the current files; show none rather than a broken image
+    for aid, m in meta.items():
+        if aid not in last[1] and m["icon"] and not exists(m["icon"]):
+            m["icon"] = None
     used = {i for e in events for i in e["added"] + e["removed"] + [c["id"] for c in e["changed"]]}
     out = {
         "from": first[0], "to": last[0],
