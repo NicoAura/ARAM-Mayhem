@@ -1,8 +1,7 @@
 // Augment odds math. Pure functions, no DOM.
 //
 // Each augment offer shows `cards` different augments drawn at random from that tier's pool.
-// The game files list the pool and the card count but no weights, so every augment in a tier is
-// treated as equally likely. A reroll redraws the whole offer, so it is one more look at the pool.
+// Every augment in a tier is treated as equally likely. A reroll redraws the whole offer, so it is one more look at the pool.
 (function (root) {
   "use strict";
 

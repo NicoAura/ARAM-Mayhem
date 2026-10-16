@@ -12,7 +12,7 @@
   const STEP = 1, HORIZON = 60 * 60, SAMPLE = 10;
   const MARKS = [600, 1200, 1800];
 
-  // Inputs that are not tied to an augment. Values from the game files come from data.income.
+  // Inputs that are not tied to an augment. Fixed values come from data.income.
   function defaults(data) {
     const inc = data.income;
     return {
