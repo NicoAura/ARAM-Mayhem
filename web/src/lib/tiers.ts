@@ -76,7 +76,7 @@ export function champStats(rows: PatchRow[], patches: Set<string>): ChampStats[]
 
   const base = [...byChamp].map(([name, rs]) => {
     const w = rs.map((r) => r.pick_rate * r.days);
-    const latest = rs.at(-1)!; // rows arrive oldest patch first
+    const latest = rs[rs.length - 1]; // rows arrive oldest patch first (no .at(): older Safari lacks it)
     const games = w.reduce((a, b) => a + b, 0);
     return {
       name,

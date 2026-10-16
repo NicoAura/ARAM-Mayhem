@@ -34,7 +34,7 @@ const ADVANCED: Column[] = [
 ];
 
 export default function ChampionTiers({ rows, patches, partners }: { rows: PatchRow[]; patches: string[]; partners: Record<string, string> }) {
-  const live = patches.at(-1)!;
+  const live = patches[patches.length - 1];
   const [picked, setPicked] = useState<Set<string>>(() => new Set([live]));
   // The starting range is a setting (gear menu); picking patches here doesn't change it.
   useEffect(() => {

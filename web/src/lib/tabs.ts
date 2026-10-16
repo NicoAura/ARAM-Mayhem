@@ -17,7 +17,7 @@ const SKIP = new Set(["web", "node_modules", ".git", ".github"]);
 
 // Where each embedded folder (by slug) is published. Anything not listed goes in the Tools menu.
 // The Kitchen's cook builds are part of The Lab now (KITCHEN), so its folder is no tab of its own.
-export const KITCHEN = "/tools/lab#kitchen";
+export const KITCHEN = "/tools/lab#cook-builds";
 const HIDDEN = new Set(["cook-builds"]);
 const ROUTES: Record<string, string> = {
   champions: "/champions",

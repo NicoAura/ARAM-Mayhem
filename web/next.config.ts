@@ -10,8 +10,8 @@ const nextConfig: NextConfig = {
       ["/tools/guide", "/info"],
       ["/guide", "/info"],
       ["/tools/fun", "/tools/lab"],
-      ["/tools/cook-builds", "/tools/lab#kitchen"],
-      ["/tools/kitchen", "/tools/lab#kitchen"],
+      ["/tools/cook-builds", "/tools/lab#cook-builds"],
+      ["/tools/kitchen", "/tools/lab#cook-builds"],
     ].map(([source, destination]) => ({ source, destination, permanent: true }));
   },
 };
