@@ -5,9 +5,11 @@
 export const ACCOUNT_STORE = "deeparam.riotId";
 export const ACCOUNT_EVENT = "deeparam-account";
 
+/** Every League region: [platform id the server routes by, label]. PH and TH play on the SEA (sg2) servers. */
 export const SERVERS: [string, string][] = [
   ["na1", "NA"], ["euw1", "EUW"], ["eun1", "EUNE"], ["kr", "KR"], ["br1", "BR"], ["la1", "LAN"], ["la2", "LAS"],
-  ["oc1", "OCE"], ["tr1", "TR"], ["ru", "RU"], ["jp1", "JP"], ["sg2", "SEA"], ["tw2", "TW"], ["vn2", "VN"],
+  ["oc1", "OCE"], ["jp1", "JP"], ["tr1", "TR"], ["ru", "RU"], ["ph2", "PH"], ["sg2", "SG"], ["th2", "TH"],
+  ["tw2", "TW"], ["vn2", "VN"], ["me1", "ME"],
 ];
 
 export const profileIcon = (id: number) => `/assets/profile-icon/${id}.jpg`;
@@ -41,7 +43,7 @@ export function saveAccount(v: Saved | null) {
 /** Looks up a Riot ID ("Name#TAG") on a server and remembers it as the signed-in account. */
 export async function signIn(riotId: string, platform: string): Promise<Profile> {
   const [gameName, tagLine] = riotId.split("#").map((s) => s.trim());
-  if (!gameName || !tagLine) throw new Error("Type your Riot ID with the #tag, like Name#NA1.");
+  if (!gameName || !tagLine) throw new Error("Enter your name and your tag (the part after #, like NA1).");
   const res = await fetch(`/api/riot/profile?${new URLSearchParams({ gameName, tagLine, platform })}`);
   const body = await res.json().catch(() => ({}));
   if (!res.ok) throw new Error(body.error || `Lookup failed (${res.status})`);

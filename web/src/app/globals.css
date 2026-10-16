@@ -2546,3 +2546,91 @@ html[data-motion="reduce"] *::after {
     align-items: stretch;
   }
 }
+
+/* Riot ID fields (header sign-in and My Stats): Name # Tag, then Region. */
+.riot-fields {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  flex: 1 1 18rem;
+}
+
+.riot-fields label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  color: var(--muted);
+  font-size: 0.8125rem;
+  font-weight: 500;
+}
+
+.riot-name {
+  flex: 1 1 13rem;
+}
+
+.riot-region {
+  flex: 0 0 6.5rem;
+}
+
+.riot-id-row {
+  display: flex;
+  align-items: center;
+  height: 38px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--surface);
+  overflow: hidden;
+}
+
+.riot-id-row:focus-within {
+  border-color: var(--accent);
+}
+
+.riot-fields input,
+.riot-fields select {
+  min-width: 0;
+  height: 100%;
+  border: 0;
+  outline: 0;
+  background: none;
+  color: var(--fg);
+  font: inherit;
+  font-size: 0.9375rem;
+}
+
+.riot-id-row input[name="riot-name"] {
+  flex: 1;
+  padding-left: 0.75rem;
+}
+
+.riot-id-row input[name="riot-tag"] {
+  flex: 0 0 4.2rem;
+  padding-right: 0.6rem;
+}
+
+.riot-hash {
+  padding: 0 0.35rem;
+  color: var(--muted);
+  font-weight: 600;
+}
+
+.riot-fields select {
+  height: 38px;
+  padding: 0 0.6rem;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--surface);
+}
+
+.account-form .riot-fields {
+  flex: none;
+}
+
+.account-form .riot-region {
+  flex: 1 1 100%;
+}
+
+html[data-device="mobile"] .riot-fields input,
+html[data-device="mobile"] .riot-fields select {
+  font-size: 16px;
+}

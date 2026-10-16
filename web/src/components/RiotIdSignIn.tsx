@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import RiotIdFields from "./RiotIdFields";
 import { ACCOUNT_EVENT, loadAccount, PROFILE_FRESH_MS, profileIcon as ICON, SERVERS, signIn, signOut as forget, type Profile } from "@/lib/account";
 
 // The My Stats sign-in card. The account itself (stored Riot ID, lookup, sign out) is shared with
@@ -105,27 +106,7 @@ export default function RiotIdSignIn() {
           lookUp(riotId, platform);
         }}
       >
-        <label className="riot-id-field">
-          <span>Riot ID</span>
-          <input
-            value={riotId}
-            onChange={(e) => setRiotId(e.target.value)}
-            name="riot-id"
-            placeholder="Name#NA1"
-            autoComplete="username"
-            spellCheck={false}
-          />
-        </label>
-        <label className="riot-id-field">
-          <span>Server</span>
-          <select value={platform} onChange={(e) => setPlatform(e.target.value)}>
-            {SERVERS.map(([v, l]) => (
-              <option key={v} value={v}>
-                {l}
-              </option>
-            ))}
-          </select>
-        </label>
+        <RiotIdFields riotId={riotId} onRiotId={setRiotId} platform={platform} onPlatform={setPlatform} />
         <button type="submit" className="btn" disabled={busy}>
           {busy ? "Looking up…" : "Sign in"}
         </button>

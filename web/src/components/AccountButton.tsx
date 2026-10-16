@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { ACCOUNT_EVENT, loadAccount, PROFILE_FRESH_MS, profileIcon, SERVERS, signIn, signOut, type Profile } from "@/lib/account";
+import RiotIdFields from "./RiotIdFields";
 
 // Top-right account button. Signed out: a person icon that opens a Riot ID sign-in.
 // Signed in: the player's profile icon, with a menu holding My Stats and Sign out.
@@ -112,28 +113,7 @@ export default function AccountButton() {
           ) : (
             <form className="account-form" method="post" action="/stats" onSubmit={submit}>
               <p className="account-title">Sign in with your Riot ID</p>
-              <label>
-                <span>Riot ID</span>
-                <input
-                  name="riot-id"
-                  value={riotId}
-                  onChange={(e) => setRiotId(e.target.value)}
-                  placeholder="Name#NA1"
-                  autoComplete="username"
-                  spellCheck={false}
-                  autoFocus
-                />
-              </label>
-              <label>
-                <span>Server</span>
-                <select name="server" value={platform} onChange={(e) => setPlatform(e.target.value)}>
-                  {SERVERS.map(([v, l]) => (
-                    <option key={v} value={v}>
-                      {l}
-                    </option>
-                  ))}
-                </select>
-              </label>
+              <RiotIdFields riotId={riotId} onRiotId={setRiotId} platform={platform} onPlatform={setPlatform} autoFocus />
               <button type="submit" className="btn" disabled={busy}>
                 {busy ? "Looking up…" : "Sign in"}
               </button>
