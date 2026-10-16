@@ -99,8 +99,14 @@
     const bySlot = {};
     for (const c of f.casts) (bySlot[c.s] = bySlot[c.s] || []).push(c);
     for (const list of Object.values(bySlot))
-      list.forEach((c, i) => { c.next = i + 1 < list.length ? list[i + 1].t : f.duration; c.land = c.t + (c.a || 0); });
+      list.forEach((c, i) => { c.n = i; c.next = i + 1 < list.length ? list[i + 1].t : f.duration; c.land = c.t + (c.a || 0); });
     f.enemyCasts = enemyCasts(f);
+    // Count each enemy's casts per ability, so repeated casts play the model's other versions
+    // of the move (Yasuo's three Q swings).
+    for (const list of f.enemyCasts.values()) {
+      const seen = {};
+      for (const c of list) c.n = seen[c.s] = (seen[c.s] ?? -1) + 1;
+    }
     // Crits on attacks: tag the matching damage number.
     for (const a of f.attacks) if (a.f) {
       const n = f.numbers.find((n) => n.u === a.u && Math.abs(n.t - a.t) < 1e-6 && n.src === 0);
@@ -157,10 +163,18 @@
     }
     return out;
   }
+  // How long a cast's animation shows: the model's whole move when it is loaded (up to 2.5 s,
+  // or until the next cast takes over), else 1.1 s.
+  function castLength(champId, slot) {
+    const M = window.Models3D;
+    const d = M && M.castLength ? M.castLength(champId, slot) : 0;
+    return d ? Math.min(2.5, d) : 1.1;
+  }
   function enemyCastAt(uid, time) {
     let cast = null;
     for (const c of fight.enemyCasts.get(uid) || []) { if (c.t > time) break; cast = c; }
-    return cast && time - cast.t < 1.1 ? cast : null;
+    const sp = fight.spawns.get(uid);
+    return cast && time - cast.t < castLength(sp ? sp.x : "", cast.s) ? cast : null;
   }
 
   // ---------- state at time t ----------
@@ -271,7 +285,7 @@
     if (s.dead) return { role: "death", t: time - fight.death.t, loop: false };
     let cast = null;
     for (const c of fight.casts) { if (c.t > time) break; cast = c; }
-    if (cast && time - cast.t < 1.1) return { role: cast.s, t: time - cast.t, loop: false };
+    if (cast && time - cast.t < castLength(champ.id, cast.s)) return { role: cast.s, t: time - cast.t, loop: false, n: cast.n };
     if (s.cc) return { role: "stunned", t: time, loop: true };
     let atk = null;
     for (const a of fight.attacks) { if (a.t - 0.3 > time) break; atk = a; }
@@ -281,7 +295,7 @@
   function enemyAnim(time, en) {
     if (en.died !== null) return { role: "death", t: time - en.died, loop: false };
     const cast = enemyCastAt(en.uid, time);
-    if (cast) return { role: cast.s, t: time - cast.t, loop: false };
+    if (cast) return { role: cast.s, t: time - cast.t, loop: false, n: cast.n };
     if (time < fight.engage) return { role: "idle", t: time + en.uid * 0.7, loop: true };
     return { role: "attack", t: time + en.uid * 0.37, loop: true };
   }

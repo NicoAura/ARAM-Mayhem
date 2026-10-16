@@ -8,10 +8,16 @@ import * as THREE from "three";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 import { MeshoptDecoder } from "three/addons/libs/meshopt_decoder.module.js";
 import { clone as cloneSkinned } from "three/addons/utils/SkeletonUtils.js";
+import { pickClips } from "./clips.js";
 
 const DATA = "replay-data/models/";
 const BUST = "?v=" + (window.REPLAY_VERSION || "0");
 const HEIGHT = 2.6;              // world units for a champion of average size
+const FADE = 0.15;               // seconds to blend from one clip into the next
+const RETURN = 0.35;             // seconds to glide back to the fighter's spot after a dash
+const MAX_SHIFT = HEIGHT * 1.6;  // furthest an ability's own movement can carry a model
+const SPELLS = new Set(["Q", "W", "E", "R"]);
+const lengths = new Map();       // champion id (lower case) -> {slot: seconds} once loaded
 const FALLBACK = { Q: ["attack"], W: ["attack"], E: ["attack"], R: ["attack"], crit: ["attack"],
   stunned: ["idle"], death: ["idle"], attack: ["idle"], run: ["idle"] };
 
@@ -23,38 +29,12 @@ const keysReady = fetch("replay-data/index.json" + BUST).then((r) => r.json())
 const SOURCE = "https://cdn.modelviewer.lol/lol/models";
 const loader = new GLTFLoader().setMeshoptDecoder(MeshoptDecoder);
 
-// Same rules as pickClips in tools/build_models.mjs: animation names vary by champion
-// (Spell4 vs Spell4_NoMove, Idle1 vs Idle_Base, Zed_idle1.anm), so try exact names first.
-function pickClips(names) {
-  const clean = (n) => n.replace(/\.anm$/i, "").toLowerCase();
-  const list = names.map((n) => ({ n, c: clean(n) }));
-  const transition = (c) => /_to_|to_?idle|to_?run|2idle|2run|_in\d*$|idle_?in|run_?in|lead_?in|leadout|intro|enter|exit|winddown|wndup|windup|_back$/.test(c);
-  const find = (...patterns) => {
-    for (const p of patterns) {
-      const hit = list.find(({ c }) => (p instanceof RegExp ? p.test(c) : c === p) && !transition(c));
-      if (hit) return hit.n;
-    }
-    return null;
-  };
-  const spell = (k) => find(`spell${k}`, `spell${k}_base`, `spell${k}_cast`, `spell${k}a`, `spell${k}_nomove`,
-    new RegExp(`^spell${k}(_|$)`), new RegExp(`(^|_)spell${k}(_base|_cast)?$`), new RegExp(`spell${k}`));
-  return {
-    idle: find("idle1", "idle_base", "idle", /^idle/, /(^|_)idle0?1(_base)?$/, /(^|_)idle\d*(_base|v\d)?$/),
-    run: find("run_base", "run", "run1", /^run(?!_homeguard|_slow)/, /(^|_)run(1|_base)?$/),
-    attack: find("attack1", "attack_1", /^attack/, /(^|_)attack_?1$/, /(^|_)attack\d*$/),
-    crit: find("crit1", "crit", /^crit/, /(^|_)crit(_base)?$/),
-    Q: spell(1), W: spell(2), E: spell(3), R: spell(4),
-    stunned: find("stunned", "stun", /stun/),
-    death: find("death", /^death/, /(^|_)death/),
-  };
-}
-
 function loadRemote(key) {
   return keysReady.then((keys) => {
     const c = keys.get(key);
     if (!c) return null;
     return loader.loadAsync(`${SOURCE}/${key}/${c.key * 1000}/model.glb`)
-      .then((g) => ({ gltf: g, entry: { clips: pickClips(g.animations.map((a) => a.name)) } }));
+      .then((g) => ({ gltf: g, entry: pickClips(g.animations.map((a) => a.name)) }));
   });
 }
 const gltfs = new Map();         // champion id (lower case) -> Promise<gltf | null>
@@ -74,9 +54,20 @@ function loadChampion(id) {
         })
         : loader.loadAsync(DATA + entry.file + BUST);
       return load.then((g) => ({ gltf: g, entry })).catch(() => null);
+    }).then((g) => {
+      if (g) lengths.set(key, castLengths(g));
+      return g;
     }));
   }
   return gltfs.get(key);
+}
+
+// How long each ability's animation runs: its main clip plus the clip that eases it back to idle.
+function castLengths({ gltf, entry }) {
+  const dur = (name) => { const a = name && gltf.animations.find((c) => c.name === name); return a ? a.duration : 0; };
+  const out = {};
+  for (const slot of SPELLS) out[slot] = dur(entry.clips[slot]) + dur((entry.after || {})[slot]);
+  return out;
 }
 
 // One posed copy of a champion model.
@@ -86,12 +77,23 @@ class Actor {
     this.root = cloneSkinned(gltf.scene);
     this.group.add(this.root);
     this.mixer = new THREE.AnimationMixer(this.root);
-    this.clips = {};
-    for (const [role, name] of Object.entries(entry.clips)) {
+    const make = (name) => {
       const clip = name && gltf.animations.find((a) => a.name === name);
-      if (clip) this.clips[role] = { action: this.mixer.clipAction(clip), duration: clip.duration, name };
-    }
+      return clip ? { action: this.mixer.clipAction(clip), duration: clip.duration, name } : null;
+    };
+    this.clips = {};
+    for (const [role, name] of Object.entries(entry.clips)) { const c = make(name); if (c) this.clips[role] = c; }
+    // Other versions of a move, played in turn, and the clips that finish abilities.
+    this.variants = {};
+    for (const [role, names] of Object.entries(entry.extra || {}))
+      if (this.clips[role]) this.variants[role] = [this.clips[role], ...names.map(make).filter(Boolean)];
+    this.after = {};
+    for (const [slot, name] of Object.entries(entry.after || {})) { const c = make(name); if (c) this.after[slot] = c; }
     this.current = null;
+    this.fade = null;            // {from, time, start}: the clip being blended out
+    this.offset = new THREE.Vector3();
+    this.leftAt = null;          // when the last ability with movement ended (ms)
+    this.lastShift = new THREE.Vector3();
     // Parts the game hides (Teemo's mushroom, Ornn's poro) start hidden; some clips show or
     // hide parts partway through (submeshVisibilityEvents on the skeleton, frames at 30 fps).
     this.meshes = [];
@@ -129,21 +131,80 @@ class Actor {
     for (const r of FALLBACK[role] || []) if (this.clips[r]) return this.clips[r];
     return this.clips.idle || Object.values(this.clips)[0] || null;
   }
-  // Shows the role's clip at time t (looping or held on its last frame).
-  pose(role, t, loop) {
-    const c = this.clip(role);
-    if (!c) return 0;
+  // Which clip and time a role shows at time t. Idle plays its main loop twice, then one of
+  // its variations; a looping attack takes turns between the attack clips; the n-th cast of
+  // an ability uses the n-th version of it, then its finishing clip.
+  pick(role, t, loop, n) {
+    const main = this.clip(role);
+    if (!main) return null;
+    const vars = this.variants[role] || [main];
+    if (loop && role === "idle" && vars.length > 1) {
+      const seq = [];
+      for (let i = 1; i < vars.length; i++) seq.push(main, main, vars[i]);
+      const total = seq.reduce((sum, c) => sum + c.duration, 0);
+      let x = ((t % total) + total) % total;
+      for (const c of seq) { if (x < c.duration) return { c, time: x }; x -= c.duration; }
+    }
+    if (loop) {
+      if (vars.length > 1) {
+        const total = vars.reduce((sum, c) => sum + c.duration, 0);
+        let x = ((t % total) + total) % total;
+        for (const c of vars) { if (x < c.duration) return { c, time: x }; x -= c.duration; }
+      }
+      const d = Math.max(1e-3, main.duration);
+      return { c: main, time: ((t % d) + d) % d };
+    }
+    const c = vars[(n || 0) % vars.length];
+    const after = SPELLS.has(role) ? this.after[role] : null;
+    if (after && t >= c.duration) return { c: after, time: Math.min(t - c.duration, after.duration - 1e-3) };
+    return { c, time: Math.min(Math.max(0, t), c.duration - 1e-3) };
+  }
+  // Shows the role's clip at time t, blending briefly out of the previous clip, and works out
+  // how far the ability's own movement (a dash, a leap) carries the model from its spot.
+  pose(role, t, loop, n, now = performance.now()) {
+    const p = this.pick(role, t, loop, n);
+    if (!p) return 0;
+    const { c, time } = p;
     if (this.current !== c) {
-      if (this.current) this.current.action.stop();
+      if (this.fade) this.fade.from.action.stop();
+      this.fade = this.current ? { from: this.current, time: this.current.action.time, start: now } : null;
       c.action.reset().play();
       this.current = c;
     }
-    const d = Math.max(1e-3, c.duration);
-    c.action.time = loop ? ((t % d) + d) % d : Math.min(Math.max(0, t), d - 1e-3);
+    c.action.time = time;
+    let w = 1;
+    if (this.fade) {
+      w = Math.min(1, (now - this.fade.start) / 1000 / FADE);
+      if (w >= 1) { this.fade.from.action.stop(); this.fade = null; }
+      else { this.fade.from.action.enabled = true; this.fade.from.action.time = this.fade.time; this.fade.from.action.setEffectiveWeight(1 - w); }
+    }
+    c.action.setEffectiveWeight(w);
     this.mixer.update(0);
-    if (this.rootRest) this.rootBone.position.copy(this.rootRest);
-    this.showParts(c.name, c.action.time * 30);
-    return d;
+    this.offset.set(0, 0, 0);
+    if (this.rootRest) {
+      // Ability clips keep their sideways root motion (capped); everything else stays on the spot.
+      if (SPELLS.has(role) && !loop) {
+        this.root.updateMatrixWorld(true);
+        const moved = this.rootBone.getWorldPosition(new THREE.Vector3());
+        this.rootBone.position.copy(this.rootRest);
+        this.root.updateMatrixWorld(true);
+        const rest = this.rootBone.getWorldPosition(new THREE.Vector3());
+        this.offset.subVectors(moved, rest).setY(0);
+        if (this.offset.length() > MAX_SHIFT) this.offset.setLength(MAX_SHIFT);
+        this.lastShift.copy(this.offset);
+        this.leftAt = null;
+      } else {
+        this.rootBone.position.copy(this.rootRest);
+        if (this.lastShift.lengthSq() > 1e-6) {
+          if (this.leftAt === null) this.leftAt = now;
+          const k = Math.min(1, (now - this.leftAt) / 1000 / RETURN);
+          this.offset.copy(this.lastShift).multiplyScalar(1 - k);
+          if (k >= 1) this.lastShift.set(0, 0, 0);
+        }
+      }
+    }
+    this.showParts(c.name, time * 30);
+    return c.duration;
   }
   showParts(clipName, frame) {
     const vis = new Map(this.meshes.map((m) => [m.hash, m.shown]));
@@ -197,7 +258,12 @@ const api = {
   hasModel(champId) { return !!(manifest && manifest[String(champId).toLowerCase()]); },
 
   // Click on an ability: your champion plays it once in the arena.
-  previewRole(role) { this.preview = { role, start: performance.now() }; },
+  previewRole(role) {
+    const n = this.preview && this.preview.role === role ? this.preview.n + 1 : 0;
+    this.preview = { role, n, start: performance.now() };
+  },
+  // Seconds the ability's animation runs for a loaded champion, or 0 if not loaded yet.
+  castLength(champId, slot) { return (lengths.get(String(champId).toLowerCase()) || {})[slot] || 0; },
 
   // Converts canvas pixels (device px) to a point on the arena floor.
   toWorld(px, py, W, H) {
@@ -249,13 +315,15 @@ const api = {
       a.group.position.copy(this.toWorld(f.x, f.y, W, H));
       a.group.rotation.y = f.face > 0 ? Math.PI / 2 : -Math.PI / 2;
       a.group.scale.setScalar(f.scale || 1);
-      let { role, t, loop } = f;
+      let { role, t, loop, n } = f;
       if (f.key === "me" && this.preview) {
         const pt = (performance.now() - this.preview.start) / 1000;
-        if (pt < a.duration(this.preview.role) + 0.2) { role = this.preview.role; t = pt; loop = false; }
+        const len = (lengths.get(String(f.champ).toLowerCase()) || {})[this.preview.role] || a.duration(this.preview.role);
+        if (pt < len + 0.2) { role = this.preview.role; t = pt; loop = false; n = this.preview.n; }
         else this.preview = null;
       }
-      a.pose(role, t, loop);
+      a.pose(role, t, loop, n);
+      a.group.position.add(a.offset);
       const head = this.toScreen(a.group.position.clone().add(new THREE.Vector3(0, a.height * (f.scale || 1) * 1.12, 0)), W, H);
       out[f.key] = head;
     }

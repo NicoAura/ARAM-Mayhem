@@ -63,30 +63,29 @@ def burst(path):
     return [round(start, 2), round(length, 2)]
 
 
-def cut(src, dst, seg):
-    subprocess.run(["ffmpeg", "-v", "error", "-y", "-ss", str(seg[0]), "-t", str(seg[1]), "-i", str(src), "-vn",
-                    "-ac", "1", "-c:a", "libmp3lame", "-b:a", "64k",
-                    "-af", f"afade=t=out:st={max(0, seg[1] - 0.12):.2f}:d=0.12", str(dst)], check=True)
+def pack(index, cache, out, rate=32000, gap=0.25):
+    """Joins every champion's sounds into OUT/sounds.mp3 and records where each sits.
 
-
-def pack(index, pieces, out):
-    """Joins every champion's cut sounds into OUT/sounds.mp3 and records where each sits."""
-    clips, files, at = {}, [], 0.0
+    Each sound is decoded straight from its preview video to raw samples, so the offsets are
+    exact sample counts, with a short silence between sounds; the whole file is encoded once
+    (joining separately encoded MP3s drifts by a few milliseconds per file, which added up to
+    seconds and played neighbouring sounds)."""
+    clips, pcm = {}, bytearray()
+    silence = bytes(int(rate * gap) * 2)
     for c in index["champions"]:
         for slot in SLOTS:
-            f = pieces / f"{c['id']}_{slot}.mp3"
-            if slot not in c.get("sound", {}) or not f.exists():
+            seg = c.get("sound", {}).get(slot)
+            raw = cache / "clips-raw" / f"{c['key']:04d}_{slot}.webm"
+            if not seg or not raw.exists():
                 continue
-            length = float(subprocess.run(["ffprobe", "-v", "error", "-show_entries", "format=duration", "-of", "csv=p=0",
-                                           str(f)], capture_output=True, text=True, check=True).stdout)
-            clips.setdefault(c["id"], {})[slot] = [round(at, 3), round(c["sound"][slot][1], 3)]
-            files.append(f)
-            at += length
-    listing = out / "sounds.txt"
-    listing.write_text("".join(f"file '{f.resolve()}'\n" for f in files))
-    subprocess.run(["ffmpeg", "-v", "error", "-y", "-f", "concat", "-safe", "0", "-i", str(listing), "-c", "copy",
-                    str(out / "sounds.mp3")], check=True)
-    listing.unlink()
+            fade = max(0.0, seg[1] - 0.12)
+            data = subprocess.run(["ffmpeg", "-v", "error", "-ss", str(seg[0]), "-t", str(seg[1]), "-i", str(raw), "-vn",
+                                   "-ac", "1", "-ar", str(rate), "-af", f"afade=t=out:st={fade:.2f}:d=0.12",
+                                   "-f", "s16le", "-"], capture_output=True, check=True).stdout
+            clips.setdefault(c["id"], {})[slot] = [round(len(pcm) / 2 / rate, 4), round(len(data) / 2 / rate, 4)]
+            pcm += data + silence
+    subprocess.run(["ffmpeg", "-v", "error", "-y", "-f", "s16le", "-ar", str(rate), "-ac", "1", "-i", "-",
+                    "-c:a", "libmp3lame", "-b:a", "64k", str(out / "sounds.mp3")], input=bytes(pcm), check=True)
     json.dump({"file": "sounds.mp3", "clips": clips}, open(out / "sounds.json", "w"), separators=(",", ":"))
 
 
@@ -105,16 +104,12 @@ def main():
     out = Path(args.out) if args.out else None
     if out:
         out.mkdir(parents=True, exist_ok=True)
-    pieces = cache / "sound-pieces"
-    pieces.mkdir(parents=True, exist_ok=True)
 
     def job(champ, slot):
         raw = fetch(clip_url(champ["key"], slot), cache / "clips-raw" / f"{champ['key']:04d}_{slot}.webm")
         if raw is None or not has_audio(raw):
             return champ["id"], slot, None
         seg = burst(raw)
-        if seg and out:
-            cut(raw, pieces / f"{champ['id']}_{slot}.mp3", seg)
         return champ["id"], slot, seg
 
     champs = [c for c in index["champions"] if not only or c["id"].lower() in only]
@@ -134,7 +129,7 @@ def main():
 
     json.dump(index, open(args.index, "w"), separators=(",", ":"))
     if out:
-        pack(index, pieces, out)
+        pack(index, cache, out)
     missing = [f"{c['id']} {s}" for c in champs for s in SLOTS if s not in c.get("sound", {})]
     print(f"{len(champs)} champions, {len(champs) * 4 - len(missing)} sounds"
           + (f"; none for: {', '.join(missing)}" if missing else ""))
