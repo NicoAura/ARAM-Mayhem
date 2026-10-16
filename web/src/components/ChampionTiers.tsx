@@ -1,6 +1,7 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { loadSettings } from "@/lib/settings";
 import DataTable, { type Column } from "./DataTable";
 import { champStats, TIER_HELP, type PatchRow } from "@/lib/tiers";
 
@@ -35,6 +36,12 @@ const ADVANCED: Column[] = [
 export default function ChampionTiers({ rows, patches, partners }: { rows: PatchRow[]; patches: string[]; partners: Record<string, string> }) {
   const live = patches.at(-1)!;
   const [picked, setPicked] = useState<Set<string>>(() => new Set([live]));
+  // The starting range is a setting (gear menu); picking patches here doesn't change it.
+  useEffect(() => {
+    const r = loadSettings().tierRange;
+    if (r === "last3") setPicked(new Set(patches.slice(-3)));
+    else if (r === "all") setPicked(new Set(patches));
+  }, [patches]);
   const stats = useMemo(() => champStats(rows, picked).map((c) => ({ ...c, partners: partners[c.name] ?? null })), [rows, picked, partners]);
 
   const preset = (list: string[]) => setPicked(new Set(list));

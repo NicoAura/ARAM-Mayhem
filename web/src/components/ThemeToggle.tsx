@@ -43,7 +43,7 @@ function apply(theme: Theme) {
   window.dispatchEvent(new Event(THEME_EVENT));
 }
 
-export default function ThemeToggle() {
+export default function ThemeToggle({ labels = false }: { labels?: boolean }) {
   const [theme, setTheme] = useState<Theme>("system");
 
   useEffect(() => {
@@ -72,10 +72,11 @@ export default function ThemeToggle() {
   return (
     <div className="theme-toggle" role="group" aria-label="Theme">
       {OPTIONS.map((o) => (
-        <button key={o.value} type="button" aria-pressed={theme === o.value} aria-label={o.label} title={o.label} onClick={() => pick(o.value)}>
+        <button key={o.value} type="button" aria-pressed={theme === o.value} aria-label={labels ? undefined : o.label} title={o.label} onClick={() => pick(o.value)}>
           <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
             {o.icon}
           </svg>
+          {labels && <span>{o.label}</span>}
         </button>
       ))}
     </div>
