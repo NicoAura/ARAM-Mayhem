@@ -61,7 +61,7 @@ export default function AdminEditor({ fields }: { fields: Field[] }) {
     if (!res.ok) return setStatus({ kind: "error", text: data.error });
     setSha(data.sha);
     setSaved(draft);
-    setStatus({ kind: "ok", text: "Saved. deeparam.com shows it after the redeploy, in about a minute." });
+    setStatus({ kind: "ok", text: "Saved. The site shows it in about a minute." });
   };
 
   if (!unlocked) {

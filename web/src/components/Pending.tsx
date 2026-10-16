@@ -1,16 +1,11 @@
-import { REPO_URL } from "@/lib/sections";
-
-// Shown when a tab's data isn't in the repo yet because its pull request hasn't merged.
-export default function Pending({ pr, children }: { pr: number; children: React.ReactNode }) {
+// Shown when a tab's content isn't ready yet. `pr` and the children say which work it waits on,
+// for whoever reads the code; visitors just see "Coming soon."
+export default function Pending(_props: { pr: number; children: React.ReactNode }) {
+  void _props;
   return (
     <div className="placeholder">
       <span className="status-dot" />
-      <span>
-        {children}{" "}
-        <a className="inline-link" href={`${REPO_URL}/pull/${pr}`}>
-          PR #{pr}
-        </a>
-      </span>
+      <span>Coming soon.</span>
     </div>
   );
 }

@@ -29,4 +29,3 @@ export const sections = [
   },
 ];
 
-export const REPO_URL = "https://github.com/NicoAura/ARAM-Mayhem";
