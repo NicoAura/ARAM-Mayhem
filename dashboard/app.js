@@ -9,8 +9,17 @@ const state = {
   games: [],        // normalized rows for the archive owner, one per game
   champNames: {},   // championId -> name
   augNames: {},     // augmentId -> name
+  augRarity: {},    // augmentId -> kSilver | kGold | kPrismatic
   owner: null,
+  sample: false,
 };
+
+// A page can ship name tables and an example archive ahead of time (the
+// published preview does, since it can't reach Riot's CDNs).
+const PRESET = window.MAYHEM_PRESET || {};
+Object.assign(state.champNames, PRESET.champNames || {});
+Object.assign(state.augNames, PRESET.augNames || {});
+Object.assign(state.augRarity, PRESET.augRarity || {});
 
 // ---------- loading ----------
 
@@ -20,9 +29,10 @@ function showError(msg) {
   const el = $("load-error");
   el.textContent = msg;
   el.hidden = false;
+  $("loader").hidden = false;
 }
 
-async function loadText(text) {
+async function loadText(text, { sample = false } = {}) {
   let data;
   try { data = JSON.parse(text); } catch (e) { return showError("That file isn't valid JSON."); }
   const raw = findGames(data);
@@ -32,9 +42,11 @@ async function loadText(text) {
   state.games = raw.map((g) => normalize(g, owner)).filter(Boolean)
     .sort((a, b) => b.time - a.time);
   if (!state.games.length) return showError("Couldn't find the account's own stats in those games.");
+  state.sample = sample;
   $("load-error").hidden = true;
   $("loader").hidden = true;
   $("stats").hidden = false;
+  $("sample-note").hidden = !sample;
   setupFilters();
   render();
   loadNames().then(render);
@@ -123,6 +135,7 @@ async function loadNames() {
       for (const a of list) {
         const name = a.nameTRA || a.name;
         if (a.id != null && name && !state.augNames[a.id]) state.augNames[a.id] = name;
+        if (a.id != null && a.rarity && !state.augRarity[a.id]) state.augRarity[a.id] = a.rarity;
       }
     } catch (e) { console.warn("augment names unavailable from", url, e); }
   }
@@ -130,9 +143,11 @@ async function loadNames() {
 
 const champName = (g) => state.champNames[g.champId] || g.champNameRaw || `Champion ${g.champId}`;
 const augName = (id) => state.augNames[id] || `Augment ${id}`;
+const RARITY = { kSilver: ["Silver", 1], kGold: ["Gold", 2], kPrismatic: ["Prismatic", 3] };
 
 // ---------- filters ----------
 
+let filtersReady = false;
 function setupFilters() {
   const queues = [...new Set(state.games.map((g) => g.queue))].sort();
   const sel = $("f-queue");
@@ -142,6 +157,8 @@ function setupFilters() {
   const first = new Date(state.games[state.games.length - 1].time);
   const last = new Date(state.games[0].time);
   $("account").textContent = `${name ? name + " · " : ""}${state.games.length} games, ${fmtDate(first)} to ${fmtDate(last)}`;
+  if (filtersReady) return;
+  filtersReady = true;
   for (const id of ["f-queue", "f-from", "f-to", "f-champ", "f-minaug"]) $(id).addEventListener("input", render);
   $("f-reset").addEventListener("click", () => {
     for (const id of ["f-queue", "f-from", "f-to", "f-champ"]) $(id).value = "";
@@ -295,11 +312,13 @@ function renderAugs(games) {
   const total = games.length || 1;
   const rows = group(games, (g) => g.augs).filter((r) => r.n >= min);
   table("t-augs", [
-    { label: "Augment", get: (r) => augName(r.key) },
+    { label: "Augment", get: (r) => augName(r.key), fmt: (r) => esc(augName(r.key)) },
+    { label: "Tier", get: (r) => (RARITY[state.augRarity[r.key]] || ["", 0])[1],
+      fmt: (r) => { const t = RARITY[state.augRarity[r.key]]; return t ? `<span class="tier ${state.augRarity[r.key]}">${t[0]}</span>` : ""; } },
     { label: "Picks", get: (r) => r.n },
     { label: "Pick rate", get: (r) => r.n / total, fmt: (r) => pct(r.n / total) },
     { label: "Win rate", get: (r) => r.w / r.n, fmt: (r) => pct(r.w / r.n) },
-  ], rows, 1);
+  ], rows, 2);
 }
 
 function renderGames(games) {
@@ -316,10 +335,13 @@ function renderGames(games) {
 
 // ---------- wiring ----------
 
-$("file").addEventListener("change", async (e) => {
-  const f = e.target.files[0];
-  if (f) loadText(await f.text());
-});
+for (const id of ["file", "file-2"]) {
+  $(id).addEventListener("change", async (e) => {
+    const f = e.target.files[0];
+    if (f) loadText(await f.text());
+    e.target.value = "";
+  });
+}
 const loader = $("loader");
 loader.addEventListener("dragover", (e) => { e.preventDefault(); loader.classList.add("drag"); });
 loader.addEventListener("dragleave", () => loader.classList.remove("drag"));
@@ -333,6 +355,7 @@ loader.addEventListener("drop", async (e) => {
 // When served next to a data file (e.g. `python3 -m http.server` in this
 // folder), load it automatically. ?data=path picks a different file.
 (async () => {
+  if (PRESET.sample) return loadText(JSON.stringify(PRESET.sample), { sample: true });
   const path = new URLSearchParams(location.search).get("data") || "data/mayhem-backup.json";
   if (location.protocol === "file:") return;
   try {

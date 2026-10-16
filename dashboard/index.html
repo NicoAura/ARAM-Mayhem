@@ -4,12 +4,14 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Mayhem Stats</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600&display=swap">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <header class="top">
     <h1>ARAM Mayhem Stats</h1>
     <p id="account" class="muted">Load your archive to see your stats.</p>
+    <p id="sample-note" class="sample-note" hidden>Showing example games, not real ones. Load your own archive to see your stats.</p>
   </header>
 
   <section id="loader" class="card loader">
@@ -28,6 +30,7 @@
       <label>To <input type="date" id="f-to"></label>
       <label>Champion <input type="search" id="f-champ" placeholder="Any"></label>
       <button id="f-reset" type="button">Reset</button>
+      <label class="btn file-btn">Load archive<input type="file" id="file-2" accept=".json,application/json" hidden></label>
     </div>
 
     <div class="tiles" id="tiles"></div>

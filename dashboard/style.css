@@ -1,43 +1,72 @@
 :root {
-  color-scheme: light;
-  --bg: #f4f4f2;
-  --surface: #fcfcfb;
-  --border: #e2e1dc;
-  --text: #0b0b0b;
-  --text-2: #52514e;
-  --muted: #7a7974;
-  --series: #2a78d6;
-  --grid: #e8e7e2;
-  --win: #1a7f37;
-  --loss: #c4312f;
+  /* Dark-first, gold on warm charcoal to match the site; light theme below */
+  color-scheme: dark;
+  --bg: #15130f;
+  --surface: #211e18;
+  --border: #3a352b;
+  --text: #f2ede2;
+  --text-2: #c9c1ae;
+  --muted: #918a79;
+  --accent: #d8b04c;
+  --series: #c99a2e;
+  --grid: #2f2b23;
+  --win: #5bbd7a;
+  --loss: #e46f68;
+  --silver: #b9c0c8;
+  --gold: #e0b443;
+  --prismatic: #c79bf2;
+  --display: "Cinzel", "Trajan Pro", Georgia, serif;
 }
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    color-scheme: dark;
-    --bg: #111110;
-    --surface: #1a1a19;
-    --border: #2e2e2c;
-    --text: #f0efec;
-    --text-2: #c3c2b7;
-    --muted: #8f8e88;
-    --series: #3987e5;
-    --grid: #2a2a28;
-    --win: #4cb06a;
-    --loss: #e66767;
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) {
+    color-scheme: light;
+    --bg: #f6f3ec;
+    --surface: #fffdf8;
+    --border: #e1dbcd;
+    --text: #1d1a14;
+    --text-2: #504a3e;
+    --muted: #7c7566;
+    --accent: #8a6410;
+    --series: #a87a14;
+    --grid: #ebe5d8;
+    --win: #1d7a3c;
+    --loss: #b8332d;
+    --silver: #66707a;
+    --gold: #946b0c;
+    --prismatic: #7b45b3;
   }
+}
+:root[data-theme="light"] {
+  color-scheme: light;
+  --bg: #f6f3ec;
+  --surface: #fffdf8;
+  --border: #e1dbcd;
+  --text: #1d1a14;
+  --text-2: #504a3e;
+  --muted: #7c7566;
+  --accent: #8a6410;
+  --series: #a87a14;
+  --grid: #ebe5d8;
+  --win: #1d7a3c;
+  --loss: #b8332d;
+  --silver: #66707a;
+  --gold: #946b0c;
+  --prismatic: #7b45b3;
 }
 
 * { box-sizing: border-box; }
 body {
   margin: 0;
-  padding: 24px 16px 48px;
+  padding-block: 24px 48px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
   background: var(--bg);
   color: var(--text);
   font: 15px/1.45 system-ui, -apple-system, "Segoe UI", sans-serif;
   max-width: 1200px;
   margin-inline: auto;
 }
-h1 { font-size: 26px; margin: 0 0 4px; }
+h1 { font: 600 28px/1.2 var(--display); letter-spacing: .02em; color: var(--accent); margin: 0 0 4px; text-wrap: balance; }
 h2 { font-size: 16px; margin: 0 0 12px; }
 .muted { color: var(--muted); }
 .small { font-size: 13px; }
@@ -52,7 +81,14 @@ code { font-size: 13px; }
   margin-top: 16px;
 }
 .loader { text-align: center; padding: 40px 16px; border-style: dashed; }
-.loader.drag { border-color: var(--series); }
+.loader.drag { border-color: var(--accent); }
+.sample-note { margin: 8px 0 0; display: inline-block; font-size: 13px; color: var(--text); border: 1px solid var(--accent); border-radius: 999px; padding: 3px 12px; }
+.btn { display: inline-flex; align-items: center; cursor: pointer; border: 1px solid var(--accent); color: var(--accent); background: transparent; border-radius: 6px; padding: 5px 10px; font-size: 14px; }
+.btn:focus-within, button:focus-visible, input:focus-visible, select:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.tier { font-size: 12px; font-weight: 600; }
+.tier.kSilver { color: var(--silver); }
+.tier.kGold { color: var(--gold); }
+.tier.kPrismatic { color: var(--prismatic); }
 
 .filters {
   display: flex; flex-wrap: wrap; gap: 12px; align-items: end;
@@ -69,7 +105,7 @@ button { cursor: pointer; }
 .tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; margin-top: 16px; }
 .tile { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 12px 14px; }
 .tile .label { font-size: 12px; color: var(--text-2); }
-.tile .value { font-size: 26px; font-weight: 600; font-variant-numeric: tabular-nums; }
+.tile .value { font-size: 26px; color: var(--text); font-weight: 600; font-variant-numeric: tabular-nums; }
 .tile .sub { font-size: 12px; color: var(--muted); }
 
 .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
