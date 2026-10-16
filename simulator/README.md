@@ -89,7 +89,7 @@ make test                     # both test suites
 
 Each champion gets a `parse_quality` of good, partial or none (currently 138 / 32 / 3). Abilities the parser gets wrong are fixed in `data/champion_overrides.json`, each with a reason. To rebuild: `python3 tools/build_champion_pool.py` and `python3 tools/build_items.py` (downloads are cached in `~/.cache/aram-mayhem-sim`).
 
-**PBE patch.** Everything defaults to the live patch. `--pbe` on `build_champion_pool.py`, `build_items.py` and `build_augments.py` builds the PBE (test server) patch into `data/pbe/` instead (same hand-written effects and overrides, the Mayhem balance table stays live, augments missing on PBE are left out). `mayhem_sim --game-data data/pbe` runs on it, and the replay's "Change the simulation" panel has a Live/PBE switch that does the same in the browser. The precomputed best builds and replays stay live.
+**PBE patch.** Everything defaults to the live patch. `--pbe` on `build_champion_pool.py`, `build_items.py` and `build_augments.py` builds the PBE (test server) patch into `data/pbe/` instead (same hand-written effects and overrides, the Mayhem balance table stays live, augments missing on PBE are left out). `mayhem_sim --game-data data/pbe` runs on it, and the replay's "Change the simulation" panel has a Live/PBE switch that does the same in the browser. The precomputed best builds and replays stay live. `sh tools/refresh_pbe.sh` runs the three builders with `--pbe` and copies the result to `viewer/replay-data/pbe/`, which the browser loads when PBE is picked, so a refresh needs no engine rebuild; the daily PBE check runs it.
 
 ## Positions and movement
 
