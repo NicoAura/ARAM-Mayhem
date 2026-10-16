@@ -41,6 +41,25 @@ def name_tables():
     )
 
 
+def sample_kill_map(rng, kills, deaths, win):
+    """Made-up kill positions along the Howling Abyss lane, pushed toward the enemy base in wins."""
+    a, b = (1800, 1600), (11000, 11200)  # roughly the two bases, in game units
+
+    def spot(bias):
+        t = min(0.92, max(0.08, rng.gauss(0.5 + bias, 0.16)))
+        off = rng.gauss(0, 550)
+        return (round(a[0] + t * (b[0] - a[0]) - off * 0.7), round(a[1] + t * (b[1] - a[1]) + off * 0.7))
+
+    events = []
+    for _ in range(kills):
+        x, y = spot(0.12 if win else 0.0)
+        events.append([rng.randint(60, 1300), x, y, 1, rng.randint(6, 10)])
+    for _ in range(deaths):
+        x, y = spot(0.0 if win else -0.12)
+        events.append([rng.randint(60, 1300), x, y, rng.randint(6, 10), 1])
+    return sorted(events)
+
+
 def sample_archive(champ_names, aug_names, aug_rarity, mayhem_ids, n=640, seed=7):
     """Example games in the League client's format. Not anyone's real history."""
     rng = random.Random(seed)
@@ -71,6 +90,7 @@ def sample_archive(champ_names, aug_names, aug_rarity, mayhem_ids, n=640, seed=7
         for k in range(6):
             stats[f"playerAugment{k + 1}"] = int(augs[k]) if k < len(augs) else 0
         games.append({
+            "killMap": sample_kill_map(random.Random(seed * 1000 + i), stats["kills"], deaths, win),
             "gameId": 5_400_000_000 - i * 7919,
             "queueId": 2400 if rng.random() < 0.85 else 2450,
             "gameCreation": t,

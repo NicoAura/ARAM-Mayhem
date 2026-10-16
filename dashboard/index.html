@@ -51,6 +51,29 @@
       <div id="chart" class="chart"></div>
     </section>
 
+    <section class="card">
+      <div class="card-h"><h3>Kill map</h3>
+        <div class="seg" role="group" aria-label="Show">
+          <button type="button" data-km="kills" class="on">Kills</button>
+          <button type="button" data-km="deaths">Deaths</button>
+          <button type="button" data-km="both">Both</button>
+        </div>
+        <label class="foot">Map <select id="km-skin">
+          <option value="2dlevelminimap">Howling Abyss</option>
+          <option value="2dlevelminimap_bloom">Koeshin's Crossing</option>
+          <option value="2dlevelminimap_bilgewater2">Butcher's Bridge</option>
+          <option value="2dlevelminimap_crepe">Bridge of Progress</option>
+        </select></label>
+      </div>
+      <div class="killmap">
+        <div class="km-frame"><img id="km-img" alt=""><canvas id="km-canvas" width="512" height="512" role="img" aria-label="Where you got kills and died on the map"></canvas></div>
+        <div class="km-side">
+          <div id="km-legend" class="km-legend"></div>
+          <p id="km-note" class="foot"></p>
+        </div>
+      </div>
+    </section>
+
     <div class="two-col">
       <section class="card">
         <div class="card-h"><h3>Champions</h3></div>
