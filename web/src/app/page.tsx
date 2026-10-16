@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { text } from "@/lib/content";
-import { statsDate, counts, kitchenBuild, pbeSummary, toolTabs, topAugments, topChampions, topDps } from "@/lib/highlights";
+import { statsDate, counts, kitchenBuild, livePatch, toolTabs, topAugments, topChampions, topDps } from "@/lib/highlights";
 
 // eslint-disable-next-line @next/next/no-img-element
 const Icon = ({ src }: { src: string }) => <img className="icon" src={src} alt="" width={24} height={24} loading="lazy" />;
@@ -12,7 +12,7 @@ const wrWidth = (v: number) => `${Math.max(4, Math.min(100, ((v - 0.44) / 0.14) 
 export default function Home() {
   const champs = topChampions();
   const augs = topAugments();
-  const pbe = pbeSummary();
+  const patch = livePatch();
   const build = kitchenBuild();
   const dps = topDps();
   const tools = toolTabs().filter((t) => t.slug !== "cook-builds");
@@ -23,7 +23,7 @@ export default function Home() {
     <>
       <section className="hero">
         <p className="eyebrow">
-          ARAM Mayhem{date ? ` · Stats from ${date.toLocaleDateString("en-US", { month: "short", day: "numeric", timeZone: "UTC" })}` : ""}
+          ARAM Mayhem{patch ? ` · Patch ${patch}` : ""}{date ? ` · Stats from ${date.toLocaleDateString("en-US", { month: "short", day: "numeric", timeZone: "UTC" })}` : ""}
         </p>
         <h1>{text("home.title", "Every Mayhem pick, measured.")}</h1>
         <p className="lede">{text("home.lede")}</p>
@@ -36,18 +36,6 @@ export default function Home() {
             <b>{n.augments}</b>
             <span>augments rated</span>
           </div>
-          {pbe && (
-            <>
-              <div>
-                <b>+{pbe.meta.augmentCounts.added}</b>
-                <span>new PBE augments</span>
-              </div>
-              <div>
-                <b>{pbe.headliners.list.length}</b>
-                <span>Headliners coming</span>
-              </div>
-            </>
-          )}
         </div>
       </section>
 
@@ -92,24 +80,8 @@ export default function Home() {
             </div>
           </section>
         )}
-        {pbe && (
-          <section className="card span-8">
-            <div className="card-head">
-              <h2>{pbe.meta.label} Headliners on PBE</h2>
-              <Link href="/pbe">What&apos;s changing →</Link>
-            </div>
-            <div className="tiles">
-              {pbe.headliners.list.slice(0, 6).map((h) => (
-                <div key={h.name}>
-                  <b>{h.name}</b>
-                  <span>{h.effect}</span>
-                </div>
-              ))}
-            </div>
-          </section>
-        )}
         {build && (
-          <section className="card span-4 feature">
+          <section className="card span-5 feature">
             <div className="card-head">
               <h2>From The Kitchen</h2>
               <Link href="/tools/cook-builds">More →</Link>
@@ -127,7 +99,7 @@ export default function Home() {
           </section>
         )}
         {dps.length > 0 && (
-          <section className="card span-6">
+          <section className="card span-7">
             <div className="card-head">
               <h2>Simulator: top damage per second</h2>
               <Link href="/simulator">Open →</Link>
@@ -146,7 +118,7 @@ export default function Home() {
             </div>
           </section>
         )}
-        <section className="card span-6">
+        <section className="card span-all">
           <div className="card-head">
             <h2>More to explore</h2>
           </div>
@@ -154,7 +126,7 @@ export default function Home() {
             {[
               { href: "/stats", label: "My Stats", body: "Your own Mayhem games" },
               ...tools.map((t) => ({ href: t.href, label: t.label, body: t.body })),
-              { href: "/pbe", label: "PBE", body: "Every Season 3 change on the test server" },
+              { href: "/pbe", label: "PBE", body: "Upcoming changes on the test server" },
             ].map((l) => (
               <Link key={l.href} href={l.href}>
                 <span className="rank-name">{l.label}</span>
