@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Bricolage_Grotesque, Geist, Geist_Mono } from "next/font/google";
 import Link from "next/link";
+import AccountButton from "@/components/AccountButton";
 import BrandMark from "@/components/BrandMark";
 import MobileTabBar from "@/components/MobileTabBar";
 import NavLinks from "@/components/NavLinks";
@@ -45,6 +46,9 @@ function kofiUrl() {
   return /^[A-Za-z0-9_-]+$/.test(name) ? `https://ko-fi.com/${name}` : "";
 }
 
+// My Stats lives behind the account button at the top right, not in the tab bars.
+const navTabs = () => allTabs().filter((t) => t.href !== "/stats").map(({ href, label }) => ({ href, label }));
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -65,7 +69,7 @@ export default function RootLayout({
                 Deep<b>ARAM</b>
               </span>
             </Link>
-            <NavLinks tabs={[{ href: "/", label: "Home" }, ...allTabs().map(({ href, label }) => ({ href, label }))]} />
+            <NavLinks tabs={[{ href: "/", label: "Home" }, ...navTabs()]} />
             <SearchPalette items={searchItems()} />
             {kofi && (
               <a className="kofi-btn" href={kofi} target="_blank" rel="noreferrer" aria-label="Support DeepARAM on Ko-fi">
@@ -78,12 +82,13 @@ export default function RootLayout({
               </a>
             )}
             <ThemeToggle />
+            <AccountButton />
           </div>
         </header>
         {text("banner") && <p className="site-banner">{text("banner")}</p>}
         <main>{children}</main>
         <footer className="site-footer">{text("footer")}</footer>
-        <MobileTabBar tabs={allTabs().map(({ href, label }) => ({ href, label }))} />
+        <MobileTabBar tabs={navTabs()} />
       </body>
     </html>
   );
