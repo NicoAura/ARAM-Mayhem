@@ -51,6 +51,7 @@ wasm-mayhem: $(CHAMP_SRC) $(CHAMP_HDR)
 
 # Fight replays for viewer/: one traced fight per champion, plus Riot's icons and
 # ability clips (CLIPS=--clips stores shrunk clips locally instead of streaming them).
+# LOCAL=1 also rebuilds anims.json (clip order, idle variations, dashes) from a local League install.
 # SOUNDS=1 also builds the ability and death sounds from a local League install
 # (tools/build_game_sounds.py; needs cdtb and vgmstream-cli).
 # MODELS=1 also builds the animated 3D models (tools/build_models.mjs; needs the
@@ -62,6 +63,7 @@ replay: mayhem_sim
 	$(MAKE) wasm-mayhem && cp dist/mayhem_sim.js dist/mayhem_sim.wasm viewer/replay-data/
 	$(if $(MODELS),node tools/build_models.mjs --index viewer/replay-data/index.json --out viewer/replay-data/models)
 	python3 tools/build_sounds.py --index viewer/replay-data/index.json
+	$(if $(LOCAL),python3 tools/build_anim_data.py --index viewer/replay-data/index.json --out viewer/replay-data/anims.json)
 	$(if $(SOUNDS),python3 tools/build_game_sounds.py --index viewer/replay-data/index.json --out viewer/replay-data/sounds)
 
 clean:

@@ -15,6 +15,12 @@
   const $ = (id) => document.getElementById(id);
 
   let index = null, traces = null, sprite = null, byId = new Map();
+  // Which abilities move their caster (dash or blink), from the game's spell tags (tools/build_anim_data.py).
+  let anims = {};
+  fetch(DATA + "anims.json" + BUST).then((r) => (r.ok ? r.json() : {})).then((a) => {
+    for (const [k, v] of Object.entries(a)) anims[k.toLowerCase()] = v;
+  }).catch(() => {});
+  const moveOf = (id, slot) => ((anims[String(id).toLowerCase()] || {})[slot] || {}).move || null;
   let champ = null, trace = null, fight = null;
   let t = 0, playing = true, speed = 1, lastFrame = 0;
   const shown = new Map(); // enemy uid -> displayed {x, y, hp}
@@ -99,7 +105,7 @@
     const bySlot = {};
     for (const c of f.casts) (bySlot[c.s] = bySlot[c.s] || []).push(c);
     for (const list of Object.values(bySlot))
-      list.forEach((c, i) => { c.next = i + 1 < list.length ? list[i + 1].t : f.duration; c.land = c.t + (c.a || 0); });
+      list.forEach((c, i) => { c.next = i + 1 < list.length ? list[i + 1].t : f.duration; c.land = c.t + (c.a || 0); c.n = i; });
     f.enemyCasts = enemyCasts(f);
     // Crits on attacks: tag the matching damage number.
     for (const a of f.attacks) if (a.f) {
@@ -153,6 +159,8 @@
         if (!last || c.t - last.t >= 1) kept.push(c);
         else if (c.cc && !last.cc) kept[kept.length - 1] = c;
       }
+      const count = {};
+      for (const c of kept) { c.n = count[c.s] || 0; count[c.s] = c.n + 1; }
       out.set(u, kept);
     }
     return out;
@@ -265,13 +273,28 @@
     return { me: { x: W * 0.2, y: H * 0.55 }, front, back };
   }
 
+  // How long a cast's animation holds: its clips' length once the model is loaded (a channel
+  // or a multi-part ability runs longer), at least 1.1 s, and never past the next cast.
+  function castWindow(key, cast) {
+    const M = window.Models3D && window.Models3D.ok ? window.Models3D : null;
+    const len = M ? M.castLength(key, cast.s, cast.n) : 0;
+    return Math.min(Math.max(1.1, len), 3, (cast.next || Infinity) - cast.t);
+  }
+  // How far a dash or blink has carried its caster toward the target, 0 to 1, at age k seconds
+  // into the cast: a dash slides out and back, a blink jumps there and back.
+  function travel(move, k) {
+    if (!move || k < 0 || k > 1.1) return 0;
+    if (move === "blink") return k < 0.85 ? 0.72 : 0;
+    const out = Math.min(1, k / 0.22), back = k > 0.7 ? Math.min(1, (k - 0.7) / 0.35) : 0;
+    return 0.62 * (ease(out) - ease(back));
+  }
   // Which animation each model plays at time t, worked out from the timeline so
   // scrubbing shows the same pose as playing.
   function myAnim(time, s) {
     if (s.dead) return { role: "death", t: time - fight.death.t, loop: false };
     let cast = null;
     for (const c of fight.casts) { if (c.t > time) break; cast = c; }
-    if (cast && time - cast.t < 1.1) return { role: cast.s, t: time - cast.t, loop: false };
+    if (cast && time - cast.t < castWindow("me", cast)) return { role: cast.s, t: time - cast.t, loop: false, n: cast.n };
     if (s.cc) return { role: "stunned", t: time, loop: true };
     let atk = null;
     for (const a of fight.attacks) { if (a.t - 0.3 > time) break; atk = a; }
@@ -281,7 +304,7 @@
   function enemyAnim(time, en) {
     if (en.died !== null) return { role: "death", t: time - en.died, loop: false };
     const cast = enemyCastAt(en.uid, time);
-    if (cast) return { role: cast.s, t: time - cast.t, loop: false };
+    if (cast) return { role: cast.s, t: time - cast.t, loop: false, n: cast.n };
     if (time < fight.engage) return { role: "idle", t: time + en.uid * 0.7, loop: true };
     return { role: "attack", t: time + en.uid * 0.37, loop: true };
   }
@@ -384,13 +407,37 @@
     }
 
     // Fighters: 3D models when they're loaded (models3d.js), otherwise portraits.
-    const meX = st.me.x + (posOf(s.focus).x - st.me.x) * 0.25 * lunge;
+    let meX = st.me.x + (posOf(s.focus).x - st.me.x) * 0.25 * lunge, meY = st.me.y;
+    // Dashes and blinks carry your model toward your target.
+    // A later cast doesn't cancel the move (Zed's E right after his R stays at the target).
+    let myCast = null, myTravel = 0;
+    for (const c of fight.casts) {
+      if (c.t > time) break;
+      const m = s.dead ? 0 : travel(moveOf(champ.id, c.s), time - c.t);
+      if (m > myTravel) { myTravel = m; myCast = c; }
+    }
+    const myMove = myCast ? moveOf(champ.id, myCast.s) : null;
+    if (myTravel > 0) {
+      const to = posOf(s.focus);
+      meX = st.me.x + (to.x - st.me.x) * Math.max(myTravel, 0.25 * lunge);
+      meY = st.me.y + (to.y - st.me.y) * myTravel;
+    }
+    const blinks = [];
+    if (myMove === "blink" && myCast) blinks.push({ k: time - myCast.t, a: st.me, b: { x: meX, y: meY } });
     const M = window.Models3D && window.Models3D.ok ? window.Models3D : null;
     let heads = {};
     if (M) {
-      const fighters = [{ key: "me", champ: champ.id, x: meX, y: st.me.y, face: 1, ...myAnim(time, s) }];
+      const fighters = [{ key: "me", champ: champ.id, x: meX, y: meY, face: 1, ...myAnim(time, s) }];
       for (const en of alive) {
-        const p = posOf(en.uid);
+        let p = posOf(en.uid);
+        const ec = en.died === null ? enemyCastAt(en.uid, time) : null;
+        const em = ec && moveOf(en.champ, ec.s);
+        const et = em ? travel(em, time - ec.t) : 0;
+        if (et > 0) {
+          const q = { x: p.x + (st.me.x - p.x) * et, y: p.y + (st.me.y - p.y) * et };
+          if (em === "blink") blinks.push({ k: time - ec.t, a: p, b: q });
+          p = q;
+        }
         fighters.push({ key: "e" + en.uid, champ: en.champ, x: p.x, y: p.y, face: -1,
           scale: en.uid === s.focus ? 1 : 0.85, visible: en.died === null || time - en.died < 1.6, ...enemyAnim(time, en) });
       }
@@ -399,6 +446,15 @@
     const og = overlay;
     og.setTransform(1, 0, 0, 1, 0, 0);
     og.clearRect(0, 0, W, H);
+    // Blinks: a flash where the caster leaves and where they land, and again on the way back.
+    for (const b of blinks) {
+      for (const [age, from, to] of [[b.k, b.a, b.b], [b.k - 0.85, b.b, b.a]]) {
+        if (age < 0 || age > 0.3) continue;
+        og.globalAlpha = 1 - age / 0.3; og.strokeStyle = "#e9f3ff"; og.lineWidth = 2.5 * u;
+        for (const p of [from, to]) { og.beginPath(); og.ellipse(p.x, p.y, (18 + age * 90) * u, (7 + age * 35) * u, 0, 0, Math.PI * 2); og.stroke(); }
+      }
+    }
+    og.globalAlpha = 1;
 
     // Enemies.
     for (const en of alive) {
