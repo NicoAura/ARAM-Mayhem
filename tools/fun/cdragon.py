@@ -1,15 +1,21 @@
 """Shared CommunityDragon helpers for the Fun Tools data builders. Python 3 standard library only."""
-import json, re, urllib.request
+import json, re, time, urllib.error, urllib.request
 
 BASE = "https://raw.communitydragon.org"
 MANA_PARTS = {"NumberCalculationPart", "NamedDataValueCalculationPart", "AbilityResourceByCoefficientCalculationPart"}
 
 
-def get(url):
-    # CommunityDragon refuses Python's default User-Agent.
+def get(url, tries=4):
+    # CommunityDragon refuses Python's default User-Agent. Retry, since many parallel requests sometimes drop.
     req = urllib.request.Request(url, headers={"User-Agent": "aram-mayhem-fun-tools"})
-    with urllib.request.urlopen(req, timeout=300) as r:
-        return json.load(r)
+    for attempt in range(tries):
+        try:
+            with urllib.request.urlopen(req, timeout=300) as r:
+                return json.load(r)
+        except (urllib.error.URLError, ConnectionError):
+            if attempt == tries - 1:
+                raise
+            time.sleep(2 ** attempt)
 
 
 class Game:

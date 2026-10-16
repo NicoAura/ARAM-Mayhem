@@ -152,3 +152,8 @@ footer { max-width: 70ch; }
   .result { grid-template-columns: 1fr; }
   .big .value { font-size: 2.5rem; }
 }
+
+.search {
+  width: 100%; max-width: 320px; margin-bottom: 0.75rem; padding: 0.5rem 0.8rem; border: 1px solid var(--line);
+  border-radius: 8px; background: transparent; color: inherit; font: inherit;
+}
