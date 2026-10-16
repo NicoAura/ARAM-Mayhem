@@ -15,7 +15,7 @@
   const changed = D.champions.filter((c) => c.mayhem.length).length;
   $("list-intro").textContent =
     `${D.champions.length} champions. ${changed} of them have abilities that Mayhem changes. ` +
-    "Pick one to see its Mayhem builds, augments, skill order, best teammates and ability changes.";
+    "Pick one to see its Mayhem builds by style, augments, skill order, best teammates and ability changes.";
 
   // ---- List
   const filters = [["all", "All"], ["changed", "Mayhem changes"], ...Object.entries(ROLE)];
@@ -108,11 +108,26 @@
           return x ? `<a class="champ" href="#${esc(x.alias)}">${img(x.icon)}<div><div class="title">${esc(x.name)}</div><div class="muted small">${pct(m.win)} win together</div></div></a>` : "";
         }).join("")}</div></div>`
       : "";
+    const arrow = '<span class="arrow">›</span>';
+    const augChip = (id) => {
+      const a = D.augments[id] || { name: `#${id}` };
+      return `<span class="aug-chip">${a.icon ? `<img src="${esc(a.icon)}" alt="" loading="lazy">` : ""}${esc(a.name)}</span>`;
+    };
+    const styles = B && B.styles && B.styles.length
+      ? `<div class="card"><div class="card-head"><h2>Builds by style</h2><span class="muted small">Share of the most common builds</span></div>
+          <div class="styles">${B.styles.map((st) => `<section class="style">
+            <div class="style-head"><h3>${esc(st.label)}</h3><span class="rates"><span><b>${pct(st.win)}</b> win</span><span>${pct(st.share, 0)} of builds</span></span></div>
+            <div class="eyebrow">Core items, in order</div>
+            <div class="build-list">${st.core.map((r) => itemRow(r, arrow)).join("")}</div>
+            ${st.full.length ? `<div class="eyebrow">Full build</div><div class="build-list">${st.full.map((r) => itemRow(r)).join("")}</div>` : ""}
+            ${st.items.length ? `<div class="eyebrow">Also fits</div><div class="items">${st.items.map(itemImg).join("")}</div>` : ""}
+            ${st.augments.length ? `<div class="eyebrow">Augments that fit</div><div class="aug-chips">${st.augments.map(augChip).join("")}</div>` : ""}
+          </section>`).join("")}</div></div>`
+      : `${block("Core items", B && B.core, arrow, "First three items, in order")}${block("Full builds", B && B.full, "")}`;
     const builds = B
       ? `${augs}
+        ${styles}
         <div class="grid">${block("Starting items", B.start, "")}${block("Boots", B.boots, "")}</div>
-        ${block("Core items", B.core, '<span class="arrow">›</span>', "First three items, in order")}
-        ${block("Full builds", B.full, "")}
         ${block("Most-built items", B.first, "", "Share of games with the item")}
         <div class="grid">${skills}${mates}</div>`
       : '<p class="muted">No build stats for this champion yet.</p>';
