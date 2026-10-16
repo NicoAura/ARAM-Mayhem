@@ -355,7 +355,7 @@ function renderKillMap(games) {
     `<div class="km-key"><i style="background:var(--good)"></i>Kills<b>${kills.length.toLocaleString()}</b></div>` +
     `<div class="km-key"><i style="background:var(--bad)"></i>Deaths<b>${deaths.length.toLocaleString()}</b></div>`;
   let note = `From ${mapped.toLocaleString()} of ${games.length.toLocaleString()} games.`;
-  if (missing) note += " The rest have no positions yet: syncing adds them, up to 200 games per sync. Very old games may not have one.";
+  if (missing) note += " The rest have no positions yet: importing adds them, up to 200 games per import. Very old games may not have one.";
   note += " The map skin isn't recorded, so pick one above.";
   $("km-note").textContent = note;
 }
@@ -456,13 +456,15 @@ loader.addEventListener("drop", async (e) => {
 });
 
 // ---------- sync ----------
-// Opened from the local sync helper, the button adds new games to the archive.
-// Opened any other way, the button explains how to get there.
+// Opened from the local sync helper, "Get all my Mayhem games" checks every
+// match that can still be fetched and fills any gaps; "Import games from
+// client" only adds games newer than the archive. Opened any other way, the
+// buttons explain how to get there.
 
 const syncBtns = [...document.querySelectorAll(".sync-btn")];
 const syncStatus = $("sync-status");
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
-const OFFLINE_HINT = "Sync works when League is open on your Mac and this page is opened from Open Mayhem Stats.command.";
+const OFFLINE_HINT = "Importing works when League is open on your Mac and this page is opened from Open Mayhem Stats.command.";
 let helperOnline = false;
 
 function setSyncStatus(text, error = false) {
@@ -483,11 +485,11 @@ async function reloadArchive() {
 }
 
 async function watchSync() {
-  for (const b of syncBtns) { b.disabled = true; b.textContent = "Syncing…"; }
+  for (const b of syncBtns) { b.dataset.label ||= b.textContent; b.disabled = true; }
   try {
     let s = await syncState();
     while (s.running) {
-      setSyncStatus(s.log.at(-1) || "Syncing…");
+      setSyncStatus(s.log.at(-1) || "Importing…");
       await sleep(1000);
       s = await syncState();
     }
@@ -499,30 +501,30 @@ async function watchSync() {
       const summary = added
         ? `Added ${added} new game${added === 1 ? "" : "s"}. ${total} in your archive.`
         : `Up to date. ${total} games in your archive.`;
-      setSyncStatus(summary + (failed ? ` ${failed} couldn't be fetched; sync again to retry them.` : ""));
+      setSyncStatus(summary + (failed ? ` ${failed} couldn't be fetched; import again to retry them.` : ""));
     }
   } catch (e) {
     setSyncStatus("Lost contact with the sync helper. Is it still running?", true);
   } finally {
-    for (const b of syncBtns) { b.disabled = false; b.textContent = "Sync games"; }
+    for (const b of syncBtns) b.disabled = false;
   }
 }
 
-const startSync = async () => {
+const startSync = async (full) => {
   if (!helperOnline) {
     // the helper may have been started since the page loaded
     try { await syncState(); helperOnline = true; } catch (e) { return setSyncStatus(OFFLINE_HINT); }
   }
   setSyncStatus("Starting…");
   try {
-    const res = await fetch("api/sync", { method: "POST", headers: { "X-Mayhem": "1" } });
+    const res = await fetch(full ? "api/sync?full=1" : "api/sync", { method: "POST", headers: { "X-Mayhem": "1" } });
     if (!res.ok && res.status !== 409) throw new Error(String(res.status));
   } catch (e) {
     return setSyncStatus("Couldn't reach the sync helper.", true);
   }
   watchSync();
 };
-for (const b of syncBtns) b.addEventListener("click", startSync);
+for (const b of syncBtns) b.addEventListener("click", () => startSync(b.dataset.full === "1"));
 
 async function setupSync() {
   // The empty state already explains Sync, so this only picks up a running sync

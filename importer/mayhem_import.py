@@ -438,13 +438,13 @@ def serve(out, port, lockfile=None, sgp_host=None, open_browser=True):
     state = {"running": False, "log": [], "result": None, "error": None}
     lock = threading.Lock()
 
-    def sync_worker():
+    def sync_worker(full):
         def progress(msg):
             log(msg)
             with lock:
                 state["log"] = (state["log"] + [msg.strip()])[-50:]
         try:
-            result = run_import(out, lockfile=lockfile, sgp_host=sgp_host, progress=progress)
+            result = run_import(out, full, lockfile, sgp_host, progress)
             with lock:
                 state["result"] = result
         except (ImportFailed, HttpError, ConnectionError) as e:
@@ -500,12 +500,14 @@ def serve(out, port, lockfile=None, sgp_host=None, open_browser=True):
         def do_POST(self):
             if not self.local_host() or self.headers.get("X-Mayhem") != "1":
                 return self.send_json({"error": "forbidden"}, 403)
-            if self.path.split("?")[0] != "/api/sync":
+            path, _, query = self.path.partition("?")
+            if path != "/api/sync":
                 return self.send_json({"error": "not found"}, 404)
             with lock:
                 if not state["running"]:
                     state.update(running=True, log=[], result=None, error=None)
-                    threading.Thread(target=sync_worker, daemon=True).start()
+                    full = "full=1" in query.split("&")
+                    threading.Thread(target=sync_worker, args=(full,), daemon=True).start()
                 return self.send_json(dict(state), 202)
 
     server = http.server.ThreadingHTTPServer(("127.0.0.1", port), Handler)
