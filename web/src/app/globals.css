@@ -2136,3 +2136,80 @@ html[data-device="mobile"] .site-header-inner {
 .data-table td {
   white-space: nowrap;
 }
+
+/* "Beta" label for unstable experiments (the Simulator). */
+.beta {
+  display: inline-block;
+  margin-left: 0.35rem;
+  padding: 1px 5px;
+  border-radius: 5px;
+  background: var(--accent-soft);
+  color: var(--accent);
+  font: 600 0.625rem/1.4 var(--mono);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  vertical-align: 0.15em;
+}
+
+/* Settings menu (gear, top right). */
+.settings-menu {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  padding: 0.85rem;
+  width: min(320px, calc(100vw - 2rem));
+}
+
+.setting {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  font-size: 0.8125rem;
+  color: var(--muted);
+}
+
+.seg,
+.setting .theme-toggle {
+  display: flex;
+  gap: 2px;
+  padding: 3px;
+  border-radius: 10px;
+  background: var(--raised);
+}
+
+.seg button,
+.setting .theme-toggle button {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  width: auto;
+  height: 30px;
+  padding: 0 0.5rem;
+  border: 0;
+  border-radius: 7px;
+  background: none;
+  color: var(--muted);
+  font: inherit;
+  font-size: 0.8125rem;
+  cursor: pointer;
+}
+
+.seg button[aria-pressed="true"],
+.setting .theme-toggle button[aria-pressed="true"] {
+  background: var(--surface);
+  color: var(--fg);
+  box-shadow:
+    0 1px 2px rgb(0 0 0 / 0.08),
+    0 0 0 1px var(--line);
+}
+
+/* "Reduce" motion in settings: no animations or transitions anywhere on the site. */
+html[data-motion="reduce"] *,
+html[data-motion="reduce"] *::before,
+html[data-motion="reduce"] *::after {
+  animation: none !important;
+  transition: none !important;
+  scroll-behavior: auto !important;
+}

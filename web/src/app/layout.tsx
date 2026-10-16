@@ -6,9 +6,10 @@ import BrandMark from "@/components/BrandMark";
 import MobileTabBar from "@/components/MobileTabBar";
 import NavLinks from "@/components/NavLinks";
 import SearchPalette from "@/components/SearchPalette";
-import ThemeToggle from "@/components/ThemeToggle";
+import SettingsMenu from "@/components/SettingsMenu";
 import { text } from "@/lib/content";
 import { searchItems } from "@/lib/highlights";
+import { SETTINGS_SCRIPT } from "@/lib/settings";
 import { THEME_COLORS, THEME_KEY } from "@/lib/theme";
 import { allTabs } from "@/lib/tabs";
 import "./globals.css";
@@ -58,7 +59,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${sans.variable} ${mono.variable} ${display.variable}`} suppressHydrationWarning>
       <head>
-        <script dangerouslySetInnerHTML={{ __html: DEVICE_SCRIPT + THEME_SCRIPT }} />
+        <script dangerouslySetInnerHTML={{ __html: DEVICE_SCRIPT + THEME_SCRIPT + SETTINGS_SCRIPT }} />
       </head>
       <body>
         <header className="site-header">
@@ -81,7 +82,7 @@ export default function RootLayout({
                 <span>Ko-fi</span>
               </a>
             )}
-            <ThemeToggle />
+            <SettingsMenu />
             <AccountButton />
           </div>
         </header>

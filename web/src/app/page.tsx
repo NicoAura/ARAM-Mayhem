@@ -101,7 +101,9 @@ export default function Home() {
         {dps.length > 0 && (
           <section className="card span-7">
             <div className="card-head">
-              <h2>Simulator: top damage per second</h2>
+              <h2>
+                Simulator: top damage per second <span className="beta">Beta</span>
+              </h2>
               <Link href="/simulator">Open →</Link>
             </div>
             <div className="bars">
