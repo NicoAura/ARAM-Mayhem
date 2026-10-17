@@ -7,6 +7,7 @@ import HeroParticles from "@/components/HeroParticles";
 import { augmentHref } from "@/lib/augments";
 import { movers } from "@/lib/champions";
 import { KITCHEN, navPages } from "@/lib/tabs";
+import RecentStrip from "@/components/RecentStrip";
 
 // eslint-disable-next-line @next/next/no-img-element
 const Icon = ({ src }: { src: string }) => <img className="icon" src={src} alt="" width={24} height={24} loading="lazy" />;
@@ -47,6 +48,7 @@ export default function Home() {
       </section>
 
       <div className="bento">
+        <RecentStrip />
         <Favorites champs={tiers} />
         {tiers.length > 0 && (
           <section className="card span-7" data-accent="tier">
