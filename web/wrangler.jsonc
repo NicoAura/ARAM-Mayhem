@@ -1,8 +1,8 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
-  // The Worker keeps its first name: renaming it would make a new Worker without the site's domains,
-  // databases or secrets. The repo and site are DeepARAM.
-  "name": "aram-mayhem",
+  // Must match the Worker's name in the dashboard (renamed from aram-mayhem in place, so it kept
+  // its domains, databases and secrets), or Workers Builds refuses to deploy.
+  "name": "deeparam",
   "main": ".open-next/worker.js",
   "compatibility_date": "2026-09-01",
   "compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
