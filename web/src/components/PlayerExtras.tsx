@@ -2,8 +2,8 @@
 
 import { useEffect, useState } from "react";
 
-// Under the My Stats account card: challenge standing, mastery against this patch's Mayhem tiers,
-// and the player's ARAM Clash team. Loaded after the Riot ID lookup.
+// On the account page, for the connected Riot account: ranked standing, challenge standing, mastery
+// against this patch's Mayhem tiers, and the player's ARAM Clash team (/api/account/riot).
 
 type Mastery = { championId: number; championLevel: number; championPoints: number };
 type Member = {
@@ -15,7 +15,10 @@ type Member = {
   page: string | null;
   mayhem: { championId: number; games: number; wins: number }[];
 };
+type Ranked = { queueType: string; tier: string; rank: string; leaguePoints: number; wins: number; losses: number };
 type Extras = {
+  connected: boolean;
+  ranked: Ranked[];
   mastery: Mastery[];
   challenges: { total: { level: string; percentile: number } | null; aram: { level: string; percentile: number } | null } | null;
   clash: { name: string; abbreviation: string; tier: number; members: Member[] } | null;
@@ -23,18 +26,18 @@ type Extras = {
 type Tiers = Record<number, { id: string; name: string; tier: string | null; winRate: number | null }>;
 
 const STRONG = new Set(["S", "A"]);
+const QUEUES: Record<string, string> = { RANKED_SOLO_5x5: "Solo/Duo", RANKED_FLEX_SR: "Flex" };
 const title = (s: string) => s.charAt(0) + s.slice(1).toLowerCase();
 const top = (p: number) => `Top ${p * 100 < 1 ? (p * 100).toFixed(1) : Math.max(1, Math.round(p * 100))}%`;
 const icon = (alias: string) => `/icons/champions/${alias}.webp`;
 
-export default function PlayerExtras({ puuid, platform }: { puuid: string; platform: string }) {
+export default function PlayerExtras() {
   const [extras, setExtras] = useState<Extras | null>(null);
   const [tiers, setTiers] = useState<Tiers>({});
 
   useEffect(() => {
     let live = true;
-    setExtras(null);
-    fetch(`/api/riot/player?${new URLSearchParams({ puuid, platform })}`)
+    fetch("/api/account/riot", { cache: "no-store" })
       .then((r) => (r.ok ? r.json() : null))
       .then((d) => live && d && setExtras(d))
       .catch(() => {});
@@ -45,16 +48,34 @@ export default function PlayerExtras({ puuid, platform }: { puuid: string; platf
     return () => {
       live = false;
     };
-  }, [puuid, platform]);
+  }, []);
 
-  if (!extras) return null;
+  if (!extras?.connected) return null;
   const champ = (id: number) => tiers[id] ?? { id: "", name: `Champion ${id}`, tier: null, winRate: null };
   const { challenges, mastery, clash } = extras;
+  const ranked = (extras.ranked ?? []).filter((r) => QUEUES[r.queueType]);
 
   return (
-    <>
+    <section className="card acct-riot">
+      {ranked.length > 0 && (
+        <dl className="acct-ranks">
+          {ranked.map((r) => (
+            <div key={r.queueType} className="rank-badge">
+              <dt>{QUEUES[r.queueType]}</dt>
+              <dd>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={`/assets/ranked/${r.tier.toLowerCase()}.png`} alt="" width={40} height={40} />
+                {title(r.tier)} {["MASTER", "GRANDMASTER", "CHALLENGER"].includes(r.tier) ? "" : r.rank} · {r.leaguePoints} LP
+                <span>
+                  {r.wins}W {r.losses}L
+                </span>
+              </dd>
+            </div>
+          ))}
+        </dl>
+      )}
       {challenges && (challenges.total || challenges.aram) && (
-        <dl className="riot-id-ranks">
+        <dl className="acct-ranks">
           {challenges.total && (
             <div>
               <dt>Challenges</dt>
@@ -79,7 +100,7 @@ export default function PlayerExtras({ puuid, platform }: { puuid: string; platf
       {mastery.length > 0 && (
         <div className="player-extra">
           <h3>Mastery and this patch&apos;s Mayhem tier</h3>
-          <p className="riot-id-note">Your highest-mastery champions. Highlighted ones are S or A tier in Mayhem right now.</p>
+          <p className="acct-hint">Your highest-mastery champions. Highlighted ones are S or A tier in Mayhem right now.</p>
           <ul className="mastery-list">
             {mastery.map((m) => {
               const c = champ(m.championId);
@@ -127,6 +148,6 @@ export default function PlayerExtras({ puuid, platform }: { puuid: string; platf
           </ul>
         </div>
       )}
-    </>
+    </section>
   );
 }

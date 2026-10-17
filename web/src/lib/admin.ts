@@ -3,8 +3,8 @@ import { serverEnv } from "./env";
 import { cleanContent, type Content } from "./content";
 import bundled from "@/content/site.json";
 
-// Backs the /admin editor. Two Cloudflare secrets:
-//   ADMIN_PASSWORD  what Nico types to unlock the editor
+// Backs the site editor (/account/edit). Two Cloudflare secrets:
+//   ADMIN_PASSWORD  typed once to make Nico's account the site owner (/api/account/owner); can be deleted after
 //   GITHUB_TOKEN    fine-grained token with Contents read/write on nicothomas02/DeepARAM only
 // A save commits src/content/site.json to main; Workers Builds then redeploys the site.
 
@@ -69,7 +69,7 @@ export async function saveContent(input: unknown, sha: string | null): Promise<s
   const body = JSON.stringify(cleanContent(input), null, 2) + "\n";
   const res = await github(`contents/${FILE}`, {
     method: "PUT",
-    body: JSON.stringify({ message: "Edit site text from /admin", content: toBase64(body), sha, branch: BRANCH }),
+    body: JSON.stringify({ message: "Edit site text from the site editor", content: toBase64(body), sha, branch: BRANCH }),
   });
   if (res.status === 409 || res.status === 422) throw new AdminError("The text changed since you opened the editor. Reload to get the latest, then save again.", 409);
   if (!res.ok) throw new AdminError(`GitHub returned ${res.status} saving the site text.`, 502);
