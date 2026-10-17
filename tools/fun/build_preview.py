@@ -9,6 +9,7 @@ from concurrent.futures import ThreadPoolExecutor
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 TOOLS = [("ryze-calculator", "Infinite Ryze", "How far Ryze's AP to Mana loop goes with your items and augments."),
+         ("region-teams", "Region Teams", "The strongest Mayhem team from each region of Runeterra."),
          ("cook-builds", "Cook Builds", "Troll builds built on strange augment interactions, checked against Mayhem win rates and the simulator.")]
 SWAP_ICONS = ("<script>(function(){var M=parent.FUN_ICONS||{};function w(o){for(var k in o){var v=o[k];"
               "if(typeof v==='string'){if(M[v])o[k]=M[v];}else if(v&&typeof v==='object')w(v);}}"
