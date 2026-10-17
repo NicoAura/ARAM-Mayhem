@@ -13,6 +13,7 @@ by_id = {v["id"]: k for k, v in items.items()}
 augs = json.load(open(f"{R}/simulator/data/augments.json"))["augments"]
 aug_by_id = {v["id"]: k for k, v in augs.items()}
 champs = json.load(open(f"{R}/simulator/data/champions.json"))["champions"]
+real = {c["champion_id"]: c for c in json.load(open(f"{R}/data/cn/champions.json"))["champions"]}
 best = {c["champion"]: c for c in json.load(open(f"{R}/simulator/viewer/replay-data/best-builds.json"))["champions"]}
 def real_build(c):
     f = f"{R}/data/cn/builds/{c["champion_id"]}.json"
@@ -41,7 +42,8 @@ def run(c):
     except Exception: print(c["id"], r.stderr[:200], file=sys.stderr); return None
     bb = best.get(c["id"], {})
     return dict(champ=c["id"], role=bb.get("role"), cn=bb.get("cn_damage_share"), dps=s["mean_dps"], st=s["single_target_dps"],
-                surv=s["survival_rate"], alive=s["time_alive"], items=it, augs=a)
+                surv=s["survival_rate"], alive=s["time_alive"], taken=s.get("damage_taken"), healing=s.get("healing"),
+                cc=s.get("cc_seconds"), tank=real.get(c["champion_id"], {}).get("avg_tank_ratio"), items=it, augs=a)
 with cf.ThreadPoolExecutor(8) as ex: res = [r for r in ex.map(run, champs) if r]
 json.dump(res, open(OUT, "w"))
 def rank(v):
@@ -53,6 +55,9 @@ def sp(a, b):
 x = [r for r in res if r["cn"]]
 print("n", len(x), "spearman dps", round(sp([r["dps"] for r in x], [r["cn"] for r in x]), 3),
       "single-target", round(sp([r["st"] for r in x], [r["cn"] for r in x]), 3))
+# Damage taken against the real share of the team's damage taken (tankiness), both per champion.
+t = [r for r in res if r.get("tank") and r.get("taken") is not None]
+if t: print("n", len(t), "spearman damage taken vs real tank share", round(sp([r["taken"] for r in t], [r["tank"] for r in t]), 3))
 for role in sorted(set(r["role"] for r in x)):
     rr = [r for r in x if r["role"] == role]
     print(role, len(rr), "dps", round(st.mean(r["dps"] for r in rr)), "cn", round(st.mean(r["cn"] for r in rr), 3))
