@@ -8,7 +8,7 @@ import { getParam, setParams } from "@/lib/url-state";
 import Skeleton from "@/components/Skeleton";
 import { LoadError } from "@/components/EmptyState";
 
-// Two champions side by side (/compare?a=Jinx&b=Ezreal). Data comes from /data/compare.json.
+// Two champions side by side (/builds?tab=compare&a=Jinx&b=Ezreal). Data comes from /data/compare.json.
 
 type Data = { patch: string | null; champions: CompareChampion[]; items: Record<string, { id: number; name: string; icon?: string }> };
 const AUGS = augmentNames as Record<string, string>;

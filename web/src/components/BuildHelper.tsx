@@ -8,7 +8,7 @@ import { getParam, setParams } from "@/lib/url-state";
 import { LoadError } from "@/components/EmptyState";
 import Skeleton from "@/components/Skeleton";
 
-// "What should I build?" (/what-to-build?champ=Jinx&vs=healing,tanky): the build that wins most for a
+// "What should I build?" (/builds?champ=Jinx&vs=healing,tanky): the build that wins most for a
 // champion, its boots, skill order and augments to look for, and item swaps for the enemy team.
 // Data: /data/what-to-build.json.
 
@@ -188,7 +188,7 @@ export default function BuildHelper() {
           <section className="card span-all" data-accent="gold">
             <div className="card-head">
               <h2>Augments to look for</h2>
-              <Link href={`/draft?champ=${c.id}`}>Practice a draft →</Link>
+              <Link href={`/augments?tab=draft&champ=${c.id}`}>Practice a draft →</Link>
             </div>
             <div className="helper-augs">
               {(["prismatic", "gold", "silver"] as const).map((r) =>
@@ -212,7 +212,7 @@ export default function BuildHelper() {
               {c.name}&apos;s page
             </Link>{" "}
             or try your own build in the{" "}
-            <Link className="inline-link" href={`/builder?champ=${c.id}`}>
+            <Link className="inline-link" href={`/builds?tab=editor&champ=${c.id}`}>
               Build Editor
             </Link>
             .

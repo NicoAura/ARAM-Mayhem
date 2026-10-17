@@ -11,7 +11,7 @@ import type { CardSpec } from "@/lib/share-card";
 import { buzz } from "@/lib/haptics";
 import { LoadError } from "@/components/EmptyState";
 
-// Build Editor (/builder?champ=Jinx&items=…&augs=…): drag items into six slots and pick four augments;
+// Build Editor (/builds?tab=editor&champ=Jinx&items=…&augs=…): drag items into six slots and pick four augments;
 // the summed stats and gold update as you go and the simulator re-runs the build in the browser
 // (the Simulator's own engine, /embed/simulator/sim-worker.js) for its damage per second.
 

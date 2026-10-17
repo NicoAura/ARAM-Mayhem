@@ -8,7 +8,7 @@ import { getParam, setParams } from "@/lib/url-state";
 import Skeleton from "@/components/Skeleton";
 import { EmptyState, LoadError } from "@/components/EmptyState";
 
-// Team Builder (/synergy?team=Jinx,Lulu): pick up to five champions to see how each pair does together
+// Team Builder (/builds?tab=team&team=Jinx,Lulu): pick up to five champions to see how each pair does together
 // and which champions fit the team best (handy for picking from the ARAM bench). Data: /data/synergy.json.
 
 const MAX = 5;

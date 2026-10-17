@@ -48,6 +48,12 @@ const nextConfig: NextConfig = {
       // Each augment has its own page; the bare address shows them all on the Tier List.
       .concat([
         { source: "/items", destination: "/", permanent: false },
+        // The build tools and augment draft share pages now; the old addresses keep their query.
+        { source: "/what-to-build", destination: "/builds", permanent: true },
+        { source: "/builder", destination: "/builds?tab=editor", permanent: true },
+        { source: "/compare", destination: "/builds?tab=compare", permanent: true },
+        { source: "/synergy", destination: "/builds?tab=team", permanent: true },
+        { source: "/draft", destination: "/augments?tab=draft", permanent: true },
       ]);
   },
 };

@@ -14,10 +14,11 @@ const PAGES = [
   "/stats",
   "/champions/Ahri",
   "/champions/Yunara",
-  "/compare",
-  "/builder",
-  "/draft",
-  "/synergy",
+  "/builds",
+  "/builds?tab=editor",
+  "/builds?tab=compare&a=Jinx&b=Ezreal",
+  "/builds?tab=team",
+  "/augments?tab=draft",
   "/patches",
   "/privacy",
   "/terms",
@@ -79,6 +80,20 @@ test("old addresses redirect to the current tabs", async ({ page }) => {
   ]) {
     await page.goto(from);
     expect(new URL(page.url()).pathname + new URL(page.url()).search, from).toBe(to);
+  }
+  // Pages merged into Builds and Augments: the tab is picked and the old query kept.
+  for (const [from, path, tab, keep] of [
+    ["/what-to-build?champ=Jinx", "/builds", null, "champ"],
+    ["/builder", "/builds", "editor", null],
+    ["/compare?a=Jinx", "/builds", "compare", "a"],
+    ["/synergy", "/builds", "team", null],
+    ["/draft", "/augments", "draft", null],
+  ]) {
+    await page.goto(from!);
+    const url = new URL(page.url());
+    expect(url.pathname, from!).toBe(path);
+    expect(url.searchParams.get("tab"), from!).toBe(tab);
+    if (keep) expect(url.searchParams.get(keep), from!).toBeTruthy();
   }
   await page.goto("/kitchen");
   expect(new URL(page.url()).hash).toBe("#cook-builds");

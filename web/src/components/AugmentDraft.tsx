@@ -2,14 +2,14 @@
 /* eslint-disable @next/next/no-img-element -- small local icons */
 
 import Link from "next/link";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { DraftData } from "@/lib/draft";
 import { buzz } from "@/lib/haptics";
 import { getParam, setParams } from "@/lib/url-state";
 import Skeleton from "@/components/Skeleton";
 import { LoadError } from "@/components/EmptyState";
 
-// Augment Draft practice (/draft?champ=Jinx): four selections of three augments, one reroll per card,
+// Augment Draft practice (/augments?tab=draft&champ=Jinx): four selections of three augments, one reroll per card,
 // like a real Mayhem game. After each pick it shows how often players on that champion take it,
 // and which of the three cards they take most. Data: /data/draft.json.
 
@@ -30,6 +30,7 @@ export default function AugmentDraft() {
   const [rarities, setRarities] = useState<string[]>([]);
   const [cards, setCards] = useState<Card[]>([]);
   const [picks, setPicks] = useState<Pick[]>([]);
+  const root = useRef<HTMLDivElement>(null);
 
   const pools = useMemo(() => {
     const out: Record<string, string[]> = { silver: [], gold: [], prismatic: [] };
@@ -105,9 +106,10 @@ export default function AugmentDraft() {
     setCards(cards.map((c, j) => (j === i ? { id: fresh, rerolled: true } : c)));
   };
 
-  // 1, 2 and 3 pick a card.
+  // 1, 2 and 3 pick a card, while the draft is on screen (it shares /augments with the tier list).
   useEffect(() => {
     const key = (e: KeyboardEvent) => {
+      if (!root.current?.offsetParent) return;
       if (e.metaKey || e.ctrlKey || e.altKey || /INPUT|TEXTAREA|SELECT/.test((e.target as HTMLElement)?.tagName ?? "")) return;
       const i = ["1", "2", "3"].indexOf(e.key);
       if (i >= 0 && cards[i]) take(cards[i].id);
@@ -123,7 +125,7 @@ export default function AugmentDraft() {
   const last = picks[picks.length - 1];
 
   return (
-    <div className="draft">
+    <div className="draft" ref={root}>
       <div className="draft-bar">
         <label className="draft-champ builder-champ">
           {champ && <img src={`/icons/champions/${champ}.webp`} alt="" width={40} height={40} />}

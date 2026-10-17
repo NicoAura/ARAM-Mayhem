@@ -40,7 +40,7 @@ export default function QuickReference({ alias }: { alias: string }) {
     <section className="card quickref" data-accent="tier" aria-labelledby="quickref-title">
       <div className="card-head">
         <h2 id="quickref-title">Quick reference</h2>
-        <Link href={`/what-to-build?champ=${c.id}`}>Against a specific team →</Link>
+        <Link href={`/builds?champ=${c.id}`}>Against a specific team →</Link>
       </div>
       <div className="quickref-grid">
         {c.skills.length > 0 && (
