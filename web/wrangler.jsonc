@@ -9,6 +9,8 @@
     "binding": "ASSETS"
   },
   "observability": { "enabled": true },
+  // The Worker itself, so the Discord bot route (/api/discord) can read the prebuilt /data/bot.json.
+  "services": [{ "binding": "WORKER_SELF_REFERENCE", "service": "aram-mayhem" }],
   // Browser errors from /api/log, read by the morning error check.
   "d1_databases": [{ "binding": "ERRORS", "database_name": "deeparam-errors", "database_id": "a09c155a-a812-4c9a-a5ef-df74082daeaf" }]
 }
