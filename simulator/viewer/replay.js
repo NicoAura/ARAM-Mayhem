@@ -14,13 +14,13 @@
   // What the simulator measures (the Mode picker in sim-panel.js): damage per second, or per fight the damage
   // you take, the damage you mitigate, the Health you restore and the seconds of crowd control you deal.
   const MODES = {
-    damage: { label: "Damage", key: "mean_dps", fight: "total_damage", now: (s) => s.damage },
-    taken: { label: "Damage taken", key: "damage_taken", fight: "damage_taken", now: (s) => s.taken },
-    mitigated: { label: "Damage mitigated", key: "damage_mitigated", fight: "damage_mitigated", now: (s) => s.mitigated },
-    healing: { label: "Healing done", key: "healing", fight: "healing", now: (s) => s.healing },
-    cc: { label: "Crowd control", key: "cc_seconds", fight: "cc_seconds", now: (s) => s.ccDealt, seconds: true },
+    damage: { get label() { return T("Damage"); }, key: "mean_dps", fight: "total_damage", now: (s) => s.damage },
+    taken: { get label() { return T("Damage taken"); }, key: "damage_taken", fight: "damage_taken", now: (s) => s.taken },
+    mitigated: { get label() { return T("Damage mitigated"); }, key: "damage_mitigated", fight: "damage_mitigated", now: (s) => s.mitigated },
+    healing: { get label() { return T("Healing done"); }, key: "healing", fight: "healing", now: (s) => s.healing },
+    cc: { get label() { return T("Crowd control"); }, key: "cc_seconds", fight: "cc_seconds", now: (s) => s.ccDealt, seconds: true },
   };
-  const modeValue = (m, v) => (MODES[m].seconds ? (v || 0).toFixed(1) + " s" : Math.round(v || 0).toLocaleString());
+  const modeValue = (m, v) => (MODES[m].seconds ? T("{n} s", { n: (v || 0).toFixed(1) }) : Math.round(v || 0).toLocaleString());
   let mode = "damage";
   const SOURCE_COLORS = ["#c9d6e2", SLOT_COLORS.Q, SLOT_COLORS.W, SLOT_COLORS.E, SLOT_COLORS.R, "#b9a3ff", SLOT_COLORS.P];
   const SLOT_COL = { P: 1, Q: 2, W: 3, E: 4, R: 5 };
@@ -77,9 +77,10 @@
   Promise.all([
     fetch(DATA + "index.json" + BUST).then((r) => r.json()),
     fetch(DATA + "traces.json" + BUST).then((r) => r.json()),
+    window.I18N.ready,
   ]).then(([idx, tr]) => {
     index = idx; traces = tr;
-    for (const c of index.champions) byId.set(c.id.toLowerCase(), c);
+    for (const c of index.champions) { c.name = NAME("champions", c.id, c.name); byId.set(c.id.toLowerCase(), c); }
     const sel = $("champ");
     const list = index.champions.filter((c) => traces[c.id]).sort((a, b) => a.name.localeCompare(b.name));
     for (const c of list) sel.add(new Option(c.name, c.id));
@@ -97,8 +98,8 @@
     requestAnimationFrame(frame);
     if (window.onReplayData) window.onReplayData(index);
   }).catch((err) => {
-    $("title").textContent = "Replays could not be loaded";
-    $("state").textContent = "Build them with tools/build_replay_assets.py, then serve this folder over HTTP. (" + err + ")";
+    $("title").textContent = T("Replays could not be loaded");
+    $("state").textContent = T("Try reloading the page.") + " (" + err + ")";
   });
 
   // ---------- one champion's fight ----------
@@ -107,8 +108,9 @@
     trace = custom[champ.id] || traces[champ.id];
     fight = prepare(trace);
     t = 0; playing = true; shown.clear(); clipState.slot = null;
-    $("play").textContent = "Pause";
-    $("title").textContent = champ.name + (champ.title ? ", " + champ.title : "");
+    $("play").textContent = T("Pause");
+    // Titles ("the Loose Cannon") are English only, so other languages show the name alone.
+    $("title").textContent = champ.name + (champ.title && window.I18N.lang === "en" ? ", " + champ.title : "");
     $("total").textContent = fight.duration.toFixed(1);
     try { history.replaceState(null, "", "#" + champ.id); } catch (e) { /* sandboxed */ }
     renderBuild();
@@ -412,6 +414,8 @@
     suppress: ["SUPPRESSED", "#d36bff"], polymorph: ["POLYMORPHED", "#6bffb3"], root: ["ROOTED", "#7fd17f"],
     slow: ["SLOWED", "#6bc7ff"], silence: ["SILENCED", "#c9d6e2"],
   };
+  // The badge words in the page's language, once the dictionary is in (English keys stay above).
+  window.I18N.ready.then(() => { for (const v of Object.values(CC_LOOK)) v[0] = T(v[0]); });
   // How a champion under crowd control moves: the stunned clip, running when feared,
   // tossed into the air when knocked up. Roots, slows and silences don't change the pose.
   function ccPose(kind, age, total) {
@@ -746,7 +750,7 @@
           g.beginPath(); g.arc(to.x, to.y, r + age * 120 * u, 0, Math.PI * 2); g.stroke(); g.globalAlpha = 1;
         }
       }
-      if (miss && age > 0 && age < 0.6) floatText(overlay, "MISS", to.x, to.y - r - 30 * u - age * 40 * u, 1 - age / 0.6, "#c9d6e2", 18 * u);
+      if (miss && age > 0 && age < 0.6) floatText(overlay, T("MISS"), to.x, to.y - r - 30 * u - age * 40 * u, 1 - age / 0.6, "#c9d6e2", 18 * u);
     }
 
     // Who is hurting you: a faint line from each enemy whose reach you're inside.
@@ -959,8 +963,8 @@
       if (c) ccBadge(og, meX, top, kind, c.a - time, c.a - c.t, u);
       else floatText(og, CC_LOOK.stun[0], meX, labelY, 1, CC_LOOK.stun[1], 15 * u);
     }
-    if (s.dead) floatText(og, "SLAIN", meX, labelY, 1, "#f0605a", 18 * u);
-    else if (time < fight.engage) floatText(og, "ENEMIES ENGAGE IN " + (fight.engage - time).toFixed(1) + " s", meX, labelY + (s.cc ? 18 * u : 0), 0.8, "#8295a8", 13 * u);
+    if (s.dead) floatText(og, T("SLAIN"), meX, labelY, 1, "#f0605a", 18 * u);
+    else if (time < fight.engage) floatText(og, T("ENEMIES ENGAGE IN {n} s", { n: (fight.engage - time).toFixed(1) }), meX, labelY + (s.cc ? 18 * u : 0), 0.8, "#8295a8", 13 * u);
 
     // On-hit passives.
     for (const pr of fight.procs) {
@@ -1018,7 +1022,7 @@
       const age = time - sh.t;
       if (age < 0 || age > (sh.l || 1)) continue;
       const top = myHead ? myHead.y - 30 * u : meY - R - 40 * u;
-      if (age < 1) floatText(og, "+" + Math.round(sh.a) + " shield", meX - 40 * u, top - age * 50 * u, 1 - age, "#eef3f8", 14 * u);
+      if (age < 1) floatText(og, T("+{n} shield", { n: Math.round(sh.a) }), meX - 40 * u, top - age * 50 * u, 1 - age, "#eef3f8", 14 * u);
     }
     if ((s.shield || 0) > 1 && !s.dead && !lowQuality()) {
       og.globalAlpha = 0.35 + 0.15 * Math.sin(time * 6);
@@ -1037,7 +1041,7 @@
         og.beginPath(); og.ellipse(p.x, p.y, (30 + age * 160) * u, (12 + age * 60) * u, 0, 0, Math.PI * 2); og.stroke();
         og.globalAlpha = 1;
       }
-      floatText(og, k.f ? "EXECUTED" : "KILL", p.x, y - 30 * u - age * 30 * u, 1 - age / 0.9, k.f ? "#ff5a4f" : "#ffd36b", (k.f ? 18 : 16) * u);
+      floatText(og, k.f ? T("EXECUTED") : T("KILL"), p.x, y - 30 * u - age * 30 * u, 1 - age / 0.9, k.f ? "#ff5a4f" : "#ffd36b", (k.f ? 18 : 16) * u);
     }
 
     // Dashes: a streak from where you set off.
@@ -1055,7 +1059,7 @@
       }
 
     const held = s.cc ? (CC_LOOK[(s.ccOn && s.ccOn.x) || "stun"] || CC_LOOK.stun)[0] : "";
-    $("state").textContent = s.dead ? "Slain" : held ? held[0] + held.slice(1).toLowerCase() : "";
+    $("state").textContent = s.dead ? T("Slain") : held ? (window.I18N.lang === "en" ? held[0] + held.slice(1).toLowerCase() : held) : "";
     return s;
   }
 
@@ -1199,8 +1203,8 @@
       video.pause();
       $("clipVideo").hidden = ok;
       $("clipNote").textContent = ok
-        ? "Click an ability (or press Q, W, E, R) and your champion casts it in the arena."
-        : "No model for this champion yet, so casts play the ability's preview instead.";
+        ? T("Click an ability (or press Q, W, E, R) and your champion casts it in the arena.")
+        : T("No model for this champion yet, so casts play the ability's preview instead.");
     });
   }
   // Ability button or key: the model's animation, or the clip without a model.
@@ -1308,7 +1312,7 @@
     if (!soundOn) for (const a of voices) a.pause();
     if (pickVoice) { pickVoice.volume = Math.min(pickVoice.volume, masterVolume); if (!soundOn) pickVoice.pause(); }
     const b = $("sound");
-    b.textContent = soundOn ? "Sound on" : "Sound off";
+    b.textContent = soundOn ? T("Sound on") : T("Sound off");
     b.setAttribute("aria-pressed", String(soundOn));
   }
   for (const type of ["pointerdown", "keydown"])
@@ -1324,7 +1328,7 @@
     else video.removeAttribute("src");
     showCaption("Q");
     video.pause();
-    if (!modelMode) $("clipNote").textContent = "Each cast plays the official preview of that ability. Click an ability to watch it again.";
+    if (!modelMode) $("clipNote").textContent = T("Each cast plays the official preview of that ability. Click an ability to watch it again.");
   }
   function clipUrl(slot) {
     const k = String(champ.key).padStart(4, "0");
@@ -1350,7 +1354,7 @@
     };
     if (index.local_clips) {
       const seg = champ.clip && champ.clip[slot];
-      if (!seg) { video.pause(); showFallback("There's no preview clip for this ability."); return; }
+      if (!seg) { video.pause(); showFallback(T("There's no preview clip for this ability.")); return; }
       fb.hidden = true;
       clipState.start = seg[0]; clipState.end = seg[0] + seg[1] - 0.05;
       video.currentTime = seg[0];
@@ -1358,7 +1362,7 @@
       fb.hidden = true;
       clipState.start = 0; clipState.end = Infinity;
       video.src = clipUrl(slot);
-      video.onerror = () => showFallback("The preview clip couldn't be loaded.");
+      video.onerror = () => showFallback(T("The preview clip couldn't be loaded."));
     }
     video.playbackRate = 1;
     const p = video.play();
@@ -1379,7 +1383,7 @@
     for (const slot of "QWER") {
       const b = document.createElement("button");
       b.type = "button"; b.className = "ab"; b.dataset.slot = slot;
-      b.title = `${slot}: ${(champ.spells || {})[slot] || ""}. Click to see it.`;
+      b.title = T("{slot}: {name}. Click to see it.", { slot, name: (champ.spells || {})[slot] || "" });
       const c = document.createElement("canvas"); c.width = c.height = 128;
       paintIcon(c, champ.row, SLOT_COL[slot], 128);
       const cd = document.createElement("canvas"); cd.width = cd.height = 128; cd.className = "cd";
@@ -1409,17 +1413,17 @@
   // ---------- side panels ----------
   function renderBuild() {
     const b = $("build"); b.textContent = "";
-    for (const it of trace.build.items) { const s = document.createElement("span"); s.textContent = it.name; b.append(s); }
-    for (const a of trace.build.augments) { const s = document.createElement("span"); s.className = "aug " + (a.rarity || ""); s.textContent = a.name; b.append(s); }
+    for (const it of trace.build.items) { const s = document.createElement("span"); s.textContent = NAME("items", it.id, it.name); b.append(s); }
+    for (const a of trace.build.augments) { const s = document.createElement("span"); s.className = "aug " + (a.rarity || ""); s.textContent = NAME("augments", a.id, a.name); b.append(s); }
     const sm = trace.summary, f = trace.fight;
     const has = mode !== "damage" && sm[MODES[mode].key] !== undefined;
     const st = [
-      ...(has ? [[MODES[mode].label + " / fight", modeValue(mode, sm[MODES[mode].key])]] : []),
-      ["Average DPS", Math.round(sm.mean_dps).toLocaleString()],
-      ["Time alive", (sm.time_alive || 0).toFixed(1) + " s"],
-      ["Kills / min", sm.kills_per_minute.toFixed(1)],
-      ["This fight", f.duration.toFixed(1) + " s"],
-      [f.team.length === 1 ? "Enemy" : "Enemies", f.team.join(", ")],
+      ...(has ? [[T("{mode} / fight", { mode: MODES[mode].label }), modeValue(mode, sm[MODES[mode].key])]] : []),
+      [T("Average DPS"), Math.round(sm.mean_dps).toLocaleString()],
+      [T("Time alive"), T("{n} s", { n: (sm.time_alive || 0).toFixed(1) })],
+      [T("Kills / min"), sm.kills_per_minute.toFixed(1)],
+      [T("This fight"), T("{n} s", { n: f.duration.toFixed(1) })],
+      [f.team.length === 1 ? T("Enemy") : T("Enemies"), f.team.map((id) => NAME("champions", id, (byId.get(id.toLowerCase()) || { name: id }).name)).join(", ")],
     ];
     const box = $("stats"); box.textContent = "";
     for (const [k, v] of st) {
@@ -1436,7 +1440,7 @@
       box.replaceChildren(); box.drawn = null;
       trace.sources.forEach((name, i) => {
         const row = document.createElement("div"); row.className = "bar";
-        const label = document.createElement("span"); label.textContent = name;
+        const label = document.createElement("span"); label.textContent = T(name);
         const fill = document.createElement("div"); fill.className = "fill";
         const bar = document.createElement("i"); bar.style.background = SOURCE_COLORS[i]; fill.append(bar);
         const v = document.createElement("b");
@@ -1470,7 +1474,7 @@
       const before = t;
       if (playing && !dragging) {
         t = Math.min(fight.duration, t + dt * speed);
-        if (t >= fight.duration) { playing = false; $("play").textContent = "Play"; if (before < fight.duration && !fight.death) haptic("win"); }
+        if (t >= fight.duration) { playing = false; $("play").textContent = T("Play"); if (before < fight.duration && !fight.death) haptic("win"); }
         // Clips for casts that started during this frame.
         let latest = null;
         for (const c of fight.casts) if (c.t > before && c.t <= t) latest = !latest || c.s === "R" ? c : latest;
@@ -1509,10 +1513,10 @@
     if (!fight) return;
     if (t >= fight.duration) { t = 0; shown.clear(); }
     playing = !playing;
-    $("play").textContent = playing ? "Pause" : "Play";
+    $("play").textContent = playing ? T("Pause") : T("Play");
     if (!playing) video.pause();
   });
-  $("restart").addEventListener("click", () => { t = 0; shown.clear(); playing = true; $("play").textContent = "Pause"; });
+  $("restart").addEventListener("click", () => { t = 0; shown.clear(); playing = true; $("play").textContent = T("Pause"); });
   $("speed").addEventListener("change", (e) => { speed = parseFloat(e.target.value); });
   $("sound").addEventListener("click", () => { soundOn = !soundOn; saveSound(); syncSound(); });
   syncSound();  // the button shows the saved setting from the start

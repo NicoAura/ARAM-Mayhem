@@ -20,6 +20,8 @@ python3 -m pip install xxhash
 python3 data/cn/fetch_cn.py                  # Mayhem stats (data/cn/, PR #5)
 make -C simulator mayhem_sim                 # optional (simulator/, PR #4)
 python3 data/cook-builds/build_data.py --cn data/cn --sim simulator/mayhem_sim
+NODE_PATH=$(npm root -g) node data/cook-builds/share_images.js   # link preview images
+python3 tools/fun/i18n/build_keys.py         # then translate any new keys (below)
 ```
 
 Leave out `--sim` to skip the simulator numbers. Augment names, tooltips and icons come from
@@ -64,3 +66,19 @@ healer whose heals do the killing. A side effect of the kit becomes the champion
 adds a new one every day at 7:50 PM New York, next to the PBE update: it appends one dated build (never
 removing or redating earlier ones, so the archive grows), reruns `build_data.py` and merges the PR once
 Tests pass.
+
+## Sharing
+
+Every card has a Share button: phones open the share sheet, other devices copy the link. A Chef Special
+shares its dated link (`/lab#chefs-special-YYYY-MM-DD`), any other build `/lab#cook-<build id>`, which opens
+the Cook Builds page at that card. `share_images.js` draws each build's 1200x630 link preview image
+(`tools/fun/cook-builds/share/<build id>.png`, served at `/embed/fun/cook-builds/share/`), with no stats.
+
+## Languages
+
+The Lab shows in the site's language (see web/README.md "Languages"). `tools/fun/i18n.js` reads it, loads
+`tools/fun/i18n/<code>.json` (English text to translation) and the site's official champion, item and augment
+names, and leaves anything untranslated in English. `tools/fun/i18n/build_keys.py` lists every English string
+The Lab shows, build text and augment tooltips included, in `tools/fun/i18n/en.json`; a new build's title, why,
+play and augment texts must be added to every language file (`pytest tests/data` checks). `chefs-special.json`
+carries today's special's text in every language under `i18n`, with augment and item ids for the names.

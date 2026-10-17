@@ -1288,10 +1288,19 @@ h1 {
 }
 
 html[data-device="mobile"] {
-  --tabbar-h: 62px;
-  /* The bar floats just above the home indicator (or 10px off the edge on phones without one). */
-  --tabbar-gap: max(10px, calc(env(safe-area-inset-bottom, 0px) - 8px));
+  /* In the browser the bar is slim so it sits lightly above Safari's or Chrome's own bottom bar. */
+  --tabbar-h: 54px;
+  /* The bar floats just above the home indicator, or 8px above the browser's bar (or the edge). */
+  --tabbar-gap: max(8px, calc(env(safe-area-inset-bottom, 0px) - 10px));
   -webkit-tap-highlight-color: transparent;
+}
+
+/* Added to the Home Screen there is no browser bar under it, so the bar keeps its full size. */
+@media (display-mode: standalone) {
+  html[data-device="mobile"] {
+    --tabbar-h: 62px;
+    --tabbar-gap: max(10px, calc(env(safe-area-inset-bottom, 0px) - 8px));
+  }
 }
 
 html[data-device="mobile"] body {
@@ -1413,6 +1422,32 @@ html[data-device="mobile"] .tabbar {
     inset 0 1px 0 color-mix(in srgb, #fff 14%, transparent);
   -webkit-backdrop-filter: saturate(1.8) blur(22px);
   backdrop-filter: saturate(1.8) blur(22px);
+  transition:
+    transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+    opacity 0.2s;
+}
+
+/* Tucked away below the screen edge while scrolling down (set by MobileTabBar). */
+html[data-device="mobile"] .tabbar[data-hidden] {
+  transform: translateY(calc(100% + var(--tabbar-gap) + 16px));
+  opacity: 0;
+  pointer-events: none;
+}
+
+html[data-motion="reduce"] .tabbar {
+  transition: opacity 0.2s;
+}
+
+html[data-device="mobile"] .tabbar svg {
+  width: 22px;
+  height: 22px;
+}
+
+@media (display-mode: standalone) {
+  html[data-device="mobile"] .tabbar svg {
+    width: 24px;
+    height: 24px;
+  }
 }
 
 html[data-device="mobile"] .tabbar a,

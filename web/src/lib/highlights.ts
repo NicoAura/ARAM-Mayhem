@@ -158,6 +158,6 @@ export function chefsSpecial() {
     play: s.play ?? "",
     items: (s.items ?? []).map((name) => ({ name, icon: pages.get(name)?.icon, href: pages.has(name) ? `/items/${pages.get(name)!.slug}` : null })),
     augments: (s.augments ?? []).map((a) => ({ name: a.name, rarity: a.rarity.toLowerCase(), core: a.core, icon: a.icon })),
-    href: s.href || "/lab#chefs-special",
+    href: s.href || "/kitchen#chefs-special",
   };
 }

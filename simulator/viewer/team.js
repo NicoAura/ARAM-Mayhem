@@ -47,8 +47,12 @@
     setBusy(true);
     return call(["--list", "--json", ...patchArgs()]).then((r) => {
       setBusy(false);
-      if (!r.ok) { status("The simulator couldn't load its data: " + r.stderr, "err"); return false; }
+      if (!r.ok) { status(T("The simulator couldn't load its data:") + " " + r.stderr, "err"); return false; }
       meta = JSON.parse(r.stdout);
+      // Official names in the page's language.
+      for (const i of meta.items) i.name = NAME("items", i.id, i.name);
+      for (const a of meta.augments) a.name = NAME("augments", a.id, a.name);
+      for (const c of meta.champions) c.name = NAME("champions", c.id, c.name);
       meta.champions.sort((a, b) => a.name.localeCompare(b.name));
       popular.clear();
       for (const e of meta.enemies) popular.set(e.id.toLowerCase(), { items: e.items, augments: e.augments });
@@ -95,6 +99,13 @@
       teams[side].forEach((slot, i) => box.append(slotRow(side, i, slot)));
     }
   }
+  // "Your build · change" or "Most popular build · change" on a champion's build toggle.
+  function summaryText(sum, custom) {
+    sum.textContent = "";
+    if (custom) { const b = document.createElement("b"); b.textContent = T("Your build"); sum.append(b); }
+    else sum.append(T("Most popular build"));
+    sum.append(" · " + T("change"));
+  }
   function slotRow(side, i, slot) {
     const row = document.createElement("div");
     row.className = "slot";
@@ -102,18 +113,18 @@
     pick.className = "pick";
     const taken = new Set([...teams.allies, ...teams.foes].filter((s) => s !== slot).map((s) => s.id.toLowerCase()));
     const opts = meta.champions.filter((c) => !taken.has(c.id.toLowerCase())).map((c) => ({ key: c.id, name: c.name }));
-    const sel = select(opts, slot.id, (side === "allies" ? (i ? "Ally " + i : "Your champion") : "Enemy " + (i + 1)), false);
+    const sel = select(opts, slot.id, (side === "allies" ? (i ? T("Ally {n}", { n: i }) : T("Your champion")) : T("Enemy {n}", { n: i + 1 })), false);
     sel.addEventListener("change", () => { teams[side][i] = slotFor(sel.value); render(); });
     pick.append(sel);
     if (side === "allies" && i === 0) {
       const tag = document.createElement("span");
       tag.className = "tag";
-      tag.textContent = "You";
+      tag.textContent = T("You");
       pick.append(tag);
     }
     const det = document.createElement("details");
     const sum = document.createElement("summary");
-    sum.innerHTML = slot.custom ? "<b>Your build</b> · change" : "Most popular build · change";
+    summaryText(sum, slot.custom);
     det.append(sum);
     det.addEventListener("toggle", () => { if (det.open && !det.querySelector(".gear")) det.append(gear(side, i, slot, sum)); });
     row.append(icon(slot.id), pick, det);
@@ -126,32 +137,32 @@
     const c = champ(slot.id), pool = new Set((c && c.augments) || []);
     for (const k of slot.augs) pool.add(k);
     const augs = meta.augments.filter((a) => pool.has(a.key))
-      .map((a) => (a.modeled === false ? { ...a, name: a.name + " (no effect yet)" } : a))
+      .map((a) => (a.modeled === false ? { ...a, name: a.name + " " + T("(no effect yet)") } : a))
       .sort((a, b) => a.name.localeCompare(b.name));
     const changed = () => {
       slot.items = [...box.querySelectorAll("select[data-kind=item]")].map((s) => s.value).filter(Boolean);
       slot.augs = [...box.querySelectorAll("select[data-kind=aug]")].map((s) => s.value).filter(Boolean);
       slot.custom = true;
-      sum.innerHTML = "<b>Your build</b> · change";
+      summaryText(sum, true);
     };
     const head = (t) => { const s = document.createElement("span"); s.textContent = t; box.append(s); };
-    head("Items");
+    head(T("Items"));
     for (let k = 0; k < Math.max(6, slot.items.length); k++) {
-      const s = select(items, slot.items[k], "Item " + (k + 1), true);
+      const s = select(items, slot.items[k], T("Item {n}", { n: k + 1 }), true);
       s.dataset.kind = "item";
       s.addEventListener("change", changed);
       box.append(s);
     }
-    head("Augments");
+    head(T("Augments"));
     for (let k = 0; k < 4; k++) {
-      const s = select(augs, slot.augs[k], "Augment " + (k + 1), true);
+      const s = select(augs, slot.augs[k], T("Augment {n}", { n: k + 1 }), true);
       s.dataset.kind = "aug";
       s.addEventListener("change", changed);
       box.append(s);
     }
     const reset = document.createElement("button");
     reset.type = "button";
-    reset.textContent = "Most popular build";
+    reset.textContent = T("Most popular build");
     reset.style.gridColumn = "1 / -1";
     reset.addEventListener("click", () => { teams[side][i] = slotFor(slot.id); render(); });
     box.append(reset);
@@ -180,12 +191,12 @@
       if (you.augs.length) args.push("--augs", you.augs.join(","));
     }
     setBusy(true);
-    status("Simulating every champion's fight, then the teamfight…", "busy");
+    status(T("Simulating every champion's fight, then the teamfight…"), "busy");
     call(args).then((r) => {
       setBusy(false);
-      if (!r.ok) { status("The simulation failed: " + (r.stderr || "unknown error").replace(/^error:\s*/, ""), "err"); return; }
+      if (!r.ok) { status(T("The simulation failed:") + " " + (r.stderr || T("unknown error")).replace(/^error:\s*/, ""), "err"); return; }
       show(JSON.parse(r.stdout));
-      status(patch === "pbe" ? "Done, on the PBE patch's numbers." : "Done. Change anyone and simulate again.");
+      status(patch === "pbe" ? T("Done, on the PBE patch's numbers.") : T("Done. Change anyone and simulate again."));
     });
   }
   const pct = (x) => Math.round(x * 100) + "%";
@@ -198,11 +209,11 @@
     if (res.win_rate > 0.5 && window.parent !== window) {
       try { window.parent.postMessage({ type: "deeparam-haptic", kind: "win" }, location.origin); } catch {}
     }
-    $("fightLen").textContent = res.fight_length.toFixed(1) + " s";
+    $("fightLen").textContent = T("{n} s", { n: res.fight_length.toFixed(1) });
     $("teamDps").textContent = Math.round(res.team_dps).toLocaleString();
     $("enemyDps").textContent = Math.round(res.enemy_dps).toLocaleString();
-    table($("allyTable"), "Your team", res.members);
-    table($("foeTable"), "Enemy team", res.enemies);
+    table($("allyTable"), T("Your team"), res.members);
+    table($("foeTable"), T("Enemy team"), res.enemies);
     // Who goes down when, in a median-length fight.
     const track = $("track"), end = Math.max(res.fight_length, ...res.timeline.map((e) => e.t), 1);
     track.querySelectorAll(".tick").forEach((n) => n.remove());
@@ -219,19 +230,19 @@
         t.className = "tick " + e.side;
         t.style.left = Math.max(0, xs[i]) + "%";
         const c = champ(e.champion);
-        t.title = (c ? c.name : e.champion) + " goes down at " + e.t.toFixed(1) + " s";
+        t.title = T("{name} goes down at {t} s", { name: c ? c.name : e.champion, t: e.t.toFixed(1) });
         const lbl = document.createElement("span");
         lbl.textContent = e.t.toFixed(1) + "s";
         t.append(icon(e.champion), lbl);
         track.append(t);
       });
     }
-    $("axisEnd").textContent = end.toFixed(1) + " s";
+    $("axisEnd").textContent = T("{n} s", { n: end.toFixed(1) });
   }
   function table(el, title, list) {
     el.textContent = "";
     const head = el.insertRow();
-    for (const h of [title, "DPS", "Share", "Standing", "Survives"]) {
+    for (const h of [title, "DPS", T("Share"), T("Standing"), T("Survives")]) {
       const th = document.createElement("th");
       th.textContent = h;
       head.append(th);
@@ -241,8 +252,8 @@
       const who = tr.insertCell();
       who.className = "who";
       const nm = document.createElement("span");
-      nm.textContent = m.name;
-      who.title = m.build.items.map((i) => i.name || itemName(i.key || i)).concat(m.build.augments.map((a) => a.name || augName(a.key || a))).join(", ");
+      nm.textContent = NAME("champions", m.champion, m.name);
+      who.title = m.build.items.map((i) => itemName(i.key || i)).concat(m.build.augments.map((a) => augName(a.key || a))).join(", ");
       who.append(icon(m.champion), nm);
       tr.insertCell().textContent = Math.round(m.summary.mean_dps).toLocaleString();
       const share = tr.insertCell();
@@ -252,7 +263,7 @@
       bar.innerHTML = "<i></i>";
       bar.firstChild.style.width = Math.round(m.share * 100) + "%";
       share.append(bar);
-      tr.insertCell().textContent = m.time_alive.toFixed(1) + " s";
+      tr.insertCell().textContent = T("{n} s", { n: m.time_alive.toFixed(1) });
       tr.insertCell().textContent = pct(m.survival);
     }
   }
@@ -267,15 +278,15 @@
   $("patchSel").addEventListener("change", (e) => {
     patch = e.target.value;
     loadMeta().then((ok) => {
-      if (ok) status(patch === "pbe" ? "PBE patch: the fight now uses the test server's numbers." : "Live patch again.");
+      if (ok) status(patch === "pbe" ? T("PBE patch: the fight now uses the test server's numbers.") : T("Live patch again."));
     });
   });
   try {
     worker = new Worker("sim-worker.js?v=" + (window.REPLAY_VERSION || "0"));
     worker.onmessage = (e) => { const r = pending.get(e.data.id); pending.delete(e.data.id); if (r) r(e.data); };
-    worker.onerror = () => status("The simulator couldn't start in this browser.", "err");
-    loadMeta().then((ok) => { if (ok) status("Pick the teams, then simulate."); });
+    worker.onerror = () => status(T("The simulator couldn't start in this browser."), "err");
+    window.I18N.ready.then(loadMeta).then((ok) => { if (ok) status(T("Pick the teams, then simulate.")); });
   } catch (e) {
-    status("The simulator needs Web Workers, which this browser blocks.", "err");
+    status(T("The simulator needs Web Workers, which this browser blocks."), "err");
   }
 })();

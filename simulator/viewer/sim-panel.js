@@ -64,18 +64,23 @@
   try {
     worker = new Worker("sim-worker.js?v=" + (window.REPLAY_VERSION || "0"));
     worker.onmessage = (e) => { const r = pending.get(e.data.id); pending.delete(e.data.id); if (r) r(e.data); };
-    worker.onerror = () => status("The simulator couldn't start in this browser. The replays above still work.", "err");
-    loadMeta().then((ok) => { if (ok) status("Change anything below, then simulate. Changed values are marked with a dot."); });
+    worker.onerror = () => status(T("The simulator couldn't start in this browser. The replays above still work."), "err");
+    window.I18N.ready.then(loadMeta).then((ok) => { if (ok) status(T("Change anything below, then simulate. Changed values are marked with a dot.")); });
   } catch (e) {
-    status("The simulator needs Web Workers, which this browser blocks.", "err");
+    status(T("The simulator needs Web Workers, which this browser blocks."), "err");
   }
 
   // Champions, items, augments and settings for the chosen patch.
   function loadMeta() {
     for (const b of ["runBuild", "findBest", "resetAll", "patchSel", "modeSel"]) $(b).disabled = true;
     return call(["--list", "--json", ...patchArgs()]).then((r) => {
-      if (!r.ok) { status("The simulator couldn't load its data: " + r.stderr, "err"); return false; }
+      if (!r.ok) { status(T("The simulator couldn't load its data:") + " " + r.stderr, "err"); return false; }
       meta = JSON.parse(r.stdout);
+      // Official names in the page's language.
+      for (const i of meta.items) i.name = NAME("items", i.id, i.name);
+      for (const a of meta.augments) a.name = NAME("augments", a.id, a.name);
+      for (const c of meta.champions) c.name = NAME("champions", c.id, c.name);
+      for (const e of meta.enemies) e.name = NAME("champions", e.id, e.name);
       enemyById.clear();
       for (const e of meta.enemies) enemyById.set(e.id.toLowerCase(), e);
       buildFightForm();
@@ -90,24 +95,24 @@
     loadMeta().then((ok) => {
       if (!ok) return;
       status(patch === "pbe"
-        ? "PBE patch: simulations now use the test server's numbers. The replay above changes when you simulate."
-        : "Live patch: simulations use the current patch's numbers again.");
+        ? T("PBE patch: simulations now use the test server's numbers. The replay above changes when you simulate.")
+        : T("Live patch: simulations use the current patch's numbers again."));
     });
   });
 
   $("modeSel").addEventListener("change", (e) => {
     mode = e.target.value;
     window.ReplayViewer.setMode(mode);
-    const label = window.ReplayViewer.modes[mode].label.toLowerCase();
+    const label = window.ReplayViewer.modes[mode].label;
     status(mode === "damage"
-      ? "Mode: damage. Find the best build looks for the most damage per second."
-      : `Mode: ${label}. Simulate shows ${label} per fight, and Find the best build looks for the most ${label} per fight.`);
+      ? T("Mode: damage. Find the best build looks for the most damage per second.")
+      : T("Mode: {mode}. Simulate shows it per fight, and Find the best build looks for the most per fight.", { mode: label }));
   });
 
   window.onReplayLoad = (c, tr, isCustom) => {
     const changedChamp = !champ || champ.id !== c.id;
     if (changedChamp) offerSubmit(null);
-    $("buildTitle").textContent = isCustom ? "Your simulated setup" + (tr.patch === "pbe" ? " (PBE patch)" : "") : "Simulated best build";
+    $("buildTitle").textContent = isCustom ? (tr.patch === "pbe" ? T("Your simulated setup (PBE patch)") : T("Your simulated setup")) : T("Simulated best build");
     champ = c; trace = tr;
     if (meta && (changedChamp || !isCustom)) fillFromTrace();
     runLinked();
@@ -135,19 +140,19 @@
   function select(options, value, label) {
     const s = document.createElement("select");
     s.setAttribute("aria-label", label);
-    s.add(new Option("(empty)", ""));
+    s.add(new Option(T("(empty)"), ""));
     for (const o of options) s.add(new Option(o.name + (o.rarity ? " · " + rarityName(o.rarity) : ""), o.key));
     s.value = value || "";
     return s;
   }
-  function rarityName(r) { return { S: "Silver", G: "Gold", P: "Prismatic" }[r] || r.charAt(0).toUpperCase() + r.slice(1); }
+  function rarityName(r) { return T({ S: "Silver", G: "Gold", P: "Prismatic" }[r] || r.charAt(0).toUpperCase() + r.slice(1)); }
   // The augments a champion can be offered, sorted by name; ones the simulator can't model yet are marked.
   function augmentsFor(id, keep) {
     const c = meta.champions.find((x) => x.id.toLowerCase() === String(id).toLowerCase());
     const pool = new Set((c && c.augments) || []);
     for (const k of keep || []) pool.add(k);
     return meta.augments.filter((a) => !c || pool.has(a.key))
-      .map((a) => a.modeled === false ? { ...a, name: a.name + " (no effect yet)" } : a)
+      .map((a) => a.modeled === false ? { ...a, name: a.name + " " + T("(no effect yet)") } : a)
       .sort((a, b) => a.name.localeCompare(b.name));
   }
   function fillFromTrace() {
@@ -163,12 +168,12 @@
       const l = document.createElement("span"); l.textContent = label;
       r.append(l, el); box.append(r);
     };
-    row("B", select(boots, bootKey, "Boots"));
-    for (let i = 0; i < 5; i++) row(String(i + 1), select(legs, legKeys[i], "Item " + (i + 1)));
-    const sub = document.createElement("div"); sub.className = "sub"; sub.textContent = "Augments"; box.append(sub);
+    row("B", select(boots, bootKey, T("Boots")));
+    for (let i = 0; i < 5; i++) row(String(i + 1), select(legs, legKeys[i], T("Item {n}", { n: i + 1 })));
+    const sub = document.createElement("div"); sub.className = "sub"; sub.textContent = T("Augments"); box.append(sub);
     const augKeys = trace.build.augments.map((a) => a.key);
     const augs = augmentsFor(champ.id, augKeys);
-    for (let i = 0; i < 4; i++) row(String(i + 1), select(augs, augKeys[i], "Augment " + (i + 1)));
+    for (let i = 0; i < 4; i++) row(String(i + 1), select(augs, augKeys[i], T("Augment {n}", { n: i + 1 })));
     renderCombo();
 
     if (!picks) {
@@ -219,13 +224,16 @@
       box.append(f);
     }
     const mode = enemyMode();
-    const n = teamSize(), word = n === 1 ? "enemy" : `${n} enemies`;
+    const n = teamSize();
     const p = document.createElement("p"); p.className = "note";
     if (mode === "pool")
-      p.textContent = `Each fight draws ${n === 1 ? "one enemy" : word} weighted by how often they're picked in Mayhem, with their HP, resists and damage. ` +
-        "To fight a particular champion or change its stats, items or augments, open Advanced settings.";
+      p.textContent = (n === 1
+        ? T("Each fight draws one enemy weighted by how often they're picked in Mayhem, with their HP, resists and damage.")
+        : T("Each fight draws {n} enemies weighted by how often they're picked in Mayhem, with their HP, resists and damage.", { n })) + " " +
+        T("To fight a particular champion or change its stats, items or augments, open Advanced settings.");
     else if (mode === "pick")
-      p.textContent = `Every fight is against the ${word} set under Advanced settings.`;
+      p.textContent = n === 1 ? T("Every fight is against the enemy set under Advanced settings.")
+        : T("Every fight is against the {n} enemies set under Advanced settings.", { n });
     else p.id = "dummyNote";
     box.append(p);
     if (mode === "dummy") dummyNote();
@@ -241,9 +249,12 @@
     };
     const changed = ["target_hp", "target_armor", "target_mr"].some((k) => fieldValues[k] !== undefined);
     const n = teamSize();
-    p.textContent = `${n === 1 ? "One dummy" : n + " dummies"} with ${val("target_hp")} HP, ${val("target_armor")} armor and ` +
-      `${val("target_mr")} magic resist${changed ? "" : ", the average enemy's"}. They stand still and don't hit back. `;
-    const b = document.createElement("button"); b.type = "button"; b.className = "linkish"; b.textContent = "Change dummy stats";
+    const v = { n, hp: val("target_hp"), armor: val("target_armor"), mr: val("target_mr") };
+    p.textContent = (n === 1
+      ? (changed ? T("One dummy with {hp} HP, {armor} armor and {mr} magic resist.", v) : T("One dummy with {hp} HP, {armor} armor and {mr} magic resist, the average enemy's.", v))
+      : (changed ? T("{n} dummies with {hp} HP, {armor} armor and {mr} magic resist.", v) : T("{n} dummies with {hp} HP, {armor} armor and {mr} magic resist, the average enemy's.", v))) +
+      " " + T("They stand still and don't hit back.") + " ";
+    const b = document.createElement("button"); b.type = "button"; b.className = "linkish"; b.textContent = T("Change dummy stats");
     b.addEventListener("click", () => {
       $("advBox").open = true;
       const f = $("set_target_hp");
@@ -280,10 +291,10 @@
       grid.prepend(fs);
     }
     fs.textContent = "";
-    const lg = document.createElement("legend"); lg.textContent = "Chosen enemies"; fs.append(lg);
+    const lg = document.createElement("legend"); lg.textContent = T("Chosen enemies"); fs.append(lg);
     if (!meta || !champ || !picks) return;
     const intro = document.createElement("p"); intro.className = "note";
-    intro.textContent = "Used when Enemies is set to Chosen; changing one switches to it. Each enemy starts with its most popular items and augments; its Health, Armor and Magic Resist come from its level and build. Dmg share sets how hard the enemy hits.";
+    intro.textContent = T("Used when Enemies is set to Chosen; changing one switches to it. Each enemy starts with its most popular items and augments; its Health, Armor and Magic Resist come from its level and build. Dmg share sets how hard the enemy hits.");
     fs.append(intro);
     const pool = meta.enemies.filter((e) => e.id.toLowerCase() !== champ.id.toLowerCase())
       .sort((a, b) => a.name.localeCompare(b.name));
@@ -292,7 +303,7 @@
     picks.slice(0, teamSize()).forEach((pick, idx) => {
       const card = document.createElement("div"); card.className = "enemy";
       const mark = () => { card.classList.toggle("changed", changedPick(pick)); countAdvanced(); };
-      const s = document.createElement("select"); s.setAttribute("aria-label", "Enemy " + (idx + 1));
+      const s = document.createElement("select"); s.setAttribute("aria-label", T("Enemy {n}", { n: idx + 1 }));
       for (const e of pool) s.add(new Option(e.name, e.id));
       s.value = pick.id;
       s.addEventListener("change", () => { pick.id = s.value; pick.stats = {}; withBuild(pick); useChosen(); renderEnemyCards(); });
@@ -300,7 +311,7 @@
       const base = enemyById.get(pick.id.toLowerCase()) || {};
       for (const [key, label, step] of ENEMY_STATS) {
         const l = document.createElement("label");
-        l.append(label);
+        l.append(T(label));
         const inp = document.createElement("input");
         inp.type = "number"; inp.step = step; inp.min = 0;
         inp.value = pick.stats[key] !== undefined ? pick.stats[key] : base[key];
@@ -315,9 +326,9 @@
       }
       const gear = (label, list, chosen, count) => {
         const wrap = document.createElement("div"); wrap.className = "enemy-gear";
-        const h = document.createElement("span"); h.textContent = label; wrap.append(h);
+        const h = document.createElement("span"); h.textContent = T(label); wrap.append(h);
         for (let i = 0; i < count; i++) {
-          const g = select(list, chosen[i], `Enemy ${idx + 1} ${label.toLowerCase()} ${i + 1}`);
+          const g = select(list, chosen[i], `${T("Enemy {n}", { n: idx + 1 })} · ${T(label)} ${i + 1}`);
           g.addEventListener("change", () => {
             const vals = [...wrap.querySelectorAll("select")].map((x) => x.value).filter(Boolean);
             chosen.length = 0; chosen.push(...vals);
@@ -340,19 +351,20 @@
     const wrap = document.createElement("div"); wrap.className = "field";
     const id = "set_" + s.key;
     const l = document.createElement("label"); l.htmlFor = id;
-    const words = s.description.charAt(0).toUpperCase() + s.description.slice(1);
-    l.textContent = LABELS[s.key] || words;
+    const en = s.description.charAt(0).toUpperCase() + s.description.slice(1);
+    const words = T(en);
+    l.textContent = LABELS[s.key] ? T(LABELS[s.key]) : words;
     if (LABELS[s.key]) {
       l.title = words;
       // The description under the name, unless it only repeats it.
-      if (hint && !words.toLowerCase().startsWith(LABELS[s.key].toLowerCase())) {
+      if (hint && !en.toLowerCase().startsWith(LABELS[s.key].toLowerCase())) {
         const sm = document.createElement("small"); sm.textContent = words; l.append(sm);
       }
     }
     let inp;
     if (CHOICES[s.key]) {
       inp = document.createElement("select"); wrap.classList.add("has-select");  // :has(select) is too new for some browsers
-      for (const [v, name] of CHOICES[s.key]) inp.add(new Option(name, v));
+      for (const [v, name] of CHOICES[s.key]) inp.add(new Option(T(name), v));
     } else {
       inp = document.createElement("input");
       inp.type = "number";
@@ -390,7 +402,7 @@
     groups[0][1].push(...meta.settings.map((s) => s.key).filter((k) => !placed.has(k)));
     for (const [name, keys] of groups) {
       const fs = document.createElement("fieldset");
-      const lg = document.createElement("legend"); lg.textContent = name; fs.append(lg);
+      const lg = document.createElement("legend"); lg.textContent = T(name); fs.append(lg);
       if (keys.includes("combo_order")) fs.id = "castBox";
       if (!keys.length) continue;
       for (const k of keys) fs.append(field(byKey.get(k)));
@@ -406,7 +418,7 @@
     if (!box || !champ) return;
     box.querySelectorAll(".combo-field").forEach((n) => n.remove());
     const wrap = document.createElement("div"); wrap.className = "field combo-field";
-    const l = document.createElement("label"); l.htmlFor = "comboInput"; l.textContent = "Combo (cast order), for example EQRW";
+    const l = document.createElement("label"); l.htmlFor = "comboInput"; l.textContent = T("Combo (cast order), for example EQRW");
     const combo = document.createElement("input");
     combo.id = "comboInput"; combo.type = "text"; combo.maxLength = 4; combo.autocomplete = "off";
     combo.value = combos[champ.id] || defaultCombo();
@@ -424,7 +436,7 @@
   // "Advanced settings (2 changed)", so changes hidden in the closed section aren't forgotten.
   function countAdvanced() {
     const n = $("advGrid").querySelectorAll(".field.changed, .enemy.changed").length;
-    $("advCount").textContent = n ? `(${n} changed)` : "";
+    $("advCount").textContent = n ? T("({n} changed)", { n }) : "";
   }
 
   // ---------- running ----------
@@ -442,12 +454,12 @@
       }).join(","));
     const combo = $("comboInput") ? $("comboInput").value : "";
     if (combo && combo !== defaultCombo()) {
-      if (new Set(combo).size !== combo.length) throw new Error("Use each of Q, W, E and R at most once in the combo.");
+      if (new Set(combo).size !== combo.length) throw new Error(T("Use each of Q, W, E and R at most once in the combo."));
       a.push("--combo", combo);
     }
     if (withBuild) {
       const b = chosenBuild();
-      if (!b.items.length) throw new Error("Pick at least one item.");
+      if (!b.items.length) throw new Error(T("Pick at least one item."));
       a.push("--items", b.items.join(","));
       if (b.augs.length) a.push("--augs", b.augs.join(","));
     }
@@ -459,13 +471,13 @@
     try { a = args(withBuild); } catch (e) { status(e.message, "err"); return; }
     busy = true;
     for (const b of ["runBuild", "findBest", "resetAll", "patchSel", "modeSel"]) $(b).disabled = true;
-    status(withBuild ? "Simulating 2,000 fights…" : "Searching item and augment builds. This takes a few seconds…", "busy");
+    status(withBuild ? T("Simulating 2,000 fights…") : T("Searching item and augment builds. This takes a few seconds…"), "busy");
     const t0 = performance.now();
     const r = await call(a);
     busy = false;
     for (const b of ["runBuild", "findBest", "resetAll", "patchSel", "modeSel"]) $(b).disabled = false;
     if (!r.ok || !r.trace) {
-      status((r.stderr || "The simulation failed.").replace(/^error:\s*/, ""), "err");
+      status((r.stderr || T("The simulation failed.")).replace(/^error:\s*/, ""), "err");
       return;
     }
     const res = JSON.parse(r.stdout);
@@ -477,21 +489,21 @@
     const M = window.ReplayViewer.modes[mode], fmt = window.ReplayViewer.modeValue;
     const defSum = window.ReplayViewer.defaultTrace().summary;
     const defVal = mode === "damage" ? def : defSum[M.key];
-    const where = `Done in ${secs} s${patch === "pbe" ? " on the PBE patch" : ""}. `;
-    const after = "The replay above now shows a typical fight with these settings.";
+    const where = (patch === "pbe" ? T("Done in {s} s on the PBE patch.", { s: secs }) : T("Done in {s} s.", { s: secs })) + " ";
+    const after = T("The replay above now shows a typical fight with these settings.");
+    const alive = best.time_alive.toFixed(1), dps = Math.round(best.mean_dps).toLocaleString();
     if (mode === "damage")
-      status(where + `Average DPS ${Math.round(best.mean_dps).toLocaleString()} (±${Math.round(best.ci95)}), alive for ` +
-        `${best.time_alive.toFixed(1)} s on average. The default setup averaged ${Math.round(def).toLocaleString()}. ` + after);
+      status(where + T("Average DPS {dps} (±{ci}), alive for {alive} s on average.", { dps, ci: Math.round(best.ci95), alive }) + " " +
+        T("The default setup averaged {v}.", { v: Math.round(def).toLocaleString() }) + " " + after);
     else
-      status(where + `${M.label}: ${fmt(mode, best[M.key])} per fight on average, alive for ${best.time_alive.toFixed(1)} s ` +
-        `(average DPS ${Math.round(best.mean_dps).toLocaleString()}).` +
-        (defVal !== undefined ? ` The default setup averaged ${fmt(mode, defVal)}. ` : " ") + after);
+      status(where + T("{mode}: {v} per fight on average, alive for {alive} s (average DPS {dps}).", { mode: M.label, v: fmt(mode, best[M.key]), alive, dps }) + " " +
+        (defVal !== undefined ? T("The default setup averaged {v}.", { v: fmt(mode, defVal) }) + " " : "") + after);
     // ▲/▼ against the default setup, coloured.
     const change = defVal !== undefined ? (best[M.key] - defVal) / Math.max(1, defVal) : 0;
     if (Math.abs(change) >= 0.005) {
       const d = document.createElement("span");
       d.className = change > 0 ? "up" : "down";
-      d.textContent = ` ${change > 0 ? "▲" : "▼"} ${Math.abs(change * 100).toFixed(1)}% ${mode === "damage" ? "DPS" : M.label.toLowerCase()} vs default`;
+      d.textContent = ` ${change > 0 ? "▲" : "▼"} ` + T("{pct}% {what} vs default", { pct: Math.abs(change * 100).toFixed(1), what: mode === "damage" ? "DPS" : M.label });
       $("simStatus").append(d);
     }
     // Any live-patch build can go on the leaderboard: it's simulated again on our side against the Survival
@@ -510,9 +522,9 @@
     $("submitScore").hidden = !submission;
     $("submitScore").disabled = false;
     $("submitNote").textContent = !build ? "" : submission
-      ? `Put this build on the Leaderboard. There every build fights ${survivalEnemy(build.champion)} with the ` +
-        "default settings until your champion falls, simulated again on our side before it's listed."
-      : "Only live-patch builds can go on the Leaderboard.";
+      ? T("Put this build on the Leaderboard. There every build fights {enemy} with the default settings until your champion falls, simulated again on our side before it's listed.",
+        { enemy: NAME("champions", survivalEnemy(build.champion), survivalEnemy(build.champion)) })
+      : T("Only live-patch builds can go on the Leaderboard.");
   }
   // The site's bot check, when it's switched on: usually invisible, sometimes a box to tick under the button.
   let checkWidget = null;
@@ -523,7 +535,7 @@
       await new Promise((ok, fail) => {
         const s = document.createElement("script");
         s.src = cfg.script; s.async = true; s.onload = ok;
-        s.onerror = () => fail(new Error("The bot check couldn't load. Try again in a moment."));
+        s.onerror = () => fail(new Error(T("The bot check couldn't load. Try again in a moment.")));
         document.head.append(s);
       });
     }
@@ -534,27 +546,27 @@
       checkWidget = window.turnstile.render(box, {
         sitekey: cfg.siteKey, appearance: "interaction-only",
         callback: ok,
-        "error-callback": () => fail(new Error("The bot check didn't pass. Try again.")),
+        "error-callback": () => fail(new Error(T("The bot check didn't pass. Try again."))),
       });
     });
   }
   $("submitScore").addEventListener("click", async () => {
     if (!submission) return;
     $("submitScore").disabled = true;
-    $("submitNote").textContent = "Submitting…";
+    $("submitNote").textContent = T("Submitting…");
     try {
       const check = await botCheck();
       const r = await fetch("/api/sim-scores", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(check ? { ...submission, check } : submission) });
       const b = await r.json().catch(() => ({}));
       if (!r.ok) throw new Error(b.error || "");
       $("submitNote").textContent = b.status === "verified"
-        ? `This build is already on the Leaderboard at ${Math.round(b.verified_dps).toLocaleString()} DPS.`
-        : b.status === "rejected" ? "This build was already checked and can't go on the Leaderboard."
-        : "Submitted. It shows on the Leaderboard once our simulator has re-run it.";
+        ? T("This build is already on the Leaderboard at {dps} DPS.", { dps: Math.round(b.verified_dps).toLocaleString() })
+        : b.status === "rejected" ? T("This build was already checked and can't go on the Leaderboard.")
+        : T("Submitted. It shows on the Leaderboard once our simulator has re-run it.");
       $("submitScore").hidden = true;
     } catch (e) {
       $("submitScore").disabled = false;
-      $("submitNote").textContent = e.message || "The Leaderboard couldn't be reached. Try again in a moment.";
+      $("submitNote").textContent = e.message || T("The Leaderboard couldn't be reached. Try again in a moment.");
     }
   });
 
@@ -563,7 +575,7 @@
     box.textContent = "";
     box.hidden = builds.length < 2;
     if (builds.length < 2) return;
-    const h = document.createElement("div"); h.className = "sub"; h.textContent = "Other strong builds (click to load into the build slots)";
+    const h = document.createElement("div"); h.className = "sub"; h.textContent = T("Other strong builds (click to load into the build slots)");
     box.append(h);
     const name = (k, list) => (list.find((x) => x.key === k) || { name: k }).name;
     builds.slice(1).forEach((b) => {
@@ -595,7 +607,7 @@
     offerSubmit(null);
     buildFightForm();
     window.ReplayViewer.resetTrace();
-    status("Back to the default build, enemies and fight settings.");
+    status(T("Back to the default build, enemies and fight settings."));
     if (patch !== "live") {  // and back to the live patch
       patch = $("patchSel").value = "live";
       loadMeta();
