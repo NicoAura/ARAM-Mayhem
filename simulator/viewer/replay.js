@@ -1137,6 +1137,7 @@
     if (!fight) return;
     const dpr = pixelRatio();
     const w = Math.round(track.clientWidth * dpr), h = Math.round(track.clientHeight * dpr);
+    if (!w || !h) return; // hidden (another Simulator tab is open): nothing to draw until it shows
     if (tc.width !== w || tc.height !== h) { tc.width = w; tc.height = h; }
     const key = w + "x" + h;
     if (trackKey === key && trackCache.fight === fight) return;
@@ -1164,6 +1165,7 @@
   }
   function drawPlayhead() {
     drawTrack();
+    if (!trackCache.width || !trackCache.height || !tc.width || !tc.height) return;
     const W = tc.width, H = tc.height, x = (t / fight.duration) * W;
     tg.drawImage(trackCache, 0, 0);
     tg.fillStyle = "rgba(10,16,23,.45)"; tg.fillRect(x, 0, W - x, H);
