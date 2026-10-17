@@ -1,0 +1,34 @@
+{
+ "patch": "16.20.8248524",
+ "attackSpeedCap": 5.0,
+ "aramAttackSpeedCap": 3.0,
+ "critOverflow": "adaptive",
+ "runes": false,
+ "aura": [
+  "+70 Summoner Spell Haste",
+  "Increased Mana and Energy Regeneration",
+  "Gain Experience Passively",
+  "Healing Effects on Allies are 50% as Effective",
+  "AoE Damage Dealt to Minions is 75% Effective",
+  "Nearby Enemy Minion Deaths Grant 6 Gold",
+  "Excess Critical Strike Chance gets converted to Adaptive Force",
+  "Attack Speed Maximum raised to 5.0",
+  "Melee champions gain Armor and Magic Resistance",
+  "All champions gain additional Health",
+  "All champions gain Presence of Mind"
+ ],
+ "keystoneAugments": {
+  "1038": [
+   "First Strike",
+   "Dark Harvest"
+  ],
+  "1149": [
+   "Aftershock",
+   "Glacial Augment"
+  ],
+  "1079": [
+   "Lethal Tempo",
+   "Conqueror"
+  ]
+ }
+}

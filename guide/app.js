@@ -51,7 +51,11 @@
     ["Augments", [
       `One augment at levels ${R.augmentLevels.join(", ")}.`,
       "You can still pick it while you're dead.",
-      R.rerolls != null ? `${fmt(R.rerolls)} reroll to start.` : "",
+      R.rerolls != null ? `Each selection shows ${R.cards} augments of one rarity, and each of the ${R.cards} can be rerolled ${R.rerolls === 1 ? "once" : `${fmt(R.rerolls)} times`}, so you can see up to ${R.cards * (1 + R.rerolls)}.` : "",
+    ]],
+    ["Attack speed and crits", [
+      R.attackSpeedCap ? `Attack speed can go up to ${fmt(R.attackSpeedCap)} attacks per second${R.aramAttackSpeedCap ? ` (${fmt(R.aramAttackSpeedCap)} in regular ARAM)` : ""}.` : "",
+      R.critOverflow === "adaptive" ? "Critical Strike Chance over 100% turns into Adaptive Force, which becomes Attack Damage or Ability Power, whichever you have more of." : "",
     ]],
     ["Combo Breaker", [`A Mayhem buff worth ${pct(R.comboBreakerTenacity)} Tenacity.`]],
     ["Melee champions", [`Bonus Health ${fmt(B.MeleeHealthBonus)}, up to ${fmt(B.MeleeHealthBonusMax)}.`, `${fmt(B.MeleeFlatArmor)} flat Armor.`]],
@@ -64,9 +68,21 @@
       `Burns enemies within ${fmt(F.ImmolateRadius)} units, +${pct(F.PercentAS)} Attack Speed, +${pct(F.RegularMS)} Move Speed (+${pct(F.MoveTowardsEnemyMS)} toward enemies), +${pct(F.ManaRegen)} Mana Regen.`,
       `The cost: ${pct(-F.GrievousAmount)} less healing and shielding, ${pct(F.DamageTakenAmp_Melee - 1)} more damage taken (${pct(F.DamageTakenAmp_Range - 1)} for ranged champions).`]],
   ];
+  if (R.aura?.length) rules.push(["Mayhemic Magic", ["Everyone has this Mayhem buff all game:", ...R.aura.map((l) => `• ${l}`)]]);
   $("rule-list").innerHTML = rules
     .map(([t, lines]) => `<article class="card"><div class="title">${esc(t)}</div>${lines.filter(Boolean).map((l) => `<p class="muted small" style="margin-top:0.4rem">${esc(l)}</p>`).join("")}</article>`)
     .join("");
+  const CS = D.champSelect;
+  if (CS) {
+    const lines = [
+      CS.runes ? "" : "There's no rune page. Your keystones come only from augments.",
+      CS.notInMayhem.length ? `${CS.notInMayhem.join(", ")} ${CS.notInMayhem.length > 1 ? "aren't" : "isn't"} allowed, though regular ARAM has ${CS.notInMayhem.length > 1 ? "them" : "it"}.` : "",
+    ].filter(Boolean);
+    $("champ-select-intro").textContent = lines.join(" ");
+    $("keystone-list").innerHTML = CS.keystoneAugments
+      .map((a) => `<div class="row">${img(a.icon)}<div><div class="title">${esc(a.name)} ${tierChip(a.tier)}</div><div class="muted small">${esc(a.runes.join(" and "))}</div></div></div>`)
+      .join("");
+  }
   $("spell-list").innerHTML = D.spells
     .map((x) => `<div class="row" style="align-items:flex-start">${img(x.icon)}<div><div class="title">${esc(x.name)} <span class="muted small">${fmt(x.cooldown)}s</span></div><div class="muted small">${esc(x.text)}</div></div></div>`)
     .join("");
@@ -94,6 +110,10 @@
     $("odds-note").textContent =
       `The chance that one augment you want is among the ${AR.cards} cards when a selection of its rarity comes up, if every augment of that rarity is equally likely. ` +
       `"Using every reroll" counts each reroll as a fresh card. The last column is the chance it shows up at least once if all ${n} selections were that rarity.`;
+    const extra = [...(AR.selectionAugments || []).map((a) => ({ ...a, how: a.tier })), ...(AR.goldenReroll?.name ? [{ name: AR.goldenReroll.name, icon: AR.goldenReroll.icon, text: `${AR.goldenReroll.text} A reward from the Mayhem progression track, not an augment.` }] : [])];
+    $("selection-list").innerHTML = extra
+      .map((a) => `<div class="row" style="align-items:flex-start">${img(a.icon)}<div><div class="title">${esc(a.name)} ${tierChip(a.tier)}</div><div class="muted small">${esc(a.text)}</div></div></div>`)
+      .join("");
     const gi = AR.grantedItems.filter((g, i, all) => all.findIndex((x) => x.name === g.name) === i);
     $("granted-intro").textContent =
       "Rewards can't be bought, so build stats on the champion pages leave them out. Free items are handed over at once, but you can also buy them.";
