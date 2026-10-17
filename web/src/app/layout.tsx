@@ -7,6 +7,7 @@ import TiltEffects from "@/components/TiltEffects";
 import SwipeGestures from "@/components/SwipeGestures";
 import CompareTray from "@/components/CompareTray";
 import HoverPreview from "@/components/HoverPreview";
+import CountUp from "@/components/CountUp";
 import AccountButton from "@/components/AccountButton";
 import BrandMark from "@/components/BrandMark";
 import MobileTabBar from "@/components/MobileTabBar";
@@ -131,6 +132,7 @@ export default function RootLayout({
         <SwipeGestures />
         <CompareTray />
         <HoverPreview />
+        <CountUp />
         <MobileTabBar tabs={navPages().map(({ href, label }) => ({ href, label }))} />
       </body>
     </html>
