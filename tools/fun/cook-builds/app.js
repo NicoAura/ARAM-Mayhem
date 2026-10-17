@@ -11,6 +11,8 @@
   const state = { tier: "All", sort: "tier" };
 
   const pct = (x, d = 1) => (x == null ? "–" : (x * 100).toFixed(d) + "%");
+  // A win rate coloured by how it does: 52% or more good, 48% or less bad.
+  const wr = (x) => `<span class="${x == null ? "" : x >= 0.52 ? "good" : x <= 0.48 ? "bad" : ""}">${pct(x)}</span>`;
   const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
   const icon = (path) => (window.COOK_ICONS && window.COOK_ICONS[path]) || path;
 
@@ -18,7 +20,7 @@
     const rarity = a.rarity.toLowerCase();
     const stat = a.win_rate == null
       ? `<span class="muted">no data</span>`
-      : `${pct(a.win_rate)}<small>#${a.win_rank} of ${data.meta.augment_count}</small>`;
+      : `${wr(a.win_rate)}<small>#${a.win_rank} of ${data.meta.augment_count}</small>`;
     const best = a.champion_is_best ? `<span class="chip" title="${esc(champ)} is on the best-champion list for this augment">best on ${esc(champ)}</span>` : "";
     return `<li class="${a.core ? "core" : "flex"}">
       <img src="${icon(a.icon)}" alt="" width="32" height="32" loading="lazy">
@@ -50,7 +52,7 @@
           <h2>${esc(b.title)}</h2>
           <div class="sub">${esc(b.champion_name)} <span class="chip tier" title="${esc(TIER_NOTE[b.tier] || "")}">${esc(b.tier)}</span>${b.lab ? ` <span class="chip" title="Invented for this page">Lab original</span>` : ""}</div>
         </div>
-        <div class="score"><span class="value">${pct(b.core_win_rate)}</span><span class="label">core augment win rate</span></div>
+        <div class="score"><span class="value">${wr(b.core_win_rate)}</span><span class="label">core augment win rate</span></div>
       </div>
       <p class="why">${esc(b.why)}</p>
       <p class="play muted"><b>How to play:</b> ${esc(b.play)}</p>
@@ -60,7 +62,7 @@
       </div>
       <dl class="stats">
         <div><dt>Usual on ${esc(b.champion_name)}</dt><dd>${b.core_usual} of ${b.core} <small>core augments · picked ${pct(b.core_pick_rate, 0)} of games</small></dd></div>
-        <div><dt>${esc(b.champion_name)} win rate</dt><dd>${pct(b.champion_win_rate)} <small>#${b.champion_win_rank} of ${data.meta.champion_count} by win rate</small></dd></div>
+        <div><dt>${esc(b.champion_name)} win rate</dt><dd>${wr(b.champion_win_rate)} <small>#${b.champion_win_rank} of ${data.meta.champion_count} by win rate</small></dd></div>
         ${simStat(b)}
       </dl>
     </article>`;
