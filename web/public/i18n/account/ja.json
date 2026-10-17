@@ -26,7 +26,7 @@
  "Sign out": "ログアウト",
  "Profile": "プロフィール",
  "Display name": "表示名",
- "Only you see your name and icon, here on your account page.": "名前とアイコンは、このアカウントページで自分だけに表示されます。",
+ "Your name and icon show on your account page. Your name also appears on builds you share in The Kitchen.": "名前とアイコンはアカウントページに表示されます。名前は「キッチン」で共有したビルドにも表示されます。",
  "Choose an icon": "アイコンを選択",
  "Search champions": "チャンピオンを検索",
  "Icon": "アイコン",

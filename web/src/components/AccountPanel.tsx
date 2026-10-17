@@ -345,7 +345,7 @@ function ProfileCard({ account, refresh }: { account: Account; refresh: () => Pr
           {t("Display name")}
           <input type="text" name="nickname" autoComplete="nickname" maxLength={24} value={name} onChange={(e) => setName(e.target.value)} />
         </label>
-        <p className="acct-hint">{t("Only you see your name and icon, here on your account page.")}</p>
+        <p className="acct-hint">{t("Your name and icon show on your account page. Your name also appears on builds you share in The Kitchen.")}</p>
         <details className="acct-icons">
           <summary>
             {icon ? (
