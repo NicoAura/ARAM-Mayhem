@@ -38,7 +38,9 @@ export type HelperData = { champions: HelperChamp[]; items: Record<string, [stri
 
 const pick = (r?: Row): BuildPick | null => (r ? { items: r.items, winRate: r.win_rate ?? null, pickRate: r.pick_rate } : null);
 
+let cache: HelperData | null = null;
 export function whatToBuildData(): HelperData {
+  if (cache) return cache;
   const all = items();
   const rewards = rewardItems();
   const file = join(process.cwd(), "public", "assets", "cd", "latest", GAME_DATA, "v1", "items.json");
@@ -77,7 +79,8 @@ export function whatToBuildData(): HelperData {
   }
   const augs: HelperData["augs"] = {};
   for (const c of champions) for (const ids of Object.values(c.augs)) for (const a of ids) augs[a] = NAMES[a];
-  return { champions, items: itemInfo, augs };
+  cache = { champions, items: itemInfo, augs };
+  return cache;
 }
 
 /** Situational items by threat and by what the champion builds, best first. */

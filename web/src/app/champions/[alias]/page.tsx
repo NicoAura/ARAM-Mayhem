@@ -8,15 +8,16 @@ import SplashAccent from "@/components/SplashAccent";
 import { TIER_COLORS } from "@/lib/share-card";
 import WinRateChart from "@/components/WinRateChart";
 import ChampionShowcase from "@/components/ChampionShowcase";
+import QuickReference from "@/components/QuickReference";
 import { notFound } from "next/navigation";
 import Embed from "@/components/Embed";
-import { augmentHref } from "@/lib/augments";
 import { championAliases, championSummary, champList } from "@/lib/champions";
 import { pageMeta } from "@/lib/meta";
 import { discoverToolTabs } from "@/lib/tabs";
 
 // One page per champion, so each can be found in search: a server-rendered summary of the live
-// patch (tier, rates, change, top augments, partners), then the full champion page from champions/.
+// patch (tier, rates, change), a quick in-game reference (skill order, build, augments), then
+// partners, charts and the full champion page from champions/.
 
 export const dynamicParams = false;
 export const generateStaticParams = () => championAliases().map((alias) => ({ alias }));
@@ -116,27 +117,11 @@ export default async function ChampionPage({ params }: { params: Promise<{ alias
           </div>
         )}
       </section>
-      {(c.augments.length > 0 || c.partners.length > 0) && (
+      <QuickReference alias={c.alias} />
+      {c.partners.length > 0 && (
         <div className="bento">
-          {c.augments.length > 0 && (
-            <section className="card span-7" data-accent="gold">
-              <div className="card-head">
-                <h2>Most picked augments</h2>
-              </div>
-              <div className="rank">
-                {c.augments.map((a, i) => (
-                  <Link key={a.id} href={augmentHref(a.id) ?? `/tier-list?tab=augments&q=${encodeURIComponent(a.name)}`}>
-                    <span className="rank-i">{i + 1}</span>
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img className="icon" src={`/icons/augments/${a.id}.webp`} alt="" width={24} height={24} loading="lazy" />
-                    <span className="rank-name">{a.name}</span>
-                  </Link>
-                ))}
-              </div>
-            </section>
-          )}
           {c.partners.length > 0 && (
-            <section className="card span-5" data-accent="tier">
+            <section className="card span-all" data-accent="tier">
               <div className="card-head">
                 <h2>Best teammates</h2>
                 <Link href={`/synergy?team=${c.alias}`}>Team Builder →</Link>

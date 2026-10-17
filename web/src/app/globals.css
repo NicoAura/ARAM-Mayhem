@@ -6225,3 +6225,59 @@ th > button[data-tip] {
 .item-sim { margin-top: 1.5rem; }
 .item-sim .stat-row { margin-top: 0.25rem; margin-bottom: 0.75rem; }
 .item-sim .rank-v { white-space: nowrap; }
+
+/* Champion page: quick reference (skill order, build, augments) */
+.quickref { margin-top: 1.5rem; }
+.quickref-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr));
+  gap: 1.25rem 2rem;
+}
+.quickref-block { display: grid; gap: 0.6rem; align-content: start; min-width: 0; }
+.quickref-full { grid-column: 1 / -1; }
+.quickref-block h3 {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.quickref-note { color: var(--muted); font-weight: 500; letter-spacing: 0; text-transform: none; }
+.quickref-skills { display: flex; align-items: center; gap: 0.4rem; margin: 0; color: var(--muted); }
+.quickref-skills span { display: inline-flex; align-items: center; gap: 0.4rem; }
+.quickref-skills .chip { font-size: 1rem; min-width: 2rem; justify-content: center; color: var(--fg); }
+.quickref-levels { display: grid; gap: 3px; overflow-x: auto; font: 600 0.75rem/1 var(--mono); }
+.quickref-levels [role="row"] { display: grid; grid-template-columns: 1.25rem repeat(var(--n, 15), minmax(1.15rem, 1fr)); gap: 3px; min-width: 19rem; }
+.quickref-levels [role="columnheader"] { color: var(--muted); text-align: center; font-weight: 500; }
+.quickref-levels [role="rowheader"] { display: grid; place-items: center; color: var(--muted); }
+.quickref-levels [role="cell"] {
+  display: grid;
+  place-items: center;
+  height: 1.5rem;
+  border-radius: 5px;
+  background: color-mix(in srgb, var(--fg) 6%, transparent);
+}
+.quickref-levels [role="cell"][data-on] { background: var(--a, var(--accent)); color: var(--bg); }
+.quickref-levels [data-key="R"] [role="cell"][data-on] { background: var(--gold, var(--a)); }
+.quickref-items { display: flex; flex-wrap: wrap; gap: 0.75rem; margin: 0; padding: 0; list-style: none; counter-reset: item; }
+.quickref-items li,
+.quickref-items li a { display: grid; justify-items: center; align-content: start; gap: 0.3rem; }
+.quickref-items li { width: 4.5rem; font-size: 0.75rem; line-height: 1.2; text-align: center; }
+.quickref-items li a { color: inherit; text-decoration: none; }
+.quickref-items img { border-radius: 8px; }
+.quickref-items a:hover span { color: var(--a, var(--accent)); }
+.quickref-augs { display: grid; gap: 0.6rem; }
+.quickref-augs > div { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem 1rem; }
+.quickref-augs .chip { min-width: 5.5rem; justify-content: center; }
+.quickref-aug { display: inline-flex; align-items: center; gap: 0.4rem; color: inherit; text-decoration: none; }
+.quickref-aug:hover { color: var(--a, var(--accent)); }
+.quickref-aug img { border-radius: 6px; }
+@media (max-width: 600px) {
+  /* Keep the quick reference close to the top on phones. */
+  .showcase { height: 190px; }
+  .quickref-levels { font-size: 0.6875rem; }
+  .quickref-levels [role="row"] { grid-template-columns: 1rem repeat(var(--n, 15), minmax(0, 1fr)); gap: 2px; min-width: 0; }
+  .quickref-levels { gap: 2px; }
+  .quickref-levels [role="cell"] { height: 1.35rem; border-radius: 4px; }
+}
