@@ -36,9 +36,10 @@ jobs:
         run: |
           pip install xxhash pytest
           python3 web/scripts/fetch_assets.py --refresh
-          python3 guide/build_data.py
+          python3 guide/build_data.py --languages
           python3 guide/build_history.py
           python3 champions/build_data.py
+          python3 champions/build_i18n.py
       - uses: actions/setup-node@v4
         if: steps.check.outputs.status == 'ready'
         with:

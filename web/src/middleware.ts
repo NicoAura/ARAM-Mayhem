@@ -5,7 +5,7 @@ import { ownerFromCookie } from "@/lib/admin-session";
 
 // Per-visitor limits on the routes that cost something: browser error reports (/api/log, so they can't
 // flood the logs), signing in, and the writes (leaderboard submissions, public profiles, shared games,
-// account changes). On Cloudflare the counts come from the Worker's
+// account changes, builds sent to The Kitchen). On Cloudflare the counts come from the Worker's
 // rate-limit bindings (wrangler.jsonc "ratelimits"), shared by every request in a location; elsewhere,
 // or if a binding is missing, from this instance's memory, which is approximate.
 type Rule = { binding: string; limit: number; message: string };
@@ -28,6 +28,8 @@ function ruleFor(req: NextRequest): Rule | null {
     // Saving Favorites and settings happens as you click; the rest is signing in and account changes.
     return req.method === "PUT" ? SHARE : SIGNIN;
   }
+  // The Kitchen's community list and your own submissions are free to read; sending or removing one counts.
+  if (path.startsWith("/api/kitchen")) return req.method === "GET" ? null : WRITE;
   // GET /api/sim-scores is the public leaderboard, cached for a minute; only sending counts.
   if (req.method === "POST") return WRITE;
   return null;
@@ -53,10 +55,10 @@ function memoryAllows(key: string, limit: number) {
   return true;
 }
 
-// Owner-only files (wrangler.jsonc sends these paths through the Worker first): 3D models, ability
-// videos, the 3D replay's ability sounds, and the full Simulator replay with its sounds. The signed-in site owner gets the file from the
+// Owner-only files (wrangler.jsonc sends these paths through the Worker first): 3D models, the 3D
+// replay's ability sounds, and the full Simulator replay with its sounds. The signed-in site owner gets the file from the
 // static assets; everyone else a plain 404.
-const ADMIN_ONLY = /^\/(assets\/(models|clips|sounds)\/|embed\/simulator\/(full(\.html)?$|replay-data\/sounds\/))/;
+const ADMIN_ONLY = /^\/(assets\/(models|sounds)\/|embed\/simulator\/(full(\.html)?$|replay-data\/sounds\/))/;
 
 async function adminOnly(req: NextRequest) {
   if (!(await ownerFromCookie(req.cookies.get(SESSION_COOKIE)?.value))) {
@@ -98,4 +100,4 @@ export async function middleware(req: NextRequest) {
   );
 }
 
-export const config = { matcher: ["/assets/models/:path*", "/assets/clips/:path*", "/assets/sounds/:path*", "/embed/simulator/full", "/embed/simulator/full.html", "/embed/simulator/replay-data/sounds/:path*", "/api/log", "/api/sim-scores", "/api/profile", "/api/games", "/api/account", "/api/account/:path*"] };
+export const config = { matcher: ["/assets/models/:path*", "/assets/sounds/:path*", "/embed/simulator/full", "/embed/simulator/full.html", "/embed/simulator/replay-data/sounds/:path*", "/api/log", "/api/sim-scores", "/api/profile", "/api/games", "/api/account", "/api/account/:path*", "/api/kitchen/:path*"] };

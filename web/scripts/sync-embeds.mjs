@@ -52,7 +52,7 @@ for (const { name, from, exclude = [] } of embeds) {
 // Every image, sound, model, font and script the pages use is mirrored in public/assets/ (scripts/fetch_assets.py),
 // so links to the outside copies are pointed at the site's own. Pages that already use /assets/ are left as they are.
 // A rule with a third entry only applies when that file is in public/assets/ (in git, so in the deployed build):
-// until the clips, models or three.js are committed there, pages keep loading them from the outside copy.
+// until the models or three.js are committed there, pages keep loading them from the outside copy.
 const LOCAL = [
   [/https:\/\/raw\.communitydragon\.org\//g, "/assets/cd/"],
   [/https:\/\/ddragon\.leagueoflegends\.com\/cdn\//g, "/assets/dd/"],
@@ -66,7 +66,6 @@ const LOCAL = [
     /\/assets\/(cd\/[^"'`\s]*?\/augments\/icons\/[\w.-]+?)_small\.png/gi,
     (m, path) => (existsSync(join(web, "public", "assets", `${path}_large.png`)) ? `/assets/${path}_large.png` : m),
   ],
-  [/https:\/\/d28xe8vt774jo5\.cloudfront\.net\/champion-abilities/g, "/assets/clips", "clips"],
   [/https:\/\/cdn\.modelviewer\.lol\/lol\/models/g, "/assets/models", "models/models.json"],
   [/https:\/\/cdn\.jsdelivr\.net\/npm\/three@0\.160\.0\//g, "/assets/lib/three-0.160.0/", "lib/three-0.160.0/build/three.module.js"],
   [/<link[^>]+rel="preconnect"[^>]+fonts\.g(?:oogleapis|static)\.com[^>]*>\s*/g, ""],

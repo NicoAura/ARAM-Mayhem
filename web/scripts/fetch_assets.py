@@ -1,11 +1,10 @@
-"""Mirror every image, sound, model, clip, font and script the site's pages use into web/public/assets/,
+"""Mirror every image, sound, model, font and script the site's pages use into web/public/assets/,
 so the whole site loads from deeparam.com.
 
 Where things land (the full map, for the other tabs, is /mnt/project-files/website/assets-map.md):
   raw.communitydragon.org/<channel>/<path>   -> /assets/cd/<channel>/<path, lower case>   (channel: latest or pbe)
   ddragon.leagueoflegends.com/cdn/<v>/img/<p> -> /assets/dd/<v>/img/<p>                  (live patch's version only)
   ddragon.leagueoflegends.com/cdn/img/<p>     -> /assets/dd/img/<p>                      (splash, loading, tile art; runes)
-  ability preview clips <k>/ability_<k>_<s>1.webm -> /assets/clips/<k>/ability_<k>_<s>1.webm (re-encoded, 480 px)
   cdn.modelviewer.lol/lol/models/<id>/<n>/model.glb -> /assets/models/<id>/<n>/model.glb + models.json
                                                   (slimmed: the replay's clips only, 512 px WebP textures)
   Google Fonts (Bricolage Grotesque, Geist, Geist Mono) -> /assets/fonts/fonts.css
@@ -20,14 +19,13 @@ augment and item icons, challenge tokens and minimaps have no Data Dragon versio
 
 What gets fetched: every such URL written anywhere in the repo's pages and data, plus the sets pages build
 from ids at runtime (each champion's icon, pick quote, client JSON, splash and ability icons; items; augments;
-the Howling Abyss minimaps; the replay's ability icons, clips and models). /assets/manifest.json records the
+the Howling Abyss minimaps; the replay's ability icons and models). /assets/manifest.json records the
 live patch and what was fetched.
 
 Usage (from the repo root):
   python3 web/scripts/fetch_assets.py           # icons, splashes, sounds, JSON, fonts, three.js (new files only)
   python3 web/scripts/fetch_assets.py --refresh # also re-download files already present (after a patch),
                                                 #   and refresh the translated names (fetch_names.py)
-  python3 web/scripts/fetch_assets.py --clips   # + ability clips (needs ffmpeg)
   python3 web/scripts/fetch_assets.py --models  # + 3D models (needs node and the glTF tools, see below)
 
 --models runs simulator/tools/build_models.mjs, which needs:
@@ -45,7 +43,6 @@ OUT = os.path.join(WEB, "public", "assets")
 CD = "https://raw.communitydragon.org"
 GD = "plugins/rcp-be-lol-game-data/global/default"
 DD = "https://ddragon.leagueoflegends.com"
-CLIPS = "https://d28xe8vt774jo5.cloudfront.net/champion-abilities"
 FONTS = ("https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700"
          "&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&display=swap")
 THREE = "https://cdn.jsdelivr.net/npm/three@0.160.0"
@@ -364,47 +361,6 @@ def replay_index():
         return json.load(f)
 
 
-def fetch_clips(force):
-    """Each champion's ability preview clips, re-encoded to 480 px VP9 (about 1/20 the size)."""
-    if not shutil.which("ffmpeg"):
-        sys.exit("--clips needs ffmpeg")
-    jobs = []
-    for c in replay_index()["champions"]:
-        k = str(c["key"]).zfill(4)
-        for slot in ("Q", "W", "E", "R"):
-            jobs.append((k, f"ability_{k}_{slot}1.webm"))
-
-    def one(job):
-        k, name = job
-        dst = os.path.join(OUT, "clips", k, name)
-        if os.path.exists(dst) and not force:
-            return 0, None
-        try:
-            raw = fetch(f"{CLIPS}/{k}/{name}")
-        except Exception as e:  # noqa: BLE001
-            return 0, f"{k}/{name}: {e}"
-        os.makedirs(os.path.dirname(dst), exist_ok=True)
-        with tempfile.TemporaryDirectory() as tmp:
-            src, out = os.path.join(tmp, "in.webm"), os.path.join(tmp, "out.webm")
-            open(src, "wb").write(raw)
-            r = subprocess.run(["ffmpeg", "-y", "-v", "error", "-i", src, "-vf", "scale=480:-2", "-c:v", "libvpx-vp9",
-                                "-crf", "42", "-b:v", "0", "-row-mt", "1", "-deadline", "good", "-cpu-used", "4",
-                                "-c:a", "libopus", "-b:a", "48k", out], capture_output=True)
-            if r.returncode:
-                return 0, f"{k}/{name}: ffmpeg failed"
-            shutil.move(out, dst)
-        return 1, None
-
-    new = errors = 0
-    with cf.ThreadPoolExecutor(max(2, (os.cpu_count() or 4) // 2)) as pool:
-        for n, err in pool.map(one, jobs):
-            new += n
-            if err:
-                errors += 1
-                print("  clips:", err)
-    print(f"clips: {len(jobs)} clips, {new} encoded, {errors} missing")
-
-
 def fetch_models(force):
     mods = os.environ.get("GLTF_MODULES", "/tmp/gltf/node_modules")
     out = os.path.join(OUT, "models")
@@ -459,7 +415,6 @@ def split_large():
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--refresh", action="store_true", help="download files that already exist again")
-    ap.add_argument("--clips", action="store_true", help="also mirror ability preview clips (ffmpeg)")
     ap.add_argument("--models", action="store_true", help="also build the 3D champion models")
     args = ap.parse_args()
     os.makedirs(OUT, exist_ok=True)
@@ -518,8 +473,6 @@ def main():
             shutil.rmtree(os.path.join(OUT, "dd", old))
     fetch_fonts()
     fetch_three()
-    if args.clips:
-        fetch_clips(args.refresh)
     if args.models:
         fetch_models(args.refresh)
     write_large_icon_list()
