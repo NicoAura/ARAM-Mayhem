@@ -34,6 +34,12 @@ export const sections = [
     pr: 0,
   },
   {
+    href: "/draft",
+    label: text("tab./draft.label", "Augment Draft"),
+    body: text("tab./draft.body", "Practice augment picks with rerolls and see how often players on your champion take each one."),
+    pr: 0,
+  },
+  {
     href: "/synergy",
     label: text("tab./synergy.label", "Team Builder"),
     body: text("tab./synergy.body", "Pick your team to see each pair's win rate together and who fits it best."),

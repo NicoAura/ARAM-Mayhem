@@ -14,6 +14,7 @@ const GO: [string, string, string][] = [
   ["p", "/pbe", "PBE"],
   ["c", "/compare", "Compare"],
   ["b", "/builder", "Build Editor"],
+  ["d", "/draft", "Augment Draft"],
   ["m", "/synergy", "Team Builder"],
   ["r", "/patches", "Patch Recaps"],
   ["i", "/info", "Info"],
