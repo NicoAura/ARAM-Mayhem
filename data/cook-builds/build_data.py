@@ -278,11 +278,10 @@ def main():
             "champion_icon": site + chef["champion_icon"],
             "augments": [{"name": r["name"], "rarity": r["rarity"], "core": r["core"], "text": r["text"],
                           "icon": site + r["icon"]} for r in chef["augments"]],
-            "href": "/lab#chefs-special",
-            "archive_href": "/lab#chef-archive",
-            # Links stay on /lab until the site serves /kitchen (it redirects /lab there).
+            "href": "/kitchen#chefs-special",
+            "archive_href": "/kitchen#chef-archive",
             # Sharing: the dated link keeps opening this special after it is replaced; the image is its link preview.
-            "share_href": "/lab#chefs-special-" + chef["chef"],
+            "share_href": "/kitchen#chefs-special-" + chef["chef"],
             "share_image": site + "share/" + chef["id"] + ".png",
             "item_ids": chef["item_ids"],
             "i18n": chef_i18n(chef),
