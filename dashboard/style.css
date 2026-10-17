@@ -207,3 +207,6 @@ td.delta-up { color: var(--good); }
 td.delta-down { color: var(--bad); }
 td.delta-up::before { content: "▲ "; font-size: .7em; }
 td.delta-down::before { content: "▼ "; font-size: .7em; }
+.share-toggle { display: inline-flex; align-items: center; gap: 8px; margin-top: 10px; font-weight: 600; cursor: pointer; }
+.share-toggle input { width: 18px; height: 18px; accent-color: var(--accent); }
+#share-card .sub { max-width: 80ch; }

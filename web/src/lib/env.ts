@@ -22,8 +22,13 @@ export function bindingNames(): string[] {
   }
 }
 
+type D1Statement = {
+  run(): Promise<unknown>;
+  first<T = Record<string, unknown>>(): Promise<T | null>;
+};
 type D1 = {
-  prepare(sql: string): { bind(...v: unknown[]): { run(): Promise<unknown>; first<T = Record<string, unknown>>(): Promise<T | null> } };
+  prepare(sql: string): { bind(...v: unknown[]): D1Statement };
+  batch(statements: D1Statement[]): Promise<unknown>;
 };
 
 /** A D1 database binding (wrangler.jsonc), or null outside Cloudflare. */
