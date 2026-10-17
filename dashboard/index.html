@@ -49,6 +49,11 @@
     <div class="stats-row" id="tiles"></div>
 
     <section class="card">
+      <div class="card-h"><h3>Achievements</h3><span class="foot" id="n-badges"></span></div>
+      <div id="badges" class="badges"></div>
+    </section>
+
+    <section class="card">
       <div class="card-h"><h3>Win rate by month</h3></div>
       <div id="chart" class="chart"></div>
     </section>
@@ -88,9 +93,47 @@
       </section>
     </div>
 
+    <div class="two-col">
+      <section class="card">
+        <div class="card-h"><h3>Win rate by game length</h3><span class="foot" id="n-length"></span></div>
+        <div id="wr-length" class="wrbars"></div>
+      </section>
+      <section class="card">
+        <div class="card-h"><h3>Boots</h3><span class="foot">Boots in your final items</span></div>
+        <div id="wr-boots" class="wrbars"></div>
+      </section>
+    </div>
+
+    <section class="card">
+      <div class="card-h"><h3>Personal records</h3><span class="foot">All games</span></div>
+      <div id="records" class="records"></div>
+    </section>
+
+    <div class="two-col">
+      <section class="card">
+        <div class="card-h"><h3>Learning curve</h3><span class="foot">Win rate by how many times you'd played the champion · all games</span></div>
+        <div class="tbl-wrap"><table id="t-curve"></table></div>
+      </section>
+      <section class="card">
+        <div class="card-h"><h3>Best augment pairs</h3>
+          <span class="foot">At least <input type="number" id="f-minpair" value="3" min="1" class="tiny" aria-label="Minimum games"> games together</span></div>
+        <div class="tbl-wrap"><table id="t-pairs"></table></div>
+      </section>
+    </div>
+
     <section class="card">
       <div class="card-h"><h3>Recent games</h3><span class="foot" id="n-games"></span></div>
       <div class="tbl-wrap"><table id="t-games"></table></div>
+    </section>
+
+    <section class="card" id="profile-card" hidden>
+      <div class="card-h"><h3>Public page</h3></div>
+      <p class="sub" id="profile-text"></p>
+      <p><a id="profile-link" target="_blank" rel="noopener" hidden></a></p>
+      <div class="profile-actions">
+        <button id="profile-publish" type="button" class="btn primary">Publish my page</button>
+        <button id="profile-remove" type="button" class="btn" hidden>Remove page</button>
+      </div>
     </section>
   </main>
 

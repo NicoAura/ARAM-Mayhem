@@ -10,6 +10,7 @@ const state = {
   augRarity: {},    // augmentId -> kSilver | kGold | kPrismatic
   owner: null,
   sample: false,
+  boots: new Set(), // item ids that count as boots
 };
 
 // A page can ship name tables and an example archive ahead of time.
@@ -48,7 +49,7 @@ async function loadText(text, { sample = false } = {}) {
   $("sample-note").hidden = !sample;
   setupFilters();
   render();
-  loadNames().then(render);
+  Promise.all([loadNames(), loadItems()]).then(render);
 }
 
 function findGames(data) {
@@ -117,10 +118,23 @@ function normalize(g, owner) {
     // [seconds, x, y, killerId, victimId] per kill; undefined until synced
     killMap: g.killMap,
     pid: p.participantId,
+    penta: s.pentaKills || 0,
+    quadra: s.quadraKills || 0,
+    spree: s.largestKillingSpree || 0,
+    heal: s.totalHeal || 0,
+    taken: s.totalDamageTaken || 0,
+    items: [0, 1, 2, 3, 4, 5, 6].map((i) => s["item" + i]).filter((x) => x > 0),
   };
 }
 
 // Champion and augment names; if unavailable the page falls back to ids.
+async function loadItems() {
+  try {
+    const items = await (await fetch("/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/items.json")).json();
+    for (const it of items) if ((it.categories || []).includes("Boots") && !(it.id >= 550000 && it.id < 560000)) state.boots.add(it.id);
+  } catch (e) { console.warn("item data unavailable", e); }
+}
+
 async function loadNames() {
   try {
     const champs = await (await fetch("/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-summary.json")).json();
@@ -170,7 +184,7 @@ function setupFilters() {
   $("account").textContent = `${name ? name + " · " : ""}${state.games.length} games, ${fmtDate(first)} to ${fmtDate(last)}`;
   if (filtersReady) return;
   filtersReady = true;
-  for (const id of ["f-patch", "f-queue", "f-from", "f-to", "f-champ", "f-minaug"]) $(id).addEventListener("input", render);
+  for (const id of ["f-patch", "f-queue", "f-from", "f-to", "f-champ", "f-minaug", "f-minpair"]) $(id).addEventListener("input", render);
   $("f-reset").addEventListener("click", () => {
     for (const id of ["f-queue", "f-from", "f-to", "f-champ"]) $(id).value = "";
     $("f-patch").value = latestPatch;
@@ -199,10 +213,16 @@ const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&l
 function render() {
   const games = filtered();
   renderTiles(games);
+  renderBadges(state.games);
   renderChart(games);
   renderKillMap(games);
   renderChamps(games);
   renderAugs(games);
+  renderLength(games);
+  renderBoots(games);
+  renderRecords(state.games);
+  renderCurve(state.games);
+  renderPairs(games);
   renderGames(games);
 }
 
@@ -224,6 +244,61 @@ function renderTiles(games) {
   ];
   $("tiles").innerHTML = tiles.map(([l, v, s, c]) =>
     `<div class="tile ${c || ""}"><div class="label">${l}</div><div class="value">${v}</div><div class="sub">${s}</div></div>`).join("");
+}
+
+// Achievements count every imported game, whatever the filters show.
+const BADGES = [
+  ["Pentakill", "Get a pentakill", (G) => count(G, (g) => g.penta > 0), 1],
+  ["Quadra", "Get a quadra kill", (G) => count(G, (g) => g.quadra + g.penta > 0), 1],
+  ["Legendary", "Kill 8 champions without dying", (G) => max(G, (g) => g.spree), 8],
+  ["Massacre", "Get 25 kills in one game", (G) => max(G, (g) => g.kills), 25],
+  ["Helping hand", "Get 40 assists in one game", (G) => max(G, (g) => g.assists), 40],
+  ["Untouchable", "Win a game without dying", (G) => count(G, (g) => g.win && g.deaths === 0), 1],
+  ["Heavy hitter", "Deal 75,000 damage to champions in one game", (G) => max(G, (g) => g.damage), 75000],
+  ["Frontline", "Take 80,000 damage in one game", (G) => max(G, (g) => g.taken), 80000],
+  ["Speedrun", "Win a game in under 15 minutes", (G) => count(G, (g) => g.win && g.duration > 0 && g.duration < 900), 1],
+  ["Marathon", "Play a game over 30 minutes", (G) => count(G, (g) => g.duration >= 1800), 1],
+  ["Hot streak", "Win 5 games in a row", (G) => streak(G), 5],
+  ["Unstoppable", "Win 10 games in a row", (G) => streak(G), 10],
+  ["Main", "Win 10 games on one champion", (G) => bestChamp(G, true), 10],
+  ["One-trick", "Play 50 games on one champion", (G) => bestChamp(G, false), 50],
+  ["Explorer", "Play 50 different champions", (G) => new Set(G.map((g) => g.champId)).size, 50],
+  ["Collector", "Pick 100 different augments", (G) => new Set(G.flatMap((g) => g.augs)).size, 100],
+  ["Regular", "Play 100 games", (G) => G.length, 100],
+  ["Veteran", "Play 500 games", (G) => G.length, 500],
+  ["Winner", "Win 250 games", (G) => count(G, (g) => g.win), 250],
+];
+
+function count(G, f) { return G.reduce((t, g) => t + (f(g) ? 1 : 0), 0); }
+function max(G, f) { return G.reduce((m, g) => Math.max(m, f(g)), 0); }
+function streak(G) {
+  let best = 0, run = 0;
+  for (const g of [...G].sort((a, b) => a.time - b.time)) { run = g.win ? run + 1 : 0; best = Math.max(best, run); }
+  return best;
+}
+function bestChamp(G, wins) {
+  const m = new Map();
+  for (const g of G) if (!wins || g.win) m.set(g.champId, (m.get(g.champId) || 0) + 1);
+  return Math.max(0, ...m.values());
+}
+
+const badgeRows = (G) => BADGES.map(([name, desc, f, goal]) => ({ name, desc, goal, have: f(G) }));
+
+function renderBadges(G) {
+  const rows = badgeRows(G);
+  const earned = rows.filter((r) => r.have >= r.goal).length;
+  $("n-badges").textContent = `${earned} of ${rows.length} earned`;
+  rows.sort((a, b) => (b.have >= b.goal) - (a.have >= a.goal) || b.have / b.goal - a.have / a.goal);
+  $("badges").innerHTML = rows.map((r) => {
+    const done = r.have >= r.goal;
+    const prog = Math.min(1, r.have / r.goal);
+    const label = r.goal === 1 ? (done ? `${r.have.toLocaleString()}×` : "Not yet") : `${Math.min(r.have, r.goal).toLocaleString()} / ${r.goal.toLocaleString()}`;
+    return `<div class="badge${done ? " done" : ""}" title="${esc(r.desc)}">
+      <div class="b-name">${done ? "★ " : ""}${esc(r.name)}</div>
+      <div class="b-desc">${esc(r.desc)}</div>
+      <div class="b-bar"><span style="width:${(prog * 100).toFixed(1)}%"></span></div>
+      <div class="b-prog">${label}</div></div>`;
+  }).join("");
 }
 
 function renderChart(games) {
@@ -427,6 +502,115 @@ function renderAugs(games) {
   ], rows, 2);
 }
 
+// ---------- game length, boots, records, learning curve, augment pairs ----------
+
+const mmss = (sec) => `${Math.floor(sec / 60)}:${String(Math.round(sec % 60)).padStart(2, "0")}`;
+
+// Rows of {label, n, w} drawn as win-rate bars; the dashed line marks 50%.
+function wrBars(id, rows) {
+  const shown = rows.filter((r) => r.n);
+  $(id).innerHTML = shown.length ? shown.map((r) => {
+    const rate = r.w / r.n;
+    return `<div class="wrbar"><span class="wb-label">${esc(r.label)}</span>
+      <span class="wb-track"><span class="wb-fill ${wrClass(rate)}" style="width:${(rate * 100).toFixed(1)}%"></span></span>
+      <span class="wb-v ${wrClass(rate)}">${pct(rate)}</span><span class="wb-n">${r.n.toLocaleString()}</span></div>`;
+  }).join("") : `<p class="foot">No games in this view.</p>`;
+}
+
+const LENGTHS = [[0, 900, "Under 15 min"], [900, 1080, "15–18 min"], [1080, 1260, "18–21 min"], [1260, 1440, "21–24 min"], [1440, 1e9, "24 min or more"]];
+
+function renderLength(games) {
+  const timed = games.filter((g) => g.duration > 0);
+  $("n-length").textContent = timed.length ? `Average ${mmss(sum(timed, (g) => g.duration) / timed.length)}` : "";
+  wrBars("wr-length", LENGTHS.map(([lo, hi, label]) => {
+    const G = timed.filter((g) => g.duration >= lo && g.duration < hi);
+    return { label, n: G.length, w: count(G, (g) => g.win) };
+  }));
+}
+
+function renderBoots(games) {
+  if (!state.boots.size) return wrBars("wr-boots", []);
+  const G = games.filter((g) => g.items && g.items.length);
+  const has = (g) => g.items.some((i) => state.boots.has(i));
+  wrBars("wr-boots", [
+    { label: "With boots", n: count(G, has), w: count(G, (g) => g.win && has(g)) },
+    { label: "No boots", n: count(G, (g) => !has(g)), w: count(G, (g) => g.win && !has(g)) },
+  ]);
+}
+
+const RECORDS = [
+  ["Most kills", (g) => g.kills, (v) => v],
+  ["Most assists", (g) => g.assists, (v) => v],
+  ["Most deaths", (g) => g.deaths, (v) => v],
+  ["Most damage", (g) => g.damage, (v) => v.toLocaleString()],
+  ["Most damage taken", (g) => g.taken, (v) => v.toLocaleString()],
+  ["Most healing", (g) => g.heal, (v) => v.toLocaleString()],
+  ["Longest killing spree", (g) => g.spree, (v) => v],
+  ["Best KDA", (g) => (g.kills + g.assists) / Math.max(1, g.deaths), (v) => v.toFixed(2)],
+  ["Longest game", (g) => g.duration, mmss],
+  ["Fastest win", (g) => (g.win && g.duration > 0 ? -g.duration : -Infinity), (v) => mmss(-v)],
+];
+
+function renderRecords(G) {
+  $("records").innerHTML = RECORDS.map(([label, f, fmt]) => {
+    let best = null, bv = -Infinity;
+    for (const g of G) { const v = f(g); if (v > bv) { bv = v; best = g; } }
+    if (!best || !Number.isFinite(bv) || bv <= 0 && !label.startsWith("Fastest")) return "";
+    return `<div class="record"><div class="r-v">${fmt(bv)}</div><div class="r-label">${label}</div>
+      <div class="r-sub">${esc(champName(best))} · ${fmtDate(new Date(best.time))}</div></div>`;
+  }).join("");
+}
+
+const CURVE = [[1, 5, "Games 1–5"], [6, 10, "6–10"], [11, 20, "11–20"], [21, 1e9, "21+"]];
+
+function renderCurve(G) {
+  const byChamp = new Map();
+  for (const g of [...G].sort((a, b) => a.time - b.time)) {
+    const list = byChamp.get(g.champId) || [];
+    list.push(g);
+    byChamp.set(g.champId, list);
+  }
+  const rows = [...byChamp.values()].filter((l) => l.length >= 10).map((l) => {
+    const r = { sample: l[0], n: l.length, b: CURVE.map(([lo, hi]) => l.slice(lo - 1, hi)) };
+    const first = r.b[0], last = r.b.filter((x) => x.length).at(-1);
+    r.change = count(last, (g) => g.win) / last.length - count(first, (g) => g.win) / first.length;
+    return r;
+  });
+  const cell = (i) => ({
+    label: CURVE[i][2], get: (r) => (r.b[i].length ? count(r.b[i], (g) => g.win) / r.b[i].length : -1),
+    fmt: (r) => (r.b[i].length ? pct(count(r.b[i], (g) => g.win) / r.b[i].length) : "–"),
+    cls: (r) => (r.b[i].length >= 3 ? wrClass(count(r.b[i], (g) => g.win) / r.b[i].length) : ""),
+  });
+  table("t-curve", [
+    { label: "Champion", get: (r) => champName(r.sample), fmt: (r) => esc(champName(r.sample)) },
+    { label: "Matches", get: (r) => r.n },
+    cell(0), cell(1), cell(2), cell(3),
+    { label: "Change", get: (r) => r.change, fmt: (r) => `${r.change > 0 ? "+" : ""}${(r.change * 100).toFixed(1)}`,
+      cls: (r) => (r.change > 0 ? "delta-up" : r.change < 0 ? "delta-down" : "") },
+  ], rows, 1);
+}
+
+function renderPairs(games) {
+  const min = +$("f-minpair").value || 1;
+  const map = new Map();
+  for (const g of games) {
+    const a = [...new Set(g.augs)].sort((x, y) => x - y);
+    for (let i = 0; i < a.length; i++) for (let j = i + 1; j < a.length; j++) {
+      const k = a[i] + "-" + a[j];
+      const r = map.get(k) || { a: a[i], b: a[j], n: 0, w: 0 };
+      r.n++; r.w += g.win ? 1 : 0;
+      map.set(k, r);
+    }
+  }
+  // The 100 best pairs; ties go to the pair seen in more games
+  const rows = [...map.values()].filter((r) => r.n >= min).sort((x, y) => y.w / y.n - x.w / x.n || y.n - x.n).slice(0, 100);
+  table("t-pairs", [
+    { label: "Augments", get: (r) => augName(r.a) + augName(r.b), fmt: (r) => `${esc(augName(r.a))} + ${esc(augName(r.b))}` },
+    { label: "Games", get: (r) => r.n },
+    { label: "Win rate", get: (r) => r.w / r.n + r.n / 1e6, fmt: (r) => pct(r.w / r.n), cls: (r) => wrClass(r.w / r.n) },
+  ], rows, 2);
+}
+
 function renderGames(games) {
   $("n-games").textContent = games.length > 200 ? `Latest 200 of ${games.length.toLocaleString()} matches` : `${games.length.toLocaleString()} matches`;
   table("t-games", [
@@ -531,5 +715,75 @@ async function setupSync() {
       if (res.ok) await loadText(await res.text());
     } catch (e) { /* no archive yet */ }
   }
-  setupSync();
+  await setupSync();
+  setupProfile();
 })();
+
+// ---------- public page ----------
+// Off unless the player publishes. Only totals, top champions and earned achievements leave the computer.
+
+const profileCard = $("profile-card");
+const profileText = $("profile-text");
+const profileLink = $("profile-link");
+const profileBtns = { publish: $("profile-publish"), remove: $("profile-remove") };
+
+function profileSummary(G) {
+  const champs = new Map();
+  for (const g of G) {
+    const c = champs.get(g.champId) || { id: g.champId, n: 0, w: 0, k: 0, d: 0, a: 0 };
+    c.n++; c.w += g.win ? 1 : 0; c.k += g.kills; c.d += g.deaths; c.a += g.assists;
+    champs.set(g.champId, c);
+  }
+  const n = G.length;
+  return {
+    games: n, wins: sum(G, (g) => g.win),
+    kills: sum(G, (g) => g.kills), deaths: sum(G, (g) => g.deaths), assists: sum(G, (g) => g.assists),
+    damage: Math.round(sum(G, (g) => g.damage) / n), duration: Math.round(sum(G, (g) => g.duration) / n),
+    first: Math.min(...G.map((g) => g.time)), last: Math.max(...G.map((g) => g.time)),
+    champions: [...champs.values()].sort((a, b) => b.n - a.n).slice(0, 10),
+    badges: badgeRows(G).filter((r) => r.have >= r.goal).map((r) => r.name),
+  };
+}
+
+function showProfile(p) {
+  const on = !!(p && p.published);
+  profileText.textContent = on
+    ? "Your public page is live. Update it after importing new games, or remove it any time."
+    : "Off. Publish a public page with your totals, top champions and achievements. Your individual games stay on this computer.";
+  profileLink.hidden = !on;
+  if (on) { profileLink.href = p.url; profileLink.textContent = p.url.replace(/^https?:\/\//, ""); }
+  profileBtns.publish.textContent = on ? "Update my page" : "Publish my page";
+  profileBtns.remove.hidden = !on;
+}
+
+async function profileCall(action, data) {
+  const res = await fetch("api/profile", {
+    method: "POST", headers: { "X-Mayhem": "1", "Content-Type": "application/json" },
+    body: JSON.stringify({ action, data }),
+  });
+  const j = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error(j.error || "Something went wrong. Try again.");
+  return j;
+}
+
+async function profileAction(action) {
+  if (action === "remove" && !confirm("Remove your public page? Anyone with the link will see it's gone.")) return;
+  for (const b of Object.values(profileBtns)) b.disabled = true;
+  try {
+    showProfile(await profileCall(action, action === "publish" ? profileSummary(state.games) : undefined));
+  } catch (e) {
+    profileText.textContent = e.message;
+  } finally {
+    for (const b of Object.values(profileBtns)) b.disabled = false;
+  }
+}
+profileBtns.publish.addEventListener("click", () => profileAction("publish"));
+profileBtns.remove.addEventListener("click", () => profileAction("remove"));
+
+async function setupProfile() {
+  // Publishing goes through the helper, so the card only shows when it's running and there are games
+  if (!helperOnline || state.sample || !(state.games || []).length) return;
+  profileCard.hidden = false;
+  showProfile(null);
+  try { showProfile(await profileCall("status")); } catch (e) { /* stays "Off" until they try */ }
+}

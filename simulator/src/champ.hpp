@@ -207,9 +207,13 @@ struct Library {
 enum Source : int { SrcAttack = 0, SrcQ, SrcW, SrcE, SrcR, SrcItems, SrcPassive, SrcCount };
 extern const char* const kSourceNames[SrcCount];
 
+constexpr double kShortFight = 6.0, kLongFight = 20.0;
+
 struct Result {
     double duration = 0, totalDamage = 0, primaryDamage = 0, timeAlive = 0, damageTaken = 0, shielded = 0;
     double exposure = 0;  // share of the enemies' damage that could reach you, averaged over the fight
+    double firstHit = -1; // when you first deal damage
+    double inShort = 0, inLong = 0;  // damage dealt in the kShortFight and kLongFight seconds from then
     int kills = 0;
     bool died = false;
     std::array<double, SrcCount> bySource{};
@@ -254,6 +258,9 @@ struct Summary {
     double meanDps = 0, ci95 = 0, p5 = 0, median = 0, p95 = 0;
     double singleTargetDps = 0, killsPerMinute = 0, survivalRate = 0, meanTimeAlive = 0;
     double damageTakenPerSec = 0;  // damage you take per second alive, after your resists
+    // Short against long fights: damage per second over the first kShortFight and the first
+    // kLongFight seconds from your first hit (going down early counts against both).
+    double shortDps = 0, longDps = 0;
     std::array<double, SrcCount> shareBySource{};
 };
 Summary summarize(const std::vector<Result>& results);
