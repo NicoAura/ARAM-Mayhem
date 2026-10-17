@@ -1,98 +1,10 @@
 {
-  "_note": "Hand-written cook builds. Every build flips what its champion is known for (Nico, 2026-10-16: keep only builds like Melee Bomb Man Ziggs). build_data.py adds augment text, Mayhem win rates and simulator numbers and writes data.js. The first `core` augments decide the build's tier; the rest are flex picks. `augment_text` replaces the generated text for augments whose tooltip numbers the game data doesn't fill in. A build with a `chef` date was the Chef's Special that day; the page features the newest one (a new pick is added every day).",
+  "_note": "Chef Specials, one per day (Nico, 2026-10-17: The Kitchen shows only Chef Specials). Each build's `chef` date is the day it was served; never remove or redate one, since every dated build is the archive. build_data.py adds augment text and icons and writes data.js, chef.js and chefs-special.json.",
   "augment_text": {
     "With Haste": "Gain Move Speed equal to a share of your Ability Haste.",
     "Overloaded": "Using another Ability resets the cooldown of the chosen ability."
   },
   "builds": [
-    {
-      "id": "ziggs-melee",
-      "champion": "Ziggs",
-      "title": "Melee Bomb Man",
-      "augments": [
-        "Draw Your Sword",
-        "Dual Wield",
-        "Firebrand",
-        "Juiced"
-      ],
-      "core": 4,
-      "items": [
-        "Berserker's Greaves",
-        "Nashor's Tooth",
-        "Guinsoo's Rageblade",
-        "Blade of The Ruined King",
-        "Wit's End",
-        "Riftmaker"
-      ],
-      "why": "Ziggs gives up his bombs-from-a-mile-away identity and walks up to stab people. Draw Your Sword turns his range into AD, Health, Attack Speed and Lifesteal, and his passive Short Fuse still blows up on his next melee hit. Dual Wield, Firebrand and Juiced pile on-hit magic damage onto every swing.",
-      "play": "Walk at them. Throw a bomb only when you're already standing on them."
-    },
-    {
-      "id": "darius-sniper",
-      "champion": "Darius",
-      "title": "Noxian Sniper",
-      "augments": [
-        "Scoped Weapons",
-        "Scopier Weapons",
-        "Scopiest Weapons",
-        "Typhoon"
-      ],
-      "core": 3,
-      "items": [
-        "Berserker's Greaves",
-        "Kraken Slayer",
-        "Blade of The Ruined King",
-        "Guinsoo's Rageblade",
-        "Wit's End",
-        "Sterak's Gage"
-      ],
-      "why": "The reverse of Melee Bomb Man. Melee champions get more from the range augments than ranged ones (75, 150 and 250), so all three together add 475 range and put Darius's autos at 650, the same as Caitlyn's. He stacks Hemorrhage from across the fight, and Typhoon fires a second shot at another target.",
-      "play": "Stand at the back and auto. Walk up only to Guillotine whoever has five stacks."
-    },
-    {
-      "id": "veigar-marksman",
-      "champion": "Veigar",
-      "title": "Tiny Marksman",
-      "augments": [
-        "escAPADe",
-        "Dual Wield",
-        "Critical Rhythm",
-        "It's Critical"
-      ],
-      "core": 4,
-      "items": [
-        "Berserker's Greaves",
-        "Rabadon's Deathcap",
-        "Infinity Edge",
-        "Kraken Slayer",
-        "Lord Dominik's Regards",
-        "Phantom Dancer"
-      ],
-      "why": "Veigar's whole game is stacking infinite Ability Power. escAPADe turns every point of it into 0.6 bonus AD (plus 15% more AD), so his Q stacks and even Rabadon's Deathcap now feed his auto attacks. Dual Wield, Critical Rhythm and It's Critical make him a crit marksman with a yordle hat.",
-      "play": "Farm Q stacks like normal, then right-click everyone. Cage still works."
-    },
-    {
-      "id": "blitzcrank-hook-line-kraken",
-      "champion": "Blitzcrank",
-      "title": "Hook, Line and Kraken",
-      "augments": [
-        "Ethereal Weapon",
-        "Mystic Punch",
-        "Juiced",
-        "Firebrand"
-      ],
-      "core": 3,
-      "items": [
-        "Berserker's Greaves",
-        "Nashor's Tooth",
-        "Kraken Slayer",
-        "Blade of The Ruined King",
-        "Wit's End",
-        "Guinsoo's Rageblade"
-      ],
-      "why": "Ethereal Weapon makes Rocket Grab apply on-hit effects, so the hook lands like a fully built attack-speed carry's auto: Blade of the Ruined King takes a chunk of current health, Kraken Slayer, Wit's End, Nashor's and Juiced all proc, and Firebrand starts a burn before the target has even arrived. Mystic Punch then turns that on-hit into cooldown back on the hook. The support robot is now the team's on-hit ADC, and his best attack has 1,100 range.",
-      "play": "Turn on Overdrive, hook someone, then Power Fist them as they land so they eat two rounds of on-hit. Pop Static Field to proc everything on everyone nearby, and keep auto-attacking until Mystic Punch hands the hook back."
-    },
     {
       "id": "tryndamere-bloodlust-doctor",
       "champion": "Tryndamere",
