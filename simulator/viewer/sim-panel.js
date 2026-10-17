@@ -12,6 +12,7 @@
       "retarget_delay", "r_ready_chance"]],
     ["Positions and skillshots", ["start_distance", "enemy_spread", "reaction_time", "aim_lead"]],
     ["Crowd control and casting", ["cc_min", "cc_max", "combo_order"]],
+    ["Training dummy", ["target_hp", "target_armor", "target_mr"]],
   ];
   const ENEMY_STATS = [
     ["hp", "HP", 1], ["armor", "Armor", 1], ["mr", "MR", 1], ["damage_share", "Dmg share", 0.01],
@@ -83,13 +84,22 @@
     if (meta && (changedChamp || !isCustom)) fillFromTrace();
     runLinked();
   };
-  // A leaderboard link (#Jinx&items=…&augs=…) loads that build into the slots and simulates it, once.
+  // The Survival leaderboard's enemy, the same for every champion: Ashe (the most picked enemy) with her
+  // most popular build, and Teemo for Ashe herself. Keep in step with tools/verify_leaderboard.py.
+  const SURVIVAL = { enemy: "Ashe", fallback: "Teemo" };
+  const survivalEnemy = (id) => (id.toLowerCase() === SURVIVAL.enemy.toLowerCase() ? SURVIVAL.fallback : SURVIVAL.enemy);
+  // A leaderboard link (#Jinx&items=…&augs=…) loads that build into the slots and simulates it, once,
+  // against the Survival enemy, as the leaderboard did.
   function runLinked() {
     const l = window.linkedBuild;
     if (!l || !meta || !champ || champ.id.toLowerCase() !== l.champion) return;
     window.linkedBuild = null;
     trace = { build: { items: l.items.map((key) => ({ key })), augments: l.augs.map((key) => ({ key })) }, fight: trace.fight };
     fillFromTrace();
+    const foe = survivalEnemy(champ.id);
+    picks = [withBuild({ id: foe, stats: {} }), ...picks.filter((p) => p.id !== foe)].slice(0, 5);
+    $("emodePick").checked = true;
+    renderEnemies();
     run(true);
   }
 
@@ -188,12 +198,30 @@
         "To fight a particular champion or change its stats, items or augments, open Advanced settings.";
     else if (mode === "pick")
       p.textContent = `Every fight is against the ${word} set under Advanced settings.`;
-    else {
-      for (const k of ["target_hp", "target_armor", "target_mr"]) box.append(field(meta.settings.find((s) => s.key === k)));
-      p.textContent = "Dummies stand still and don't hit back.";
-    }
+    else p.id = "dummyNote";
     box.append(p);
+    if (mode === "dummy") dummyNote();
     renderEnemyCards();
+  }
+  // What the dummies are: the average enemy unless changed under Advanced settings.
+  function dummyNote() {
+    const p = $("dummyNote");
+    if (!p || !meta) return;
+    const val = (k) => {
+      const s = meta.settings.find((x) => x.key === k);
+      return Math.round(fieldValues[k] !== undefined ? fieldValues[k] : s ? s.default : 0).toLocaleString();
+    };
+    const changed = ["target_hp", "target_armor", "target_mr"].some((k) => fieldValues[k] !== undefined);
+    const n = teamSize();
+    p.textContent = `${n === 1 ? "One dummy" : n + " dummies"} with ${val("target_hp")} HP, ${val("target_armor")} armor and ` +
+      `${val("target_mr")} magic resist${changed ? "" : ", the average enemy's"}. They stand still and don't hit back. `;
+    const b = document.createElement("button"); b.type = "button"; b.className = "linkish"; b.textContent = "Change dummy stats";
+    b.addEventListener("click", () => {
+      $("advBox").open = true;
+      const f = $("set_target_hp");
+      if (f) { f.scrollIntoView({ block: "center", behavior: "smooth" }); f.focus({ preventScroll: true }); }
+    });
+    p.append(b);
   }
   // Each enemy starts with its own most popular items and augments.
   function defaultBuild(id) {
@@ -296,6 +324,9 @@
       if (Number.isFinite(v) && Math.abs(v - s.default) > 1e-9) fieldValues[s.key] = v; else delete fieldValues[s.key];
       mark();
       countAdvanced();
+      // Changing the dummy means you want to fight it.
+      if (DUMMY_KEYS.includes(s.key) && enemyMode() !== "dummy") { $("emodeDummy").checked = true; renderEnemies(); }
+      else if (DUMMY_KEYS.includes(s.key)) dummyNote();
     });
     mark();
     wrap.append(l, inp);
@@ -410,10 +441,9 @@
       d.textContent = ` ${change > 0 ? "▲" : "▼"} ${Math.abs(change * 100).toFixed(1)}% DPS vs default`;
       $("simStatus").append(d);
     }
-    // Only runs with the default settings on the live patch can go on the leaderboard, so every entry is comparable.
-    const combo = $("comboInput") ? $("comboInput").value : "";
-    const plain = patch === "live" && !Object.keys(fieldValues).length && enemyMode() === "pool" && (!combo || combo === defaultCombo());
-    offerSubmit({ champion: champ.id, items: res.builds[0].build.items, augments: res.builds[0].build.augments, dps: best.mean_dps }, plain);
+    // Any live-patch build can go on the leaderboard: it's simulated again on our side against the Survival
+    // enemy with the default settings, so every entry is comparable whatever this run used.
+    offerSubmit({ champion: champ.id, items: res.builds[0].build.items, augments: res.builds[0].build.augments, dps: best.mean_dps }, patch === "live");
     showAlternatives(withBuild ? [] : res.builds);
     window.ReplayViewer.showTrace(tr);
     trace = tr;
@@ -427,8 +457,9 @@
     $("submitScore").hidden = !submission;
     $("submitScore").disabled = false;
     $("submitNote").textContent = !build ? "" : submission
-      ? "Put this build on the Simulator leaderboard. It's simulated again on our side before it's listed."
-      : "Only builds simulated with the default settings and enemies on the live patch can go on the leaderboard.";
+      ? `Put this build on the Survival leaderboard. There every build fights ${survivalEnemy(build.champion)} with the ` +
+        "default settings until your champion falls, simulated again on our side before it's listed."
+      : "Only live-patch builds can go on the Survival leaderboard.";
   }
   $("submitScore").addEventListener("click", async () => {
     if (!submission) return;
@@ -439,13 +470,13 @@
       const b = await r.json().catch(() => ({}));
       if (!r.ok) throw new Error(b.error || "");
       $("submitNote").textContent = b.status === "verified"
-        ? `This build is already on the leaderboard at ${Math.round(b.verified_dps).toLocaleString()} DPS.`
-        : b.status === "rejected" ? "This build was already checked and can't go on the leaderboard."
-        : "Submitted. It shows on the leaderboard once our simulator has re-run it.";
+        ? `This build is already on the Survival leaderboard at ${Math.round(b.verified_dps).toLocaleString()} DPS.`
+        : b.status === "rejected" ? "This build was already checked and can't go on the Survival leaderboard."
+        : "Submitted. It shows on the Survival leaderboard once our simulator has re-run it.";
       $("submitScore").hidden = true;
     } catch (e) {
       $("submitScore").disabled = false;
-      $("submitNote").textContent = e.message || "The leaderboard couldn't be reached. Try again in a moment.";
+      $("submitNote").textContent = e.message || "The Survival leaderboard couldn't be reached. Try again in a moment.";
     }
   });
 

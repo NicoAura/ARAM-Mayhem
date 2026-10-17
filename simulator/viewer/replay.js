@@ -37,12 +37,9 @@
     im.onerror = () => loadImage(urls.slice(1), done);
     im.src = urls[0];
   }
-  // The Howling Abyss from above (the game's minimap art) as the arena floor, and a Poro for Poro Charge.
-  let floorImg = null, poroImg = null;
-  loadImage([CDRAGON + "game/assets/maps/info/map12/2dlevelminimap.png", DATA + "art/floor.png"], (im) => { floorImg = im; });
+  // A Poro for Poro Charge.
+  let poroImg = null;
   loadImage([CDRAGON + "game/assets/spells/icons2d/porocharge_quest2.png", DATA + "art/poro.png"], (im) => { poroImg = im; });
-  const FLOOR_UNITS_PER_PX = 1100 / 60; // the minimap's bridge is about 60 px across; the lane is 1100 units wide
-  const FLOOR_CENTER_X = 650;            // where the map's middle sits on the simulated lane
   const PORO_SPEED = 900, PORO_WIDTH = 420; // match poro_speed and poro_width in data/augments.json
   // Which abilities move their caster (dash or blink), from each spell's tags.
   let anims = {};
@@ -497,6 +494,16 @@
     return { role: "attack", t: time + en.uid * 0.37, loop: true, chase: true };
   }
 
+  // A soft pool of light in the team's colour under a model, so it stands out from the floor.
+  function footShadow(g, x, y, rx, rgb) {
+    g.save();
+    g.translate(x, y); g.scale(1, 0.42);
+    const grd = g.createRadialGradient(0, 0, 0, 0, 0, rx);
+    grd.addColorStop(0, `rgba(${rgb},.22)`); grd.addColorStop(1, `rgba(${rgb},0)`);
+    g.fillStyle = grd; g.beginPath(); g.arc(0, 0, rx, 0, Math.PI * 2); g.fill();
+    g.restore();
+  }
+
   function drawArena(time, dt) {
     const dpr = resize();
     // Scale: bigger shapes on narrow screens so portraits stay readable on a phone.
@@ -505,33 +512,22 @@
     const world = fight.positional ? worldAt(fight, time) : null;
     const view = world ? camera(W, H, world, s.focus, dt) : null;
     const scr = (p) => ({ x: view.sx(p), y: view.sy(p) });
-    // Ground: the Howling Abyss bridge.
+    // Ground: a plain, dark lane, kept quiet so champions and ability effects stand out.
     const g = ctx;
     g.setTransform(1, 0, 0, 1, 0, 0);
-    const grd = g.createLinearGradient(0, 0, 0, H);
-    grd.addColorStop(0, "#0e1822"); grd.addColorStop(1, "#0a1118");
-    g.fillStyle = grd; g.fillRect(0, 0, W, H);
-    if (floorImg) {
-      // The real map, turned so its lane runs left to right (your base on the left), scaled so
-      // the bridge is the simulated lane, and scrolling with the view.
-      const k = world ? view.k : (H * 0.74) / (2 * LANE), cx = world ? view.cx : FLOOR_CENTER_X;
-      g.save();
-      g.translate(W / 2 + (FLOOR_CENTER_X - cx) * k, H * 0.55);
-      g.scale(k * FLOOR_UNITS_PER_PX, k * FLOOR_UNITS_PER_PX);
-      g.rotate(Math.PI / 4);
-      g.imageSmoothingQuality = lowQuality() ? "low" : "high";
-      g.drawImage(floorImg, -floorImg.width / 2, -floorImg.height / 2);
-      g.restore();
-      g.fillStyle = "rgba(8,14,20,.38)"; g.fillRect(0, 0, W, H);  // dimmed so fighters and effects stand out
-    } else {
-      g.fillStyle = "#13212e"; g.fillRect(0, H * 0.18, W, H * 0.74);
-      g.strokeStyle = "rgba(143,211,255,.08)"; g.lineWidth = 2 * u;
-      // With positions the stripes scroll with the view, so you can see the fight move along the lane.
-      const step = world ? 200 * view.k : 80 * u, shift = world ? -((view.cx * view.k) % step) : 0;
-      for (let x = -H + shift; x < W + step; x += step) { g.beginPath(); g.moveTo(x, H * 0.18); g.lineTo(x + H * 0.74, H * 0.92); g.stroke(); }
-      g.strokeStyle = "rgba(143,211,255,.25)"; g.lineWidth = 3 * u;
-      g.beginPath(); g.moveTo(0, H * 0.18); g.lineTo(W, H * 0.18); g.moveTo(0, H * 0.92); g.lineTo(W, H * 0.92); g.stroke();
-    }
+    g.fillStyle = "#091017"; g.fillRect(0, 0, W, H);
+    const top = world ? view.sy({ y: -LANE }) : H * 0.18, bottom = world ? view.sy({ y: LANE }) : H * 0.92;
+    const lane = g.createLinearGradient(0, top, 0, bottom);
+    lane.addColorStop(0, "#111b25"); lane.addColorStop(0.5, "#15212c"); lane.addColorStop(1, "#111b25");
+    g.fillStyle = lane; g.fillRect(0, top, W, bottom - top);
+    // Faint marks across the lane every 250 units scroll with the view, so you can see the fight move.
+    g.strokeStyle = "rgba(143,211,255,.045)"; g.lineWidth = 1.5 * u;
+    const step = world ? 250 * view.k : 80 * u, shift = world ? -(((view.cx * view.k) % step) + step) % step : 0;
+    g.beginPath();
+    for (let x = shift; x < W + step; x += step) { g.moveTo(x, top); g.lineTo(x, bottom); }
+    g.stroke();
+    g.strokeStyle = "rgba(143,211,255,.16)"; g.lineWidth = 2 * u;
+    g.beginPath(); g.moveTo(0, top); g.lineTo(W, top); g.moveTo(0, bottom); g.lineTo(W, bottom); g.stroke();
 
     const alive = [...s.enemies.values()].filter((e) => e.died === null || time - e.died < 0.8);
     const others = alive.filter((e) => e.uid !== s.focus).sort((a, b) => a.uid - b.uid);
@@ -771,6 +767,7 @@
       if (head) {
         // Model: a ring at its feet, portrait and HP bar above its head.
         g.globalAlpha = Math.max(0, fade);
+        footShadow(g, p.x, p.y, rr * 1.3, "240,96,90");
         g.strokeStyle = en.uid === s.focus ? "#f0605a" : "rgba(240,96,90,.55)"; g.lineWidth = 3 * u;
         g.beginPath(); g.ellipse(p.x, p.y, rr * 1.2, rr * 0.5, 0, 0, Math.PI * 2); g.stroke();
         g.globalAlpha = 1;
@@ -807,6 +804,7 @@
     const myHead = heads.me;
     let labelY = meY + R + 30 * u;
     if (myHead) {
+      footShadow(g, meX, meY, R * 1.3, "143,211,255");
       g.strokeStyle = s.dead ? "rgba(120,120,120,.6)" : "#8fd3ff"; g.lineWidth = 3 * u;
       g.beginPath(); g.ellipse(meX, meY, R * 1.2, R * 0.5, 0, 0, Math.PI * 2); g.stroke();
       hpBar(og, myHead.x - R, myHead.y - 4 * u, R * 2, frac, frac < 0.3 ? "#f0605a" : "#5fd38a", (s.shield || 0) / fight.maxHp);

@@ -134,11 +134,12 @@ export default function SimulatorPage() {
 
   if (hasReplays) {
     const names = (m: Named) => Object.fromEntries(Object.entries(m).map(([k, v]) => [k, v.name]));
+    // Leaderboards, one tab each; more boards can be added here with their own name.
     tabs.push({
-      id: "leaderboard",
-      label: "Leaderboard",
+      id: "survival",
+      label: "Survival",
       lazy: true,
-      content: <SimLeaderboard items={names(items)} augments={names(augments)} />,
+      content: <SimLeaderboard board="Survival" items={names(items)} augments={names(augments)} />,
     });
   }
 

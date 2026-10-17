@@ -3,7 +3,8 @@
 
 Visitors submit builds from the browser (web/src/app/api/sim-scores); the damage they send is never
 trusted. This takes rows from the deeparam-sim D1 database (table submissions), checks each build is
-legal, simulates it with the default settings on the live patch, and prints SQL that writes the result.
+legal, simulates it with the default settings on the live patch against the Survival enemy (the same for
+every champion), and prints SQL that writes the result.
 
     python3 tools/verify_leaderboard.py rows.json > updates.sql
 
@@ -18,6 +19,10 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 SIM = ROOT / "mayhem_sim"
+# Survival: every champion fights the same enemy with its most popular build, until it dies (the default
+# fight). Ashe is the most picked enemy; Ashe herself fights Teemo. Keep in step with SURVIVAL in
+# viewer/sim-panel.js and the Survival tab's text (web/src/components/SimLeaderboard.tsx).
+SURVIVAL_ENEMY, SURVIVAL_FALLBACK = "Ashe", "Teemo"
 
 
 def sim(*args):
@@ -69,7 +74,8 @@ def main():
         if not champ:
             print(f"UPDATE submissions SET status = 'rejected', verified_at = datetime('now') WHERE id = {int(row['id'])}; -- {why}")
             continue
-        args = ["--champ", champ, "--json", "--items", row["items"]]
+        enemy = SURVIVAL_FALLBACK if champ == SURVIVAL_ENEMY else SURVIVAL_ENEMY
+        args = ["--champ", champ, "--json", "--items", row["items"], "--team", enemy]
         if row.get("augments"):
             args += ["--augs", row["augments"]]
         code, out, err = sim(*args)
