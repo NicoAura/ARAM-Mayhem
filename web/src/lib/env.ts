@@ -21,3 +21,14 @@ export function bindingNames(): string[] {
     return [];
   }
 }
+
+type D1 = { prepare(sql: string): { bind(...v: unknown[]): { run(): Promise<unknown> } } };
+
+/** A D1 database binding (wrangler.jsonc), or null outside Cloudflare. */
+export function d1(name: string): D1 | null {
+  try {
+    return ((getCloudflareContext().env as unknown as Record<string, unknown>)[name] as D1) ?? null;
+  } catch {
+    return null;
+  }
+}

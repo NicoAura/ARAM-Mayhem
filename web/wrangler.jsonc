@@ -8,5 +8,7 @@
     "directory": ".open-next/assets",
     "binding": "ASSETS"
   },
-  "observability": { "enabled": true }
+  "observability": { "enabled": true },
+  // Browser errors from /api/log, read by the morning error check.
+  "d1_databases": [{ "binding": "ERRORS", "database_name": "deeparam-errors", "database_id": "a09c155a-a812-4c9a-a5ef-df74082daeaf" }]
 }
