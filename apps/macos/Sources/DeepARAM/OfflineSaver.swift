@@ -38,7 +38,7 @@ final class OfflineSaver: NSObject, WKNavigationDelegate {
         timeout?.invalidate()
         guard let webView, !queue.isEmpty else {
             UserDefaults.standard.set(Date().timeIntervalSince1970, forKey: Self.lastSaveKey)
-            webView = nil
+            self.webView = nil
             return
         }
         webView.load(URLRequest(url: queue.removeFirst()))

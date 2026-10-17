@@ -52,7 +52,10 @@ final class WindowModel: ObservableObject {
 
     /// Opens a site link in the section it belongs to (a patch alert's PBE link lands on the PBE tab).
     func open(_ url: URL) {
-        guard Site.isInternal(url) else { return NSWorkspace.shared.open(url) }
+        guard Site.isInternal(url) else {
+            NSWorkspace.shared.open(url)
+            return
+        }
         let tab = Self.section(for: url) ?? currentTab
         if selection != tab.id { selection = tab.id }
         page(for: tab).open(url)
