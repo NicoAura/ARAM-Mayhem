@@ -13,8 +13,6 @@ const PAGES = [
   "/info/region-teams",
   "/champions/Ahri",
   "/champions/Yunara",
-  "/tier-list?tab=draft",
-  "/tier-list?tab=groups",
   "/patches",
   "/items",
   "/items?tag=crit,as",
@@ -87,9 +85,12 @@ test("old addresses redirect to the current tabs", async ({ page }) => {
   }
   // Pages merged into the Tier List: the tab is picked and the old query kept.
   for (const [from, path, tab, keep] of [
-    ["/draft", "/tier-list", "draft", null],
-    ["/augments?tab=draft&champ=Jinx", "/tier-list", "draft", "champ"],
-    ["/augments?tab=groups", "/tier-list", "groups", null],
+    ["/augments?tab=duos&q=Jinx", "/tier-list", "duos", "q"],
+    // Augments by icon and Draft practice were removed: their old addresses open the augment tier list.
+    ["/draft", "/tier-list", "augments", null],
+    ["/augments?tab=draft&champ=Jinx", "/tier-list", "augments", null],
+    ["/augments?tab=groups", "/tier-list", "augments", null],
+    ["/tier-list?tab=groups", "/tier-list", "augments", null],
   ]) {
     await page.goto(from!);
     const url = new URL(page.url());

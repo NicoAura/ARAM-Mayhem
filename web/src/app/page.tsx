@@ -2,7 +2,7 @@ import Link from "next/link";
 import { text } from "@/lib/content";
 import { chefsSpecial, statsDate, counts, kitchenBuilds, livePatch, liveTiers, topAugments } from "@/lib/highlights";
 import { championSplash } from "@/lib/champions";
-import { ChampionJump, KitchenPick, TierSnapshot } from "@/components/HomeWidgets";
+import { KitchenPick, TierSnapshot } from "@/components/HomeWidgets";
 import { augmentHref } from "@/lib/augments";
 import { KITCHEN } from "@/lib/tabs";
 import RecentPlayed from "@/components/RecentPlayed";
@@ -46,7 +46,6 @@ export default function Home() {
         <p className="lede">
           <T>{text("home.lede")}</T>
         </p>
-        {tiers.length > 0 && <ChampionJump champs={tiers} />}
       </section>
 
       <div className="bento">

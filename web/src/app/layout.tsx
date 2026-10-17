@@ -141,9 +141,6 @@ export default function RootLayout({
         <footer className="site-footer">
           <FeedbackBox />
           <nav className="footer-links" aria-label="Site">
-            <Link href="/champions">
-              <T>Champions</T>
-            </Link>
             <Link href="/privacy">
               <T>Privacy</T>
             </Link>
