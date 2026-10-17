@@ -50,6 +50,14 @@ champion's games in a patch are estimated as pick rate × window days, which ass
 about the same number of games each day. `est_game_share` is the champion's share of all
 champion slots.
 
+## Augment tiers and augments with no data
+
+`augments.json` takes each augment's tier and key from the live game client (`kiwi.bin` rarity:
+0 Silver, 1 Gold, 2 Prismatic), falling back to Tencent's list if the client files can't be
+reached. Its `no_data` list holds live Mayhem augments that have no stats yet (`augment_id`, `key`,
+`name`, `tier`), so pages can show them as "no data yet". In `builds/`, item 3097 is mapped to
+3095 (Stormrazor's id in the client).
+
 ## Champion builds
 
 `builds.py` fetches each champion's Mayhem build page data (`fuwen_hero_rank?championid=N`)

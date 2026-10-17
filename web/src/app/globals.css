@@ -1639,7 +1639,7 @@ html[data-device="mobile"] .theme-toggle button {
   height: 28px;
 }
 
-/* Augment offer cards (PBE tab): the in-game card art from game/assets/ux/kiwi/augments/augmentselection.
+/* Augment offer cards (PBE tab): the in-game card art in public/augment-card.
    The card face stays dark in both themes, like the game. */
 .aug-grid {
   display: grid;
@@ -2674,4 +2674,212 @@ html[data-motion="reduce"] *::after {
 html[data-device="mobile"] .riot-fields input,
 html[data-device="mobile"] .riot-fields select {
   font-size: 16px;
+}
+
+/* ---------------------------------------------------------------------------------------------
+   Colour pass: each tab has its own hue, and hover, active, focus and numbers pick up colour.
+   --a is the hue in use; --a-ink mixes it toward the text colour so it reads in dark and Mist light. */
+:root {
+  --hue-tier: #f0713a;
+  --hue-sim: #9b7bff;
+  --hue-pbe: #23b386;
+  --hue-info: #3fa7f5;
+  --hue-lab: #ec5aa6;
+  --hue-gold: #e0a83c;
+  --a: var(--accent);
+}
+
+[data-accent="tier"] { --a: var(--hue-tier); }
+[data-accent="sim"] { --a: var(--hue-sim); }
+[data-accent="pbe"] { --a: var(--hue-pbe); }
+[data-accent="info"] { --a: var(--hue-info); }
+[data-accent="lab"] { --a: var(--hue-lab); }
+[data-accent="gold"] { --a: var(--hue-gold); }
+
+[data-accent] {
+  --a-ink: color-mix(in srgb, var(--a) 72%, var(--fg));
+  --a-soft: color-mix(in srgb, var(--a) 16%, transparent);
+}
+
+/* Header tabs: the open tab is tinted in its own colour; hovering previews it. */
+.nav a[data-accent]:hover {
+  color: var(--a-ink);
+}
+
+.nav a[data-accent][aria-current="page"] {
+  background: var(--a-soft);
+  color: var(--a-ink);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--a) 40%, transparent);
+}
+
+.nav-menu a[data-accent] b {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.nav-menu a[data-accent] b::before {
+  content: "";
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--a);
+}
+
+.nav-menu a[data-accent]:hover,
+.nav-menu a[data-accent][aria-current="page"] {
+  background: var(--a-soft);
+}
+
+/* Cards: a thin colour edge on top, and a lift with a tinted border on hover. */
+.card[data-accent] {
+  position: relative;
+  overflow: hidden;
+  transition:
+    border-color 0.2s,
+    transform 0.2s,
+    box-shadow 0.2s;
+}
+
+.card[data-accent]::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  height: 3px;
+  background: linear-gradient(90deg, var(--a), color-mix(in srgb, var(--a) 30%, transparent));
+}
+
+.card[data-accent]:hover {
+  border-color: color-mix(in srgb, var(--a) 45%, var(--line));
+  box-shadow: 0 10px 30px -18px var(--a);
+  transform: translateY(-2px);
+}
+
+.card[data-accent] .card-head a {
+  color: var(--a-ink);
+}
+
+.card[data-accent] .rank a:hover {
+  background: var(--a-soft);
+}
+
+.card[data-accent] .bars .bar {
+  background: linear-gradient(90deg, var(--a), color-mix(in srgb, var(--a) 35%, var(--accent)));
+}
+
+/* Lists: hovered rows get a tint and a colour bar on the left. */
+.rank a {
+  position: relative;
+  transition: background 0.15s;
+}
+
+.rank a::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 22%;
+  bottom: 22%;
+  width: 3px;
+  border-radius: 3px;
+  background: var(--a, var(--accent));
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+
+.rank a:hover::before {
+  opacity: 1;
+}
+
+.rank a:hover .rank-name {
+  color: var(--a-ink, var(--accent));
+}
+
+/* Buttons and switches use the accent instead of plain black or white. */
+.btn:not(.ghost) {
+  background: linear-gradient(135deg, var(--accent), color-mix(in srgb, var(--accent) 60%, var(--hue-sim)));
+  color: var(--accent-ink);
+  transition:
+    filter 0.15s,
+    transform 0.15s;
+}
+
+.btn:not(.ghost):hover:not(:disabled) {
+  filter: brightness(1.08) saturate(1.1);
+  transform: translateY(-1px);
+}
+
+.btn.ghost:hover:not(:disabled) {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.seg button[aria-pressed="true"],
+.setting .theme-toggle button[aria-pressed="true"] {
+  background: var(--accent-soft);
+  color: var(--accent);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--accent) 40%, transparent);
+}
+
+.seg button:hover:not([aria-pressed="true"]) {
+  color: var(--fg);
+}
+
+/* Home tier snapshot: each tier letter button takes its tier's colour when picked. */
+.snap-tiers button:nth-child(1)[aria-pressed="true"] { background: #e2553f; color: #fff; box-shadow: none; }
+.snap-tiers button:nth-child(2)[aria-pressed="true"] { background: #f0913a; color: #1a0e02; box-shadow: none; }
+.snap-tiers button:nth-child(3)[aria-pressed="true"] { background: #e6c24a; color: #1d1602; box-shadow: none; }
+.snap-tiers button:nth-child(4)[aria-pressed="true"] { background: #7fb6e8; color: #04121c; box-shadow: none; }
+
+/* Tables: win rates above or below an even 50%, and rank changes up or down. */
+td.wr-high { color: var(--good); font-weight: 600; }
+td.wr-low { color: var(--bad); }
+td.delta-up { color: var(--good); }
+td.delta-down { color: var(--bad); }
+td.delta-up::before { content: "▲ "; font-size: 0.7em; }
+td.delta-down::before { content: "▼ "; font-size: 0.7em; }
+
+.data-table tbody tr {
+  transition: background 0.12s;
+}
+
+.data-table tbody tr:hover {
+  background: var(--accent-soft);
+}
+
+/* Augment rarity chips: filled and glowing instead of outlined. */
+.chip.tier-gold {
+  background: color-mix(in srgb, var(--gold) 18%, transparent);
+  border-color: color-mix(in srgb, var(--gold) 60%, transparent);
+}
+
+.chip.tier-silver {
+  background: color-mix(in srgb, var(--silver) 16%, transparent);
+  border-color: color-mix(in srgb, var(--silver) 50%, transparent);
+}
+
+.chip.tier-prismatic {
+  box-shadow: 0 0 12px -4px #c9b8ff;
+}
+
+/* Page intros: the eyebrow and focus ring pick up the accent. */
+.intro .eyebrow,
+.hero .eyebrow {
+  color: var(--accent);
+}
+
+.stat-row b {
+  background: linear-gradient(100deg, var(--accent), var(--hue-sim));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+input:focus-visible,
+select:focus-visible {
+  outline-color: var(--accent);
+}
+
+html[data-motion="reduce"] .card[data-accent]:hover,
+html[data-motion="reduce"] .btn:hover {
+  transform: none;
 }

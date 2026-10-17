@@ -6,6 +6,9 @@ import { useEffect, useRef, useState } from "react";
 import { BETA } from "@/lib/beta";
 import type { NavItem } from "@/lib/tabs";
 
+// Each tab has its own accent colour (globals.css, [data-accent]).
+const ACCENT: Record<string, string> = { "/tier-list": "tier", "/simulator": "sim", "/pbe": "pbe", "/info": "info", "/lab": "lab" };
+
 const Beta = ({ href }: { href: string }) => (BETA.has(href) ? <span className="beta">Beta</span> : null);
 
 export default function NavLinks({ items }: { items: NavItem[] }) {
@@ -17,7 +20,7 @@ export default function NavLinks({ items }: { items: NavItem[] }) {
         t.children ? (
           <NavMenu key={t.href} item={t} current={t.children.some((c) => active(c.href))} pathname={pathname} />
         ) : (
-          <Link key={t.href} href={t.href} aria-current={active(t.href) ? "page" : undefined}>
+          <Link key={t.href} href={t.href} data-accent={ACCENT[t.href]} aria-current={active(t.href) ? "page" : undefined}>
             {t.label}
             <Beta href={t.href} />
           </Link>
@@ -80,7 +83,7 @@ function NavMenu({ item, current, pathname }: { item: NavItem; current: boolean;
       {at && (
         <div ref={menu} className="nav-menu" style={at}>
           {item.children!.map((c) => (
-            <Link key={c.href} href={c.href} aria-current={pathname === c.href ? "page" : undefined}>
+            <Link key={c.href} href={c.href} data-accent={ACCENT[c.href]} aria-current={pathname === c.href ? "page" : undefined}>
               <b>
                 {c.label}
                 <Beta href={c.href} />

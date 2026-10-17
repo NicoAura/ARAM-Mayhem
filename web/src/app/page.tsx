@@ -43,7 +43,7 @@ export default function Home() {
 
       <div className="bento">
         {tiers.length > 0 && (
-          <section className="card span-7">
+          <section className="card span-7" data-accent="tier">
             <div className="card-head">
               <h2>Tier List{patch ? ` · Patch ${patch}` : ""}</h2>
               <Link href="/tier-list">All {n.champions} →</Link>
@@ -52,7 +52,7 @@ export default function Home() {
           </section>
         )}
         {augs.length > 0 && (
-          <section className="card span-5">
+          <section className="card span-5" data-accent="gold">
             <div className="card-head">
               <h2>Best augments</h2>
               <Link href="/tier-list?tab=augments">All →</Link>
@@ -71,7 +71,7 @@ export default function Home() {
           </section>
         )}
         {pool.length >= 3 && (
-          <section className="card span-7">
+          <section className="card span-7" data-accent="gold">
             <div className="card-head">
               <h2>Roll an augment offer</h2>
               <Link href="/tier-list?tab=augments">All augments →</Link>
@@ -80,7 +80,7 @@ export default function Home() {
           </section>
         )}
         {builds.length > 0 && (
-          <section className="card span-5 feature">
+          <section className="card span-5 feature" data-accent="lab">
             <div className="card-head">
               <h2>Cook builds from The Lab</h2>
               <Link href={KITCHEN}>More →</Link>
@@ -89,7 +89,7 @@ export default function Home() {
           </section>
         )}
         {dps.length > 0 && (
-          <section className="card span-7">
+          <section className="card span-7" data-accent="sim">
             <div className="card-head">
               <h2>
                 Simulator: top damage per second <span className="beta">Beta</span>
@@ -110,7 +110,7 @@ export default function Home() {
             </div>
           </section>
         )}
-        <section className="card span-5">
+        <section className="card span-5" data-accent="info">
           <div className="card-head">
             <h2>More to explore</h2>
           </div>

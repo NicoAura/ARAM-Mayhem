@@ -56,6 +56,16 @@ for (const { name, from, exclude = [] } of embeds) {
 const LOCAL = [
   [/https:\/\/raw\.communitydragon\.org\//g, "/assets/cd/"],
   [/https:\/\/ddragon\.leagueoflegends\.com\/cdn\//g, "/assets/dd/"],
+  // The mode's internal name stays out of the pages: unfilled tooltip tokens are dropped, and the copies in
+  // public/assets/ store its "kiwi" folders and files as "mayhem" (fetch_assets.py local_path).
+  [/\{\{\s*Kiwi_[^}]*\}\}\s*/g, ""],
+  [/kiwi/gi, (m) => (m === "KIWI" ? "MAYHEM" : m[0] === "K" ? "Mayhem" : "mayhem")],
+  // Augment "small" icons are grey for every rarity; the "large" ones carry the silver, gold or prismatic colour.
+  // Arena augments have no large icon, so only swap when the large copy is there.
+  [
+    /\/assets\/(cd\/[^"'`\s]*?\/augments\/icons\/[\w.-]+?)_small\.png/gi,
+    (m, path) => (existsSync(join(web, "public", "assets", `${path}_large.png`)) ? `/assets/${path}_large.png` : m),
+  ],
   [/https:\/\/d28xe8vt774jo5\.cloudfront\.net\/champion-abilities/g, "/assets/clips", "clips"],
   [/https:\/\/cdn\.modelviewer\.lol\/lol\/models/g, "/assets/models", "models/models.json"],
   [/https:\/\/cdn\.jsdelivr\.net\/npm\/three@0\.160\.0\//g, "/assets/lib/three-0.160.0/", "lib/three-0.160.0/build/three.module.js"],

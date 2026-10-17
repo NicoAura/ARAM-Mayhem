@@ -1,8 +1,9 @@
 """Add each Mayhem augment's icon to data/pbe/kiwi-s3.json.
 
 Matches augments by display name against kiwi.bin (AugmentLargeIconPath), saves the
-CommunityDragon PNG into web/public/assets/cd/ and writes its site path (/assets/cd/...)
-to an "icon" field, so the PBE tab loads it from the site. Added and changed augments
+CommunityDragon PNG as web/public/assets/augments/<pbe|live>/<file name> and writes that
+site path to an "icon" field, so the PBE tab loads it from the site with no internal names
+in the URL. Added and changed augments
 use the PBE icon; removed ones use the live icon. Changed augments also get
 their tier. Run after fetch.py or local.py.
 
@@ -55,9 +56,10 @@ def first_live(urls):
     return next((u for u in urls if exists(u)), None)
 
 def save(url):
-    """Copy a CommunityDragon file to web/public/assets/cd/<channel>/<path, lower case>; return its site path."""
+    """Copy a CommunityDragon icon to web/public/assets/augments/<pbe|live>/<file name>; return its site path."""
     channel, _, rest = urllib.parse.urlsplit(url).path.lstrip("/").partition("/")
-    site = f"/assets/cd/{channel}/{urllib.parse.unquote(rest).lower()}"
+    name = os.path.basename(urllib.parse.unquote(rest)).lower()
+    site = f"/assets/augments/{'pbe' if channel == 'pbe' else 'live'}/{name}"
     dest = ASSETS + site[len("/assets"):]
     if not os.path.exists(dest):
         os.makedirs(os.path.dirname(dest), exist_ok=True)

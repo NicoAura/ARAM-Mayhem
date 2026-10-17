@@ -2,7 +2,7 @@
 
 The icons are the League client's own files, as CommunityDragon extracts them from each patch:
 - champions/<Alias>.webp, from the client's champion-icons (Alias as in data/cn/champions.csv, e.g. MonkeyKing)
-- augments/<id>.webp, from each Mayhem (KIWI) augment's small icon (id as in data/cn/augments.csv)
+- augments/<id>.webp, from each Mayhem (KIWI) augment's large icon, which carries its rarity colour (the small one is grey)
 and writes src/data/champion-ids.json (alias → the client's numeric champion id).
 
 Each icon is resized to 64x64 WebP so the whole set stays small.
@@ -60,10 +60,10 @@ def main():
         json.dump(ids, f, indent=0)
 
     kiwi = json.loads(fetch(CD + "/game/maps/modespecificdata/kiwi.bin.json"))
-    augs = [e for e in kiwi.values() if isinstance(e, dict) and e.get("AugmentPlatformId") and e.get("AugmentSmallIconPath")]
+    augs = [e for e in kiwi.values() if isinstance(e, dict) and e.get("AugmentPlatformId") and e.get("AugmentLargeIconPath")]
     n = 0
     for e in augs:
-        url = CD + "/game/" + re.sub(r"\.(tex|dds)$", ".png", e["AugmentSmallIconPath"].lower())
+        url = CD + "/game/" + re.sub(r"\.(tex|dds)$", ".png", e["AugmentLargeIconPath"].lower())
         try:
             n += save(url, os.path.join(OUT, "augments", f"{e['AugmentPlatformId']}.webp"), force)
         except OSError as err:

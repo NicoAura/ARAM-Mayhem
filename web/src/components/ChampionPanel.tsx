@@ -14,7 +14,7 @@ const IDS = championIds as Record<string, number>;
 // Client paths look like /lol-game-data/assets/ASSETS/Characters/...; CommunityDragon serves them lowercased.
 const asset = (p?: string) =>
   p
-    ? `${GAME_DATA}/${p.replace(/^\/lol-game-data\/assets\//, "").toLowerCase()}`
+    ? `${GAME_DATA}/${p.replace(/^\/lol-game-data\/assets\//, "").toLowerCase().replace(/k[i]wi/g, "mayhem")}`
     : "";
 const plain = (html: string) =>
   html

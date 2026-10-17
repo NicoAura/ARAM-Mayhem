@@ -4,6 +4,14 @@
   const esc = (s) => String(s ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
   const fmt = (n) => Number(n).toLocaleString("en-US", { maximumFractionDigits: 2 });
   const img = (src, cls = "icon") => !src ? `<span class="${cls}"></span>` : `<img class="${cls}" src="${esc(src)}" alt="" loading="lazy" onerror="this.style.visibility='hidden'">`;
+  // ▲/▼ for a number going up or down; green when the change helps the player (lower cooldowns and costs help)
+  const delta = (name, a, b) => {
+    const mean = (v) => (Array.isArray(v) ? v.reduce((x, y) => x + y, 0) / v.length : v);
+    const x = mean(a), y = mean(b);
+    if (typeof x !== "number" || typeof y !== "number" || x === y) return "";
+    const up = y > x, helps = /cooldown|cost|cd\b|delay|timer/i.test(name) ? !up : up;
+    return ` <span class="${helps ? "up" : "down"}">${up ? "▲" : "▼"}</span>`;
+  };
   const tierChip = (t) => (t ? `<span class="chip tier-${t.toLowerCase()}">${t}</span>` : "");
   const TIER_NAMES = { IRON: "Iron", BRONZE: "Bronze", SILVER: "Silver", GOLD: "Gold", PLATINUM: "Plat", DIAMOND: "Diamond", MASTER: "Master", GRANDMASTER: "GM", CHALLENGER: "Chall" };
 
@@ -72,7 +80,7 @@
   $("items-intro").textContent = `${D.itemChanges.length} items have their own values in Mayhem. Each row is one value that changes.`;
   $("item-changes").innerHTML = D.itemChanges
     .flatMap((it) => it.changes.map((c, i) => `<tr>${i === 0 ? `<td rowspan="${it.changes.length}"><div class="row">${img(it.icon)}<span class="title">${esc(it.name)}</span></div></td>` : ""}
-      <td>${esc(words(c.name))}</td><td class="num">${c.rift == null ? "–" : exact(c.rift)}</td><td class="num"><b>${c.mayhem == null ? "–" : exact(c.mayhem)}</b></td></tr>`))
+      <td>${esc(words(c.name))}</td><td class="num">${c.rift == null ? "–" : exact(c.rift)}</td><td class="num"><b>${c.mayhem == null ? "–" : exact(c.mayhem)}</b>${delta(c.name, c.rift, c.mayhem)}</td></tr>`))
     .join("");
 
   // ---- Archive
@@ -102,7 +110,7 @@
           <div class="grid tight">${ids.map((id) => augRow(id)).join("")}</div></div>` : "");
         return `<div class="card"><div class="card-head"><h2>Patch ${esc(p.patch)}</h2></div><div class="panel">
           ${changed.length ? `<div class="grid">${changed.map((c) => augRow(c.id, c.changes.map((r) =>
-            `<div class="small"><span class="muted">${esc(words(r.name))}:</span> ${val(r.old)} → <b>${val(r.new)}</b></div>`).join(""))).join("")}</div>` : ""}
+            `<div class="small"><span class="muted">${esc(words(r.name))}:</span> ${val(r.old)} → <b>${val(r.new)}</b>${delta(r.name, r.old, r.new)}</div>`).join(""))).join("")}</div>` : ""}
           ${list("Added to the pool", added)}${list("Removed from the pool", removed)}</div></div>`;
       }).join("");
       $("history-list").innerHTML = blocks;

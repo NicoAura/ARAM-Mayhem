@@ -207,14 +207,15 @@ def main():
     item_changes = []
     for path, b in items_bin.items():
         o = (b.get("DataValuesModeOverride") or {}) if isinstance(b, dict) else {}
-        mode = "Kiwi" if "Kiwi" in o else "ARAM" if "ARAM" in o else None
         iid = path.split("/")[-1]
         # ids above 100000 are other modes' copies of an item; keep the normal one
-        if not mode or not iid.isdigit() or int(iid) >= 100000 or int(iid) not in items_by_id:
+        if not ("Kiwi" in o or "ARAM" in o) or not iid.isdigit() or int(iid) >= 100000 or int(iid) not in items_by_id:
             continue
         base = {d["mName"]: d.get("mValue") for d in b.get("mDataValues", [])}
-        diffs = [{"name": d["mName"], "rift": base.get(d["mName"]), "mayhem": d.get("mValue")}
-                 for d in o[mode].get("DataValues", []) if base.get(d["mName"]) != d.get("mValue")]
+        mayhem = {}
+        for mode in ("ARAM", "Kiwi"):  # Kiwi (Mayhem) is applied on top of the ARAM layer
+            mayhem.update({d["mName"]: d.get("mValue") for d in (o.get(mode) or {}).get("DataValues", [])})
+        diffs = [{"name": k, "rift": base.get(k), "mayhem": v} for k, v in mayhem.items() if base.get(k) != v]
         if diffs and not any(c["id"] == int(iid) for c in item_changes):
             it = items_by_id[int(iid)]
             item_changes.append({"id": int(iid), "name": it["name"], "icon": asset(it["iconPath"]), "changes": diffs})

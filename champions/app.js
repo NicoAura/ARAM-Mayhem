@@ -51,6 +51,8 @@
     const uniq = [...new Set(vals)];
     return uniq.length === 1 ? f(uniq[0]) : vals.map(f).join(" / ");
   }
+  // Win rates: green at 52% or more, red at 48% or less
+  const wr = (x, d = 1) => `<span class="${x >= 0.52 ? "wr-high" : x <= 0.48 ? "wr-low" : ""}">${pct(x, d)}</span>`;
   const avg = (a) => a.reduce((x, y) => x + y, 0) / a.length;
   const itemImg = (id) => {
     const it = D.items[id];
@@ -60,7 +62,7 @@
   function renderPage(c) {
     const ab = Object.fromEntries(c.abilities.map((a) => [a.slot, a]));
     const facts = c.tier
-      ? [["Tier List rank", `#${c.tier.rank} of ${c.tier.of}`], ["Win rate", pct(c.tier.winRate)], ["Pick rate", pct(c.tier.pickRate)],
+      ? [["Tier List rank", `#${c.tier.rank} of ${c.tier.of}`], ["Win rate", wr(c.tier.winRate)], ["Pick rate", pct(c.tier.pickRate)],
          ["Damage share", pct(c.tier.damage)], ["Damage taken share", pct(c.tier.tank)]]
       : [];
     const changes = c.mayhem.length
@@ -69,14 +71,15 @@
           <tbody>${c.mayhem.map((m) => {
             const a = ab[m.slot] || {};
             const up = avg(m.mayhem) > avg(m.rift);
+            const helps = /cooldown|cost/i.test(m.name) ? !up : up;
             return `<tr><td><div class="row">${img(a.icon, "icon")}<div><span class="slot">${m.slot}</span> <span class="ability-name">${esc(a.name || "")}</span></div></div></td>
               <td>${esc(words(m.name))}</td><td class="num" data-label="Rift">${values(m.name, m.rift)}</td>
-              <td class="num" data-label="Mayhem"><b>${values(m.name, m.mayhem)}</b> <span class="muted">${up ? "↑" : "↓"}</span></td></tr>`;
+              <td class="num" data-label="Mayhem"><b>${values(m.name, m.mayhem)}</b> <span class="${helps ? "up" : "down"}">${up ? "▲" : "▼"}</span></td></tr>`;
           }).join("")}</tbody></table></div>
           <p class="muted small">Ranks run left to right.</p>`
       : `<p class="muted">Mayhem doesn't change any of ${esc(c.name)}'s ability numbers.</p>`;
     const B = c.builds;
-    const rate = (r) => `<span class="rates"><span><b>${pct(r.win)}</b> win</span><span>${pct(r.pick)} pick</span></span>`;
+    const rate = (r) => `<span class="rates"><span><b>${wr(r.win)}</b> win</span><span>${pct(r.pick)} pick</span></span>`;
     const itemRow = (r, sep = "") => `<div class="build-row"><div class="items">${r.items.map(itemImg).join(sep)}</div>${rate(r)}</div>`;
     const block = (title, rows, sep, hint = "") => (rows && rows.length
       ? `<div class="card"><div class="card-head"><h2>${title}</h2>${hint ? `<span class="muted small">${hint}</span>` : ""}</div>
@@ -86,7 +89,7 @@
     const augs = B && B.augments
       ? `<div class="card"><div class="card-head"><h2>Augments</h2><span class="muted small">Most picked by ${esc(c.name)} players</span></div>
           <div class="aug-cols">${TIERS.filter(([k]) => (B.augments[k] || []).length).map(([k, l]) => `<div>
-            <div class="eyebrow" style="margin-bottom:0.5rem">${l}</div>
+            <div class="eyebrow tier-label-${k}" style="margin-bottom:0.5rem">${l}</div>
             ${B.augments[k].map((x) => {
               const a = D.augments[x.id] || { name: `#${x.id}` };
               return `<div class="aug-row">${a.icon ? `<img src="${esc(a.icon)}" alt="" loading="lazy">` : ""}<span class="name">${esc(a.name)}</span>
@@ -105,7 +108,7 @@
     const mates = B && B.mates.length
       ? `<div class="card"><div class="card-head"><h2>Best teammates</h2></div><div class="mates">${B.mates.map((m) => {
           const x = byId[m.id];
-          return x ? `<a class="champ" href="#${esc(x.alias)}">${img(x.icon)}<div><div class="title">${esc(x.name)}</div><div class="muted small">${pct(m.win)} win together</div></div></a>` : "";
+          return x ? `<a class="champ" href="#${esc(x.alias)}">${img(x.icon)}<div><div class="title">${esc(x.name)}</div><div class="muted small">${wr(m.win)} win together</div></div></a>` : "";
         }).join("")}</div></div>`
       : "";
     const arrow = '<span class="arrow">›</span>';
@@ -116,7 +119,7 @@
     const styles = B && B.styles && B.styles.length
       ? `<div class="card"><div class="card-head"><h2>Builds by style</h2><span class="muted small">Share of the most common builds</span></div>
           <div class="styles">${B.styles.map((st) => `<section class="style">
-            <div class="style-head"><h3>${esc(st.label)}</h3><span class="rates"><span><b>${pct(st.win)}</b> win</span><span>${pct(st.share, 0)} of builds</span></span></div>
+            <div class="style-head"><h3>${esc(st.label)}</h3><span class="rates"><span><b>${wr(st.win)}</b> win</span><span>${pct(st.share, 0)} of builds</span></span></div>
             <div class="eyebrow">Core items, in order</div>
             <div class="build-list">${st.core.map((r) => itemRow(r, arrow)).join("")}</div>
             ${st.full.length ? `<div class="eyebrow">Full build</div><div class="build-list">${st.full.map((r) => itemRow(r)).join("")}</div>` : ""}
