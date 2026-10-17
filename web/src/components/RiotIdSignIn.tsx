@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import PlayerExtras from "./PlayerExtras";
 import RiotIdFields from "./RiotIdFields";
 import { ACCOUNT_EVENT, loadAccount, PROFILE_FRESH_MS, profileIcon as ICON, SERVERS, signIn, signOut as forget, type Profile } from "@/lib/account";
 
@@ -80,9 +81,11 @@ export default function RiotIdSignIn() {
             {profile.ranked
               .filter((r) => QUEUES[r.queueType])
               .map((r) => (
-                <div key={r.queueType}>
+                <div key={r.queueType} className="rank-badge">
                   <dt>{QUEUES[r.queueType]}</dt>
                   <dd>
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src={`/assets/ranked/${r.tier.toLowerCase()}.png`} alt="" width={40} height={40} />
                     {title(r.tier)} {["MASTER", "GRANDMASTER", "CHALLENGER"].includes(r.tier) ? "" : r.rank} ·{" "}
                     {r.leaguePoints} LP
                     <span>
@@ -93,6 +96,7 @@ export default function RiotIdSignIn() {
               ))}
           </dl>
         )}
+        {profile.puuid && <PlayerExtras puuid={profile.puuid} platform={profile.platform} />}
       </section>
     );
   }
