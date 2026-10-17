@@ -3,7 +3,7 @@ import championIds from "@/data/champion-ids.json";
 import augmentNames from "@/data/augment-names.json";
 import { liveWithChange } from "./champions";
 import { champName } from "./highlights";
-import { item } from "./items";
+import { item, rewardItems } from "./items";
 import { readRepoJson } from "./repo-data";
 
 // Everything the champion compare page (/compare) lines up side by side, built once per deploy into
@@ -75,7 +75,7 @@ export function compareData() {
       kp: s?.kp ?? null,
       dead: s?.dead ?? null,
       augments: (b?.augments?.all ?? []).filter((a) => AUGS[a.id]).slice(0, 5).map((a) => a.id),
-      core: core ? { items: core.items, winRate: core.win_rate } : null,
+      core: core ? { items: core.items.filter((id) => !rewardItems().has(id)), winRate: core.win_rate } : null,
       skills: b?.skills?.[0]?.max_order ?? [],
       partners: (b?.partners ?? []).map((p) => ALIAS[p.id]).filter(Boolean).slice(0, 3),
       sim: sim
