@@ -144,6 +144,9 @@ ChampionKit loadChampion(const json::Value& c, const Rules& rules) {
     k.damageTaken = m["damage_taken"].asNumber(1.0);
     k.mayhemAh = m["ability_haste"].asNumber(0.0);
     k.mayhemAs = m["attack_speed"].asNumber(0.0);
+    k.mayhemHealing = m["healing"].asNumber(1.0);
+    k.mayhemShielding = m["shielding"].asNumber(1.0);
+    k.mayhemTenacity = std::clamp(m["tenacity"].asNumber(0.0), 0.0, 1.0);
     const json::Value& res = c["resource"];
     const std::string kind = res["kind"].asString("none");
     k.resource = kind == "mana" ? 1 : kind == "energy" ? 2 : 0;
@@ -1168,9 +1171,13 @@ private:
     double incomingRoll_ = 0;
     uint64_t targetSeed_ = 0;
 
+    // Tenacity from items (Mercury's Treads) and the champion's Mayhem balance stacks multiplicatively.
+    double tenacity() const {
+        return 1.0 - (1.0 - std::clamp(get(fx_, "tenacity"), 0.0, 1.0)) * (1.0 - ch_.mayhemTenacity);
+    }
     void setupDefences() {
-        // Tenacity (Mercury's Treads) shortens the crowd control drawn for the fight.
-        if (const double ten = std::clamp(get(fx_, "tenacity"), 0.0, 1.0); ten > 0)
+        // Tenacity shortens the crowd control drawn for the fight.
+        if (const double ten = tenacity(); ten > 0)
             for (auto& [a, b] : cc_) b = a + (b - a) * (1.0 - ten);
         // Enemy spawns and movement use their own streams so builds that kill faster
         // don't shift the rest of the fight's random draws.
@@ -1316,7 +1323,7 @@ private:
                 total += dmg;
                 if (!c.cc.empty() && abilityRng_.chance(c.ccChance * acting)) {
                     // Tenacity shortens it, except knock-ups.
-                    const double ten = c.cc == "knockup" ? 0.0 : std::clamp(get(fx_, "tenacity"), 0.0, 1.0);
+                    const double ten = c.cc == "knockup" ? 0.0 : tenacity();
                     cc_.push_back({now, now + c.ccDuration * (1.0 - ten)});
                     if (trace_ && e.profile) {
                         TraceEvent ev;
@@ -1601,6 +1608,7 @@ private:
     }
     void addShield(double amount, double duration, char slot) {
         if (dead_ || amount <= 0 || duration <= 0) return;
+        amount *= ch_.mayhemShielding;  // Mayhem balance
         shields_.push_back({amount, t_ + duration});
         stackEvent(OnShield);
         if (trace_) {
@@ -1632,7 +1640,7 @@ private:
 
     void heal(double amount) {
         if (dead_ || amount <= 0) return;
-        amount *= 1.0 + get(fx_, "healing_received");  // Spirit Visage
+        amount *= (1.0 + get(fx_, "healing_received")) * ch_.mayhemHealing;  // Spirit Visage, Mayhem balance
         // Grievous Wounds: an enemy whose build applies it and who can reach you cuts your healing by 40%.
         for (const auto& e : enemies_)
             if (e.alive && e.antiHeal && distTo(e) <= e.reach + 2 * rules_.hitbox) { amount *= 1.0 - rules_.grievous; break; }

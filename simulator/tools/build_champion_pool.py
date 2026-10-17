@@ -948,6 +948,7 @@ def main():
                 "damage_taken": (bal or {}).get("damage_taken", 1.0),
                 "ability_haste": (bal or {}).get("ability_haste", 0.0),
                 "attack_speed": (bal or {}).get("attack_speed", 0.0),
+                **{k: bal[k] for k in ("healing", "shielding", "tenacity") if k in (bal or {})},
             },
             "resource": resource(record),
             "cn": {k: p[k] for k in ("weight", "damage_share", "damage_taken_share", "win_rate", "cc", "phys_share")} if p else None,

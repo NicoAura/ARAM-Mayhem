@@ -5,6 +5,9 @@
 (() => {
   "use strict";
   const DATA = "replay-data/";
+  // The public page (index.html) plays the fight in 2D with champion icons and sounds of our own;
+  // full.html, for admins, adds the 3D models, the game's ability sounds and the preview clips.
+  const FULL = document.documentElement.dataset.edition === "full";
   const BUST = "?v=" + (window.REPLAY_VERSION || "0");
   const SLOT_COLORS = { P: "#ffd36b", Q: "#4fc3f7", W: "#7bd88f", E: "#f4b860", R: "#e66ad2" };
   const TYPE_COLORS = { physical: "#f08a4b", magic: "#7aa2ff", true: "#f4f4f4" };
@@ -1179,6 +1182,7 @@
   // ---------- 3D models ----------
   let modelMode = false;
   function attachModels() {
+    if (!FULL) return;
     const M = window.Models3D;
     // Antialiasing is fixed when the 3D canvas is made: off for low, and for auto on touch screens
     // (phones have dense screens, where it costs the most and shows the least).
@@ -1189,6 +1193,7 @@
   window.addEventListener("models3d-ready", attachModels);
   attachModels();
   function setupModels() {
+    if (!FULL) return;
     const M = window.Models3D;
     if (!M || !M.ok || !champ) return;
     const id = champ.id;
@@ -1204,6 +1209,7 @@
   }
   // Ability button or key: the model's animation, or the clip without a model.
   function showAbility(slot) {
+    if (!FULL) { showCaption(slot); playSound(champ, slot, 1); return; }
     if (modelMode) { showCaption(slot); window.Models3D.previewRole(slot); playSound(champ, slot, 1); }
     else playClip(slot);
   }
@@ -1224,7 +1230,7 @@
   // Master volume from the slider, 0 to 1, remembered between visits.
   let masterVolume = 0.8;
   try { const v = parseFloat(localStorage.getItem("replayVolume")); if (v >= 0 && v <= 1) masterVolume = v; } catch (e) {}
-  fetch(DATA + "sounds/sounds.json" + BUST).then((r) => (r.ok ? r.json() : {})).then((m) => { soundFiles = m; }).catch(() => {});
+  if (FULL) fetch(DATA + "sounds/sounds.json" + BUST).then((r) => (r.ok ? r.json() : {})).then((m) => { soundFiles = m; }).catch(() => {});
   // A few audio players reused round robin. Each is started once inside the first click or
   // key press, which lets it play later from the animation loop (Safari needs this per player).
   const voices = [];
@@ -1249,7 +1255,26 @@
     const p = pickVoice.play();
     if (p && p.catch) p.catch(() => {});
   }
+  // Public page: a short synthesized tone per ability (lower for the ultimate, falling for a death).
+  let audio = null;
+  const TONES = { Q: [660, 0.12], W: [520, 0.12], E: [440, 0.14], R: [220, 0.35], P: [780, 0.08], D: [300, 0.45] };
+  function synth(slot, volume) {
+    const [freq, len] = TONES[slot] || TONES.Q;
+    try {
+      audio = audio || new (window.AudioContext || window.webkitAudioContext)();
+      const now = audio.currentTime, osc = audio.createOscillator(), gain = audio.createGain();
+      osc.type = slot === "R" ? "sawtooth" : "triangle";
+      osc.frequency.setValueAtTime(freq, now);
+      osc.frequency.exponentialRampToValueAtTime(slot === "D" ? freq / 3 : freq * 1.5, now + len);
+      gain.gain.setValueAtTime(0.0001, now);
+      gain.gain.exponentialRampToValueAtTime(Math.max(0.0002, 0.18 * volume * masterVolume), now + 0.01);
+      gain.gain.exponentialRampToValueAtTime(0.0001, now + len);
+      osc.connect(gain).connect(audio.destination);
+      osc.start(now); osc.stop(now + len + 0.02);
+    } catch (e) { /* no Web Audio */ }
+  }
   function playSound(c, slot, volume) {
+    if (!FULL) { if (soundOn && gestured && c && masterVolume > 0) synth(slot, volume); return; }
     if (!soundOn || !gestured || !voices.length || !c) return;
     const packed = soundFiles.clips && soundFiles.clips[c.id] && soundFiles.clips[c.id][slot];
     const video = !soundFiles.clips && slot !== "D" && c.sound && c.sound[slot];
@@ -1269,6 +1294,7 @@
   // The champion's pick quote, when you choose a champion.
   let pickVoice = null;
   function playPickQuote(c) {
+    if (!FULL) return;
     if (!pickVoice || !soundOn || masterVolume === 0 || !c) return;
     const path = `plugins/rcp-be-lol-game-data/global/default/v1/champion-choose-vo/${c.key}.ogg`;
     const urls = [CDRAGON + path, `${DATA}pick/${c.key}.ogg`];
@@ -1453,7 +1479,7 @@
         let latest = null;
         for (const c of fight.casts) if (c.t > before && c.t <= t) latest = !latest || c.s === "R" ? c : latest;
         if (latest) maybeClip(latest.s);
-        if (modelMode) {
+        if (modelMode || !FULL) {
           for (const c of fight.casts) if (c.t > before && c.t <= t) playSound(champ, c.s, 1);
           for (const [uid, list] of fight.enemyCasts)
             for (const c of list) if (c.t > before && c.t <= t) {
