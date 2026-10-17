@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
+import { ADMIN_COOKIE, adminFromCookie } from "@/lib/admin-session";
 
 // Per-visitor limits on the routes that cost something: the Riot lookups (the site's Riot API quota),
 // browser error reports (/api/log, so they can't flood the logs), and the writes (leaderboard
@@ -44,7 +45,33 @@ function memoryAllows(key: string, limit: number) {
   return true;
 }
 
+// Admin-only files (wrangler.jsonc sends these paths through the Worker first): 3D models, ability
+// videos, and the full Simulator replay with its sounds. Admins get the file from the static assets;
+// everyone else a plain 404.
+const ADMIN_ONLY = /^\/(assets\/(models|clips)\/|embed\/simulator\/(full(\.html)?$|replay-data\/sounds\/))/;
+
+async function adminOnly(req: NextRequest) {
+  if (!(await adminFromCookie(req.cookies.get(ADMIN_COOKIE)?.value))) {
+    return new NextResponse("Not found", { status: 404, headers: { "Cache-Control": "no-store" } });
+  }
+  // In `next dev` (and outside Cloudflare) Next serves public/ itself.
+  if (process.env.NODE_ENV === "development") return NextResponse.next();
+  let assets: { fetch(r: Request): Promise<Response> } | undefined;
+  try {
+    assets = (getCloudflareContext().env as unknown as Record<string, typeof assets>).ASSETS;
+  } catch {
+    // Not running on Cloudflare.
+  }
+  if (!assets) return NextResponse.next();
+  const res = await assets.fetch(new Request(req.url, { method: req.method, headers: req.headers }));
+  // Private, so a shared cache never hands an admin's copy to someone else.
+  const out = new Response(res.body, res);
+  out.headers.set("Cache-Control", "private, max-age=86400");
+  return out;
+}
+
 export async function middleware(req: NextRequest) {
+  if (ADMIN_ONLY.test(req.nextUrl.pathname)) return adminOnly(req);
   const rule = ruleFor(req);
   if (!rule) return NextResponse.next();
   const ip = req.headers.get("cf-connecting-ip") ?? req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ?? "unknown";
@@ -63,4 +90,4 @@ export async function middleware(req: NextRequest) {
   );
 }
 
-export const config = { matcher: ["/api/riot/:path*", "/api/log", "/api/sim-scores", "/api/profile", "/api/games"] };
+export const config = { matcher: ["/assets/models/:path*", "/assets/clips/:path*", "/embed/simulator/full", "/embed/simulator/full.html", "/embed/simulator/replay-data/sounds/:path*", "/api/riot/:path*", "/api/log", "/api/sim-scores", "/api/profile", "/api/games"] };

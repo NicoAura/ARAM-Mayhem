@@ -32,6 +32,12 @@ describe("rate limits", () => {
   });
 
   it("guards the lookups, error reports and write routes", () => {
-    expect(config.matcher).toEqual(["/api/riot/:path*", "/api/log", "/api/sim-scores", "/api/profile", "/api/games"]);
+    expect(config.matcher).toEqual(expect.arrayContaining(["/api/riot/:path*", "/api/log", "/api/sim-scores", "/api/profile", "/api/games"]));
+  });
+
+  it("guards the admin-only files", () => {
+    expect(config.matcher).toEqual(
+      expect.arrayContaining(["/assets/models/:path*", "/assets/clips/:path*", "/embed/simulator/full.html", "/embed/simulator/replay-data/sounds/:path*"]),
+    );
   });
 });

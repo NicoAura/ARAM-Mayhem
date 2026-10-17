@@ -6906,3 +6906,15 @@ html[data-device="mobile"] .arch-filter .arch-tag::after {
   color: var(--muted);
   font-size: 0.8125rem;
 }
+
+.admin-session {
+  color: var(--muted);
+  font-size: 0.875rem;
+}
+.admin-session button.inline-link {
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  cursor: pointer;
+}
