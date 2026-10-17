@@ -216,14 +216,14 @@ function renderTiles(games) {
   const dur = n ? sum(games, (g) => g.duration) / n : 0;
   const tiles = [
     ["Games", n, `${wins} W · ${n - wins} L`],
-    ["Win rate", n ? pct(wins / n) : "–", ""],
+    ["Win rate", n ? pct(wins / n) : "–", "", n ? wrClass(wins / n) : ""],
     ["KDA", n ? kda(K, D, A) : "–", n ? `${(K / n).toFixed(1)} / ${(D / n).toFixed(1)} / ${(A / n).toFixed(1)}` : ""],
     ["Damage to champions", n ? Math.round(dmg).toLocaleString() : "–", "per game"],
     ["Game length", n ? `${Math.floor(dur / 60)}:${String(Math.round(dur % 60)).padStart(2, "0")}` : "–", "average"],
     ["Champions played", new Set(games.map((g) => g.champId)).size, ""],
   ];
-  $("tiles").innerHTML = tiles.map(([l, v, s]) =>
-    `<div class="tile"><div class="label">${l}</div><div class="value">${v}</div><div class="sub">${s}</div></div>`).join("");
+  $("tiles").innerHTML = tiles.map(([l, v, s, c]) =>
+    `<div class="tile ${c || ""}"><div class="label">${l}</div><div class="value">${v}</div><div class="sub">${s}</div></div>`).join("");
 }
 
 function renderChart(games) {
@@ -369,6 +369,8 @@ $("km-skin").addEventListener("input", render);
 
 // Sortable table helper. cols: [{label, get, fmt?}]
 const sortState = {};
+const wrClass = (wr) => (wr >= 0.52 ? "wr-high" : wr <= 0.48 ? "wr-low" : "");
+
 function table(id, cols, rows, defaultSort) {
   const t = $(id);
   const s = sortState[id] || (sortState[id] = { col: defaultSort, asc: false });
@@ -404,7 +406,7 @@ function renderChamps(games) {
   table("t-champs", [
     { label: "Champion", get: (r) => champName(r.sample) },
     { label: "Games", get: (r) => r.n },
-    { label: "Win rate", get: (r) => r.w / r.n, fmt: (r) => pct(r.w / r.n) },
+    { label: "Win rate", get: (r) => r.w / r.n, fmt: (r) => pct(r.w / r.n), cls: (r) => wrClass(r.w / r.n) },
     { label: "KDA", get: (r) => (r.k + r.a) / Math.max(1, r.d), fmt: (r) => kda(r.k, r.d, r.a) },
     { label: "Damage", get: (r) => r.dmg / r.n, fmt: (r) => Math.round(r.dmg / r.n).toLocaleString() },
   ], rows, 1);
@@ -420,7 +422,7 @@ function renderAugs(games) {
       fmt: (r) => { const t = RARITY[state.augRarity[r.key]]; return t ? `<span class="tier ${state.augRarity[r.key]}">${t[0]}</span>` : ""; } },
     { label: "Picks", get: (r) => r.n },
     { label: "Pick rate", get: (r) => r.n / total, fmt: (r) => pct(r.n / total) },
-    { label: "Win rate", get: (r) => r.w / r.n, fmt: (r) => pct(r.w / r.n) },
+    { label: "Win rate", get: (r) => r.w / r.n, fmt: (r) => pct(r.w / r.n), cls: (r) => wrClass(r.w / r.n) },
   ], rows, 2);
 }
 
