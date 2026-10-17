@@ -113,15 +113,10 @@ def guide_keys():
     for f in B.WIKI_MECHANICS["fastTravel"]:
         keys += [f["map"], f["name"], f["text"]]
     keys += [n for n, _, _, _ in B.SUMMONS] + [t for _, _, _, t in B.SUMMONS]
-    keys += [x for _, name, bonus in B.AUGMENT_SETS for x in (name, bonus) if x]
     keys += ["Augment", "Emote", "Icon", "Title", "Reward", "A title", "Profile icon"]
     D = load_js(os.path.join(REPO, "guide", "data.js"))
     keys += [c["group"] for c in D["challenges"]]
     keys += [words(c["name"]) for it in D["itemChanges"] for c in it["changes"]]
-    hist = os.path.join(REPO, "guide", "history.js")
-    if os.path.exists(hist):
-        H = load_js(hist)
-        keys += [words(r["name"]) for p in H["patches"] for c in p["changed"] for r in c["changes"]]
     return keys
 
 

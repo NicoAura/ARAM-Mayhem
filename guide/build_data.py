@@ -528,7 +528,7 @@ def localize(en, lo):
     for i, r in enumerate((E.get("track") or {}).get("levels") or []):
         if r.get("augmentId"):
             put(["track", "levels", i, "name"], names.get(str(r["augmentId"])), r["name"])
-    data = {"guide": tree, "augmentNames": {i: n for i, n in names.items() if n != en["augmentNames"].get(i)}}
+    data = {"guide": tree}
     augs = {i: {k: d[k] for k in ("name", "text", "tooltip") if d.get(k)} for i, d in det.items()}
     for i, d in en["details"].items():  # an augment only English parsing found still gets its name
         if i not in augs and names.get(i):
