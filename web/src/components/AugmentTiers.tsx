@@ -5,11 +5,13 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { getParam, setParams } from "@/lib/url-state";
 import { EmptyState } from "@/components/EmptyState";
+import DeepScore from "@/components/DeepScore";
+import { AUGMENT_DEEPSCORE_HELP } from "@/lib/deepscore";
 
 // Augment tier list (/augments?rarity=gold&style=ap): one row per tier, filtered by rarity and build style.
 // Tiers and styles come from the server (lib/augment-tiers.ts).
 
-export type TierRow = { id: number; name: string; href: string; rarity: string; tier: string; winRate: number; pickRate: number; styles: string[] };
+export type TierRow = { id: number; name: string; href: string; rarity: string; tier: string; deepScore: number; winRate: number; pickRate: number; styles: string[] };
 
 const RARITIES: [string, string][] = [
   ["", "All rarities"],
@@ -61,6 +63,12 @@ export default function AugmentTiers({ rows, styles }: { rows: TierRow[]; styles
         </div>
       </div>
 
+      <p className="deepscore-legend">
+        <DeepScore value={50} help={AUGMENT_DEEPSCORE_HELP} />
+        <span>
+          Ranked by <b>DeepScore</b>. Hover or tap the badge to see how it works.
+        </span>
+      </p>
       {shown.length === 0 ? (
         <EmptyState
           title="No augments match"
@@ -83,16 +91,17 @@ export default function AugmentTiers({ rows, styles }: { rows: TierRow[]; styles
       ) : (
         <div className="atiers-rows">
           {TIER_ORDER.map((t) => {
-            const list = shown.filter((a) => a.tier === t).sort((x, y) => y.winRate - x.winRate);
+            const list = shown.filter((a) => a.tier === t).sort((x, y) => y.deepScore - x.deepScore);
             if (!list.length) return null;
             return (
               <section key={t} className="atiers-row" aria-label={`Tier ${t}`}>
                 <span className={`chip tier-${t.toLowerCase()} atiers-tier`}>{t}</span>
                 <div className="atiers-grid">
                   {list.map((a) => (
-                    <Link key={a.id} href={a.href} className="atiers-aug" data-rarity={a.rarity} title={`${a.name}: ${pct(a.winRate)} win, picked in ${pct(a.pickRate)} of games`}>
+                    <Link key={a.id} href={a.href} className="atiers-aug" data-rarity={a.rarity} title={`${a.name}: DeepScore ${a.deepScore}, ${pct(a.winRate)} win, picked in ${pct(a.pickRate)} of games`}>
                       <img src={`/icons/augments/${a.id}.webp`} alt="" width={48} height={48} loading="lazy" />
                       <span className="atiers-name">{a.name}</span>
+                      <DeepScore value={a.deepScore} static />
                       <span className={`atiers-wr ${a.winRate >= 0.52 ? "wr-high" : a.winRate <= 0.48 ? "wr-low" : ""}`}>{pct(a.winRate)}</span>
                     </Link>
                   ))}

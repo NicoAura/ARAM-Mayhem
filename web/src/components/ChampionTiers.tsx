@@ -11,6 +11,7 @@ import Skeleton from "@/components/Skeleton";
 // The page carries only the live and previous patch; older patches load from /data/tier-history.json when picked.
 
 const TIER: Column = { key: "tier", label: "Tier", format: "tier", sortKey: "score", hint: TIER_HELP };
+const DEEP: Column = { key: "deepScore", label: "DeepScore", format: "deepscore", sortKey: "score", hint: TIER_HELP };
 const NAME: Column = { key: "name", label: "Champion", format: "champion" };
 const PATCHES: Column = { key: "patches", label: "Patches", format: "int" };
 
@@ -19,6 +20,7 @@ const CHANGE: Column = { key: "change", label: "Change", format: "pct", hint: "W
 const STANDARD: Column[] = [
   TIER,
   NAME,
+  DEEP,
   { key: "win_rate", label: "Win rate", format: "pct" },
   { key: "pick_rate", label: "Pick rate", format: "pct" },
 ];
@@ -26,7 +28,8 @@ const STANDARD: Column[] = [
 const ADVANCED: Column[] = [
   TIER,
   NAME,
-  { key: "score", label: "Bayesian win rate", format: "pct", hint: TIER_HELP },
+  DEEP,
+  { key: "score", label: "Confident win rate", format: "pct", hint: "The low end of the win rate's likely range, after allowing for how many games there are. DeepScore ranks on this." },
   { key: "win_rate", label: "Raw win rate", format: "pct" },
   { key: "pick_rate", label: "Pick rate", format: "pct" },
   { key: "share", label: "Game share", format: "pct", hint: "Estimated share of all games in the chosen patches, from pick rate and days." },

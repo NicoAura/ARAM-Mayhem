@@ -19,8 +19,8 @@ export default function AugmentTierPage() {
   return (
     <>
       <Intro eyebrow={`Augments · Patch ${livePatch()}`} title="Every augment, ranked.">
-        Each augment is ranked against the others of its rarity, since a selection only offers one rarity. Rarely picked augments need a bigger edge to rank high. Pick a style to see the
-        augments that suit your build.
+        Each augment gets a DeepScore against the others of its rarity, since a selection only offers one rarity. It compares how an augment does with what its champions win anyway,
+        so a strong champion&apos;s favourite has to earn its spot. Pick a style to see the augments that suit your build.
       </Intro>
       <SubTabs
         tabs={[
@@ -31,7 +31,7 @@ export default function AugmentTierPage() {
               <>
                 <AugmentTiers rows={rows} styles={STYLES} />
                 <p className="patch-note">
-                  Live patch games. S is the top 8% of each rarity, then A 20%, B 32%, C 25% and D 15%. For exact numbers, see the{" "}
+                  Live patch games. 50 is average for the rarity; S is 70 and up, A 59, B 44, C 32 and D below. For exact numbers, see the{" "}
                   <Link className="inline-link" href="/tier-list?tab=augments">
                     augment table
                   </Link>

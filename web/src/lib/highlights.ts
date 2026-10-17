@@ -101,7 +101,7 @@ export function searchItems(): SearchItem[] {
 
 export type HomeChamp = { id: string; name: string; tier: string; winRate: number; pickRate: number };
 
-/** Live-patch tiers for every champion (same Bayesian tiers as the Tier List's default view). */
+/** Live-patch tiers for every champion (same DeepScore tiers as the Tier List's default view). */
 export function liveTiers(): HomeChamp[] {
   const patch = livePatch();
   const num = (v?: string) => (v === undefined || v === "" ? null : Number(v));
