@@ -12,9 +12,8 @@ const KEY = "deeparam-tour";
 export const TOUR_EVENT = "deeparam-tour";
 
 const STEPS: { sel: string[]; title: string; body: string }[] = [
-  { sel: [".hero .jump"], title: "Find a champion", body: "Type a name to jump to their build, augments and win rate." },
   { sel: ['.site-header .nav a[href="/tier-list"]', '.tabbar a[href="/tier-list"]'], title: "Tier List", body: "Every champion and augment ranked on the live patch. Pick older patches from the list." },
-  { sel: ['.site-header .nav a[href="/simulator"]', '.tabbar a[href="/simulator"]'], title: "Simulator", body: "Simulated teamfights and builds for every champion. Try your own build in the Build Editor too." },
+  { sel: ['.site-header .nav a[href="/simulator"]', '.tabbar a[href="/simulator"]'], title: "Simulator", body: "Simulated teamfights and builds for every champion." },
   { sel: [".search-btn"], title: "Search anything", body: "Champions, augments, items and pages. Press / or Ctrl+K from anywhere." },
   { sel: ['.site-header [aria-label="Settings"]'], title: "Make it yours", body: "Light or dark theme, less motion, sound and graphics. Saved in this browser." },
 ];

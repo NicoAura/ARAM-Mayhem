@@ -12,7 +12,6 @@ const GO: [string, string, string][] = [
   ["t", "/tier-list", "Tier List"],
   ["s", "/simulator", "Simulator"],
   ["p", "/pbe", "PBE"],
-  ["d", "/tier-list?tab=draft", "Augment Draft"],
   ["r", "/patches", "Patch Recaps"],
   ["i", "/info", "Info"],
 ];
