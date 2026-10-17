@@ -1288,10 +1288,19 @@ h1 {
 }
 
 html[data-device="mobile"] {
-  --tabbar-h: 62px;
-  /* The bar floats just above the home indicator (or 10px off the edge on phones without one). */
-  --tabbar-gap: max(10px, calc(env(safe-area-inset-bottom, 0px) - 8px));
+  /* In the browser the bar is slim so it sits lightly above Safari's or Chrome's own bottom bar. */
+  --tabbar-h: 54px;
+  /* The bar floats just above the home indicator, or 8px above the browser's bar (or the edge). */
+  --tabbar-gap: max(8px, calc(env(safe-area-inset-bottom, 0px) - 10px));
   -webkit-tap-highlight-color: transparent;
+}
+
+/* Added to the Home Screen there is no browser bar under it, so the bar keeps its full size. */
+@media (display-mode: standalone) {
+  html[data-device="mobile"] {
+    --tabbar-h: 62px;
+    --tabbar-gap: max(10px, calc(env(safe-area-inset-bottom, 0px) - 8px));
+  }
 }
 
 html[data-device="mobile"] body {
@@ -1413,6 +1422,32 @@ html[data-device="mobile"] .tabbar {
     inset 0 1px 0 color-mix(in srgb, #fff 14%, transparent);
   -webkit-backdrop-filter: saturate(1.8) blur(22px);
   backdrop-filter: saturate(1.8) blur(22px);
+  transition:
+    transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+    opacity 0.2s;
+}
+
+/* Tucked away below the screen edge while scrolling down (set by MobileTabBar). */
+html[data-device="mobile"] .tabbar[data-hidden] {
+  transform: translateY(calc(100% + var(--tabbar-gap) + 16px));
+  opacity: 0;
+  pointer-events: none;
+}
+
+html[data-motion="reduce"] .tabbar {
+  transition: opacity 0.2s;
+}
+
+html[data-device="mobile"] .tabbar svg {
+  width: 22px;
+  height: 22px;
+}
+
+@media (display-mode: standalone) {
+  html[data-device="mobile"] .tabbar svg {
+    width: 24px;
+    height: 24px;
+  }
 }
 
 html[data-device="mobile"] .tabbar a,
@@ -2065,6 +2100,7 @@ html[data-device="mobile"] .theme-toggle button {
 }
 
 .account-btn:hover,
+.account-btn[aria-expanded="true"],
 .account-btn[aria-current="page"] {
   border-color: var(--muted);
   color: var(--fg);
@@ -2223,6 +2259,29 @@ html[data-device="mobile"] .site-header-inner {
   letter-spacing: 0.04em;
   text-transform: uppercase;
   vertical-align: 0.15em;
+}
+
+/* Header pop-up panel (the settings menu uses it). */
+.account-menu {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  z-index: 40;
+  width: min(300px, calc(100vw - 2rem));
+  padding: 0.5rem;
+  border: 1px solid var(--line);
+  border-radius: var(--r);
+  background: var(--surface);
+  box-shadow: 0 12px 32px rgb(0 0 0 / 0.18);
+}
+
+.account-title {
+  font: 700 1rem/1.2 var(--display);
+}
+
+.account-note {
+  color: var(--muted);
+  font-size: 0.78rem;
 }
 
 /* Settings menu (gear, top right). */
@@ -6070,6 +6129,8 @@ th > button[data-tip] {
   font-size: 0.8125rem;
 }
 .acct-form input[type="email"],
+.acct-form input[type="text"]:not(.visually-hidden),
+.acct-icons input[type="search"],
 .acct-form input[type="password"] {
   height: 40px;
   padding: 0 0.7rem;
@@ -6126,6 +6187,16 @@ th > button[data-tip] {
   letter-spacing: 0.12em;
 }
 .acct-steps { display: grid; gap: 0.35rem; padding-left: 1.2rem; font-size: 0.875rem; }
+.acct-me { display: flex; align-items: center; gap: 0.75rem; }
+.acct-me img { border-radius: 50%; flex: none; }
+.acct-who small { display: block; color: var(--muted); font-size: 0.75rem; font-weight: 400; }
+.acct-icons summary { display: flex; align-items: center; gap: 0.5rem; cursor: pointer; }
+.acct-icons summary img { border-radius: 50%; }
+.acct-icons input[type="search"] { width: 100%; margin: 0.5rem 0; }
+.acct-icon-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(44px, 1fr)); gap: 0.35rem; max-height: 14rem; overflow-y: auto; }
+.acct-icon-grid button { display: grid; place-items: center; min-height: 44px; padding: 2px; border: 2px solid transparent; border-radius: 8px; background: none; color: inherit; font-size: 0.7rem; cursor: pointer; }
+.acct-icon-grid button img { border-radius: 6px; }
+.acct-icon-grid button.picked { border-color: var(--accent); }
 .acct-list { display: grid; gap: 0.35rem; padding: 0; list-style: none; }
 .acct-list li {
   display: flex;
@@ -6140,6 +6211,31 @@ th > button[data-tip] {
 .acct-links { display: flex; flex-wrap: wrap; gap: 0.5rem; }
 .acct-links .btn { display: inline-flex; align-items: center; text-decoration: none; }
 .acct-danger summary { color: var(--bad); }
+/* Colour: each card wears a site hue (data-accent) as a top stripe, a tinted heading and buttons. */
+.acct-card[data-accent], .acct-signin[data-accent] { border-top: 3px solid var(--a); }
+.acct-card[data-accent] h2 { color: var(--a); color: var(--a-ink); }
+.acct-card[data-accent] .btn:not(.ghost):not(.danger) { background: var(--a); border-color: var(--a); color: #fff; }
+.acct-card[data-accent] .btn.ghost { border-color: var(--a); }
+.acct-signin[data-accent] .acct-tabs .active { color: var(--a); color: var(--a-ink); box-shadow: inset 0 -2px 0 var(--a); }
+.acct-me img { box-shadow: 0 0 0 2px var(--a); }
+.acct-danger { border-top: 3px solid var(--bad); }
+
+/* Connecting a Riot account: three steps with progress, the code with a copy button, then waiting. */
+.acct-progress { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.35rem; margin: 0; padding: 0; list-style: none; font-size: 0.75rem; }
+.acct-progress li { display: grid; justify-items: center; gap: 0.25rem; text-align: center; color: var(--muted); position: relative; }
+.acct-progress li + li::before { content: ""; position: absolute; top: 0.8rem; right: 50%; width: 100%; height: 2px; background: var(--line); z-index: 0; }
+.acct-progress li.done + li::before { background: var(--a); }
+.acct-progress .dot { position: relative; z-index: 1; display: grid; place-items: center; width: 1.6rem; height: 1.6rem; border-radius: 50%; border: 2px solid var(--line); background: var(--bg); font-weight: 700; }
+.acct-progress .now { color: var(--fg); font-weight: 600; }
+.acct-progress .now .dot { border-color: var(--a); color: var(--a); }
+.acct-progress .done .dot { border-color: var(--a); background: var(--a); color: #fff; }
+.acct-code-row { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0.5rem; }
+.acct-code-row .acct-code { margin: 0; color: var(--a); }
+.acct-waiting { display: flex; align-items: center; gap: 0.5rem; font-size: 0.8rem; color: var(--muted); }
+.acct-waiting .pulse { flex: none; width: 0.6rem; height: 0.6rem; border-radius: 50%; background: var(--a); animation: acct-pulse 1.4s ease-in-out infinite; }
+@keyframes acct-pulse { 50% { opacity: 0.3; transform: scale(0.7); } }
+html[data-motion="reduce"] .acct-waiting .pulse { animation: none; }
+@media (prefers-reduced-motion: reduce) { .acct-waiting .pulse { animation: none; } }
 .btn.danger { background: var(--bad); color: #fff; }
 
 /* Augments by icon (/augments?tab=groups) */
@@ -7017,4 +7113,24 @@ html[dir="rtl"] .jump-wr {
   .arch-filter .arch-tag {
     min-height: 44px;
   }
+}
+
+/* The site owner's 3D Simulator switch, at the top of the Simulator page. */
+.sim-view-switch {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 14px;
+  margin: 0 0 16px;
+  padding: 10px 14px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--surface);
+}
+.sim-view-switch .seg button {
+  min-width: 56px;
+}
+.sim-view-switch span {
+  color: var(--muted);
+  font-size: 13px;
 }

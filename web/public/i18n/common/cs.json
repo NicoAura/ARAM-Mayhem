@@ -113,8 +113,6 @@
  "Everything ARAM Mayhem.": "Vše o ARAM: Mela.",
  "Every Mayhem pick, measured.": "Každá volba v ARAM: Mela, změřená.",
  "Win rates for every champion and augment on the current patch, and a fight simulator for every champion.": "Procento výher každého šampiona a augmentu v aktuálním patchi a simulátor soubojů pro každého šampiona.",
- "days of games this patch": "dní her v tomto patchi",
- "days of games, all time": "dní her celkem",
  "All {n} →": "Všech {n} →",
  "Best augments": "Nejlepší augmenty",
  "All →": "Vše →",
@@ -149,6 +147,7 @@
  "Silver": "Stříbrný",
  "Gold": "Zlatý",
  "Prismatic": "Prizmatický",
- "patches covered": "pokrytých patchů",
- "games shared by players": "her sdílených hráči"
+ "Share": "Sdílet",
+ "Link copied": "Odkaz zkopírován",
+ "Copy this link": "Zkopírujte tento odkaz"
 }

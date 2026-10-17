@@ -113,8 +113,6 @@
  "Everything ARAM Mayhem.": "Everything ARAM Mayhem.",
  "Every Mayhem pick, measured.": "Every Mayhem pick, measured.",
  "Win rates for every champion and augment on the current patch, and a fight simulator for every champion.": "Win rates for every champion and augment on the current patch, and a fight simulator for every champion.",
- "days of games this patch": "days of games this patch",
- "days of games, all time": "days of games, all time",
  "All {n} →": "All {n} →",
  "Best augments": "Best augments",
  "All →": "All →",
@@ -149,6 +147,7 @@
  "Silver": "Silver",
  "Gold": "Gold",
  "Prismatic": "Prismatic",
- "patches covered": "patches covered",
- "games shared by players": "games shared by players"
+ "Share": "Share",
+ "Link copied": "Link copied",
+ "Copy this link": "Copy this link"
 }

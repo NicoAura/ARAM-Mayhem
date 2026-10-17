@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useNames, useT } from "./I18n";
 
 // On the account page, for the connected Riot account: ranked standing, challenge standing, mastery
 // against this patch's Mayhem tiers, the title and challenge tokens they show in the client, and the
@@ -33,13 +34,16 @@ type Tiers = Record<number, { id: string; name: string; tier: string | null; win
 
 const STRONG = new Set(["S", "A"]);
 const QUEUES: Record<string, string> = { RANKED_SOLO_5x5: "Solo/Duo", RANKED_FLEX_SR: "Flex" };
+// Ranked tiers and challenge levels, as words ("GOLD" → "Gold"); they are also translation keys.
 const title = (s: string) => s.charAt(0) + s.slice(1).toLowerCase();
-const top = (p: number) => `Top ${p * 100 < 1 ? (p * 100).toFixed(1) : Math.max(1, Math.round(p * 100))}%`;
+const pct = (p: number) => (p * 100 < 1 ? (p * 100).toFixed(1) : String(Math.max(1, Math.round(p * 100))));
 const icon = (alias: string) => `/icons/champions/${alias}.webp`;
 
 export default function PlayerExtras() {
   const [extras, setExtras] = useState<Extras | null>(null);
   const [tiers, setTiers] = useState<Tiers>({});
+  const t = useT("account");
+  const names = useNames();
 
   useEffect(() => {
     let live = true;
@@ -57,7 +61,12 @@ export default function PlayerExtras() {
   }, []);
 
   if (!extras?.connected) return null;
-  const champ = (id: number) => tiers[id] ?? { id: "", name: `Champion ${id}`, tier: null, winRate: null };
+  const champ = (id: number) => {
+    const c = tiers[id] ?? { id: "", name: t("Champion {id}", { id }), tier: null, winRate: null };
+    return c.id ? { ...c, name: names("champions", c.id, c.name) } : c;
+  };
+  const level = (s: string) => t(title(s));
+  const top = (p: number) => t("Top {pct}%", { pct: pct(p) });
   const { challenges, mastery, clash } = extras;
   const ranked = (extras.ranked ?? []).filter((r) => QUEUES[r.queueType]);
 
@@ -67,14 +76,12 @@ export default function PlayerExtras() {
         <dl className="acct-ranks">
           {ranked.map((r) => (
             <div key={r.queueType} className="rank-badge">
-              <dt>{QUEUES[r.queueType]}</dt>
+              <dt>{t(QUEUES[r.queueType])}</dt>
               <dd>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img src={`/assets/ranked/${r.tier.toLowerCase()}.png`} alt="" width={40} height={40} />
-                {title(r.tier)} {["MASTER", "GRANDMASTER", "CHALLENGER"].includes(r.tier) ? "" : r.rank} · {r.leaguePoints} LP
-                <span>
-                  {r.wins}W {r.losses}L
-                </span>
+                {level(r.tier)} {["MASTER", "GRANDMASTER", "CHALLENGER"].includes(r.tier) ? "" : r.rank} · {t("{n} LP", { n: r.leaguePoints })}
+                <span>{t("{wins}W {losses}L", { wins: r.wins, losses: r.losses })}</span>
               </dd>
             </div>
           ))}
@@ -84,18 +91,18 @@ export default function PlayerExtras() {
         <dl className="acct-ranks">
           {challenges.total && (
             <div>
-              <dt>Challenges</dt>
+              <dt>{t("Challenges")}</dt>
               <dd>
-                {title(challenges.total.level)}
+                {level(challenges.total.level)}
                 <span>{top(challenges.total.percentile)}</span>
               </dd>
             </div>
           )}
           {challenges.aram && (
             <div>
-              <dt>ARAM challenges</dt>
+              <dt>{t("ARAM challenges")}</dt>
               <dd>
-                {title(challenges.aram.level)}
+                {level(challenges.aram.level)}
                 <span>{top(challenges.aram.percentile)}</span>
               </dd>
             </div>
@@ -105,20 +112,20 @@ export default function PlayerExtras() {
 
       {challenges && (challenges.title || challenges.tokens?.length) ? (
         <div className="player-extra">
-          <h3>Your profile in the client</h3>
+          <h3>{t("Your profile in the client")}</h3>
           {challenges.title && (
             <p className="acct-title">
-              Title: <strong>{challenges.title}</strong>
+              {t("Title:")} <strong>{challenges.title}</strong>
             </p>
           )}
           {challenges.tokens?.length ? (
             <ul className="acct-tokens">
-              {challenges.tokens.map((t) => (
-                <li key={t.id} title={t.description}>
+              {challenges.tokens.map((tok) => (
+                <li key={tok.id} title={tok.description}>
                   {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={`/assets/challenge/${t.id}-${t.level}.png`} alt="" width={48} height={48} loading="lazy" />
-                  <span className="name">{t.name}</span>
-                  <span className="lvl">{title(t.level)}</span>
+                  <img src={`/assets/challenge/${tok.id}-${tok.level}.png`} alt="" width={48} height={48} loading="lazy" />
+                  <span className="name">{tok.name}</span>
+                  <span className="lvl">{level(tok.level)}</span>
                 </li>
               ))}
             </ul>
@@ -128,8 +135,8 @@ export default function PlayerExtras() {
 
       {mastery.length > 0 && (
         <div className="player-extra">
-          <h3>Mastery and this patch&apos;s Mayhem tier</h3>
-          <p className="acct-hint">Your highest-mastery champions. Highlighted ones are S or A tier in Mayhem right now.</p>
+          <h3>{t("Mastery and this patch's Mayhem tier")}</h3>
+          <p className="acct-hint">{t("Your highest-mastery champions. Highlighted ones are S or A tier in Mayhem right now.")}</p>
           <ul className="mastery-list">
             {mastery.map((m) => {
               const c = champ(m.championId);
@@ -141,7 +148,7 @@ export default function PlayerExtras() {
                   )}
                   <span className="name">{c.id ? <a href={`/champions/${c.id}`}>{c.name}</a> : c.name}</span>
                   <span className="pts">
-                    Level {m.championLevel} · {m.championPoints.toLocaleString()} pts
+                    {t("Level {level} · {points} pts", { level: m.championLevel, points: m.championPoints.toLocaleString() })}
                   </span>
                   <span className={`chip tier-${(c.tier ?? "none").toLowerCase()}`}>{c.tier ?? "–"}</span>
                 </li>
@@ -154,22 +161,22 @@ export default function PlayerExtras() {
       {clash && (
         <div className="player-extra">
           <h3>
-            ARAM Clash team: {clash.name} <span>[{clash.abbreviation}] · Tier {clash.tier}</span>
+            {t("ARAM Clash team: {name}", { name: clash.name })} <span>[{clash.abbreviation}] · {t("Tier {n}", { n: clash.tier })}</span>
           </h3>
           <ul className="clash-roster">
             {clash.members.map((m, i) => {
               const best = m.mayhem.length
-                ? m.mayhem.map((c) => `${champ(c.championId).name} (${c.games} games, ${Math.round((100 * c.wins) / Math.max(1, c.games))}%)`)
-                : m.top.map((c) => `${champ(c.championId).name}${champ(c.championId).tier ? ` (${champ(c.championId).tier} tier)` : ""}`);
-              const who = m.gameName ? `${m.gameName}#${m.tagLine}` : "Teammate";
+                ? m.mayhem.map((c) => t("{name} ({games} games, {pct}%)", { name: champ(c.championId).name, games: c.games, pct: Math.round((100 * c.wins) / Math.max(1, c.games)) }))
+                : m.top.map((c) => (champ(c.championId).tier ? t("{name} ({tier} tier)", { name: champ(c.championId).name, tier: champ(c.championId).tier! }) : champ(c.championId).name));
+              const who = m.gameName ? `${m.gameName}#${m.tagLine}` : t("Teammate");
               return (
                 <li key={i}>
                   <span className="name">
                     {m.page ? <a href={m.page}>{who}</a> : who}
-                    {m.role === "CAPTAIN" && <span> · Captain</span>}
+                    {m.role === "CAPTAIN" && <span> · {t("Captain")}</span>}
                   </span>
                   <span className="best">
-                    {best.length ? `${m.mayhem.length ? "Most-played Mayhem" : "Best mastery"}: ${best.join(", ")}` : ""}
+                    {best.length ? `${m.mayhem.length ? t("Most-played Mayhem") : t("Best mastery")}: ${best.join(", ")}` : ""}
                   </span>
                 </li>
               );

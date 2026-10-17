@@ -6,6 +6,8 @@ import { profileByPuuid, profilePath } from "./profiles";
 import { enabledProviders, PROVIDER_NAMES, type Identity, type Provider } from "./oauth";
 import { rsoEnabled } from "./rso";
 import { DEFAULT_SETTINGS } from "./settings";
+import { serverEnv } from "./env";
+import CHAMPIONS from "@/data/champion-names.json";
 
 // Site accounts: sign in with an email and password or a passkey, and Favorites and settings follow
 // you to every browser you sign in on. Passwords are stored as salted PBKDF2 hashes, sessions as the
@@ -68,9 +70,28 @@ export function cleanPassword(raw: unknown): string {
 
 const randomToken = () => b64(crypto.getRandomValues(new Uint8Array(32))).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
 
-/** Starts a session and sets its cookies on the response. */
-export async function startSession(res: NextResponse, account: { id: string; owner: boolean }, method: "password" | "passkey" | "riot" | Provider, secure: boolean) {
+const ownerEmail = () => serverEnv("OWNER_EMAIL")?.trim().toLowerCase() || null;
+
+/**
+ * The site owner (3D Simulator, site editor) is the account whose email is the OWNER_EMAIL secret. The email
+ * lives only in that secret, never in the code. Brings the stored flag in line and says whether this account is it.
+ */
+export async function syncOwner(id: string): Promise<boolean> {
+  const want = ownerEmail();
   const d = await db();
+  const row = await d.prepare("SELECT email, owner FROM accounts WHERE id = ?").bind(id).first<{ email: string | null; owner: number }>();
+  const owner = Boolean(want && row?.email && row.email === want);
+  if (row && owner !== (row.owner === 1)) {
+    if (owner) await d.batch([d.prepare("UPDATE accounts SET owner = 0 WHERE owner = 1 AND id != ?").bind(id), d.prepare("UPDATE accounts SET owner = 1 WHERE id = ?").bind(id)]);
+    else await d.prepare("UPDATE accounts SET owner = 0 WHERE id = ?").bind(id).run();
+  }
+  return owner;
+}
+
+/** Starts a session and sets its cookies on the response. */
+export async function startSession(res: NextResponse, account: { id: string }, method: "password" | "passkey" | "riot" | Provider, secure: boolean) {
+  const d = await db();
+  const owner = await syncOwner(account.id);
   const token = randomToken();
   const now = Date.now();
   const expires = now + SESSION_DAYS * 86_400_000;
@@ -81,7 +102,7 @@ export async function startSession(res: NextResponse, account: { id: string; own
   const opts = { path: "/", maxAge: SESSION_DAYS * 86_400, sameSite: "lax" as const, secure };
   res.cookies.set(SESSION_COOKIE, token, { ...opts, httpOnly: true });
   res.cookies.set(SIGNED_IN_FLAG, "1", opts);
-  if (account.owner) res.cookies.set(OWNER_FLAG, "1", opts);
+  if (owner) res.cookies.set(OWNER_FLAG, "1", opts);
   else res.cookies.delete(OWNER_FLAG);
 }
 
@@ -151,20 +172,20 @@ export async function accountView(a: SessionAccount) {
   const row = await d.prepare("SELECT * FROM accounts WHERE id = ?").bind(a.id).first<Row>();
   if (!row) throw new AccountError("Sign in first.", 401);
   const keys = await d.prepare("SELECT id, label, created_at FROM passkeys WHERE account = ? ORDER BY created_at").bind(a.id).all<{ id: string; label: string | null; created_at: string }>();
-  const ownerTaken = await d.prepare("SELECT 1 FROM accounts WHERE owner = 1").first();
   let data: AccountData = { favorites: [], settings: {} };
   try {
     data = cleanData(JSON.parse(row.data));
   } catch {}
   const profile = row.riot_puuid ? await profileByPuuid(row.riot_puuid).catch(() => null) : null;
+  const look = await d.prepare("SELECT name, icon FROM account_profile WHERE account = ?").bind(a.id).first<{ name: string | null; icon: string | null }>();
   const logins = await d.prepare("SELECT provider, email FROM logins WHERE account = ? ORDER BY created_at").bind(a.id).all<{ provider: Provider; email: string | null }>();
   return {
     id: row.id,
     email: row.email,
+    name: look?.name ?? null,
+    icon: look?.icon ?? null,
     hasPassword: Boolean(row.pass),
-    owner: row.owner === 1,
-    // The owner can be claimed once, with the old editor password, while nobody holds it.
-    canClaimOwner: !ownerTaken,
+    owner: await syncOwner(a.id),
     data,
     passkeys: keys.results.map((k) => ({ id: k.id, label: k.label ?? "Passkey", created: k.created_at })),
     riot: row.riot_name ? { name: row.riot_name, platform: row.riot_platform, page: profile ? profilePath(profile.platform, profile.name, profile.tag) : null } : null,
@@ -189,15 +210,39 @@ export async function changePassword(a: SessionAccount, current: unknown, next: 
   ]);
 }
 
-export async function deleteAccount(id: string) {
-  const d = await db();
-  await d.batch(["passkeys", "sessions", "link_codes", "logins"].map((t) => d.prepare(`DELETE FROM ${t} WHERE account = ?`).bind(id)).concat(d.prepare("DELETE FROM accounts WHERE id = ?").bind(id)));
+/** A password check for changes that matter, skipped right after a fresh sign-in on an account with no password. */
+export async function confirmIt(a: SessionAccount, password: unknown) {
+  const row = await (await db()).prepare("SELECT pass FROM accounts WHERE id = ?").bind(a.id).first<{ pass: string | null }>();
+  const recent = Date.now() - a.created < 15 * 60_000;
+  if (row?.pass ? !(a.method === "passkey" && recent) && !(typeof password === "string" && (await checkPasswordHash(password, row.pass))) : !recent)
+    throw new AccountError(row?.pass ? "Your password is wrong." : "Sign out and back in, then try again.", 401);
 }
 
-export async function claimOwner(id: string) {
+/** Display name (up to 24 characters) and champion icon. Empty clears either one. */
+export async function saveProfile(id: string, raw: { name?: unknown; icon?: unknown }) {
+  const name = typeof raw.name === "string" ? raw.name.replace(/\s+/g, " ").trim() : "";
+  if (name.length > 24) throw new AccountError("Use 24 characters or fewer for your name.");
+  if (/[<>\p{C}]/u.test(name)) throw new AccountError("That name has characters it can't use.");
+  const icon = typeof raw.icon === "string" && raw.icon in CHAMPIONS ? raw.icon : null;
+  await (await db())
+    .prepare("INSERT INTO account_profile (account, name, icon) VALUES (?, ?, ?) ON CONFLICT (account) DO UPDATE SET name = excluded.name, icon = excluded.icon")
+    .bind(id, name || null, icon)
+    .run();
+}
+
+/** A new email for signing in. The owner's email can't be moved onto another account. */
+export async function changeEmail(a: SessionAccount, email: string, password: unknown) {
+  await confirmIt(a, password);
   const d = await db();
-  if (await d.prepare("SELECT 1 FROM accounts WHERE owner = 1").first()) throw new AccountError("The site already has an owner.", 409);
-  await d.prepare("UPDATE accounts SET owner = 1 WHERE id = ?").bind(id).run();
+  if (email === ownerEmail()) throw new AccountError("That email can't be used here.", 403);
+  if (await d.prepare("SELECT 1 FROM accounts WHERE email = ? AND id != ?").bind(email, a.id).first()) throw new AccountError("There's already an account with that email.", 409);
+  await d.prepare("UPDATE accounts SET email = ? WHERE id = ?").bind(email, a.id).run();
+  await syncOwner(a.id);
+}
+
+export async function deleteAccount(id: string) {
+  const d = await db();
+  await d.batch(["passkeys", "sessions", "link_codes", "logins", "account_profile"].map((t) => d.prepare(`DELETE FROM ${t} WHERE account = ?`).bind(id)).concat(d.prepare("DELETE FROM accounts WHERE id = ?").bind(id)));
 }
 
 // ---- Riot account (through My Stats) ----

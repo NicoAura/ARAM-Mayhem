@@ -3,8 +3,7 @@ import { serverEnv } from "./env";
 import { cleanContent, type Content } from "./content";
 import bundled from "@/content/site.json";
 
-// Backs the site editor (/account/edit). Two Cloudflare secrets:
-//   ADMIN_PASSWORD  typed once to make Nico's account the site owner (/api/account/owner); can be deleted after
+// Backs the site editor (/account/edit), open to the owner's account only (OWNER_EMAIL, lib/accounts.ts). Secret:
 //   GITHUB_TOKEN    fine-grained token with Contents read/write on nicothomas02/DeepARAM only
 // A save commits src/content/site.json to main; Workers Builds then redeploys the site.
 
@@ -18,21 +17,6 @@ export class AdminError extends Error {
     public status: number,
   ) {
     super(message);
-  }
-}
-
-export async function checkPassword(given: string | null) {
-  const want = serverEnv("ADMIN_PASSWORD");
-  if (!want) throw new AdminError("The editor isn't set up yet: ADMIN_PASSWORD is missing.", 503);
-  const enc = new TextEncoder();
-  const [a, b] = await Promise.all([crypto.subtle.digest("SHA-256", enc.encode(given ?? "")), crypto.subtle.digest("SHA-256", enc.encode(want))]);
-  const x = new Uint8Array(a);
-  const y = new Uint8Array(b);
-  let diff = 0;
-  for (let i = 0; i < x.length; i++) diff |= x[i] ^ y[i];
-  if (diff !== 0) {
-    await new Promise((r) => setTimeout(r, 800)); // slows down guessing
-    throw new AdminError("Wrong password.", 401);
   }
 }
 

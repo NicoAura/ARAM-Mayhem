@@ -113,8 +113,6 @@
  "Everything ARAM Mayhem.": "Minden az ARAM: Káoszról.",
  "Every Mayhem pick, measured.": "Minden ARAM: Káosz-választás, lemérve.",
  "Win rates for every champion and augment on the current patch, and a fight simulator for every champion.": "Minden hős és bővítés győzelmi aránya az aktuális frissítésen, és harcszimulátor minden hőshöz.",
- "days of games this patch": "nap meccsei ezen a frissítésen",
- "days of games, all time": "nap meccsei összesen",
  "All {n} →": "Mind a {n} →",
  "Best augments": "Legjobb bővítések",
  "All →": "Mind →",
@@ -149,6 +147,7 @@
  "Silver": "Ezüst",
  "Gold": "Arany",
  "Prismatic": "Prizmatikus",
- "patches covered": "lefedett frissítés",
- "games shared by players": "játékosok által megosztott meccs"
+ "Share": "Megosztás",
+ "Link copied": "Link kimásolva",
+ "Copy this link": "Másold ki ezt a linket"
 }

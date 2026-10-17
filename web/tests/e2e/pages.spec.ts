@@ -10,7 +10,9 @@ const PAGES = [
   "/simulator",
   "/pbe",
   "/info",
-  "/lab",
+  "/kitchen",
+  "/simulator/infinite-ryze",
+  "/info/region-teams",
   "/stats",
   "/champions/Ahri",
   "/champions/Yunara",
@@ -81,7 +83,8 @@ test("old addresses redirect to the current tabs", async ({ page }) => {
     ["/tools/guide", "/info"],
     ["/tools/simulator", "/simulator"],
     ["/china", "/tier-list"],
-    ["/tools/fun", "/lab"],
+    ["/tools/fun", "/kitchen"],
+    ["/lab", "/kitchen"],
   ]) {
     await page.goto(from);
     expect(new URL(page.url()).pathname + new URL(page.url()).search, from).toBe(to);
@@ -100,8 +103,9 @@ test("old addresses redirect to the current tabs", async ({ page }) => {
     expect(url.searchParams.get("tab"), from!).toBe(tab);
     if (keep) expect(url.searchParams.get(keep), from!).toBeTruthy();
   }
-  await page.goto("/kitchen");
-  expect(new URL(page.url()).hash).toBe("#cook-builds");
+  // The Lab is The Kitchen now; a deep link keeps its #hash.
+  await page.goto("/lab#chefs-special");
+  expect(new URL(page.url()).pathname + new URL(page.url()).hash).toBe("/kitchen#chefs-special");
 });
 
 test("new visitors start in dark mode", async ({ page }) => {

@@ -26,6 +26,8 @@ const SCHEMA = [
   `CREATE TABLE IF NOT EXISTS logins (provider TEXT NOT NULL, subject TEXT NOT NULL, account TEXT NOT NULL, email TEXT, created_at TEXT NOT NULL,
     PRIMARY KEY (provider, subject))`,
   `CREATE INDEX IF NOT EXISTS logins_account ON logins (account)`,
+  // What the account looks like on its own page: a display name and a champion icon.
+  `CREATE TABLE IF NOT EXISTS account_profile (account TEXT PRIMARY KEY, name TEXT, icon TEXT)`,
 ];
 
 let ready: Promise<void> | null = null;

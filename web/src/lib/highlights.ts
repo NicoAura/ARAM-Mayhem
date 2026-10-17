@@ -59,12 +59,6 @@ export function topDps(n = 5) {
     .slice(0, n);
 }
 
-/** Days of games behind the stats: on the live patch and across every patch, and how many patches. */
-export function coverage() {
-  const rows = readRepoCsv("data/cn/history/patches.csv") ?? [];
-  return { patchDays: Number(rows.at(-1)?.days ?? 0), allDays: rows.reduce((s, r) => s + Number(r.days || 0), 0), patches: rows.length };
-}
-
 export function counts() {
   return {
     champions: readRepoCsv("data/cn/champions.csv")?.length ?? 0,
@@ -164,6 +158,6 @@ export function chefsSpecial() {
     play: s.play ?? "",
     items: (s.items ?? []).map((name) => ({ name, icon: pages.get(name)?.icon, href: pages.has(name) ? `/items/${pages.get(name)!.slug}` : null })),
     augments: (s.augments ?? []).map((a) => ({ name: a.name, rarity: a.rarity.toLowerCase(), core: a.core, icon: a.icon })),
-    href: s.href || "/lab#chefs-special",
+    href: s.href || "/kitchen#chefs-special",
   };
 }

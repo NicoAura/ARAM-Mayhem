@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { pageMeta } from "@/lib/meta";
 import DataTable, { type Row } from "@/components/DataTable";
 import Embed from "@/components/Embed";
@@ -6,6 +7,7 @@ import Intro from "@/components/Intro";
 import { text } from "@/lib/content";
 import Pending from "@/components/Pending";
 import SimLeaderboard from "@/components/SimLeaderboard";
+import SimReplayEmbed, { SimViewSwitch } from "@/components/SimReplayEmbed";
 import SubTabs from "@/components/SubTabs";
 import { readRepoJson, repoHas } from "@/lib/repo-data";
 
@@ -51,7 +53,7 @@ export default function SimulatorPage() {
     tabs.push({
       id: "replays",
       label: "Fight replays",
-      content: <Embed src="/embed/simulator/index.html" title="Mayhem fight replay" minHeight={900} />,
+      content: <SimReplayEmbed />,
     });
   }
   if (repoHas(`${VIEWER}/team.html`)) {
@@ -143,14 +145,37 @@ export default function SimulatorPage() {
     });
   }
 
+  // Infinite Ryze (The Lab's calculator) lives with the other simulations; its own page is /simulator/infinite-ryze.
+  if (repoHas("tools/fun/ryze-calculator/index.html")) {
+    tabs.push({
+      id: "infinite-ryze",
+      label: "Infinite Ryze",
+      lazy: true,
+      content: (
+        <>
+          {repoHas("web/src/app/simulator/infinite-ryze/page.tsx") && (
+            <p className="table-note">
+              How far Ryze&apos;s AP to Mana loop goes. <Link href="/simulator/infinite-ryze">Open it on its own page →</Link>
+            </p>
+          )}
+          <Embed src="/embed/fun/ryze-calculator/index.html" title="Infinite Ryze" minHeight={900} />
+        </>
+      ),
+    });
+  }
+
   return (
     <>
       <Intro eyebrow="Simulator" title={text("page./simulator.title", "Teamfight damage, simulated.")}>
         <span className="tag">Beta</span>{" "}
         An experiment: results can shift as the model changes. Monte Carlo teamfights against enemy teams weighted by
         Mayhem pick rates, with a build search for every champion. Use it to compare builds for one champion, not to
-        rank champions.
+        rank champions.{" "}
+        <Link className="inline-link" href="/simulator/infinite-ryze">
+          Infinite Ryze →
+        </Link>
       </Intro>
+      <SimViewSwitch />
       {tabs.length ? (
         <SubTabs tabs={tabs} />
       ) : (

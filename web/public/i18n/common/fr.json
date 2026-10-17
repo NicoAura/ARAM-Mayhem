@@ -113,8 +113,6 @@
  "Everything ARAM Mayhem.": "Tout l'ARAM du chaos.",
  "Every Mayhem pick, measured.": "Chaque choix de l'ARAM du chaos, mesuré.",
  "Win rates for every champion and augment on the current patch, and a fight simulator for every champion.": "Taux de victoire de chaque champion et augment sur le patch actuel, et un simulateur de combat pour chaque champion.",
- "days of games this patch": "jours de parties sur ce patch",
- "days of games, all time": "jours de parties au total",
  "All {n} →": "Les {n} →",
  "Best augments": "Meilleurs augments",
  "All →": "Tout →",
@@ -149,6 +147,7 @@
  "Silver": "Argent",
  "Gold": "Or",
  "Prismatic": "Prismatique",
- "patches covered": "patchs couverts",
- "games shared by players": "parties partagées par les joueurs"
+ "Share": "Partager",
+ "Link copied": "Lien copié",
+ "Copy this link": "Copiez ce lien"
 }
