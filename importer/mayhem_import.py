@@ -520,9 +520,13 @@ def site_post(lcu, path, payload):
     return reply
 
 
-def site_profile(action, data=None, lockfile=None):
-    """Publish, remove or check this account's public page on the site."""
-    reply = site_post(find_client(lockfile), "/api/profile", {"action": action, "data": data})
+def site_profile(action, data=None, lockfile=None, code=None):
+    """Publish, remove or check this account's public page on the site, or ("link") connect this Riot
+    account to a deeparam.com account with the code shown on its account page."""
+    payload = {"action": action, "data": data}
+    if action == "link":
+        payload = {"action": action, "code": code}
+    reply = site_post(find_client(lockfile), "/api/profile", payload)
     if reply.get("path"):
         reply["url"] = SITE + reply["path"]
     return reply
@@ -915,9 +919,12 @@ def serve(out, port, lockfile=None, sgp_host=None, open_browser=True, record_liv
                 try:
                     req = json.loads(self.rfile.read(min(int(self.headers.get("Content-Length") or 0), 64000)) or b"{}")
                     action = req.get("action")
-                    if action not in ("publish", "remove", "status"):
+                    if action not in ("publish", "remove", "status", "link"):
                         return self.send_json({"error": "bad request"}, 400)
-                    return self.send_json(site_profile(action, req.get("data"), lockfile))
+                    code = str(req.get("code") or "").strip().upper()
+                    if action == "link" and not re.fullmatch(r"[A-Z0-9]{8}", code):
+                        return self.send_json({"error": "Enter the 8-character code from your account page."}, 400)
+                    return self.send_json(site_profile(action, req.get("data"), lockfile, code))
                 except ImportFailed as e:
                     return self.send_json({"error": str(e)}, 502)
                 except Exception:

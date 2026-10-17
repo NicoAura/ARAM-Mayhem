@@ -511,3 +511,11 @@ def test_live_recording_closed_mid_game_is_kept(mi, tmp_path):
     mi.live_recorder(stop, {}, fetch=fetch, folder=str(tmp_path), progress=lambda m: None)
     (r,) = mi.live_recordings(str(tmp_path))
     assert r["complete"] and len(r["snapshots"]) == 2
+
+
+def test_link_sends_only_the_code(mi, monkeypatch):
+    sent = []
+    monkeypatch.setattr(mi, "find_client", lambda lockfile=None: None)
+    monkeypatch.setattr(mi, "site_post", lambda lcu, path, payload: sent.append((path, payload)) or {"linked": True, "riotId": "Me#1"})
+    assert mi.site_profile("link", {"games": 5}, code="AB12CD34") == {"linked": True, "riotId": "Me#1"}
+    assert sent == [("/api/profile", {"action": "link", "code": "AB12CD34"})]

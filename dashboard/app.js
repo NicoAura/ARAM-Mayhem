@@ -731,6 +731,7 @@ async function setupSync() {
   setupProfile();
   setupShare();
   setupLive();
+  setupLink();
 })();
 
 // ---------- public page ----------
@@ -800,6 +801,41 @@ async function setupProfile() {
   profileCard.hidden = false;
   showProfile(null);
   try { showProfile(await profileCall("status")); } catch (e) { /* stays "Off" until they try */ }
+}
+
+// ---------- connect account ----------
+// Links the Riot account signed in to this computer to a deeparam.com account, using the one-time code the
+// site's account page shows. The helper proves which Riot account it is; nothing else is sent.
+
+const linkStatus = $("link-status");
+
+$("link-form").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const input = $("link-code");
+  const code = input.value.trim().toUpperCase();
+  linkStatus.hidden = false;
+  if (!/^[A-Z0-9]{8}$/.test(code)) { linkStatus.textContent = "Enter the 8-character code from your account page."; return; }
+  const btn = e.submitter || $("link-form").querySelector("button");
+  btn.disabled = true;
+  linkStatus.textContent = "Connecting…";
+  try {
+    const res = await fetch("api/profile", {
+      method: "POST", headers: { "X-Mayhem": "1", "Content-Type": "application/json" },
+      body: JSON.stringify({ action: "link", code }),
+    });
+    const j = await res.json().catch(() => ({}));
+    if (!res.ok || !j.linked) throw new Error(j.error || "Something went wrong. Try again.");
+    linkStatus.textContent = `Connected ${j.riotId || "your Riot account"}. Reload your account page on deeparam.com to see it.`;
+    input.value = "";
+  } catch (err) {
+    linkStatus.textContent = err.message;
+  } finally {
+    btn.disabled = false;
+  }
+});
+
+function setupLink() {
+  if (helperOnline && !state.sample) $("link-card").hidden = false;
 }
 
 // ---------- sharing ----------
