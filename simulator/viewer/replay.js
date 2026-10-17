@@ -1202,34 +1202,11 @@
     M.setFight(id, trace.fight.team).then((ok) => {
       if (!champ || champ.id !== id) return;
       modelMode = ok;
-      if (ok) showSkins(id);
       video.pause();
       $("clipVideo").hidden = ok;
       $("clipNote").textContent = ok
         ? T("Click an ability (or press Q, W, E, R) and your champion casts it in the arena.")
         : T("No model for this champion yet, so casts play the ability's preview instead.");
-    });
-  }
-  // The owner's skin picker, next to the replay controls, for champions with other skins.
-  function showSkins(id) {
-    const M = window.Models3D;
-    if (!M.skinsFor) return;
-    M.skinsFor(id).then(({ list, picked }) => {
-      if (!champ || champ.id !== id) return;
-      let sel = $("skinSel");
-      if (!list.length) { if (sel) sel.hidden = true; return; }
-      if (!sel) {
-        sel = document.createElement("select");
-        sel.id = "skinSel";
-        sel.setAttribute("aria-label", T("Skin"));
-        sel.addEventListener("change", () => { M.setSkin(champ.id, sel.value); setupModels(); });
-        $("sound").before(sel);
-      }
-      sel.hidden = false;
-      sel.textContent = "";
-      sel.add(new Option(T("Default skin"), ""));
-      for (const s of list) sel.add(new Option(s.name, s.id));
-      sel.value = picked;
     });
   }
   // Ability button or key: the model's animation, or the clip without a model.
