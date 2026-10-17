@@ -128,6 +128,7 @@ export default function RootLayout({
           <nav className="footer-links" aria-label="Legal">
             <Link href="/privacy">Privacy</Link>
             <Link href="/terms">Terms</Link>
+            <Link href="/status">Status</Link>
             <a href="mailto:admin@deeparam.com">Contact</a>
           </nav>
           <p>{text("footer")}</p>
