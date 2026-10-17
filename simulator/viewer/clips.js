@@ -6,7 +6,7 @@
 // champion or skin prefix.
 //
 // Returns {clips, extra, after}:
-//   clips: {idle, run, attack, crit, Q, W, E, R, stunned, death}, one name each (or null)
+//   clips: {idle, run, attack, crit, Q, W, E, R, stunned, death, dance}, one name each (or null)
 //   extra: {idle: [...], attack: [...], Q: [...], ...}, other versions of the same move,
 //          played in turn (idle variations, Yasuo's three Q swings, Lux's other idles)
 //   after: {Q: name, ...}, the clip that finishes an ability back into idle (Spell4_toIdle)
@@ -35,6 +35,7 @@ export function pickClips(names) {
     Q: spell(1), W: spell(2), E: spell(3), R: spell(4),
     stunned: find("stunned", "stun", /stun/),
     death: find("death", /^death/, /(^|_)death/),
+    dance: find("dance_loop", "dance_loop_base", "dance_base", "dance", /(^|_)dance(_loop)?(_base)?$/, /dance/),
   };
 
   // Other versions of the same move, in name order: one idle and one attack variation, up to

@@ -8,12 +8,15 @@
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="stylesheet" href="/assets/fonts/fonts.css">
 <style>
-/* Same look as the website (web/): cool grey page, white cards with hairline borders, blue accent,
+/* Same look as the website (web/): cool grey page, white cards with hairline borders, the Simulator's purple tab hue,
    Bricolage Grotesque headings over Geist and Geist Mono; light and dark follow the system.
    The arena and timeline stay a dark game screen. */
 :root {
   --bg: #e7ebef; --surface: #f0f3f6; --raised: #e0e5eb; --fg: #1f252e; --muted: #525b68; --line: #d3dae2;
-  --hover: var(--raised); --accent: #09659d; --accent-ink: #ffffff;
+  --hover: var(--raised); --accent: #9b7bff; --accent-ink: #120a2b;
+  --accent-soft: color-mix(in srgb, var(--accent) 16%, transparent);
+  --accent-text: color-mix(in srgb, var(--accent) 70%, var(--fg));
+  --good: #197048; --bad: #a83831; --gold: #e0a83c;
   --abyss: var(--bg);
   --panel: var(--surface);
   --panel-2: var(--raised);
@@ -30,10 +33,10 @@
 }
 @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
   --bg: #090b0f; --surface: #11151c; --raised: #181d26; --fg: #e8ecf2; --muted: #8b94a3; --line: #222936;
-  --accent: #5cc0ff; --accent-ink: #04121c; color-scheme: dark; } }
+  --good: #4cc98b; --bad: #f0776f; color-scheme: dark; } }
 :root[data-theme="dark"] {
   --bg: #090b0f; --surface: #11151c; --raised: #181d26; --fg: #e8ecf2; --muted: #8b94a3; --line: #222936;
-  --accent: #5cc0ff; --accent-ink: #04121c; color-scheme: dark; }
+  --good: #4cc98b; --bad: #f0776f; color-scheme: dark; }
 * { box-sizing: border-box; }
 html, body { background: var(--abyss); color: var(--frost); }
 body { margin: 0; font: 14px/1.5 var(--body); }
@@ -43,15 +46,15 @@ body { margin: 0; font: 14px/1.5 var(--body); }
 header { display: flex; flex-wrap: wrap; align-items: end; gap: 12px 24px; justify-content: space-between; }
 h1 { font: 700 clamp(26px, 3.2vw, 32px)/1.1 var(--display); letter-spacing: -.025em; margin: 0; text-wrap: balance; }
 .eyebrow { font: 500 11.5px/1 var(--mono); letter-spacing: .06em; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; }
-.beta { display: inline-block; margin-left: 6px; padding: 3px 7px; border: 1px solid var(--accent); border-radius: 999px; color: var(--accent); letter-spacing: .06em; vertical-align: 1px; }
+.beta { display: inline-block; margin-left: 6px; padding: 3px 7px; border: 1px solid var(--accent); border-radius: 999px; color: var(--accent-text); background: var(--accent-soft); letter-spacing: .06em; vertical-align: 1px; }
 .picker { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
 label.lbl { font: 500 11px/1 var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
 select, button { font: 500 14px var(--body); color: var(--frost); background: transparent; border: 1px solid var(--line);
   border-radius: 10px; padding: 7px 12px; background: var(--surface); }
 button { cursor: pointer; }
-button:hover, select:hover { background: var(--hover); }
+button:hover, select:hover { background: var(--accent-soft); border-color: color-mix(in srgb, var(--accent) 45%, var(--line)); }
 :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 6px; }
-.stage { display: grid; grid-template-columns: minmax(0, 1.7fr) minmax(0, 1fr); gap: 16px; align-items: start; }
+.stage { display: grid; grid-template-columns: minmax(0, 1fr); gap: 16px; align-items: start; }
 @media (max-width: 860px) { .stage { grid-template-columns: minmax(0, 1fr); } }
 .arena { background: var(--screen); border: 1px solid var(--line); border-radius: 14px; color-scheme: dark; overflow: hidden; position: relative; min-width: 0; }
 .arena canvas { display: block; width: 100%; height: auto; aspect-ratio: 16 / 9; max-width: 100%; }
@@ -61,6 +64,7 @@ button:hover, select:hover { background: var(--hover); }
 .hud b { color: #ededed; font-variant-numeric: tabular-nums; }
 .clip { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; overflow: hidden; display: grid;
   grid-template-rows: auto auto 1fr; min-width: 0; }
+.clip[hidden] { display: none; }
 .clip-video { position: relative; background: #05080c; aspect-ratio: 360 / 246; max-width: 100%; }
 .clip-video video { width: 100%; height: 100%; display: block; object-fit: cover; }
 .clip-video .fallback { position: absolute; inset: 0; display: grid; place-items: center; color: var(--muted); font-size: 13px; text-align: center; padding: 16px; }
@@ -75,7 +79,7 @@ button:hover, select:hover { background: var(--hover); }
 .ab .cd { position: absolute; inset: 0; pointer-events: none; }
 .ab.lit { border-color: var(--accent); }
 .clip-note { padding: 0 12px 12px; color: var(--muted); font-size: 12px; }
-.timeline { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 10px 12px; display: grid; gap: 8px; }
+.timeline { background: var(--panel); border: 1px solid var(--line); border-top: 2px solid var(--accent); border-radius: 14px; padding: 10px 12px; display: grid; gap: 8px; }
 .controls { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
 .controls .time { font: 500 13px var(--mono); font-variant-numeric: tabular-nums; margin-left: auto; color: var(--muted); }
 .controls .time b { color: var(--frost); }
@@ -86,17 +90,23 @@ button:hover, select:hover { background: var(--hover); }
 .legend i { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 6px; vertical-align: -1px; }
 .lower { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: 16px; }
 @media (max-width: 860px) { .lower { grid-template-columns: minmax(0, 1fr); } }
-.card { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 18px 20px; min-width: 0; }
-.card h2 { font: 500 11.5px/1 var(--mono); letter-spacing: .06em; text-transform: uppercase; color: var(--muted); margin: 0 0 12px; }
+.card { background: var(--panel); border: 1px solid var(--line); border-top: 2px solid var(--accent); border-radius: 14px; padding: 18px 20px; min-width: 0; }
+.card h2 { font: 500 11.5px/1 var(--mono); letter-spacing: .06em; text-transform: uppercase; color: var(--accent-text); margin: 0 0 12px; }
 .build { display: flex; flex-wrap: wrap; gap: 6px; }
 .build span { border: 1px solid var(--line); border-radius: 4px; padding: 3px 8px; font-size: 13px; }
-.build span.aug { border-style: dashed; }
+.build span:hover { background: var(--accent-soft); }
+.build span.aug { border-color: transparent; color: #14100a; font-weight: 500; }
+.build span.aug.silver { background: #b9c1cc; }
+.build span.aug.gold { background: var(--gold); }
+.build span.aug.prismatic { background: linear-gradient(90deg, #c7b4ff, #9be7ff 50%, #ffc2e8); }
+.up { color: var(--good); } .down { color: var(--bad); }
 .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); gap: 10px; margin-top: 14px; }
 .stats div { display: grid; gap: 2px; }
 .stats small { color: var(--muted); font: 500 11px var(--mono); text-transform: uppercase; letter-spacing: .06em; }
 .stats b { font: 600 20px var(--mono); letter-spacing: -.02em; font-variant-numeric: tabular-nums; }
 .bars { display: grid; gap: 8px; }
-.bar { display: grid; grid-template-columns: 110px minmax(0, 1fr) 70px; gap: 10px; align-items: center; font-size: 13px; }
+.bar { display: grid; grid-template-columns: 110px minmax(0, 1fr) 70px; gap: 10px; align-items: center; font-size: 13px; border-radius: 6px; }
+.bar:hover { background: var(--accent-soft); }
 .bar .fill { height: 8px; border-radius: 4px; background: var(--panel-2); overflow: hidden; }
 .bar .fill i { display: block; height: 100%; border-radius: 4px; }
 .bar b { text-align: right; font: 500 13px var(--mono); font-variant-numeric: tabular-nums; }
@@ -131,6 +141,13 @@ fieldset select { width: 100%; min-width: 0; font-size: 13px; padding: 6px 8px; 
 .modes { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: 13px; }
 .modes label { display: flex; gap: 6px; align-items: center; cursor: pointer; }
 .enemy { display: grid; gap: 6px; padding: 8px; border: 1px solid var(--line); border-radius: 8px; background: var(--raised); }
+.enemy:hover { border-color: color-mix(in srgb, var(--accent) 50%, var(--line)); }
+fieldset.wide { grid-column: 1 / -1; }
+.enemy-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 10px; }
+.enemy.changed { border-color: var(--e); }
+.enemy-gear { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 4px; }
+.enemy-gear span { grid-column: 1 / -1; font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; }
+.enemy-gear select { font-size: 12px; padding: 4px 6px; }
 .enemy-stats { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px; }
 .enemy-stats label { display: grid; gap: 2px; font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; }
 .enemy-stats input.changed { border-color: var(--e); }
@@ -169,7 +186,7 @@ fieldset select { width: 100%; min-width: 0; font-size: 13px; padding: 6px 8px; 
       <canvas id="arenaOverlay" class="layer" width="1280" height="720" aria-hidden="true"></canvas>
       <div class="hud"><span>Kills <b id="kills">0</b></span><span>Damage <b id="dmg">0</b></span><span id="state"></span></div>
     </div>
-    <div class="clip">
+    <div class="clip" hidden>
       <div class="clip-cap"><span class="chip" id="clipChip" style="background:var(--q)">Q</span><span class="nm" id="clipName">Ability</span></div>
       <div class="clip-video" id="clipVideo">
         <video id="video" playsinline muted preload="auto" aria-label="Official ability preview"></video>
@@ -216,8 +233,8 @@ fieldset select { width: 100%; min-width: 0; font-size: 13px; padding: 6px 8px; 
       <fieldset id="buildBox"><legend>Build</legend></fieldset>
       <fieldset id="enemyBox"><legend>Enemies</legend>
         <div class="modes" role="radiogroup" aria-label="Enemy team">
-          <label><input type="radio" name="emode" id="emodePool" value="pool" checked> Random mix</label>
-          <label><input type="radio" name="emode" id="emodePick" value="pick"> Pick five</label>
+          <label><input type="radio" name="emode" id="emodePool" value="pool" checked> Random each fight</label>
+          <label><input type="radio" name="emode" id="emodePick" value="pick"> Chosen</label>
           <label><input type="radio" name="emode" id="emodeDummy" value="dummy"> Training dummies</label>
         </div>
         <div id="enemyDetail"></div>
@@ -248,10 +265,10 @@ fieldset select { width: 100%; min-width: 0; font-size: 13px; padding: 6px 8px; 
 </div>
 <script type="importmap">{"imports": {"three": "/assets/lib/three-0.160.0/build/three.module.js",
   "three/addons/": "/assets/lib/three-0.160.0/examples/jsm/"}}</script>
-<script>window.REPLAY_VERSION = "27";</script>
-<script src="replay.js?v=27"></script>
-<script type="module" src="models3d.js?v=27"></script>
-<script src="sim-panel.js?v=27"></script>
+<script>window.REPLAY_VERSION = "28";</script>
+<script src="replay.js?v=28"></script>
+<script type="module" src="models3d.js?v=28"></script>
+<script src="sim-panel.js?v=28"></script>
 <!-- replay-page-end -->
 </body>
 </html>

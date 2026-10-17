@@ -41,13 +41,15 @@ wasm: $(SRC) $(HDR)
 		--preload-file data/yunara_mayhem.json --preload-file data/cn_enemy_pool.json
 
 # Browser build of the all-champion simulator for the replay viewer's controls (data embedded in the .wasm).
+# The embedded data files leave out their maintainer notes (tools/strip_notes.py).
+EMBED_DATA = mayhem_rules champions items augments cn_enemy_pool combos
 wasm-mayhem: $(CHAMP_SRC) $(CHAMP_HDR)
-	mkdir -p dist
+	mkdir -p dist dist/embed
+	python3 tools/strip_notes.py dist/embed $(EMBED_DATA:%=data/%.json)
 	$(EMCC) -std=c++17 -O2 $(CHAMP_SRC) -o dist/mayhem_sim.js \
 		-sMODULARIZE -sEXPORT_NAME=MayhemSim -sALLOW_MEMORY_GROWTH -sENVIRONMENT=worker,web,node \
 		-sINVOKE_RUN=0 -sEXIT_RUNTIME=0 -sEXPORTED_RUNTIME_METHODS=callMain,FS \
-		--embed-file data/mayhem_rules.json --embed-file data/champions.json --embed-file data/items.json \
-		--embed-file data/augments.json --embed-file data/cn_enemy_pool.json --embed-file data/combos.json
+		$(foreach f,$(EMBED_DATA),--embed-file dist/embed/$(f).json@data/$(f).json)
 
 # Fight replays for viewer/: one traced fight per champion, plus Riot's icons and
 # ability clips (CLIPS=--clips stores shrunk clips locally instead of streaming them).

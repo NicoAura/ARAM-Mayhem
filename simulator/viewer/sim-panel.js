@@ -5,9 +5,11 @@
   const $ = (id) => document.getElementById(id);
   const DUMMY_KEYS = ["fixed_target", "target_hp", "target_armor", "target_mr"];
   // The Fight box shows the few settings most people change; the rest sit under "Advanced settings".
-  const BASIC_KEYS = ["level", "fight_mean", "enemy_damage_scale", "cc_scale", "dodge_chance"];
+  const BASIC_KEYS = ["level", "enemy_damage_scale", "cc_scale", "dodge_chance"];
+  const WHOLE_KEYS = ["level", "until_death", "team_size", "fixed_target", "combo_order"];  // integer steps
   const ADVANCED = [
-    ["Fight timing", ["fight_sd", "fight_min", "fight_max", "engage_min", "engage_max", "retarget_delay", "r_ready_chance"]],
+    ["Fight timing", ["until_death", "fight_cap", "fight_mean", "fight_sd", "fight_min", "fight_max", "engage_min", "engage_max",
+      "retarget_delay", "r_ready_chance"]],
     ["Positions and skillshots", ["start_distance", "enemy_spread", "reaction_time", "aim_lead"]],
     ["Crowd control and casting", ["cc_min", "cc_max", "combo_order"]],
   ];
@@ -19,7 +21,7 @@
   // Live patch by default; PBE runs the same model on the test server's numbers (data/pbe).
   let patch = "live";
   const patchArgs = () => (patch === "pbe" ? ["--game-data", "data/pbe"] : []);
-  let picks = null; // [{id, stats:{hp, armor, mr, damage_share}}]
+  let picks = null; // five enemies [{id, stats:{hp, armor, mr, damage_share}, items:[], augs:[]}]; the first team_size fight
   const combos = {};  // champion id -> combo the user typed
   const enemyById = new Map();
 
@@ -111,11 +113,12 @@
     renderCombo();
 
     if (!picks) {
-      picks = trace.fight.team.slice(0, 5).map((id) => ({ id, stats: {} }));
+      picks = trace.fight.team.slice(0, 5).map((id) => ({ id, stats: {}, items: [], augs: [] }));
       const byWeight = meta.enemies.slice().sort((a, b) => b.weight - a.weight);
       for (const e of byWeight) {
         if (picks.length >= 5) break;
-        if (!picks.some((p) => p.id === e.id) && e.id.toLowerCase() !== champ.id.toLowerCase()) picks.push({ id: e.id, stats: {} });
+        if (!picks.some((p) => p.id === e.id) && e.id.toLowerCase() !== champ.id.toLowerCase())
+          picks.push({ id: e.id, stats: {}, items: [], augs: [] });
       }
     }
     // A champion never fights itself in Mayhem.
@@ -136,32 +139,74 @@
   }
 
   // ---------- enemies ----------
+  // The Enemies box holds how many enemies fight and how they're chosen; each chosen enemy's
+  // champion, stats, items and augments sit under Advanced settings.
   function enemyMode() { return document.querySelector('input[name="emode"]:checked').value; }
   for (const r of document.querySelectorAll('input[name="emode"]')) r.addEventListener("change", renderEnemies);
+  const teamSize = () => {
+    const s = meta && meta.settings.find((x) => x.key === "team_size");
+    const v = fieldValues.team_size !== undefined ? fieldValues.team_size : s ? s.default : 1;
+    return Math.max(1, Math.min(5, Math.round(v) || 1));
+  };
   function renderEnemies() {
     const box = $("enemyDetail");
     box.textContent = "";
     if (!meta) return;
+    const size = meta.settings.find((s) => s.key === "team_size");
+    if (size) {
+      const f = field(size);
+      f.querySelector("input").min = 1; f.querySelector("input").max = 5;
+      f.querySelector("input").addEventListener("change", renderEnemies);
+      box.append(f);
+    }
     const mode = enemyMode();
-    if (mode === "pool") {
-      const p = document.createElement("p"); p.className = "note";
-      p.textContent = "Each fight draws five enemies weighted by how often they're picked in Mayhem, with their HP, resists and damage. This is the default.";
-      box.append(p);
-      return;
-    }
-    if (mode === "dummy") {
+    const n = teamSize(), word = n === 1 ? "enemy" : `${n} enemies`;
+    const p = document.createElement("p"); p.className = "note";
+    if (mode === "pool")
+      p.textContent = `Each fight draws ${n === 1 ? "one enemy" : word} weighted by how often they're picked in Mayhem, with their HP, resists and damage. ` +
+        "To fight a particular champion or change its stats, items or augments, open Advanced settings.";
+    else if (mode === "pick")
+      p.textContent = `Every fight is against the ${word} set under Advanced settings.`;
+    else {
       for (const k of ["target_hp", "target_armor", "target_mr"]) box.append(field(meta.settings.find((s) => s.key === k)));
-      return;
+      p.textContent = "Dummies stand still and don't hit back.";
     }
+    box.append(p);
+    renderEnemyCards();
+  }
+  function changedPick(pick) { return Object.keys(pick.stats).length > 0 || pick.items.length > 0 || pick.augs.length > 0; }
+  // Editing a chosen enemy means you want to fight it.
+  function useChosen() {
+    if (enemyMode() === "pick") return;
+    $("emodePick").checked = true;
+    renderEnemies();
+  }
+  function renderEnemyCards() {
+    const grid = $("advGrid");
+    let fs = $("enemyCards");
+    if (!fs) {
+      fs = document.createElement("fieldset"); fs.id = "enemyCards"; fs.className = "wide";
+      grid.prepend(fs);
+    }
+    fs.textContent = "";
+    const lg = document.createElement("legend"); lg.textContent = "Chosen enemies"; fs.append(lg);
+    if (!meta || !champ || !picks) return;
+    const intro = document.createElement("p"); intro.className = "note";
+    intro.textContent = "Used when Enemies is set to Chosen; changing one switches to it. Items and augments add their Health, Armor and Magic Resist. Dmg share sets how hard the enemy hits.";
+    fs.append(intro);
     const pool = meta.enemies.filter((e) => e.id.toLowerCase() !== champ.id.toLowerCase())
       .sort((a, b) => a.name.localeCompare(b.name));
-    picks.forEach((pick, idx) => {
+    const items = meta.items.slice().sort((a, b) => a.name.localeCompare(b.name));
+    const augs = meta.augments.slice().sort((a, b) => a.name.localeCompare(b.name));
+    const cards = document.createElement("div"); cards.className = "enemy-cards";
+    picks.slice(0, teamSize()).forEach((pick, idx) => {
       const card = document.createElement("div"); card.className = "enemy";
+      const mark = () => { card.classList.toggle("changed", changedPick(pick)); countAdvanced(); };
       const s = document.createElement("select"); s.setAttribute("aria-label", "Enemy " + (idx + 1));
       for (const e of pool) s.add(new Option(e.name, e.id));
       s.value = pick.id;
-      s.addEventListener("change", () => { pick.id = s.value; pick.stats = {}; renderEnemies(); });
-      const grid = document.createElement("div"); grid.className = "enemy-stats";
+      s.addEventListener("change", () => { pick.id = s.value; pick.stats = {}; useChosen(); renderEnemyCards(); });
+      const stats = document.createElement("div"); stats.className = "enemy-stats";
       const base = enemyById.get(pick.id.toLowerCase()) || {};
       for (const [key, label, step] of ENEMY_STATS) {
         const l = document.createElement("label");
@@ -169,20 +214,34 @@
         const inp = document.createElement("input");
         inp.type = "number"; inp.step = step; inp.min = 0;
         inp.value = pick.stats[key] !== undefined ? pick.stats[key] : base[key];
-        const mark = () => inp.classList.toggle("changed", Math.abs(parseFloat(inp.value) - base[key]) > 1e-9);
+        const markInput = () => inp.classList.toggle("changed", Math.abs(parseFloat(inp.value) - base[key]) > 1e-9);
         inp.addEventListener("input", () => {
           const v = parseFloat(inp.value);
           if (Number.isFinite(v) && Math.abs(v - base[key]) > 1e-9) pick.stats[key] = v; else delete pick.stats[key];
-          mark();
+          markInput(); mark(); useChosen();
         });
-        mark();
-        l.append(inp); grid.append(l);
+        markInput();
+        l.append(inp); stats.append(l);
       }
-      card.append(s, grid); box.append(card);
+      const gear = (label, list, chosen, count) => {
+        const wrap = document.createElement("div"); wrap.className = "enemy-gear";
+        const h = document.createElement("span"); h.textContent = label; wrap.append(h);
+        for (let i = 0; i < count; i++) {
+          const g = select(list, chosen[i], `Enemy ${idx + 1} ${label.toLowerCase()} ${i + 1}`);
+          g.addEventListener("change", () => {
+            const vals = [...wrap.querySelectorAll("select")].map((x) => x.value).filter(Boolean);
+            chosen.length = 0; chosen.push(...vals);
+            mark(); useChosen();
+          });
+          wrap.append(g);
+        }
+        return wrap;
+      };
+      card.append(s, stats, gear("Items", items, pick.items, 6), gear("Augments", augs, pick.augs, 4));
+      cards.append(card);
+      mark();
     });
-    const p = document.createElement("p"); p.className = "note";
-    p.textContent = "Starts from each champion's Mayhem HP, resists and share of their team's damage. Change any number to make that enemy tougher or hit harder.";
-    box.append(p);
+    fs.append(cards);
   }
 
   // ---------- fight settings ----------
@@ -195,7 +254,7 @@
     l.textContent = words;
     const inp = document.createElement("input");
     inp.type = "number"; inp.id = id;
-    inp.step = Math.abs(s.default) <= 1 && s.key !== "level" ? 0.05 : s.default >= 100 ? 10 : 1;
+    inp.step = WHOLE_KEYS.includes(s.key) ? 1 : Math.abs(s.default) <= 1 ? 0.05 : s.default >= 100 ? 10 : 1;
     inp.value = fieldValues[s.key] !== undefined ? fieldValues[s.key] : s.default;
     const mark = () => wrap.classList.toggle("changed", Math.abs(parseFloat(inp.value) - s.default) > 1e-9);
     inp.addEventListener("input", () => {
@@ -215,7 +274,7 @@
     for (const k of BASIC_KEYS) if (byKey.has(k)) box.append(field(byKey.get(k)));
     const grid = $("advGrid");
     grid.textContent = "";
-    const placed = new Set([...BASIC_KEYS, ...DUMMY_KEYS]);
+    const placed = new Set([...BASIC_KEYS, ...DUMMY_KEYS, "team_size"]);
     const groups = ADVANCED.map(([name, keys]) => {
       keys.forEach((k) => placed.add(k));
       return [name, keys.filter((k) => byKey.has(k))];
@@ -230,6 +289,7 @@
       grid.append(fs);
     }
     if (champ) renderCombo();
+    renderEnemies();
     countAdvanced();
   }
   // Cast order when several abilities are ready; defaults to the champion's recommended combo.
@@ -255,7 +315,7 @@
   }
   // "Advanced settings (2 changed)", so changes hidden in the closed section aren't forgotten.
   function countAdvanced() {
-    const n = $("advGrid").querySelectorAll(".field.changed").length;
+    const n = $("advGrid").querySelectorAll(".field.changed, .enemy.changed").length;
     $("advCount").textContent = n ? `(${n} changed)` : "";
   }
 
@@ -266,7 +326,8 @@
     if (enemyMode() === "dummy") set.push(["fixed_target", 1]);
     if (set.length) a.push("--set", set.map(([k, v]) => `${k}=${v}`).join(","));
     if (enemyMode() === "pick")
-      a.push("--team", picks.map((p) => [p.id, ...Object.entries(p.stats).map(([k, v]) => `${k}=${v}`)].join(":")).join(","));
+      a.push("--team", picks.slice(0, teamSize()).map((p) => [p.id, ...Object.entries(p.stats).map(([k, v]) => `${k}=${v}`),
+        ...(p.items.length ? ["items=" + p.items.join("+")] : []), ...(p.augs.length ? ["augs=" + p.augs.join("+")] : [])].join(":")).join(","));
     const combo = $("comboInput") ? $("comboInput").value : "";
     if (combo && combo !== defaultCombo()) {
       if (new Set(combo).size !== combo.length) throw new Error("Use each of Q, W, E and R at most once in the combo.");
@@ -302,8 +363,16 @@
     const def = window.ReplayViewer.defaultTrace().summary.mean_dps;
     const secs = ((performance.now() - t0) / 1000).toFixed(1);
     status(`Done in ${secs} s${patch === "pbe" ? " on the PBE patch" : ""}. Average DPS ${Math.round(best.mean_dps).toLocaleString()} ` +
-      `(±${Math.round(best.ci95)}), survives ${Math.round(best.survival_rate * 100)}% of fights. ` +
+      `(±${Math.round(best.ci95)}), alive for ${best.time_alive.toFixed(1)} s on average. ` +
       `The default setup averaged ${Math.round(def).toLocaleString()}. The replay above now shows a typical fight with these settings.`);
+    // ▲/▼ against the default setup, coloured.
+    const change = (best.mean_dps - def) / Math.max(1, def);
+    if (Math.abs(change) >= 0.005) {
+      const d = document.createElement("span");
+      d.className = change > 0 ? "up" : "down";
+      d.textContent = ` ${change > 0 ? "▲" : "▼"} ${Math.abs(change * 100).toFixed(1)}% DPS vs default`;
+      $("simStatus").append(d);
+    }
     showAlternatives(withBuild ? [] : res.builds);
     window.ReplayViewer.showTrace(tr);
     trace = tr;
