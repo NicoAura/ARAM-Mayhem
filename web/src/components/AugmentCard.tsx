@@ -17,7 +17,7 @@ export default function AugmentCard({
   removed,
   compact,
 }: {
-  name: string;
+  name: React.ReactNode;
   tier?: string;
   icon?: string;
   set?: string;

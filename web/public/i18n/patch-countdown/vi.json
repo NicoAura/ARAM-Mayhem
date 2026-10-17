@@ -1,0 +1,9 @@
+{
+ "Patch {patch} comes out in {n} days": "Phiên bản {patch} ra mắt sau {n} ngày",
+ "Patch {patch} comes out tomorrow": "Phiên bản {patch} ra mắt vào ngày mai",
+ "Patch {patch} is out today": "Phiên bản {patch} ra mắt hôm nay",
+ "Today": "Hôm nay",
+ "day": "ngày",
+ "days": "ngày",
+ "{date} (Pacific Time)": "{date} (giờ Thái Bình Dương)"
+}

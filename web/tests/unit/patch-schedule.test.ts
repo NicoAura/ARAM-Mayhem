@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { readFileSync } from "node:fs";
-import { inDays, longDate, nextPatch, type PatchSchedule } from "@/lib/patch-schedule";
+import { longDate, nextPatch, type PatchSchedule } from "@/lib/patch-schedule";
 
 const schedule = JSON.parse(readFileSync("../data/patch-schedule.json", "utf8")) as PatchSchedule;
 
@@ -25,7 +25,7 @@ describe("patch countdown", () => {
   });
 
   it("words the dates for players", () => {
-    expect([inDays(0), inDays(1), inDays(4)]).toEqual(["today", "tomorrow", "in 4 days"]);
     expect(longDate("2026-10-21")).toBe("Wednesday, October 21");
+    expect(longDate("2026-10-21", "fr")).toBe("mercredi 21 octobre");
   });
 });

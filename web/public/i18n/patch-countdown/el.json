@@ -1,0 +1,9 @@
+{
+ "Patch {patch} comes out in {n} days": "Η ενημέρωση {patch} κυκλοφορεί σε {n} ημέρες",
+ "Patch {patch} comes out tomorrow": "Η ενημέρωση {patch} κυκλοφορεί αύριο",
+ "Patch {patch} is out today": "Η ενημέρωση {patch} κυκλοφορεί σήμερα",
+ "Today": "Σήμερα",
+ "day": "ημέρα",
+ "days": "ημέρες",
+ "{date} (Pacific Time)": "{date} (ώρα Ειρηνικού)"
+}
