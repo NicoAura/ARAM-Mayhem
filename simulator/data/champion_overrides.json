@@ -454,5 +454,55 @@
    "lock": 1.5,
    "why": "about five bullets after a full charge"
   }
+ },
+ "Hwei": {
+  "Q": {
+   "alt_calcs": [
+    "Tooltip_QWDamage",
+    "Tooltip_QWBonusDamage",
+    "Tooltip_QEDamage",
+    "Tooltip_QEDamagePerSecond"
+   ],
+   "cast_time": 0.25,
+   "geometry": {
+    "shape": "line",
+    "range": 800,
+    "width": 200,
+    "speed": 2000,
+    "on_self": false,
+    "self_buff": false,
+    "stops": true
+   },
+   "why": "Q is three subspells on one cooldown; modelled as QQ Devastating Fire (the fireball), the usual damage pick, not all three at once"
+  },
+  "W": {
+   "hit_mults": {
+    "Tooltip_WEOnHitDamage": 3
+   },
+   "shield": null,
+   "cast_time": 0.25,
+   "why": "W is three subspells on one cooldown; modelled as WE Stirring Lights (three empowered hits), without WW's ally shield"
+  },
+  "E": {
+   "alt_calcs": [
+    "Tooltip_EWDamage",
+    "Tooltip_EEDamage"
+   ],
+   "cast_time": 0.25,
+   "geometry": {
+    "shape": "line",
+    "range": 1100,
+    "width": 140,
+    "speed": 1300,
+    "on_self": false,
+    "self_buff": false,
+    "stops": true
+   },
+   "why": "E is three subspells on one cooldown; modelled as EQ Gaze of the Abyss (the fear skillshot), not all three at once"
+  },
+  "R": {
+   "cast_time": 0.25,
+   "why": "Spiraling Despair's cast time is 0.25 s"
+  }
  }
 }
