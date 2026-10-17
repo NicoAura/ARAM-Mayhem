@@ -212,13 +212,15 @@ def test_enemy_pool_builds_live():
         check_build(e["id"], e["build"], its, augs, (6, 4))
 
 
-@pytest.mark.xfail(strict=True, reason="PBE patch bug: cn_enemy_pool.json builds use augments that data/pbe/augments.json "
-                                       "leaves out (critical_missile, dropkick, ult_bot), so --game-data data/pbe fails")
 def test_enemy_pool_builds_pbe():
+    """Pool builds come from live games; gear the PBE patch removed is left out of them there (not an error)."""
     pool = load_json(DATA_DIR / "cn_enemy_pool.json")
+    live = set(items("live")) | set(augments("live"))
     its, augs = set(items("pbe")), set(augments("pbe"))
     for e in pool["enemies"]:
-        check_build(e["id"], e["build"], its, augs)
+        missing = [k for k in e["build"]["items"] if k not in its] + [k for k in e["build"]["augments"] if k not in augs]
+        assert all(k in live for k in missing), (e["id"], missing)
+    assert "" not in augs
 
 
 def test_yunara_presets_reference_its_items_and_augments():

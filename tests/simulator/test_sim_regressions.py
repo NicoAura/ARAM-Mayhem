@@ -156,8 +156,6 @@ def test_mayhem_sim_rejects_unknown_ids(run_sim, args, message):
 
 @pytest.mark.parametrize("args", [["--items", "berserkers,not_an_item"], ["--items", "berserkers", "--augs", "not_an_aug"]],
                          ids=["item", "augment"])
-@pytest.mark.xfail(strict=True, reason="yunara_sim throws the unknown-id error inside a worker thread and aborts "
-                                       "(SIGABRT, 'terminate called recursively') instead of printing it and exiting 1")
 def test_yunara_sim_rejects_unknown_ids_cleanly(run_sim, args):
     proc = run_sim("yunara_sim", [*args, "--trials", "20", "--seed", "1"])
     assert proc.returncode > 0, proc.returncode
@@ -206,12 +204,8 @@ def test_game_data_dir_is_what_gets_loaded(run_json, tmp_path):
     assert {a["key"] for a in live["augments"]} == set(live_augs)
 
 
-PBE_BUG = ("data/pbe/augments.json leaves out augments missing on PBE (critical_missile, dropkick, ult_bot), but the "
-           "enemy pool's popular builds (cn_enemy_pool.json) still use them, so every --game-data data/pbe run fails "
-           "with \"unknown augment 'critical_missile' for enemy Caitlyn\" (and --list --json aborts): the page's PBE switch is broken")
 
 
-@pytest.mark.xfail(strict=True, reason=PBE_BUG)
 def test_pbe_list_json_loads(run_sim):
     proc = run_sim("mayhem_sim", ["--list", "--json", "--game-data", "data/pbe"])
     assert proc.returncode == 0, proc.stderr
@@ -219,7 +213,6 @@ def test_pbe_list_json_loads(run_sim):
     assert {a["key"] for a in out["augments"]} == set(load_json(PBE_DIR / "augments.json")["augments"])
 
 
-@pytest.mark.xfail(strict=True, reason=PBE_BUG)
 def test_pbe_fixed_build_runs(run_sim):
     proc = run_sim("mayhem_sim", ["--champ", "Jinx", *JINX_BUILD, "--game-data", "data/pbe",
                                   "--trials", "200", "--seed", "1", "--json"])
@@ -265,8 +258,6 @@ def test_short_and_long_fight_dps_are_reported(run_json):
     assert s["dps_short_fight"] > 0 and s["dps_long_fight"] > 0
 
 
-@pytest.mark.xfail(strict=True, reason="--allies accepts the same champion twice on one team (Lulu,Lulu,...) "
-                                       "although it rejects one champion on both teams; Mayhem has no duplicates")
 def test_5v5_rejects_duplicate_allies(run_sim):
     proc = run_sim("mayhem_sim", ["--champ", "Jinx", "--allies", "Lulu,Lulu,Leona,Ahri", "--trials", "20", "--seed", "1"])
     assert proc.returncode > 0
