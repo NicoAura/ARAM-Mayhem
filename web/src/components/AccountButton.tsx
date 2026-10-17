@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { ACCOUNT_EVENT, loadAccount, PROFILE_FRESH_MS, profileIcon, SERVERS, signIn, signOut, type Profile } from "@/lib/account";
 import RiotIdFields from "./RiotIdFields";
+import { useT } from "./I18n";
 
 // Top-right account button. Empty: a person icon that opens the Riot ID account lookup.
 // After a lookup: the player's profile icon, with a menu holding My Stats and Clear lookup.
@@ -18,6 +19,7 @@ export default function AccountButton() {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
   const box = useRef<HTMLDivElement>(null);
+  const t = useT();
 
   useEffect(() => {
     const sync = () => {
@@ -71,7 +73,7 @@ export default function AccountButton() {
       <button
         type="button"
         className={profile ? "account-btn signed-in" : "account-btn"}
-        aria-label={profile ? `Account: ${profile.gameName}` : "Account lookup"}
+        aria-label={profile ? t("Account: {name}", { name: profile.gameName }) : t("Account lookup")}
         aria-expanded={open}
         aria-haspopup="dialog"
         onClick={() => setOpen((o) => !o)}
@@ -87,7 +89,7 @@ export default function AccountButton() {
         )}
       </button>
       {open && (
-        <div className="account-menu" role="dialog" aria-label={profile ? "Account" : "Account lookup"}>
+        <div className="account-menu" role="dialog" aria-label={profile ? t("Account") : t("Account lookup")}>
           {profile ? (
             <>
               <div className="account-who">
@@ -99,26 +101,26 @@ export default function AccountButton() {
                     <span>#{profile.tagLine}</span>
                   </b>
                   <span>
-                    {server} · Level {profile.summonerLevel}
+                    {server} · {t("Level {n}", { n: profile.summonerLevel })}
                   </span>
                 </div>
               </div>
               <Link href="/stats" className="account-item">
-                My Stats
+                {t("My Stats")}
               </Link>
               <button type="button" className="account-item" onClick={() => (signOut(), setOpen(false))}>
-                Clear lookup
+                {t("Clear lookup")}
               </button>
             </>
           ) : (
             <form className="account-form" method="post" action="/stats" onSubmit={submit}>
-              <p className="account-title">Account lookup</p>
+              <p className="account-title">{t("Account lookup")}</p>
               <RiotIdFields riotId={riotId} onRiotId={setRiotId} platform={platform} onPlatform={setPlatform} autoFocus />
               <button type="submit" className="btn" disabled={busy}>
-                {busy ? "Looking up…" : "Look up"}
+                {busy ? t("Looking up…") : t("Look up")}
               </button>
               <p className={error ? "account-note error" : "account-note"}>
-                {error || "No password needed. Your Riot ID is remembered in this browser only."}
+                {error ? t(error) : t("No password needed. Your Riot ID is remembered in this browser only.")}
               </p>
             </form>
           )}

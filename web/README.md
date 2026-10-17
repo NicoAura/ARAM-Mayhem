@@ -47,6 +47,32 @@ for Cloudflare).
 
 Example route: `/api/riot/account?gameName=Name&tagLine=NA1&region=americas`.
 
+## Languages
+
+The site speaks Riot's languages (list: `src/i18n/languages.json`). Pages are built
+once, in English; the visitor's language (their pick in Settings or the footer,
+else their browser's language) is applied in the browser after the page loads.
+Anything without a translation stays in English.
+
+- **Page text** is looked up by its English wording in
+  `public/i18n/<namespace>/<code>.json`. `en.json` lists every key (key = value);
+  each other language maps the same keys. `common` is the shared chrome (header,
+  footer, settings, search, account, tour, Home). Each tab uses its own
+  namespace named after its route (`tier-list`, `simulator`, `pbe`, `lab`, ...).
+- **In a component** (server or client): `<T>Best augments</T>`, or with a tab's
+  namespace and placeholders `<T ns="tier-list" v={{ n }}>{"All {n} →"}</T>`.
+  In a client component: `const t = useT("tier-list"); t("Win rate")`.
+  Both come from `src/components/I18n.tsx`.
+- **Champion, item and augment names** use the official translations in
+  `public/i18n/names/<code>.json` (`scripts/fetch_names.py`, refreshed by
+  `fetch_assets.py --refresh`): `<Name kind="champions" id="AurelionSol">Aurelion Sol</Name>`
+  or `useNames()("items", 3031, "Infinity Edge")`. `<ModeName />` is the mode's own
+  name in each language. Dates: `<LocalDate iso="2026-10-17" />`.
+- **Embedded tools** (same origin) read the language from `<html data-lang>` of
+  the parent page or `localStorage["deeparam-lang"]`, and can fetch the same files.
+- `npm test` (`tests/unit/i18n.test.ts`) fails when a language misses a key or
+  changes a `{placeholder}`, so add a key to every language file at once.
+
 ## Keeping the site up to date
 
 `npm run build` (and `npm run dev`) first runs `scripts/sync-embeds.mjs`, which

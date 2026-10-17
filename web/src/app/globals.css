@@ -7067,3 +7067,38 @@ html[data-device="mobile"] .arch-filter .arch-tag::after {
   font-size: 0.8125rem;
   font-weight: 400;
 }
+
+/* Language picker: Settings and the footer (components/LanguagePicker.tsx). */
+.lang-picker {
+  height: 34px;
+  padding: 0 0.6rem;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--raised);
+  color: var(--fg);
+  font: inherit;
+  font-size: 0.8125rem;
+}
+
+.site-footer .lang-picker {
+  height: 28px;
+  margin-bottom: 0.6rem;
+  background: var(--surface);
+  color: var(--muted);
+  font-size: 0.75rem;
+}
+
+html[data-device="mobile"] .lang-picker {
+  font-size: 16px;
+}
+
+/* Right-to-left languages (Arabic): joined script can't take letter spacing, and signed numbers stay left-to-right. */
+html[dir="rtl"] * {
+  letter-spacing: 0 !important;
+}
+
+html[dir="rtl"] .rank-v,
+html[dir="rtl"] .jump-wr {
+  direction: ltr;
+  unicode-bidi: isolate;
+}

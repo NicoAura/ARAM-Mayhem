@@ -25,7 +25,8 @@ live patch and what was fetched.
 
 Usage (from the repo root):
   python3 web/scripts/fetch_assets.py           # icons, splashes, sounds, JSON, fonts, three.js (new files only)
-  python3 web/scripts/fetch_assets.py --refresh # also re-download files already present (after a patch)
+  python3 web/scripts/fetch_assets.py --refresh # also re-download files already present (after a patch),
+                                                #   and refresh the translated names (fetch_names.py)
   python3 web/scripts/fetch_assets.py --clips   # + ability clips (needs ffmpeg)
   python3 web/scripts/fetch_assets.py --models  # + 3D models (needs node and the glTF tools, see below)
 
@@ -539,6 +540,8 @@ def main():
     with open(os.path.join(OUT, "manifest.json"), "w") as f:
         json.dump(manifest, f, indent=1)
     print(f"done: patch {patch}, {sum(counts.values())} files, {total / 1e6:.1f} MB" + (f", {errors} failed" if errors else ""))
+    if args.refresh:  # the other languages' champion, item and augment names follow the patch too
+        subprocess.run([sys.executable, os.path.join(HERE, "fetch_names.py")], check=False)
 
 
 if __name__ == "__main__":

@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import { useFavorites } from "@/lib/favorites";
 import FavoriteStar from "./FavoriteStar";
+import { useNames, useT } from "./I18n";
 
 // The home page's interactive pieces: jump to a champion, the live tier snapshot,
 // an augment offer to roll, and a Kitchen build to reroll.
@@ -20,17 +21,21 @@ const fold = (s: string) => s.normalize("NFD").replace(/[^a-z0-9]/gi, "").toLowe
 /** A search box that opens the champion's page. */
 export function ChampionJump({ champs }: { champs: Champ[] }) {
   const router = useRouter();
+  const t = useT();
+  const names = useNames();
   const [q, setQ] = useState("");
   const [sel, setSel] = useState(0);
   const [open, setOpen] = useState(false);
+  // Champions by their name in the page's language; the English name and id still match.
+  const local = useMemo(() => champs.map((c) => ({ ...c, name: names("champions", c.id, c.name), en: c.name })), [champs, names]);
   const matches = useMemo(() => {
     const f = fold(q);
     if (!f) return [];
-    return champs
-      .filter((c) => fold(c.name).includes(f) || fold(c.id).includes(f))
+    return local
+      .filter((c) => fold(c.name).includes(f) || fold(c.en).includes(f) || fold(c.id).includes(f))
       .sort((a, b) => Number(!fold(a.name).startsWith(f)) - Number(!fold(b.name).startsWith(f)) || a.name.localeCompare(b.name))
       .slice(0, 6);
-  }, [q, champs]);
+  }, [q, local]);
   useEffect(() => setSel(0), [q]);
   const go = (c?: Champ) => c && router.push(`/champions/${c.id}`);
 
@@ -52,8 +57,8 @@ export function ChampionJump({ champs }: { champs: Champ[] }) {
           } else if (e.key === "Enter") go(matches[sel]);
           else if (e.key === "Escape") setOpen(false);
         }}
-        placeholder="Find a champion…"
-        aria-label="Find a champion"
+        placeholder={t("Find a champion…")}
+        aria-label={t("Find a champion")}
         role="combobox"
         aria-expanded={open && matches.length > 0}
         aria-controls="jump-list"
@@ -81,13 +86,15 @@ export function ChampionJump({ champs }: { champs: Champ[] }) {
 /** Starred champions with their live numbers; hidden until a champion is starred. */
 export function Favorites({ champs }: { champs: Champ[] }) {
   const ids = useFavorites();
+  const t = useT();
+  const names = useNames();
   const list = ids.map((id) => champs.find((c) => c.id === id)).filter((c): c is Champ => Boolean(c));
   if (!list.length) return null;
   return (
     <section className="card span-all" data-accent="gold">
       <div className="card-head">
-        <h2>Your favorites</h2>
-        <Link href="/tier-list">On the Tier List →</Link>
+        <h2>{t("Your favorites")}</h2>
+        <Link href="/tier-list">{t("On the Tier List →")}</Link>
       </div>
       <div className="fav-grid">
         {list.map((c) => (
@@ -95,10 +102,8 @@ export function Favorites({ champs }: { champs: Champ[] }) {
             <Link href={`/champions/${c.id}`}>
               <img src={champIcon(c.id)} alt="" width={40} height={40} loading="lazy" />
               <span className="fav-name">
-                <b>{c.name}</b>
-                <span>
-                  {pct(c.winRate)} win · {pct(c.pickRate)} pick
-                </span>
+                <b>{names("champions", c.id, c.name)}</b>
+                <span>{t("{wr} win · {pr} pick", { wr: pct(c.winRate), pr: pct(c.pickRate) })}</span>
               </span>
               <span className={`chip tier-${c.tier.toLowerCase()}`}>{c.tier}</span>
             </Link>
@@ -113,15 +118,17 @@ export function Favorites({ champs }: { champs: Champ[] }) {
 /** The live patch's S and A tier champions as icons; hover or focus one for its numbers. */
 export function TierSnapshot({ champs }: { champs: Champ[] }) {
   const [tier, setTier] = useState("S");
+  const t = useT();
+  const names = useNames();
   const [hover, setHover] = useState<Champ | null>(null);
   const list = champs.filter((c) => c.tier === tier).sort((a, b) => b.winRate - a.winRate);
   const shown = hover && hover.tier === tier ? hover : list[0];
   return (
     <div className="snap">
-      <div className="seg snap-tiers" role="group" aria-label="Tier">
-        {["S", "A", "B", "C", "D"].map((t) => (
-          <button key={t} type="button" aria-pressed={tier === t} onClick={() => (setTier(t), setHover(null))}>
-            {t}
+      <div className="seg snap-tiers" role="group" aria-label={t("Tier")}>
+        {["S", "A", "B", "C", "D"].map((x) => (
+          <button key={x} type="button" aria-pressed={tier === x} onClick={() => (setTier(x), setHover(null))}>
+            {x}
           </button>
         ))}
       </div>
@@ -133,7 +140,7 @@ export function TierSnapshot({ champs }: { champs: Champ[] }) {
             className={shown?.id === c.id ? "on" : undefined}
             onMouseEnter={() => setHover(c)}
             onFocus={() => setHover(c)}
-            aria-label={`${c.name}: ${pct(c.winRate)} win rate`}
+            aria-label={t("{name}: {wr} win rate", { name: names("champions", c.id, c.name), wr: pct(c.winRate) })}
           >
             <img src={champIcon(c.id)} alt="" width={40} height={40} loading="lazy" />
           </Link>
@@ -150,10 +157,8 @@ export function TierSnapshot({ champs }: { champs: Champ[] }) {
         >
           <img src={champIcon(shown.id)} alt="" width={44} height={44} />
           <div>
-            <b>{shown.name}</b>
-            <span>
-              {pct(shown.winRate)} win · {pct(shown.pickRate)} pick
-            </span>
+            <b>{names("champions", shown.id, shown.name)}</b>
+            <span>{t("{wr} win · {pr} pick", { wr: pct(shown.winRate), pr: pct(shown.pickRate) })}</span>
           </div>
           <span className={`chip tier-${shown.tier.toLowerCase()}`}>{shown.tier}</span>
         </Link>
@@ -168,6 +173,8 @@ export function TierSnapshot({ champs }: { champs: Champ[] }) {
 /** One Kitchen build at a time, with a button for another. */
 export function KitchenPick({ builds }: { builds: Build[] }) {
   const [i, setI] = useState(0);
+  const t = useT();
+  const names = useNames();
   const b = builds[i];
   if (!b) return null;
   return (
@@ -175,7 +182,7 @@ export function KitchenPick({ builds }: { builds: Build[] }) {
       <div className="kitchen-head">
         <img src={champIcon(b.champion)} alt="" width={40} height={40} />
         <div>
-          <p className="eyebrow">{b.champion}</p>
+          <p className="eyebrow">{names("champions", b.champion, b.champion)}</p>
           <h3>{b.title}</h3>
         </div>
       </div>
@@ -189,7 +196,7 @@ export function KitchenPick({ builds }: { builds: Build[] }) {
       </div>
       {builds.length > 1 && (
         <button type="button" className="btn ghost" onClick={() => setI((n) => (n + 1) % builds.length)}>
-          Another build ({i + 1}/{builds.length})
+          {t("Another build ({i}/{n})", { i: i + 1, n: builds.length })}
         </button>
       )}
     </div>

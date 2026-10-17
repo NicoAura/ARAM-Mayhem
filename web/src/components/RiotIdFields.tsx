@@ -1,6 +1,7 @@
 "use client";
 
 import { SERVERS } from "@/lib/account";
+import { useT } from "./I18n";
 
 // Riot ID as Name # Tag plus a region, shared by the header account lookup and My Stats.
 // `riotId` stays one "Name#TAG" string for the caller; pasting a whole Riot ID into Name splits it.
@@ -18,6 +19,7 @@ export default function RiotIdFields({
   onPlatform: (v: string) => void;
   autoFocus?: boolean;
 }) {
+  const t = useT();
   const i = riotId.indexOf("#");
   const name = i < 0 ? riotId : riotId.slice(0, i);
   const tag = i < 0 ? "" : riotId.slice(i + 1);
@@ -38,7 +40,7 @@ export default function RiotIdFields({
                 set(n, t.join("").replace(/\s/g, ""));
               } else set(v, tag);
             }}
-            placeholder="Name"
+            placeholder={t("Name")}
             autoComplete="username"
             spellCheck={false}
             autoFocus={autoFocus}
@@ -50,7 +52,7 @@ export default function RiotIdFields({
           </span>
           <input
             name="riot-tag"
-            aria-label="Tag"
+            aria-label={t("Tag")}
             value={tag}
             onChange={(e) => set(name, e.target.value.replace(/[#\s]/g, ""))}
             placeholder="NA1"
@@ -63,7 +65,7 @@ export default function RiotIdFields({
         </span>
       </label>
       <label className="riot-region">
-        <span>Region</span>
+        <span>{t("Region")}</span>
         <select name="region" value={platform} onChange={(e) => onPlatform(e.target.value)}>
           {SERVERS.map(([v, l]) => (
             <option key={v} value={v}>

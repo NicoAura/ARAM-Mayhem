@@ -2,6 +2,7 @@
 
 import { usePathname, useRouter } from "next/navigation";
 import { useCallback, useEffect, useLayoutEffect, useState } from "react";
+import { useT } from "./I18n";
 
 // A short guided tour for first-time visitors on Home: a spotlight moves over a few key places with a
 // line about each. Shown once per browser (localStorage); Settings' "Take the tour" or /?tour replays it.
@@ -28,6 +29,7 @@ export default function FirstVisitTour() {
   const [i, setI] = useState(0);
   const [rect, setRect] = useState<DOMRect | null>(null);
   const [asked, setAsked] = useState(0);
+  const t = useT();
   useEffect(() => {
     const ask = () => setAsked((n) => n + 1);
     addEventListener(TOUR_EVENT, ask);
@@ -102,21 +104,21 @@ export default function FirstVisitTour() {
       <div className="tour-hole" style={{ left: rect.left - pad, top: rect.top - pad, width: rect.width + pad * 2, height: rect.height + pad * 2 }} />
       <div className="tour-card" style={below ? { left, top: rect.bottom + pad + 12 } : { left, top: rect.top - pad - 12, translate: "0 -100%" }}>
         <p className="tour-count">
-          {i + 1} of {steps.length}
+          {t("{i} of {n}", { i: i + 1, n: steps.length })}
         </p>
-        <h2 id="tour-title">{step.title}</h2>
-        <p>{step.body}</p>
+        <h2 id="tour-title">{t(step.title)}</h2>
+        <p>{t(step.body)}</p>
         <div className="tour-actions">
           <button type="button" className="tour-skip" onClick={finish}>
-            {i === steps.length - 1 ? "Close" : "Skip tour"}
+            {i === steps.length - 1 ? t("Close") : t("Skip tour")}
           </button>
           {i > 0 && (
             <button type="button" className="btn ghost" onClick={() => setI(i - 1)}>
-              Back
+              {t("Back")}
             </button>
           )}
           <button type="button" className="btn" autoFocus onClick={() => (i < steps.length - 1 ? setI(i + 1) : finish())}>
-            {i < steps.length - 1 ? "Next" : "Done"}
+            {i < steps.length - 1 ? t("Next") : t("Done")}
           </button>
         </div>
       </div>
