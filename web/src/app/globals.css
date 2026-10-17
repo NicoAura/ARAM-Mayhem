@@ -3584,3 +3584,48 @@ html[data-motion="reduce"] .btn:hover {
 .feedback-copy:hover {
   color: var(--fg);
 }
+
+/* Page transitions (components/PageTransitions.tsx) */
+.champ-hero-title {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.champ-hero-icon {
+  flex: none;
+  width: clamp(52px, 9vw, 72px);
+  height: auto;
+  border: 2px solid color-mix(in srgb, var(--fg) 18%, transparent);
+  border-radius: 16px;
+  view-transition-name: champ-icon;
+}
+
+.champ-hero {
+  view-transition-name: champ-hero;
+}
+
+.site-header {
+  view-transition-name: site-header;
+}
+
+.tabbar {
+  view-transition-name: tabbar;
+}
+
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 0.22s;
+}
+
+::view-transition-group(champ-icon),
+::view-transition-group(champ-hero) {
+  animation-duration: 0.45s;
+  animation-timing-function: cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+::view-transition-old(champ-hero),
+::view-transition-new(champ-hero) {
+  height: 100%;
+  object-fit: cover;
+}

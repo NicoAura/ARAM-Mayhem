@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Bricolage_Grotesque, Geist, Geist_Mono } from "next/font/google";
 import Link from "next/link";
 import FeedbackBox from "@/components/FeedbackBox";
+import PageTransitions from "@/components/PageTransitions";
 import AccountButton from "@/components/AccountButton";
 import BrandMark from "@/components/BrandMark";
 import MobileTabBar from "@/components/MobileTabBar";
@@ -121,6 +122,7 @@ export default function RootLayout({
           </nav>
           <p>{text("footer")}</p>
         </footer>
+        <PageTransitions />
         <MobileTabBar tabs={navPages().map(({ href, label }) => ({ href, label }))} />
       </body>
     </html>
