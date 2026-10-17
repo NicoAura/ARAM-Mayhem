@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import FavoriteStar from "@/components/FavoriteStar";
 import WinRateChart from "@/components/WinRateChart";
+import ChampionShowcase from "@/components/ChampionShowcase";
 import { notFound } from "next/navigation";
 import Embed from "@/components/Embed";
 import { augmentHref } from "@/lib/augments";
@@ -39,6 +40,7 @@ export default async function ChampionPage({ params }: { params: Promise<{ alias
   return (
     <>
       <section className="champ-hero" style={c.splash ? ({ "--splash": `url("${c.splash}")` } as React.CSSProperties) : undefined}>
+        <ChampionShowcase alias={c.alias} name={c.name} />
         <p className="eyebrow">
           <Link href="/tier-list">Tier List</Link> · Patch {c.patch}
         </p>

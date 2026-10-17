@@ -3741,3 +3741,61 @@ html[data-motion="reduce"] .btn:hover {
 .wr-tip .other {
   color: var(--hue-sim);
 }
+
+/* 3D champion showcase (components/ChampionShowcase.tsx) */
+.showcase {
+  position: relative;
+  order: 99;
+  height: 300px;
+  margin: 1rem calc(-1 * clamp(1.25rem, 4vw, 2.5rem)) calc(-1 * clamp(1.25rem, 4vw, 2.5rem));
+}
+
+.showcase canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  cursor: grab;
+  touch-action: pan-y;
+  opacity: 0;
+  transition: opacity 0.6s ease;
+}
+
+.showcase[data-state="ready"] canvas {
+  opacity: 1;
+}
+
+.showcase canvas:active {
+  cursor: grabbing;
+}
+
+.showcase-hint {
+  position: absolute;
+  right: 1rem;
+  bottom: 0.75rem;
+  color: var(--muted);
+  font-size: 0.6875rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  pointer-events: none;
+}
+
+.champ-hero {
+  display: flex;
+  flex-direction: column;
+}
+
+@media (min-width: 900px) {
+  .showcase {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 40%;
+    height: auto;
+    margin: 0;
+  }
+
+  .champ-hero:has(.showcase:not([hidden])) > :not(.showcase) {
+    max-width: 58%;
+  }
+}
