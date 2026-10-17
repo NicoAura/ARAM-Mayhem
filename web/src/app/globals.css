@@ -684,6 +684,43 @@ h1 {
   color: var(--accent);
 }
 
+/* Next-patch countdown (Riot's schedule): a big day count beside the patch and its date */
+.patch-countdown {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin: 0 0 1.5rem;
+  padding: 0.85rem 1rem;
+  border: 1px solid var(--line);
+  border-radius: var(--r);
+  background: var(--surface);
+}
+
+.patch-countdown-days {
+  display: grid;
+  flex: none;
+  place-items: center;
+  min-width: 4.5rem;
+  padding: 0.35rem 0.6rem;
+  border-radius: 10px;
+  background: var(--accent-soft);
+  color: var(--accent);
+  font-size: 0.75rem;
+  line-height: 1.1;
+  text-align: center;
+}
+
+.patch-countdown-days b {
+  font-size: 1.6rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.patch-countdown-text {
+  display: grid;
+  gap: 0.15rem;
+  min-width: 0;
+}
+
 /* PBE change tracker: filter bar, tag buttons and one row per champion, item or augment */
 .tracker-bar {
   display: flex;
