@@ -43,8 +43,9 @@
   --depth-hover: inset 0 1px 0 rgb(255 255 255 / 0.85), 0 2px 4px rgb(31 41 55 / 0.08), 0 10px 20px rgb(31 41 55 / 0.1),
     0 22px 44px rgb(31 41 55 / 0.1);
   --depth-tile: inset 0 1px 0 rgb(255 255 255 / 0.85), 0 1px 2px rgb(31 41 55 / 0.07), 0 2px 6px rgb(31 41 55 / 0.05);
-  --display: var(--font-display), var(--font-sans), system-ui, sans-serif;
-  --mono: var(--font-mono), ui-monospace, monospace;
+  /* Headlines and numbers share the text face; numbers line up through tabular figures on body. */
+  --display: var(--font-sans), system-ui, sans-serif;
+  --mono: var(--font-sans), system-ui, sans-serif;
 }
 
 /* Dark palette: follows the system unless the header switch picked light; the switch's "dark" forces it. */
@@ -154,6 +155,7 @@ body {
   font-family: var(--font-sans), system-ui, sans-serif;
   font-size: 15px;
   line-height: 1.5;
+  font-variant-numeric: tabular-nums;
   -webkit-font-smoothing: antialiased;
 }
 
@@ -5158,7 +5160,7 @@ th > button[data-tip] {
 .acct-card details[open] summary { margin-bottom: 0.65rem; }
 .acct-who { font-weight: 600; overflow-wrap: anywhere; }
 .acct-code {
-  font: 700 1.75rem/1 var(--font-mono, ui-monospace), ui-monospace, monospace;
+  font: 700 1.75rem/1 ui-monospace, monospace;
   letter-spacing: 0.12em;
 }
 .acct-steps { display: grid; gap: 0.35rem; padding-left: 1.2rem; font-size: 0.875rem; }
