@@ -1,0 +1,63 @@
+# Accuracy check: runs every champion with its most-played real build (CN full builds plus the
+# top augments the simulator models) and compares simulated DPS with the champion's real CN damage
+# share. Prints the rank correlation, role averages and the champions that drift most (simulated
+# DPS rank far from their real damage-share rank), which are the ones to look at after a patch.
+#
+#   python3 tools/accuracy.py ./mayhem_sim out.json [trials]
+# SIMDIR picks the folder the simulator runs in; XARGS adds simulator options.
+import json, subprocess, sys, os, concurrent.futures as cf, statistics as st
+SIM, OUT = os.path.abspath(sys.argv[1]), sys.argv[2]; TR = sys.argv[3] if len(sys.argv) > 3 else "300"
+R = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
+items = json.load(open(f"{R}/simulator/data/items.json"))["items"]
+by_id = {v["id"]: k for k, v in items.items()}
+augs = json.load(open(f"{R}/simulator/data/augments.json"))["augments"]
+aug_by_id = {v["id"]: k for k, v in augs.items()}
+champs = json.load(open(f"{R}/simulator/data/champions.json"))["champions"]
+best = {c["champion"]: c for c in json.load(open(f"{R}/simulator/viewer/replay-data/best-builds.json"))["champions"]}
+def real_build(c):
+    f = f"{R}/data/cn/builds/{c["champion_id"]}.json"
+    if not os.path.exists(f): return None
+    b = json.load(open(f))
+    picks = []
+    for fb in b["items"].get("full_builds", []):
+        ks = [by_id[i] for i in fb["items"] if i in by_id]
+        if len(ks) >= 4: picks = ks; break
+    if not picks:
+        for grp in ("boots", "core", "other"):
+            for e in b["items"].get(grp, []):
+                for i in e["items"]:
+                    if i in by_id and by_id[i] not in picks: picks.append(by_id[i])
+    picks = picks[:6]
+    a = [aug_by_id[x["id"]] for x in sorted(b["augments"]["all"], key=lambda x: -x["pick_rate"]) if x["id"] in aug_by_id][:4]
+    return picks, a
+def run(c):
+    rb = real_build(c)
+    if not rb or not rb[0]: return None
+    it, a = rb
+    args = [SIM, "--champ", c["id"], "--items", ",".join(it), "--json", "--trials", TR, "--threads", "1"] + os.environ.get("XARGS", "").split()
+    if a: args += ["--augs", ",".join(a)]
+    r = subprocess.run(args, capture_output=True, text=True, cwd=os.environ.get("SIMDIR", f"{R}/simulator"))
+    try: s = json.loads(r.stdout)["builds"][0]["summary"]
+    except Exception: print(c["id"], r.stderr[:200], file=sys.stderr); return None
+    bb = best.get(c["id"], {})
+    return dict(champ=c["id"], role=bb.get("role"), cn=bb.get("cn_damage_share"), dps=s["mean_dps"], st=s["single_target_dps"],
+                surv=s["survival_rate"], alive=s["time_alive"], items=it, augs=a)
+with cf.ThreadPoolExecutor(8) as ex: res = [r for r in ex.map(run, champs) if r]
+json.dump(res, open(OUT, "w"))
+def rank(v):
+    o = sorted(range(len(v)), key=lambda i: v[i]); r = [0] * len(v)
+    for k, i in enumerate(o): r[i] = k
+    return r
+def sp(a, b):
+    a, b = rank(a), rank(b); n = len(a); return 1 - 6 * sum((p - q) ** 2 for p, q in zip(a, b)) / (n * (n * n - 1))
+x = [r for r in res if r["cn"]]
+print("n", len(x), "spearman dps", round(sp([r["dps"] for r in x], [r["cn"] for r in x]), 3),
+      "single-target", round(sp([r["st"] for r in x], [r["cn"] for r in x]), 3))
+for role in sorted(set(r["role"] for r in x)):
+    rr = [r for r in x if r["role"] == role]
+    print(role, len(rr), "dps", round(st.mean(r["dps"] for r in rr)), "cn", round(st.mean(r["cn"] for r in rr), 3))
+# The champions whose simulated DPS rank is furthest from their real damage-share rank.
+ra, rb = rank([r["dps"] for r in x]), rank([r["cn"] for r in x])
+drift = sorted(((ra[i] - rb[i], x[i]["champ"]) for i in range(len(x))), key=lambda d: -abs(d[0]))
+print("drift (sim rank minus real rank; + overrated, - underrated):")
+for d, c in drift[:15]: print(f"  {c:14s} {d:+d}")
