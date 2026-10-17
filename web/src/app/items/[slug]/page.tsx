@@ -37,13 +37,13 @@ export default async function ItemPage({ params }: { params: Promise<{ slug: str
     <>
       <Breadcrumbs
         trail={[
-          ["Items", "/items"],
+          ["Items", "/tier-list?tab=items"],
           [i.name, `/items/${i.slug}`],
         ]}
       />
       <section className="champ-hero aug-hero">
         <p className="eyebrow">
-          <Link href="/items">
+          <Link href="/tier-list?tab=items">
             <T ns="items">Items</T>
           </Link>{" "}
           ·{" "}
@@ -70,7 +70,7 @@ export default async function ItemPage({ params }: { params: Promise<{ slug: str
         {i.tags.length > 0 && (
           <p className="item-tags-row">
             {i.tags.map((t) => (
-              <Link key={t} href={`/items?tag=${t}`} className="item-tag" data-group={itemTag(t)?.group}>
+              <Link key={t} href={`/tier-list?tab=items&itag=${t}`} className="item-tag" data-group={itemTag(t)?.group}>
                 <T ns="items">{itemTag(t)?.label ?? t}</T>
               </Link>
             ))}

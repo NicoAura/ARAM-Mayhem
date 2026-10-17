@@ -8,7 +8,8 @@ import { ITEM_TAGS, TAG_GROUPS, itemTag } from "@/lib/item-tags";
 import { getParam, setParams } from "@/lib/url-state";
 import { useLang, useNames, useT } from "./I18n";
 
-// Items index (/items?tag=crit,as&sort=cost): colour-coded tag filters (every picked tag must match),
+// Items index (the Tier List's Items tab, ?tab=items&itag=crit,as&isort=cost; the params are prefixed so
+// they don't clash with the champion table's): colour-coded tag filters (every picked tag must match),
 // a name search and a sort. Tags come from the shop's categories (lib/item-tags.ts).
 
 type Item = {
@@ -38,10 +39,10 @@ export default function ItemIndex({ items }: { items: Item[] }) {
   const [sort, setSort] = useState<Sort>("popular");
 
   useEffect(() => {
-    setPicked((getParam("tag") ?? "").split(",").filter((t) => itemTag(t)));
-    const s = getParam("sort");
+    setPicked((getParam("itag") ?? "").split(",").filter((t) => itemTag(t)));
+    const s = getParam("isort");
     if (SORTS.some(([k]) => k === s)) setSort(s as Sort);
-    setQuery(getParam("q") ?? "");
+    setQuery(getParam("iq") ?? "");
   }, []);
 
   // Only tags some item has; counts follow the tags already picked.
@@ -57,7 +58,7 @@ export default function ItemIndex({ items }: { items: Item[] }) {
   const toggle = (key: string) => {
     const next = picked.includes(key) ? picked.filter((t) => t !== key) : [...picked, key];
     setPicked(next);
-    setParams({ tag: next.join(",") || null });
+    setParams({ itag: next.join(",") || null });
   };
 
   return (
@@ -92,7 +93,7 @@ export default function ItemIndex({ items }: { items: Item[] }) {
           value={query}
           onChange={(e) => {
             setQuery(e.target.value);
-            setParams({ q: e.target.value.trim() || null });
+            setParams({ iq: e.target.value.trim() || null });
           }}
         />
         <div className="seg" role="group" aria-label={t("Sort")}>
@@ -103,7 +104,7 @@ export default function ItemIndex({ items }: { items: Item[] }) {
               aria-pressed={sort === k}
               onClick={() => {
                 setSort(k);
-                setParams({ sort: k === "popular" ? null : k });
+                setParams({ isort: k === "popular" ? null : k });
               }}
             >
               {t(l)}
@@ -147,7 +148,7 @@ export default function ItemIndex({ items }: { items: Item[] }) {
               onClick={() => {
                 setPicked([]);
                 setQuery("");
-                setParams({ tag: null, q: null });
+                setParams({ itag: null, iq: null });
               }}
             >
               {t("Show every item")}

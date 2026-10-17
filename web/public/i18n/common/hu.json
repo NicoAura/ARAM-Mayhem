@@ -151,5 +151,11 @@
  "Copy this link": "Másold ki ezt a linket",
  "Page detail": "Oldal részletessége",
  "Simple": "Egyszerű",
- "Detailed": "Részletes"
+ "Detailed": "Részletes",
+ "Best duos": "Legjobb párosok",
+ "Most simulated damage": "Legtöbb szimulált sebzés",
+ "Simulator →": "Szimulátor →",
+ "{n} DPS": "{n} DPS",
+ "Patch {patch} recap": "{patch} frissítés összefoglalója",
+ "The Kitchen →": "A Konyha →"
 }

@@ -151,5 +151,11 @@
  "Copy this link": "Скопируйте эту ссылку",
  "Page detail": "Детализация страниц",
  "Simple": "Простой",
- "Detailed": "Подробный"
+ "Detailed": "Подробный",
+ "Best duos": "Лучшие дуэты",
+ "Most simulated damage": "Наибольший урон в симуляторе",
+ "Simulator →": "Симулятор →",
+ "{n} DPS": "{n} DPS",
+ "Patch {patch} recap": "Итоги патча {patch}",
+ "The Kitchen →": "Кухня →"
 }

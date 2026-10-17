@@ -14,8 +14,8 @@ const PAGES = [
   "/champions/Ahri",
   "/champions/Yunara",
   "/patches",
-  "/items",
-  "/items?tag=crit,as",
+  "/tier-list?tab=items",
+  "/tier-list?tab=items&itag=crit,as",
   "/tier-list?tag=Mage,Poke",
   "/account",
   "/privacy",
@@ -91,6 +91,8 @@ test("old addresses redirect to the current tabs", async ({ page }) => {
     ["/augments?tab=draft&champ=Jinx", "/tier-list", "augments", null],
     ["/augments?tab=groups", "/tier-list", "augments", null],
     ["/tier-list?tab=groups", "/tier-list", "augments", null],
+    ["/items", "/tier-list", "items", null],
+    ["/items?tag=crit,as", "/tier-list", "items", "itag"],
   ]) {
     await page.goto(from!);
     const url = new URL(page.url());
@@ -150,4 +152,15 @@ test("owner-only files stay private without the owner's sign-in", async ({ reque
   const res = await request.get("/account/simulator", { maxRedirects: 0 });
   expect([307, 308]).toContain(res.status());
   expect(res.headers().location).toMatch(/\/simulator$/);
+});
+
+test("the Tier List's Items tab filters items and links to item pages", async ({ page }) => {
+  await page.goto("/tier-list?tab=items&itag=crit");
+  const index = page.locator(".items-index");
+  await expect(index).toBeVisible();
+  await expect(index.locator('[aria-pressed="true"]').first()).toBeVisible();
+  const first = index.locator('a[href^="/items/"]').first();
+  const href = await first.getAttribute("href");
+  await first.click();
+  await expect(page).toHaveURL(new RegExp(`${href}$`));
 });

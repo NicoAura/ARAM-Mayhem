@@ -4845,6 +4845,10 @@ html[data-motion="reduce"] .acct-waiting .pulse { animation: none; }
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr));
   gap: 1.25rem 2rem;
 }
+/* Wide screens: the skill grid gets the larger share, so neither column leaves a gap on its right. */
+@media (min-width: 900px) {
+  .quickref-grid { grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr); }
+}
 .quickref-block { display: grid; gap: 0.6rem; align-content: start; min-width: 0; }
 .quickref-full { grid-column: 1 / -1; }
 .quickref-block h3 {
@@ -4871,8 +4875,16 @@ html[data-motion="reduce"] .acct-waiting .pulse { animation: none; }
   background: rgb(var(--fg-rgb) / 6%);
   background: color-mix(in srgb, var(--fg) 6%, transparent);
 }
-.quickref-levels [role="cell"][data-on] { background: var(--a, var(--accent)); color: var(--bg); }
-.quickref-levels [data-key="R"] [role="cell"][data-on] { background: var(--gold, var(--a)); }
+.quickref-levels [role="cell"] { box-shadow: inset 0 0 0 1px var(--line); }
+/* Each ability has its own colour, the same in both themes: Q blue, W green, E violet, R amber. */
+.quickref-levels [data-key="Q"], .skill-key[data-key="Q"] { --skill: #4ea8ff; }
+.quickref-levels [data-key="W"], .skill-key[data-key="W"] { --skill: #3ccf8e; }
+.quickref-levels [data-key="E"], .skill-key[data-key="E"] { --skill: #b48cff; }
+.quickref-levels [data-key="R"], .skill-key[data-key="R"] { --skill: #f2b544; }
+.quickref-levels [role="cell"][data-on] { background: var(--skill, var(--accent)); color: #0b0f14; box-shadow: none; }
+.quickref-levels [role="rowheader"] { color: var(--skill, var(--muted)); font-weight: 700; }
+.quickref-skills .chip.skill-key { background: var(--skill); border-color: transparent; color: #0b0f14; }
+.quickref-levels [role="cell"] { height: 1.75rem; }
 .quickref-items { display: flex; flex-wrap: wrap; gap: 0.75rem; margin: 0; padding: 0; list-style: none; counter-reset: item; }
 .quickref-items li,
 .quickref-items li a { display: grid; justify-items: center; align-content: start; gap: 0.3rem; }
@@ -4907,6 +4919,19 @@ html[data-motion="reduce"] .acct-waiting .pulse { animation: none; }
 .chef-items { display: flex; flex-wrap: wrap; gap: 6px; }
 .chef-items .icon { width: 32px; height: 32px; border-radius: 6px; }
 .subtab-note { margin: 0 0 1rem; }
+
+/* Home: best duos (two icons per row), the Chef Special's head as a link, and the next-patch strip */
+.rank.home-duos a { grid-template-columns: auto minmax(0, 1fr) auto; }
+.rank.home-dps a { grid-template-columns: 1.4rem 24px minmax(0, 1fr) auto; }
+.home-duo-icons { display: flex; }
+.home-duo-icons .icon + .icon { margin-inline-start: -6px; box-shadow: 0 0 0 2px var(--surface); }
+.chef-special a.kitchen-head { color: inherit; text-decoration: none; }
+.chef-special h3 { font-size: 1rem; }
+.home-patch { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0.75rem 1.5rem; }
+.home-patch .patch-countdown { margin: 0; padding: 0; border: 0; background: none; }
+.home-recap { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.25rem 0.75rem; color: inherit; text-decoration: none; }
+.home-recap span { color: var(--muted); }
+.home-recap:hover b { text-decoration: underline; }
 
 /* DeepScore badge (components/DeepScore.tsx): a ring that fills to the score, its colour running from red
    at 0 through green at the average 50 to violet at 100. Its explanation shows on hover, focus or tap. */

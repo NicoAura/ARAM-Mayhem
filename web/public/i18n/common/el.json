@@ -151,5 +151,11 @@
  "Copy this link": "Αντιγράψτε αυτόν τον σύνδεσμο",
  "Page detail": "Λεπτομέρεια σελίδας",
  "Simple": "Απλή",
- "Detailed": "Αναλυτική"
+ "Detailed": "Αναλυτική",
+ "Best duos": "Καλύτερες δυάδες",
+ "Most simulated damage": "Μεγαλύτερη προσομοιωμένη ζημιά",
+ "Simulator →": "Προσομοιωτής →",
+ "{n} DPS": "{n} DPS",
+ "Patch {patch} recap": "Σύνοψη ενημέρωσης {patch}",
+ "The Kitchen →": "Η Κουζίνα →"
 }

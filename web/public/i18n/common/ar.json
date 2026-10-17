@@ -151,5 +151,11 @@
  "Copy this link": "انسخ هذا الرابط",
  "Page detail": "تفاصيل الصفحة",
  "Simple": "بسيط",
- "Detailed": "مفصّل"
+ "Detailed": "مفصّل",
+ "Best duos": "أفضل الثنائيات",
+ "Most simulated damage": "أعلى ضرر في المحاكي",
+ "Simulator →": "المحاكي ←",
+ "{n} DPS": "{n} DPS",
+ "Patch {patch} recap": "ملخص التحديث {patch}",
+ "The Kitchen →": "المطبخ ←"
 }

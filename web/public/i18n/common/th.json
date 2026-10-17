@@ -151,5 +151,11 @@
  "Copy this link": "คัดลอกลิงก์นี้",
  "Page detail": "รายละเอียดหน้า",
  "Simple": "แบบง่าย",
- "Detailed": "แบบละเอียด"
+ "Detailed": "แบบละเอียด",
+ "Best duos": "ดูโอที่ดีที่สุด",
+ "Most simulated damage": "ดาเมจจำลองสูงสุด",
+ "Simulator →": "ซิมูเลเตอร์ →",
+ "{n} DPS": "{n} DPS",
+ "Patch {patch} recap": "สรุปแพตช์ {patch}",
+ "The Kitchen →": "ครัว →"
 }

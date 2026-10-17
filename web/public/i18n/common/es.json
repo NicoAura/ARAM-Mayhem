@@ -151,5 +151,11 @@
  "Copy this link": "Copia este enlace",
  "Page detail": "Detalle de página",
  "Simple": "Simple",
- "Detailed": "Detallado"
+ "Detailed": "Detallado",
+ "Best duos": "Mejores dúos",
+ "Most simulated damage": "Más daño simulado",
+ "Simulator →": "Simulador →",
+ "{n} DPS": "{n} DPS",
+ "Patch {patch} recap": "Resumen del parche {patch}",
+ "The Kitchen →": "La Cocina →"
 }

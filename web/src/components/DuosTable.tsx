@@ -24,12 +24,24 @@ export default function DuosTable() {
         { key: "a", label: "Champion", format: "champion" },
         { key: "b", label: "With", format: "champion" },
         { key: "win_rate", label: "Win rate", format: "pct" },
+        {
+          key: "delta",
+          label: "Win rate delta",
+          format: "pct",
+          hint: "Pair win rate minus the average of the two champions' own win rates. Above zero means they win more together.",
+        },
         { key: "pick_rate", label: "Pick rate", format: "pct" },
       ]}
       advancedColumns={[
         { key: "a", label: "Champion", format: "champion" },
         { key: "b", label: "With", format: "champion" },
         { key: "win_rate", label: "Win rate", format: "pct" },
+        {
+          key: "delta",
+          label: "Win rate delta",
+          format: "pct",
+          hint: "Pair win rate minus the average of the two champions' own win rates. Above zero means they win more together.",
+        },
         { key: "pick_rate", label: "Pick rate", format: "pct" },
         { key: "rank", label: "Rank", format: "int" },
         { key: "roles", label: "Roles", format: "text", sortable: false },

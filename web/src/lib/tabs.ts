@@ -80,7 +80,7 @@ export function navItems(): NavItem[] {
     ...pick("/tier-list"),
     ...pick("/simulator"),
     ...menu("#patches", "Patches", [...pick("/pbe"), ...pick("/patches")]),
-    ...menu("#more", "More", [...pick("/items"), ...pick("/info"), ...pick("/kitchen"), ...tools.flatMap((t) => pick(t.href))]),
+    ...menu("#more", "More", [...pick("/info"), ...pick("/kitchen"), ...tools.flatMap((t) => pick(t.href))]),
   ];
 }
 
