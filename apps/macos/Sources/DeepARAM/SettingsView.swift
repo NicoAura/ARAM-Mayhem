@@ -18,7 +18,9 @@ struct SettingsView: View {
                         PatchNotifier.shared.check()
                         status = "Checked. You'll get a notification if there's a new patch."
                     }
-                    Text(lastSeen).foregroundStyle(.secondary)
+                    if let live = UserDefaults.standard.string(forKey: PatchWatcher.patchKey) {
+                        Text("Live patch \(live)").foregroundStyle(.secondary)
+                    }
                 }
             }
             Section("Offline") {
@@ -30,34 +32,25 @@ struct SettingsView: View {
                     }
                     .disabled(!saveOffline)
                     Button("Clear saved pages") {
-                        Task {
-                            await OfflineSaver.shared.clear()
-                            status = "Saved pages cleared."
-                        }
+                        OfflineSaver.shared.clear()
+                        status = "Saved pages cleared."
                     }
                 }
             }
             Section("Windows") {
-                Toggle("Reopen the last page on launch", isOn: $reopenLastPage)
+                Toggle("Reopen the last section on launch", isOn: $reopenLastPage)
             }
             if !status.isEmpty {
                 Text(status).font(.callout).foregroundStyle(.secondary)
             }
-            Text("DeepARAM isn't endorsed by Riot Games and doesn't reflect the views or opinions of Riot Games or anyone officially involved in producing or managing Riot Games properties. Riot Games, and all associated properties are trademarks or registered trademarks of Riot Games, Inc.")
+            Text(Legal.riotNotice)
                 .font(.footnote)
                 .foregroundStyle(.secondary)
                 .fixedSize(horizontal: false, vertical: true)
         }
         .formStyle(.grouped)
         .frame(width: 480)
-        .onChange(of: notifyLive) { on in if on { Task { _ = await PatchNotifier.shared.requestPermission() } } }
-        .onChange(of: notifyPbe) { on in if on { Task { _ = await PatchNotifier.shared.requestPermission() } } }
-    }
-
-    private var lastSeen: String {
-        guard let s = PatchWatcher().lastSeen else { return "" }
-        return [s.livePatch.map { "Live \($0)" }, s.pbePatch.map { "PBE \($0)" }]
-            .compactMap { $0 }
-            .joined(separator: " · ")
+        .onChange(of: notifyLive) { _, on in if on { Task { _ = await PatchNotifier.shared.requestPermission() } } }
+        .onChange(of: notifyPbe) { _, on in if on { Task { _ = await PatchNotifier.shared.requestPermission() } } }
     }
 }

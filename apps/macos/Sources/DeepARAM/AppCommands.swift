@@ -3,7 +3,7 @@ import SwiftUI
 
 /// The menu bar: a Go menu for the site's sections plus browser-style View and navigation items.
 struct AppCommands: Commands {
-    @FocusedObject private var model: BrowserModel?
+    @FocusedObject private var model: WindowModel?
     @Environment(\.openWindow) private var openWindow
 
     var body: some Commands {
@@ -56,15 +56,19 @@ struct AppCommands: Commands {
                 .keyboardShortcut("]")
                 .disabled(model?.canGoForward != true)
             Divider()
-            ForEach(Array(Site.sections.enumerated()), id: \.element.id) { i, section in
-                Button(section.title) { model?.go(section) }
-                    .keyboardShortcut(KeyEquivalent(Character(String(i + 1))))
+            ForEach(Array(WindowModel.sections.enumerated()), id: \.element.id) { i, tab in
+                Button(tab.title) { model?.select(tab) }
+                    .keyboardShortcut(i < 9 ? KeyboardShortcut(KeyEquivalent(Character(String(i + 1)))) : nil)
                     .disabled(model == nil)
             }
         }
 
         CommandGroup(replacing: .help) {
             Button("DeepARAM Website") { NSWorkspace.shared.open(Site.base) }
+            ForEach(SiteTab.legal) { tab in
+                Button(tab.title) { WindowRouter.shared.open(tab.url) }
+            }
+            Divider()
             Button("Report a Bug or Request a Feature") {
                 if let url = URL(string: "mailto:admin@deeparam.com?subject=DeepARAM%20for%20Mac") {
                     NSWorkspace.shared.open(url)

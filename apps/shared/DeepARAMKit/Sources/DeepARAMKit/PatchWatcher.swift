@@ -1,7 +1,7 @@
 import Foundation
 
-/// What the site reports about the current patches.
-public struct PatchStatus: Codable, Equatable, Sendable {
+/// What the site says is current: the live patch and the PBE build (from /data/app-status.json).
+public struct SiteStatus: Codable, Equatable, Sendable {
     public var livePatch: String?
     public var pbeBuild: String?
     public var pbeUpdated: String?
@@ -11,91 +11,72 @@ public struct PatchStatus: Codable, Equatable, Sendable {
         self.pbeBuild = pbeBuild
         self.pbeUpdated = pbeUpdated
     }
-
-    /// "16.21.8289811" -> "16.21": PBE build numbers change far more often than anything people notice.
-    public var pbePatch: String? {
-        guard let pbeBuild else { return nil }
-        return pbeBuild.split(separator: ".").prefix(2).joined(separator: ".")
-    }
 }
 
-public enum PatchChange: Equatable, Sendable {
-    case live(String)
-    case pbe(String)
-
-    public var title: String {
-        switch self {
-        case .live(let p): return "Patch \(p) is live"
-        case .pbe(let p): return "Patch \(p) is on the PBE"
-        }
-    }
-
-    public var body: String {
-        switch self {
-        case .live: return "The tier list and stats now cover the new patch."
-        case .pbe: return "See what's changing for ARAM Mayhem on the test server."
-        }
-    }
-
-    public var url: URL {
-        switch self {
-        case .live: return Site.url("/tier-list")
-        case .pbe: return Site.url("/pbe")
-        }
-    }
+/// Something new since the last check, worth a notification.
+public enum SiteNews: Equatable, Sendable {
+    case newPatch(String)
+    case newPBE(String)
 }
 
-/// Checks the site for a new live or PBE patch and remembers what it last saw.
-public final class PatchWatcher: @unchecked Sendable {
-    private let defaults: UserDefaults
-    private let session: URLSession
-    private let key = "deeparam.lastPatchStatus"
+/// Checks the site for a new live patch or PBE build and remembers what the person was last told
+/// about. The very first check only records the current state, so nobody gets a notification on install.
+public struct PatchWatcher: Sendable {
+    public static let patchKey = "deeparam.lastSeenPatch"
+    public static let pbeKey = "deeparam.lastSeenPBE"
+
+    public let defaults: UserDefaults
+    public let session: URLSession
 
     public init(defaults: UserDefaults = .standard, session: URLSession = .shared) {
         self.defaults = defaults
         self.session = session
     }
 
-    public var lastSeen: PatchStatus? {
-        guard let data = defaults.data(forKey: key) else { return nil }
-        return try? JSONDecoder().decode(PatchStatus.self, from: data)
+    /// Reads /data/app-status.json; falls back to the newest patch recap in the sitemap.
+    public func status() async throws -> SiteStatus {
+        if let (data, resp) = try? await session.data(from: Site.url("/data/app-status.json")),
+           (resp as? HTTPURLResponse)?.statusCode == 200,
+           let s = try? JSONDecoder().decode(SiteStatus.self, from: data), s.livePatch != nil {
+            return s
+        }
+        let (data, _) = try await session.data(from: Site.url("/sitemap.xml"))
+        return SiteStatus(livePatch: Self.patches(inSitemap: String(decoding: data, as: UTF8.self)).first)
     }
 
-    /// Fetches the current status and returns what changed since the last check.
-    /// The very first check only records the current patches, so nobody is told about an old one.
-    public func check() async throws -> [PatchChange] {
-        var request = URLRequest(url: Site.statusURL)
-        request.cachePolicy = .reloadIgnoringLocalCacheData
-        let (data, response) = try await session.data(for: request)
-        if let http = response as? HTTPURLResponse, !(200..<300).contains(http.statusCode) {
-            throw URLError(.badServerResponse)
+    public func check() async throws -> [SiteNews] {
+        let s = try await status()
+        var news: [SiteNews] = []
+        if let patch = s.livePatch {
+            if let seen = defaults.string(forKey: Self.patchKey), Self.compare(patch, seen) > 0 { news.append(.newPatch(patch)) }
+            defaults.set(patch, forKey: Self.patchKey)
         }
-        let current = try JSONDecoder().decode(PatchStatus.self, from: data)
-        let changes = Self.changes(from: lastSeen, to: current)
-        defaults.set(try JSONEncoder().encode(current), forKey: key)
-        return changes
+        if let build = s.pbeBuild {
+            if let seen = defaults.string(forKey: Self.pbeKey), seen != build { news.append(.newPBE(build)) }
+            defaults.set(build, forKey: Self.pbeKey)
+        }
+        return news
     }
 
-    public static func changes(from old: PatchStatus?, to new: PatchStatus) -> [PatchChange] {
-        guard let old else { return [] }
-        var out: [PatchChange] = []
-        if let live = new.livePatch, let was = old.livePatch, live != was, isNewer(live, than: was) {
-            out.append(.live(live))
+    /// "16.20" style patch names found in /patches/<patch> links, newest first.
+    public static func patches(inSitemap xml: String) -> [String] {
+        guard let re = try? NSRegularExpression(pattern: #"/patches/(\d+)\.(\d+)<"#) else { return [] }
+        var found = Set<String>()
+        for m in re.matches(in: xml, range: NSRange(xml.startIndex..., in: xml)) {
+            guard let a = Range(m.range(at: 1), in: xml), let b = Range(m.range(at: 2), in: xml) else { continue }
+            found.insert("\(xml[a]).\(xml[b])")
         }
-        if let pbe = new.pbePatch, let was = old.pbePatch, pbe != was, isNewer(pbe, than: was) {
-            out.append(.pbe(pbe))
-        }
-        return out
+        return found.sorted { compare($0, $1) > 0 }
     }
 
-    /// Compares "16.20" style versions number by number.
-    public static func isNewer(_ a: String, than b: String) -> Bool {
-        let x = a.split(separator: ".").map { Int($0) ?? 0 }
-        let y = b.split(separator: ".").map { Int($0) ?? 0 }
+    /// Compares "16.9" and "16.10" as numbers, not text.
+    public static func compare(_ a: String, _ b: String) -> Int {
+        let x = a.split(separator: ".").compactMap { Int($0) }
+        let y = b.split(separator: ".").compactMap { Int($0) }
         for i in 0..<max(x.count, y.count) {
-            let l = i < x.count ? x[i] : 0, r = i < y.count ? y[i] : 0
-            if l != r { return l > r }
+            let p = i < x.count ? x[i] : 0, q = i < y.count ? y[i] : 0
+            if p != q { return p < q ? -1 : 1 }
         }
-        return false
+        return 0
     }
 }

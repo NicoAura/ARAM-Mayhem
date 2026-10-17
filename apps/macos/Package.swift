@@ -4,7 +4,7 @@ import PackageDescription
 // The DeepARAM macOS app. `scripts/build-app.sh` turns the executable into DeepARAM.app.
 let package = Package(
     name: "DeepARAM",
-    platforms: [.macOS(.v13)],
+    platforms: [.macOS(.v14)],
     dependencies: [.package(path: "../shared/DeepARAMKit")],
     targets: [
         .executableTarget(

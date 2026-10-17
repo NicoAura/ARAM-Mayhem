@@ -6,10 +6,12 @@ import SwiftUI
 struct DeepARAMApp: App {
     @NSApplicationDelegateAdaptor(AppDelegate.self) private var appDelegate
 
+    init() { AppSettings.register() }
+
     var body: some Scene {
         WindowGroup("DeepARAM", id: "main") {
-            BrowserWindow()
-                .frame(minWidth: 720, minHeight: 480)
+            MainWindow()
+                .frame(minWidth: 820, minHeight: 520)
         }
         .defaultSize(width: 1360, height: 900)
         .commands { AppCommands() }

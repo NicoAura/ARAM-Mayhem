@@ -17,7 +17,6 @@ final class PatchNotifier: NSObject, UNUserNotificationCenterDelegate {
     }
 
     func start() {
-        AppSettings.register()
         center?.delegate = self
         check()
         timer = Timer.scheduledTimer(withTimeInterval: Self.interval, repeats: true) { _ in
@@ -36,7 +35,7 @@ final class PatchNotifier: NSObject, UNUserNotificationCenterDelegate {
         Task {
             guard let changes = try? await watcher.check(), !changes.isEmpty else { return }
             let wanted = changes.filter {
-                if case .live = $0 { return AppSettings.notifyLive } else { return AppSettings.notifyPbe }
+                if case .newPatch = $0 { return AppSettings.notifyLive } else { return AppSettings.notifyPbe }
             }
             for change in wanted { await post(change) }
             // A new patch means new pages; refresh the saved copies too.
@@ -50,18 +49,24 @@ final class PatchNotifier: NSObject, UNUserNotificationCenterDelegate {
         return (try? await center.requestAuthorization(options: [.alert, .sound])) ?? false
     }
 
-    private func post(_ change: PatchChange) async {
+    private func post(_ news: SiteNews) async {
         guard let center, await requestPermission() else { return }
         let content = UNMutableNotificationContent()
-        content.title = change.title
-        content.body = change.body
-        content.sound = .default
-        content.userInfo = ["url": change.url.absoluteString]
-        let id: String
-        switch change {
-        case .live(let p): id = "live-\(p)"
-        case .pbe(let p): id = "pbe-\(p)"
+        let id: String, url: URL
+        switch news {
+        case .newPatch(let p):
+            content.title = "Patch \(p) is live"
+            content.body = "The tier list and stats now cover the new patch."
+            id = "live-\(p)"
+            url = SiteTab.tiers.url
+        case .newPBE(let build):
+            content.title = "New PBE update"
+            content.body = "See what's changing for ARAM Mayhem on the test server."
+            id = "pbe-\(build)"
+            url = SiteTab.pbe.url
         }
+        content.sound = .default
+        content.userInfo = ["url": url.absoluteString]
         try? await center.add(UNNotificationRequest(identifier: id, content: content, trigger: nil))
     }
 

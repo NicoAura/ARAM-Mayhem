@@ -1,23 +1,23 @@
 # DeepARAM for Mac
 
-A native macOS window around deeparam.com: the site's pages (Tier List, Simulator, PBE and the rest) run
-in a WKWebView, and the app adds what a browser tab can't.
+A native macOS window around deeparam.com: a sidebar of the site's sections (Tier List, Simulator, PBE and
+the rest), each shown in its own web view that remembers where you were, plus what a browser tab can't do.
 
-- **Menus and shortcuts**: Go menu with every section on ⌘1–⌘8, ⌘[ / ⌘] back and forward, ⌘K search
+- **Menus and shortcuts**: Go menu with the sections on ⌘1–⌘9, ⌘[ / ⌘] back and forward, ⌘K search
   (opens the site's own search), ⌘R reload, ⌘+ / ⌘− / ⌘0 zoom, ⌘T new tab, ⌘⇧C copy link,
   ⌘⇧O open in browser.
-- **Offline**: the main sections are loaded into the cache once a day (and after each new patch). With no
-  connection, pages fall back to their saved copy with a banner; unsaved pages show a short offline page.
+- **Offline**: every page that loads keeps a saved copy, and all sections are saved in the background once
+  a day (and after each new patch). With no connection a page shows its saved copy under a banner.
 - **Patch notifications**: every 3 hours (and on wake) the app reads `/data/app-status.json` and posts a
   notification when a new live or PBE patch appears. Clicking it opens the Tier List or PBE page.
 - Links to other sites open in the default browser. Sign-in and settings persist like Safari's.
 
-Shared logic (sections, link rules, patch check) lives in `apps/shared/DeepARAMKit`, which the iOS and
-iPadOS apps use too.
+The web view, offline copies, sections, link rules and patch check come from `apps/shared/DeepARAMKit`,
+shared with the iPhone and iPad apps. This folder adds the Mac window, menus, settings and notifications.
 
 ## Build
 
-Needs macOS 13+ and Xcode or the Command Line Tools.
+Needs macOS 14+ and Xcode or the Command Line Tools.
 
 ```sh
 apps/macos/scripts/build-app.sh          # runs the shared package's tests, then builds

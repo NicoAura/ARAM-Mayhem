@@ -25,7 +25,10 @@ enum AppSettings {
     static var saveOffline: Bool { UserDefaults.standard.bool(forKey: Key.saveOffline) }
     static var reopenLastPage: Bool { UserDefaults.standard.bool(forKey: Key.reopenLastPage) }
     static var pageZoom: CGFloat {
-        get { CGFloat(UserDefaults.standard.double(forKey: Key.pageZoom)) }
+        get {
+            let z = UserDefaults.standard.double(forKey: Key.pageZoom)
+            return z > 0 ? CGFloat(z) : 1
+        }
         set { UserDefaults.standard.set(Double(newValue), forKey: Key.pageZoom) }
     }
 }
