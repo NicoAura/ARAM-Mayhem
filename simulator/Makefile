@@ -60,7 +60,7 @@ wasm-mayhem: $(CHAMP_SRC) $(CHAMP_HDR)
 # glTF-Transform packages listed there on NODE_PATH).
 replay: mayhem_sim
 	rm -rf viewer/replay-data/traces && mkdir -p viewer/replay-data/traces
-	./mayhem_sim --all --trace-dir viewer/replay-data/traces --json > viewer/replay-data/best-builds.json
+	./mayhem_sim --all --search smart --trace-dir viewer/replay-data/traces --json > viewer/replay-data/best-builds.json
 	python3 tools/build_replay_assets.py --traces viewer/replay-data/traces --out viewer/replay-data $(CLIPS)
 	$(MAKE) wasm-mayhem && cp dist/mayhem_sim.js dist/mayhem_sim.wasm viewer/replay-data/
 	$(if $(MODELS),node tools/build_models.mjs --index viewer/replay-data/index.json --out viewer/replay-data/models)

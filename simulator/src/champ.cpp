@@ -384,6 +384,15 @@ Library Library::load(const std::string& rulesPath, const Settings& settings, co
     os.finalTrials = static_cast<int>(o["final_trials"].asNumber(os.finalTrials));
     os.finalists = static_cast<int>(o["finalists"].asNumber(os.finalists));
     os.fittingItemsOnly = o["fitting_items_only"].asBool(os.fittingItemsOnly);
+    const json::Value& sm = o["smart"];
+    os.smartItems = static_cast<int>(sm["candidate_items"].asNumber(os.smartItems));
+    os.smartAugs = static_cast<int>(sm["candidate_augments"].asNumber(os.smartAugs));
+    os.smartItemSets = static_cast<int>(sm["item_sets"].asNumber(os.smartItemSets));
+    os.smartAugSets = static_cast<int>(sm["augment_sets"].asNumber(os.smartAugSets));
+    os.smartStartTrials = static_cast<int>(sm["start_trials"].asNumber(os.smartStartTrials));
+    os.smartKeep = std::max(2, static_cast<int>(sm["keep_one_in"].asNumber(os.smartKeep)));
+    os.smartFinalists = std::max(1, static_cast<int>(sm["finalists"].asNumber(os.smartFinalists)));
+    os.smartFinalTrials = static_cast<int>(sm["final_trials"].asNumber(os.smartFinalTrials));
 
     lib.scenario = Scenario::fromJson(root["scenario"]);
     const json::Value champs = json::parse(readFile(game + "/champions.json"));
@@ -2903,9 +2912,15 @@ void combinations(int n, int k, int start, std::vector<int>& cur, std::vector<st
     }
 }
 
-}  // namespace
+struct ItemShortlist {
+    std::string boots;                    // the best boots on their own
+    std::vector<std::string> allBoots;    // every boots option that fits
+    std::vector<std::string> pool;        // legendaries worth trying together
+    Build greedy;                         // boots plus the best legendary added one slot at a time
+};
 
-std::vector<Ranked> optimize(const Library& lib, const ChampionKit& c, const Scenario& sc, int threads, int top, Metric metric) {
+// The quick search's first step: build greedily, one item at a time, and keep the runners-up.
+ItemShortlist shortlistItems(const Library& lib, const ChampionKit& c, const Scenario& sc, int threads, Metric metric) {
     const OptimizerSettings& os = lib.optimizer;
     std::vector<std::string> boots, legendaries;
     const auto roles = fittingRoles(c);
@@ -2964,6 +2979,140 @@ std::vector<Ranked> optimize(const Library& lib, const ChampionKit& c, const Sce
         pool = trimmed;
     }
 
+    return {bestBoots, boots, pool, greedy};
+}
+
+}  // namespace
+
+namespace {
+
+// One build in the smart search, with its running total over fights [0, n).
+struct Arm {
+    Build build;
+    double sum = 0;
+    int n = 0;
+    double mean() const { return n ? sum / n : -1; }
+};
+
+// Plays each arm's fights up to `trials` (only the ones it hasn't played yet), then sorts best first.
+void race(const Library& lib, const ChampionKit& c, const Scenario& sc, std::vector<Arm>& arms, int trials,
+          int threads, Metric metric) {
+    parallelFor(static_cast<int>(arms.size()), threads, [&](int i) {
+        Arm& a = arms[i];
+        if (a.n >= trials) return;
+        for (const auto& r : runTrials(lib, c, a.build, sc, static_cast<uint64_t>(a.n), trials - a.n)) a.sum += metricOf(r, metric);
+        a.n = trials;
+    });
+    std::stable_sort(arms.begin(), arms.end(), [](const Arm& a, const Arm& b) { return a.mean() > b.mean(); });
+}
+
+std::vector<Ranked> smartOptimize(const Library& lib, const ChampionKit& c, const Scenario& sc, int threads, int top,
+                                  Metric metric) {
+    const OptimizerSettings& os = lib.optimizer;
+    // The quick search's greedy pass gives the boots, the item shortlist and a starting build.
+    Library wide = lib;
+    wide.optimizer.smart = false;
+    wide.optimizer.candidates = os.smartItems;
+    const ItemShortlist sl = shortlistItems(wide, c, sc, threads, metric);
+    const int screen = os.screenTrials * 3;
+
+    // Augment shortlist: augments added greedily to the greedy build, one slot at a time (so
+    // augments that only pay off together are found), keeping the runners-up at every step.
+    const std::vector<std::string> augs = lib.augmentsFor(c);
+    std::vector<std::string> augPool, topAugs;
+    const int keepAugs = std::max(2, os.smartAugs / std::max(1, os.augmentSlots) + 1);
+    for (int slot = 0; slot < os.augmentSlots && slot < static_cast<int>(augs.size()); ++slot) {
+        std::vector<std::pair<double, std::string>> scored(augs.size());
+        parallelFor(static_cast<int>(augs.size()), threads, [&](int i) {
+            if (std::find(topAugs.begin(), topAugs.end(), augs[i]) != topAugs.end()) { scored[i] = {-1, augs[i]}; return; }
+            Build b = sl.greedy;
+            b.augments = topAugs;
+            b.augments.push_back(augs[i]);
+            scored[i] = {score(lib, c, b, sc, screen, metric), augs[i]};
+        });
+        std::sort(scored.rbegin(), scored.rend());
+        topAugs.push_back(scored[0].second);
+        for (int i = 0; i < keepAugs && i < static_cast<int>(scored.size()); ++i)
+            if (scored[i].first >= 0 && std::find(augPool.begin(), augPool.end(), scored[i].second) == augPool.end())
+                augPool.push_back(scored[i].second);
+    }
+    const int augK = static_cast<int>(topAugs.size());
+
+    // Item sets: every combination of the shortlist, with the boots and the best single augments.
+    std::vector<std::vector<int>> combos;
+    std::vector<int> cur;
+    combinations(static_cast<int>(sl.pool.size()), std::min(os.legendarySlots, static_cast<int>(sl.pool.size())), 0, cur, combos);
+    std::vector<Arm> itemSets;
+    for (const auto& combo : combos) {
+        Build b{{sl.boots}, topAugs};
+        bool ok = true;
+        for (int j : combo) {
+            if (clashes(lib, b.items, sl.pool[j])) { ok = false; break; }
+            b.items.push_back(sl.pool[j]);
+        }
+        if (ok) itemSets.push_back({b});
+    }
+    race(lib, c, sc, itemSets, os.screenTrials, threads, metric);
+    if (static_cast<int>(itemSets.size()) > os.smartItemSets) itemSets.resize(static_cast<size_t>(os.smartItemSets));
+
+    // Augment sets: every combination of the augment shortlist, on the best item set.
+    std::vector<std::vector<int>> augCombos;
+    cur.clear();
+    combinations(static_cast<int>(augPool.size()), augK, 0, cur, augCombos);
+    std::vector<Arm> augSets;
+    for (const auto& combo : augCombos) {
+        Build b = itemSets.front().build;
+        b.augments.clear();
+        for (int j : combo) b.augments.push_back(augPool[j]);
+        augSets.push_back({b});
+    }
+    race(lib, c, sc, augSets, os.screenTrials, threads, metric);
+    if (static_cast<int>(augSets.size()) > os.smartAugSets) augSets.resize(static_cast<size_t>(os.smartAugSets));
+
+    // Every shortlisted item set with every shortlisted augment set, plus every boots option on the
+    // leading items, raced with successive halving. Fights 0..n are shared, so each round only adds new ones.
+    std::vector<Arm> arms;
+    std::set<std::pair<std::vector<std::string>, std::vector<std::string>>> seen;
+    auto add = [&](const Build& b) { if (seen.insert({b.items, b.augments}).second) arms.push_back({b}); };
+    for (const auto& is : itemSets)
+        for (const auto& as : augSets) add(Build{is.build.items, as.build.augments});
+    for (const auto& bt : sl.allBoots)
+        for (const auto& as : augSets) {
+            Build b{itemSets.front().build.items, as.build.augments};
+            b.items[0] = bt;
+            add(b);
+        }
+    // The quick search's best builds race too, so the smart search never does worse than it.
+    Library quick = lib;
+    quick.optimizer.smart = false;
+    for (const auto& r : optimize(quick, c, sc, threads, os.smartFinalists, metric)) add(r.build);
+    const int finalists = std::max(os.smartFinalists, top);
+    for (int trials = os.smartStartTrials; static_cast<int>(arms.size()) > finalists && trials < os.smartFinalTrials;
+         trials *= os.smartKeep) {
+        race(lib, c, sc, arms, trials, threads, metric);
+        arms.resize(static_cast<size_t>(std::max(finalists, static_cast<int>(arms.size()) / os.smartKeep)));
+    }
+    if (static_cast<int>(arms.size()) > finalists) arms.resize(static_cast<size_t>(finalists));
+    std::vector<Ranked> ranked(arms.size());
+    parallelFor(static_cast<int>(arms.size()), threads, [&](int i) {
+        ranked[i] = {arms[i].build, summarize(runTrials(lib, c, arms[i].build, sc, 0, os.smartFinalTrials))};
+    });
+    std::sort(ranked.begin(), ranked.end(),
+              [&](const Ranked& a, const Ranked& b) { return metricOf(a.summary, metric) > metricOf(b.summary, metric); });
+    if (static_cast<int>(ranked.size()) > top) ranked.resize(static_cast<size_t>(top));
+    return ranked;
+}
+
+}  // namespace
+
+std::vector<Ranked> optimize(const Library& lib, const ChampionKit& c, const Scenario& sc, int threads, int top, Metric metric) {
+    const OptimizerSettings& os = lib.optimizer;
+    if (os.smart) return smartOptimize(lib, c, sc, threads, top, metric);
+    const ItemShortlist sl = shortlistItems(lib, c, sc, threads, metric);
+    const std::string& bestBoots = sl.boots;
+    const std::vector<std::string>& boots = sl.allBoots;
+    const std::vector<std::string>& pool = sl.pool;
+    const int screen = os.screenTrials * 3;
     // 2. Every combination of the candidates, with the greedy boots.
     std::vector<std::vector<int>> combos;
     std::vector<int> cur;

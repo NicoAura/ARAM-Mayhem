@@ -172,6 +172,8 @@ After a run on the live patch, the replay page offers *Submit to Survival*. On t
 
 Boots, five legendaries and four augments. Items are searched greedily to pick about 14 candidates, then every five-item combination is screened on a few fights, then augments are added greedily, and the finalists are re-run on 2000 fights. Every build sees the same fights (common random numbers). Only items whose roles fit the champion's class and ability scalings are searched; `--any-items` lifts that. The objective is mean DPS over the whole fight, so dying early counts against a build. Settings live in `data/mayhem_rules.json`.
 
+`--search smart` (used by `make replay` for the published best builds) searches items and augments together. It shortlists 15 items and about 10 augments, screens every five-item set and every four-augment set, then races the best 24 item sets × 12 augment sets, every boots option and the quick search's best builds with successive halving. Each build starts with 250 fights, and the best third go on with three times as many. The last 4 are compared on 20,000 fights. Fights are shared between rounds, so each round only plays new ones. It takes about 3 to 8 times as long as the quick search (Jinx: 80 s instead of 10 s on 4 cores). Settings are in `optimizer.smart`.
+
 ## Limits
 
 - Passives, stacking and HP-scaling kits are mostly missing, so fighters and juggernauts (Sett, Sion, Mundo, Mordekaiser, Gwen, Diana) are underrated.

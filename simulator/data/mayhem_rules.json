@@ -85,6 +85,17 @@
   "final_trials": 2000,
   "finalists": 12,
   "fitting_items_only": true,
-  "fitting_items_note": "Search only items whose roles fit the champion's class and its AP/AD ability scalings. mayhem_sim --any-items lifts this."
+  "fitting_items_note": "Search only items whose roles fit the champion's class and its AP/AD ability scalings. mayhem_sim --any-items lifts this.",
+  "smart": {
+   "candidate_items": 15,
+   "candidate_augments": 10,
+   "item_sets": 24,
+   "augment_sets": 12,
+   "start_trials": 250,
+   "keep_one_in": 3,
+   "finalists": 4,
+   "final_trials": 20000,
+   "note": "mayhem_sim --search smart: every 5-item set from candidate_items shortlisted items is screened, then every augment set from candidate_augments shortlisted augments; the best item_sets x augment_sets builds (plus each boots option and the quick search's best builds) race with successive halving, start_trials fights each, the best 1/keep_one_in going on with keep_one_in times as many, until finalists are left for final_trials fights."
+  }
  }
 }
