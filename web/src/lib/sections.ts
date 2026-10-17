@@ -28,6 +28,12 @@ export const sections = [
     pr: 0,
   },
   {
+    href: "/builder",
+    label: text("tab./builder.label", "Build Editor"),
+    body: text("tab./builder.body", "Drag items and augments into a build to see its stats, gold and simulated damage."),
+    pr: 0,
+  },
+  {
     href: "/synergy",
     label: text("tab./synergy.label", "Team Builder"),
     body: text("tab./synergy.body", "Pick your team to see each pair's win rate together and who fits it best."),
