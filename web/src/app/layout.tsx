@@ -30,6 +30,19 @@ export const metadata: Metadata = {
   twitter: { card: "summary_large_image", title: "DeepARAM", description: DESCRIPTION, images: ["/og.png"] },
 };
 
+// Tells search engines the site's name and logo, so results show "DeepARAM" with the Augment Hex icon.
+const STRUCTURED_DATA = JSON.stringify([
+  { "@context": "https://schema.org", "@type": "WebSite", name: "DeepARAM", url: "https://deeparam.com/" },
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    name: "DeepARAM",
+    url: "https://deeparam.com/",
+    logo: "https://deeparam.com/icons/app/icon-512.png",
+    email: "admin@deeparam.com",
+  },
+]);
+
 export const viewport: Viewport = {
   viewportFit: "cover",
   themeColor: [
@@ -66,6 +79,7 @@ export default function RootLayout({
     <html lang="en" className={`${sans.variable} ${mono.variable} ${display.variable}`} suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: DEVICE_SCRIPT + THEME_SCRIPT + SETTINGS_SCRIPT }} />
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: STRUCTURED_DATA }} />
       </head>
       <body>
         <header className="site-header">
@@ -73,7 +87,8 @@ export default function RootLayout({
             <Link href="/" className="brand">
               <BrandMark />
               <span>
-                Deep<b>ARAM</b>
+                <span className="brand-deep">Deep</span>
+                <b>ARAM</b>
               </span>
             </Link>
             <NavLinks items={[{ href: "/", label: "Home" }, ...navItems()]} />

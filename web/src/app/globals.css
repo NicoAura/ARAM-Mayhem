@@ -18,6 +18,8 @@
   --silver: #59626e;
   --mark-core: #1f252e;
   --prismatic: linear-gradient(100deg, #9fe7ff, #c9b8ff 40%, #ffb8e0 70%, #ffe2a3);
+  /* The same hues as text: deepened on Mist so "Deep" in the wordmark stays readable. */
+  --prismatic-ink: linear-gradient(100deg, #1a7fae, #6a4fd0 40%, #c03f8c 70%, #a8700c);
   --r: 14px;
   --r-sm: 8px;
   --display: var(--font-display), var(--font-sans), system-ui, sans-serif;
@@ -28,6 +30,7 @@
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
     color-scheme: dark;
+    --prismatic-ink: var(--prismatic);
     --bg: #090b0f;
     --surface: #11151c;
     --raised: #181d26;
@@ -48,6 +51,7 @@
 
 :root[data-theme="dark"] {
   color-scheme: dark;
+  --prismatic-ink: var(--prismatic);
   --bg: #090b0f;
   --surface: #11151c;
   --raised: #181d26;
@@ -163,6 +167,13 @@ body::before {
 .brand-mark {
   display: block;
   flex: none;
+}
+
+.brand-deep {
+  background: var(--prismatic-ink);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
 }
 
 .brand b {
