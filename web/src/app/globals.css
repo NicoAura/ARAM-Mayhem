@@ -1093,7 +1093,7 @@ h1 {
 }
 
 .change s {
-  opacity: 0.7;
+  color: var(--muted);
 }
 
 .change b {
@@ -5749,3 +5749,74 @@ html[data-motion="reduce"] .draft-card {
 .fresh[data-state="stale"]::before {
   background: var(--bad);
 }
+
+/* Skip link: first thing a keyboard user reaches; hidden until focused. */
+.skip-link {
+  position: fixed;
+  top: calc(env(safe-area-inset-top, 0px) + 8px);
+  left: max(12px, env(safe-area-inset-left, 0px));
+  z-index: 1000;
+  padding: 0.6rem 1rem;
+  border-radius: 999px;
+  background: var(--accent);
+  color: var(--accent-ink);
+  font-weight: 600;
+  transform: translateY(-200%);
+}
+.skip-link:focus {
+  transform: none;
+}
+main:focus {
+  outline: none;
+}
+
+/* High contrast (Settings > Contrast): stronger muted text, borders and focus rings. */
+html[data-contrast="high"] {
+  --muted: #2b313a;
+  --line: #7d8897;
+  --silver: #3e4650;
+}
+html[data-contrast="high"] :focus-visible {
+  outline-width: 3px;
+  outline-offset: 3px;
+}
+html[data-contrast="high"] .chip.tier-d {
+  color: var(--fg);
+}
+@media (prefers-color-scheme: dark) {
+  html[data-contrast="high"]:not([data-theme="light"]) {
+    --muted: #c9d0db;
+    --line: #5d6878;
+    --silver: #c9d0db;
+  }
+}
+html[data-contrast="high"][data-theme="dark"] {
+  --muted: #c9d0db;
+  --line: #5d6878;
+  --silver: #c9d0db;
+}
+
+/* Colorblind-safe colors (Settings > Win/loss colors): blue for good, orange for bad, and tier
+   colors that differ by lightness as well as hue. */
+html[data-colors="colorblind"] {
+  --good: #1f5fae;
+  --bad: #a64f00;
+}
+@media (prefers-color-scheme: dark) {
+  html[data-colors="colorblind"]:not([data-theme="light"]) {
+    --good: #6cb4ff;
+    --bad: #ffa04d;
+  }
+}
+html[data-colors="colorblind"][data-theme="dark"] {
+  --good: #6cb4ff;
+  --bad: #ffa04d;
+}
+html[data-colors="colorblind"] .chip.tier-s { background: #0b4f9c; border-color: #0b4f9c; color: #fff; }
+html[data-colors="colorblind"] .chip.tier-a { background: #4a90d9; border-color: #4a90d9; color: #04121c; }
+html[data-colors="colorblind"] .chip.tier-b { background: #f2c14e; border-color: #f2c14e; color: #1d1602; }
+html[data-colors="colorblind"] .chip.tier-c { background: #d9731a; border-color: #d9731a; color: #1a0b00; }
+html[data-colors="colorblind"] .snap-tiers button:nth-child(1)[aria-pressed="true"] { background: #0b4f9c; color: #fff; }
+html[data-colors="colorblind"] .snap-tiers button:nth-child(2)[aria-pressed="true"] { background: #4a90d9; color: #04121c; }
+html[data-colors="colorblind"] .snap-tiers button:nth-child(3)[aria-pressed="true"] { background: #f2c14e; color: #1d1602; }
+html[data-colors="colorblind"] .snap-tiers button:nth-child(4)[aria-pressed="true"] { background: #d9731a; color: #1a0b00; }
