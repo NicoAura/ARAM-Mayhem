@@ -6,6 +6,7 @@ import { useEffect, useMemo, useState } from "react";
 import type { SynergyData } from "@/lib/synergy";
 import { getParam, setParams } from "@/lib/url-state";
 import Skeleton from "@/components/Skeleton";
+import { EmptyState, LoadError } from "@/components/EmptyState";
 
 // Team Builder (/synergy?team=Jinx,Lulu): pick up to five champions to see how each pair does together
 // and which champions fit the team best (handy for picking from the ARAM bench). Data: /data/synergy.json.
@@ -59,7 +60,7 @@ export default function TeamBuilder() {
       .slice(0, 10);
   }, [team, data]);
 
-  if (failed) return <p className="table-note">Couldn&apos;t load pair data. Try reloading the page.</p>;
+  if (failed) return <LoadError what="Pair data" />;
   if (!data) return <Skeleton kind="slots" rows={5} label="Loading pair data…" />;
 
   return (
@@ -140,7 +141,7 @@ export default function TeamBuilder() {
               <h2>{team.length === 1 ? `Best teammates for ${byId.get(team[0])?.name}` : team.length === MAX ? "Best fits from the bench" : "Who fits this team best"}</h2>
             </div>
             {fits.length === 0 ? (
-              <p className="table-note">No pair data for this team yet.</p>
+              <EmptyState title="Not enough games yet.">These champions haven&apos;t played together often enough to rate. Try adding someone else.</EmptyState>
             ) : (
               <div className="rank plain team-fits">
                 {fits.map((f) => (

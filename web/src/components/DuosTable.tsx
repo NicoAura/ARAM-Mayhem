@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import DataTable, { type Row } from "./DataTable";
 import Skeleton from "@/components/Skeleton";
+import { LoadError } from "@/components/EmptyState";
 
 // The Duos tab: 2,000 pairs, so they load from /data/duos.json when the tab is first opened, not with the page.
 export default function DuosTable() {
@@ -14,7 +15,7 @@ export default function DuosTable() {
       .then(setRows)
       .catch(() => setFailed(true));
   }, []);
-  if (!rows) return failed ? <p className="table-note">Duos didn&apos;t load. Reload the page to try again.</p> : <Skeleton rows={10} label="Loading duos…" />;
+  if (!rows) return failed ? <LoadError what="Duos" /> : <Skeleton rows={10} label="Loading duos…" />;
   return (
     <DataTable
       columns={[
