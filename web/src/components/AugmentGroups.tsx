@@ -1,5 +1,7 @@
+"use client";
 /* eslint-disable @next/next/no-img-element -- small local icons */
 import Link from "next/link";
+import { useNames, useT } from "./I18n";
 import DeepScore from "@/components/DeepScore";
 import type { AugmentGroup } from "@/lib/augment-groups";
 
@@ -10,16 +12,29 @@ const pct = (v: number) => `${(v * 100).toFixed(1)}%`;
 const SHOWN = 12;
 
 function Member({ a }: { a: AugmentGroup["members"][number] }) {
+  const t = useT("augments");
+  const name = useNames()("augments", a.id, a.name);
   return (
-    <Link className="group-aug" data-rarity={a.rarity} href={a.href} title={`${a.name} · ${a.tier} tier, DeepScore ${a.deepScore}`}>
+    <Link
+      className="group-aug"
+      data-rarity={a.rarity}
+      href={a.href}
+      title={t("{name} · {tier} tier, DeepScore {score}", {
+        name,
+        tier: a.tier,
+        score: a.deepScore,
+      })}
+    >
       <img src={`/icons/augments/${a.id}.webp`} alt="" width={40} height={40} loading="lazy" />
-      <span className="group-aug-name">{a.name}</span>
+      <span className="group-aug-name">{name}</span>
       <span className={`chip tier-${a.tier.toLowerCase()}`}>{a.tier}</span>
     </Link>
   );
 }
 
 export default function AugmentGroups({ groups, help }: { groups: AugmentGroup[]; help: string }) {
+  const t = useT("augments");
+  const tables = useT("tables");
   return (
     <div className="aug-groups">
       {groups.map((g) => {
@@ -31,29 +46,37 @@ export default function AugmentGroups({ groups, help }: { groups: AugmentGroup[]
             <header className="aug-group-head">
               <img className="aug-group-icon" src={`/icons/augments/${g.members[0].id}.webp`} alt="" width={48} height={48} />
               <div>
-                <h3>{g.name}</h3>
-                <span className="card-note">
-                  {g.members.length} augment{g.members.length === 1 ? "" : "s"}
-                </span>
+                <h3>{t(g.name)}</h3>
+                <span className="card-note">{g.members.length === 1 ? t("1 augment") : t("{n} augments", { n: g.members.length })}</span>
               </div>
-              <DeepScore value={g.deepScore} help={`The group's average DeepScore. ${help}`} />
+              <DeepScore value={g.deepScore} help={`${t("The group's average DeepScore.")} ${tables(help)}`} />
             </header>
             {(traits.length > 0 || g.words.length > 0) && (
               <p className="aug-group-traits">
-                {traits.map((t) => (
-                  <span key={t} className="aug-group-trait">
-                    {t}
+                {traits.map((tr) => (
+                  <span key={tr} className="aug-group-trait">
+                    {t(tr)}
                   </span>
                 ))}
                 {g.words.map((w) => (
-                  <span key={w.word} className="aug-group-word" title={`${Math.round(w.share * 100)}% of the group mention it`}>
-                    {w.word} <small>{Math.round(w.share * 100)}%</small>
+                  <span
+                    key={w.word}
+                    className="aug-group-word"
+                    title={t("{pct}% of the group mention it", {
+                      pct: Math.round(w.share * 100),
+                    })}
+                  >
+                    {t(w.word)} <small>{Math.round(w.share * 100)}%</small>
                   </span>
                 ))}
               </p>
             )}
             <p className="aug-group-wr">
-              Win rate {pct(g.winRate.min)} to {pct(g.winRate.max)}, average <b>{pct(g.winRate.avg)}</b>
+              {t("Win rate {min} to {max}, average {avg}", {
+                min: pct(g.winRate.min),
+                max: pct(g.winRate.max),
+                avg: pct(g.winRate.avg),
+              })}
             </p>
             <div className="aug-group-members">
               {g.members.slice(0, shown).map((a) => (
@@ -62,7 +85,7 @@ export default function AugmentGroups({ groups, help }: { groups: AugmentGroup[]
             </div>
             {g.members.length > shown && (
               <details className="aug-group-more">
-                <summary>Show {g.members.length - shown} more</summary>
+                <summary>{t("Show {n} more", { n: g.members.length - shown })}</summary>
                 <div className="aug-group-members">
                   {g.members.slice(shown).map((a) => (
                     <Member key={a.id} a={a} />

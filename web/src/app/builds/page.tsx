@@ -5,6 +5,7 @@ import SubTabs from "@/components/SubTabs";
 import TeamBuilder from "@/components/TeamBuilder";
 import { pageMeta } from "@/lib/meta";
 import NeedsScript from "@/components/NeedsScript";
+import { T } from "@/components/I18n";
 
 // Build tools (/builds?tab=…, under More): the Build Editor (default) and the Team Builder.
 // What to build for a champion is on its page; /builds?champ=… and the old What to build address
@@ -21,18 +22,23 @@ const Note = ({ children }: { children: React.ReactNode }) => <p className="patc
 export default function BuildsPage() {
   return (
     <>
-      <Intro eyebrow="Build tools" title="Try builds and plan a team.">
-        Try your own build with simulated damage, or check how your team fits together. The build that wins most for each champion is on its page.
+      <Intro eyebrow={<T ns="builds">Build tools</T>} title={<T ns="builds">Try builds and plan a team.</T>}>
+        <T ns="builds">
+          Try your own build with simulated damage, or check how your team fits together. The build that wins most for each champion is on its page.
+        </T>
       </Intro>
       <NeedsScript />
       <SubTabs
+        ns="builds"
         tabs={[
           {
             id: "editor",
             label: "Build Editor",
             content: (
               <>
-                <Note>Drag items into the six slots and pick four augments. Stats, gold and simulated damage update as you go.</Note>
+                <Note>
+                  <T ns="builds">Drag items into the six slots and pick four augments. Stats, gold and simulated damage update as you go.</T>
+                </Note>
                 <BuildEditor />
               </>
             ),
@@ -43,7 +49,9 @@ export default function BuildsPage() {
             lazy: true,
             content: (
               <>
-                <Note>Add your team, or just your own champion, to see each pair&apos;s win rate and the best champions to add.</Note>
+                <Note>
+                  <T ns="builds">{"Add your team, or just your own champion, to see each pair's win rate and the best champions to add."}</T>
+                </Note>
                 <TeamBuilder />
               </>
             ),

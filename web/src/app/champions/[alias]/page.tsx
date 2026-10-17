@@ -14,6 +14,7 @@ import { notFound } from "next/navigation";
 import Embed from "@/components/Embed";
 import { championAliases, championSummary, champList } from "@/lib/champions";
 import ArchetypeTags from "@/components/ArchetypeTags";
+import { Name, T } from "@/components/I18n";
 import { championTagData, championTags } from "@/lib/champion-tags";
 import { pageMeta } from "@/lib/meta";
 import { discoverToolTabs } from "@/lib/tabs";
@@ -64,33 +65,55 @@ export default async function ChampionPage({ params }: { params: Promise<{ alias
   const next = all[(at + 1) % all.length];
   return (
     <>
-      <Breadcrumbs trail={[["Champions", "/champions"], [c.name, `/champions/${c.alias}`]]} />
+      <Breadcrumbs
+        trail={[
+          ["Champions", "/champions"],
+          [c.name, `/champions/${c.alias}`],
+        ]}
+      />
       <SplashAccent src={c.splash} />
       <section className="champ-hero" data-parallax style={c.splash ? ({ "--splash": `url("${c.splash}")` } as React.CSSProperties) : undefined}>
         <ChampionShowcase alias={c.alias} name={c.name} />
         <p className="eyebrow">
-          <Link href="/tier-list">Tier List</Link> · Patch {c.patch}
+          <Link href="/tier-list">
+            <T ns="champion-page">Tier List</T>
+          </Link>{" "}
+          ·{" "}
+          <T ns="champion-page" v={{ patch: c.patch ?? "" }}>
+            {"Patch {patch}"}
+          </T>
         </p>
         <nav className="champ-steps" aria-label="Other champions">
           <Link href={`/champions/${prev.id}`} data-swipe="prev" rel="prev">
-            ‹ {prev.name}
+            ‹{" "}
+            <Name kind="champions" id={prev.id}>
+              {prev.name}
+            </Name>
           </Link>
           <Link href={`/champions/${next.id}`} data-swipe="next" rel="next">
-            {next.name} ›
+            <Name kind="champions" id={next.id}>
+              {next.name}
+            </Name>{" "}
+            ›
           </Link>
         </nav>
         <div className="champ-hero-title">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img className="champ-hero-icon" src={`/icons/champions/${c.alias}.webp`} alt="" width={72} height={72} />
           <h1>
-            {c.name} <span className="champ-hero-sub">ARAM Mayhem build</span>
+            <Name kind="champions" id={c.alias}>
+              {c.name}
+            </Name>{" "}
+            <span className="champ-hero-sub">
+              <T ns="champion-page">ARAM Mayhem build</T>
+            </span>
           </h1>
         </div>
         {c.title && <p className="lede">{c.title.charAt(0).toUpperCase() + c.title.slice(1)}</p>}
         <ArchetypeTags names={championTags(c.alias)} info={championTagData().info} link />
         <p className="champ-hero-links">
           <Link className="inline-link" href={`/builds?tab=editor&champ=${c.alias}`}>
-            Try a build
+            <T ns="champion-page">Try a build</T>
           </Link>
           <ShareButton title={c.name} />
           {c.winRate !== undefined && (
@@ -102,11 +125,28 @@ export default async function ChampionPage({ params }: { params: Promise<{ alias
                 icon: `/icons/champions/${c.alias}.webp`,
                 badge: c.tier && TIER_COLORS[c.tier] ? { text: c.tier, ...TIER_COLORS[c.tier] } : undefined,
                 stats: [
-                  { label: "Win rate", value: pct(c.winRate), tone: c.winRate >= 0.52 ? "good" : c.winRate <= 0.48 ? "bad" : undefined },
+                  {
+                    label: "Win rate",
+                    value: pct(c.winRate),
+                    tone: c.winRate >= 0.52 ? "good" : c.winRate <= 0.48 ? "bad" : undefined,
+                  },
                   { label: "Pick rate", value: pct(c.pickRate ?? 0) },
-                  ...(c.change !== null ? [{ label: `Since ${c.prev}`, value: pts(c.change), tone: c.change > 0 ? ("good" as const) : c.change < 0 ? ("bad" as const) : undefined }] : []),
+                  ...(c.change !== null
+                    ? [
+                        {
+                          label: `Since ${c.prev}`,
+                          value: pts(c.change),
+                          tone: c.change > 0 ? ("good" as const) : c.change < 0 ? ("bad" as const) : undefined,
+                        },
+                      ]
+                    : []),
                 ],
-                row: c.augments.length ? { label: "Most picked augments", icons: c.augments.slice(0, 6).map((a) => `/icons/augments/${a.id}.webp`) } : undefined,
+                row: c.augments.length
+                  ? {
+                      label: "Most picked augments",
+                      icons: c.augments.slice(0, 6).map((a) => `/icons/augments/${a.id}.webp`),
+                    }
+                  : undefined,
                 url: `https://deeparam.com/champions/${c.alias}`,
               }}
             />
@@ -119,21 +159,31 @@ export default async function ChampionPage({ params }: { params: Promise<{ alias
                 <span className={`chip tier-${c.tier?.toLowerCase()}`}>{c.tier}</span>
               </b>
               <span>
-                tier, #{c.rank} of {c.of}
+                <T ns="champion-page" v={{ rank: c.rank ?? "", of: c.of ?? "" }}>
+                  {"tier, #{rank} of {of}"}
+                </T>
               </span>
             </div>
             <div>
               <b className={c.winRate >= 0.52 ? "wr-high" : c.winRate <= 0.48 ? "wr-low" : ""}>{pct(c.winRate)}</b>
-              <span>win rate</span>
+              <span>
+                <T ns="champion-page">win rate</T>
+              </span>
             </div>
             <div>
               <b>{pct(c.pickRate ?? 0)}</b>
-              <span>pick rate</span>
+              <span>
+                <T ns="champion-page">pick rate</T>
+              </span>
             </div>
             {c.change !== null && (
               <div>
                 <b className={c.change > 0 ? "delta-up" : c.change < 0 ? "delta-down" : ""}>{pts(c.change)}</b>
-                <span>since {c.prev}</span>
+                <span>
+                  <T ns="champion-page" v={{ patch: c.prev ?? "" }}>
+                    {"since {patch}"}
+                  </T>
+                </span>
               </div>
             )}
           </div>
@@ -146,15 +196,23 @@ export default async function ChampionPage({ params }: { params: Promise<{ alias
           {c.partners.length > 0 && (
             <section className="card span-all" data-accent="tier">
               <div className="card-head">
-                <h2>Best teammates</h2>
-                <Link href={`/builds?tab=team&team=${c.alias}`}>Team Builder →</Link>
+                <h2>
+                  <T ns="champion-page">Best teammates</T>
+                </h2>
+                <Link href={`/builds?tab=team&team=${c.alias}`}>
+                  <T ns="champion-page">Team Builder →</T>
+                </Link>
               </div>
               <div className="rank plain">
                 {c.partners.map((p) => (
                   <Link key={p.id} href={`/champions/${p.id}`}>
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img className="icon" src={`/icons/champions/${p.id}.webp`} alt="" width={24} height={24} loading="lazy" />
-                    <span className="rank-name">{p.name}</span>
+                    <span className="rank-name">
+                      <Name kind="champions" id={p.id}>
+                        {p.name}
+                      </Name>
+                    </span>
                     <span className="rank-v">{pct(p.winRate)}</span>
                   </Link>
                 ))}
@@ -165,11 +223,11 @@ export default async function ChampionPage({ params }: { params: Promise<{ alias
       )}
       {c.radar.length >= 3 && (
         <div className="bento quick-spot" id="playstyle">
-          <ChampionRadar name={c.name} axes={c.radar} />
+          <ChampionRadar id={c.alias} name={c.name} axes={c.radar} />
         </div>
       )}
       <div className="bento quick-spot" id="history">
-        <WinRateChart name={c.name} history={c.history} patches={c.patches} champions={champList()} />
+        <WinRateChart id={c.alias} name={c.name} history={c.history} patches={c.patches} champions={champList()} />
       </div>
       {tab && (
         <div className="quick-spot" id="details">

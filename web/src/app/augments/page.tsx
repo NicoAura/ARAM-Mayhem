@@ -4,6 +4,7 @@ import AugmentDraft from "@/components/AugmentDraft";
 import AugmentGroups from "@/components/AugmentGroups";
 import SubTabs from "@/components/SubTabs";
 import Intro from "@/components/Intro";
+import { T } from "@/components/I18n";
 import { augmentGroups } from "@/lib/augment-groups";
 import { AUGMENT_DEEPSCORE_HELP } from "@/lib/deepscore";
 import { livePatch } from "@/lib/highlights";
@@ -18,12 +19,18 @@ export const metadata: Metadata = pageMeta(
 export default function AugmentsPage() {
   return (
     <>
-      <Intro eyebrow={`Augments · Patch ${livePatch()}`} title="What augments do, and how to draft them.">
-        Augments grouped by what they do, and draft practice with rerolls. For every augment ranked S to D, see the{" "}
+      <Intro
+        eyebrow={
+          <T ns="augments" v={{ patch: livePatch() ?? "" }}>
+            {"Augments · Patch {patch}"}
+          </T>
+        }
+        title={<T ns="augments">What augments do, and how to draft them.</T>}
+      >
+        <T ns="augments">Augments grouped by what they do, and draft practice with rerolls.</T>{" "}
         <Link className="inline-link" href="/tier-list?tab=augments">
-          Tier List
+          <T ns="augments">Every augment ranked S to D is on the Tier List →</T>
         </Link>
-        .
       </Intro>
       <SubTabs
         tabs={[
@@ -33,7 +40,9 @@ export default function AugmentsPage() {
             content: (
               <>
                 <p className="patch-note subtab-note">
-                  Augments that share an icon usually share a job. Each group shows what most of its members have in common, then every member, best first.
+                  <T ns="augments">
+                    Augments that share an icon usually share a job. Each group shows what most of its members have in common, then every member, best first.
+                  </T>
                 </p>
                 <AugmentGroups groups={augmentGroups()} help={AUGMENT_DEEPSCORE_HELP} />
               </>
@@ -46,13 +55,16 @@ export default function AugmentsPage() {
             content: (
               <>
                 <p className="patch-note subtab-note">
-                  Four selections, three cards each, one reroll per card. After every pick you&apos;ll see how often players on your champion take it.
+                  <T ns="augments">
+                    {"Four selections, three cards each, one reroll per card. After every pick you'll see how often players on your champion take it."}
+                  </T>
                 </p>
                 <AugmentDraft />
               </>
             ),
           },
         ]}
+        ns="augments"
       />
     </>
   );

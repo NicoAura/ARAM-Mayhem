@@ -11,6 +11,7 @@ import ShareCard from "@/components/ShareCard";
 import type { CardSpec } from "@/lib/share-card";
 import { buzz } from "@/lib/haptics";
 import { LoadError } from "@/components/EmptyState";
+import { useNames, useT } from "./I18n";
 
 // Build Editor (/builds?tab=editor&champ=Jinx&items=…&augs=…): drag items into six slots and pick four augments;
 // the summed stats and gold update as you go and the simulator re-runs the build in the browser
@@ -62,6 +63,8 @@ function sim(args: string[]) {
 const fixed = (n: number, d = 0) => n.toLocaleString(undefined, { maximumFractionDigits: d, minimumFractionDigits: d });
 
 export default function BuildEditor() {
+  const t = useT("builds");
+  const names = useNames();
   const [list, setList] = useState<SimList | null>(null);
   const [data, setData] = useState<BuilderData | null>(null);
   const [best, setBest] = useState<Best[]>([]);
@@ -75,7 +78,7 @@ export default function BuildEditor() {
   const [result, setResult] = useState<Summary | null>(null);
   const [prev, setPrev] = useState<Summary | null>(null);
   const [running, setRunning] = useState(false);
-  const [simError, setSimError] = useState("");
+  const [simError, setSimError] = useState(false);
   const [over, setOver] = useState<number | null>(null);
   const drag = useRef<{ key: string; from: number | null } | null>(null);
   const last = useRef<Summary | null>(null);
@@ -109,8 +112,9 @@ export default function BuildEditor() {
   const itemByKey = useMemo(() => new Map(list?.items.map((i) => [i.key, i]) ?? []), [list]);
   const augByKey = useMemo(() => new Map(list?.augments.map((a) => [a.key, a]) ?? []), [list]);
   const champion = list?.champions.find((c) => c.id === champ);
-  const champName = (id: string) => data?.champions[id] ?? Object.entries(data?.champions ?? {}).find(([k]) => k.toLowerCase() === id.toLowerCase())?.[1] ?? id;
   const alias = (id: string) => Object.keys(data?.champions ?? {}).find((k) => k.toLowerCase() === id.toLowerCase()) ?? id;
+  const champName = (id: string) =>
+    names("champions", alias(id), data?.champions[id] ?? Object.entries(data?.champions ?? {}).find(([k]) => k.toLowerCase() === id.toLowerCase())?.[1] ?? id);
   const champIcon = (id: string) => `/icons/champions/${alias(id)}.webp`;
 
   // Keep the URL shareable and re-run the simulator a moment after the build stops changing.
@@ -120,7 +124,7 @@ export default function BuildEditor() {
     const as = augs.filter(Boolean);
     setParams({ champ, items: its.length ? its.join(",") : null, augs: as.length ? as.join(",") : null });
     let live = true;
-    const t = setTimeout(() => {
+    const timer = setTimeout(() => {
       setRunning(true);
       const args = ["--champ", champ, "--json", "--set", `level=${level}`];
       if (its.length) args.push("--items", its.join(","));
@@ -131,18 +135,18 @@ export default function BuildEditor() {
         try {
           const s = (JSON.parse(r.stdout).builds?.[0]?.summary ?? null) as Summary | null;
           if (!r.ok || !s) throw new Error();
-          setSimError("");
+          setSimError(false);
           setPrev(last.current);
           last.current = s;
           setResult(s);
         } catch {
-          setSimError("The simulator couldn't run this build.");
+          setSimError(true);
         }
       });
     }, 250);
     return () => {
       live = false;
-      clearTimeout(t);
+      clearTimeout(timer);
     };
   }, [list, champ, items, augs, level]);
 
@@ -211,18 +215,18 @@ export default function BuildEditor() {
     if (!result || !data || !list) return null;
     const icon = (k: string) => data.items[list.items.find((i) => i.key === k)?.name ?? ""]?.icon;
     return {
-      title: `${champName(champ)} build`,
-      subtitle: `Simulated at level ${level} · ${totals.gold.toLocaleString("en-US")} gold`,
+      title: t("{champ} build", { champ: champName(champ) }),
+      subtitle: t("Simulated at level {level} · {gold} gold", { level, gold: totals.gold.toLocaleString("en-US") }),
       icon: champIcon(champ),
       stats: [
-        { label: "Damage per second", value: fixed(result.mean_dps) },
-        { label: "Time alive", value: `${fixed(result.time_alive, 1)} s` },
+        { label: t("Damage per second"), value: fixed(result.mean_dps) },
+        { label: t("Time alive"), value: `${fixed(result.time_alive, 1)} s` },
       ],
-      row: { label: "Items", icons: picked.map(icon).filter((x): x is string => Boolean(x)) },
+      row: { label: t("Items"), icons: picked.map(icon).filter((x): x is string => Boolean(x)) },
       url: typeof location === "undefined" ? "https://deeparam.com/builder" : `https://deeparam.com/builder${location.search}`,
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps -- champName/champIcon only read data
-  }, [result, data, list, champ, level, totals.gold, items]);
+  }, [result, data, list, champ, level, totals.gold, items, t, names]);
 
   const pool = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -232,8 +236,8 @@ export default function BuildEditor() {
       .sort((a, b) => a.name.localeCompare(b.name));
   }, [list, query, role]);
 
-  if (failed) return <LoadError what="The Build Editor" />;
-  if (!list || !data || !champion) return <Skeleton kind="slots" rows={6} label="Loading the simulator…" />;
+  if (failed) return <LoadError what={t("The Build Editor")} />;
+  if (!list || !data || !champion) return <Skeleton kind="slots" rows={6} label={t("Loading the simulator…")} />;
 
   const icon = (k: string) => data.items[itemByKey.get(k)?.name ?? ""]?.icon;
   const augIcon = (k: string) => {
@@ -241,6 +245,12 @@ export default function BuildEditor() {
     return id ? `/icons/augments/${id}.webp` : undefined;
   };
   const delta = result && prev ? result.mean_dps - prev.mean_dps : 0;
+  const augName = (k: string) => {
+    const a = augByKey.get(k);
+    const id = data.augments[a?.name ?? ""];
+    return id ? names("augments", id, a?.name ?? k) : (a?.name ?? k);
+  };
+  const rarityLabel: Record<string, string> = { prismatic: t("Prismatic"), gold: t("Gold"), silver: t("Silver") };
   const pool4 = RARITY.map((r) => [r, champion.augments.map((k) => augByKey.get(k)).filter((a): a is SimItem => a?.rarity === r)] as const);
 
   return (
@@ -248,7 +258,7 @@ export default function BuildEditor() {
       <div className="builder-top">
         <label className="builder-champ">
           <img src={champIcon(champ)} alt="" width={40} height={40} />
-          <select value={champ} aria-label="Champion" onChange={(e) => pickChamp(e.target.value)}>
+          <select value={champ} aria-label={t("Champion")} onChange={(e) => pickChamp(e.target.value)}>
             {[...list.champions]
               .sort((a, b) => champName(a.id).localeCompare(champName(b.id)))
               .map((c) => (
@@ -259,12 +269,12 @@ export default function BuildEditor() {
           </select>
         </label>
         <label className="builder-level">
-          Level <b>{level}</b>
+          {t("Level")} <b>{level}</b>
           <input type="range" min={1} max={18} value={level} onChange={(e) => setLevel(Number(e.target.value))} />
         </label>
         <div className="builder-actions">
           <button type="button" className="btn ghost" onClick={reset}>
-            Simulated best build
+            {t("Simulated best build")}
           </button>
           <button
             type="button"
@@ -274,12 +284,12 @@ export default function BuildEditor() {
               setAugs(Array(AUGS).fill(""));
             }}
           >
-            Clear
+            {t("Clear")}
           </button>
-          <ShareButton url={() => `/share/builds${location.search}`} title={`${champName(champ)} build`} />
+          <ShareButton url={() => `/share/builds${location.search}`} title={t("{champ} build", { champ: champName(champ) })} />
           {shareSpec && <ShareCard spec={shareSpec} />}
           <Link className="inline-link" href={`/champions/${alias(champ)}`}>
-            {champName(champ)} page →
+            {t("{champ} page →", { champ: champName(champ) })}
           </Link>
         </div>
       </div>
@@ -287,12 +297,14 @@ export default function BuildEditor() {
       <div className="builder-grid">
         <section className="card builder-build" data-accent="gold">
           <div className="card-head">
-            <h2>Build</h2>
+            <h2>{t("Build")}</h2>
             <span className="card-note">
-              <b>{fixed(totals.gold)}</b> gold
+              {t("{gold} gold", { gold: "\u0000" })
+                .split("\u0000")
+                .map((part, n) => (n ? [<b key="g">{fixed(totals.gold)}</b>, part] : part))}
             </span>
           </div>
-          <ol className="builder-slots" aria-label="Item slots">
+          <ol className="builder-slots" aria-label={t("Item slots")}>
             {items.map((k, i) => (
               <li
                 key={i}
@@ -314,8 +326,8 @@ export default function BuildEditor() {
                   <button
                     type="button"
                     draggable
-                    title={`${itemByKey.get(k)?.name} (tap to remove)`}
-                    aria-label={`Remove ${itemByKey.get(k)?.name}`}
+                    title={t("{item} (tap to remove)", { item: itemByKey.get(k)?.name ?? k })}
+                    aria-label={t("Remove {item}", { item: itemByKey.get(k)?.name ?? k })}
                     onDragStart={(e) => start(e, k, i)}
                     onClick={() => remove(i)}
                   >
@@ -329,25 +341,25 @@ export default function BuildEditor() {
               </li>
             ))}
           </ol>
-          <p className="builder-names">{picked.map((k) => itemByKey.get(k)?.name).join(" · ") || "Drag items here, or tap one below."}</p>
+          <p className="builder-names">{picked.map((k) => itemByKey.get(k)?.name).join(" · ") || t("Drag items here, or tap one below.")}</p>
           <div className="builder-augs">
             {augs.map((a, i) => (
               <label key={i} className="builder-aug" data-rarity={augByKey.get(a)?.rarity}>
                 {a && augIcon(a) ? <img src={augIcon(a)} alt="" width={32} height={32} /> : <span className="builder-aug-dot" aria-hidden="true" />}
                 <select
                   value={a}
-                  aria-label={`Augment ${i + 1}`}
+                  aria-label={t("Augment {n}", { n: i + 1 })}
                   onChange={(e) => setAugs((cur) => cur.map((x, n) => (n === i ? e.target.value : x)))}
                 >
-                  <option value="">Augment {i + 1}</option>
+                  <option value="">{t("Augment {n}", { n: i + 1 })}</option>
                   {pool4.map(([r, as]) => (
-                    <optgroup key={r} label={r[0].toUpperCase() + r.slice(1)}>
+                    <optgroup key={r} label={rarityLabel[r] ?? r[0].toUpperCase() + r.slice(1)}>
                       {as
                         .filter((x) => x.key === a || !augs.includes(x.key))
-                        .sort((x, y) => x.name.localeCompare(y.name))
+                        .sort((x, y) => augName(x.key).localeCompare(augName(y.key)))
                         .map((x) => (
                           <option key={x.key} value={x.key}>
-                            {x.name}
+                            {augName(x.key)}
                           </option>
                         ))}
                     </optgroup>
@@ -360,33 +372,33 @@ export default function BuildEditor() {
 
         <section className="card builder-result" data-accent="tier" aria-live="polite">
           <div className="card-head">
-            <h2>Simulated damage</h2>
-            <span className="card-note">{running ? "Simulating…" : `level ${level}`}</span>
+            <h2>{t("Simulated damage")}</h2>
+            <span className="card-note">{running ? t("Simulating…") : t("level {level}", { level })}</span>
           </div>
           {simError ? (
-            <p className="table-note">{simError}</p>
+            <p className="table-note">{t("The simulator couldn't run this build.")}</p>
           ) : result ? (
             <>
               <div className="builder-dps">
                 <b>{fixed(result.mean_dps)}</b>
                 <span>
-                  damage per second ± {fixed(result.ci95)}
+                  {t("damage per second ± {ci}", { ci: fixed(result.ci95) })}
                   {prev && Math.abs(delta) >= 0.5 && (
                     <em className={delta > 0 ? "wr-high" : "wr-low"}>
                       {" "}
                       {delta > 0 ? "+" : "−"}
-                      {fixed(Math.abs(delta))} vs last
+                      {t("{delta} vs last", { delta: fixed(Math.abs(delta)) })}
                     </em>
                   )}
                 </span>
               </div>
               <dl className="builder-facts">
                 <div>
-                  <dt>Time alive</dt>
+                  <dt>{t("Time alive")}</dt>
                   <dd>{fixed(result.time_alive, 1)} s</dd>
                 </div>
                 <div>
-                  <dt>Survives the fight</dt>
+                  <dt>{t("Survives the fight")}</dt>
                   <dd>{fixed(result.survival_rate * 100, 1)}%</dd>
                 </div>
               </dl>
@@ -406,13 +418,13 @@ export default function BuildEditor() {
               </ul>
             </>
           ) : (
-            <p className="table-note">Simulating…</p>
+            <p className="table-note">{t("Simulating…")}</p>
           )}
         </section>
 
         <section className="card builder-stats">
           <div className="card-head">
-            <h2>Item stats</h2>
+            <h2>{t("Item stats")}</h2>
           </div>
           {totals.stats.length ? (
             <dl className="builder-statlist">
@@ -427,20 +439,27 @@ export default function BuildEditor() {
               ))}
             </dl>
           ) : (
-            <p className="table-note">No items yet.</p>
+            <p className="table-note">{t("No items yet.")}</p>
           )}
         </section>
       </div>
 
       <section className="card builder-pool">
         <div className="card-head">
-          <h2>Items</h2>
-          <input className="builder-search" type="search" placeholder="Search items" aria-label="Search items" value={query} onChange={(e) => setQuery(e.target.value)} />
+          <h2>{t("Items")}</h2>
+          <input
+            className="builder-search"
+            type="search"
+            placeholder={t("Search items")}
+            aria-label={t("Search items")}
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+          />
         </div>
-        <div className="builder-roles" role="group" aria-label="Item type">
+        <div className="builder-roles" role="group" aria-label={t("Item type")}>
           {ROLES.map(([r, label]) => (
             <button key={r} type="button" className="builder-role" aria-pressed={role === r} onClick={() => setRole(r)}>
-              {label}
+              {t(label)}
             </button>
           ))}
         </div>
@@ -471,12 +490,12 @@ export default function BuildEditor() {
               </li>
             );
           })}
-          {pool.length === 0 && <li className="table-note">No items match.</li>}
+          {pool.length === 0 && <li className="table-note">{t("No items match.")}</li>}
         </ul>
       </section>
       <p className="patch-note">
-        Damage is the simulator&apos;s average over many simulated teamfights against a typical enemy team, live patch. Drag an item back to the list
-        to remove it.
+        {t("Damage is the simulator's average over many simulated teamfights against a typical enemy team, live patch.")}{" "}
+        {t("Drag an item back to the list to remove it.")}
       </p>
     </div>
   );

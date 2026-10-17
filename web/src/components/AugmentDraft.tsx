@@ -8,6 +8,7 @@ import { buzz } from "@/lib/haptics";
 import { getParam, setParams } from "@/lib/url-state";
 import Skeleton from "@/components/Skeleton";
 import { LoadError } from "@/components/EmptyState";
+import { useNames, useT } from "./I18n";
 
 // Augment Draft practice (/augments?tab=draft&champ=Jinx): four selections of three augments, one reroll per card,
 // like a real Mayhem game. After each pick it shows how often players on that champion take it,
@@ -15,7 +16,11 @@ import { LoadError } from "@/components/EmptyState";
 
 const STAGES = [3, 7, 11, 15];
 const RARITIES = ["silver", "gold", "prismatic"];
-const LABEL: Record<string, string> = { silver: "Silver", gold: "Gold", prismatic: "Prismatic" };
+const LABEL: Record<string, string> = {
+  silver: "Silver",
+  gold: "Gold",
+  prismatic: "Prismatic",
+};
 const pct = (bp: number) => `${(bp / 100).toFixed(1)}%`;
 
 type Pick = { id: string; offers: string[]; rarity: string };
@@ -24,6 +29,8 @@ type Card = { id: string; rerolled: boolean };
 const randomOf = <T,>(list: T[]) => list[Math.floor(Math.random() * list.length)];
 
 export default function AugmentDraft() {
+  const t = useT("augments");
+  const names = useNames();
   const [data, setData] = useState<DraftData | null>(null);
   const [failed, setFailed] = useState(false);
   const [champ, setChamp] = useState("");
@@ -33,7 +40,11 @@ export default function AugmentDraft() {
   const root = useRef<HTMLDivElement>(null);
 
   const pools = useMemo(() => {
-    const out: Record<string, string[]> = { silver: [], gold: [], prismatic: [] };
+    const out: Record<string, string[]> = {
+      silver: [],
+      gold: [],
+      prismatic: [],
+    };
     for (const [id, [, r]] of Object.entries(data?.augs ?? {})) out[r]?.push(id);
     return out;
   }, [data]);
@@ -76,14 +87,19 @@ export default function AugmentDraft() {
 
   const stage = picks.length;
   const done = stage >= STAGES.length;
-  const name = data?.champions.find((c) => c.id === champ)?.name ?? champ;
+  const name = names("champions", champ, data?.champions.find((c) => c.id === champ)?.name ?? champ);
+  // An augment's name in the page's language.
+  const aug = (id: string) => names("augments", id, data?.augs[id]?.[0] ?? id);
+  const rarityName = (r: string) => t(LABEL[r]);
   const rate = (id: string) => data?.picks[champ]?.[id] ?? 0;
   // The card this champion's players take most; augments they never take rank by overall win rate.
   const best = (offers: string[]) => [...offers].sort((a, b) => rate(b) - rate(a) || (data?.augs[b]?.[2] ?? 0) - (data?.augs[a]?.[2] ?? 0))[0];
   // Where an augment ranks among this champion's picks of its rarity.
   const rankOf = (id: string) => {
     const r = data?.augs[id]?.[1];
-    const mine = Object.entries(data?.picks[champ] ?? {}).filter(([a]) => data?.augs[a]?.[1] === r).sort((x, y) => y[1] - x[1]);
+    const mine = Object.entries(data?.picks[champ] ?? {})
+      .filter(([a]) => data?.augs[a]?.[1] === r)
+      .sort((x, y) => y[1] - x[1]);
     const i = mine.findIndex(([a]) => a === id);
     return i < 0 ? null : { n: i + 1, of: mine.length };
   };
@@ -96,7 +112,12 @@ export default function AugmentDraft() {
     buzz(next.length >= STAGES.length ? "done" : rarities[stage] === "prismatic" ? "thud" : "tap");
     if (next.length < STAGES.length) {
       const taken = new Set(next.map((p) => p.id));
-      setCards(draw(rarities[next.length], taken, 3).map((c) => ({ id: c, rerolled: false })));
+      setCards(
+        draw(rarities[next.length], taken, 3).map((c) => ({
+          id: c,
+          rerolled: false,
+        })),
+      );
     } else setCards([]);
   };
   const reroll = (i: number) => {
@@ -128,8 +149,8 @@ export default function AugmentDraft() {
     return () => removeEventListener("keydown", key);
   });
 
-  if (failed) return <LoadError what="The augments" />;
-  if (!data) return <Skeleton kind="cards" rows={3} label="Shuffling augments…" />;
+  if (failed) return <LoadError what={t("The augments")} />;
+  if (!data) return <Skeleton kind="cards" rows={3} label={t("Shuffling augments…")} />;
 
   const matched = picks.filter((p) => p.id === best(p.offers)).length;
   const last = picks[picks.length - 1];
@@ -139,32 +160,32 @@ export default function AugmentDraft() {
       <div className="draft-bar">
         <label className="draft-champ builder-champ">
           {champ && <img src={`/icons/champions/${champ}.webp`} alt="" width={40} height={40} />}
-          <select value={champ} aria-label="Champion" onChange={(e) => start(e.target.value)}>
+          <select value={champ} aria-label={t("Champion")} onChange={(e) => start(e.target.value)}>
             {data.champions.map((c) => (
               <option key={c.id} value={c.id}>
-                {c.name}
+                {names("champions", c.id, c.name)}
               </option>
             ))}
           </select>
         </label>
         <button type="button" className="btn ghost" onClick={() => start(randomOf(data.champions).id)}>
-          Random champion
+          {t("Random champion")}
         </button>
         <button type="button" className="btn ghost" onClick={() => start(champ)}>
-          Restart draft
+          {t("Restart draft")}
         </button>
       </div>
 
-      <ol className="draft-stages" aria-label="Selections">
+      <ol className="draft-stages" aria-label={t("Selections")}>
         {STAGES.map((lv, i) => {
           const p = picks[i];
           return (
             <li key={lv} data-state={p ? "done" : i === stage ? "now" : undefined} data-rarity={rarities[i]}>
-              <span className="draft-lv">Level {lv}</span>
+              <span className="draft-lv">{t("Level {lv}", { lv })}</span>
               {p ? (
-                <img src={`/icons/augments/${p.id}.webp`} alt={data.augs[p.id][0]} title={data.augs[p.id][0]} width={32} height={32} />
+                <img src={`/icons/augments/${p.id}.webp`} alt={aug(p.id)} title={aug(p.id)} width={32} height={32} />
               ) : (
-                <span className="draft-empty">{i === stage ? LABEL[rarities[i]] : "?"}</span>
+                <span className="draft-empty">{i === stage ? rarityName(rarities[i]) : "?"}</span>
               )}
             </li>
           );
@@ -178,16 +199,39 @@ export default function AugmentDraft() {
             const rank = rankOf(last.id);
             const top = best(last.offers);
             const lead = r
-              ? `${name} players take ${data.augs[last.id][0]} in ${pct(r)} of games${rank ? `, their #${rank.n} of ${rank.of} ${LABEL[last.rarity]} picks` : ""}.`
-              : `${name} players rarely take ${data.augs[last.id][0]}.`;
+              ? rank
+                ? t("{champ} players take {aug} in {pct} of games, their #{n} of {of} {rarity} picks.", {
+                    champ: name,
+                    aug: aug(last.id),
+                    pct: pct(r),
+                    n: rank.n,
+                    of: rank.of,
+                    rarity: rarityName(last.rarity),
+                  })
+                : t("{champ} players take {aug} in {pct} of games.", {
+                    champ: name,
+                    aug: aug(last.id),
+                    pct: pct(r),
+                  })
+              : t("{champ} players rarely take {aug}.", {
+                  champ: name,
+                  aug: aug(last.id),
+                });
             return top === last.id ? (
               <>
-                <b className="wr-high">Top pick.</b> {lead}
+                <b className="wr-high">{t("Top pick.")}</b> {lead}
               </>
             ) : (
               <>
-                {lead} Their favorite of those three: <b>{data.augs[top][0]}</b>
-                {rate(top) ? ` (${pct(rate(top))})` : ""}.
+                {lead}{" "}
+                {rate(top)
+                  ? t("Their favorite of those three: {aug} ({pct}).", {
+                      aug: aug(top),
+                      pct: pct(rate(top)),
+                    })
+                  : t("Their favorite of those three: {aug}.", {
+                      aug: aug(top),
+                    })}
               </>
             );
           })()}
@@ -195,13 +239,14 @@ export default function AugmentDraft() {
       )}
 
       {!done ? (
-        <section className="draft-pick" aria-label={`Level ${STAGES[stage]} selection`}>
+        <section className="draft-pick" aria-label={t("Level {lv} selection", { lv: STAGES[stage] })}>
           <h2>
-            Level {STAGES[stage]}: choose a <span className={`chip tier-${rarities[stage]}`}>{LABEL[rarities[stage]]}</span> augment
+            {t("Level {lv}: choose an augment", { lv: STAGES[stage] })} <span className={`chip tier-${rarities[stage]}`}>{rarityName(rarities[stage])}</span>
           </h2>
           <div className="draft-cards" key={`${stage}`}>
             {cards.map((c, i) => {
-              const [nm, r] = data.augs[c.id];
+              const [, r] = data.augs[c.id];
+              const nm = aug(c.id);
               return (
                 <div className="draft-slot" key={`${i}-${c.id}`}>
                   <button type="button" className="draft-card" data-rarity={r} onClick={() => take(c.id)} aria-keyshortcuts={String(i + 1)}>
@@ -211,8 +256,14 @@ export default function AugmentDraft() {
                       {i + 1}
                     </span>
                   </button>
-                  <button type="button" className="btn ghost draft-reroll" disabled={c.rerolled} onClick={() => reroll(i)} aria-label={`Reroll ${nm}`}>
-                    {c.rerolled ? "Rerolled" : "Reroll"}
+                  <button
+                    type="button"
+                    className="btn ghost draft-reroll"
+                    disabled={c.rerolled}
+                    onClick={() => reroll(i)}
+                    aria-label={t("Reroll {aug}", { aug: nm })}
+                  >
+                    {c.rerolled ? t("Rerolled") : t("Reroll")}
                   </button>
                 </div>
               );
@@ -223,7 +274,10 @@ export default function AugmentDraft() {
         <section className="card draft-result" data-accent="gold">
           <div className="card-head">
             <h2>
-              You matched the top pick {matched} of {STAGES.length} times
+              {t("You matched the top pick {n} of {of} times", {
+                n: matched,
+                of: STAGES.length,
+              })}
             </h2>
           </div>
           <div className="draft-list">
@@ -231,11 +285,11 @@ export default function AugmentDraft() {
               const top = best(p.offers);
               return (
                 <Link key={p.id} href={data.augs[p.id][3] || `/tier-list?tab=augments&q=${encodeURIComponent(data.augs[p.id][0])}`}>
-                  <span className="draft-list-lv">Lv {STAGES[i]}</span>
+                  <span className="draft-list-lv">{t("Lv {lv}", { lv: STAGES[i] })}</span>
                   <img src={`/icons/augments/${p.id}.webp`} alt="" width={24} height={24} />
                   <span className="draft-list-name">
-                    {data.augs[p.id][0]}
-                    <small>{top === p.id ? "Top pick" : `Top pick was ${data.augs[top][0]}`}</small>
+                    {aug(p.id)}
+                    <small>{top === p.id ? t("Top pick") : t("Top pick was {aug}", { aug: aug(top) })}</small>
                   </span>
                   <span className="draft-list-v">{rate(p.id) ? pct(rate(p.id)) : "–"}</span>
                 </Link>
@@ -244,17 +298,19 @@ export default function AugmentDraft() {
           </div>
           <p className="draft-again">
             <button type="button" className="btn" onClick={() => start(champ)}>
-              Draft {name} again
+              {t("Draft {champ} again", { champ: name })}
             </button>
             <Link className="inline-link" href={`/champions/${champ}`}>
-              {name}&apos;s best augments
+              {t("{champ}'s best augments", { champ: name })}
             </Link>
           </p>
         </section>
       )}
       <p className="patch-note">
-        Practice only: each selection&apos;s rarity is random here, and every augment of a rarity is equally likely. Percentages are how often{" "}
-        {name} players take each augment on the live patch.
+        {t(
+          "Practice only: each selection's rarity is random here, and every augment of a rarity is equally likely. Percentages are how often {champ} players take each augment on the live patch.",
+          { champ: name },
+        )}
       </p>
     </div>
   );

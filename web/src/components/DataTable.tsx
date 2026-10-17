@@ -7,6 +7,7 @@ import { setParams } from "@/lib/url-state";
 import { useAdvanced } from "./Advanced";
 import championIds from "@/data/champion-ids.json";
 import { hintFor } from "@/lib/glossary";
+import { useNames, useT } from "./I18n";
 import { EmptyState } from "@/components/EmptyState";
 import DeepScore from "./DeepScore";
 import ArchetypeTags from "./ArchetypeTags";
@@ -33,10 +34,13 @@ export type Row = Record<string, string | number | null>;
 
 const NAMES = championNames as Record<string, string>;
 
-// Search matches champion ids ("MonkeyKing") and display names ("Wukong") alike.
-function searchText(v: Row[string]) {
+// Search matches champion ids ("MonkeyKing"), display names ("Wukong") and names in the page's language alike.
+function searchText(v: Row[string], local: (id: string, en: string) => string) {
   const raw = String(v ?? "");
-  const names = raw.split(" ").map((w) => NAMES[w] ?? w.replace(/([a-z])([A-Z])/g, "$1 $2"));
+  const names = raw.split(" ").map((w) => {
+    const en = NAMES[w] ?? w.replace(/([a-z])([A-Z])/g, "$1 $2");
+    return `${en} ${local(w, en)}`;
+  });
   return `${raw} ${names.join(" ")}`.toLowerCase();
 }
 
@@ -65,6 +69,7 @@ function show(v: Row[string], format: Column["format"]) {
 // patch timeline's playback).
 const ORDER = ["S", "A", "B", "C", "D"];
 function TierChip({ tier, was }: { tier: string; was: Row[string] | undefined }) {
+  const t = useT("tables");
   const old = typeof was === "string" && was !== tier && ORDER.includes(was) ? was : null;
   return (
     <span
@@ -72,7 +77,7 @@ function TierChip({ tier, was }: { tier: string; was: Row[string] | undefined })
       className={`chip tier-${tier.toLowerCase()}`}
       data-was={old ?? undefined}
       data-dir={old ? (ORDER.indexOf(tier) < ORDER.indexOf(old) ? "up" : "down") : undefined}
-      title={old ? `${old} last patch` : undefined}
+      title={old ? t("{tier} last patch", { tier: old }) : undefined}
     >
       {tier}
     </span>
@@ -105,7 +110,7 @@ function Named({ src, name }: { src: string; name: string }) {
 
 // A champion's name opens its page.
 function Champion({ id }: { id: string }) {
-  const name = NAMES[id] ?? id.replace(/([a-z])([A-Z])/g, "$1 $2");
+  const name = useNames()("champions", id, NAMES[id] ?? id.replace(/([a-z])([A-Z])/g, "$1 $2"));
   const named = <Named src={`/icons/champions/${id}.webp`} name={name} />;
   return id in championIds ? (
     <Link className="cell-link" href={`/champions/${id}`}>
@@ -138,6 +143,13 @@ export default function DataTable({
   urlTab?: string;
 }) {
   const columns = useAdvanced() && advancedColumns ? advancedColumns : standardColumns;
+  // Column labels, hints and the table's own wording live in the "tables" namespace.
+  const t = useT("tables");
+  const names = useNames();
+  const hint = (c: Column) => {
+    const h = hintFor(c.label, c.hint);
+    return h && t(h);
+  };
   const [sort, setSort] = useState(initialSort);
   const [query, setQuery] = useState("");
   const [shown, setShown] = useState(PAGE);
@@ -157,7 +169,11 @@ export default function DataTable({
 
   const sorted = useMemo(() => {
     const q = query.trim().toLowerCase();
-    const filtered = q && searchKey ? rows.filter((r) => searchText(r[searchKey]).includes(q)) : rows;
+    const local = (id: string, en: string) => names("champions", id, en);
+    const filtered =
+      q && searchKey
+        ? rows.filter((r) => `${searchText(r[searchKey], local)} ${r.id === undefined ? "" : names("augments", String(r.id), "")}`.toLowerCase().includes(q))
+        : rows;
     const dir = sort.desc ? -1 : 1;
     return [...filtered].sort((a, b) => {
       const x = a[sort.key];
@@ -168,7 +184,7 @@ export default function DataTable({
       if (typeof x === "number" && typeof y === "number") return (x - y) * dir;
       return String(x ?? "").localeCompare(String(y ?? "")) * dir;
     });
-  }, [rows, sort, query, searchKey]);
+  }, [rows, sort, query, searchKey, names]);
 
   const toggle = (key: string) => {
     const next = sort.key === key ? { key, desc: !sort.desc } : { key, desc: key !== searchKey };
@@ -182,8 +198,8 @@ export default function DataTable({
         <input
           className="table-search"
           type="search"
-          placeholder={searchLabel}
-          aria-label={searchLabel}
+          placeholder={t(searchLabel)}
+          aria-label={t(searchLabel)}
           value={query}
           onChange={(e) => {
             setQuery(e.target.value);
@@ -204,16 +220,15 @@ export default function DataTable({
                   aria-sort={c.sortable !== false && sort.key === (c.sortKey ?? c.key) ? (sort.desc ? "descending" : "ascending") : undefined}
                 >
                   {c.sortable === false ? (
-                    c.label
+                    t(c.label)
                   ) : (
-                    <button
-                      type="button"
-                      onClick={() => toggle(c.sortKey ?? c.key)}
-                      data-tip={hintFor(c.label, c.hint)}
-                      aria-description={hintFor(c.label, c.hint)}
-                    >
-                      {c.label}
-                      {hintFor(c.label, c.hint) && <span className="col-hint" aria-hidden="true">?</span>}
+                    <button type="button" onClick={() => toggle(c.sortKey ?? c.key)} data-tip={hint(c)} aria-description={hint(c)}>
+                      {t(c.label)}
+                      {hint(c) && (
+                        <span className="col-hint" aria-hidden="true">
+                          ?
+                        </span>
+                      )}
                       <span className="sort-mark">{sort.key === (c.sortKey ?? c.key) ? (sort.desc ? "↓" : "↑") : ""}</span>
                     </button>
                   )}
@@ -232,10 +247,16 @@ export default function DataTable({
                     ) : c.format === "augment" ? (
                       c.hrefKey && r[c.hrefKey] ? (
                         <Link className="cell-link" href={String(r[c.hrefKey])}>
-                          <Named src={`/icons/augments/${r[c.iconKey ?? "id"]}.webp`} name={String(r[c.key] ?? "")} />
+                          <Named
+                            src={`/icons/augments/${r[c.iconKey ?? "id"]}.webp`}
+                            name={names("augments", String(r[c.iconKey ?? "id"]), String(r[c.key] ?? ""))}
+                          />
                         </Link>
                       ) : (
-                        <Named src={`/icons/augments/${r[c.iconKey ?? "id"]}.webp`} name={String(r[c.key] ?? "")} />
+                        <Named
+                          src={`/icons/augments/${r[c.iconKey ?? "id"]}.webp`}
+                          name={names("augments", String(r[c.iconKey ?? "id"]), String(r[c.key] ?? ""))}
+                        />
                       )
                     ) : c.hrefKey && r[c.hrefKey] ? (
                       <a className="cell-link" href={String(r[c.hrefKey])}>
@@ -260,7 +281,7 @@ export default function DataTable({
       {sorted.length === 0 &&
         (query.trim() ? (
           <EmptyState
-            title={`Nothing matches “${query.trim()}”.`}
+            title={t("Nothing matches “{q}”.", { q: query.trim() })}
             action={
               <button
                 type="button"
@@ -270,23 +291,23 @@ export default function DataTable({
                   share({ q: null });
                 }}
               >
-                Clear search
+                {t("Clear search")}
               </button>
             }
           >
-            Check the spelling, or search for part of the name.
+            {t("Check the spelling, or search for part of the name.")}
           </EmptyState>
         ) : (
-          <EmptyState title="Nothing to show here yet.">There&apos;s no data for this view on the chosen patches.</EmptyState>
+          <EmptyState title={t("Nothing to show here yet.")}>{t("There's no data for this view on the chosen patches.")}</EmptyState>
         ))}
       {(() => {
         const terms = columns.flatMap((c) => {
-          const h = hintFor(c.label, c.hint);
-          return h ? [[c.label, h] as const] : [];
+          const h = hint(c);
+          return h ? [[t(c.label), h] as const] : [];
         });
         return terms.length ? (
           <details className="table-glossary">
-            <summary>What do these columns mean?</summary>
+            <summary>{t("What do these columns mean?")}</summary>
             <dl>
               {terms.map(([t, h]) => (
                 <div key={t}>
@@ -300,7 +321,7 @@ export default function DataTable({
       })()}
       {sorted.length > shown && (
         <button type="button" className="show-more" onClick={() => setShown((n) => n + PAGE * 2)}>
-          Show more ({sorted.length - shown} left)
+          {t("Show more ({n} left)", { n: sorted.length - shown })}
         </button>
       )}
     </div>

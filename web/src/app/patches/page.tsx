@@ -3,6 +3,7 @@ import Link from "next/link";
 import Intro from "@/components/Intro";
 import { pageMeta } from "@/lib/meta";
 import { recap, recapPatches } from "@/lib/patches";
+import { Name, T } from "@/components/I18n";
 
 export const metadata: Metadata = pageMeta(
   "/patches",
@@ -13,27 +14,49 @@ export const metadata: Metadata = pageMeta(
 const pts = (v: number) => `${v > 0 ? "+" : ""}${(v * 100).toFixed(1)}`;
 
 export default function PatchesPage() {
-  const recaps = recapPatches().map((p) => recap(p)!).filter(Boolean);
+  const recaps = recapPatches()
+    .map((p) => recap(p)!)
+    .filter(Boolean);
   return (
     <>
-      <Intro eyebrow="Patch Recaps" title="What every patch changed.">
-        Augment changes and the biggest champion risers and fallers, patch by patch.
+      <Intro eyebrow={<T ns="patches">Patch Recaps</T>} title={<T ns="patches">What every patch changed.</T>}>
+        <T ns="patches">Augment changes and the biggest champion risers and fallers, patch by patch.</T>
       </Intro>
       <div className="recap-index">
         {recaps.map((r, i) => (
           <Link key={r.patch} className="card recap-row" href={`/patches/${r.patch}`} data-accent={i === 0 ? "tier" : undefined}>
             <b className="recap-patch">
               {r.patch}
-              {i === 0 && <span className="chip">Live</span>}
+              {i === 0 && (
+                <span className="chip">
+                  <T ns="patches">Live</T>
+                </span>
+              )}
             </b>
             <span className="recap-meta">
-              {r.hasAugmentHistory ? `${r.added.length} added · ${r.removed.length} removed · ${r.changed.length} changed` : "Win rates only"}
+              {r.hasAugmentHistory ? (
+                <T
+                  ns="patches"
+                  v={{
+                    added: r.added.length,
+                    removed: r.removed.length,
+                    changed: r.changed.length,
+                  }}
+                >
+                  {"{added} added · {removed} removed · {changed} changed"}
+                </T>
+              ) : (
+                <T ns="patches">Win rates only</T>
+              )}
             </span>
             {r.up[0] && (
               <span className="recap-top">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img src={`/icons/champions/${r.up[0].id}.webp`} alt="" width={22} height={22} loading="lazy" />
-                {r.up[0].name} <span className="delta-up">{pts(r.up[0].change)}</span>
+                <Name kind="champions" id={r.up[0].id}>
+                  {r.up[0].name}
+                </Name>{" "}
+                <span className="delta-up">{pts(r.up[0].change)}</span>
               </span>
             )}
           </Link>

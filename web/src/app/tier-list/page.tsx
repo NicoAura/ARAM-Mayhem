@@ -17,13 +17,18 @@ import championIds from "@/data/champion-ids.json";
 import championNames from "@/data/champion-names.json";
 import type { PatchRow } from "@/lib/tiers";
 import Intro from "@/components/Intro";
+import { T } from "@/components/I18n";
 import { text } from "@/lib/content";
 import Pending from "@/components/Pending";
 import SubTabs from "@/components/SubTabs";
 import { readRepoCsv, readRepoJson } from "@/lib/repo-data";
 import { allChampionTags, championTagData } from "@/lib/champion-tags";
 
-export const metadata: Metadata = pageMeta("/tier-list", `ARAM Mayhem Tier List${livePatch() ? `, Patch ${livePatch()}` : ""}`, "ARAM Mayhem champion tier list for the current patch, with augment and duo win rates.");
+export const metadata: Metadata = pageMeta(
+  "/tier-list",
+  `ARAM Mayhem Tier List${livePatch() ? `, Patch ${livePatch()}` : ""}`,
+  "ARAM Mayhem champion tier list for the current patch, with augment and duo win rates.",
+);
 
 const num = (v: string | undefined) => (v === undefined || v === "" ? null : Number(v));
 const ALIAS = Object.fromEntries(Object.entries(championIds as Record<string, number>).map(([alias, id]) => [id, alias]));
@@ -41,7 +46,10 @@ export default function TierListPage() {
   if (!byPatch || !patches?.length) {
     return (
       <>
-        <Intro eyebrow="Tier List" title={text("page./tier-list.title", "Every Mayhem champion and augment, ranked.")} />
+        <Intro
+          eyebrow={<T ns="tier-list">Tier List</T>}
+          title={<T ns="tier-list">{text("page./tier-list.title", "Every Mayhem champion and augment, ranked.")}</T>}
+        />
         <Pending pr={5}>Champion, augment and duo stats appear here once the stats data is merged:</Pending>
       </>
     );
@@ -50,18 +58,20 @@ export default function TierListPage() {
   const latest = patches.at(-1)!;
   // Only the live and previous patch ship with the page; ChampionTiers loads the rest when picked.
   const recent = new Set(patches.slice(-2).map((p) => p.patch));
-  const rows: PatchRow[] = byPatch.filter((r) => recent.has(r.patch)).map((r) => ({
-    patch: r.patch,
-    days: Number(r.days),
-    name: r.name,
-    win_rate: Number(r.win_rate),
-    pick_rate: Number(r.pick_rate),
-    damage: num(r.avg_damage_ratio),
-    tank: num(r.avg_tank_ratio),
-    kp: num(r.avg_participation_rate),
-    dead: num(r.avg_death_time),
-    augs: r.augment_ids ?? "",
-  }));
+  const rows: PatchRow[] = byPatch
+    .filter((r) => recent.has(r.patch))
+    .map((r) => ({
+      patch: r.patch,
+      days: Number(r.days),
+      name: r.name,
+      win_rate: Number(r.win_rate),
+      pick_rate: Number(r.pick_rate),
+      damage: num(r.avg_damage_ratio),
+      tank: num(r.avg_tank_ratio),
+      kp: num(r.avg_participation_rate),
+      dead: num(r.avg_death_time),
+      augs: r.augment_ids ?? "",
+    }));
   const champName = (alias?: string) => (alias ? (NAMES[alias] ?? alias) : null);
   const partners = Object.fromEntries(
     (champs?.champions ?? []).map((c) => [
@@ -106,14 +116,22 @@ export default function TierListPage() {
         <>
           <AugmentTiers rows={augmentTiers()} styles={STYLES} />
           <p className="patch-note">
-            Live patch {latest.patch}. Each augment gets a DeepScore against the others of its rarity: 50 is average, S is 70 and up, A 59, B 44, C 32 and D below. Every number is in
-            the table below.
+            <T ns="tier-list" v={{ patch: latest.patch }}>
+              {
+                "Live patch {patch}. Each augment gets a DeepScore against the others of its rarity: 50 is average, S is 70 and up, A 59, B 44, C 32 and D below. Every number is in the table below."
+              }
+            </T>
           </p>
           <DataTable
             columns={augCols}
             advancedColumns={[
               ...augCols,
-              { key: "lift", label: "Win rate vs its champions", format: "pct" as const, hint: "Win rate minus what the champions who take it win anyway. Above zero means it helps them." },
+              {
+                key: "lift",
+                label: "Win rate vs its champions",
+                format: "pct" as const,
+                hint: "Win rate minus what the champions who take it win anyway. Above zero means it helps them.",
+              },
               { key: "win_rank", label: "Win rank", format: "int" },
               { key: "pick_rank", label: "Pick rank", format: "int" },
               { key: "pick_change", label: "Pick rank change", format: "int" },
@@ -153,13 +171,22 @@ export default function TierListPage() {
 
   return (
     <AdvancedProvider>
-      <Intro eyebrow={`Tier List · Patch ${latest.patch}`} title={text("page./tier-list.title", "Every Mayhem champion and augment, ranked.")}>
-        Live patch {latest.patch} by default. Pick any patches, or all time, above the champion table. Advanced shows every stat we have.
+      <Intro
+        eyebrow={
+          <T ns="tier-list" v={{ patch: latest.patch }}>
+            {"Tier List · Patch {patch}"}
+          </T>
+        }
+        title={<T ns="tier-list">{text("page./tier-list.title", "Every Mayhem champion and augment, ranked.")}</T>}
+      >
+        <T ns="tier-list" v={{ patch: latest.patch }}>
+          {"Live patch {patch} by default. Pick any patches, or all time, above the champion table. Advanced shows every stat we have."}
+        </T>
       </Intro>
       <div className="tier-view">
         <AdvancedToggle />
       </div>
-      <SubTabs tabs={tabs} />
+      <SubTabs tabs={tabs} ns="tier-list" />
     </AdvancedProvider>
   );
 }
