@@ -116,7 +116,6 @@
  "Gold": "Oro",
  "Your healing and Health Regen deal 70% of the value magic damage to the nearest enemy champion.": "Le tue cure e la rigenerazione salute infliggono il 70% del valore in danni magici al campione nemico più vicino.",
  "Prismatic": "Prismatico",
- "You can Critically Defend using your Crit Chance (max 50% chance), giving you a chance to reduce damage taken by 20%. Gain 25% Crit Chance. Damage Reduced:": "Puoi effettuare una Difesa critica usando la tua probabilità di critico (massimo 50%), con la possibilità di ridurre i danni subiti del 20%. Ottieni il 25% di probabilità di critico. Danni ridotti:",
  "Silver": "Argento",
  "Ionia": "Ionia",
  "Slayer": "Assassino",
@@ -183,5 +182,6 @@
  "Dealing and receiving champion damage grants you @StacksPerHit@ stack of Juggernauting for @Stack_Duration@ seconds. For every @Stacks_Max@ stacks of Juggernauting you gain @Calc_AF@ Adaptive Force, @Calc_Defenses@ Armor, @Calc_Defenses@ Magic Resist, @Calc_Size@ Size, and @Calc_Tenacity@ Tenacity. Stacks fall off faster the more you have. Maximum Juggernauting Level: @f1.0@": "Infliggere e subire danni dai campioni ti conferisce @StacksPerHit@ carica di Colosso per @Stack_Duration@ secondi. Ogni @Stacks_Max@ cariche di Colosso ottieni @Calc_AF@ forza adattiva, @Calc_Defenses@ armatura, @Calc_Defenses@ resistenza magica, @Calc_Size@ dimensioni e @Calc_Tenacity@ tenacia. Più cariche hai, più in fretta svaniscono. Livello massimo di Colosso: @f1.0@",
  "Gain @ManaToHealthCalc@ Health.": "Ottieni @ManaToHealthCalc@ salute.",
  "Your Mana costs double. Your Ability Heals, Shields, and damage are @ManaCalc@ more effective.": "I tuoi costi in mana raddoppiano. Le cure, gli scudi e i danni delle tue abilità sono più efficaci del @ManaCalc@.",
- "Immediately gain a Needlessly Large Rod. QUEST: Possess Rabadon's Deathcap and Zhonya's Hourglass. REWARD: Gain Wooglet's Witchcap.": "Ottieni subito un Bastone colossale. MISSIONE: possiedi il Copricapo di Rabadon e la Clessidra di Zhonya. RICOMPENSA: ottieni il Copricapo di Wooglet."
+ "Immediately gain a Needlessly Large Rod. QUEST: Possess Rabadon's Deathcap and Zhonya's Hourglass. REWARD: Gain Wooglet's Witchcap.": "Ottieni subito un Bastone colossale. MISSIONE: possiedi il Copricapo di Rabadon e la Clessidra di Zhonya. RICOMPENSA: ottieni il Copricapo di Wooglet.",
+ "You can Critically Defend using your Crit Chance (max 50% chance), giving you a chance to reduce damage taken by 20%. Gain 25% Crit Chance.": "Puoi effettuare una Difesa critica usando la tua probabilità di critico (massimo 50%), con la possibilità di ridurre i danni subiti del 20%. Ottieni il 25% di probabilità di critico."
 }

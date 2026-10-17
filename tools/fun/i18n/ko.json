@@ -116,7 +116,6 @@
  "Gold": "골드",
  "Your healing and Health Regen deal 70% of the value magic damage to the nearest enemy champion.": "회복량과 체력 재생량의 70%만큼 가장 가까운 적 챔피언에게 마법 피해를 입힙니다.",
  "Prismatic": "프리즘",
- "You can Critically Defend using your Crit Chance (max 50% chance), giving you a chance to reduce damage taken by 20%. Gain 25% Crit Chance. Damage Reduced:": "치명타 확률로 치명적 방어가 가능해져(최대 50% 확률), 받는 피해를 20% 줄일 확률을 얻습니다. 치명타 확률이 25% 증가합니다. 감소한 피해량:",
  "Silver": "실버",
  "Ionia": "아이오니아",
  "Slayer": "슬레이어",
@@ -183,5 +182,6 @@
  "Dealing and receiving champion damage grants you @StacksPerHit@ stack of Juggernauting for @Stack_Duration@ seconds. For every @Stacks_Max@ stacks of Juggernauting you gain @Calc_AF@ Adaptive Force, @Calc_Defenses@ Armor, @Calc_Defenses@ Magic Resist, @Calc_Size@ Size, and @Calc_Tenacity@ Tenacity. Stacks fall off faster the more you have. Maximum Juggernauting Level: @f1.0@": "챔피언에게 피해를 주거나 받으면 @Stack_Duration@초 동안 저거너트 중첩을 @StacksPerHit@ 얻습니다. 저거너트 중첩 @Stacks_Max@마다 적응형 능력치 @Calc_AF@, 방어력 @Calc_Defenses@, 마법 저항력 @Calc_Defenses@, 크기 @Calc_Size@, 강인함 @Calc_Tenacity@를 얻습니다. 중첩이 많을수록 더 빨리 사라집니다. 최대 저거너트 레벨: @f1.0@",
  "Gain @ManaToHealthCalc@ Health.": "체력을 @ManaToHealthCalc@ 얻습니다.",
  "Your Mana costs double. Your Ability Heals, Shields, and damage are @ManaCalc@ more effective.": "마나 소모량이 두 배가 됩니다. 스킬 회복, 보호막, 피해량 효과가 @ManaCalc@ 증가합니다.",
- "Immediately gain a Needlessly Large Rod. QUEST: Possess Rabadon's Deathcap and Zhonya's Hourglass. REWARD: Gain Wooglet's Witchcap.": "즉시 쓸데없이 큰 지팡이를 얻습니다. 퀘스트: 라바돈의 죽음모자와 존야의 모래시계를 보유하세요. 보상: 우글렛의 마녀 모자를 얻습니다."
+ "Immediately gain a Needlessly Large Rod. QUEST: Possess Rabadon's Deathcap and Zhonya's Hourglass. REWARD: Gain Wooglet's Witchcap.": "즉시 쓸데없이 큰 지팡이를 얻습니다. 퀘스트: 라바돈의 죽음모자와 존야의 모래시계를 보유하세요. 보상: 우글렛의 마녀 모자를 얻습니다.",
+ "You can Critically Defend using your Crit Chance (max 50% chance), giving you a chance to reduce damage taken by 20%. Gain 25% Crit Chance.": "치명타 확률로 치명적 방어가 가능해져(최대 50% 확률), 받는 피해를 20% 줄일 확률을 얻습니다. 치명타 확률이 25% 증가합니다."
 }

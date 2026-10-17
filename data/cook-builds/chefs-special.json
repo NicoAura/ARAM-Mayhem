@@ -37,7 +37,7 @@
       "name": "Tank It Or Leave It",
       "rarity": "Silver",
       "core": false,
-      "text": "You can Critically Defend using your Crit Chance (max 50% chance), giving you a chance to reduce damage taken by 20%. Gain 25% Crit Chance. Damage Reduced:",
+      "text": "You can Critically Defend using your Crit Chance (max 50% chance), giving you a chance to reduce damage taken by 20%. Gain 25% Crit Chance.",
       "icon": "/embed/fun/cook-builds/icons/augments/tank-it-or-leave-it.png",
       "id": 1080
     }
@@ -62,7 +62,7 @@
       "augments": [
         "علاجك ودروعك الواقية يمكن أن تكون حرجة بزيادة 40%. تحصل على 25% فرصة ضربة حرجة.",
         "علاجك وتجدد صحتك يُلحقان ضررًا سحريًا بنسبة 70% من القيمة بأقرب بطل عدو.",
-        "يمكنك الدفاع الحرج باستخدام فرصة ضربتك الحرجة (بحد أقصى 50%)، ما يمنحك فرصة لتقليل الضرر المتلقى بنسبة 20%. تحصل على 25% فرصة ضربة حرجة. الضرر المُقلَّص:"
+        "يمكنك الدفاع الحرج باستخدام فرصة ضربتك الحرجة (بحد أقصى 50%)، ما يمنحك فرصة لتقليل الضرر المتلقى بنسبة 20%. تحصل على 25% فرصة ضربة حرجة."
       ]
     },
     "cs": {
@@ -72,7 +72,7 @@
       "augments": [
         "Tvé léčení a štíty můžou kriticky zasáhnout za 40 % navíc. Získáš 25 % šance na kritický zásah.",
         "Tvé léčení a regenerace zdraví udělí nejbližšímu nepřátelskému šampionovi magické poškození ve výši 70 % své hodnoty.",
-        "Díky šanci na kritický zásah se můžeš kriticky bránit (max. 50% šance), což ti dá šanci snížit přijaté poškození o 20 %. Získáš 25 % šance na kritický zásah. Sníženo poškození:"
+        "Díky šanci na kritický zásah se můžeš kriticky bránit (max. 50% šance), což ti dá šanci snížit přijaté poškození o 20 %. Získáš 25 % šance na kritický zásah."
       ]
     },
     "de": {
@@ -82,7 +82,7 @@
       "augments": [
         "Deine Heilungen und Schilde können für 40 % zusätzlichen Wert kritisch treffen. Erhalte 25 % kritische Trefferchance.",
         "Deine Heilung und Lebensregeneration fügen dem nächsten gegnerischen Champion 70 % des Werts als magischen Schaden zu.",
-        "Du kannst mit deiner kritischen Trefferchance kritisch verteidigen (max. 50 % Chance), wodurch du eine Chance hast, erlittenen Schaden um 20 % zu verringern. Erhalte 25 % kritische Trefferchance. Verringerter Schaden:"
+        "Du kannst mit deiner kritischen Trefferchance kritisch verteidigen (max. 50 % Chance), wodurch du eine Chance hast, erlittenen Schaden um 20 % zu verringern. Erhalte 25 % kritische Trefferchance."
       ]
     },
     "el": {
@@ -92,7 +92,7 @@
       "augments": [
         "Οι θεραπείες και οι Ασπίδες σου μπορούν να είναι Καίριες για 40% επιπλέον ποσό. Κερδίζεις 25% Πιθανότητα Καίριου Χτυπήματος.",
         "Οι θεραπείες και η Ανανέωση Ζωής σου προκαλούν το 70% της τιμής τους ως μαγική ζημιά στον πλησιέστερο εχθρικό ήρωα.",
-        "Μπορείς να κάνεις Καίρια Άμυνα με την Πιθανότητα Καίριου Χτυπήματος (έως 50%), με πιθανότητα να μειώσεις τη ζημιά που δέχεσαι κατά 20%. Κερδίζεις 25% Πιθανότητα Καίριου Χτυπήματος. Μειωμένη ζημιά:"
+        "Μπορείς να κάνεις Καίρια Άμυνα με την Πιθανότητα Καίριου Χτυπήματος (έως 50%), με πιθανότητα να μειώσεις τη ζημιά που δέχεσαι κατά 20%. Κερδίζεις 25% Πιθανότητα Καίριου Χτυπήματος."
       ]
     },
     "es-MX": {
@@ -102,7 +102,7 @@
       "augments": [
         "Tus curaciones y escudos pueden ser críticos y otorgar 40% adicional. Obtienes 25% de Probabilidad de Crítico.",
         "Tus curaciones y Regeneración de Vida infligen el 70% del valor como daño mágico al campeón enemigo más cercano.",
-        "Puedes hacer una Defensa Crítica usando tu Probabilidad de Crítico (máximo 50%), lo que te da una probabilidad de reducir el daño recibido en 20%. Obtienes 25% de Probabilidad de Crítico. Daño reducido:"
+        "Puedes hacer una Defensa Crítica usando tu Probabilidad de Crítico (máximo 50%), lo que te da una probabilidad de reducir el daño recibido en 20%. Obtienes 25% de Probabilidad de Crítico."
       ]
     },
     "es": {
@@ -112,7 +112,7 @@
       "augments": [
         "Tus curaciones y escudos pueden ser críticos y otorgar un 40 % adicional. Obtienes un 25 % de probabilidad de crítico.",
         "Tu curación y regeneración de vida infligen un 70 % de su valor como daño mágico al campeón enemigo más cercano.",
-        "Puedes defenderte críticamente usando tu probabilidad de crítico (máx. 50 % de probabilidad), lo que te da una probabilidad de reducir el daño recibido un 20 %. Obtienes un 25 % de probabilidad de crítico. Daño reducido:"
+        "Puedes defenderte críticamente usando tu probabilidad de crítico (máx. 50 % de probabilidad), lo que te da una probabilidad de reducir el daño recibido un 20 %. Obtienes un 25 % de probabilidad de crítico."
       ]
     },
     "fr": {
@@ -122,7 +122,7 @@
       "augments": [
         "Vos soins et boucliers peuvent être critiques et augmentés de 40 %. Vous gagnez 25 % de chances de coup critique.",
         "Vos soins et votre régénération de PV infligent 70 % de leur valeur en dégâts magiques au champion ennemi le plus proche.",
-        "Vous pouvez faire une défense critique grâce à vos chances de coup critique (50 % de chances max), ce qui vous donne une chance de réduire les dégâts subis de 20 %. Vous gagnez 25 % de chances de coup critique. Dégâts réduits :"
+        "Vous pouvez faire une défense critique grâce à vos chances de coup critique (50 % de chances max), ce qui vous donne une chance de réduire les dégâts subis de 20 %. Vous gagnez 25 % de chances de coup critique."
       ]
     },
     "hu": {
@@ -132,7 +132,7 @@
       "augments": [
         "A gyógyításaid és pajzsaid kritikusak lehetnek, 40% bónusz mennyiséggel. 25% kritikus esélyt kapsz.",
         "A gyógyulásod és életerő-regenerációd az érték 70%-ának megfelelő mágikus sebzést okoz a legközelebbi ellenséges hősnek.",
-        "A kritikus esélyeddel kritikusan védekezhetsz (legfeljebb 50% esély), ami esélyt ad arra, hogy 20%-kal csökkentsd a kapott sebzést. 25% kritikus esélyt kapsz. Csökkentett sebzés:"
+        "A kritikus esélyeddel kritikusan védekezhetsz (legfeljebb 50% esély), ami esélyt ad arra, hogy 20%-kal csökkentsd a kapott sebzést. 25% kritikus esélyt kapsz."
       ]
     },
     "id": {
@@ -142,7 +142,7 @@
       "augments": [
         "Healing dan Shield-mu bisa Critical Strike dengan bonus 40%. Dapatkan 25% Crit Chance.",
         "Healing dan Health Regen-mu memberikan 70% nilainya sebagai magic damage ke champion musuh terdekat.",
-        "Kamu bisa Critical Defend memakai Crit Chance-mu (maks. 50% peluang), memberi peluang mengurangi damage yang diterima sebesar 20%. Dapatkan 25% Crit Chance. Damage Dikurangi:"
+        "Kamu bisa Critical Defend memakai Crit Chance-mu (maks. 50% peluang), memberi peluang mengurangi damage yang diterima sebesar 20%. Dapatkan 25% Crit Chance."
       ]
     },
     "it": {
@@ -152,7 +152,7 @@
       "augments": [
         "Le tue cure e i tuoi scudi possono essere critici per un 40% bonus. Ottieni il 25% di probabilità di critico.",
         "Le tue cure e la rigenerazione salute infliggono il 70% del valore in danni magici al campione nemico più vicino.",
-        "Puoi effettuare una Difesa critica usando la tua probabilità di critico (massimo 50%), con la possibilità di ridurre i danni subiti del 20%. Ottieni il 25% di probabilità di critico. Danni ridotti:"
+        "Puoi effettuare una Difesa critica usando la tua probabilità di critico (massimo 50%), con la possibilità di ridurre i danni subiti del 20%. Ottieni il 25% di probabilità di critico."
       ]
     },
     "ja": {
@@ -162,7 +162,7 @@
       "augments": [
         "回復とシールドがクリティカルし、効果量が40%増加する。クリティカル率+25%。",
         "回復と体力自動回復の量の70%を、最寄りの敵チャンピオンに魔法ダメージとして与える。",
-        "クリティカル率を使ってクリティカル防御が発生するようになり(最大50%)、受けるダメージを20%軽減する確率を得る。クリティカル率+25%。軽減ダメージ:"
+        "クリティカル率を使ってクリティカル防御が発生するようになり(最大50%)、受けるダメージを20%軽減する確率を得る。クリティカル率+25%。"
       ]
     },
     "ko": {
@@ -172,7 +172,7 @@
       "augments": [
         "회복과 보호막에 치명타가 적용되어 40% 추가 효과를 냅니다. 치명타 확률이 25% 증가합니다.",
         "회복량과 체력 재생량의 70%만큼 가장 가까운 적 챔피언에게 마법 피해를 입힙니다.",
-        "치명타 확률로 치명적 방어가 가능해져(최대 50% 확률), 받는 피해를 20% 줄일 확률을 얻습니다. 치명타 확률이 25% 증가합니다. 감소한 피해량:"
+        "치명타 확률로 치명적 방어가 가능해져(최대 50% 확률), 받는 피해를 20% 줄일 확률을 얻습니다. 치명타 확률이 25% 증가합니다."
       ]
     },
     "pl": {
@@ -182,7 +182,7 @@
       "augments": [
         "Twoje leczenie i tarcze mogą trafić krytycznie, dając 40% więcej. Zyskujesz 25% szansy na trafienie krytyczne.",
         "Twoje leczenie i regeneracja zdrowia zadają najbliższemu wrogiemu bohaterowi obrażenia magiczne równe 70% ich wartości.",
-        "Możesz krytycznie się bronić dzięki szansie na trafienie krytyczne (maks. 50% szansy), co daje szansę na zmniejszenie otrzymywanych obrażeń o 20%. Zyskujesz 25% szansy na trafienie krytyczne. Zredukowane obrażenia:"
+        "Możesz krytycznie się bronić dzięki szansie na trafienie krytyczne (maks. 50% szansy), co daje szansę na zmniejszenie otrzymywanych obrażeń o 20%. Zyskujesz 25% szansy na trafienie krytyczne."
       ]
     },
     "pt-BR": {
@@ -192,7 +192,7 @@
       "augments": [
         "Suas curas e escudos podem ser críticos, com 40% de valor adicional. Receba 25% de Chance de Acerto Crítico.",
         "Suas curas e Regeneração de Vida causam 70% do valor como dano mágico no campeão inimigo mais próximo.",
-        "Você pode fazer uma Defesa Crítica usando sua Chance de Acerto Crítico (máximo de 50%), com chance de reduzir o dano recebido em 20%. Receba 25% de Chance de Acerto Crítico. Dano reduzido:"
+        "Você pode fazer uma Defesa Crítica usando sua Chance de Acerto Crítico (máximo de 50%), com chance de reduzir o dano recebido em 20%. Receba 25% de Chance de Acerto Crítico."
       ]
     },
     "ro": {
@@ -202,7 +202,7 @@
       "augments": [
         "Vindecările și scuturile tale pot fi critice, cu 40% valoare în plus. Primești 25% șansă de critic.",
         "Vindecările și regenerarea ta de viață provoacă 70% din valoare ca daune magice celui mai apropiat campion inamic.",
-        "Poți da o apărare critică folosind șansa de critic (maximum 50% șansă), ceea ce îți dă o șansă să reduci daunele primite cu 20%. Primești 25% șansă de critic. Daune reduse:"
+        "Poți da o apărare critică folosind șansa de critic (maximum 50% șansă), ceea ce îți dă o șansă să reduci daunele primite cu 20%. Primești 25% șansă de critic."
       ]
     },
     "ru": {
@@ -212,7 +212,7 @@
       "augments": [
         "Ваше лечение и щиты могут быть критическими и усиливаются на 40%. Вы получаете 25% шанса критического удара.",
         "Ваше лечение и регенерация здоровья наносят ближайшему вражескому чемпиону магический урон, равный 70% восстановленного.",
-        "Вы можете критически защищаться, используя свой шанс критического удара (не больше 50%): с этим шансом получаемый урон снижается на 20%. Вы получаете 25% шанса критического удара. Поглощено урона:"
+        "Вы можете критически защищаться, используя свой шанс критического удара (не больше 50%): с этим шансом получаемый урон снижается на 20%. Вы получаете 25% шанса критического удара."
       ]
     },
     "th": {
@@ -222,7 +222,7 @@
       "augments": [
         "การฮีลและโล่ของคุณคริติคอลได้ เพิ่มปริมาณ 40% ได้รับโอกาสคริติคอล 25%",
         "การฮีลและการฟื้นฟูพลังชีวิตของคุณสร้างความเสียหายเวท 70% ของค่านั้นใส่แชมเปี้ยนศัตรูที่ใกล้ที่สุด",
-        "คุณป้องกันแบบคริติคอลได้โดยใช้โอกาสคริติคอล (สูงสุด 50%) มีโอกาสลดความเสียหายที่ได้รับ 20% ได้รับโอกาสคริติคอล 25% ความเสียหายที่ลดได้:"
+        "คุณป้องกันแบบคริติคอลได้โดยใช้โอกาสคริติคอล (สูงสุด 50%) มีโอกาสลดความเสียหายที่ได้รับ 20% ได้รับโอกาสคริติคอล 25%"
       ]
     },
     "tr": {
@@ -232,7 +232,7 @@
       "augments": [
         "İyileştirmelerin ve Kalkanların %40 ek miktarla Kritik Vuruş yapabilir. %25 Kritik Vuruş İhtimali kazanırsın.",
         "İyileştirmelerin ve Can Yenilemen, değerin %70'i kadar büyü hasarını en yakın rakip şampiyona verir.",
-        "Kritik Vuruş İhtimalini kullanarak Kritik Savunma yapabilirsin (en fazla %50 ihtimal); bu sana aldığın hasarı %20 azaltma şansı verir. %25 Kritik Vuruş İhtimali kazanırsın. Azaltılan Hasar:"
+        "Kritik Vuruş İhtimalini kullanarak Kritik Savunma yapabilirsin (en fazla %50 ihtimal); bu sana aldığın hasarı %20 azaltma şansı verir. %25 Kritik Vuruş İhtimali kazanırsın."
       ]
     },
     "vi": {
@@ -242,7 +242,7 @@
       "augments": [
         "Lượng hồi máu và Lá Chắn của bạn có thể Chí Mạng, tăng thêm 40%. Nhận 25% Tỉ Lệ Chí Mạng.",
         "Lượng hồi máu và Hồi Máu của bạn gây sát thương phép bằng 70% giá trị lên tướng địch gần nhất.",
-        "Bạn có thể Phòng Thủ Chí Mạng dựa trên Tỉ Lệ Chí Mạng (tối đa 50%), có cơ hội giảm 20% sát thương nhận vào. Nhận 25% Tỉ Lệ Chí Mạng. Sát thương đã giảm:"
+        "Bạn có thể Phòng Thủ Chí Mạng dựa trên Tỉ Lệ Chí Mạng (tối đa 50%), có cơ hội giảm 20% sát thương nhận vào. Nhận 25% Tỉ Lệ Chí Mạng."
       ]
     },
     "zh-CN": {
@@ -252,7 +252,7 @@
       "augments": [
         "你的治疗和护盾可以暴击，额外提升40%。获得25%暴击几率。",
         "你的治疗和生命回复会对最近的敌方英雄造成相当于该数值70%的魔法伤害。",
-        "你可以用暴击几率进行暴击防御（最高50%几率），有几率使受到的伤害降低20%。获得25%暴击几率。降低的伤害："
+        "你可以用暴击几率进行暴击防御（最高50%几率），有几率使受到的伤害降低20%。获得25%暴击几率。"
       ]
     },
     "zh-TW": {
@@ -262,7 +262,7 @@
       "augments": [
         "你的治療和護盾可以暴擊，額外提升40%。獲得25%暴擊率。",
         "你的治療和生命回復會對最近的敵方英雄造成相當於該數值70%的魔法傷害。",
-        "你可以用暴擊率進行暴擊防禦（最高50%機率），有機率使受到的傷害降低20%。獲得25%暴擊率。降低的傷害："
+        "你可以用暴擊率進行暴擊防禦（最高50%機率），有機率使受到的傷害降低20%。獲得25%暴擊率。"
       ]
     }
   }

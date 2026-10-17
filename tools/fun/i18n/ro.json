@@ -116,7 +116,6 @@
  "Gold": "Aur",
  "Your healing and Health Regen deal 70% of the value magic damage to the nearest enemy champion.": "Vindecările și regenerarea ta de viață provoacă 70% din valoare ca daune magice celui mai apropiat campion inamic.",
  "Prismatic": "Prismatic",
- "You can Critically Defend using your Crit Chance (max 50% chance), giving you a chance to reduce damage taken by 20%. Gain 25% Crit Chance. Damage Reduced:": "Poți da o apărare critică folosind șansa de critic (maximum 50% șansă), ceea ce îți dă o șansă să reduci daunele primite cu 20%. Primești 25% șansă de critic. Daune reduse:",
  "Silver": "Argint",
  "Ionia": "Ionia",
  "Slayer": "Ucigaș",
@@ -183,5 +182,6 @@
  "Dealing and receiving champion damage grants you @StacksPerHit@ stack of Juggernauting for @Stack_Duration@ seconds. For every @Stacks_Max@ stacks of Juggernauting you gain @Calc_AF@ Adaptive Force, @Calc_Defenses@ Armor, @Calc_Defenses@ Magic Resist, @Calc_Size@ Size, and @Calc_Tenacity@ Tenacity. Stacks fall off faster the more you have. Maximum Juggernauting Level: @f1.0@": "Când provoci și primești daune de la campioni, primești @StacksPerHit@ cumul de Colos timp de @Stack_Duration@ secunde. Pentru fiecare @Stacks_Max@ cumuluri de Colos primești @Calc_AF@ forță adaptivă, @Calc_Defenses@ armură, @Calc_Defenses@ rezistență magică, @Calc_Size@ mărime și @Calc_Tenacity@ tenacitate. Cumulurile dispar mai repede cu cât ai mai multe. Nivel maxim de Colos: @f1.0@",
  "Gain @ManaToHealthCalc@ Health.": "Primești @ManaToHealthCalc@ viață.",
  "Your Mana costs double. Your Ability Heals, Shields, and damage are @ManaCalc@ more effective.": "Costurile tale de mană se dublează. Vindecările, scuturile și daunele abilităților tale sunt cu @ManaCalc@ mai eficiente.",
- "Immediately gain a Needlessly Large Rod. QUEST: Possess Rabadon's Deathcap and Zhonya's Hourglass. REWARD: Gain Wooglet's Witchcap.": "Primești imediat un Toiag uriaș. MISIUNE: deține Pălăria malefică a lui Rabadon și Clepsidra Zhonyei. RECOMPENSĂ: primești Pălăria de vrăjitoare a lui Wooglet."
+ "Immediately gain a Needlessly Large Rod. QUEST: Possess Rabadon's Deathcap and Zhonya's Hourglass. REWARD: Gain Wooglet's Witchcap.": "Primești imediat un Toiag uriaș. MISIUNE: deține Pălăria malefică a lui Rabadon și Clepsidra Zhonyei. RECOMPENSĂ: primești Pălăria de vrăjitoare a lui Wooglet.",
+ "You can Critically Defend using your Crit Chance (max 50% chance), giving you a chance to reduce damage taken by 20%. Gain 25% Crit Chance.": "Poți da o apărare critică folosind șansa de critic (maximum 50% șansă), ceea ce îți dă o șansă să reduci daunele primite cu 20%. Primești 25% șansă de critic."
 }

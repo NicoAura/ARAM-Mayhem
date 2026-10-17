@@ -116,7 +116,6 @@
  "Gold": "Złote",
  "Your healing and Health Regen deal 70% of the value magic damage to the nearest enemy champion.": "Twoje leczenie i regeneracja zdrowia zadają najbliższemu wrogiemu bohaterowi obrażenia magiczne równe 70% ich wartości.",
  "Prismatic": "Pryzmatyczne",
- "You can Critically Defend using your Crit Chance (max 50% chance), giving you a chance to reduce damage taken by 20%. Gain 25% Crit Chance. Damage Reduced:": "Możesz krytycznie się bronić dzięki szansie na trafienie krytyczne (maks. 50% szansy), co daje szansę na zmniejszenie otrzymywanych obrażeń o 20%. Zyskujesz 25% szansy na trafienie krytyczne. Zredukowane obrażenia:",
  "Silver": "Srebrne",
  "Ionia": "Ionia",
  "Slayer": "Pogromca",
@@ -183,5 +182,6 @@
  "Dealing and receiving champion damage grants you @StacksPerHit@ stack of Juggernauting for @Stack_Duration@ seconds. For every @Stacks_Max@ stacks of Juggernauting you gain @Calc_AF@ Adaptive Force, @Calc_Defenses@ Armor, @Calc_Defenses@ Magic Resist, @Calc_Size@ Size, and @Calc_Tenacity@ Tenacity. Stacks fall off faster the more you have. Maximum Juggernauting Level: @f1.0@": "Zadawanie i otrzymywanie obrażeń od bohaterów daje ci @StacksPerHit@ ładunek Juggernauta na @Stack_Duration@ sekund. Za każde @Stacks_Max@ ładunków Juggernauta zyskujesz @Calc_AF@ siły adaptacyjnej, @Calc_Defenses@ pancerza, @Calc_Defenses@ odporności na magię, @Calc_Size@ rozmiaru i @Calc_Tenacity@ nieustępliwości. Im więcej ładunków, tym szybciej spadają. Maksymalny poziom Juggernauta: @f1.0@",
  "Gain @ManaToHealthCalc@ Health.": "Zyskujesz @ManaToHealthCalc@ zdrowia.",
  "Your Mana costs double. Your Ability Heals, Shields, and damage are @ManaCalc@ more effective.": "Twoje koszty many są podwojone. Twoje leczenie, tarcze i obrażenia z umiejętności są o @ManaCalc@ skuteczniejsze.",
- "Immediately gain a Needlessly Large Rod. QUEST: Possess Rabadon's Deathcap and Zhonya's Hourglass. REWARD: Gain Wooglet's Witchcap.": "Natychmiast zyskujesz Absurdalnie Wielką Różdżkę. ZADANIE: Posiadaj Zabójczy Kapelusz Rabadona i Klepsydrę Zhonyi. NAGRODA: Zyskujesz Wiedźmi Kapelusz Woogleta."
+ "Immediately gain a Needlessly Large Rod. QUEST: Possess Rabadon's Deathcap and Zhonya's Hourglass. REWARD: Gain Wooglet's Witchcap.": "Natychmiast zyskujesz Absurdalnie Wielką Różdżkę. ZADANIE: Posiadaj Zabójczy Kapelusz Rabadona i Klepsydrę Zhonyi. NAGRODA: Zyskujesz Wiedźmi Kapelusz Woogleta.",
+ "You can Critically Defend using your Crit Chance (max 50% chance), giving you a chance to reduce damage taken by 20%. Gain 25% Crit Chance.": "Możesz krytycznie się bronić dzięki szansie na trafienie krytyczne (maks. 50% szansy), co daje szansę na zmniejszenie otrzymywanych obrażeń o 20%. Zyskujesz 25% szansy na trafienie krytyczne."
 }

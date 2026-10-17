@@ -116,7 +116,6 @@
  "Gold": "Oro",
  "Your healing and Health Regen deal 70% of the value magic damage to the nearest enemy champion.": "Tu curación y regeneración de vida infligen un 70 % de su valor como daño mágico al campeón enemigo más cercano.",
  "Prismatic": "Prismático",
- "You can Critically Defend using your Crit Chance (max 50% chance), giving you a chance to reduce damage taken by 20%. Gain 25% Crit Chance. Damage Reduced:": "Puedes defenderte críticamente usando tu probabilidad de crítico (máx. 50 % de probabilidad), lo que te da una probabilidad de reducir el daño recibido un 20 %. Obtienes un 25 % de probabilidad de crítico. Daño reducido:",
  "Silver": "Plata",
  "Ionia": "Jonia",
  "Slayer": "Asesino",
@@ -183,5 +182,6 @@
  "Dealing and receiving champion damage grants you @StacksPerHit@ stack of Juggernauting for @Stack_Duration@ seconds. For every @Stacks_Max@ stacks of Juggernauting you gain @Calc_AF@ Adaptive Force, @Calc_Defenses@ Armor, @Calc_Defenses@ Magic Resist, @Calc_Size@ Size, and @Calc_Tenacity@ Tenacity. Stacks fall off faster the more you have. Maximum Juggernauting Level: @f1.0@": "Infligir y recibir daño de campeones te otorga @StacksPerHit@ acumulación de Coloso durante @Stack_Duration@ segundos. Por cada @Stacks_Max@ acumulaciones de Coloso obtienes @Calc_AF@ de fuerza adaptable, @Calc_Defenses@ de armadura, @Calc_Defenses@ de resistencia mágica, @Calc_Size@ de tamaño y @Calc_Tenacity@ de tenacidad. Cuantas más acumulaciones tengas, más rápido se pierden. Nivel máximo de Coloso: @f1.0@",
  "Gain @ManaToHealthCalc@ Health.": "Obtienes @ManaToHealthCalc@ de vida.",
  "Your Mana costs double. Your Ability Heals, Shields, and damage are @ManaCalc@ more effective.": "Tus costes de maná se duplican. Las curaciones, escudos y daño de tus habilidades son @ManaCalc@ más eficaces.",
- "Immediately gain a Needlessly Large Rod. QUEST: Possess Rabadon's Deathcap and Zhonya's Hourglass. REWARD: Gain Wooglet's Witchcap.": "Obtienes al instante una Vara innecesariamente grande. MISIÓN: ten el Sombrero mortal de Rabadon y el Reloj de arena de Zhonya. RECOMPENSA: obtienes el Sombrero de Wooglet."
+ "Immediately gain a Needlessly Large Rod. QUEST: Possess Rabadon's Deathcap and Zhonya's Hourglass. REWARD: Gain Wooglet's Witchcap.": "Obtienes al instante una Vara innecesariamente grande. MISIÓN: ten el Sombrero mortal de Rabadon y el Reloj de arena de Zhonya. RECOMPENSA: obtienes el Sombrero de Wooglet.",
+ "You can Critically Defend using your Crit Chance (max 50% chance), giving you a chance to reduce damage taken by 20%. Gain 25% Crit Chance.": "Puedes defenderte críticamente usando tu probabilidad de crítico (máx. 50 % de probabilidad), lo que te da una probabilidad de reducir el daño recibido un 20 %. Obtienes un 25 % de probabilidad de crítico."
 }

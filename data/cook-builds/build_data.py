@@ -58,7 +58,7 @@ def augment_text(text, data_values, s):
         return m.group(0) if v is None else "%g" % round(v * float(m.group(2) or 1), 2)
     text = re.sub(r"@([A-Za-z0-9_]+)(?:\*([0-9.]+))?@", rep, text)
     text = text.split("---")[0]
-    text = re.sub(r"(Damage Dealt|Bonus Damage|Gold Generated|Total Healing Done|Total Health Gained|Terrain Damage|Encouragements Received|Number of Bounces|Units knocked back|Spirit Bombs Tossed|Bonus Healing|Times Triggered|Out of)\b.*$", "", text)
+    text = re.sub(r"(Damage Dealt|Bonus Damage|Gold Generated|Total Healing Done|Total Health Gained|Terrain Damage|Encouragements Received|Number of Bounces|Units knocked back|Spirit Bombs Tossed|Bonus Healing|Times Triggered|Damage Reduced|Out of)\b.*$", "", text)
     text = re.sub(r"<[^>]+>|%i:[A-Za-z]+%", "", text)
     text = re.sub(r"\{\{\s*Item_Keyword_OnHit\s*\}\}", "On-Hit", text)
     # Ability-specific augments are rolled for one of the champion's abilities.
@@ -69,7 +69,8 @@ def augment_text(text, data_values, s):
     text = text.replace("an extra damage", "extra damage").replace("()", "")
     text = re.sub(r"\b1 plus (?=[a-z])", "", text)
     text = re.sub(r"\b(\w+) \1\b", r"\1", text)  # "damage damage" from joined strings
-    return re.sub(r"\s+", " ", text).replace(" ,", ",").replace(" .", ".").strip()
+    text = re.sub(r"\s+", " ", text).replace(" ,", ",").replace(" .", ".").strip()
+    return re.sub(r"(?<=[.!)])\s+[^.!:]{1,40}:$", "", text)  # a stat counter's label left at the end
 
 
 def best_text(candidates, dv, s):

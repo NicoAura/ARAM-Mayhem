@@ -101,7 +101,7 @@ select:hover { border-color: var(--muted); }
 
 
 /* Today's Chef Special, set apart in gold. */
-.chef { display: grid; gap: 10px; }
+.chef { display: grid; grid-template-columns: minmax(0, 1fr); gap: 10px; }
 .chef-head { display: flex; flex-wrap: wrap; gap: 4px 12px; align-items: baseline; justify-content: space-between; }
 .chef .eyebrow { color: var(--gold-ink); font-size: 12.5px; }
 .chef .card { border-color: var(--gold-line); box-shadow: 0 12px 34px -22px var(--hue-gold); }
