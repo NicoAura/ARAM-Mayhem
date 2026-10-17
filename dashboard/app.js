@@ -268,8 +268,10 @@ function bestChamp(G, wins) {
   return Math.max(0, ...m.values());
 }
 
+const badgeRows = (G) => BADGES.map(([name, desc, f, goal]) => ({ name, desc, goal, have: f(G) }));
+
 function renderBadges(G) {
-  const rows = BADGES.map(([name, desc, f, goal]) => ({ name, desc, goal, have: f(G) }));
+  const rows = badgeRows(G);
   const earned = rows.filter((r) => r.have >= r.goal).length;
   $("n-badges").textContent = `${earned} of ${rows.length} earned`;
   rows.sort((a, b) => (b.have >= b.goal) - (a.have >= a.goal) || b.have / b.goal - a.have / a.goal);
@@ -590,5 +592,75 @@ async function setupSync() {
       if (res.ok) await loadText(await res.text());
     } catch (e) { /* no archive yet */ }
   }
-  setupSync();
+  await setupSync();
+  setupProfile();
 })();
+
+// ---------- public page ----------
+// Off unless the player publishes. Only totals, top champions and earned achievements leave the computer.
+
+const profileCard = $("profile-card");
+const profileText = $("profile-text");
+const profileLink = $("profile-link");
+const profileBtns = { publish: $("profile-publish"), remove: $("profile-remove") };
+
+function profileSummary(G) {
+  const champs = new Map();
+  for (const g of G) {
+    const c = champs.get(g.champId) || { id: g.champId, n: 0, w: 0, k: 0, d: 0, a: 0 };
+    c.n++; c.w += g.win ? 1 : 0; c.k += g.kills; c.d += g.deaths; c.a += g.assists;
+    champs.set(g.champId, c);
+  }
+  const n = G.length;
+  return {
+    games: n, wins: sum(G, (g) => g.win),
+    kills: sum(G, (g) => g.kills), deaths: sum(G, (g) => g.deaths), assists: sum(G, (g) => g.assists),
+    damage: Math.round(sum(G, (g) => g.damage) / n), duration: Math.round(sum(G, (g) => g.duration) / n),
+    first: Math.min(...G.map((g) => g.time)), last: Math.max(...G.map((g) => g.time)),
+    champions: [...champs.values()].sort((a, b) => b.n - a.n).slice(0, 10),
+    badges: badgeRows(G).filter((r) => r.have >= r.goal).map((r) => r.name),
+  };
+}
+
+function showProfile(p) {
+  const on = !!(p && p.published);
+  profileText.textContent = on
+    ? "Your public page is live. Update it after importing new games, or remove it any time."
+    : "Off. Publish a public page with your totals, top champions and achievements. Your individual games stay on this computer.";
+  profileLink.hidden = !on;
+  if (on) { profileLink.href = p.url; profileLink.textContent = p.url.replace(/^https?:\/\//, ""); }
+  profileBtns.publish.textContent = on ? "Update my page" : "Publish my page";
+  profileBtns.remove.hidden = !on;
+}
+
+async function profileCall(action, data) {
+  const res = await fetch("api/profile", {
+    method: "POST", headers: { "X-Mayhem": "1", "Content-Type": "application/json" },
+    body: JSON.stringify({ action, data }),
+  });
+  const j = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error(j.error || "Something went wrong. Try again.");
+  return j;
+}
+
+async function profileAction(action) {
+  if (action === "remove" && !confirm("Remove your public page? Anyone with the link will see it's gone.")) return;
+  for (const b of Object.values(profileBtns)) b.disabled = true;
+  try {
+    showProfile(await profileCall(action, action === "publish" ? profileSummary(state.games) : undefined));
+  } catch (e) {
+    profileText.textContent = e.message;
+  } finally {
+    for (const b of Object.values(profileBtns)) b.disabled = false;
+  }
+}
+profileBtns.publish.addEventListener("click", () => profileAction("publish"));
+profileBtns.remove.addEventListener("click", () => profileAction("remove"));
+
+async function setupProfile() {
+  // Publishing goes through the helper, so the card only shows when it's running and there are games
+  if (!helperOnline || state.sample || !(state.games || []).length) return;
+  profileCard.hidden = false;
+  showProfile(null);
+  try { showProfile(await profileCall("status")); } catch (e) { /* stays "Off" until they try */ }
+}

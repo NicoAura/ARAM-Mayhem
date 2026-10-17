@@ -91,6 +91,10 @@ def sample_archive(champ_names, aug_names, aug_rarity, mayhem_ids, n=640, seed=7
             "deaths": deaths,
             "assists": max(0, int(rng.gauss(24 if win else 18, 8))),
             "totalDamageDealtToChampions": int(rng.gauss(52000 if win else 44000, 14000)),
+            "totalDamageTaken": int(rng.gauss(38000, 12000)),
+            "largestKillingSpree": rng.choices([0, 3, 5, 8, 10], [3, 5, 3, 1, 0.3])[0],
+            "quadraKills": int(rng.random() < 0.03),
+            "pentaKills": int(rng.random() < 0.006),
         }
         for k in range(6):
             stats[f"playerAugment{k + 1}"] = int(augs[k]) if k < len(augs) else 0

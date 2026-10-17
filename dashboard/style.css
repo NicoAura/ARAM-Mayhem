@@ -181,3 +181,7 @@ td.augs { text-align: left; white-space: normal; color: var(--muted); font-size:
 .badge .b-bar { height: 4px; border-radius: 2px; background: var(--raised); overflow: hidden; margin-top: 2px; }
 .badge .b-bar span { display: block; height: 100%; background: var(--accent); }
 .badge .b-prog { font: 400 11.5px var(--mono); color: var(--muted); }
+
+#profile-card .sub { margin-bottom: 8px; }
+#profile-link { color: color-mix(in srgb, var(--accent) 72%, var(--fg)); font-weight: 600; word-break: break-all; }
+.profile-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
