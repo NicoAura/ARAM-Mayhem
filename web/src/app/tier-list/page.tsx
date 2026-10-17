@@ -34,7 +34,6 @@ export const metadata: Metadata = pageMeta(
 const num = (v: string | undefined) => (v === undefined || v === "" ? null : Number(v));
 const ALIAS = Object.fromEntries(Object.entries(championIds as Record<string, number>).map(([alias, id]) => [id, alias]));
 const NAMES = championNames as Record<string, string>;
-type Champs = { champions: { name: string; best_partners?: { champion_id: number }[] }[] };
 const names = augmentNames as Record<string, string>;
 
 export default function TierListPage() {
@@ -42,7 +41,6 @@ export default function TierListPage() {
   const patches = readRepoCsv("data/cn/history/patches.csv");
   const augments = augmentRows<RawAugment & Record<string, string | number | number[]>>();
   const duos = hasDuos();
-  const champs = readRepoJson<Champs>("data/cn/champions.json");
 
   if (!byPatch || !patches?.length) {
     return (
@@ -74,16 +72,6 @@ export default function TierListPage() {
       augs: r.augment_ids ?? "",
     }));
   const champName = (alias?: string) => (alias ? (NAMES[alias] ?? alias) : null);
-  const partners = Object.fromEntries(
-    (champs?.champions ?? []).map((c) => [
-      c.name,
-      (c.best_partners ?? [])
-        .slice(0, 3)
-        .map((p) => champName(ALIAS[p.champion_id]))
-        .filter(Boolean)
-        .join(", "),
-    ]),
-  );
   const tabs: { id: string; label: string; content: React.ReactNode; lazy?: boolean }[] = [
     {
       id: "champions",
@@ -92,7 +80,6 @@ export default function TierListPage() {
         <ChampionTiers
           rows={rows}
           patches={patches.map((p) => p.patch)}
-          partners={partners}
           tags={allChampionTags([...new Set(rows.map((r) => r.name))])}
           tagInfo={championTagData().info}
         />
@@ -168,7 +155,6 @@ export default function TierListPage() {
       ),
     });
   }
-  if (duos) tabs.push({ id: "duos", label: "Duos", content: <DuosTable />, lazy: true });
   // Formerly the Items page (/items redirects here); each item keeps its own page at /items/<slug>.
   const items = itemPages().map(({ id, slug, name, icon, cost, tags, popularity }) => ({ id, slug, name, icon, cost, tags, popularity }));
   if (items.length) {
@@ -188,6 +174,7 @@ export default function TierListPage() {
       ),
     });
   }
+  if (duos) tabs.push({ id: "duos", label: "Duos", content: <DuosTable />, lazy: true });
 
   return (
     <AdvancedProvider>

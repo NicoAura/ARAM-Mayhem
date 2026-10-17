@@ -27,7 +27,6 @@ const DEEP: Column = {
   hint: TIER_HELP,
 };
 const NAME: Column = { key: "name", label: "Champion", format: "champion" };
-const PATCHES: Column = { key: "patches", label: "Patches", format: "int" };
 
 const CHANGE: Column = {
   key: "change",
@@ -60,18 +59,6 @@ const ADVANCED: Column[] = [
   { key: "tank", label: "Damage taken", format: "pct" },
   { key: "kp", label: "Kill part.", format: "pct" },
   { key: "dead", label: "Time dead", format: "sec" },
-  {
-    key: "top_augments",
-    label: "Top augments",
-    format: "text",
-    sortable: false,
-  },
-  {
-    key: "partners",
-    label: "Best partners (live)",
-    format: "text",
-    sortable: false,
-  },
 ];
 
 const MOVERS = { key: "change", desc: true };
@@ -80,12 +67,11 @@ const BEST = { key: "score", desc: true };
 type Props = {
   rows: PatchRow[];
   patches: string[];
-  partners: Record<string, string>;
   tags: Record<string, string[]>;
   tagInfo: TagInfo;
 };
 
-export default function ChampionTiers({ rows: initial, patches, partners, tags, tagInfo }: Props) {
+export default function ChampionTiers({ rows: initial, patches, tags, tagInfo }: Props) {
   const t = useT("tier-list");
   const tt = useT("tags");
   const live = patches[patches.length - 1];
@@ -126,13 +112,12 @@ export default function ChampionTiers({ rows: initial, patches, partners, tags, 
       // tier_was lets the table slide a changed tier in from the previous patch's (DataTable).
       return {
         ...c,
-        partners: partners[c.name] ?? null,
         change: was === undefined ? null : c.win_rate - was.win_rate,
         tier_was: was?.tier ?? null,
         archetype: (tags[c.name] ?? []).filter((t) => tagInfo[t]?.kind !== "play").join(","),
       };
     });
-  }, [rows, picked, partners, before, have, missing, tags, tagInfo]);
+  }, [rows, picked, before, have, missing, tags, tagInfo]);
 
   // Archetype filter (?tag=Mage,Poke): a champion shows when it has every picked tag. Tiers and
   // DeepScores stay graded against the whole list, so a filtered view shows where each stands overall.
@@ -270,8 +255,8 @@ export default function ChampionTiers({ rows: initial, patches, partners, tags, 
       ) : (
         <DataTable
           key={sort.key}
-          columns={[...STANDARD.slice(0, 3), tagCol, ...STANDARD.slice(3), ...(showMulti ? [PATCHES] : showChange ? [CHANGE] : [])]}
-          advancedColumns={[...ADVANCED.slice(0, 3), tagCol, ...ADVANCED.slice(3), ...(showMulti ? [PATCHES] : showChange ? [CHANGE] : [])]}
+          columns={[...STANDARD.slice(0, 3), tagCol, ...STANDARD.slice(3), ...(showChange ? [CHANGE] : [])]}
+          advancedColumns={[...ADVANCED.slice(0, 3), tagCol, ...ADVANCED.slice(3), ...(showChange ? [CHANGE] : [])]}
           rows={shownRows}
           initialSort={sort}
           searchKey="name"

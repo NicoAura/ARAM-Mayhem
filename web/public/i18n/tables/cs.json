@@ -89,5 +89,7 @@
  "This browser can't copy images. Save it instead.": "Tento prohlížeč neumí kopírovat obrázky. Ulož si ho místo toho.",
  "Copy image": "Kopírovat obrázek",
  "Save": "Uložit",
- "Close": "Zavřít"
+ "Close": "Zavřít",
+ "Win rate delta": "Rozdíl míry výher",
+ "Pair win rate minus the average of the two champions' own win rates. Above zero means they win more together.": "Míra výher dvojice minus průměr vlastních měr výher obou šampionů. Nad nulou znamená, že spolu vyhrávají víc."
 }

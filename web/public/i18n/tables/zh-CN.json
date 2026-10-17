@@ -89,5 +89,7 @@
  "This browser can't copy images. Save it instead.": "此浏览器无法复制图片，请改为保存。",
  "Copy image": "复制图片",
  "Save": "保存",
- "Close": "关闭"
+ "Close": "关闭",
+ "Win rate delta": "胜率差",
+ "Pair win rate minus the average of the two champions' own win rates. Above zero means they win more together.": "组合胜率减去两位英雄各自胜率的平均值。高于零表示一起时赢得更多。"
 }

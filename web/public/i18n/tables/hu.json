@@ -89,5 +89,7 @@
  "This browser can't copy images. Save it instead.": "Ez a böngésző nem tud képet másolni. Mentsd el inkább.",
  "Copy image": "Kép másolása",
  "Save": "Mentés",
- "Close": "Bezárás"
+ "Close": "Bezárás",
+ "Win rate delta": "Győzelmi arány eltérés",
+ "Pair win rate minus the average of the two champions' own win rates. Above zero means they win more together.": "A páros győzelmi aránya mínusz a két hős saját győzelmi arányának átlaga. Nulla fölött együtt többet nyernek."
 }
