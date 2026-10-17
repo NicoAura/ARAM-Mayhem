@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { loadSettings } from "@/lib/settings";
 import { getParam, setParams } from "@/lib/url-state";
 import DataTable, { type Column } from "./DataTable";
@@ -110,6 +110,28 @@ export default function ChampionTiers({ rows: initial, patches, partners }: { ro
     if (getParam("sort") === "change.desc" && !getParam("tab")) setSort(MOVERS);
   }, []);
 
+  // Timeline: a slider over the patches, one patch at a time, with a play button that steps forward.
+  const [playing, setPlaying] = useState(false);
+  const at = one ? patches.indexOf(one) : patches.length - 1;
+  const atRef = useRef(at);
+  atRef.current = at;
+  useEffect(() => {
+    if (!playing) return;
+    const t = setInterval(() => {
+      const next = atRef.current + 1;
+      if (next >= patches.length) return setPlaying(false);
+      choose(new Set([patches[next]]));
+    }, 1400);
+    return () => clearInterval(t);
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- choose only sets state and the URL
+  }, [playing, patches]);
+  const play = () => {
+    if (playing) return setPlaying(false);
+    // From the end, start over from the first patch.
+    if (at >= patches.length - 1 || !one) choose(new Set([patches[0]]));
+    setPlaying(true);
+  };
+
   const presets: [string, string[]][] = [
     [`Live patch (${live})`, [live]],
     ["Last 3 patches", patches.slice(-3)],
@@ -133,6 +155,30 @@ export default function ChampionTiers({ rows: initial, patches, partners }: { ro
           </button>
         )}
       </div>
+      {patches.length > 2 && (
+        <div className="patch-timeline">
+          <button type="button" className="timeline-play" aria-label={playing ? "Pause timeline" : "Play through every patch"} aria-pressed={playing} onClick={play}>
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor" aria-hidden="true">
+              {playing ? <path d="M7 5h4v14H7zM13 5h4v14h-4z" /> : <path d="M8 5v14l11-7z" />}
+            </svg>
+          </button>
+          <input
+            type="range"
+            min={0}
+            max={patches.length - 1}
+            step={1}
+            value={at}
+            aria-label="Patch"
+            aria-valuetext={`Patch ${patches[at]}`}
+            onChange={(e) => {
+              setPlaying(false);
+              choose(new Set([patches[Number(e.target.value)]]));
+            }}
+            style={{ "--fill": `${(at / (patches.length - 1)) * 100}%` } as React.CSSProperties}
+          />
+          <output className="timeline-label">{one ? `Patch ${one}` : `${picked.size} patches`}</output>
+        </div>
+      )}
       <div className="patch-chips" role="group" aria-label="Patches">
         {[...patches].reverse().map((p) => (
           <button key={p} type="button" aria-pressed={picked.has(p)} onClick={() => toggle(p)}>
