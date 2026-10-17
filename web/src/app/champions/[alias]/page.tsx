@@ -4,6 +4,7 @@ import FavoriteStar from "@/components/FavoriteStar";
 import CompareToggle from "@/components/CompareToggle";
 import ShareCard from "@/components/ShareCard";
 import ChampionRadar from "@/components/ChampionRadar";
+import SplashAccent from "@/components/SplashAccent";
 import { TIER_COLORS } from "@/lib/share-card";
 import WinRateChart from "@/components/WinRateChart";
 import ChampionShowcase from "@/components/ChampionShowcase";
@@ -43,6 +44,7 @@ export default async function ChampionPage({ params }: { params: Promise<{ alias
   if (!c) notFound();
   return (
     <>
+      <SplashAccent src={c.splash} />
       <section className="champ-hero" style={c.splash ? ({ "--splash": `url("${c.splash}")` } as React.CSSProperties) : undefined}>
         <ChampionShowcase alias={c.alias} name={c.name} />
         <p className="eyebrow">
