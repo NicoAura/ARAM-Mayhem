@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Mayhem 5v5 Teamfight</title>
+<link rel="stylesheet" href="/assets/fonts/fonts.css">
+<style>
+/* Same look as the fight replay page (index.html). */
+:root {
+  --bg: #e7ebef; --surface: #f0f3f6; --raised: #e0e5eb; --fg: #1f252e; --muted: #525b68; --line: #d3dae2;
+  --hover: var(--raised); --accent: #9b7bff; --accent-ink: #120a2b;
+  --accent-soft: color-mix(in srgb, var(--accent) 16%, transparent);
+  --accent-text: color-mix(in srgb, var(--accent) 70%, var(--fg));
+  --good: #197048; --bad: #a83831; --gold: #e0a83c;
+  --abyss: var(--bg);
+  --panel: var(--surface);
+  --panel-2: var(--raised);
+  --frost: var(--fg);
+  --ice: var(--fg);
+  --screen: #0b0f14;
+  --q: #4fc3f7; --w: #7bd88f; --e: #f4b860; --r: #e66ad2;
+  --phys: #f08a4b; --magic: #7aa2ff; --true: #9ca3af;
+  --hp: #3fb873; --hp-low: #e5534b; --cc: #b388ff;
+  --display: "Bricolage Grotesque", "Geist", system-ui, sans-serif;
+  --mono: "Geist Mono", ui-monospace, monospace;
+  --body: "Geist", system-ui, -apple-system, sans-serif;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #090b0f; --surface: #11151c; --raised: #181d26; --fg: #e8ecf2; --muted: #8b94a3; --line: #222936;
+  --good: #4cc98b; --bad: #f0776f; color-scheme: dark; } }
+:root[data-theme="dark"] {
+  --bg: #090b0f; --surface: #11151c; --raised: #181d26; --fg: #e8ecf2; --muted: #8b94a3; --line: #222936;
+  --good: #4cc98b; --bad: #f0776f; color-scheme: dark; }
+* { box-sizing: border-box; }
+html, body { background: var(--bg); color: var(--fg); }
+body { margin: 0; font: 14px/1.5 var(--body); }
+.wrap { margin: 0 auto; padding-block: 40px 48px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+  display: grid; gap: 16px; }
+header { display: flex; flex-wrap: wrap; align-items: end; gap: 12px 24px; justify-content: space-between; }
+h1 { font: 700 clamp(26px, 3.2vw, 32px)/1.1 var(--display); letter-spacing: -.025em; margin: 0; text-wrap: balance; }
+.eyebrow { font: 500 11.5px/1 var(--mono); letter-spacing: .06em; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; }
+.beta { display: inline-block; margin-left: 6px; padding: 3px 7px; border: 1px solid var(--accent); border-radius: 999px; color: var(--accent-text); background: var(--accent-soft); letter-spacing: .06em; vertical-align: 1px; }
+select, button { font: 500 14px var(--body); color: var(--fg); border: 1px solid var(--line); border-radius: 10px; padding: 7px 12px; background: var(--surface); }
+button { cursor: pointer; }
+button:hover, select:hover { background: var(--accent-soft); border-color: color-mix(in srgb, var(--accent) 45%, var(--line)); }
+button.primary { background: var(--accent); color: var(--accent-ink); border-color: transparent; }
+button.primary:hover { opacity: .9; background: var(--accent); }
+button:disabled { opacity: .5; cursor: progress; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 6px; }
+.card { background: var(--surface); border: 1px solid var(--line); border-top: 2px solid var(--accent); border-radius: 14px; padding: 18px 20px; min-width: 0; }
+.card h2 { font: 500 11.5px/1 var(--mono); letter-spacing: .06em; text-transform: uppercase; color: var(--accent-text); margin: 0 0 12px; }
+.card.foe { border-top-color: var(--hp-low); }
+.card.foe h2 { color: color-mix(in srgb, var(--hp-low) 75%, var(--fg)); }
+.teams { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+@media (max-width: 860px) { .teams { grid-template-columns: minmax(0, 1fr); } }
+.slot { display: grid; grid-template-columns: 40px minmax(0, 1fr); gap: 4px 10px; align-items: center; padding: 8px 0; border-top: 1px solid var(--line); }
+.slot:first-of-type { border-top: 0; }
+.slot img, .who img, .tick img { width: 40px; height: 40px; border-radius: 8px; background: var(--raised); display: block; }
+.slot .pick { display: flex; gap: 8px; align-items: center; min-width: 0; }
+.slot .pick select { flex: 1; min-width: 0; }
+.slot .tag { font: 500 10.5px var(--mono); letter-spacing: .06em; text-transform: uppercase; color: var(--muted); flex: none; }
+.slot details { grid-column: 2; font-size: 13px; }
+.slot summary { cursor: pointer; color: var(--muted); font-size: 12.5px; width: fit-content; }
+.slot summary:hover { color: var(--fg); }
+.slot summary b { color: var(--fg); font-weight: 500; }
+.gear { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 4px; margin-top: 6px; }
+.gear span { grid-column: 1 / -1; font: 500 10.5px var(--mono); color: var(--muted); text-transform: uppercase; letter-spacing: .06em; margin-top: 4px; }
+.gear select { font-size: 12px; padding: 4px 6px; min-width: 0; }
+.row { display: flex; flex-wrap: wrap; gap: 8px 12px; align-items: center; }
+.row .patch { display: inline-flex; gap: 6px; align-items: center; color: var(--muted); font-size: 13px; }
+.status { color: var(--muted); font-size: 13px; min-height: 20px; }
+.status.err { color: var(--hp-low); }
+.status.busy::before { content: ""; display: inline-block; width: 10px; height: 10px; margin-right: 8px; border-radius: 50%;
+  border: 2px solid var(--fg); border-right-color: transparent; animation: spin .8s linear infinite; vertical-align: -1px; }
+@keyframes spin { to { transform: rotate(1turn); } }
+.stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px; }
+.stats div { display: grid; gap: 2px; }
+.stats small { color: var(--muted); font: 500 11px var(--mono); text-transform: uppercase; letter-spacing: .06em; }
+.stats b { font: 600 24px var(--mono); letter-spacing: -.02em; font-variant-numeric: tabular-nums; }
+.good { color: var(--good); } .bad { color: var(--bad); }
+table { width: 100%; border-collapse: collapse; font-size: 13px; }
+th { font: 500 10.5px var(--mono); letter-spacing: .06em; text-transform: uppercase; color: var(--muted); text-align: right; padding: 6px 8px; font-weight: 500; }
+th:first-child, td:first-child { text-align: left; }
+td { padding: 6px 8px; border-top: 1px solid var(--line); text-align: right; font-variant-numeric: tabular-nums; font-family: var(--mono); }
+td.who { font-family: var(--body); }
+.who { display: flex; gap: 8px; align-items: center; min-width: 0; }
+.who img { width: 28px; height: 28px; border-radius: 6px; }
+.share { display: inline-block; width: 60px; height: 6px; border-radius: 3px; background: var(--raised); overflow: hidden; vertical-align: middle; margin-left: 8px; }
+.share i { display: block; height: 100%; background: var(--accent); }
+.foe .share i { background: var(--hp-low); }
+.scroll { overflow-x: auto; }
+@media (max-width: 600px) { .share { display: none; } th, td { padding: 6px 4px; } }
+.track { position: relative; height: 96px; margin: 8px 0 4px; }
+.track .line { position: absolute; left: 0; right: 0; top: 47px; height: 2px; background: var(--line); }
+.tick { position: absolute; transform: translateX(-50%); display: grid; justify-items: center; gap: 2px; font: 500 10.5px var(--mono); color: var(--muted); }
+.tick img { width: 30px; height: 30px; border-radius: 50%; border: 2px solid var(--accent); filter: grayscale(.6); }
+.tick.ally { top: 0; } .tick.enemy { top: 52px; }
+.tick.enemy img { border-color: var(--hp-low); }
+.axis { display: flex; justify-content: space-between; font: 500 10.5px var(--mono); color: var(--muted); }
+.note { color: var(--muted); font-size: 12px; max-width: 80ch; }
+[hidden] { display: none !important; }
+@media (prefers-reduced-motion: reduce) { .status.busy::before { animation: none; } }
+</style>
+</head>
+<body>
+<main class="wrap">
+  <header>
+    <div>
+      <div class="eyebrow">Simulator <span class="beta">Beta</span></div>
+      <h1>5v5 teamfight</h1>
+    </div>
+    <div class="row">
+      <label class="patch">Patch <select id="patchSel" aria-label="Patch"><option value="live">Live</option><option value="pbe">PBE</option></select></label>
+      <button id="randomFoes" type="button">Likely enemies</button>
+      <button id="runTeam" class="primary" type="button" disabled>Simulate the fight</button>
+    </div>
+  </header>
+  <p class="note">Pick your champion, four allies and five enemies. Each champion starts with its most popular build; open a
+    champion's build to change it. Every champion fights the other team on its own, then the two teams trade that damage
+    at once, with front-liners soaking their usual share. Each matchup runs 300 times.</p>
+  <div class="status" id="status" role="status">Loading the simulator…</div>
+  <div class="teams">
+    <section class="card" aria-labelledby="allyTitle"><h2 id="allyTitle">Your team</h2><div id="allies"></div></section>
+    <section class="card foe" aria-labelledby="foeTitle"><h2 id="foeTitle">Enemy team</h2><div id="foes"></div></section>
+  </div>
+  <section class="card" id="result" hidden aria-labelledby="resTitle">
+    <h2 id="resTitle">Result</h2>
+    <div class="stats">
+      <div><small>Your team wins</small><b id="winRate">–</b></div>
+      <div><small>Fight length</small><b id="fightLen">–</b></div>
+      <div><small>Your team's DPS</small><b id="teamDps">–</b></div>
+      <div><small>Enemy team's DPS</small><b id="enemyDps">–</b></div>
+    </div>
+    <h2 style="margin-top:22px">A typical fight</h2>
+    <div class="track" id="track"><div class="line"></div></div>
+    <div class="axis"><span>0 s</span><span id="axisEnd"></span></div>
+    <div class="teams" style="margin-top:18px">
+      <div class="scroll"><table id="allyTable"></table></div>
+      <div class="scroll foe"><table id="foeTable"></table></div>
+    </div>
+  </section>
+</main>
+<script>window.REPLAY_VERSION = "35";</script>
+<script src="team.js?v=35"></script>
+</body>
+</html>

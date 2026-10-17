@@ -2811,4 +2811,173 @@ std::vector<Ranked> optimize(const Library& lib, const ChampionKit& c, const Sce
     return ranked;
 }
 
+Build popularBuild(const Library& lib, const ChampionKit& champ) {
+    Build b;
+    if (!lib.enemyPool.isObject()) return b;
+    for (const auto& e : lib.enemyPool["enemies"].arr) {
+        if (static_cast<int>(e["champion_id"].asNumber(0)) != champ.championId) continue;
+        for (const auto& x : e["build"]["items"].arr) b.items.push_back(x.asString());
+        for (const auto& x : e["build"]["augments"].arr) b.augments.push_back(x.asString());
+        break;
+    }
+    return b;
+}
+
+namespace {
+// "Lulu:items=a+b:augs=c+d": how a champion is named in Library::enemyTeam.
+std::string teamEntry(const TeamPick& m) {
+    std::string s = m.first->id;
+    auto add = [&](const char* key, const std::vector<std::string>& list) {
+        if (list.empty()) return;
+        s += std::string(":") + key + "=";
+        for (size_t i = 0; i < list.size(); ++i) s += (i ? "+" : "") + list[i];
+    };
+    add("items", m.second.items);
+    add("augs", m.second.augments);
+    return s;
+}
+}  // namespace
+
+std::vector<TeamPick> defaultEnemyTeam(const Library& lib, const std::vector<TeamPick>& allies) {
+    std::vector<TeamPick> out;
+    if (allies.empty()) return out;
+    Library open = lib;
+    open.enemyTeam.clear();
+    std::vector<EnemyProfile> pool = open.scenarioFor(*allies.front().first).enemies;
+    std::stable_sort(pool.begin(), pool.end(), [](const EnemyProfile& a, const EnemyProfile& b) { return a.weight > b.weight; });
+    for (const auto& e : pool) {
+        if (out.size() >= 5) break;
+        bool mine = false;
+        for (const auto& [k, b] : allies) mine = mine || k->championId == e.championId;
+        const ChampionKit* k = lib.find(std::to_string(e.championId));
+        if (mine || !k) continue;
+        out.push_back({k, popularBuild(lib, *k)});
+    }
+    return out;
+}
+
+TeamResult runTeam(const Library& lib, const std::vector<TeamPick>& allies, const std::vector<TeamPick>& enemies, int trials) {
+    TeamResult out;
+    if (allies.empty() || enemies.empty() || trials <= 0) return out;
+    for (const auto& [a, ab] : allies)
+        for (const auto& [e, eb] : enemies)
+            if (a->championId == e->championId) throw std::runtime_error(a->name + " can't be on both teams");
+    // Every champion plays its own fight against the other team (the same model as a single
+    // champion's fight, with those five as the enemies). That gives, fight by fight, how much
+    // damage per second it deals to them and how much damage it takes before it goes down.
+    struct Side {
+        const std::vector<TeamPick>* picks;
+        std::vector<TeamMember>* members;
+        std::vector<std::vector<Result>> res;
+    };
+    Side sides[2] = {{&allies, &out.members, {}}, {&enemies, &out.foes, {}}};
+    for (int s = 0; s < 2; ++s) {
+        Library vs = lib;
+        vs.enemyTeam.clear();
+        for (const auto& m : *sides[1 - s].picks) vs.enemyTeam.push_back(teamEntry(m));
+        for (const auto& [k, b] : *sides[s].picks) {
+            TeamMember m;
+            m.kit = k;
+            m.build = b;
+            m.scenario = vs.scenarioFor(*k);
+            sides[s].res.push_back(runTrials(vs, *k, b, m.scenario, 0, trials));
+            m.summary = summarize(sides[s].res.back());
+            sides[s].members->push_back(std::move(m));
+        }
+        double sum = 0;
+        for (const auto& m : *sides[s].members) sum += m.summary.meanDps;
+        for (auto& m : *sides[s].members) m.share = sum > 0 ? m.summary.meanDps / sum : 0.0;
+        (s ? out.enemyDps : out.teamDps) = sum;
+    }
+    // Then the teams trade that damage at once; a champion who's down deals no more, and a
+    // side wins when the other has nobody left standing.
+    // The champions' own fights count every hit on every enemy, so raw damage per second runs
+    // far above what a teamfight's front line actually soaks. Both teams' damage is scaled by
+    // the same factor, so the damage everyone takes per second is what it takes in its own
+    // (real-game calibrated) fight: that sets how long fights last, not who wins them.
+    double taken = 0, dealt = out.teamDps + out.enemyDps;
+    for (const auto* list : {&out.members, &out.foes})
+        for (const auto& m : *list) taken += m.summary.damageTakenPerSec;
+    out.damageScale = dealt > 0 ? std::min(1.0, taken / dealt) : 1.0;
+    // Each side's damage spreads over the other side's champions who are still up, in the
+    // shares each takes of its team's damage in real games (front-liners soak the most).
+    std::vector<double> soak[2];
+    for (int s = 0; s < 2; ++s)
+        for (const auto& m : *sides[s].members) soak[s].push_back(m.kit->hasCn ? std::max(0.02, m.kit->cnTakenShare) : 0.2);
+    const double cap = 120;
+    std::vector<double> lengths;
+    std::vector<std::vector<TeamEvent>> timelines;
+    std::vector<double> alive[2] = {std::vector<double>(out.members.size(), 0), std::vector<double>(out.foes.size(), 0)};
+    std::vector<int> survived[2] = {std::vector<int>(out.members.size(), 0), std::vector<int>(out.foes.size(), 0)};
+    double wins = 0;
+    for (int t = 0; t < trials; ++t) {
+        std::vector<double> hp[2], dps[2];
+        std::vector<bool> up[2];
+        for (int s = 0; s < 2; ++s)
+            for (const auto& r : sides[s].res) {
+                const Result& x = r[static_cast<size_t>(t)];
+                dps[s].push_back(x.timeAlive > 0 ? out.damageScale * x.totalDamage / x.timeAlive : 0.0);
+                hp[s].push_back(std::max(1.0, x.damageTaken + x.shielded));
+                up[s].push_back(true);
+            }
+        std::vector<TeamEvent> events;
+        double now = 0;
+        auto standing = [&](int s) { return std::count(up[s].begin(), up[s].end(), true) > 0; };
+        while (standing(0) && standing(1) && now < cap) {
+            // Damage each champion still up takes per second right now.
+            std::vector<double> in[2];
+            double dt = cap - now;
+            for (int s = 0; s < 2; ++s) {
+                double rate = 0, w = 0;
+                for (size_t i = 0; i < up[1 - s].size(); ++i) if (up[1 - s][i]) rate += dps[1 - s][i];
+                for (size_t i = 0; i < up[s].size(); ++i) if (up[s][i]) w += soak[s][i];
+                in[s].assign(up[s].size(), 0.0);
+                for (size_t i = 0; i < up[s].size(); ++i)
+                    if (up[s][i] && w > 0) {
+                        in[s][i] = rate * soak[s][i] / w;
+                        if (in[s][i] > 0) dt = std::min(dt, hp[s][i] / in[s][i]);
+                    }
+            }
+            now += dt;
+            for (int s = 0; s < 2; ++s)
+                for (size_t i = 0; i < up[s].size(); ++i) {
+                    if (!up[s][i]) continue;
+                    hp[s][i] -= in[s][i] * dt;
+                    if (hp[s][i] <= 1e-6 * std::max(1.0, in[s][i])) {
+                        up[s][i] = false;
+                        alive[s][i] += now;
+                        events.push_back({now, s, i});
+                    }
+                }
+        }
+        for (int s = 0; s < 2; ++s)
+            for (size_t i = 0; i < up[s].size(); ++i)
+                if (up[s][i]) {
+                    alive[s][i] += now;
+                    survived[s][i] += 1;
+                }
+        const bool won = standing(0) && !standing(1), lost = !standing(0) && standing(1);
+        wins += won ? 1.0 : lost ? 0.0 : 0.5;
+        lengths.push_back(now);
+        timelines.push_back(std::move(events));
+    }
+    out.winRate = wins / trials;
+    std::vector<double> sorted = lengths;
+    std::nth_element(sorted.begin(), sorted.begin() + static_cast<long>(sorted.size() / 2), sorted.end());
+    out.fightLength = sorted[sorted.size() / 2];
+    // A typical fight to show: the median-length one.
+    size_t pick = 0;
+    for (size_t t = 0; t < lengths.size(); ++t)
+        if (std::abs(lengths[t] - out.fightLength) < std::abs(lengths[pick] - out.fightLength)) pick = t;
+    out.timeline = timelines[pick];
+    for (int s = 0; s < 2; ++s) {
+        auto& m = s ? out.foes : out.members;
+        for (size_t i = 0; i < m.size(); ++i) {
+            m[i].teamTimeAlive = alive[s][i] / trials;
+            m[i].teamSurvival = static_cast<double>(survived[s][i]) / trials;
+        }
+    }
+    return out;
+}
+
 }  // namespace mayhem

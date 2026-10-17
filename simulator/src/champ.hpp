@@ -270,4 +270,38 @@ struct Ranked {
 std::vector<Ranked> optimize(const Library& lib, const ChampionKit& champ, const Scenario& sc, int threads,
                              int top = 5);
 
+// A champion's most popular full build in real games (the enemy pool's), or none.
+Build popularBuild(const Library& lib, const ChampionKit& champ);
+
+// 5v5: you and four allies against five enemies. Every champion plays its own fight against
+// the other team, which says how much damage per second it deals to them and how much it can
+// take; then the teams trade that damage, each side hitting the other's front line first.
+using TeamPick = std::pair<const ChampionKit*, Build>;
+struct TeamMember {
+    const ChampionKit* kit = nullptr;
+    Build build;
+    Scenario scenario;  // this champion's own fight against the other team
+    Summary summary;
+    double share = 0;          // share of its team's damage
+    double teamTimeAlive = 0;  // mean seconds standing in the 5v5 (to the end of the fight if it survives)
+    double teamSurvival = 0;   // share of 5v5 fights it's still standing at the end
+};
+struct TeamEvent {
+    double t = 0;
+    int side = 0;    // 0 your team, 1 the enemy team
+    size_t index = 0;  // who went down
+};
+struct TeamResult {
+    std::vector<TeamMember> members, foes;
+    double teamDps = 0, enemyDps = 0;
+    double damageScale = 1;           // both teams' damage per second is scaled by this in the 5v5
+    double fightLength = 0;           // median seconds until one team is down
+    double winRate = 0;               // fights your team wins (a fight still going at 120 s counts half)
+    std::vector<TeamEvent> timeline;  // who goes down when, in a median-length fight
+};
+// The enemy team when none is given: the five most likely enemies that aren't on your team,
+// each with its most popular build.
+std::vector<TeamPick> defaultEnemyTeam(const Library& lib, const std::vector<TeamPick>& allies);
+TeamResult runTeam(const Library& lib, const std::vector<TeamPick>& allies, const std::vector<TeamPick>& enemies, int trials);
+
 }  // namespace mayhem

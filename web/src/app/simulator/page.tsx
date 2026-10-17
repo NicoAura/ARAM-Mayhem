@@ -47,6 +47,14 @@ export default function SimulatorPage() {
       content: <Embed src="/embed/simulator/index.html" title="Mayhem fight replay" minHeight={900} />,
     });
   }
+  if (repoHas(`${VIEWER}/team.html`)) {
+    tabs.push({
+      id: "teamfight",
+      label: "5v5 teamfight",
+      lazy: true,
+      content: <Embed src="/embed/simulator/team.html" title="Mayhem 5v5 teamfight" minHeight={1100} />,
+    });
+  }
   if (best) {
     const rows: Row[] = best.champions.map((c) => ({
       name: c.champion,

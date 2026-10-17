@@ -352,6 +352,17 @@ int main(int argc, char** argv) {
         CHECK(hers && !others, "Leona crowd controls you with her own stuns");
     }
 
+    {
+        // 5v5: the same two teams give the same odds whichever side you're on.
+        auto pick = [&](const char* n) { const ChampionKit* k = lib.find(n); return TeamPick{k, popularBuild(lib, *k)}; };
+        const std::vector<TeamPick> a = {pick("Jinx"), pick("Lulu"), pick("Leona"), pick("Ahri"), pick("Darius")};
+        const std::vector<TeamPick> b = {pick("Ashe"), pick("MissFortune"), pick("Teemo"), pick("Brand"), pick("Caitlyn")};
+        const TeamResult ab = runTeam(lib, a, b, 120), ba = runTeam(lib, b, a, 120);
+        CHECK(std::abs(ab.winRate + ba.winRate - 1.0) < 1e-9, "5v5 odds are the same from either side");
+        CHECK(ab.members.size() == 5 && ab.foes.size() == 5 && ab.fightLength > 0, "5v5 reports both teams");
+        CHECK(defaultEnemyTeam(lib, a).size() == 5, "5v5 picks five enemies when none are given");
+    }
+
     bool threw = false;
     try { runTrials(lib, *ahri, Build{{"not_an_item"}, {}}, sc, 0, 1); } catch (...) { threw = true; }
     CHECK(threw, "unknown item ids are rejected");
