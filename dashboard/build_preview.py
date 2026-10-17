@@ -23,7 +23,7 @@ CDRAGON = GAME_DATA + "cherry-augments.json"
 
 def get_json(url):
     # CommunityDragon refuses Python's default user agent
-    req = urllib.request.Request(url, headers={"User-Agent": "aram-mayhem-preview"})
+    req = urllib.request.Request(url, headers={"User-Agent": "deeparam-preview"})
     with urllib.request.urlopen(req, timeout=30) as r:
         return json.load(r)
 

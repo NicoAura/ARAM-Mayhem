@@ -4,13 +4,14 @@ import type { NextConfig } from "next";
 // The content policy only reports for now (inline theme scripts, embeds); enforce it once it's quiet.
 const CSP = [
   "default-src 'self'",
-  "script-src 'self' 'unsafe-inline' 'wasm-unsafe-eval' https://static.cloudflareinsights.com",
+  // challenges.cloudflare.com: the Simulator leaderboard's bot check (lib/bot-check.ts), script and frame.
+  "script-src 'self' 'unsafe-inline' 'wasm-unsafe-eval' https://static.cloudflareinsights.com https://challenges.cloudflare.com",
   "style-src 'self' 'unsafe-inline'",
   "img-src 'self' data: blob:",
   "media-src 'self' blob: data:",
   "font-src 'self' data:",
   "connect-src 'self' https://cloudflareinsights.com",
-  "frame-src 'self'",
+  "frame-src 'self' https://challenges.cloudflare.com",
   "frame-ancestors 'self'",
   "base-uri 'self'",
   "form-action 'self'",

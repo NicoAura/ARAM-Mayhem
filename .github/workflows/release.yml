@@ -1,0 +1,108 @@
+name: Release apps
+
+# Builds the Mac app and the Windows installers and attaches them to one GitHub release, so every
+# download has one home. Start one by pushing a tag (git tag v0.2.0 && git push origin v0.2.0), or
+# from the Actions tab with "Run workflow" and a version.
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Version, like 0.2.0 (the release is tagged v0.2.0)"
+        required: true
+
+permissions:
+  contents: write
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+env:
+  VERSION: ${{ inputs.version || github.ref_name }}
+
+jobs:
+  mac:
+    name: Mac app
+    runs-on: macos-15
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Use the newest Xcode
+        run: sudo xcode-select -s "$(ls -d /Applications/Xcode_16*.app | sort -V | tail -1)" && xcodebuild -version
+      - name: Build DeepARAM.app for Apple silicon and Intel
+        run: VERSION="${VERSION#v}" UNIVERSAL=1 apps/macos/scripts/build-app.sh
+      - name: Zip it
+        # ditto keeps the app's signature and permissions, which a plain zip would lose.
+        run: ditto -c -k --keepParent apps/macos/build/DeepARAM.app "DeepARAM-mac-${VERSION#v}.zip"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: release-mac
+          path: DeepARAM-mac-*.zip
+          if-no-files-found: error
+
+  windows:
+    name: Windows installers
+    runs-on: windows-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - id: has
+        shell: bash
+        run: echo "app=$([ -f apps/windows/package.json ] && echo yes || echo no)" >> "$GITHUB_OUTPUT"
+      - if: steps.has.outputs.app == 'yes'
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: apps/windows/package-lock.json
+      - if: steps.has.outputs.app == 'yes'
+        uses: dtolnay/rust-toolchain@stable
+      - if: steps.has.outputs.app == 'yes'
+        uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: apps/windows/src-tauri
+      - name: Build installers
+        if: steps.has.outputs.app == 'yes'
+        working-directory: apps/windows
+        run: |
+          npm ci
+          npx tauri build
+      - if: steps.has.outputs.app == 'yes'
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-windows
+          path: |
+            apps/windows/src-tauri/target/release/bundle/nsis/*.exe
+            apps/windows/src-tauri/target/release/bundle/msi/*.msi
+          if-no-files-found: error
+
+  publish:
+    name: Publish the release
+    needs: [mac, windows]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: release-*
+          merge-multiple: true
+          path: files
+      - name: Create or update the release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          v="${VERSION#v}"; tag="v$v"
+          ls -l files
+          notes="DeepARAM apps $v.
+
+          - **Mac** (DeepARAM-mac-$v.zip): unzip and drag DeepARAM to Applications. It isn't notarized yet, so the first time, right-click it and choose Open.
+          - **Windows** (.exe installer, or .msi): Windows may say \"Windows protected your PC\" the first time. Choose More info, then Run anyway."
+          if gh release view "$tag" >/dev/null 2>&1; then
+            gh release upload "$tag" files/* --clobber
+          else
+            gh release create "$tag" files/* --title "DeepARAM $v" --notes "$notes" --target "$GITHUB_SHA"
+          fi

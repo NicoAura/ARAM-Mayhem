@@ -15,7 +15,7 @@ the fallback when the bin has nothing, and every changed value is logged.
 
     python3 simulator/tools/build_items.py
 
-Python 3 standard library only. Downloads are cached in ~/.cache/aram-mayhem-sim.
+Python 3 standard library only. Downloads are cached in ~/.cache/deeparam-sim.
 """
 
 import argparse
@@ -33,7 +33,7 @@ if PBE:
     sys.argv.remove("--pbe")
 DATA = os.path.join(HERE, "..", "data")
 OUT_DIR = os.path.join(DATA, "pbe") if PBE else DATA
-DEFAULT_CACHE = os.path.join(os.path.expanduser("~"), ".cache", "aram-mayhem-sim", "pbe" if PBE else "")
+DEFAULT_CACHE = os.path.join(os.path.expanduser("~"), ".cache", "deeparam-sim", "pbe" if PBE else "")
 
 CDRAGON = "https://raw.communitydragon.org/" + ("pbe" if PBE else "latest")
 CONTENT_METADATA = CDRAGON + "/content-metadata.json"
@@ -141,7 +141,7 @@ def fetch(url, cache_dir, name, tries=5):
             return json.load(f)
     for i in range(tries):
         try:
-            req = urllib.request.Request(url, headers={"User-Agent": "aram-mayhem-sim"})
+            req = urllib.request.Request(url, headers={"User-Agent": "deeparam-sim"})
             with urllib.request.urlopen(req, timeout=120) as r:
                 body = r.read().decode("utf-8")
             break

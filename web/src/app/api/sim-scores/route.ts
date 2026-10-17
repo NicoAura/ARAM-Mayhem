@@ -1,12 +1,14 @@
 import { NextRequest } from "next/server";
 import { d1 } from "@/lib/env";
+import { passesBotCheck } from "@/lib/bot-check";
 
 // The Simulator leaderboard (SIM database, table submissions).
 // POST /api/sim-scores {champion, items, augments, dps}: a build a visitor simulated with the default settings.
 //   It is stored as "pending" and never shown as sent: the simulator re-runs every pending build on our side
 //   (simulator/tools/verify_leaderboard.py) and only that result counts. One row per build; repeats are ignored.
+//   The page also sends {check}, the bot-check token (lib/bot-check.ts), once that check is switched on.
 // GET /api/sim-scores: the best checked build for each champion. ?champion=Jinx: that champion's top 10.
-const MAX_BODY = 2_000;
+const MAX_BODY = 5_000; // the bot-check token can be 2,048 characters
 const PER_IP_PER_DAY = 30;
 const MAX_PENDING = 3_000;
 const CHAMP = /^[A-Za-z0-9]{2,24}$/;
@@ -45,6 +47,9 @@ export async function POST(req: NextRequest) {
   if (typeof champion !== "string" || !CHAMP.test(champion) || !items || !items.length || !augments)
     return json({ error: "Bad request" }, 400);
 
+  const ip = req.headers.get("cf-connecting-ip") ?? req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ?? null;
+  if (!(await passesBotCheck(body?.check, ip))) return json({ error: "The bot check didn't pass. Try again." }, 403);
+
   const buildKey = [champion.toLowerCase(), [...items].sort().join(","), [...augments].sort().join(",")].join("|");
   const known = await db
     .prepare("SELECT status, verified_dps FROM submissions WHERE build_key = ? LIMIT 1")
@@ -52,13 +57,13 @@ export async function POST(req: NextRequest) {
     .first<{ status: string; verified_dps: number | null }>();
   if (known) return json({ status: known.status, verified_dps: known.verified_dps, repeat: true });
 
-  const ip = await ipHash(req);
+  const hashed = await ipHash(req);
   const counts = await db
     .prepare(
       "SELECT (SELECT COUNT(*) FROM submissions WHERE ip_hash = ? AND created > datetime('now', '-1 day')) AS mine, " +
         "(SELECT COUNT(*) FROM submissions WHERE status = 'pending') AS pending",
     )
-    .bind(ip)
+    .bind(hashed)
     .first<{ mine: number; pending: number }>();
   if ((counts?.mine ?? 0) >= PER_IP_PER_DAY) return json({ error: "That's a lot of builds for one day. Try again tomorrow." }, 429);
   if ((counts?.pending ?? 0) >= MAX_PENDING) return json({ error: "Lots of builds are waiting to be checked. Try again later." }, 503);
@@ -68,7 +73,7 @@ export async function POST(req: NextRequest) {
       "INSERT OR IGNORE INTO submissions (champion, items, augments, build_key, patch, claimed_dps, ip_hash, created) " +
         "VALUES (?, ?, ?, ?, '', ?, ?, datetime('now'))",
     )
-    .bind(champion, items.join(","), augments.join(","), buildKey, Number.isFinite(dps) ? dps : null, ip)
+    .bind(champion, items.join(","), augments.join(","), buildKey, Number.isFinite(dps) ? dps : null, hashed)
     .run();
   return json({ status: "pending" }, 202);
 }

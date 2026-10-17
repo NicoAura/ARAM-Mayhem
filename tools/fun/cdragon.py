@@ -7,7 +7,7 @@ MANA_PARTS = {"NumberCalculationPart", "NamedDataValueCalculationPart", "Ability
 
 def get(url, tries=4, raw=False):
     # CommunityDragon refuses Python's default User-Agent. Retry, since many parallel requests sometimes drop.
-    req = urllib.request.Request(url, headers={"User-Agent": "aram-mayhem-fun-tools"})
+    req = urllib.request.Request(url, headers={"User-Agent": "deeparam-fun-tools"})
     for attempt in range(tries):
         try:
             with urllib.request.urlopen(req, timeout=300) as r:

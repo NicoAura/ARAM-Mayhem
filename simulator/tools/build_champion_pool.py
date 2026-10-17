@@ -50,7 +50,7 @@ if PBE:
 DATA = os.path.join(HERE, "..", "data")
 DEFAULT_OUT = os.path.join(DATA, "pbe" if PBE else "", "champions.json")
 DEFAULT_POOL = os.path.join(DATA, "cn_enemy_pool.json")
-DEFAULT_CACHE = os.path.join(os.path.expanduser("~"), ".cache", "aram-mayhem-sim", "pbe" if PBE else "")
+DEFAULT_CACHE = os.path.join(os.path.expanduser("~"), ".cache", "deeparam-sim", "pbe" if PBE else "")
 
 CDRAGON = "https://raw.communitydragon.org/" + ("pbe" if PBE else "latest")
 GAME_DATA = CDRAGON + "/plugins/rcp-be-lol-game-data/global/default/v1"
@@ -97,7 +97,7 @@ def fetch(url, cache_dir, name=None, tries=5):
             return f.read()
     for i in range(tries):
         try:
-            req = urllib.request.Request(url, headers={"User-Agent": "aram-mayhem-sim"})
+            req = urllib.request.Request(url, headers={"User-Agent": "deeparam-sim"})
             with urllib.request.urlopen(req, timeout=60) as r:
                 body = r.read().decode("utf-8")
             break
