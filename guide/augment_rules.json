@@ -343,5 +343,26 @@
    "augment": "Ultra Hydra",
    "augmentTier": "Prismatic"
   }
- ]
+ ],
+ "selectionAugments": [
+  {
+   "id": 1337,
+   "name": "King Me",
+   "tier": "Prismatic",
+   "icon": "https://raw.communitydragon.org/latest/game/assets/ux/kiwi/augments/icons/kingme_small.png",
+   "text": "The first time you take the enemy transport with a Legendary Item you become Kinged, upgrading your item and gaining a random Prismatic Augment."
+  },
+  {
+   "id": 1402,
+   "name": "Stats on Stats on Stats!",
+   "tier": "Prismatic",
+   "icon": "https://raw.communitydragon.org/latest/game/assets/ux/cherry/augments/icons/statsonstatsonstats_small.png",
+   "text": "Gain 4 Stat Anvils, with a higher chance of Gold and Prismatic Anvils! On your next Augment selection, gain one additional reroll per slot."
+  }
+ ],
+ "goldenReroll": {
+  "name": "Golden Reroll",
+  "text": "Reroll into an augment one tier higher.",
+  "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/rewards/kiwi/goldenreroll.png"
+ }
 }

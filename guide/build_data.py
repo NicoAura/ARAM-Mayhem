@@ -181,7 +181,27 @@ def main():
         return clean(s(keys.get("keyTooltip")))
     combo = tip("Kiwi_ComboBreaker")
     levels = [int(x) for x in re.findall(r"\d+", (re.search(r"Level\s*([\d/]+)", combo) or [None, ""])[1])]
+    # The Mayhem aura's tooltip lists the mode-wide rules; the mode's own settings hold the numbers behind some
+    modes = {k.split("/")[-1]: v for k, v in m12.items() if k.startswith("Maps/Shipping/Map12/Modes/")}
+    def mode_consts(mode):
+        groups = (m12.get(modes.get(mode, {}).get("mGameModeConstants"), {}) or {}).get("mGroups", {})
+        return {k: c.get("mValue") for g in groups.values() if isinstance(g, dict)
+                for k, c in (g.get("mConstants") or {}).items() if isinstance(c, dict)}
+    kiwi_consts, aram_consts = mode_consts("KIWI"), mode_consts("ARAM")
+    aura = re.sub(r"<titleLeft>.*?</titleLeft>|<postScriptLeft>.*?</postScriptLeft>|\{\{[^}]*\}\}", "", s("buff_desc_MayhemicMagic"))
+    aura = [l.strip() for l in clean(aura).split("\n") if l.strip()]
+    # each selection's card count per rarity sits in the mode's augment config
+    pick = next((c for c in (m12.get(k) for k in modes.get("KIWI", {}).get("Configs", [])) if isinstance(c, dict)
+                 and isinstance(c.get("{8794a0e6}"), dict)), {})
+    cards_per = sorted(set(pick.get("{8794a0e6}", {}).values())) or [3]
     rules = {
+        "aura": aura,
+        # attacks can't come faster than this delay, so 1 / delay is the attack speed cap
+        "attackSpeedCap": round(1 / kiwi_consts["gcd_AttackMinDelay"], 2) if kiwi_consts.get("gcd_AttackMinDelay") else None,
+        "aramAttackSpeedCap": round(1 / aram_consts["gcd_AttackMinDelay"], 2) if aram_consts.get("gcd_AttackMinDelay") else None,
+        "critOverflow": "adaptive" if any(re.search(r"Excess Critical Strike Chance .*Adaptive Force", l) for l in aura) else None,
+        "runes": not kiwi_consts.get("SuppressRunesMasteriesPerks"),
+        "cards": cards_per[-1],
         "augmentLevels": levels,
         "rerolls": dv("ARAM_Augment_Manager").get("InitialReroll"),
         "comboBreakerTenacity": dv("Kiwi_ComboBreaker").get("TenacityAmp"),
@@ -190,8 +210,9 @@ def main():
     }
 
     # ---- Summoner spells allowed in Mayhem, and augments that add one
+    summoner_spells = get(f"{gd}/v1/summoner-spells.json")
     allowed = [{"name": x["name"], "cooldown": x["cooldown"], "text": x["description"], "icon": asset(x["iconPath"])}
-               for x in get(f"{gd}/v1/summoner-spells.json") if "KIWI" in x.get("gameModes", [])]
+               for x in summoner_spells if "KIWI" in x.get("gameModes", [])]
     allowed.sort(key=lambda x: x["name"])
     by_key = {v["AugmentNameId"]: v for v in augments.values()}
     spell_augments = []
@@ -201,6 +222,37 @@ def main():
             spell_augments.append({"name": s(a["NameTra"], key), "id": a.get("AugmentPlatformId"),
                                    "tier": TIERS[a.get("rarity", 0)], "icon": asset(a["AugmentSmallIconPath"]),
                                    "text": strip_unknown(s(a.get("DescriptionTra")).split('"')[0])})
+
+    # ---- Live augments' text, for the rules below
+    live = []
+    for path in sorted(in_pool):
+        a = kiwi.get(path)
+        if a and a.get("Enabled") is not False:
+            sp = (kiwi.get(a.get("RootSpell")) or {}).get("mSpell") or {}
+            values = {d["name"].lower(): d["values"][0] for d in sp.get("DataValues") or [] if d.get("values")}
+            text = " ".join(fill(s(a.get("DescriptionTra")), values, None, None).split())
+            text = re.sub(r"\s+([.,%)])", r"\1", re.sub(r"\s*\?(?=[\s%.,]|$)", "", text))
+            live.append({"id": a.get("AugmentPlatformId"), "name": s(a["NameTra"], a["AugmentNameId"]),
+                         "tier": TIERS[a.get("rarity", 0)], "icon": asset(a["AugmentSmallIconPath"]), "text": text})
+    live.sort(key=lambda a: (TIERS.index(a["tier"]), a["name"]))
+
+    # ---- Champion select: no rune page, so keystones only come from augments; spells regular ARAM has but Mayhem lacks
+    keystones = []
+    for a in live:
+        m = re.search(r"Gain the (.+?) Keystone Runes?", a["text"])
+        if m:
+            keystones.append({**a, "runes": [r.strip() for r in re.split(r",| and ", m.group(1)) if r.strip()]})
+    champ_select = {
+        "runes": rules["runes"],
+        "keystoneAugments": keystones,
+        "notInMayhem": sorted(x["name"] for x in summoner_spells
+                              if "ARAM" in x.get("gameModes", []) and "KIWI" not in x.get("gameModes", [])),
+    }
+
+    # ---- Augments that change your selections: an extra augment, a random one in its place, or more rerolls
+    selection_augments = [a for a in live if re.search(r"random (?:Silver |Gold |Prismatic )?Augment|reroll", a["text"], re.I)]
+    golden_reroll = {"name": s("Kiwi_Golden_Reroll_Tooltip_Title"), "text": clean(s("Kiwi_Golden_Reroll_Tooltip_Desc")),
+                     "icon": asset("/lol-game-data/assets/ASSETS/Rewards/Kiwi/GoldenReroll.png")}
 
     # ---- Items with Mayhem (or ARAM) values that differ from Summoner's Rift
     items_bin = get(f"{BASE}/{ch}/game/items.cdtb.bin.json")
@@ -250,7 +302,7 @@ def main():
     granted = sorted(granted.values(), key=lambda g: (g["how"] != "reward", g["name"], g["id"]))
 
     # ---- Augment selections: when they come, what one shows, and the chance a given augment is in it
-    cards = 3  # each selection shows three augments of one rarity, and each slot can be rerolled
+    cards = rules["cards"]  # each selection shows this many augments of one rarity, and each slot can be rerolled
     rerolls = int(rules["rerolls"] or 0)
     odds = {t: {"pool": n, "offer": round(min(1, cards / n), 4) if n else 0,
                 "withRerolls": round(min(1, cards * (1 + rerolls) / n), 4) if n else 0}
@@ -258,7 +310,8 @@ def main():
     tier_of = {a["AugmentPlatformId"]: TIERS[a.get("rarity", 0)] for p, a in augments.items()
                if p in in_pool and a.get("Enabled") is not False}
     augment_rules = {"patch": version, "levels": rules["augmentLevels"], "cards": cards, "rerollsPerSlot": rerolls,
-                     "odds": odds, "tiers": {str(k): v for k, v in sorted(tier_of.items())}, "grantedItems": granted}
+                     "odds": odds, "tiers": {str(k): v for k, v in sorted(tier_of.items())}, "grantedItems": granted,
+                     "selectionAugments": selection_augments, "goldenReroll": golden_reroll}
 
     # ---- Archive: Augment Sets
     sets = []
@@ -278,7 +331,15 @@ def main():
         "quests": quests, "challenges": challenges, "rules": rules, "spells": allowed,
         "spellAugments": spell_augments, "itemChanges": item_changes, "augmentSets": sets,
         "augmentRules": {k: v for k, v in augment_rules.items() if k != "tiers"},
+        "champSelect": champ_select,
     }
+    # mode-wide numbers the simulator and site pages use
+    mode_rules = {"patch": version, "attackSpeedCap": rules["attackSpeedCap"], "aramAttackSpeedCap": rules["aramAttackSpeedCap"],
+                  "critOverflow": rules["critOverflow"], "runes": rules["runes"], "aura": rules["aura"],
+                  "keystoneAugments": {str(a["id"]): a["runes"] for a in keystones}}
+    with open(os.path.join(HERE, "mode_rules.json"), "w") as f:
+        json.dump(mode_rules, f, indent=1, ensure_ascii=False)
+        f.write("\n")
     # the same rules plus each augment's rarity, for the site's augment pages and build tables
     with open(os.path.join(HERE, "augment_rules.json"), "w") as f:
         json.dump(augment_rules, f, indent=1, ensure_ascii=False)

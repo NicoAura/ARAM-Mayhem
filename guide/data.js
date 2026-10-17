@@ -1356,6 +1356,24 @@ window.GUIDE_DATA = {
   }
  ],
  "rules": {
+  "aura": [
+   "+70 Summoner Spell Haste",
+   "Increased Mana and Energy Regeneration",
+   "Gain Experience Passively",
+   "Healing Effects on Allies are 50% as Effective",
+   "AoE Damage Dealt to Minions is 75% Effective",
+   "Nearby Enemy Minion Deaths Grant 6 Gold",
+   "Excess Critical Strike Chance gets converted to Adaptive Force",
+   "Attack Speed Maximum raised to 5.0",
+   "Melee champions gain Armor and Magic Resistance",
+   "All champions gain additional Health",
+   "All champions gain Presence of Mind"
+  ],
+  "attackSpeedCap": 5.0,
+  "aramAttackSpeedCap": 3.0,
+  "critOverflow": "adaptive",
+  "runes": false,
+  "cards": 3,
   "augmentLevels": [
    3,
    7,
@@ -2047,6 +2065,68 @@ window.GUIDE_DATA = {
     "augment": "Ultra Hydra",
     "augmentTier": "Prismatic"
    }
+  ],
+  "selectionAugments": [
+   {
+    "id": 1337,
+    "name": "King Me",
+    "tier": "Prismatic",
+    "icon": "/assets/cd/latest/game/assets/ux/kiwi/augments/icons/kingme_small.png",
+    "text": "The first time you take the enemy transport with a Legendary Item you become Kinged, upgrading your item and gaining a random Prismatic Augment."
+   },
+   {
+    "id": 1402,
+    "name": "Stats on Stats on Stats!",
+    "tier": "Prismatic",
+    "icon": "/assets/cd/latest/game/assets/ux/cherry/augments/icons/statsonstatsonstats_small.png",
+    "text": "Gain 4 Stat Anvils, with a higher chance of Gold and Prismatic Anvils! On your next Augment selection, gain one additional reroll per slot."
+   }
+  ],
+  "goldenReroll": {
+   "name": "Golden Reroll",
+   "text": "Reroll into an augment one tier higher.",
+   "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/rewards/kiwi/goldenreroll.png"
+  }
+ },
+ "champSelect": {
+  "runes": false,
+  "keystoneAugments": [
+   {
+    "id": 1038,
+    "name": "From Beginning To End",
+    "tier": "Gold",
+    "icon": "/assets/cd/latest/game/assets/ux/cherry/augments/icons/frombeginningtoend_small.png",
+    "text": "Gain the First Strike and Dark Harvest Keystone Runes.",
+    "runes": [
+     "First Strike",
+     "Dark Harvest"
+    ]
+   },
+   {
+    "id": 1149,
+    "name": "Impassable",
+    "tier": "Gold",
+    "icon": "/assets/cd/latest/game/assets/ux/cherry/augments/icons/impassable_small.png",
+    "text": "Gain the Aftershock and Glacial Augment Keystone Runes.",
+    "runes": [
+     "Aftershock",
+     "Glacial Augment"
+    ]
+   },
+   {
+    "id": 1079,
+    "name": "Symphony of War",
+    "tier": "Prismatic",
+    "icon": "/assets/cd/latest/game/assets/ux/cherry/augments/icons/symphonyofwar_small.png",
+    "text": "Gain the Lethal Tempo and Conqueror Keystone Runes.",
+    "runes": [
+     "Lethal Tempo",
+     "Conqueror"
+    ]
+   }
+  ],
+  "notInMayhem": [
+   "Exhaust"
   ]
  }
 };

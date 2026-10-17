@@ -188,6 +188,37 @@ def test_augment_rules_tiers_match_pool(rules):
         assert sum(1 for v in tiers.values() if v == tier) == rules["odds"][tier]["pool"], tier
 
 
+def test_mode_rules(guide):
+    m = load_json("guide/mode_rules.json")
+    assert m["patch"] == guide["patch"]
+    assert m["attackSpeedCap"] >= m["aramAttackSpeedCap"] > 2  # Mayhem raises the cap above regular ARAM's
+    assert m["critOverflow"] in ("adaptive", None)
+    assert m["runes"] in (True, False)
+    assert m["aura"] and all(l and "@" not in l and "{{" not in l for l in m["aura"])
+    tiers = load_json("guide/augment_rules.json")["tiers"]
+    for aid, runes in m["keystoneAugments"].items():
+        assert aid in tiers and runes and all(runes)
+    r = guide["rules"]
+    for k in ("attackSpeedCap", "critOverflow", "runes", "aura"):
+        assert r[k] == m[k], k
+
+
+def test_champ_select(guide):
+    cs = guide["champSelect"]
+    assert cs["runes"] == guide["rules"]["runes"]
+    allowed = {x["name"] for x in guide["spells"]}
+    assert not allowed & set(cs["notInMayhem"])
+    for a in cs["keystoneAugments"]:
+        assert a["tier"] in TIERS and a["runes"] and "Keystone" in a["text"]
+
+
+def test_selection_augments(rules):
+    for a in rules["selectionAugments"]:
+        assert str(a["id"]) in rules["tiers"] and a["tier"] in TIERS
+        assert "@" not in a["text"] and re.search(r"augment|reroll", a["text"], re.I)
+    assert rules["goldenReroll"]["name"] and rules["goldenReroll"]["text"]
+
+
 def test_granted_items(rules):
     ids = [g["id"] for g in rules["grantedItems"]]
     assert len(ids) == len(set(ids))

@@ -28,6 +28,23 @@ selection and rerolls per slot, the pool size and offer odds per rarity, every l
 stats); `how: "free"` items are given at once but are also sold. The Info page shows these on the Augment stages
 and Items tabs.
 
+It also lists `selectionAugments` (live augments that add an augment or rerolls, such as King Me) and the
+`goldenReroll` reward text.
+
+## Mode rules (attack speed cap, crits, runes)
+
+`build_data.py` writes `mode_rules.json` for the Simulator and the site:
+- `attackSpeedCap`: 1 / `gcd_AttackMinDelay` in the KIWI mode's GameModeConstants (map12.bin); `aramAttackSpeedCap`
+  is the same for regular ARAM.
+- `critOverflow`: `"adaptive"` when the Mayhemic Magic buff text (`buff_desc_MayhemicMagic`) says excess crit
+  chance turns into Adaptive Force. The conversion ratio isn't in the client files.
+- `runes`: false when the KIWI constants set `SuppressRunesMasteriesPerks` (no rune page in Mayhem).
+- `aura`: the Mayhemic Magic buff's lines. `keystoneAugments`: augment id to the keystones it grants.
+
+The Rules tab shows these, plus a Champion select card (no rune page, keystone augments, summoner spells regular
+ARAM allows but Mayhem doesn't). Per-champion damage, healing and shielding adjustments are applied server-side and
+aren't in any client file.
+
 ## Augment groups by icon
 
 `augment_groups.py` (needs Pillow and numpy) clusters the live augments by how their icon glyph looks. It names each
