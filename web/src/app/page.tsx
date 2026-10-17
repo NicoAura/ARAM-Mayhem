@@ -74,6 +74,7 @@ export default function Home() {
         </p>
         {tiers.length > 0 && <ChampionJump champs={tiers} />}
         <div className="stat-row">
+          <SharedGamesStat />
           <div>
             <b>{cov.patchDays}</b>
             <span>
@@ -92,7 +93,6 @@ export default function Home() {
               <T>patches covered</T>
             </span>
           </div>
-          <SharedGamesStat />
         </div>
       </section>
 
