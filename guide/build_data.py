@@ -209,6 +209,8 @@ def main():
         "onFire": {"text": tip("Kiwi_OnFireBuff"), "values": dv("Kiwi_OnFireBuff")},
     }
 
+    rules["mechanics"] = mechanics(m12, modes, spells, dv)
+
     # ---- Summoner spells allowed in Mayhem, and augments that add one
     summoner_spells = get(f"{gd}/v1/summoner-spells.json")
     allowed = [{"name": x["name"], "cooldown": x["cooldown"], "text": x["description"], "icon": asset(x["iconPath"])}
@@ -375,7 +377,7 @@ def main():
     # mode-wide numbers the simulator and site pages use
     mode_rules = {"patch": version, "attackSpeedCap": rules["attackSpeedCap"], "aramAttackSpeedCap": rules["aramAttackSpeedCap"],
                   "critOverflow": rules["critOverflow"], "runes": rules["runes"], "aura": rules["aura"],
-                  "keystoneAugments": {str(a["id"]): a["runes"] for a in keystones}}
+                  "keystoneAugments": {str(a["id"]): a["runes"] for a in keystones}, **rules["mechanics"]}
     with open(os.path.join(HERE, "mode_rules.json"), "w") as f:
         json.dump(mode_rules, f, indent=1, ensure_ascii=False)
         f.write("\n")
@@ -388,6 +390,69 @@ def main():
         f.write("window.GUIDE_DATA = " + site_paths(json.dumps(out, indent=1, ensure_ascii=False)) + ";\n")
     print(f"{version}: {len(quests)} quests, {len(challenges)} challenges "
           f"({sum(c['mayhem'] for c in challenges)} count Mayhem), {len(items)} items, pool {tier_counts}")
+
+
+# Mode mechanics the client files don't hold. Read from the official League wiki's ARAM, ARAM: Mayhem, Health Relic and
+# map pages on 2026-10-17 (Nico allowed the official wiki that day). Everything else in mechanics() is read from map12.bin.
+WIKI_MECHANICS = {
+    "startLevel": 3,
+    "longRangeReductionMax": 0.30,  # 85% -> 70% damage taken, by distance past the range
+    "longRangeExcludes": ["damage over time", "ultimate abilities"],
+    "critOverflow": {"adPerPercent": 0.45, "apPerPercent": 0.75},  # per 1% Critical Strike Chance over 100%
+    "relicPickup": 0.08, "relicFirstOuter": 105, "relicFirstInner": 150, "relicRespawn": 90,
+    "fastTravel": [
+        {"map": "Howling Abyss", "name": "Frost Gates",
+         "text": "Gates behind each Nexus send you from base to just in front of your outer turret, or your inhibitor turret once the outer turret falls. They only go one way, out of base."},
+        {"map": "Koeshin's Crossing", "name": "Portals",
+         "text": "One pair sends you out of base, one way only. A second pair by the side wall goes both ways. Entering takes a short channel that damage interrupts."},
+        {"map": "Butcher's Bridge", "name": "Cannon Launchers",
+         "text": "Launchers next to each base fire you out into the lane."},
+        {"map": "Bridge of Progress", "name": "Hex gates and Acceleration Pads",
+         "text": "Hex gates (manholes on the Zaun side) send you out of base. Acceleration Pads give 25% bonus Move Speed for 1 second."},
+    ],
+}
+
+
+def mechanics(m12, modes, spells, dv):
+    """Mode-wide mechanics for the Info page and the Simulator: map12.bin numbers, with WIKI_MECHANICS for the rest."""
+    W = WIKI_MECHANICS
+    script = {v["mName"]: {k: c.get("mValue") for k, c in v.get("mConstants", {}).items()}
+              for v in m12.values() if isinstance(v, dict) and v.get("__type") == "ScriptDataObject"}
+    pace, trap = script.get("ARAMGamePacingScriptData", {}), script.get("ARAMMinionTrapDetectionScriptData", {})
+    death = m12.get(modes.get("KIWI", {}).get("mDeathTimes"), {})
+    relic_spell = (spells.get("HowlingAbyssRelicAura_AOE", {}).get("mSpell") or {})
+    relic = dv("HowlingAbyssRelicAura_AOE")
+    kiwi_relic = {d["name"]: d["values"][0] for d in
+                  ((relic_spell.get("DataValuesModeOverride") or {}).get("Kiwi") or {}).get("SpellDataValues", [])}
+    gate = dv("Bloom_Hexgate_SpeedBuff")
+    per_level = death.get("mTimeDeadPerLevel") or []
+    start = W["startLevel"]
+    return {
+        "startLevel": start,
+        "respawn": {
+            "byLevel": {str(lvl): per_level[lvl - 1] for lvl in range(start, len(per_level) + 1)},
+            # past scaleFrom seconds, timers grow scalePerStep every scaleStep seconds, up to scaleCap times
+            "scaleFrom": death.get("mScalingStartTime"), "scaleStep": death.get("mScalingIncrementTime"),
+            "scalePerStep": round(death.get("mScalingPercentIncrease") or 0, 4), "scaleCap": round(death.get("mScalingPercentCap") or 0, 4),
+        } if per_level else None,
+        "longRange": {"range": pace.get("PokeDamageReductionRange"), "reductionMin": round(pace.get("PokeDamageReduction") or 0, 4),
+                      "reductionMax": W["longRangeReductionMax"], "excludes": W["longRangeExcludes"]}
+        if pace.get("PokeDamageReductionRange") else None,
+        "critConversion": W["critOverflow"],
+        "structures": {"bonusMax": round((pace.get("TowerDamageLateMultiplier") or 1) - 1, 4),
+                       "from": pace.get("TowerDamageMultiplierMinTime"), "to": pace.get("TowerDamageMultiplierMaxTime")}
+        if pace.get("TowerDamageLateMultiplier") else None,
+        "minions": {"aoeMultiplier": round(pace.get("MinionAoEDamageMultiplierLate") or 0, 4) or None,
+                    "blackout": {"units": ["siege", "super"], "range": trap.get("DetectionRange"),
+                                 "revealSeconds": trap.get("TrapSightDuration")} if trap else None},
+        "relics": {"pickup": W["relicPickup"], "beam": round(kiwi_relic.get("MissingHealthRestoreMult", relic.get("MissingHealthRestoreMult", 0)), 4),
+                   "aramBeam": round(relic.get("MissingHealthRestoreMult", 0), 4),
+                   "radius": relic.get("HealingRadius"), "delay": relic.get("AoEDelay"),
+                   "firstOuter": W["relicFirstOuter"], "firstInner": W["relicFirstInner"], "respawn": W["relicRespawn"]}
+        if relic else None,
+        "fastTravel": W["fastTravel"],
+        "portalSpeed": {"bonus": round(gate["BonusMS"], 4), "seconds": gate.get("Duration")} if gate.get("BonusMS") else None,
+    }
 
 
 def build_track(gd, asset, augments, s):

@@ -68,6 +68,32 @@
       `Burns enemies within ${fmt(F.ImmolateRadius)} units, +${pct(F.PercentAS)} Attack Speed, +${pct(F.RegularMS)} Move Speed (+${pct(F.MoveTowardsEnemyMS)} toward enemies), +${pct(F.ManaRegen)} Mana Regen.`,
       `The cost: ${pct(-F.GrievousAmount)} less healing and shielding, ${pct(F.DamageTakenAmp_Melee - 1)} more damage taken (${pct(F.DamageTakenAmp_Range - 1)} for ranged champions).`]],
   ];
+  const M = R.mechanics || {};
+  const mins = (sec) => `${Math.floor(sec / 60)}:${String(sec % 60).padStart(2, "0")}`;
+  const crit = M.critConversion;
+  if (crit) rules[1][1].push(`Each 1% over 100% gives ${fmt(crit.adPerPercent)} Attack Damage or ${fmt(crit.apPerPercent)} Ability Power.`);
+  if (M.longRange) rules.push(["Long-range damage", [
+    `Champions take ${pct(1 - M.longRange.reductionMin)} to ${pct(1 - M.longRange.reductionMax)} damage from enemy champions more than ${fmt(M.longRange.range)} units away, less the farther they are.`,
+    `Damage over time and ultimates aren't reduced.`]]);
+  if (M.respawn) {
+    const lv = Object.keys(M.respawn.byLevel);
+    rules.push(["Levels and respawns", [
+      `Everyone starts at level ${M.startLevel}.`,
+      `Respawn takes ${Object.values(M.respawn.byLevel).map(fmt).join(" / ")} seconds at levels ${lv[0]} to ${lv[lv.length - 1]}.`,
+      `After ${mins(M.respawn.scaleFrom)}, timers grow ${pct(M.respawn.scalePerStep)} each minute, up to ${pct(M.respawn.scaleCap - 1)} longer.`]]);
+  }
+  if (M.relics) rules.push(["Health relics", [
+    `Taking a relic restores ${pct(M.relics.pickup)} of your missing health and mana.`,
+    `${fmt(M.relics.delay)} seconds later a beam hits everyone within ${fmt(M.relics.radius)} units, either team, for ${pct(M.relics.beam)} of their missing health${M.relics.aramBeam !== M.relics.beam ? ` (${pct(M.relics.aramBeam)} in regular ARAM)` : ""}.`,
+    `Outer relics first appear at ${mins(M.relics.firstOuter)} and inner ones at ${mins(M.relics.firstInner)}, then return ${fmt(M.relics.respawn)} seconds after each beam.`]]);
+  if (M.minions) rules.push(["Minions", [
+    M.minions.aoeMultiplier ? `Area damage deals ${pct(M.minions.aoeMultiplier)} damage to minions.` : "",
+    M.minions.blackout ? `Siege and super minions have Blackout: they reveal hidden traps within ${fmt(M.minions.blackout.range)} units for ${fmt(M.minions.blackout.revealSeconds)} seconds.` : ""]]);
+  if (M.structures) rules.push(["Late-game sieges", [
+    `From ${mins(M.structures.from)} to ${mins(M.structures.to)}, champions' bonus damage to structures rises from 0 to ${pct(M.structures.bonusMax)}, and stays there.`]]);
+  if (M.fastTravel?.length) rules.push(["Getting back to the fight", [
+    ...M.fastTravel.map((f) => `${f.map}, ${f.name}: ${f.text}`),
+    M.portalSpeed ? `Koeshin's Crossing portals also give ${pct(M.portalSpeed.bonus)} bonus Move Speed that fades over ${fmt(M.portalSpeed.seconds)} seconds.` : ""]]);
   if (R.aura?.length) rules.push(["Mayhemic Magic", ["Everyone has this Mayhem buff all game:", ...R.aura.map((l) => `• ${l}`)]]);
   $("rule-list").innerHTML = rules
     .map(([t, lines]) => `<article class="card"><div class="title">${esc(t)}</div>${lines.filter(Boolean).map((l) => `<p class="muted small" style="margin-top:0.4rem">${esc(l)}</p>`).join("")}</article>`)
