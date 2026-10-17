@@ -4251,6 +4251,42 @@ html[data-motion="reduce"] .btn:hover {
   }
 }
 
+/* Pull-to-refresh in the installed app (components/SwipeGestures.tsx) */
+.ptr {
+  position: fixed;
+  top: calc(env(safe-area-inset-top, 0px) - 2.5rem);
+  left: 50%;
+  z-index: 60;
+  display: grid;
+  width: 2.5rem;
+  height: 2.5rem;
+  place-items: center;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  background: var(--surface);
+  box-shadow: 0 6px 18px -8px rgb(0 0 0 / 0.5);
+  color: var(--muted);
+  pointer-events: none;
+}
+
+.ptr[data-ready] {
+  color: var(--accent);
+}
+
+.ptr[data-spin] svg {
+  animation: ptr-spin 0.8s linear infinite;
+}
+
+[data-motion="reduce"] .ptr[data-spin] svg {
+  animation: none;
+}
+
+@keyframes ptr-spin {
+  to {
+    rotate: 360deg;
+  }
+}
+
 /* Public player pages (/profile/...) */
 .profile-tag {
   margin-left: 0.25em;
