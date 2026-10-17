@@ -25,8 +25,8 @@ export default function Privacy() {
           page at any time.
         </p>
         <p>
-          If you sign in with Google or Apple, that happens on their own page: we never see your password there, and we receive only an account identifier
-          and, if they have confirmed it, your email address. You can stop signing in that way from the account page.
+          If you sign in with Google, Apple, Discord, Twitch, Microsoft, Steam, Facebook, X or GitHub, that happens on their own page: we never see your
+          password there, and we receive only an account identifier and, if they have confirmed it, your email address. You can stop signing in that way from the account page.
         </p>
         <p>
           If you connect a Riot account, we keep its Riot ID, server and Riot&apos;s player identifier, and show you its rank, champion mastery, challenge standing,

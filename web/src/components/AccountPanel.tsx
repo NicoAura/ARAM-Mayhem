@@ -29,8 +29,48 @@ type Account = {
   logins: { provider: Provider; name: string; email: string | null }[];
 };
 
-type Provider = "google" | "apple";
-const PROVIDER_NAMES: Record<Provider, string> = { google: "Google", apple: "Apple" };
+type Provider = "google" | "apple" | "discord" | "twitch" | "microsoft" | "steam" | "facebook" | "x" | "github";
+const PROVIDER_NAMES: Record<Provider, string> = {
+  google: "Google",
+  apple: "Apple",
+  discord: "Discord",
+  twitch: "Twitch",
+  microsoft: "Microsoft",
+  steam: "Steam",
+  facebook: "Facebook",
+  x: "X",
+  github: "GitHub",
+};
+// Shown as buttons; the rest sit under "More".
+const MAIN: Provider[] = ["google", "apple", "discord", "twitch"];
+
+/** Buttons for the sign-in services that are switched on: Riot and the main ones, then a "More" menu. */
+function ProviderButtons({ providers, rso, mode }: { providers: Provider[]; rso: boolean; mode: "signin" | "connect" }) {
+  const main = providers.filter((p) => MAIN.includes(p));
+  const more = providers.filter((p) => !MAIN.includes(p));
+  const label = (name: string) => (mode === "signin" ? `Continue with ${name}` : `Connect ${name}`);
+  const link = (p: Provider) => (
+    <a key={p} className="btn ghost acct-provider" href={`/api/account/oauth/${p}/start?mode=${mode}`}>
+      {label(PROVIDER_NAMES[p])}
+    </a>
+  );
+  return (
+    <>
+      {rso && (
+        <a className="btn ghost acct-provider" href={`/api/account/rso/start?mode=${mode}`}>
+          {label("Riot")}
+        </a>
+      )}
+      {main.map(link)}
+      {more.length > 0 && (
+        <details className="acct-more">
+          <summary>More ways to {mode === "signin" ? "sign in" : "connect"}</summary>
+          <div>{more.map(link)}</div>
+        </details>
+      )}
+    </>
+  );
+}
 
 type Msg = { kind: "ok" | "error"; text: string } | null;
 
@@ -173,16 +213,7 @@ function SignIn({ onDone, rso, providers }: { onDone: () => Promise<void>; rso: 
           Sign in with a passkey
         </button>
       )}
-      {providers.map((p) => (
-        <a key={p} className="btn ghost acct-passkey" href={`/api/account/oauth/${p}/start?mode=signin`}>
-          Continue with {PROVIDER_NAMES[p]}
-        </a>
-      ))}
-      {rso && (
-        <a className="btn ghost acct-passkey" href="/api/account/rso/start?mode=signin">
-          Sign in with Riot
-        </a>
-      )}
+      <ProviderButtons providers={providers} rso={rso} mode="signin" />
       <Note msg={msg} />
       <p className="acct-hint">
         {signup
@@ -323,8 +354,8 @@ function ProvidersCard({ account, refresh }: { account: Account; refresh: () => 
 
   return (
     <section className="card acct-card">
-      <h2>Google and Apple</h2>
-      <p className="acct-hint">Sign in to this account with your Google or Apple account instead of a password.</p>
+      <h2>Other ways to sign in</h2>
+      <p className="acct-hint">Sign in to this account with another service you use, instead of a password.</p>
       {account.logins.length > 0 && (
         <ul className="acct-list">
           {account.logins.map((l) => (
@@ -340,11 +371,7 @@ function ProvidersCard({ account, refresh }: { account: Account; refresh: () => 
           ))}
         </ul>
       )}
-      {missing.map((p) => (
-        <a key={p} className="btn ghost" href={`/api/account/oauth/${p}/start?mode=connect`}>
-          Connect {PROVIDER_NAMES[p]}
-        </a>
-      ))}
+      <ProviderButtons providers={missing} rso={false} mode="connect" />
       <Note msg={msg} />
     </section>
   );

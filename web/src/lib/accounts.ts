@@ -171,7 +171,7 @@ export async function accountView(a: SessionAccount) {
     // A password can be replaced without the old one right after a passkey sign-in (the "forgot password" route).
     passkeySession: a.method === "passkey" && Date.now() - a.created < 15 * 60_000,
     rso: rsoEnabled(),
-    // Google and Apple: the ones switched on, and the ones this account signs in with.
+    // Other sign-in services: the ones switched on, and the ones this account signs in with.
     providers: enabledProviders(),
     logins: logins.results.map((l) => ({ provider: l.provider, name: PROVIDER_NAMES[l.provider] ?? l.provider, email: l.email })),
   };
@@ -272,18 +272,18 @@ export async function waysIn(id: string, without: "riot" | "passkey" | Provider,
         (SELECT COUNT(*) FROM logins WHERE account = accounts.id AND provider IS NOT ?) AS logins
        FROM accounts WHERE id = ?`,
     )
-    .bind(without === "passkey" ? (passkeyId ?? "") : null, without === "google" || without === "apple" ? without : null, id)
+    .bind(without === "passkey" ? (passkeyId ?? "") : null, without !== "riot" && without !== "passkey" ? without : null, id)
     .first<{ pw: number; riot: number; keys: number; logins: number }>();
   if (!row) return 0;
   const riot = without !== "riot" && row.riot && rsoEnabled() ? 1 : 0;
   return row.pw + riot + row.keys + row.logins;
 }
 
-// ---- Sign in with Google or Apple (lib/oauth.ts) ----
+// ---- Sign in with Google, Apple, Discord and the rest (lib/oauth.ts) ----
 
 const MISMATCH = (p: Provider) => `That ${PROVIDER_NAMES[p]} account already signs in to a different DeepARAM account.`;
 
-/** Signs in with Google or Apple: the site account it opens, or a new one for it. Never joins an existing account by email. */
+/** Signs in with another service: the site account it opens, or a new one for it. Never joins an existing account by email. */
 export async function providerSignIn(p: Provider, who: Identity): Promise<{ id: string; owner: boolean }> {
   const d = await db();
   const row = await d
@@ -300,13 +300,13 @@ export async function providerSignIn(p: Provider, who: Identity): Promise<{ id: 
   return { id, owner: false };
 }
 
-/** Adds Google or Apple as a way into the signed-in account. */
+/** Adds another service as a way into the signed-in account. */
 export async function connectProvider(id: string, p: Provider, who: Identity) {
   const d = await db();
   const other = await d.prepare("SELECT account FROM logins WHERE provider = ? AND subject = ?").bind(p, who.subject).first<{ account: string }>();
   if (other && other.account !== id) throw new AccountError(MISMATCH(p), 409);
   await d.batch([
-    // One Google and one Apple account per site account.
+    // One account per service per site account.
     d.prepare("DELETE FROM logins WHERE account = ? AND provider = ?").bind(id, p),
     d.prepare("INSERT INTO logins (provider, subject, account, email, created_at) VALUES (?, ?, ?, ?, datetime('now'))").bind(p, who.subject, id, who.email),
   ]);

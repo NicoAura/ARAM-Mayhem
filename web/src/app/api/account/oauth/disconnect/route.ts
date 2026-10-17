@@ -2,7 +2,7 @@ import { body, handle, json } from "@/lib/account-route";
 import { AccountError, disconnectProvider, requireAccount } from "@/lib/accounts";
 import { isProvider } from "@/lib/oauth";
 
-// POST /api/account/oauth/disconnect {provider} → stops Google or Apple signing in to this account.
+// POST /api/account/oauth/disconnect {provider} → stops another service signing in to this account.
 export const dynamic = "force-dynamic";
 
 export const POST = handle(async (req) => {

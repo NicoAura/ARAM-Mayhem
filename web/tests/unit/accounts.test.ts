@@ -89,7 +89,7 @@ describe("Sign in with Apple's client secret", () => {
     }) as typeof fetch;
     try {
       const { exchange } = await import("@/lib/oauth");
-      await expect(exchange("apple", "https://example.com", "code", "n")).rejects.toThrow(); // no id token in the fake answer
+      await expect(exchange("apple", { origin: "https://example.com", code: "code", nonce: "n" })).rejects.toThrow(); // no id token in the fake answer
     } finally {
       globalThis.fetch = realFetch;
     }
@@ -99,5 +99,64 @@ describe("Sign in with Apple's client secret", () => {
     expect(dec(body)).toMatchObject({ iss: "TEAM", sub: "com.example.web", aud: "https://appleid.apple.com" });
     const raw = Uint8Array.from(atob(sig.replace(/-/g, "+").replace(/_/g, "/").padEnd(Math.ceil(sig.length / 4) * 4, "=")), (c) => c.charCodeAt(0));
     expect(await crypto.subtle.verify({ name: "ECDSA", hash: "SHA-256" }, pair.publicKey, raw, new TextEncoder().encode(`${head}.${body}`))).toBe(true);
+  });
+});
+
+describe("other sign-in services", async () => {
+  const { readIdToken, steamIdentity, exchange, authorizeUrl } = await import("@/lib/oauth");
+  const token = (claims: Record<string, unknown>) => `x.${btoa(JSON.stringify(claims)).replace(/=+$/, "")}.y`;
+  const base = { aud: "client", exp: Date.now() / 1000 + 60, nonce: "n1", sub: "abc", email: "a@b.co", email_verified: true };
+
+  it("accepts Twitch and any Microsoft tenant, and never trusts Microsoft's email", () => {
+    expect(readIdToken("twitch", token({ ...base, iss: "https://id.twitch.tv/oauth2" }), "client", "n1").email).toBe("a@b.co");
+    const ms = readIdToken("microsoft", token({ ...base, iss: "https://login.microsoftonline.com/9188040d-6c67-4c5b-b112-36a304b66dad/v2.0" }), "client", "n1");
+    expect(ms).toEqual({ subject: "abc", email: null });
+    expect(() => readIdToken("microsoft", token({ ...base, iss: "https://evil.example/v2.0" }), "client", "n1")).toThrow();
+  });
+
+  it("asks X for PKCE with the nonce as the verifier", () => {
+    const url = new URL(authorizeUrl("x", "https://deeparam.com", "s1", "v".repeat(64)));
+    expect(url.searchParams.get("code_challenge")).toBe("v".repeat(64));
+    expect(url.searchParams.get("redirect_uri")).toBe("https://deeparam.com/api/account/oauth/x/callback");
+  });
+
+  it("reads Discord's user, keeping the email only when Discord confirmed it", async () => {
+    const realFetch = globalThis.fetch;
+    globalThis.fetch = (async (url: string) =>
+      String(url).includes("/token")
+        ? new Response(JSON.stringify({ access_token: "t" }))
+        : new Response(JSON.stringify({ id: "42", email: "P@Q.io", verified: false }))) as typeof fetch;
+    try {
+      expect(await exchange("discord", { origin: "https://deeparam.com", code: "c", nonce: "n" })).toEqual({ subject: "42", email: null });
+    } finally {
+      globalThis.fetch = realFetch;
+    }
+  });
+
+  it("checks a Steam answer with Steam and reads the Steam id", async () => {
+    const q = new URLSearchParams({
+      state: "s1",
+      "openid.mode": "id_res",
+      "openid.return_to": "https://deeparam.com/api/account/oauth/steam/callback?state=s1",
+      "openid.claimed_id": "https://steamcommunity.com/openid/id/76561197960287930",
+      "openid.sig": "x",
+    });
+    const realFetch = globalThis.fetch;
+    let sent = "";
+    let valid = true;
+    globalThis.fetch = (async (_u: string, init: RequestInit) => {
+      sent = String(init.body);
+      return new Response(`ns:http://specs.openid.net/auth/2.0\nis_valid:${valid}\n`);
+    }) as typeof fetch;
+    try {
+      expect(await steamIdentity("https://deeparam.com", q, "s1")).toEqual({ subject: "76561197960287930", email: null });
+      expect(sent).toContain("openid.mode=check_authentication");
+      valid = false;
+      await expect(steamIdentity("https://deeparam.com", q, "s1")).rejects.toThrow();
+      valid = true;
+      await expect(steamIdentity("https://deeparam.com", q, "other-state")).rejects.toThrow();
+    } finally {
+      globalThis.fetch = realFetch;
+    }
   });
 });

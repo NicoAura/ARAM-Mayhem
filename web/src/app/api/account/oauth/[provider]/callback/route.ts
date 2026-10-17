@@ -2,9 +2,9 @@ import { NextRequest, NextResponse } from "next/server";
 import { OAUTH_COOKIE } from "@/lib/account-cookies";
 import { isSecure } from "@/lib/account-route";
 import { AccountError, connectProvider, providerSignIn, startSession } from "@/lib/accounts";
-import { exchange, isProvider, PROVIDER_NAMES, providerEnabled } from "@/lib/oauth";
+import { exchange, isProvider, steamIdentity, PROVIDER_NAMES, providerEnabled } from "@/lib/oauth";
 
-// GET (Google) or POST (Apple) /api/account/oauth/<provider>/callback → the provider sends the browser back
+// GET (POST for Apple) /api/account/oauth/<provider>/callback → the provider sends the browser back
 // here. "connect" adds it as a way into the signed-in account; "signin" signs in to the account it opens,
 // or creates one. Either way the browser lands on /account.
 export const dynamic = "force-dynamic";
@@ -23,10 +23,12 @@ async function finish(req: NextRequest, provider: string, q: URLSearchParams) {
   const name = PROVIDER_NAMES[provider];
   if (q.get("error")) return done(`${name} sign-in was cancelled.`);
   const [p, state, nonce, mode] = (req.cookies.get(OAUTH_COOKIE)?.value ?? "").split(".");
-  const code = q.get("code");
+  // Steam (OpenID 2.0) sends no code: its whole answer is checked with Steam instead.
+  const code = provider === "steam" ? "-" : q.get("code");
   if (p !== provider || !state || !nonce || !code || q.get("state") !== state) return done("That sign-in link expired. Try again.");
   try {
-    const who = await exchange(provider, req.nextUrl.origin, code, nonce);
+    const origin = req.nextUrl.origin;
+    const who = provider === "steam" ? await steamIdentity(origin, q, state) : await exchange(provider, { origin, code, nonce });
     const connectTo = mode?.startsWith("connect:") ? mode.slice(8) : null;
     if (connectTo) {
       await connectProvider(connectTo, provider, who);

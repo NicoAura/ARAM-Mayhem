@@ -22,7 +22,7 @@ function ruleFor(req: NextRequest): Rule | null {
   if (path === "/api/log") return LOG;
   if (path === "/api/games") return SHARE;
   if (path.startsWith("/api/account")) {
-    // Sign in with Riot, Google and Apple start and finish with GETs (Apple's finish is a POST).
+    // Sign in with Riot, Google, Apple and the rest start and finish with GETs (Apple's finish is a POST).
     if (path.startsWith("/api/account/rso/") || path.startsWith("/api/account/oauth/")) return SIGNIN;
     if (req.method === "GET") return null;
     // Saving Favorites and settings happens as you click; the rest is signing in and account changes.
