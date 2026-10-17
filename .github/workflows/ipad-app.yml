@@ -28,8 +28,7 @@ jobs:
         run: |
           xcodebuild build -project DeepARAMPad.xcodeproj -scheme DeepARAM \
             -destination 'generic/platform=iOS Simulator' \
-            CODE_SIGNING_ALLOWED=NO > build.log 2>&1
-          status=$?
+            CODE_SIGNING_ALLOWED=NO > build.log 2>&1 && status=0 || status=$?
           grep -E "error:" -A4 build.log | head -150 || true
           tail -15 build.log
           exit $status
