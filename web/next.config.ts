@@ -72,14 +72,19 @@ const nextConfig: NextConfig = {
           destination: "/tier-list?tab=augments",
           permanent: true,
         })),
-        // The rest of the Augments page (by icon, draft practice) is on the Tier List too; ?tab= carries over.
+        // Other Augments page tabs carry over to the Tier List.
         { source: "/augments", has: [{ type: "query" as const, key: "tab", value: "(?<tab>.+)" }], destination: "/tier-list?tab=:tab", permanent: true },
         { source: "/augments", destination: "/tier-list?tab=augments", permanent: true },
+        // Items is a Tier List tab now; its filters carry over under their own names. Item pages stay at /items/<slug>.
+        { source: "/items", has: [{ type: "query" as const, key: "tag", value: "(?<tag>.+)" }], destination: "/tier-list?tab=items&itag=:tag", permanent: true },
+        { source: "/items", destination: "/tier-list?tab=items", permanent: true },
         // The build tools (Build Editor, Team Builder) were removed; their addresses open the Tier List.
         ...["/builds", "/builder", "/synergy"].map((source) => ({ source, destination: "/tier-list", permanent: true })),
         // Infinite Ryze is a tab on the Simulator page now.
         { source: "/simulator/infinite-ryze", destination: "/simulator?tab=infinite-ryze", permanent: true },
-        { source: "/draft", destination: "/tier-list?tab=draft", permanent: true },
+        // Augments by icon and Draft practice were removed; their tabs open the augment tier list.
+        { source: "/tier-list", has: [{ type: "query" as const, key: "tab", value: "groups|draft" }], destination: "/tier-list?tab=augments", permanent: true },
+        { source: "/draft", destination: "/tier-list?tab=augments", permanent: true },
         // Pages that once existed for another mode's stand-ins of a champion.
         { source: "/champions/Jade_:alias", destination: "/champions/:alias", permanent: true },
       ]);

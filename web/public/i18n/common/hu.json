@@ -96,7 +96,7 @@
  "Find a champion": "Keress egy hőst",
  "Type a name to jump to their build, augments and win rate.": "Írj be egy nevet, hogy a buildjére, bővítéseire és győzelmi arányára ugorj.",
  "Every champion and augment ranked on the live patch. Pick older patches or play the timeline.": "Minden hős és bővítés rangsorolva az aktuális frissítésen. Válassz régebbi frissítéseket, vagy játszd le az idővonalat.",
- "Simulated teamfights and builds for every champion. Try your own build in the Build Editor too.": "Szimulált csapatharcok és buildek minden hőshöz. Próbáld ki a saját buildedet is a buildszerkesztőben.",
+ "Simulated teamfights and builds for every champion.": "Szimulált csapatharcok és buildek minden hőshöz.",
  "Search anything": "Keress bármit",
  "Champions, augments, items and pages. Press / or Ctrl+K from anywhere.": "Hősök, bővítések, tárgyak és oldalak. Nyomd meg bárhol a / vagy a Ctrl+K billentyűt.",
  "Make it yours": "Szabd magadra",
@@ -151,5 +151,11 @@
  "Copy this link": "Másold ki ezt a linket",
  "Page detail": "Oldal részletessége",
  "Simple": "Egyszerű",
- "Detailed": "Részletes"
+ "Detailed": "Részletes",
+ "Best duos": "Legjobb párosok",
+ "Most simulated damage": "Legtöbb szimulált sebzés",
+ "Simulator →": "Szimulátor →",
+ "{n} DPS": "{n} DPS",
+ "Patch {patch} recap": "{patch} frissítés összefoglalója",
+ "The Kitchen →": "A Konyha →"
 }

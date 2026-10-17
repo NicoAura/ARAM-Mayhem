@@ -89,5 +89,7 @@
  "This browser can't copy images. Save it instead.": "Ce navigateur ne peut pas copier d'images. Enregistrez-la plutôt.",
  "Copy image": "Copier l'image",
  "Save": "Enregistrer",
- "Close": "Fermer"
+ "Close": "Fermer",
+ "Win rate delta": "Écart de victoires",
+ "Pair win rate minus the average of the two champions' own win rates. Above zero means they win more together.": "Taux de victoire du duo moins la moyenne des taux de victoire propres aux deux champions. Au-dessus de zéro, ils gagnent plus ensemble."
 }

@@ -96,7 +96,7 @@
  "Find a champion": "Find a champion",
  "Type a name to jump to their build, augments and win rate.": "Type a name to jump to their build, augments and win rate.",
  "Every champion and augment ranked on the live patch. Pick older patches or play the timeline.": "Every champion and augment ranked on the live patch. Pick older patches or play the timeline.",
- "Simulated teamfights and builds for every champion. Try your own build in the Build Editor too.": "Simulated teamfights and builds for every champion. Try your own build in the Build Editor too.",
+ "Simulated teamfights and builds for every champion.": "Simulated teamfights and builds for every champion.",
  "Search anything": "Search anything",
  "Champions, augments, items and pages. Press / or Ctrl+K from anywhere.": "Champions, augments, items and pages. Press / or Ctrl+K from anywhere.",
  "Make it yours": "Make it yours",
@@ -151,5 +151,11 @@
  "Copy this link": "Copy this link",
  "Page detail": "Page detail",
  "Simple": "Simple",
- "Detailed": "Detailed"
+ "Detailed": "Detailed",
+ "Best duos": "Best duos",
+ "Most simulated damage": "Most simulated damage",
+ "Simulator →": "Simulator →",
+ "{n} DPS": "{n} DPS",
+ "Patch {patch} recap": "Patch {patch} recap",
+ "The Kitchen →": "The Kitchen →"
 }

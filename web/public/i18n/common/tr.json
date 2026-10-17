@@ -96,7 +96,7 @@
  "Find a champion": "Bir şampiyon bul",
  "Type a name to jump to their build, augments and win rate.": "Dizilimine, güçlendirmelerine ve kazanma oranına gitmek için bir ad yaz.",
  "Every champion and augment ranked on the live patch. Pick older patches or play the timeline.": "Güncel yamada sıralanan her şampiyon ve güçlendirme. Eski yamaları seç ya da zaman çizelgesini oynat.",
- "Simulated teamfights and builds for every champion. Try your own build in the Build Editor too.": "Her şampiyon için simüle edilmiş takım savaşları ve dizilimler. Kendi dizilimini dizilim düzenleyicide de dene.",
+ "Simulated teamfights and builds for every champion.": "Her şampiyon için simüle edilmiş takım savaşları ve dizilimler.",
  "Search anything": "Her şeyi ara",
  "Champions, augments, items and pages. Press / or Ctrl+K from anywhere.": "Şampiyonlar, güçlendirmeler, eşyalar ve sayfalar. Her yerden / veya Ctrl+K tuşuna bas.",
  "Make it yours": "Kendine göre ayarla",
@@ -151,5 +151,11 @@
  "Copy this link": "Bu bağlantıyı kopyala",
  "Page detail": "Sayfa ayrıntısı",
  "Simple": "Basit",
- "Detailed": "Ayrıntılı"
+ "Detailed": "Ayrıntılı",
+ "Best duos": "En iyi ikililer",
+ "Most simulated damage": "En yüksek simüle hasar",
+ "Simulator →": "Simülatör →",
+ "{n} DPS": "{n} DPS",
+ "Patch {patch} recap": "{patch} Yaması özeti",
+ "The Kitchen →": "Mutfak →"
 }

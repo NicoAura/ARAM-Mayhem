@@ -7,5 +7,10 @@ import { useT } from "@/components/I18n";
 
 export default function ChangeName({ name }: { name: string }) {
   const t = useT("/embed/champions/i18n");
-  return t(name.replace(/([a-z])([A-Z])/g, "$1 $2").replace(/([A-Z])([A-Z][a-z])/g, "$1 $2").replace(/_/g, " "));
+  return t(
+    name
+      .replace(/([a-z])([A-Z])/g, "$1 $2")
+      .replace(/([A-Z])([A-Z][a-z])/g, "$1 $2")
+      .replace(/_/g, " "),
+  );
 }

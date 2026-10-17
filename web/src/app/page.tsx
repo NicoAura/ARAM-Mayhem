@@ -1,10 +1,18 @@
 import Link from "next/link";
 import { text } from "@/lib/content";
-import { chefsSpecial, statsDate, counts, kitchenBuilds, livePatch, liveTiers, topAugments } from "@/lib/highlights";
+import { chefsSpecial, statsDate, counts, kitchenBuilds, livePatch, liveTiers, topAugments, topDps } from "@/lib/highlights";
+import { duoRows } from "@/lib/duos";
+import { recap, recapPatches } from "@/lib/patches";
+import { readRepoJson } from "@/lib/repo-data";
+import type { PatchSchedule } from "@/lib/patch-schedule";
+import PatchCountdown from "@/components/PatchCountdown";
 import { championSplash } from "@/lib/champions";
-import { ChampionJump, KitchenPick, TierSnapshot } from "@/components/HomeWidgets";
+import { KitchenPick, TierSnapshot } from "@/components/HomeWidgets";
 import { augmentHref } from "@/lib/augments";
 import { KITCHEN } from "@/lib/tabs";
+import championNames from "@/data/champion-names.json";
+
+const NAMES = championNames as Record<string, string>;
 import RecentPlayed from "@/components/RecentPlayed";
 import { LocalDate, ModeName, Name, T } from "@/components/I18n";
 
@@ -12,6 +20,13 @@ import { LocalDate, ModeName, Name, T } from "@/components/I18n";
 const Icon = ({ src }: { src: string }) => <img className="icon" src={src} alt="" width={24} height={24} loading="lazy" />;
 
 const pct = (v: number) => `${(v * 100).toFixed(1)}%`;
+
+// The best-ranked pairs on the live patch (the Tier List's Duos tab ranks them).
+const topDuos = (n = 5) =>
+  duoRows()
+    .filter((d) => d.rank !== null)
+    .sort((a, b) => a.rank! - b.rank!)
+    .slice(0, n);
 
 export default function Home() {
   const tiers = liveTiers();
@@ -21,6 +36,11 @@ export default function Home() {
   const builds = special ? [] : kitchenBuilds();
   const n = counts();
   const date = statsDate();
+  const duos = topDuos();
+  const dps = topDps();
+  const schedule = readRepoJson<PatchSchedule>("data/patch-schedule.json");
+  const last = recapPatches()[0];
+  const latest = last ? recap(last) : null;
 
   return (
     <>
@@ -46,7 +66,6 @@ export default function Home() {
         <p className="lede">
           <T>{text("home.lede")}</T>
         </p>
-        {tiers.length > 0 && <ChampionJump champs={tiers} />}
       </section>
 
       <div className="bento">
@@ -97,23 +116,77 @@ export default function Home() {
             </div>
           </section>
         )}
+        {duos.length > 0 && (
+          <section className="card span-4" data-accent="tier">
+            <div className="card-head">
+              <h2>
+                <T>Best duos</T>
+              </h2>
+              <Link href="/tier-list?tab=duos">
+                <T>All →</T>
+              </Link>
+            </div>
+            <div className="rank home-duos">
+              {duos.map((d) => (
+                <Link key={d.pair} href={`/champions/${d.a}`}>
+                  <span className="home-duo-icons">
+                    <Icon src={`/icons/champions/${d.a}.webp`} />
+                    <Icon src={`/icons/champions/${d.b}.webp`} />
+                  </span>
+                  <span className="rank-name">
+                    <Name kind="champions" id={d.a}>
+                      {NAMES[d.a] ?? d.a}
+                    </Name>
+                    {" + "}
+                    <Name kind="champions" id={d.b}>
+                      {NAMES[d.b] ?? d.b}
+                    </Name>
+                  </span>
+                  <span className="rank-v">{pct(d.win_rate)}</span>
+                </Link>
+              ))}
+            </div>
+          </section>
+        )}
+        {dps.length > 0 && (
+          <section className="card span-4" data-accent="sim">
+            <div className="card-head">
+              <h2>
+                <T>Most simulated damage</T>
+              </h2>
+              <Link href="/simulator">
+                <T>Simulator →</T>
+              </Link>
+            </div>
+            <div className="rank home-dps">
+              {dps.map((c, i) => (
+                <Link key={c.id} href={`/champions/${c.id}`}>
+                  <span className="rank-i">{i + 1}</span>
+                  <Icon src={`/icons/champions/${c.id}.webp`} />
+                  <span className="rank-name">
+                    <Name kind="champions" id={c.id}>
+                      {c.name}
+                    </Name>
+                  </span>
+                  <span className="rank-v">
+                    <T v={{ n: Math.round(c.dps).toLocaleString("en-US") }}>{"{n} DPS"}</T>
+                  </span>
+                </Link>
+              ))}
+            </div>
+          </section>
+        )}
         {special && (
-          <section className="card span-all feature chef-special" data-accent="lab">
+          <section className="card span-4 feature chef-special" data-accent="lab">
             <div className="card-head">
               <h2>
                 <T>Today&apos;s Chef Special</T>
-                {special.date && (
-                  <span className="card-note">
-                    {" "}
-                    · <LocalDate iso={`${special.date}T12:00:00Z`} />
-                  </span>
-                )}
               </h2>
               <Link href={special.href}>
                 <T>The Kitchen →</T>
               </Link>
             </div>
-            <div className="kitchen-head">
+            <Link className="kitchen-head" href={special.href}>
               <Icon src={`/icons/champions/${special.champion}.webp`} />
               <div>
                 <p className="eyebrow">
@@ -124,8 +197,7 @@ export default function Home() {
                 </p>
                 <h3>{special.title}</h3>
               </div>
-            </div>
-            <p className="clamp">{special.why}</p>
+            </Link>
             {special.items.length > 0 && (
               <div className="chef-items">
                 {special.items.map((i) =>
@@ -141,24 +213,43 @@ export default function Home() {
                 )}
               </div>
             )}
-            <div className="chips">
-              {special.augments.map((a) => (
-                <span key={a.name} className={`chip ${a.core ? `tier-${a.rarity}` : ""}`}>
-                  {a.name}
-                </span>
-              ))}
-            </div>
+            {special.augments.some((a) => a.core) && (
+              <div className="chips">
+                {special.augments
+                  .filter((a) => a.core)
+                  .map((a) => (
+                    <span key={a.name} className={`chip tier-${a.rarity}`}>
+                      {a.name}
+                    </span>
+                  ))}
+              </div>
+            )}
             {special.winRate !== null && (
               <p className="table-note">
-                {special.champWinRate !== null ? (
-                  <T v={{ wr: pct(special.winRate), all: pct(special.champWinRate), name: special.name }}>
-                    {"Won {wr} of games with this core, against {all} for {name} overall."}
-                  </T>
-                ) : (
-                  <T v={{ wr: pct(special.winRate) }}>{"Won {wr} of games with this core."}</T>
-                )}
-                {special.play && ` ${special.play}`}
+                <T v={{ wr: pct(special.winRate) }}>{"Won {wr} of games with this core."}</T>
               </p>
+            )}
+          </section>
+        )}
+        {schedule && (
+          <section className="card span-all home-patch" data-accent="pbe">
+            <PatchCountdown schedule={schedule} />
+            {latest && (
+              <Link className="home-recap" href={`/patches/${latest.patch}`}>
+                <b>
+                  <T v={{ patch: latest.patch }}>{"Patch {patch} recap"}</T>
+                </b>
+                <span>
+                  {latest.hasAugmentHistory ? (
+                    <T ns="patches" v={{ added: latest.added.length, removed: latest.removed.length, changed: latest.changed.length }}>
+                      {"{added} added · {removed} removed · {changed} changed"}
+                    </T>
+                  ) : (
+                    <T ns="patches">Win rates only</T>
+                  )}
+                </span>
+                <span aria-hidden="true">→</span>
+              </Link>
             )}
           </section>
         )}

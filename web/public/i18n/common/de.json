@@ -96,7 +96,7 @@
  "Find a champion": "Champion finden",
  "Type a name to jump to their build, augments and win rate.": "Gib einen Namen ein, um zu seinem Build, seinen Augments und seiner Siegrate zu springen.",
  "Every champion and augment ranked on the live patch. Pick older patches or play the timeline.": "Jeder Champion und jedes Augment auf dem aktuellen Patch eingestuft. Wähle ältere Patches oder spiele die Zeitleiste ab.",
- "Simulated teamfights and builds for every champion. Try your own build in the Build Editor too.": "Simulierte Teamkämpfe und Builds für jeden Champion. Probiere im Build-Editor auch deinen eigenen Build aus.",
+ "Simulated teamfights and builds for every champion.": "Simulierte Teamkämpfe und Builds für jeden Champion.",
  "Search anything": "Alles durchsuchen",
  "Champions, augments, items and pages. Press / or Ctrl+K from anywhere.": "Champions, Augments, Gegenstände und Seiten. Drücke überall / oder Strg+K.",
  "Make it yours": "Mach es dir passend",
@@ -151,5 +151,11 @@
  "Copy this link": "Diesen Link kopieren",
  "Page detail": "Seitendetails",
  "Simple": "Einfach",
- "Detailed": "Ausführlich"
+ "Detailed": "Ausführlich",
+ "Best duos": "Beste Duos",
+ "Most simulated damage": "Höchster simulierter Schaden",
+ "Simulator →": "Simulator →",
+ "{n} DPS": "{n} DPS",
+ "Patch {patch} recap": "Rückblick auf Patch {patch}",
+ "The Kitchen →": "Die Küche →"
 }

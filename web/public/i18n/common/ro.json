@@ -96,7 +96,7 @@
  "Find a champion": "Găsește un campion",
  "Type a name to jump to their build, augments and win rate.": "Scrie un nume ca să sari la buildul, augmentările și rata lui de victorie.",
  "Every champion and augment ranked on the live patch. Pick older patches or play the timeline.": "Fiecare campion și augmentare clasate pe patchul actual. Alege patchuri mai vechi sau redă cronologia.",
- "Simulated teamfights and builds for every champion. Try your own build in the Build Editor too.": "Lupte în echipă și builduri simulate pentru fiecare campion. Încearcă și propriul build în editorul de builduri.",
+ "Simulated teamfights and builds for every champion.": "Lupte în echipă și builduri simulate pentru fiecare campion.",
  "Search anything": "Caută orice",
  "Champions, augments, items and pages. Press / or Ctrl+K from anywhere.": "Campioni, augmentări, obiecte și pagini. Apasă / sau Ctrl+K de oriunde.",
  "Make it yours": "Personalizează",
@@ -151,5 +151,11 @@
  "Copy this link": "Copiază acest link",
  "Page detail": "Detaliu pagină",
  "Simple": "Simplu",
- "Detailed": "Detaliat"
+ "Detailed": "Detaliat",
+ "Best duos": "Cele mai bune duouri",
+ "Most simulated damage": "Cele mai mari daune simulate",
+ "Simulator →": "Simulator →",
+ "{n} DPS": "{n} DPS",
+ "Patch {patch} recap": "Rezumat patch {patch}",
+ "The Kitchen →": "Bucătăria →"
 }

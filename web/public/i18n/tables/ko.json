@@ -89,5 +89,7 @@
  "This browser can't copy images. Save it instead.": "이 브라우저는 이미지를 복사할 수 없습니다. 대신 저장하세요.",
  "Copy image": "이미지 복사",
  "Save": "저장",
- "Close": "닫기"
+ "Close": "닫기",
+ "Win rate delta": "승률 차이",
+ "Pair win rate minus the average of the two champions' own win rates. Above zero means they win more together.": "듀오 승률에서 두 챔피언 각자의 승률 평균을 뺀 값입니다. 0보다 크면 함께할 때 더 많이 이깁니다."
 }

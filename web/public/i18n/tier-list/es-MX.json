@@ -43,5 +43,6 @@
  "Draft practice": "Práctica de selección",
  "Patch {patch}, with the change since {before}. Pick patches from the list to add or remove them.": "Parche {patch}, con el cambio desde {before}. Elige parches de la lista para agregarlos o quitarlos.",
  "Patch {patch}. Pick patches from the list to add or remove them.": "Parche {patch}. Elige parches de la lista para agregarlos o quitarlos.",
- "{n} patches combined. Pick patches from the list to add or remove them.": "{n} parches combinados. Elige parches de la lista para agregarlos o quitarlos."
+ "{n} patches combined. Pick patches from the list to add or remove them.": "{n} parches combinados. Elige parches de la lista para agregarlos o quitarlos.",
+ "Items": "Objetos"
 }

@@ -38,7 +38,13 @@ export function Panel({
   );
 }
 
-export function Head({ what, cols = ["Win rate", "Pick rate", "Win lift"] }: { what: string; cols?: string[] }) {
+export function Head({
+  what,
+  cols = ["Win rate", "Pick rate", "Win lift"],
+}: {
+  what: string;
+  cols?: string[];
+}) {
   return (
     <div className="cp-th" data-cols={cols.length}>
       <span>
@@ -56,7 +62,17 @@ export function Head({ what, cols = ["Win rate", "Pick rate", "Win lift"] }: { w
   );
 }
 
-export function Row({ rank, cols = 3, children, cells }: { rank: number; cols?: number; children: React.ReactNode; cells: React.ReactNode }) {
+export function Row({
+  rank,
+  cols = 3,
+  children,
+  cells,
+}: {
+  rank: number;
+  cols?: number;
+  children: React.ReactNode;
+  cells: React.ReactNode;
+}) {
   return (
     <div className="cp-row" data-cols={cols}>
       <span className="cp-rk">#{rank}</span>
@@ -66,7 +82,15 @@ export function Row({ rank, cols = 3, children, cells }: { rank: number; cols?: 
   );
 }
 
-export function Cell({ value, label, tone }: { value: React.ReactNode; label: string; tone?: "up" | "down" }) {
+export function Cell({
+  value,
+  label,
+  tone,
+}: {
+  value: React.ReactNode;
+  label: string;
+  tone?: "up" | "down";
+}) {
   return (
     <div className="cp-cell">
       <b className={tone}>{value}</b>
@@ -77,11 +101,21 @@ export function Cell({ value, label, tone }: { value: React.ReactNode; label: st
   );
 }
 
-export const tone = (v: number) => (v > 0.0005 ? "up" : v < -0.0005 ? "down" : undefined);
-export const signed = (v: number) => `${v > 0 ? "+" : ""}${(v * 100).toFixed(1)}%`;
+export const tone = (v: number) =>
+  v > 0.0005 ? "up" : v < -0.0005 ? "down" : undefined;
+export const signed = (v: number) =>
+  `${v > 0 ? "+" : ""}${(v * 100).toFixed(1)}%`;
 
 /** Win rate, pick rate and win lift for one row. */
-export function RatedCells({ r, lift = "Win lift", value }: { r: Rated; lift?: string; value?: number }) {
+export function RatedCells({
+  r,
+  lift = "Win lift",
+  value,
+}: {
+  r: Rated;
+  lift?: string;
+  value?: number;
+}) {
   const l = value ?? r.lift;
   return (
     <>
@@ -92,13 +126,35 @@ export function RatedCells({ r, lift = "Win lift", value }: { r: Rated; lift?: s
   );
 }
 
-export function ItemIcon({ id, info }: { id: number; info: Record<number, { name: string; icon?: string }> }) {
+export function ItemIcon({
+  id,
+  info,
+}: {
+  id: number;
+  info: Record<number, { name: string; icon?: string }>;
+}) {
   const it = info[id];
   if (!it?.icon) return null;
-  return <img className="cp-icon" src={it.icon} alt={it.name} title={it.name} width={36} height={36} loading="lazy" />;
+  return (
+    <img
+      className="cp-icon"
+      src={it.icon}
+      alt={it.name}
+      title={it.name}
+      width={36}
+      height={36}
+      loading="lazy"
+    />
+  );
 }
 
-export function ItemName({ id, info }: { id: number; info: Record<number, { name: string }> }) {
+export function ItemName({
+  id,
+  info,
+}: {
+  id: number;
+  info: Record<number, { name: string }>;
+}) {
   return (
     <span className="cp-name">
       <Name kind="items" id={id}>
@@ -118,7 +174,9 @@ export function Keys({ keys }: { keys: string[] }) {
               ›
             </span>
           )}
-          <b className="cp-key">{k}</b>
+          <b className="cp-key" data-k={k}>
+            {k}
+          </b>
         </span>
       ))}
     </span>

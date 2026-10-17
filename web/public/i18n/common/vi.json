@@ -96,7 +96,7 @@
  "Find a champion": "Tìm tướng",
  "Type a name to jump to their build, augments and win rate.": "Nhập tên để đến lối lên đồ, Lõi Nâng Cấp và tỉ lệ thắng của tướng đó.",
  "Every champion and augment ranked on the live patch. Pick older patches or play the timeline.": "Mọi tướng và Lõi Nâng Cấp được xếp hạng trên phiên bản hiện tại. Chọn phiên bản cũ hơn hoặc phát dòng thời gian.",
- "Simulated teamfights and builds for every champion. Try your own build in the Build Editor too.": "Giao tranh tổng và lối lên đồ mô phỏng cho mọi tướng. Thử cả lối lên đồ của bạn trong trình chỉnh lối lên đồ.",
+ "Simulated teamfights and builds for every champion.": "Giao tranh tổng và lối lên đồ mô phỏng cho mọi tướng.",
  "Search anything": "Tìm mọi thứ",
  "Champions, augments, items and pages. Press / or Ctrl+K from anywhere.": "Tướng, Lõi Nâng Cấp, trang bị và trang. Nhấn / hoặc Ctrl+K ở bất cứ đâu.",
  "Make it yours": "Tùy chỉnh theo ý bạn",
@@ -151,5 +151,11 @@
  "Copy this link": "Sao chép liên kết này",
  "Page detail": "Mức chi tiết trang",
  "Simple": "Đơn giản",
- "Detailed": "Chi tiết"
+ "Detailed": "Chi tiết",
+ "Best duos": "Cặp đôi mạnh nhất",
+ "Most simulated damage": "Sát thương mô phỏng cao nhất",
+ "Simulator →": "Mô phỏng →",
+ "{n} DPS": "{n} DPS",
+ "Patch {patch} recap": "Tóm tắt phiên bản {patch}",
+ "The Kitchen →": "Nhà Bếp →"
 }

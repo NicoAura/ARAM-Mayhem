@@ -96,7 +96,7 @@
  "Find a champion": "ابحث عن بطل",
  "Type a name to jump to their build, augments and win rate.": "اكتب اسمًا للانتقال إلى بنيته وتعزيزاته ونسبة فوزه.",
  "Every champion and augment ranked on the live patch. Pick older patches or play the timeline.": "كل بطل وتعزيز مصنف على التحديث الحالي. اختر تحديثات أقدم أو شغّل الخط الزمني.",
- "Simulated teamfights and builds for every champion. Try your own build in the Build Editor too.": "معارك فرق وبنيات محاكاة لكل بطل. جرّب بنيتك الخاصة أيضًا في محرر البنيات.",
+ "Simulated teamfights and builds for every champion.": "معارك فرق وبنيات محاكاة لكل بطل.",
  "Search anything": "ابحث عن أي شيء",
  "Champions, augments, items and pages. Press / or Ctrl+K from anywhere.": "الأبطال والتعزيزات والعناصر والصفحات. اضغط / أو Ctrl+K من أي مكان.",
  "Make it yours": "اجعله على ذوقك",
@@ -151,5 +151,11 @@
  "Copy this link": "انسخ هذا الرابط",
  "Page detail": "تفاصيل الصفحة",
  "Simple": "بسيط",
- "Detailed": "مفصّل"
+ "Detailed": "مفصّل",
+ "Best duos": "أفضل الثنائيات",
+ "Most simulated damage": "أعلى ضرر في المحاكي",
+ "Simulator →": "المحاكي ←",
+ "{n} DPS": "{n} DPS",
+ "Patch {patch} recap": "ملخص التحديث {patch}",
+ "The Kitchen →": "المطبخ ←"
 }

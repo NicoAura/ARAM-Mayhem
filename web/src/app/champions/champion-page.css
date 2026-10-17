@@ -445,9 +445,23 @@ a.cp-what:hover .cp-name,
   color: var(--muted);
   font: 700 0.72rem var(--mono);
 }
-.cp-levels span[data-k="R"] {
-  background: var(--accent-soft);
-  color: var(--accent);
+/* Q, W, E and R keep the site's skill colours (globals.css .skill-key): blue, green, violet, amber. */
+[data-k="Q"] {
+  --skill: #4ea8ff;
+}
+[data-k="W"] {
+  --skill: #3ccf8e;
+}
+[data-k="E"] {
+  --skill: #b48cff;
+}
+[data-k="R"] {
+  --skill: #f2b544;
+}
+.cp-key[data-k],
+.cp-levels span[data-k] {
+  background: var(--skill, var(--raised));
+  color: #0b0f14;
 }
 .cp-more {
   display: block;

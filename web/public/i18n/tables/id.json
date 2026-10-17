@@ -89,5 +89,7 @@
  "This browser can't copy images. Save it instead.": "Browser ini tidak bisa menyalin gambar. Simpan saja gambarnya.",
  "Copy image": "Salin gambar",
  "Save": "Simpan",
- "Close": "Tutup"
+ "Close": "Tutup",
+ "Win rate delta": "Selisih win rate",
+ "Pair win rate minus the average of the two champions' own win rates. Above zero means they win more together.": "Win rate pasangan dikurangi rata-rata win rate masing-masing champion. Di atas nol berarti mereka lebih sering menang bersama."
 }

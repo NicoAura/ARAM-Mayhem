@@ -43,5 +43,6 @@
  "Draft practice": "选择练习",
  "Patch {patch}, with the change since {before}. Pick patches from the list to add or remove them.": "版本 {patch}，含自 {before} 以来的变化。从列表中选择版本以添加或移除。",
  "Patch {patch}. Pick patches from the list to add or remove them.": "版本 {patch}。从列表中选择版本以添加或移除。",
- "{n} patches combined. Pick patches from the list to add or remove them.": "合并 {n} 个版本。从列表中选择版本以添加或移除。"
+ "{n} patches combined. Pick patches from the list to add or remove them.": "合并 {n} 个版本。从列表中选择版本以添加或移除。",
+ "Items": "装备"
 }

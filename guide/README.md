@@ -8,13 +8,14 @@ The site's **Info** tab (formerly Guide) (`/tools/guide`): how ARAM Mayhem works
   games (queue 2400 in `queueIds`). A Riot ID lookup appears once the site has a `/api/riot/challenges` route
   that returns Riot's `lol/challenges/v1/player-data/{puuid}` (`challenges: [{challengeId, level, value, percentile}]`).
 - **Rules**: Mayhem's mode-wide settings from map12.bin (`Kiwi_Balance`, `Kiwi_OnFireBuff`, `Kiwi_ComboBreaker`,
-  `ARAM_Augment_Manager`), the summoner spells allowed in Mayhem, and augments that add one.
+  `ARAM_Augment_Manager`) and augments that add a summoner spell.
 - **Items**: items whose `DataValuesModeOverride` (Kiwi, else ARAM) differs from Summoner's Rift, from items.cdtb.bin.
-- **Augment history**: every augment change from patch 16.2 (the first patch whose kiwi.bin CommunityDragon exports)
-  to the live patch: pool additions and removals, tier changes and each changed number. Built by `build_history.py`
-  from CommunityDragon's per-patch folders; never reads PBE.
-- **Archive**: features from past Mayhem seasons. Augment Sets: names and bonus text still in the string table.
-- **Maps & extras**: the Howling Abyss map skins (minimaps), Mayhem-only items and Mayhem-only units.
+- **Extras**: Mayhem-only items and Mayhem-only units.
+
+The page no longer shows queue ids, map skins, the summoner spell list, Augment history or the Archive (Nico,
+2026-10-17); `data.js` still carries that data. `history.js` (every augment change from patch 16.2 to the live patch,
+built by `build_history.py` from CommunityDragon's per-patch folders, never PBE) isn't loaded by the page any more:
+the site's Patch Recaps read it (web/src/lib/patches.ts), so keep building it.
 
 Rebuild after a patch: `python3 -m pip install xxhash && python3 guide/build_data.py && python3 guide/build_history.py`
 (writes `data.js` and `history.js`; both read the live patch). Page text doesn't mention where data comes from (Nico, 2026-10-16).
@@ -97,8 +98,7 @@ reloads when it changes. `i18n.js` (the same file is in `champions/`) loads two 
   this folder and `champions/`) from the `data-t` elements in `index.html`, the `t("...")` calls and labels in
   `app.js`, the hand-written text in `build_data.py` and the value names in the data; every other language maps the
   same keys. Add a new string to every language file in the same change (tests/data/test_data_i18n.py checks).
-- `i18n/data/<code>.json`: the game text in that language, merged into `GUIDE_DATA` by the page, plus every augment's
-  name by id for the history tab. `python3 guide/build_data.py --languages` builds the page once per client language
+- `i18n/data/<code>.json`: the game text in that language, merged into `GUIDE_DATA` by the page. `python3 guide/build_data.py --languages` builds the page once per client language
   and keeps what differs from English at text keys (`overlay()`; list items are matched by id, key or icon). It also
   writes `i18n/augments/<code>.json`: each live augment's name, text and tooltip, for the site's augment pages.
 Rerun both after a patch, with `champions/build_i18n.py`.

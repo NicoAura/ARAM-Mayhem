@@ -96,7 +96,7 @@
  "Find a champion": "ค้นหาแชมเปี้ยน",
  "Type a name to jump to their build, augments and win rate.": "พิมพ์ชื่อเพื่อไปยังบิลด์ Augments และอัตราชนะของแชมเปี้ยนนั้น",
  "Every champion and augment ranked on the live patch. Pick older patches or play the timeline.": "ทุกแชมเปี้ยนและ Augment จัดอันดับบนแพตช์ปัจจุบัน เลือกแพตช์ก่อนหน้าหรือเล่นไทม์ไลน์ได้",
- "Simulated teamfights and builds for every champion. Try your own build in the Build Editor too.": "จำลองการต่อสู้เป็นทีมและบิลด์ของทุกแชมเปี้ยน ลองบิลด์ของคุณเองในตัวแก้ไขบิลด์ได้ด้วย",
+ "Simulated teamfights and builds for every champion.": "จำลองการต่อสู้เป็นทีมและบิลด์ของทุกแชมเปี้ยน",
  "Search anything": "ค้นหาได้ทุกอย่าง",
  "Champions, augments, items and pages. Press / or Ctrl+K from anywhere.": "แชมเปี้ยน Augments ไอเทม และหน้า กด / หรือ Ctrl+K จากที่ไหนก็ได้",
  "Make it yours": "ปรับให้เป็นแบบคุณ",
@@ -151,5 +151,11 @@
  "Copy this link": "คัดลอกลิงก์นี้",
  "Page detail": "รายละเอียดหน้า",
  "Simple": "แบบง่าย",
- "Detailed": "แบบละเอียด"
+ "Detailed": "แบบละเอียด",
+ "Best duos": "ดูโอที่ดีที่สุด",
+ "Most simulated damage": "ดาเมจจำลองสูงสุด",
+ "Simulator →": "ซิมูเลเตอร์ →",
+ "{n} DPS": "{n} DPS",
+ "Patch {patch} recap": "สรุปแพตช์ {patch}",
+ "The Kitchen →": "ครัว →"
 }

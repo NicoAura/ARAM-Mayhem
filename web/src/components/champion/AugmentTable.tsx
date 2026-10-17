@@ -9,10 +9,19 @@ import type { AugmentRow } from "@/lib/champion-page";
 // A champion's augments as one ranked table with a rarity filter, the most picked first.
 
 const RARITIES = ["all", "prismatic", "gold", "silver"] as const;
-const LABEL = { all: "All", prismatic: "Prismatic", gold: "Gold", silver: "Silver" };
+const LABEL = {
+  all: "All",
+  prismatic: "Prismatic",
+  gold: "Gold",
+  silver: "Silver",
+};
 const LIMIT = 10;
 
-export default function AugmentTable({ rows }: { rows: (AugmentRow & { href?: string })[] }) {
+export default function AugmentTable({
+  rows,
+}: {
+  rows: (AugmentRow & { href?: string })[];
+}) {
   const t = useT("champions");
   const [rarity, setRarity] = useState<(typeof RARITIES)[number]>("all");
   const [open, setOpen] = useState(false);
@@ -21,8 +30,15 @@ export default function AugmentTable({ rows }: { rows: (AugmentRow & { href?: st
     <>
       <div className="cp-filters">
         <div className="cp-seg" role="group" aria-label={t("Rarity")}>
-          {RARITIES.filter((r) => r === "all" || rows.some((x) => x.rarity === r)).map((r) => (
-            <button key={r} type="button" aria-pressed={rarity === r} onClick={() => setRarity(r)}>
+          {RARITIES.filter(
+            (r) => r === "all" || rows.some((x) => x.rarity === r),
+          ).map((r) => (
+            <button
+              key={r}
+              type="button"
+              aria-pressed={rarity === r}
+              onClick={() => setRarity(r)}
+            >
               {t(LABEL[r])}
             </button>
           ))}
@@ -38,13 +54,22 @@ export default function AugmentTable({ rows }: { rows: (AugmentRow & { href?: st
         {(open ? shown : shown.slice(0, LIMIT)).map((a, i) => {
           const body = (
             <>
-              <img className="cp-icon round" src={`/icons/augments/${a.id}.webp`} alt="" width={36} height={36} loading="lazy" />
+              <img
+                className="cp-icon round"
+                src={`/icons/augments/${a.id}.webp`}
+                alt=""
+                width={36}
+                height={36}
+                loading="lazy"
+              />
               <span className="cp-name">
                 <Name kind="augments" id={a.id}>
                   {a.name}
                 </Name>
               </span>
-              <span className={`cp-pill ${a.rarity}`}>{t(LABEL[a.rarity])}</span>
+              <span className={`cp-pill ${a.rarity}`}>
+                {t(LABEL[a.rarity])}
+              </span>
             </>
           );
           return (
@@ -58,7 +83,9 @@ export default function AugmentTable({ rows }: { rows: (AugmentRow & { href?: st
                 <div className="cp-what">{body}</div>
               )}
               <div className="cp-cell">
-                <b className={`grade-${a.grade.toLowerCase()}`}>{a.grade || "–"}</b>
+                <b className={`grade-${a.grade.toLowerCase()}`}>
+                  {a.grade || "–"}
+                </b>
                 <small>{t("Grade")}</small>
               </div>
               <div className="cp-cell">
@@ -70,7 +97,12 @@ export default function AugmentTable({ rows }: { rows: (AugmentRow & { href?: st
         })}
       </div>
       {shown.length > LIMIT && (
-        <button type="button" className="cp-more" aria-expanded={open} onClick={() => setOpen(!open)}>
+        <button
+          type="button"
+          className="cp-more"
+          aria-expanded={open}
+          onClick={() => setOpen(!open)}
+        >
           {open ? t("Show fewer") : t("Show all {n}", { n: shown.length })}
         </button>
       )}

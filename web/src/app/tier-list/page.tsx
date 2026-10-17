@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { pageMeta } from "@/lib/meta";
 import { livePatch } from "@/lib/highlights";
-import Link from "next/link";
 import augmentNames from "@/data/augment-names.json";
 import { AdvancedProvider, AdvancedToggle } from "@/components/Advanced";
 import ChampionTiers from "@/components/ChampionTiers";
@@ -11,9 +10,6 @@ import { hasDuos } from "@/lib/duos";
 import { augmentHref } from "@/lib/augments";
 import { augmentTiers, STYLES } from "@/lib/augment-tiers";
 import AugmentTiers from "@/components/AugmentTiers";
-import AugmentDraft from "@/components/AugmentDraft";
-import AugmentGroups from "@/components/AugmentGroups";
-import { augmentGroups } from "@/lib/augment-groups";
 import { augmentRows, type RawAugment } from "@/lib/augment-winrate";
 import { AUGMENT_DEEPSCORE_HELP } from "@/lib/deepscore";
 import championIds from "@/data/champion-ids.json";
@@ -21,6 +17,8 @@ import championNames from "@/data/champion-names.json";
 import type { PatchRow } from "@/lib/tiers";
 import Intro from "@/components/Intro";
 import { T } from "@/components/I18n";
+import ItemIndex from "@/components/ItemIndex";
+import { itemPages } from "@/lib/item-pages";
 import { text } from "@/lib/content";
 import Pending from "@/components/Pending";
 import SubTabs from "@/components/SubTabs";
@@ -36,7 +34,6 @@ export const metadata: Metadata = pageMeta(
 const num = (v: string | undefined) => (v === undefined || v === "" ? null : Number(v));
 const ALIAS = Object.fromEntries(Object.entries(championIds as Record<string, number>).map(([alias, id]) => [id, alias]));
 const NAMES = championNames as Record<string, string>;
-type Champs = { champions: { name: string; best_partners?: { champion_id: number }[] }[] };
 const names = augmentNames as Record<string, string>;
 
 export default function TierListPage() {
@@ -44,7 +41,6 @@ export default function TierListPage() {
   const patches = readRepoCsv("data/cn/history/patches.csv");
   const augments = augmentRows<RawAugment & Record<string, string | number | number[]>>();
   const duos = hasDuos();
-  const champs = readRepoJson<Champs>("data/cn/champions.json");
 
   if (!byPatch || !patches?.length) {
     return (
@@ -76,16 +72,6 @@ export default function TierListPage() {
       augs: r.augment_ids ?? "",
     }));
   const champName = (alias?: string) => (alias ? (NAMES[alias] ?? alias) : null);
-  const partners = Object.fromEntries(
-    (champs?.champions ?? []).map((c) => [
-      c.name,
-      (c.best_partners ?? [])
-        .slice(0, 3)
-        .map((p) => champName(ALIAS[p.champion_id]))
-        .filter(Boolean)
-        .join(", "),
-    ]),
-  );
   const tabs: { id: string; label: string; content: React.ReactNode; lazy?: boolean }[] = [
     {
       id: "champions",
@@ -94,7 +80,6 @@ export default function TierListPage() {
         <ChampionTiers
           rows={rows}
           patches={patches.map((p) => p.patch)}
-          partners={partners}
           tags={allChampionTags([...new Set(rows.map((r) => r.name))])}
           tagInfo={championTagData().info}
         />
@@ -170,40 +155,26 @@ export default function TierListPage() {
       ),
     });
   }
+  // Formerly the Items page (/items redirects here); each item keeps its own page at /items/<slug>.
+  const items = itemPages().map(({ id, slug, name, icon, cost, tags, popularity }) => ({ id, slug, name, icon, cost, tags, popularity }));
+  if (items.length) {
+    tabs.push({
+      id: "items",
+      label: "Items",
+      lazy: true,
+      content: (
+        <>
+          <p className="patch-note subtab-note">
+            <T ns="items">
+              Pick tags to narrow the list: every tag you pick has to match. Open an item for its stats, who builds it and how much damage it adds in the Simulator.
+            </T>
+          </p>
+          <ItemIndex items={items} />
+        </>
+      ),
+    });
+  }
   if (duos) tabs.push({ id: "duos", label: "Duos", content: <DuosTable />, lazy: true });
-  // Formerly the Augments page (/augments redirects here).
-  tabs.push(
-    {
-      id: "groups",
-      label: "By icon",
-      lazy: true,
-      content: (
-        <>
-          <p className="patch-note subtab-note">
-            <T ns="augments">
-              Augments that share an icon usually share a job. Each group shows what most of its members have in common, then every member, best first.
-            </T>
-          </p>
-          <AugmentGroups groups={augmentGroups()} help={AUGMENT_DEEPSCORE_HELP} />
-        </>
-      ),
-    },
-    {
-      id: "draft",
-      label: "Draft practice",
-      lazy: true,
-      content: (
-        <>
-          <p className="patch-note subtab-note">
-            <T ns="augments">
-              {"Four selections, three cards each, one reroll per card. After every pick you'll see how often players on your champion take it."}
-            </T>
-          </p>
-          <AugmentDraft />
-        </>
-      ),
-    },
-  );
 
   return (
     <AdvancedProvider>

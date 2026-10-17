@@ -89,5 +89,7 @@
  "This browser can't copy images. Save it instead.": "Bu tarayıcı görsel kopyalayamıyor. Onun yerine kaydet.",
  "Copy image": "Görseli kopyala",
  "Save": "Kaydet",
- "Close": "Kapat"
+ "Close": "Kapat",
+ "Win rate delta": "Kazanma oranı farkı",
+ "Pair win rate minus the average of the two champions' own win rates. Above zero means they win more together.": "İkilinin kazanma oranı eksi iki şampiyonun kendi kazanma oranlarının ortalaması. Sıfırın üstü birlikte daha çok kazandıkları anlamına gelir."
 }

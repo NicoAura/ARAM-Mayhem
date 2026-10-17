@@ -89,5 +89,7 @@
  "This browser can't copy images. Save it instead.": "このブラウザは画像をコピーできません。代わりに保存してください。",
  "Copy image": "画像をコピー",
  "Save": "保存",
- "Close": "閉じる"
+ "Close": "閉じる",
+ "Win rate delta": "勝率差",
+ "Pair win rate minus the average of the two champions' own win rates. Above zero means they win more together.": "ペアの勝率から、2体のチャンピオンそれぞれの勝率の平均を引いた値。0より上なら一緒の方が勝ちやすいことを示します。"
 }

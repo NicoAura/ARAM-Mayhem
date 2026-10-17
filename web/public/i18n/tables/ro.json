@@ -89,5 +89,7 @@
  "This browser can't copy images. Save it instead.": "Acest browser nu poate copia imagini. Salveaz-o în schimb.",
  "Copy image": "Copiază imaginea",
  "Save": "Salvează",
- "Close": "Închide"
+ "Close": "Închide",
+ "Win rate delta": "Diferență rată de victorie",
+ "Pair win rate minus the average of the two champions' own win rates. Above zero means they win more together.": "Rata de victorie a perechii minus media ratelor proprii ale celor doi campioni. Peste zero înseamnă că împreună câștigă mai des."
 }

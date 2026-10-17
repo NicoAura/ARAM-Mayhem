@@ -6,7 +6,11 @@ import { useT } from "@/components/I18n";
 // The champion page's section links: a column beside the tables on wide screens, a sticky strip on
 // narrow ones. The section you're reading is highlighted.
 
-export default function SectionRail({ spots }: { spots: { id: string; label: string }[] }) {
+export default function SectionRail({
+  spots,
+}: {
+  spots: { id: string; label: string }[];
+}) {
   const t = useT("champions");
   const [active, setActive] = useState(spots[0]?.id ?? "");
   useEffect(() => {
@@ -14,7 +18,8 @@ export default function SectionRail({ spots }: { spots: { id: string; label: str
     const io = new IntersectionObserver(
       (entries) => {
         for (const e of entries) {
-          if (e.isIntersecting) visible.set(e.target.id, e.boundingClientRect.top);
+          if (e.isIntersecting)
+            visible.set(e.target.id, e.boundingClientRect.top);
           else visible.delete(e.target.id);
         }
         const first = spots.find((s) => visible.has(s.id));
@@ -31,7 +36,11 @@ export default function SectionRail({ spots }: { spots: { id: string; label: str
   return (
     <nav className="cp-rail" aria-label={t("Sections")}>
       {spots.map((s) => (
-        <a key={s.id} href={`#${s.id}`} aria-current={active === s.id ? "true" : undefined}>
+        <a
+          key={s.id}
+          href={`#${s.id}`}
+          aria-current={active === s.id ? "true" : undefined}
+        >
           {t(s.label)}
         </a>
       ))}
