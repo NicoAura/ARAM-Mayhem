@@ -19,6 +19,7 @@ const PAGES = [
   "/builds?tab=compare&a=Jinx&b=Ezreal",
   "/builds?tab=team",
   "/augments?tab=draft",
+  "/augments?tab=groups",
   "/patches",
   "/items",
   "/items?tag=crit,as",
