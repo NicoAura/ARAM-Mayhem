@@ -351,7 +351,7 @@
     }
     let inp;
     if (CHOICES[s.key]) {
-      inp = document.createElement("select");
+      inp = document.createElement("select"); wrap.classList.add("has-select");  // :has(select) is too new for some browsers
       for (const [v, name] of CHOICES[s.key]) inp.add(new Option(name, v));
     } else {
       inp = document.createElement("input");
@@ -510,9 +510,9 @@
     $("submitScore").hidden = !submission;
     $("submitScore").disabled = false;
     $("submitNote").textContent = !build ? "" : submission
-      ? `Put this build on the Survival leaderboard. There every build fights ${survivalEnemy(build.champion)} with the ` +
+      ? `Put this build on the Leaderboard. There every build fights ${survivalEnemy(build.champion)} with the ` +
         "default settings until your champion falls, simulated again on our side before it's listed."
-      : "Only live-patch builds can go on the Survival leaderboard.";
+      : "Only live-patch builds can go on the Leaderboard.";
   }
   // The site's bot check, when it's switched on: usually invisible, sometimes a box to tick under the button.
   let checkWidget = null;
@@ -548,13 +548,13 @@
       const b = await r.json().catch(() => ({}));
       if (!r.ok) throw new Error(b.error || "");
       $("submitNote").textContent = b.status === "verified"
-        ? `This build is already on the Survival leaderboard at ${Math.round(b.verified_dps).toLocaleString()} DPS.`
-        : b.status === "rejected" ? "This build was already checked and can't go on the Survival leaderboard."
-        : "Submitted. It shows on the Survival leaderboard once our simulator has re-run it.";
+        ? `This build is already on the Leaderboard at ${Math.round(b.verified_dps).toLocaleString()} DPS.`
+        : b.status === "rejected" ? "This build was already checked and can't go on the Leaderboard."
+        : "Submitted. It shows on the Leaderboard once our simulator has re-run it.";
       $("submitScore").hidden = true;
     } catch (e) {
       $("submitScore").disabled = false;
-      $("submitNote").textContent = e.message || "The Survival leaderboard couldn't be reached. Try again in a moment.";
+      $("submitNote").textContent = e.message || "The Leaderboard couldn't be reached. Try again in a moment.";
     }
   });
 

@@ -10,8 +10,12 @@
 :root {
   --bg: #e7ebef; --surface: #f0f3f6; --raised: #e0e5eb; --fg: #1f252e; --muted: #525b68; --line: #d3dae2;
   --hover: var(--raised); --accent: #9b7bff; --accent-ink: #120a2b;
-  --accent-soft: color-mix(in srgb, var(--accent) 16%, transparent);
-  --accent-text: color-mix(in srgb, var(--accent) 70%, var(--fg));
+  /* Colour mixes worked out ahead of time, since older Safari and Firefox can't mix colours in CSS:
+     accent at 16% over transparent, accent 50% with --fg for text, accent 45%/50% with --line for
+     hover borders, --hp-low 75% with --fg. */
+  --accent-soft: rgba(155, 123, 255, 0.16);
+  --accent-text: #5d5096;
+  --accent-line: #baafef; --accent-line-strong: #b7aaf0; --foe-text: #b44844;
   --good: #197048; --bad: #a83831; --gold: #e0a83c;
   --abyss: var(--bg);
   --panel: var(--surface);
@@ -29,10 +33,12 @@
 }
 @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
   --bg: #090b0f; --surface: #11151c; --raised: #181d26; --fg: #e8ecf2; --muted: #8b94a3; --line: #222936;
-  --good: #4cc98b; --bad: #f0776f; color-scheme: dark; } }
+  --good: #4cc98b; --bad: #f0776f;
+  --accent-text: #b29dfb; --accent-line: #584e90; --accent-line-strong: #5e529a; --foe-text: #e67975; color-scheme: dark; } }
 :root[data-theme="dark"] {
   --bg: #090b0f; --surface: #11151c; --raised: #181d26; --fg: #e8ecf2; --muted: #8b94a3; --line: #222936;
-  --good: #4cc98b; --bad: #f0776f; color-scheme: dark; }
+  --good: #4cc98b; --bad: #f0776f;
+  --accent-text: #b29dfb; --accent-line: #584e90; --accent-line-strong: #5e529a; --foe-text: #e67975; color-scheme: dark; }
 * { box-sizing: border-box; }
 html, body { background: var(--bg); color: var(--fg); }
 body { margin: 0; font: 14px/1.5 var(--body); }
@@ -45,7 +51,7 @@ h1 { font: 700 clamp(26px, 3.2vw, 32px)/1.1 var(--display); letter-spacing: -.02
 .beta { display: inline-block; margin-left: 6px; padding: 3px 7px; border: 1px solid var(--accent); border-radius: 999px; color: var(--accent-text); background: var(--accent-soft); letter-spacing: .06em; vertical-align: 1px; }
 select, button { font: 500 14px var(--body); color: var(--fg); border: 1px solid var(--line); border-radius: 10px; padding: 7px 12px; background: var(--surface); }
 button { cursor: pointer; }
-button:hover, select:hover { background: var(--accent-soft); border-color: color-mix(in srgb, var(--accent) 45%, var(--line)); }
+button:hover, select:hover { background: var(--accent-soft); border-color: var(--accent-line); }
 button.primary { background: var(--accent); color: var(--accent-ink); border-color: transparent; }
 button.primary:hover { opacity: .9; background: var(--accent); }
 button:disabled { opacity: .5; cursor: progress; }
@@ -53,7 +59,7 @@ button:disabled { opacity: .5; cursor: progress; }
 .card { background: var(--surface); border: 1px solid var(--line); border-top: 2px solid var(--accent); border-radius: 14px; padding: 18px 20px; min-width: 0; }
 .card h2 { font: 500 11.5px/1 var(--mono); letter-spacing: .06em; text-transform: uppercase; color: var(--accent-text); margin: 0 0 12px; }
 .card.foe { border-top-color: var(--hp-low); }
-.card.foe h2 { color: color-mix(in srgb, var(--hp-low) 75%, var(--fg)); }
+.card.foe h2 { color: var(--foe-text); }
 .teams { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
 @media (max-width: 860px) { .teams { grid-template-columns: minmax(0, 1fr); } }
 .slot { display: grid; grid-template-columns: 40px minmax(0, 1fr); gap: 4px 10px; align-items: center; padding: 8px 0; border-top: 1px solid var(--line); }
@@ -103,6 +109,8 @@ td.who { font-family: var(--body); }
 .note { color: var(--muted); font-size: 12px; max-width: 80ch; }
 [hidden] { display: none !important; }
 @media (prefers-reduced-motion: reduce) { .status.busy::before { animation: none; } }
+/* Phones: 16px text in boxes, so iPhone Safari doesn't zoom in when one is tapped. */
+@media (pointer: coarse) { input, select, textarea { font-size: max(16px, 1em) !important; } }
 </style>
 </head>
 <body>
@@ -143,7 +151,7 @@ td.who { font-family: var(--body); }
     </div>
   </section>
 </main>
-<script>window.REPLAY_VERSION = "47";</script>
-<script src="team.js?v=47"></script>
+<script>window.REPLAY_VERSION = "48";</script>
+<script src="team.js?v=48"></script>
 </body>
 </html>
