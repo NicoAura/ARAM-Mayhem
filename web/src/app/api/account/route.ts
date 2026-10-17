@@ -6,7 +6,7 @@ import { rsoEnabled } from "@/lib/rso";
 import { accountView, clearSessionCookies, confirmIt, currentAccount, deleteAccount, requireAccount, saveData } from "@/lib/accounts";
 
 // GET    /api/account → the signed-in account ({signedIn: false} when nobody is)
-// PUT    /api/account {favorites, settings, theme} → saves what syncs between browsers
+// PUT    /api/account {settings} → saves what syncs between browsers
 // DELETE /api/account {password?} → deletes the account and everything saved with it
 export const dynamic = "force-dynamic";
 

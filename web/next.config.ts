@@ -45,7 +45,9 @@ const nextConfig: NextConfig = {
       ["/tools/kitchen", "/kitchen"],
       // The owner's tools moved under the account page when accounts replaced the editor password.
       ["/admin", "/account/edit"],
-      ["/admin/simulator", "/account/simulator"],
+      ["/admin/simulator", "/simulator"],
+      // The 3D Simulator opens from the owner-only switch on /simulator now.
+      ["/account/simulator", "/simulator"],
     ]
       .map(([source, destination]) => ({ source, destination, permanent: true }))
       .concat([
