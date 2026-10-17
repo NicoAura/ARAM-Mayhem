@@ -6,6 +6,7 @@ import Intro from "@/components/Intro";
 import SubTabs from "@/components/SubTabs";
 import TeamBuilder from "@/components/TeamBuilder";
 import { pageMeta } from "@/lib/meta";
+import NeedsScript from "@/components/NeedsScript";
 
 // Builds (/builds?tab=…): the build tools on one page. What to build (default), the Build Editor,
 // Compare and the Team Builder. Their old addresses (/what-to-build, /builder, /compare, /synergy)
@@ -25,6 +26,7 @@ export default function BuildsPage() {
       <Intro eyebrow="Builds" title="What to build, and why.">
         Get the build that wins most for your champion, try your own, line two champions up, or check how your team fits together.
       </Intro>
+      <NeedsScript />
       <SubTabs
         tabs={[
           {
