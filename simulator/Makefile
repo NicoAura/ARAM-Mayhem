@@ -46,7 +46,7 @@ EMBED_DATA = mayhem_rules champions items augments augment_pools cn_enemy_pool c
 wasm-mayhem: $(CHAMP_SRC) $(CHAMP_HDR)
 	mkdir -p dist dist/embed
 	python3 tools/strip_notes.py dist/embed $(EMBED_DATA:%=data/%.json)
-	$(EMCC) -std=c++17 -O2 $(CHAMP_SRC) -o dist/mayhem_sim.js \
+	$(EMCC) -std=c++17 -O2 -fexceptions $(CHAMP_SRC) -o dist/mayhem_sim.js \
 		-sMODULARIZE -sEXPORT_NAME=MayhemSim -sALLOW_MEMORY_GROWTH -sENVIRONMENT=worker,web,node \
 		-sINVOKE_RUN=0 -sEXIT_RUNTIME=0 -sEXPORTED_RUNTIME_METHODS=callMain,FS \
 		$(foreach f,$(EMBED_DATA),--embed-file dist/embed/$(f).json@data/$(f).json)
