@@ -4646,14 +4646,13 @@ th > button[data-tip] {
 .acct-links { display: flex; flex-wrap: wrap; gap: 0.5rem; }
 .acct-links .btn { display: inline-flex; align-items: center; text-decoration: none; }
 .acct-danger summary { color: var(--bad); }
-/* Colour: each card wears a site hue (data-accent) as a top stripe, a tinted heading and buttons. */
-.acct-card[data-accent], .acct-signin[data-accent] { border-top: 3px solid var(--a); }
+/* Colour: each card wears a site hue (data-accent) on its heading and buttons; no colour edge (soft look). */
 .acct-card[data-accent] h2, .acct-card[data-accent] h3 { color: var(--a); color: var(--a-ink); }
-.acct-card[data-accent] .btn:not(.ghost):not(.danger) { background: var(--a); border-color: var(--a); color: #fff; }
+.acct-card[data-accent] .btn:not(.ghost):not(.danger), .acct-signin[data-accent] .btn:not(.ghost):not(.danger) { background: var(--a); border-color: var(--a); color: #fff; }
 .acct-card[data-accent] .btn.ghost { border-color: var(--a); }
+.acct-signin[data-accent="gold"] .btn:not(.ghost):not(.danger) { color: #1d1606; }
 .acct-signin[data-accent] .acct-tabs .active { color: var(--a); color: var(--a-ink); box-shadow: inset 0 -2px 0 var(--a); }
 .acct-me img { box-shadow: 0 0 0 2px var(--a); }
-.acct-danger { border-top: 3px solid var(--bad); }
 
 /* Connecting a Riot account: three steps with progress, the code with a copy button, then waiting. */
 .acct-progress { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.35rem; margin: 0; padding: 0; list-style: none; font-size: 0.75rem; }
@@ -4680,8 +4679,6 @@ html[data-motion="reduce"] .acct-waiting .pulse { animation: none; }
   grid-template-columns: auto 1fr auto;
   align-items: center;
   gap: 1rem 1.25rem;
-  border-top: 3px solid var(--a);
-  background: linear-gradient(135deg, rgb(var(--a-rgb) / 0.14), transparent 60%), var(--surface);
 }
 .acct-welcome > img, .acct-avatar { width: 72px; height: 72px; border-radius: 50%; box-shadow: 0 0 0 3px var(--a); }
 .acct-avatar { display: grid; place-items: center; background: var(--a); color: #fff; font-size: 2rem; font-weight: 700; }
