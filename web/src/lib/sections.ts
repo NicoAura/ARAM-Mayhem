@@ -22,6 +22,12 @@ export const sections = [
     pr: 4,
   },
   {
+    href: "/compare",
+    label: text("tab./compare.label", "Compare"),
+    body: text("tab./compare.body", "Two champions side by side: win rates, builds, skill order and simulated damage."),
+    pr: 0,
+  },
+  {
     href: "/pbe",
     label: text("tab./pbe.label", "PBE"),
     body: text("tab./pbe.body", "Mayhem Season 3 changes from the test server."),
