@@ -110,6 +110,19 @@
     document.head.appendChild(sc);
   }
 
+  // Home region and official difficulty, from profile.js
+  function loadProfile(c) {
+    const show = () => {
+      const el = $("profile"), p = (window.CHAMPS_PROFILE || {})[c.alias];
+      if (el && p) el.textContent = [p.region, p.difficulty && `Difficulty: ${p.difficulty}`].filter(Boolean).join(" · ");
+    };
+    if (window.CHAMPS_PROFILE) return show();
+    const sc = document.createElement("script");
+    sc.src = "profile.js";
+    sc.onload = show;
+    document.head.appendChild(sc);
+  }
+
   // Skins live in skins.js, loaded the first time a champion page's skins section comes into view
   let skinsReady = null;
   function loadSkins(c) {
@@ -217,6 +230,7 @@
         <span class="eyebrow">${c.roles.map((r) => ROLE[r] || r).join(" · ")}</span>
         <h1>${esc(c.name)}</h1>
         <span>${esc(c.title)}</span>
+        <span class="eyebrow" id="profile" style="margin-top:0.4rem"></span>
       </div></div>
       ${facts.length ? `<div class="facts">${facts.map(([l, v]) => `<div class="card fact"><span class="eyebrow">${l}</span><span class="value">${v}</span></div>`).join("")}</div>` : ""}
       ${builds}
@@ -238,6 +252,7 @@
       </div>
       ${c.tier ? '<p class="small"><a href="/tier-list" target="_top">See the full Tier List →</a></p>' : ""}`;
     loadSkins(c);
+    loadProfile(c);
     loadMods(c);
     document.title = `${c.name} · Mayhem Champions`;
   }
