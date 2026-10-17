@@ -148,5 +148,11 @@
  "Prismatic": "Πρισματική",
  "Share": "Κοινοποίηση",
  "Link copied": "Ο σύνδεσμος αντιγράφηκε",
- "Copy this link": "Αντιγράψτε αυτόν τον σύνδεσμο"
+ "Copy this link": "Αντιγράψτε αυτόν τον σύνδεσμο",
+ "Best duos": "Καλύτερες δυάδες",
+ "Most simulated damage": "Μεγαλύτερη προσομοιωμένη ζημιά",
+ "Simulator →": "Προσομοιωτής →",
+ "{n} DPS": "{n} DPS",
+ "Patch {patch} recap": "Σύνοψη ενημέρωσης {patch}",
+ "The Kitchen →": "Η Κουζίνα →"
 }

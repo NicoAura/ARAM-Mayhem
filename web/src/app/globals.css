@@ -5369,6 +5369,19 @@ html[data-motion="reduce"] .acct-waiting .pulse { animation: none; }
 .chef-items .icon { width: 32px; height: 32px; border-radius: 6px; }
 .subtab-note { margin: 0 0 1rem; }
 
+/* Home: best duos (two icons per row), the Chef Special's head as a link, and the next-patch strip */
+.rank.home-duos a { grid-template-columns: auto minmax(0, 1fr) auto; }
+.rank.home-dps a { grid-template-columns: 1.4rem 24px minmax(0, 1fr) auto; }
+.home-duo-icons { display: flex; }
+.home-duo-icons .icon + .icon { margin-inline-start: -6px; box-shadow: 0 0 0 2px var(--surface); }
+.chef-special a.kitchen-head { color: inherit; text-decoration: none; }
+.chef-special h3 { font-size: 1rem; }
+.home-patch { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0.75rem 1.5rem; }
+.home-patch .patch-countdown { margin: 0; padding: 0; border: 0; background: none; }
+.home-recap { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.25rem 0.75rem; color: inherit; text-decoration: none; }
+.home-recap span { color: var(--muted); }
+.home-recap:hover b { text-decoration: underline; }
+
 /* DeepScore badge (components/DeepScore.tsx): a ring that fills to the score, its colour running from red
    at 0 through green at the average 50 to violet at 100. Its explanation shows on hover, focus or tap. */
 .deepscore {

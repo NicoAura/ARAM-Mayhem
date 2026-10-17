@@ -43,5 +43,6 @@
  "Draft practice": "선택 연습",
  "Patch {patch}, with the change since {before}. Pick patches from the list to add or remove them.": "{patch} 패치, {before} 이후 변화 포함. 목록에서 패치를 선택해 추가하거나 제거하세요.",
  "Patch {patch}. Pick patches from the list to add or remove them.": "{patch} 패치. 목록에서 패치를 선택해 추가하거나 제거하세요.",
- "{n} patches combined. Pick patches from the list to add or remove them.": "{n}개 패치 합산. 목록에서 패치를 선택해 추가하거나 제거하세요."
+ "{n} patches combined. Pick patches from the list to add or remove them.": "{n}개 패치 합산. 목록에서 패치를 선택해 추가하거나 제거하세요.",
+ "Items": "아이템"
 }

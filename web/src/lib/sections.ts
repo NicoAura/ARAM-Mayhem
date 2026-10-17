@@ -22,12 +22,6 @@ export const sections = [
     pr: 4,
   },
   {
-    href: "/items",
-    label: text("tab./items.label", "Items"),
-    body: text("tab./items.body", "Every item Mayhem players build, tagged by what it gives, with filters."),
-    pr: 0,
-  },
-  {
     href: "/patches",
     label: text("tab./patches.label", "Patch Recaps"),
     body: text("tab./patches.body", "What every patch changed: augments added, removed and tuned, and the champions that moved most."),

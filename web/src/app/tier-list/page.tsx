@@ -21,6 +21,8 @@ import championNames from "@/data/champion-names.json";
 import type { PatchRow } from "@/lib/tiers";
 import Intro from "@/components/Intro";
 import { T } from "@/components/I18n";
+import ItemIndex from "@/components/ItemIndex";
+import { itemPages } from "@/lib/item-pages";
 import { text } from "@/lib/content";
 import Pending from "@/components/Pending";
 import SubTabs from "@/components/SubTabs";
@@ -171,6 +173,25 @@ export default function TierListPage() {
     });
   }
   if (duos) tabs.push({ id: "duos", label: "Duos", content: <DuosTable />, lazy: true });
+  // Formerly the Items page (/items redirects here); each item keeps its own page at /items/<slug>.
+  const items = itemPages().map(({ id, slug, name, icon, cost, tags, popularity }) => ({ id, slug, name, icon, cost, tags, popularity }));
+  if (items.length) {
+    tabs.push({
+      id: "items",
+      label: "Items",
+      lazy: true,
+      content: (
+        <>
+          <p className="patch-note subtab-note">
+            <T ns="items">
+              Pick tags to narrow the list: every tag you pick has to match. Open an item for its stats, who builds it and how much damage it adds in the Simulator.
+            </T>
+          </p>
+          <ItemIndex items={items} />
+        </>
+      ),
+    });
+  }
   // Formerly the Augments page (/augments redirects here).
   tabs.push(
     {

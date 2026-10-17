@@ -75,6 +75,9 @@ const nextConfig: NextConfig = {
         // The rest of the Augments page (by icon, draft practice) is on the Tier List too; ?tab= carries over.
         { source: "/augments", has: [{ type: "query" as const, key: "tab", value: "(?<tab>.+)" }], destination: "/tier-list?tab=:tab", permanent: true },
         { source: "/augments", destination: "/tier-list?tab=augments", permanent: true },
+        // Items is a Tier List tab now; its filters carry over under their own names. Item pages stay at /items/<slug>.
+        { source: "/items", has: [{ type: "query" as const, key: "tag", value: "(?<tag>.+)" }], destination: "/tier-list?tab=items&itag=:tag", permanent: true },
+        { source: "/items", destination: "/tier-list?tab=items", permanent: true },
         // The build tools (Build Editor, Team Builder) were removed; their addresses open the Tier List.
         ...["/builds", "/builder", "/synergy"].map((source) => ({ source, destination: "/tier-list", permanent: true })),
         // Infinite Ryze is a tab on the Simulator page now.

@@ -148,5 +148,11 @@
  "Prismatic": "프리즘",
  "Share": "공유",
  "Link copied": "링크를 복사했습니다",
- "Copy this link": "이 링크를 복사하세요"
+ "Copy this link": "이 링크를 복사하세요",
+ "Best duos": "최고의 듀오",
+ "Most simulated damage": "시뮬레이션 최고 피해량",
+ "Simulator →": "시뮬레이터 →",
+ "{n} DPS": "{n} DPS",
+ "Patch {patch} recap": "{patch} 패치 요약",
+ "The Kitchen →": "주방 →"
 }
