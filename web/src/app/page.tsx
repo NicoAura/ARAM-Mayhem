@@ -3,12 +3,14 @@ import { text } from "@/lib/content";
 import { statsDate, counts, augmentPool, kitchenBuilds, livePatch, liveTiers, topAugments, topDps } from "@/lib/highlights";
 import { AugmentRoll, ChampionJump, KitchenPick, TierSnapshot } from "@/components/HomeWidgets";
 import { BETA } from "@/lib/beta";
+import { movers } from "@/lib/champions";
 import { KITCHEN, navPages } from "@/lib/tabs";
 
 // eslint-disable-next-line @next/next/no-img-element
 const Icon = ({ src }: { src: string }) => <img className="icon" src={src} alt="" width={24} height={24} loading="lazy" />;
 
 const pct = (v: number) => `${(v * 100).toFixed(1)}%`;
+const pts = (v: number) => `${v > 0 ? "+" : ""}${(v * 100).toFixed(1)}`;
 
 export default function Home() {
   const tiers = liveTiers();
@@ -19,6 +21,7 @@ export default function Home() {
   const dps = topDps();
   const n = counts();
   const date = statsDate();
+  const moved = movers();
 
   return (
     <>
@@ -66,6 +69,33 @@ export default function Home() {
                   <span className={`chip tier-${a.tier?.toLowerCase()}`}>{a.tier}</span>
                   <span className="rank-v">{pct(a.winRate)}</span>
                 </Link>
+              ))}
+            </div>
+          </section>
+        )}
+        {moved.prev && moved.up.length > 0 && (
+          <section className="card span-all" data-accent="tier">
+            <div className="card-head">
+              <h2>Biggest movers since {moved.prev}</h2>
+              <Link href="/tier-list?sort=change.desc">All changes →</Link>
+            </div>
+            <div className="movers">
+              {[
+                ["Rising", moved.up],
+                ["Falling", moved.down],
+              ].map(([label, list]) => (
+                <div key={label as string} className="rank">
+                  <p className="movers-label">{label as string}</p>
+                  {(list as typeof moved.up).map((m) => (
+                    <Link key={m.id} href={`/champions/${m.id}`}>
+                      <Icon src={`/icons/champions/${m.id}.webp`} />
+                      <span className="rank-name">{m.name}</span>
+                      <span className={`chip tier-${m.tier.toLowerCase()}`}>{m.tier}</span>
+                      <span className="rank-v">{pct(m.winRate)}</span>
+                      <span className={`rank-v ${m.change > 0 ? "delta-up" : "delta-down"}`}>{pts(m.change)}</span>
+                    </Link>
+                  ))}
+                </div>
               ))}
             </div>
           </section>

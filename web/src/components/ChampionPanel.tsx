@@ -157,7 +157,7 @@ export default function ChampionPanel({
             onEnded={() => setPlaying(false)}
           />
           {error && <p className="admin-status error">{error}</p>}
-          <Link className="inline-link" href={`/champions#${alias}`}>
+          <Link className="inline-link" href={`/champions/${alias}`}>
             Champion page →
           </Link>
           <ul className="champ-abilities">
