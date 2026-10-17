@@ -55,6 +55,13 @@ export default function ChampionShowcase({ alias, name }: { alias: string; name:
     };
   }, [alias, key]);
 
+  // Narrows the hero text beside the model (globals.css; :has() does it where supported).
+  useEffect(() => {
+    const hero = canvas.current?.closest(".champ-hero");
+    hero?.classList.toggle("has-showcase", state !== "off");
+    return () => hero?.classList.remove("has-showcase");
+  }, [state]);
+
   return (
     <div className="showcase" data-state={state} hidden={state === "off"}>
       <canvas key={key} ref={canvas} aria-label={`3D model of ${name}. Drag to turn it.`} role="img" />

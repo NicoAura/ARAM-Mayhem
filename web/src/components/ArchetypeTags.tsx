@@ -1,5 +1,5 @@
 import Link from "next/link";
-import type { TagInfo } from "@/lib/tag-info";
+import { tagStyle, type TagInfo } from "@/lib/tag-info";
 
 // A champion's archetype tags as colour-coded chips: Riot's class (filled), subclass (outlined) and
 // playstyle (dot). Hovering or focusing one shows what it means; with `link`, each opens the tier list
@@ -17,7 +17,7 @@ export default function ArchetypeTags({ names, info, link, compact }: { names: s
           "data-kind": t.kind,
           "data-tip": t.meaning,
           "aria-label": `${n}: ${t.meaning}`,
-          style: { "--tag": t.color } as React.CSSProperties,
+          style: tagStyle(t.color),
         };
         return link ? (
           <Link key={n} href={`/tier-list?tag=${encodeURIComponent(n)}`} {...props}>
