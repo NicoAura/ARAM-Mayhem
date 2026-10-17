@@ -3,12 +3,8 @@
 import { useEffect, useState } from "react";
 
 // On the account page, for the connected Riot account: ranked standing, challenge standing, mastery
-<<<<<<< HEAD
 // against this patch's Mayhem tiers, the title and challenge tokens they show in the client, and the
 // player's ARAM Clash team (/api/account/riot).
-=======
-// against this patch's Mayhem tiers, and the player's ARAM Clash team (/api/account/riot).
->>>>>>> origin/main
 
 type Mastery = { championId: number; championLevel: number; championPoints: number };
 type Member = {

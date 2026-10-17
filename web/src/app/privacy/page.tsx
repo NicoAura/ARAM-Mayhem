@@ -25,16 +25,10 @@ export default function Privacy() {
           page at any time.
         </p>
         <p>
-<<<<<<< HEAD
           If you connect a Riot account, we keep its Riot ID, server and Riot&apos;s player identifier, and show you its rank, champion mastery, challenge standing,
           the title and challenge tokens you show in the game, and ARAM Clash team from Riot Games. Connecting is confirmed by the Riot Client on your own computer,
           or by signing in with Riot, so nobody can connect yours. Signing in with Riot happens on Riot&apos;s own page: we never see your Riot password, and we
           receive only your Riot ID, server and player identifier. You can disconnect it at any time.
-=======
-          If you connect a Riot account, we keep its Riot ID, server and Riot&apos;s player identifier, and show you its rank, champion mastery, challenge standing
-          and ARAM Clash team from Riot Games. Connecting is confirmed by the Riot Client on your own computer, so nobody can connect yours. You can disconnect it at
-          any time.
->>>>>>> origin/main
         </p>
         <h2>Stored in your browser</h2>
         <p>

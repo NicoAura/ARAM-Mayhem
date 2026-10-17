@@ -3,10 +3,7 @@ import type { NextResponse } from "next/server";
 import { CHALLENGE_COOKIE, OWNER_FLAG, SESSION_COOKIE, SESSION_DAYS, SIGNED_IN_FLAG } from "./account-cookies";
 import { accountsDb, sessionAccount, sha256, type DB, type SessionAccount } from "./account-session";
 import { profileByPuuid, profilePath } from "./profiles";
-<<<<<<< HEAD
 import { rsoEnabled } from "./rso";
-=======
->>>>>>> origin/main
 import { DEFAULT_SETTINGS } from "./settings";
 
 // Site accounts: sign in with an email and password or a passkey, and Favorites and settings follow
@@ -171,10 +168,7 @@ export async function accountView(a: SessionAccount) {
     riot: row.riot_name ? { name: row.riot_name, platform: row.riot_platform, page: profile ? profilePath(profile.platform, profile.name, profile.tag) : null } : null,
     // A password can be replaced without the old one right after a passkey sign-in (the "forgot password" route).
     passkeySession: a.method === "passkey" && Date.now() - a.created < 15 * 60_000,
-<<<<<<< HEAD
     rso: rsoEnabled(),
-=======
->>>>>>> origin/main
   };
 }
 
@@ -220,7 +214,6 @@ export async function linkRiot(code: unknown, riot: { puuid: string; name: strin
   const d = await db();
   const row = c ? await d.prepare("SELECT account FROM link_codes WHERE code = ? AND expires > ?").bind(c, Date.now()).first<{ account: string }>() : null;
   if (!row) throw new AccountError("That code has expired or isn't right. Get a new one from your account page.", 400);
-<<<<<<< HEAD
   await setRiot(d, row.account, riot, platform, [d.prepare("DELETE FROM link_codes WHERE code = ?").bind(c)]);
 }
 
@@ -263,16 +256,4 @@ export async function unlinkRiot(id: string) {
   // An account made with Sign in with Riot has no other way in until it gets a passkey.
   if (row && !(row.email && row.pass) && !row.keys) throw new AccountError("Add a passkey first. Your Riot account is the only way into this account.", 409);
   await d.prepare("UPDATE accounts SET riot_puuid = NULL, riot_name = NULL, riot_platform = NULL WHERE id = ?").bind(id).run();
-=======
-  await d.batch([
-    // A Riot account belongs to one site account at a time.
-    d.prepare("UPDATE accounts SET riot_puuid = NULL, riot_name = NULL, riot_platform = NULL WHERE riot_puuid = ?").bind(riot.puuid),
-    d.prepare("UPDATE accounts SET riot_puuid = ?, riot_name = ?, riot_platform = ? WHERE id = ?").bind(riot.puuid, `${riot.name}#${riot.tag}`, platform, row.account),
-    d.prepare("DELETE FROM link_codes WHERE code = ?").bind(c),
-  ]);
-}
-
-export async function unlinkRiot(id: string) {
-  await (await db()).prepare("UPDATE accounts SET riot_puuid = NULL, riot_name = NULL, riot_platform = NULL WHERE id = ?").bind(id).run();
->>>>>>> origin/main
 }

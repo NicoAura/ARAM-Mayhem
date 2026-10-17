@@ -1,10 +1,7 @@
 import { cookies } from "next/headers";
 import { SESSION_COOKIE } from "@/lib/account-cookies";
 import { body, handle, json } from "@/lib/account-route";
-<<<<<<< HEAD
 import { rsoEnabled } from "@/lib/rso";
-=======
->>>>>>> origin/main
 import { AccountError, accountView, checkPasswordHash, clearSessionCookies, currentAccount, db, deleteAccount, requireAccount, saveData } from "@/lib/accounts";
 
 // GET    /api/account → the signed-in account ({signedIn: false} when nobody is)
@@ -15,11 +12,7 @@ export const dynamic = "force-dynamic";
 export const GET = handle(async () => {
   const a = await currentAccount();
   if (!a) {
-<<<<<<< HEAD
     const res = json({ signedIn: false, rso: rsoEnabled() });
-=======
-    const res = json({ signedIn: false });
->>>>>>> origin/main
     // A cookie for a session that ended (signed out elsewhere, or expired) is cleared.
     if ((await cookies()).get(SESSION_COOKIE)) clearSessionCookies(res);
     return res;
