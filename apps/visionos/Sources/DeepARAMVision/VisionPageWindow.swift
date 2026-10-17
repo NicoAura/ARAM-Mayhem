@@ -14,8 +14,9 @@ public struct VisionPageWindow: View {
     public init(url: URL?) {
         let target = url.flatMap { Site.isInternal($0) ? $0 : nil } ?? Site.base
         let path = (target.path.isEmpty ? "/" : target.path) + (target.query.map { "?" + $0 } ?? "")
-        title = PageTitle.title(for: target)
-        _page = StateObject(wrappedValue: SitePage(tab: SiteTab(id: "window", title: title, symbol: "macwindow", path: path), platform: "visionos"))
+        let name = PageTitle.title(for: target)
+        title = name
+        _page = StateObject(wrappedValue: SitePage(tab: SiteTab(id: "window", title: name, symbol: "macwindow", path: path), platform: "visionos"))
     }
 
     public var body: some View {
