@@ -5,6 +5,7 @@ import Intro from "@/components/Intro";
 import NeedsScript from "./NeedsScript";
 import { pageMeta } from "@/lib/meta";
 import { discoverToolTabs } from "@/lib/tabs";
+import { T } from "./I18n";
 
 // A tab whose page is another folder's static site (a site-tab.json folder), found by its URL.
 
@@ -24,7 +25,7 @@ export default function ToolPage({ href }: { href: string }) {
   if (!tab) notFound();
   return (
     <>
-      <Intro eyebrow={tab.label} title={tab.body || tab.label} />
+      <Intro eyebrow={<T ns="tool-pages">{tab.label}</T>} title={<T ns="tool-pages">{tab.body || tab.label}</T>} />
       <NeedsScript />
       <Embed src={`/embed/${tab.slug}/${tab.entry}`} title={tab.label} />
     </>

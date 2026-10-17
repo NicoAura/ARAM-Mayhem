@@ -5,6 +5,7 @@ import { itemPages } from "@/lib/item-pages";
 import { readRepoJson } from "@/lib/repo-data";
 import { whatToBuildData } from "@/lib/what-to-build";
 import championIds from "@/data/champion-ids.json";
+import { Name, T } from "./I18n";
 
 // The top of a champion page: what to do in game at a glance. Skill order, the build that wins most
 // (with boots) and the augments to take at each rarity. Data: lib/what-to-build.ts and
@@ -39,12 +40,16 @@ export default function QuickReference({ alias }: { alias: string }) {
   return (
     <section className="card quickref" data-accent="tier" aria-labelledby="quickref-title">
       <div className="card-head">
-        <h2 id="quickref-title">Quick reference</h2>
+        <h2 id="quickref-title">
+          <T ns="champion-page">Quick reference</T>
+        </h2>
       </div>
       <div className="quickref-grid">
         {c.skills.length > 0 && (
           <div className="quickref-block quick-spot" id="skills">
-            <h3>Skill order</h3>
+            <h3>
+              <T ns="champion-page">Skill order</T>
+            </h3>
             <p className="quickref-skills">
               {c.skills.map((s, i) => (
                 <span key={s}>
@@ -54,7 +59,12 @@ export default function QuickReference({ alias }: { alias: string }) {
               ))}
             </p>
             {levels.length > 0 && (
-              <div className="quickref-levels" role="table" aria-label="Skill to level at each champion level" style={{ "--n": levels.length } as React.CSSProperties}>
+              <div
+                className="quickref-levels"
+                role="table"
+                aria-label="Skill to level at each champion level"
+                style={{ "--n": levels.length } as React.CSSProperties}
+              >
                 <div role="row">
                   <span role="columnheader" aria-label="Skill" />
                   {levels.map((_, i) => (
@@ -80,8 +90,15 @@ export default function QuickReference({ alias }: { alias: string }) {
         {items.length > 0 && (
           <div className="quickref-block quickref-wide quick-spot" id="build">
             <h3>
-              Build
-              {build?.winRate != null && <span className="quickref-note"> · {pct(build.winRate)} win</span>}
+              <T ns="champion-page">Build</T>
+              {build?.winRate != null && (
+                <span className="quickref-note">
+                  {" · "}
+                  <T ns="champion-page" v={{ pct: pct(build.winRate) }}>
+                    {"{pct} win"}
+                  </T>
+                </span>
+              )}
             </h3>
             <ol className="quickref-items">
               {items.map((id) => {
@@ -89,7 +106,11 @@ export default function QuickReference({ alias }: { alias: string }) {
                 const body = (
                   <>
                     {icon && <img src={icon} alt="" width={40} height={40} loading="lazy" />}
-                    <span>{name}</span>
+                    <span>
+                      <Name kind="items" id={id}>
+                        {name}
+                      </Name>
+                    </span>
                   </>
                 );
                 const slug = slugs.get(id);
@@ -100,16 +121,22 @@ export default function QuickReference({ alias }: { alias: string }) {
         )}
         {hasAugs && (
           <div className="quickref-block quickref-full quick-spot" id="augments">
-            <h3>Augments to take</h3>
+            <h3>
+              <T ns="champion-page">Augments to take</T>
+            </h3>
             <div className="quickref-augs">
               {RARITIES.map(([r, label]) =>
                 c.augs[r]?.length ? (
                   <div key={r}>
-                    <span className={`chip tier-${r}`}>{label}</span>
+                    <span className={`chip tier-${r}`}>
+                      <T ns="champion-page">{label}</T>
+                    </span>
                     {c.augs[r].map((a) => (
                       <Link key={a} href={augmentHref(a) ?? `/tier-list?tab=augments`} className="quickref-aug">
                         <img src={`/icons/augments/${a}.webp`} alt="" width={28} height={28} loading="lazy" />
-                        {data.augs[a]}
+                        <Name kind="augments" id={a}>
+                          {data.augs[a]}
+                        </Name>
                       </Link>
                     ))}
                   </div>

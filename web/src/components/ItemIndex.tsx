@@ -6,11 +6,20 @@ import { useEffect, useMemo, useState } from "react";
 import { EmptyState } from "@/components/EmptyState";
 import { ITEM_TAGS, TAG_GROUPS, itemTag } from "@/lib/item-tags";
 import { getParam, setParams } from "@/lib/url-state";
+import { useLang, useNames, useT } from "./I18n";
 
 // Items index (/items?tag=crit,as&sort=cost): colour-coded tag filters (every picked tag must match),
 // a name search and a sort. Tags come from the shop's categories (lib/item-tags.ts).
 
-type Item = { id: number; slug: string; name: string; icon?: string; cost: number; tags: string[]; popularity: number };
+type Item = {
+  id: number;
+  slug: string;
+  name: string;
+  icon?: string;
+  cost: number;
+  tags: string[];
+  popularity: number;
+};
 const SORTS = [
   ["popular", "Most built"],
   ["name", "Name"],
@@ -19,6 +28,11 @@ const SORTS = [
 type Sort = (typeof SORTS)[number][0];
 
 export default function ItemIndex({ items }: { items: Item[] }) {
+  const t = useT("items");
+  const tr = t; // for maps whose item is named t
+  const names = useNames();
+  const lang = useLang();
+  const name = (i: Item) => names("items", i.id, i.name);
   const [picked, setPicked] = useState<string[]>([]);
   const [query, setQuery] = useState("");
   const [sort, setSort] = useState<Sort>("popular");
@@ -33,9 +47,11 @@ export default function ItemIndex({ items }: { items: Item[] }) {
   // Only tags some item has; counts follow the tags already picked.
   const shown = useMemo(() => {
     const q = query.trim().toLowerCase();
-    const list = items.filter((i) => picked.every((t) => i.tags.includes(t)) && (!q || i.name.toLowerCase().includes(q)));
-    return list.sort((a, b) => (sort === "name" ? a.name.localeCompare(b.name) : sort === "cost" ? b.cost - a.cost || a.name.localeCompare(b.name) : b.popularity - a.popularity));
-  }, [items, picked, query, sort]);
+    const list = items.filter((i) => picked.every((t) => i.tags.includes(t)) && (!q || `${i.name} ${name(i)}`.toLowerCase().includes(q)));
+    const byName = (a: Item, b: Item) => name(a).localeCompare(name(b), lang);
+    return list.sort((a, b) => (sort === "name" ? byName(a, b) : sort === "cost" ? b.cost - a.cost || byName(a, b) : b.popularity - a.popularity));
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- name follows names
+  }, [items, picked, query, sort, names, lang]);
   const count = (key: string) => shown.filter((i) => i.tags.includes(key)).length;
 
   const toggle = (key: string) => {
@@ -48,8 +64,8 @@ export default function ItemIndex({ items }: { items: Item[] }) {
     <div className="items-index">
       <div className="items-filters">
         {TAG_GROUPS.map(([group, label]) => (
-          <div key={group} className="items-group" data-group={group} role="group" aria-label={label}>
-            <span className="items-group-label">{label}</span>
+          <div key={group} className="items-group" data-group={group} role="group" aria-label={t(label)}>
+            <span className="items-group-label">{t(label)}</span>
             {ITEM_TAGS.filter((t) => t.group === group && items.some((i) => i.tags.includes(t.key))).map((t) => (
               <button
                 key={t.key}
@@ -60,7 +76,7 @@ export default function ItemIndex({ items }: { items: Item[] }) {
                 disabled={!picked.includes(t.key) && count(t.key) === 0}
                 onClick={() => toggle(t.key)}
               >
-                {t.label}
+                {tr(t.label)}
                 <small>{picked.includes(t.key) ? "" : count(t.key)}</small>
               </button>
             ))}
@@ -71,15 +87,15 @@ export default function ItemIndex({ items }: { items: Item[] }) {
         <input
           type="search"
           className="table-search"
-          placeholder="Find an item"
-          aria-label="Find an item"
+          placeholder={t("Find an item")}
+          aria-label={t("Find an item")}
           value={query}
           onChange={(e) => {
             setQuery(e.target.value);
             setParams({ q: e.target.value.trim() || null });
           }}
         />
-        <div className="seg" role="group" aria-label="Sort">
+        <div className="seg" role="group" aria-label={t("Sort")}>
           {SORTS.map(([k, l]) => (
             <button
               key={k}
@@ -90,13 +106,11 @@ export default function ItemIndex({ items }: { items: Item[] }) {
                 setParams({ sort: k === "popular" ? null : k });
               }}
             >
-              {l}
+              {t(l)}
             </button>
           ))}
         </div>
-        <span className="items-count">
-          {shown.length} of {items.length}
-        </span>
+        <span className="items-count">{t("{n} of {total}", { n: shown.length, total: items.length })}</span>
       </div>
       {shown.length ? (
         <ul className="items-grid">
@@ -105,11 +119,17 @@ export default function ItemIndex({ items }: { items: Item[] }) {
               <Link href={`/items/${i.slug}`} className="item-card">
                 {i.icon && <img src={i.icon} alt="" width={48} height={48} loading="lazy" />}
                 <span className="item-card-body">
-                  <b>{i.name}</b>
-                  {i.cost > 0 && <small>{i.cost.toLocaleString("en-US")} gold</small>}
+                  <b>{name(i)}</b>
+                  {i.cost > 0 && (
+                    <small>
+                      {t("{cost} gold", {
+                        cost: i.cost.toLocaleString(lang === "en" ? "en-US" : lang),
+                      })}
+                    </small>
+                  )}
                   <span className="item-card-tags">
-                    {i.tags.map((t) => (
-                      <span key={t} className="item-dot" data-group={itemTag(t)?.group} title={itemTag(t)?.label} />
+                    {i.tags.map((k) => (
+                      <span key={k} className="item-dot" data-group={itemTag(k)?.group} title={itemTag(k) && t(itemTag(k)!.label)} />
                     ))}
                   </span>
                 </span>
@@ -119,7 +139,7 @@ export default function ItemIndex({ items }: { items: Item[] }) {
         </ul>
       ) : (
         <EmptyState
-          title="No item has all of those"
+          title={t("No item has all of those")}
           action={
             <button
               type="button"
@@ -130,11 +150,11 @@ export default function ItemIndex({ items }: { items: Item[] }) {
                 setParams({ tag: null, q: null });
               }}
             >
-              Show every item
+              {t("Show every item")}
             </button>
           }
         >
-          Remove a tag or clear the search.
+          {t("Remove a tag or clear the search.")}
         </EmptyState>
       )}
     </div>

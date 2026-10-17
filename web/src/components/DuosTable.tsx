@@ -4,18 +4,20 @@ import { useEffect, useState } from "react";
 import DataTable, { type Row } from "./DataTable";
 import Skeleton from "@/components/Skeleton";
 import { LoadError } from "@/components/EmptyState";
+import { useT } from "./I18n";
 
 // The Duos tab: 2,000 pairs, so they load from /data/duos.json when the tab is first opened, not with the page.
 export default function DuosTable() {
   const [rows, setRows] = useState<Row[] | null>(null);
   const [failed, setFailed] = useState(false);
+  const t = useT("tier-list");
   useEffect(() => {
     fetch("/data/duos.json")
       .then((r) => (r.ok ? r.json() : Promise.reject(r.status)))
       .then(setRows)
       .catch(() => setFailed(true));
   }, []);
-  if (!rows) return failed ? <LoadError what="Duos" /> : <Skeleton rows={10} label="Loading duos…" />;
+  if (!rows) return failed ? <LoadError what={t("Duos")} /> : <Skeleton rows={10} label={t("Loading duos…")} />;
   return (
     <DataTable
       columns={[

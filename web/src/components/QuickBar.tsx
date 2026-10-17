@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { useT } from "./I18n";
 
 // Champion pages: a slim bar that sticks under the header once the summary scrolls away, for jumping
 // between the in-game essentials (skill order, build, augments) and the rest of the page. The part
@@ -9,6 +10,7 @@ import { useEffect, useRef, useState } from "react";
 type Spot = { id: string; label: string };
 
 export default function QuickBar({ spots }: { spots: Spot[] }) {
+  const t = useT("champion-page");
   const [here, setHere] = useState<Spot[]>([]);
   const [active, setActive] = useState("");
   const [shown, setShown] = useState(false);
@@ -18,7 +20,11 @@ export default function QuickBar({ spots }: { spots: Spot[] }) {
   useEffect(() => {
     const nav = bar.current;
     const a = nav?.querySelector<HTMLElement>("[aria-current]");
-    if (nav && a) nav.scrollTo({ left: a.offsetLeft - (nav.clientWidth - a.offsetWidth) / 2, behavior: "smooth" });
+    if (nav && a)
+      nav.scrollTo({
+        left: a.offsetLeft - (nav.clientWidth - a.offsetWidth) / 2,
+        behavior: "smooth",
+      });
   }, [active]);
 
   useEffect(() => {
@@ -60,7 +66,7 @@ export default function QuickBar({ spots }: { spots: Spot[] }) {
 
   if (here.length < 2) return null;
   return (
-    <nav ref={bar} className="quickbar" data-shown={shown || undefined} aria-label="Jump to">
+    <nav ref={bar} className="quickbar" data-shown={shown || undefined} aria-label={t("Jump to")}>
       {here.map((s) => (
         <a
           key={s.id}
@@ -70,11 +76,14 @@ export default function QuickBar({ spots }: { spots: Spot[] }) {
             const el = document.getElementById(s.id);
             if (!el) return;
             e.preventDefault();
-            el.scrollIntoView({ behavior: document.documentElement.dataset.motion === "reduce" ? "auto" : "smooth", block: "start" });
+            el.scrollIntoView({
+              behavior: document.documentElement.dataset.motion === "reduce" ? "auto" : "smooth",
+              block: "start",
+            });
             history.replaceState(null, "", `#${s.id}`);
           }}
         >
-          {s.label}
+          {t(s.label)}
         </a>
       ))}
     </nav>
