@@ -4866,3 +4866,90 @@ html[data-device="mobile"] .cmp-tray {
   color: var(--muted);
   font-size: 0.75rem;
 }
+
+/* Share image (components/ShareCard.tsx) */
+.share-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.25rem;
+  border: 0;
+  background: none;
+  color: var(--accent);
+  font: inherit;
+  font-size: 0.875rem;
+  cursor: pointer;
+}
+
+.share-btn:hover span {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.share-sheet {
+  width: min(760px, calc(100vw - 32px));
+  max-height: calc(100dvh - 48px);
+  margin: auto;
+  padding: 0;
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  background: var(--surface);
+  color: var(--fg);
+  overflow: auto;
+}
+
+.share-sheet::backdrop {
+  background: rgb(9 11 15 / 0.55);
+  backdrop-filter: blur(4px);
+}
+
+.share-inner {
+  display: grid;
+  gap: 1rem;
+  padding: 1rem;
+}
+
+.share-inner img,
+.share-wait {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  aspect-ratio: 1200 / 630;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+}
+
+.share-wait {
+  display: grid;
+  place-items: center;
+  color: var(--muted);
+}
+
+.share-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.share-actions .btn {
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none;
+}
+
+.share-close {
+  margin-left: auto;
+  border: 0;
+  background: none;
+  color: var(--muted);
+  font: inherit;
+  font-size: 0.875rem;
+  cursor: pointer;
+}
+
+.share-note {
+  color: var(--muted);
+  font-size: 0.8125rem;
+}

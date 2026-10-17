@@ -6,6 +6,8 @@ import { type DragEvent, useEffect, useMemo, useRef, useState } from "react";
 import type { BuilderData } from "@/lib/builder";
 import { getParam, setParams } from "@/lib/url-state";
 import Skeleton from "@/components/Skeleton";
+import ShareCard from "@/components/ShareCard";
+import type { CardSpec } from "@/lib/share-card";
 
 // Build Editor (/builder?champ=Jinx&items=…&augs=…): drag items into six slots and pick four augments;
 // the summed stats and gold update as you go and the simulator re-runs the build in the browser
@@ -201,6 +203,23 @@ export default function BuildEditor() {
     return { gold, stats: [...sum.entries()] };
   }, [picked, data, itemByKey]);
 
+  const shareSpec = useMemo<CardSpec | null>(() => {
+    if (!result || !data || !list) return null;
+    const icon = (k: string) => data.items[list.items.find((i) => i.key === k)?.name ?? ""]?.icon;
+    return {
+      title: `${champName(champ)} build`,
+      subtitle: `Simulated at level ${level} · ${totals.gold.toLocaleString("en-US")} gold`,
+      icon: champIcon(champ),
+      stats: [
+        { label: "Damage per second", value: fixed(result.mean_dps) },
+        { label: "Time alive", value: `${fixed(result.time_alive, 1)} s` },
+      ],
+      row: { label: "Items", icons: picked.map(icon).filter((x): x is string => Boolean(x)) },
+      url: typeof location === "undefined" ? "https://deeparam.com/builder" : `https://deeparam.com/builder${location.search}`,
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- champName/champIcon only read data
+  }, [result, data, list, champ, level, totals.gold, items]);
+
   const pool = useMemo(() => {
     const q = query.trim().toLowerCase();
     return (list?.items ?? [])
@@ -253,6 +272,7 @@ export default function BuildEditor() {
           >
             Clear
           </button>
+          {shareSpec && <ShareCard spec={shareSpec} />}
           <Link className="inline-link" href={`/champions/${alias(champ)}`}>
             {champName(champ)} page →
           </Link>
