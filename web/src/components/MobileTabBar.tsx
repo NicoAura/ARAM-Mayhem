@@ -2,9 +2,9 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 
-type Tab = { href: string; label: string };
+type Tab = { href: string; label: string; group?: string };
 
 // Bottom tab bar for phones and tablets. It is only shown when the inline script in the
 // layout marks the page as running on iOS or Android (html[data-device="mobile"]).
@@ -49,11 +49,14 @@ export default function MobileTabBar({ tabs }: { tabs: Tab[] }) {
     <>
       {open && <button type="button" className="sheet-scrim" aria-label="Close menu" onClick={() => setOpen(false)} />}
       <div className="sheet" hidden={!open} id="more-sheet">
-        {rest.map((t) => (
-          <Link key={t.href} href={t.href} aria-current={isActive(t.href) ? "page" : undefined}>
-            {t.label}
-            <span aria-hidden="true">→</span>
-          </Link>
+        {rest.map((t, i) => (
+          <Fragment key={t.href}>
+            {t.group && t.group !== rest[i - 1]?.group && <p className="sheet-group">{t.group}</p>}
+            <Link href={t.href} aria-current={isActive(t.href) ? "page" : undefined}>
+              {t.label}
+              <span aria-hidden="true">→</span>
+            </Link>
+          </Fragment>
         ))}
       </div>
       <nav className="tabbar" aria-label="Sections">

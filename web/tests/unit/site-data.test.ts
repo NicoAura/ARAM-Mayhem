@@ -62,12 +62,12 @@ describe("page addresses", () => {
 });
 
 describe("header", () => {
-  it("shows Tier List, Simulator, PBE and a More menu with Info and The Lab", () => {
+  it("shows Tier List, Builds, Simulator, Patches and More, with every page in one of them", () => {
     const top = navItems().map((n) => n.label);
-    expect(top.slice(0, 3)).toEqual(["Tier List", "Simulator", "PBE"]);
-    expect(top).toContain("More");
+    expect(top).toEqual(["Tier List", "Builds", "Simulator", "Patches", "More"]);
+    for (const n of navItems()) if (n.children) expect(n.children.length, n.label).toBeGreaterThan(1);
     const hrefs = navPages().map((n) => n.href);
-    expect(hrefs).toEqual(expect.arrayContaining(["/tier-list", "/simulator", "/pbe", "/info", "/lab"]));
+    expect(hrefs).toEqual(expect.arrayContaining(["/tier-list", "/simulator", "/pbe", "/patches", "/what-to-build", "/augments", "/builder", "/compare", "/synergy", "/draft", "/info", "/lab"]));
     expect(unique(hrefs)).toBe(true);
   });
 });
