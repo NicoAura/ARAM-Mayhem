@@ -191,7 +191,7 @@ export default function Home() {
           <section className="card span-7" data-accent="gold">
             <div className="card-head">
               <h2>Winning builds this patch</h2>
-              <Link href="/what-to-build">Build Helper →</Link>
+              <Link href="/builds">Builds →</Link>
             </div>
             <div className="rank home-builds">
               {wins.map((c) => (

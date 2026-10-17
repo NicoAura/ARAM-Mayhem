@@ -62,13 +62,13 @@ export default async function ChampionPage({ params }: { params: Promise<{ alias
         <p className="champ-hero-links">
           <FavoriteStar id={c.alias} name={c.name} label />
           <CompareToggle id={c.alias} name={c.name} label />
-          <Link className="inline-link" href={`/compare?a=${c.alias}`}>
+          <Link className="inline-link" href={`/builds?tab=compare&a=${c.alias}`}>
             Compare with another champion
           </Link>
-          <Link className="inline-link" href={`/what-to-build?champ=${c.alias}`}>
+          <Link className="inline-link" href={`/builds?champ=${c.alias}`}>
             What should I build?
           </Link>
-          <Link className="inline-link" href={`/builder?champ=${c.alias}`}>
+          <Link className="inline-link" href={`/builds?tab=editor&champ=${c.alias}`}>
             Try a build
           </Link>
           {c.winRate !== undefined && (
@@ -124,7 +124,7 @@ export default async function ChampionPage({ params }: { params: Promise<{ alias
             <section className="card span-all" data-accent="tier">
               <div className="card-head">
                 <h2>Best teammates</h2>
-                <Link href={`/synergy?team=${c.alias}`}>Team Builder →</Link>
+                <Link href={`/builds?tab=team&team=${c.alias}`}>Team Builder →</Link>
               </div>
               <div className="rank plain">
                 {c.partners.map((p) => (

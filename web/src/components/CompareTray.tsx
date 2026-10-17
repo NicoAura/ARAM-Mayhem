@@ -15,7 +15,7 @@ const nameOf = (id: string) => NAMES[id] ?? id.replace(/([a-z])([A-Z])/g, "$1 $2
 export default function CompareTray() {
   const picked = useCompare();
   const pathname = usePathname();
-  if (!picked.length || pathname === "/compare") return null;
+  if (!picked.length || pathname === "/builds") return null;
   const [a, b] = picked;
   return (
     <aside className="cmp-tray" aria-label="Compare tray">
@@ -41,7 +41,7 @@ export default function CompareTray() {
         <button type="button" className="cmp-clear" onClick={clearCompare}>
           Clear
         </button>
-        <Link className="btn cmp-go" href={`/compare?a=${a}${b ? `&b=${b}` : ""}`} aria-disabled={!b || undefined}>
+        <Link className="btn cmp-go" href={`/builds?tab=compare&a=${a}${b ? `&b=${b}` : ""}`} aria-disabled={!b || undefined}>
           Compare
         </Link>
       </div>

@@ -6293,3 +6293,4 @@ th > button[data-tip] {
 .chef-special .kitchen-head .icon { width: 40px; height: 40px; border-radius: 10px; }
 .chef-items { display: flex; flex-wrap: wrap; gap: 6px; }
 .chef-items .icon { width: 32px; height: 32px; border-radius: 6px; }
+.subtab-note { margin: 0 0 1rem; }
