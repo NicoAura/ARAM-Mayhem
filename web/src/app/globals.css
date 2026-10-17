@@ -3464,30 +3464,6 @@ html[data-motion="reduce"] .btn:hover {
   font-size: 0.875rem;
 }
 
-/* Home hero particles (components/HeroParticles.tsx) */
-.hero.has-particles {
-  position: relative;
-  isolation: isolate;
-}
-
-.hero-particles {
-  position: absolute;
-  inset: -2.5rem 0 -1.5rem;
-  z-index: -1;
-  width: 100%;
-  height: calc(100% + 4rem);
-  pointer-events: none;
-  -webkit-mask-image: radial-gradient(ellipse 80% 75% at 60% 45%, #000 40%, transparent 100%);
-  mask-image: radial-gradient(ellipse 80% 75% at 60% 45%, #000 40%, transparent 100%);
-  animation: fade-in 1.2s ease both;
-}
-
-@keyframes fade-in {
-  from {
-    opacity: 0;
-  }
-}
-
 /* Pull-to-refresh on phones (components/SwipeGestures.tsx) */
 .ptr {
   position: fixed;
@@ -6155,4 +6131,179 @@ html[dir="rtl"] .jump-wr {
 }
 .my-stats .lede {
   margin: 0 0 16px;
+}
+
+/* Soft look (Nico's pick, 2026-10-17): rounder shapes, 16px text, sentence-case labels, borderless cards,
+   less space above each page. Kept as one block at the end so it wins over the older rules above. */
+:root {
+  --r: 24px;
+  --r-sm: 12px;
+  --card: #f7f9fb;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --card: #141a23;
+  }
+}
+:root[data-theme="dark"] {
+  --card: #141a23;
+}
+
+body {
+  font-size: 16px;
+}
+
+main {
+  padding-top: 1.5rem;
+}
+
+.intro,
+.hero {
+  margin-bottom: 1.25rem;
+}
+
+.lede {
+  margin-top: 0.5rem;
+}
+
+h1 {
+  max-width: 24em;
+  font-size: clamp(1.9rem, 4vw, 2.6rem);
+  font-weight: 750;
+  letter-spacing: -0.035em;
+}
+
+/* Labels read as normal text instead of small spaced capitals. */
+.eyebrow,
+.intro .eyebrow,
+.hero .eyebrow,
+.data-table th,
+.quickref-block h3,
+.movers-label {
+  color: var(--muted);
+  font: 600 0.875rem/1.4 var(--font-sans), system-ui, sans-serif;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+.chip,
+.tier,
+.tag {
+  height: auto;
+  padding: 0.2rem 0.65rem;
+  font-size: 0.8125rem;
+}
+
+.chip:not([class*="tier-"]),
+.tag {
+  border-color: transparent;
+  background: rgb(var(--fg-rgb) / 8%);
+}
+
+.chip.tier-prismatic {
+  box-shadow: none;
+}
+
+.bento {
+  gap: 1rem;
+}
+
+/* Cards: a filled surface, no border, no shadow, no colour edge, no lift. */
+.card,
+.card:hover,
+.champ-hero,
+html[data-champ-accent] .champ-hero {
+  border-color: transparent;
+  background: var(--card);
+  box-shadow: none;
+}
+
+.card[data-accent]::before {
+  display: none;
+}
+
+.card[data-accent]:hover {
+  border-color: transparent;
+  box-shadow: none;
+  transform: none;
+}
+
+.card-head h2 {
+  font-size: 1.0625rem;
+  font-weight: 650;
+}
+
+.card-head a {
+  font-size: 0.9375rem;
+}
+
+.stat-row b {
+  background: none;
+  color: var(--fg);
+  -webkit-text-fill-color: currentColor;
+  font-size: 1.75rem;
+}
+
+.stat-row b.wr-high,
+.stat-row b.delta-up {
+  color: var(--good);
+}
+
+.stat-row span {
+  font-size: 0.875rem;
+}
+
+.site-header {
+  border-bottom-color: transparent;
+}
+
+/* The open tab is a plain raised pill; site hues stay on the cards and icons. */
+.nav a[aria-current="page"],
+.nav a[data-accent][aria-current="page"] {
+  background: var(--surface);
+  color: var(--fg);
+  box-shadow: 0 0 0 1px var(--line);
+}
+
+.nav a[data-accent]:hover {
+  color: var(--fg);
+}
+
+/* Round controls and pictures. Groups that can wrap onto two lines get a large radius, not a pill. */
+.seg,
+.subtab-list,
+.patch-presets,
+.view-toggle {
+  border-radius: 20px;
+}
+
+.seg button,
+.subtab-list button,
+.patch-presets button,
+.view-toggle button,
+.patch-chips button,
+.search-btn,
+.table-search,
+.jump,
+.jump input,
+.show-more,
+.btn,
+.share-btn,
+.champ-steps a,
+.nav-menu-btn {
+  border-radius: 999px;
+}
+
+img.icon,
+.snap-grid a,
+.snap-grid img,
+.snap-card,
+.champ-hero-icon,
+.quickref-items img {
+  border-radius: 14px;
+}
+
+.data-table,
+.table-scroll {
+  border-radius: var(--r);
 }
