@@ -1,9 +1,12 @@
 import type { Metadata } from "next";
 import { pageMeta } from "@/lib/meta";
 import AugmentCard from "@/components/AugmentCard";
+import ChangeTracker, { type TrackerEntry } from "@/components/ChangeTracker";
 import Intro from "@/components/Intro";
 import Pending from "@/components/Pending";
+import { items } from "@/lib/items";
 import { readRepoJson } from "@/lib/repo-data";
+import championNames from "@/data/champion-names.json";
 
 export const metadata: Metadata = pageMeta("/pbe", "PBE", "What's changing for ARAM Mayhem on the test server: new and changed augments, rules and quests.");
 
@@ -35,6 +38,24 @@ type Pbe = {
 
 const TIERS = ["prismatic", "gold", "silver"];
 
+// Champion names to their icon ids ("Wukong" → MonkeyKing).
+const CHAMP_ID = Object.fromEntries(Object.entries(championNames as Record<string, string>).map(([id, name]) => [name, id]));
+
+function trackerEntries(): TrackerEntry[] {
+  const t = readRepoJson<{ entries: TrackerEntry[] }>("data/pbe/tracker.json");
+  if (!t) return [];
+  const itemIcon = new Map([...items().values()].map((i) => [i.name, i.icon]));
+  return t.entries.map((e) => ({
+    ...e,
+    icon:
+      e.kind === "champion"
+        ? CHAMP_ID[e.name] && `/icons/champions/${CHAMP_ID[e.name]}.webp`
+        : e.kind === "item"
+          ? itemIcon.get(e.name)
+          : e.icon,
+  }));
+}
+
 function Section({ id, title, count, children }: { id: string; title: string; count?: number; children: React.ReactNode }) {
   return (
     <section className="doc-section" id={id}>
@@ -59,7 +80,9 @@ export default function PbePage() {
   }
 
   const { meta, augments } = d;
+  const tracker = trackerEntries();
   const toc = [
+    ["tracker", "Change tracker"],
     ["headliners", "Headliners"],
     ["fame", "Fame"],
     ["augments", "Augments"],
@@ -83,6 +106,16 @@ export default function PbePage() {
           </a>
         ))}
       </nav>
+
+      {tracker.length > 0 && (
+        <Section id="tracker" title="Change tracker" count={tracker.length}>
+          <p className="lede">
+            Every champion, item and augment change on the test server. Tags read which way the numbers moved, so treat them as a guide
+            rather than the final word.
+          </p>
+          <ChangeTracker entries={tracker} />
+        </Section>
+      )}
 
       <Section id="headliners" title="Headliners" count={d.headliners.list.length}>
         <p className="lede">{d.headliners.summary}</p>
