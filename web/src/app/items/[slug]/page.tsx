@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { livePatch } from "@/lib/highlights";
 import { itemBySlug, itemPages } from "@/lib/item-pages";
+import { itemSim } from "@/lib/item-sim";
 import { pageMeta } from "@/lib/meta";
 
 // One page per item Mayhem players build (lib/item-pages.ts).
@@ -11,6 +12,7 @@ export const dynamicParams = false;
 export const generateStaticParams = () => itemPages().map((i) => ({ slug: i.slug }));
 
 const pct = (v: number) => `${(v * 100).toFixed(1)}%`;
+const signed = (v: number, unit = "") => `${v >= 0 ? "+" : "−"}${Math.abs(v).toFixed(unit ? 1 : 0)}${unit}`;
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const i = itemBySlug((await params).slug);
@@ -22,6 +24,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 export default async function ItemPage({ params }: { params: Promise<{ slug: string }> }) {
   const i = itemBySlug((await params).slug);
   if (!i) notFound();
+  const sim = itemSim(i.id);
   return (
     <>
       <section className="champ-hero aug-hero">
@@ -71,6 +74,39 @@ export default async function ItemPage({ params }: { params: Promise<{ slug: str
               </Link>
             ))}
           </div>
+        </section>
+      )}
+      {sim && (
+        <section className="card item-sim" data-accent="sim">
+          <div className="card-head">
+            <h2>Simulated damage</h2>
+            <Link href="/simulator">Open the simulator →</Link>
+          </div>
+          <div className="stat-row">
+            <div>
+              <b className={sim.gain >= 0.03 ? "wr-high" : sim.gain < 0 ? "wr-low" : ""}>{signed(sim.gain * 100, "%")}</b>
+              <span>damage</span>
+            </div>
+            <div>
+              <b>{signed(sim.alive, " s")}</b>
+              <span>time alive</span>
+            </div>
+          </div>
+          <div className="rank builders">
+            {sim.champs.map((c) => (
+              <Link key={c.id} href={`/champions/${c.id}`}>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img className="icon" src={`/icons/champions/${c.id}.webp`} alt="" width={24} height={24} loading="lazy" />
+                <span className="rank-name">{c.name}</span>
+                <span className={`rank-v ${c.gain >= 0.03 ? "wr-good" : ""}`}>{signed(c.gain * 100, "%")} damage</span>
+                <span className="rank-v">{c.dps.toLocaleString("en-US")} DPS</span>
+              </Link>
+            ))}
+          </div>
+          <p className="table-note">
+            Simulated on patch {sim.patch}: each champion&apos;s best simulated build with and without {i.name}, in the same fights. The top line is
+            the middle result across these champions.
+          </p>
         </section>
       )}
       <p className="patch-note">Build rate is the share of that champion&apos;s games where they finished the item.</p>
