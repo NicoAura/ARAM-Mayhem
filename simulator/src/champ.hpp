@@ -63,6 +63,8 @@ struct Ability {
     double ccDuration = 0, ccSlow = 0;
     Bag shield;                // a shield on yourself when cast (its scaling), and how long it lasts
     double shieldDuration = 0;
+    double cost = 0;           // mana or energy per cast
+    Bag heal;                  // Health restored to yourself when cast (its scaling)
     Area area = Area::Single;
     Geometry geo;
     bool aura = false;  // per-second damage on a toggle or very short cooldown: always on
@@ -105,6 +107,9 @@ struct ChampionKit {
     bool deathNeedsR = false;
     std::vector<Ability> abilities;
     std::vector<Passive> passives;
+    // Mana or energy (resource 1 or 2; 0: casts are free): pool and regeneration per second.
+    int resource = 0;
+    double mana = 0, manaG = 0, manaRegen = 0, manaRegenG = 0;
     // Stat and stacking passives (data/kit_passives.json), in the same keys as augments.
     Bag kitStats, kitEffects;
     // Its abilities' crowd control that stops a champion acting (slot, kind), damaging or not:

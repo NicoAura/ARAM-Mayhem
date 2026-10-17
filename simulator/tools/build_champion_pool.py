@@ -448,6 +448,8 @@ def parse_spell(slot, spell_obj, strings, base_stats, attack_range=125):
         **cast_timing(spell, rank, targeting),
         **({"cc": cc} if (cc := parse_cc(text, ev)) else {}),
         **({"shield": sh} if (sh := parse_shield(body, ev)) else {}),
+        **({"heal": hl} if (hl := parse_heal(body, ev)) else {}),
+        **({"cost": c} if (c := spell_cost(spell, rank)) else {}),
         "targeting": targeting,
         "area": area,
         "duration": round(duration, 3),
@@ -516,6 +518,47 @@ def parse_shield(body, ev):
                     dur = dl.const()
                     break
         return {"scaling": round_lin(lin), "duration": round(dur, 3)}
+    return None
+
+
+def spell_cost(spell, rank):
+    """Mana or energy per cast at this rank."""
+    costs = spell.get("mana") or []
+    return round(float(costs[min(rank, len(costs)) - 1]), 2) if costs else 0.0
+
+
+# Resource types in the CharacterRecord (AbilityResourceSlotInfo.arType) and its value hashes.
+RESOURCES = {0: "mana", 1: "energy"}
+AR_BASE, AR_PER_LEVEL, AR_REGEN, AR_REGEN_PER_LEVEL = "{726ee5cd}", "{6216bf7b}", "{c4ab3550}", "{3a509002}"
+
+
+def resource(record):
+    """The champion's ability resource: kind, pool and regeneration per second (base and per level)."""
+    ar = record.get("primaryAbilityResource") or {}
+    kind = RESOURCES.get(ar.get("arType", 0) if ar else 0)
+    num = lambda k: round(float((ar.get(k) or {}).get("baseValue", 0.0)), 4)  # noqa: E731
+    if not kind or num(AR_BASE) <= 0:
+        return {"kind": "none"}
+    return {"kind": kind, "pool": num(AR_BASE), "pool_per_level": num(AR_PER_LEVEL),
+            "regen": num(AR_REGEN), "regen_per_level": num(AR_REGEN_PER_LEVEL)}
+
+
+HEAL_TAG = re.compile(r"<healing>(.*?)</healing>", re.S | re.I)
+
+
+def parse_heal(body, ev):
+    """The Health an ability restores to its caster (its first flat <healing> amount). Heals that
+    are a share of damage dealt or of missing Health are left out."""
+    for m in HEAL_TAG.finditer(body):
+        ref = REF.search(m.group(1))
+        if not ref:
+            continue
+        lin, is_pct = ev.calc(ref.group(1))
+        if lin is None or is_pct or ref.group(2) or "%" in m.group(1):
+            continue
+        if lin.const() <= 0 and not any(k != "const" for k in round_lin(lin)):
+            continue
+        return {"scaling": round_lin(lin)}
     return None
 
 
@@ -906,6 +949,7 @@ def main():
                 "ability_haste": (bal or {}).get("ability_haste", 0.0),
                 "attack_speed": (bal or {}).get("attack_speed", 0.0),
             },
+            "resource": resource(record),
             "cn": {k: p[k] for k in ("weight", "damage_share", "damage_taken_share", "win_rate", "cc", "phys_share")} if p else None,
             "abilities": abilities,
             **({"passives": passives} if passives else {}),

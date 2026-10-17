@@ -114,5 +114,37 @@
    "stack_as_l18": 0.15
   },
   "why": "Ionian Fervor: attack speed per ability hit, up to 4 (approximate per-stack values)"
+ },
+ "Yasuo": {
+  "stats": {
+   "crit_damage": -0.2
+  },
+  "effects": {
+   "crit_chance_mult": 1
+  },
+  "why": "Way of the Wanderer: double crit chance, crits deal 10% less"
+ },
+ "Yone": {
+  "stats": {
+   "crit_damage": -0.2
+  },
+  "effects": {
+   "crit_chance_mult": 1
+  },
+  "why": "Way of the Hunter: double crit chance, crits deal 10% less"
+ },
+ "Jhin": {
+  "stats": {
+   "crit_damage": -0.28
+  },
+  "effects": {
+   "crit_every": 4,
+   "whisper_ad_pct_l1": 0.04,
+   "whisper_ad_pct_l18": 0.44,
+   "whisper_crit": 0.003,
+   "whisper_as": 0.0025,
+   "as_fixed": 0.625
+  },
+  "why": "Whisper: fixed 0.625 attack speed, every fourth shot crits, crits deal 14% less; 4-44% bonus AD by level plus 0.3% per 1% crit and 0.25% per 1% bonus attack speed"
  }
 }

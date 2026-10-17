@@ -326,6 +326,17 @@ int main(int argc, char** argv) {
         }
     }
 
+    {
+        // Mana and energy: casts cost them, so a free-casting copy does more damage.
+        CHECK(lux->resource == 1 && lux->mana > 0 && lux->abilities[0].cost > 0, "Lux has mana and her abilities cost it");
+        const ChampionKit* zed = lib.find("Zed");
+        CHECK(zed && zed->resource == 2, "Zed uses energy");
+        ChampionKit free = *lux;
+        free.resource = 0;
+        const Scenario lsc = lib.scenarioFor(*lux);
+        CHECK(meanDps(lib, free, cap, lsc, 600) > meanDps(lib, *lux, cap, lsc, 600), "running out of mana costs damage");
+    }
+
     bool threw = false;
     try { runTrials(lib, *ahri, Build{{"not_an_item"}, {}}, sc, 0, 1); } catch (...) { threw = true; }
     CHECK(threw, "unknown item ids are rejected");

@@ -143,6 +143,13 @@ ChampionKit loadChampion(const json::Value& c, const Rules& rules) {
     k.damageTaken = m["damage_taken"].asNumber(1.0);
     k.mayhemAh = m["ability_haste"].asNumber(0.0);
     k.mayhemAs = m["attack_speed"].asNumber(0.0);
+    const json::Value& res = c["resource"];
+    const std::string kind = res["kind"].asString("none");
+    k.resource = kind == "mana" ? 1 : kind == "energy" ? 2 : 0;
+    k.mana = res["pool"].asNumber(0);
+    k.manaG = res["pool_per_level"].asNumber(0);
+    k.manaRegen = res["regen"].asNumber(0);
+    k.manaRegenG = res["regen_per_level"].asNumber(0);
     k.kitStats = bagOf(c["kit"]["stats"]);
     k.kitEffects = bagOf(c["kit"]["effects"]);
     const json::Value& d = c["death"];
@@ -205,6 +212,8 @@ ChampionKit loadChampion(const json::Value& c, const Rules& rules) {
             ab.ccSlow = cc["amount"].asNumber(0.3);
             if (ab.cc != "slow" && ab.cc != "silence" && ab.cc != "root") k.hardCc.push_back({ab.slot, ab.cc});
         }
+        if (a["heal"].isObject()) ab.heal = bagOf(a["heal"]["scaling"]);
+        ab.cost = a["cost"].asNumber(0);
         if (a["shield"].isObject()) {
             ab.shield = bagOf(a["shield"]["scaling"]);
             ab.shieldDuration = a["shield"]["duration"].asNumber(2.5);
@@ -732,6 +741,12 @@ private:
     double rUnstopReady_ = 0, rReductionReady_ = 0, rVampUntil_ = -1, rBasicAhUntil_ = -1, rWindowUntil_ = -1;
     double reductionUntil_ = -1, firstHitAt_ = -1, lowHealReady_ = 0, nextInvuln_ = 1e18, reviveFrac_ = 0;
     Effect kitFx_;  // the champion's own stat and stacking passives
+    // Mana or energy: what's left at manaT_ (it refills at manaRegen_ per second since).
+    double maxMana_ = 0, mana_ = 0, manaT_ = 0, manaRegen_ = 0, costMult_ = 1;
+    double manaAt(double t) const { return std::min(maxMana_, mana_ + manaRegen_ * std::max(0.0, t - manaT_)); }
+    double costOf(const Ability& a) const { return ch_.resource ? a.cost * (ch_.resource == 1 ? costMult_ : 1.0) : 0.0; }
+    bool affordable(const Ability& a, double t) const { return costOf(a) <= manaAt(t) + 1e-9; }
+    void spend(double cost, double t) { mana_ = manaAt(t) - cost; manaT_ = t; }
     bool converting_ = false, snipeHit_ = false, augReviveUsed_ = false, augRevive_ = false;
     double poroReady_ = 0;
     bool hasMissile_ = false, hasKraken_ = false, hasStorm_ = false, hasEclipse_ = false;
@@ -891,11 +906,15 @@ private:
         else bonusAd_ *= 1.0 + adaptive;
         ap_ *= 1.0 + get(fx_, "ap_amp");
         crit_ = get(stats, "crit") + get(fx_, "crit_per_ap") * ap_;
+        crit_ *= 1.0 + get(fx_, "crit_chance_mult");  // Yasuo, Yone: double crit chance
         if (crit_ > 1.0) {  // Mayhem: crit chance above 100% becomes AD
             bonusAd_ += (crit_ - 1.0) * 100.0 * rules_.critOverflowAd;
             crit_ = 1.0;
         }
         critDamage_ = get(stats, "crit_damage") + get(fx_, "crit_damage_per_crit") * crit_;
+        // Jhin: bonus AD from level, crit chance and bonus attack speed (before the build's % AD).
+        bonusAd_ += (get(fx_, "whisper_ad_pct") + get(fx_, "whisper_crit") * crit_ * 100.0 +
+                     get(fx_, "whisper_as") * 100.0 * (ch_.asG * g + get(stats, "as"))) * (baseAd_ + bonusAd_);
         ad_ = baseAd_ + bonusAd_;
         bonusAd_ += (get(fx_, "ad_pct") + sword * get(fx_, "sword_ad")) * ad_;  // "% Attack Damage" (Blunt Force)
         ad_ = baseAd_ + bonusAd_;
@@ -907,7 +926,20 @@ private:
         }
         msToAs_ = get(fx_, "ms_to_as");
         asCap_ = std::max(rules_.asCap, get(fx_, "as_cap"));
-        bonusHp_ = get(stats, "hp") + (hasImmobilize_ ? get(fx_, "cc_hp") : 0.0);
+        if (get(fx_, "as_fixed") > 0) asCap_ = get(fx_, "as_fixed");  // Jhin: attack speed never changes
+        // Mana (energy pools don't grow). Mind to Matter turns some of it into Health.
+        if (ch_.resource == 1) {
+            maxMana_ = ch_.mana + ch_.manaG * g + get(stats, "mana");
+            manaRegen_ = (ch_.manaRegen + ch_.manaRegenG * g) * (1.0 + get(stats, "mana_regen"));
+        } else if (ch_.resource == 2) {
+            maxMana_ = ch_.mana;
+            manaRegen_ = ch_.manaRegen;
+        }
+        mana_ = maxMana_;
+        manaT_ = 0;
+        costMult_ = 1.0 + get(fx_, "cost_mult");
+        bonusHp_ = get(stats, "hp") + (hasImmobilize_ ? get(fx_, "cc_hp") : 0.0) +
+                   (ch_.resource == 1 ? get(fx_, "mana_to_hp") * maxMana_ : 0.0);
         const double baseHp = ch_.hp + ch_.hpG * g;
         maxHp_ = (baseHp + bonusHp_) * (1.0 + get(fx_, "hp_pct") + sword * get(fx_, "sword_hp")) * (1.0 + get(fx_, "hp_mult"));
         bonusHp_ = maxHp_ - baseHp;
@@ -925,7 +957,10 @@ private:
         magicPenPct_ = get(stats, "magic_pen_pct");
         lifesteal_ = get(stats, "lifesteal") + sword * get(fx_, "sword_lifesteal");
         omnivamp_ = get(stats, "omnivamp") + get(fx_, "omnivamp_per_ap") * ap_;
-        damageAmp_ = (1.0 + get(fx_, "damage_amp")) * ch_.damageDealt;
+        // Overflow: double mana costs for more effective damage, heals and shields (more with more mana).
+        const double overflow = ch_.resource == 1 && get(fx_, "overflow_amp") > 0
+                                    ? get(fx_, "overflow_amp") + get(fx_, "overflow_amp_per_mana") * maxMana_ : 0.0;
+        damageAmp_ = (1.0 + get(fx_, "damage_amp")) * (1.0 + overflow) * ch_.damageDealt;
         abilityAmp_ = 1.0 + get(fx_, "ability_amp");
         myHp_ = maxHp_;
         moveSpeed_ = ch_.moveSpeed + get(fx_, "ms") + get(fx_, "ms_per_ah") * ah_;
@@ -941,7 +976,7 @@ private:
         trueExtra_ = ranged_ && get(fx_, "true_extra_ranged") > 0 ? get(fx_, "true_extra_ranged") : get(fx_, "true_extra");
         msDiffAmp_ = get(fx_, "ms_diff_amp");
         hsp_ = 1.0 + get(fx_, "heal_shield_power") + get(fx_, "hsp_per_resist") * (bonusArmor_ + bonusMr_) +
-               get(fx_, "heal_shield_crit") * crit_;
+               get(fx_, "heal_shield_crit") * crit_ + overflow;
         cdr_ = get(fx_, "cdr");
         incomingMult_ = 1.0 - get(fx_, "crit_defend") * std::min(crit_, get(fx_, "crit_defend_cap", 1.0));
         shrink_ = get(fx_, "shrink");
@@ -1723,6 +1758,7 @@ private:
             record(ev);
         }
         if (!a.shield.empty()) addShield(scaled(a.shield) * hsp_, a.shieldDuration, a.slot);
+        if (!a.heal.empty()) heal(scaled(a.heal) * hsp_);
         // Tripleshot, Spell Split: the ability also hits a few more enemies near the target, for less.
         std::vector<std::pair<Enemy*, double>> targets;
         for (Enemy* e : shot.hits) targets.push_back({e, 1.0});
@@ -1838,7 +1874,9 @@ private:
 
     void applyOnHit(Enemy* e, double scale) {
         if (!e || !e->alive) return;
-        const double magic = get(fx_, "onhit_magic") + get(fx_, "onhit_magic_ap") * ap_;
+        double magic = get(fx_, "onhit_magic") + get(fx_, "onhit_magic_ap") * ap_;
+        if (ch_.resource == 1 && get(fx_, "onhit_mana") > 0)  // Juiced: a share of max mana (less when ranged)
+            magic += get(fx_, "onhit_mana") * maxMana_ * (ranged_ ? get(fx_, "onhit_mana_ranged", 1.0) : 1.0);
         deal(e, scale * magic, DamageType::Magic, SrcItems);
         double phys = get(fx_, "onhit_phys") + get(fx_, "onhit_cur_hp") * e->hp + get(fx_, "onhit_own_hp") * maxHp_ +
                       get(fx_, "onhit_phys_ap") * ap_;
@@ -1903,7 +1941,8 @@ private:
         tickStacks();
         Enemy* e = &P();
         ++attacks_;
-        const bool crit = rng_.chance(crit_);
+        const int every = static_cast<int>(get(fx_, "crit_every"));  // Jhin's fourth shot always crits
+        const bool crit = (every > 0 && attacks_ % every == 0) || rng_.chance(crit_);
         const double critMult = rules_.critMult + critDamage_;
         if (trace_) {
             TraceEvent ev;
@@ -2315,6 +2354,7 @@ Result Fight::run() {
         for (size_t i : order_) {
             if (readyAt_[i] > t_) continue;
             const Ability& a = ch_.abilities[i];
+            if (!affordable(a, t_)) continue;  // out of mana or energy: wait for it to come back
             const double need = needRange(a);
             if (distTo(P()) > need) {
                 wantRange_ = std::min(wantRange_, need);
@@ -2332,6 +2372,7 @@ Result Fight::run() {
             t_ += ct;
             if (t_ >= duration_ || advance(t_)) break;
             if (!hasPrimary()) primary_ = nearestAlive(me_);
+            spend(costOf(a), t_ - ct);
             if (primary_ >= 0) castAbility(i, ct);
             readyAt_[i] = t_ + cooldownOf(a);
             afterCast(i);
@@ -2372,8 +2413,13 @@ Result Fight::run() {
         if (nextAttack_ > t_ || !inRange) {
             double nt = inRange ? nextAttack_ : t_ + kStep;
             if (waiting) nt = std::min(nt, t_ + kStep);
-            for (size_t i : order_)
-                if (readyAt_[i] > t_) nt = std::min(nt, readyAt_[i]);
+            for (size_t i : order_) {
+                const Ability& a = ch_.abilities[i];
+                const double ready = std::max(readyAt_[i], affordable(a, t_) || manaRegen_ <= 0
+                                                               ? readyAt_[i]
+                                                               : t_ + (costOf(a) - manaAt(t_)) / manaRegen_);
+                if (ready > t_) nt = std::min(nt, ready);
+            }
             t_ = std::max(nt, t_ + 1e-9);
             continue;
         }
