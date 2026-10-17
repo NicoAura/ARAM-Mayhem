@@ -1,0 +1,79 @@
+"use client";
+/* eslint-disable @next/next/no-img-element -- small local icons */
+
+import Link from "next/link";
+import { useState } from "react";
+import { Name, useT } from "@/components/I18n";
+import type { AugmentRow } from "@/lib/champion-page";
+
+// A champion's augments as one ranked table with a rarity filter, the most picked first.
+
+const RARITIES = ["all", "prismatic", "gold", "silver"] as const;
+const LABEL = { all: "All", prismatic: "Prismatic", gold: "Gold", silver: "Silver" };
+const LIMIT = 10;
+
+export default function AugmentTable({ rows }: { rows: (AugmentRow & { href?: string })[] }) {
+  const t = useT("champions");
+  const [rarity, setRarity] = useState<(typeof RARITIES)[number]>("all");
+  const [open, setOpen] = useState(false);
+  const shown = rows.filter((r) => rarity === "all" || r.rarity === rarity);
+  return (
+    <>
+      <div className="cp-filters">
+        <div className="cp-seg" role="group" aria-label={t("Rarity")}>
+          {RARITIES.filter((r) => r === "all" || rows.some((x) => x.rarity === r)).map((r) => (
+            <button key={r} type="button" aria-pressed={rarity === r} onClick={() => setRarity(r)}>
+              {t(LABEL[r])}
+            </button>
+          ))}
+        </div>
+      </div>
+      <div className="cp-th" data-cols={2}>
+        <span>{t("Rank")}</span>
+        <span>{t("Augment")}</span>
+        <span>{t("Grade")}</span>
+        <span>{t("Pick rate")}</span>
+      </div>
+      <div className="cp-rows">
+        {(open ? shown : shown.slice(0, LIMIT)).map((a, i) => {
+          const body = (
+            <>
+              <img className="cp-icon round" src={`/icons/augments/${a.id}.webp`} alt="" width={36} height={36} loading="lazy" />
+              <span className="cp-name">
+                <Name kind="augments" id={a.id}>
+                  {a.name}
+                </Name>
+              </span>
+              <span className={`cp-pill ${a.rarity}`}>{t(LABEL[a.rarity])}</span>
+            </>
+          );
+          return (
+            <div key={a.id} className="cp-row" data-cols={2}>
+              <span className="cp-rk">#{i + 1}</span>
+              {a.href ? (
+                <Link className="cp-what" href={a.href}>
+                  {body}
+                </Link>
+              ) : (
+                <div className="cp-what">{body}</div>
+              )}
+              <div className="cp-cell">
+                <b className={`grade-${a.grade.toLowerCase()}`}>{a.grade || "–"}</b>
+                <small>{t("Grade")}</small>
+              </div>
+              <div className="cp-cell">
+                <b>{(a.pickRate * 100).toFixed(1)}%</b>
+                <small>{t("Pick rate")}</small>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+      {shown.length > LIMIT && (
+        <button type="button" className="cp-more" aria-expanded={open} onClick={() => setOpen(!open)}>
+          {open ? t("Show fewer") : t("Show all {n}", { n: shown.length })}
+        </button>
+      )}
+    </>
+  );
+}

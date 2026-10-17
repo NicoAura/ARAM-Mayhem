@@ -77,10 +77,11 @@ export function setLang(code: string) {
   dispatchEvent(new Event(LANG_EVENT));
 }
 
-/** A translator for one namespace: t("English text", { placeholder: value }). */
+/** A translator for one namespace: t("English text", { placeholder: value }). A namespace starting with "/" is a
+ *  folder of its own, such as an embedded tab's "/embed/champions/i18n". */
 export function useT(ns = "common") {
   const lang = useLang();
-  const d = lang === DEFAULT_LANG ? null : dict(`/i18n/${ns}/${lang}.json`);
+  const d = lang === DEFAULT_LANG ? null : dict(ns.startsWith("/") ? `${ns}/${lang}.json` : `/i18n/${ns}/${lang}.json`);
   return useCallback((en: string, v?: Record<string, string | number>) => fill(d?.[en] || en, v), [d]);
 }
 
