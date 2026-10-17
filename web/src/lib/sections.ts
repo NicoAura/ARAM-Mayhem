@@ -28,6 +28,12 @@ export const sections = [
     pr: 0,
   },
   {
+    href: "/patches",
+    label: text("tab./patches.label", "Patch Recaps"),
+    body: text("tab./patches.body", "What every patch changed: augments added, removed and tuned, and the champions that moved most."),
+    pr: 0,
+  },
+  {
     href: "/pbe",
     label: text("tab./pbe.label", "PBE"),
     body: text("tab./pbe.body", "Mayhem Season 3 changes from the test server."),
