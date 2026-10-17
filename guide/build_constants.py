@@ -1,23 +1,22 @@
 """Write guide/game_constants.json: Riot's official IDs and names for the ARAM and Mayhem queues and maps.
 
-Usage: python3 guide/build_constants.py
+Usage: python3 data/constants/update.py && python3 guide/build_constants.py
 
-Reads Riot's developer constants (static.developer.riotgames.com/docs/lol/{queues,maps,gameModes,seasons}.json), the
-same lists the Riot API's match data uses. build_data.py takes the public Mayhem queue id from here, and My Stats and
+Reads Riot's developer constants from data/constants/*.json (the My Stats copy, refreshed by
+data/constants/update.py), the same lists the Riot API's match data uses. build_data.py takes the public Mayhem queue id from here, and My Stats and
 the site can use it in place of hard-coded ids. The client's own queue list (guide/data.js "queues") also has
 internal Mayhem queues (tournament and test ids) that the official list leaves out.
 """
-import json, os, urllib.request
+import json, os
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-DOCS = "https://static.developer.riotgames.com/docs/lol"
+CONSTANTS = os.path.join(os.path.dirname(HERE), "data", "constants")
 ARAM_MAPS = ("Howling Abyss", "Butcher's Bridge")
 
 
 def get(name):
-    req = urllib.request.Request(f"{DOCS}/{name}.json", headers={"User-Agent": "deeparam-guide"})
-    with urllib.request.urlopen(req, timeout=60) as r:
-        return json.load(r)
+    with open(os.path.join(CONSTANTS, f"{name}.json")) as f:
+        return json.load(f)
 
 
 def main():

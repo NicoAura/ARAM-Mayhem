@@ -85,6 +85,6 @@ mode written from Riot's /dev posts and dev updates (What is Mayhem tab). Neithe
 
 ## Official game constants
 
-`build_constants.py` writes `game_constants.json` from Riot's developer constants: the public Mayhem queue id
+`build_constants.py` writes `game_constants.json` from Riot's developer constants in `data/constants/` (run `data/constants/update.py` first): the public Mayhem queue id
 (`mayhemQueue`), the live ARAM-map queues, the ARAM map ids and the ARAM game modes. `build_data.py` takes the Mayhem
 queue id from it. Rerun when Riot adds a queue.
