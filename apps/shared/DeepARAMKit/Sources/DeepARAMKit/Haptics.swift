@@ -53,10 +53,12 @@ public final class Haptics: ObservableObject {
     /// Changed from the app's own switch: saved here and written to the site's settings on `pages`
     /// (they share storage, so one loaded page is enough; each is told so open pages update).
     public func setEnabled(_ on: Bool, pages: [WKWebView]) {
+        // Settings switches answer with the tick, on the way off too (before it goes quiet).
+        if !on { play(.tick) }
         store(on)
         let js = HapticsBridge.writeSettingScript(on)
         for wv in pages where wv.url.map(Site.isInternal) == true { wv.evaluateJavaScript(js) }
-        if on { play(.tap) }
+        if on { play(.tick) }
     }
 
     /// Changed on the site (its settings menu): just follow it.
