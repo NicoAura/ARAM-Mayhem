@@ -1,6 +1,7 @@
 "use client";
 
 import { toggleCompare, useCompare } from "@/lib/compare-tray";
+import { buzz } from "@/lib/haptics";
 
 /** Adds a champion to (or takes it out of) the compare tray at the bottom of the screen. */
 export default function CompareToggle({ id, name, label = false }: { id: string; name: string; label?: boolean }) {
@@ -15,6 +16,7 @@ export default function CompareToggle({ id, name, label = false }: { id: string;
       onClick={(e) => {
         e.preventDefault();
         e.stopPropagation();
+        buzz();
         toggleCompare(id);
       }}
     >

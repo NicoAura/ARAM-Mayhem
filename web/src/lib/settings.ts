@@ -13,11 +13,13 @@ export type Settings = {
   sound: boolean;
   /** Simulator rendering quality; "auto" lets it adapt to the device. */
   graphics: "auto" | "low" | "high";
+  /** Short vibrations on phone taps and swipes, where the phone supports them. */
+  haptics: boolean;
   /** The Tier List's starting patch range. */
   tierRange: "live" | "last3" | "all";
 };
 
-export const DEFAULT_SETTINGS: Settings = { motion: "system", sound: true, graphics: "auto", tierRange: "live" };
+export const DEFAULT_SETTINGS: Settings = { motion: "system", sound: true, haptics: true, graphics: "auto", tierRange: "live" };
 
 export function loadSettings(): Settings {
   try {
