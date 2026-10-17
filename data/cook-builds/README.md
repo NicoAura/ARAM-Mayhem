@@ -40,3 +40,15 @@ the live client's Mayhem (KIWI) augment pool on CommunityDragon.
 
 Add an entry to `builds.json` with augment names exactly as the client spells them and item
 names as the simulator spells them (`./mayhem_sim --list`), then rerun `build_data.py`.
+
+## Chef's Pick
+
+A build with a `"chef": "YYYY-MM-DD"` field was the Chef's Pick that day. The Cook Builds page
+features the build with the newest date at the top (`/lab#chefs-pick`); earlier picks stay in the
+list with a "Chef's Pick" chip. `build_data.py` also writes `tools/fun/cook-builds/chef.js`, a
+small file The Lab's front page reads to name today's pick.
+
+A scheduled task adds a new pick every day at 7:50 PM New York, next to the PBE update. It writes
+one new build (a champion played completely against type, built on an augment or item gimmick,
+whose core augments aren't already on that champion's best-champion list), dates it, reruns
+`build_data.py` and merges the PR once Tests pass.
