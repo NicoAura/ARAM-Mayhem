@@ -321,3 +321,13 @@ def test_official_patch_notes():
         assert p["url"].startswith("https://www.leagueoflegends.com/"), p["patch"]
         for c in p["champions"] + p["augments"]:
             assert c["name"] and all(isinstance(x, str) and x for x in c["changes"]), (p["patch"], c["name"])
+
+def test_official_profile():
+    o = load_json("champions/official.json")
+    tags = load_json("champions/tags.json")["champions"]
+    assert set(o["champions"]) == set(tags) and len(o["difficulty"]) == 3
+    for alias, c in o["champions"].items():
+        assert c["roles"] and set(c["roles"]) <= {"Assassin", "Fighter", "Mage", "Marksman", "Support", "Tank"}, alias
+        assert 1 <= c["difficulty"] <= len(o["difficulty"]), alias
+    profile = load_js_data("champions/profile.js", "CHAMPS_PROFILE")
+    assert set(profile) == set(tags) and all(p["difficulty"] in o["difficulty"] for p in profile.values())
