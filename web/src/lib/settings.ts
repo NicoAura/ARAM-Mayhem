@@ -23,7 +23,7 @@ export type Settings = {
   colors: "standard" | "colorblind";
   /** Base text size; everything sized in rem follows it. */
   text: "standard" | "large" | "larger";
-  /** Reopen the Tier List, Compare, Team Builder and Build Editor the way they were left. */
+  /** Reopen the Tier List, Team Builder and Build Editor the way they were left. */
   remember: boolean;
   /** The Tier List's starting patch range. */
   tierRange: "live" | "last3" | "all";

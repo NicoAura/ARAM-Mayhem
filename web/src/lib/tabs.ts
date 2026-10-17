@@ -69,19 +69,19 @@ const pick = (href: string): NavItem[] => {
 };
 
 /** The header's tabs, grouped by what a player is trying to do:
- *  Tier List · Builds (what to build, editor, compare, team) · Augments (tier list, draft practice) · Simulator ·
- *  Patches (live recaps and the PBE) · More (Items, Info, The Lab, newer tool folders).
+ *  Tier List (champions, augments, duos) · Augments (by icon, draft practice) · Simulator ·
+ *  Patches (live recaps and the PBE) · More (Items, Build tools, Info, The Kitchen, newer tool folders).
+ *  Builds for a champion are on its page.
  *  My Stats sits behind the account button; champion, augment and item pages open from the tier lists and search. */
 export function navItems(): NavItem[] {
   const tools = discoverToolTabs().filter((t) => t.href.startsWith("/tools/"));
   const menu = (href: string, label: string, children: NavItem[]): NavItem[] => (children.length ? [{ href, label, children }] : []);
   return [
     ...pick("/tier-list"),
-    ...pick("/builds"),
     ...pick("/augments"),
     ...pick("/simulator"),
     ...menu("#patches", "Patches", [...pick("/pbe"), ...pick("/patches")]),
-    ...menu("#more", "More", [...pick("/items"), ...pick("/info"), ...pick("/kitchen"), ...tools.flatMap((t) => pick(t.href))]),
+    ...menu("#more", "More", [...pick("/items"), ...pick("/builds"), ...pick("/info"), ...pick("/kitchen"), ...tools.flatMap((t) => pick(t.href))]),
   ];
 }
 
