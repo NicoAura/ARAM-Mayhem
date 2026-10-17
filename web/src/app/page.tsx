@@ -7,7 +7,7 @@ import { readRepoJson } from "@/lib/repo-data";
 import type { PatchSchedule } from "@/lib/patch-schedule";
 import PatchCountdown from "@/components/PatchCountdown";
 import { championSplash } from "@/lib/champions";
-import { ChampionJump, KitchenPick, TierSnapshot } from "@/components/HomeWidgets";
+import { KitchenPick, TierSnapshot } from "@/components/HomeWidgets";
 import { augmentHref } from "@/lib/augments";
 import { KITCHEN } from "@/lib/tabs";
 import championNames from "@/data/champion-names.json";
@@ -66,7 +66,6 @@ export default function Home() {
         <p className="lede">
           <T>{text("home.lede")}</T>
         </p>
-        {tiers.length > 0 && <ChampionJump champs={tiers} />}
       </section>
 
       <div className="bento">

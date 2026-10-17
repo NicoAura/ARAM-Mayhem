@@ -111,3 +111,10 @@ def test_no_maps_or_summoner_spell_lists():
     """The Info tab doesn't list map skins or summoner spells (Nico, 2026-10-17)."""
     html, js = read("guide/index.html"), read("guide/app.js")
     assert not any(x in html or x in js for x in ("map-list", "spell-list"))
+
+
+def test_no_archive_or_augment_history_tabs():
+    """The Info tab has no Archive or Augment history tab (Nico, 2026-10-17). guide/history.js stays for Patch Recaps."""
+    html, js = read("guide/index.html"), read("guide/app.js")
+    assert not any(x in html for x in ('data-tab="history"', 'data-tab="archive"', 'src="history.js"'))
+    assert "GUIDE_HISTORY" not in js and "set-list" not in js

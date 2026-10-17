@@ -70,7 +70,7 @@ const pick = (href: string): NavItem[] => {
 
 /** The header's tabs, grouped by what a player is trying to do:
  *  Tier List (champions, augments, duos, augments by icon, draft practice) · Simulator ·
- *  Patches (live recaps and the PBE) · More (Items, Build tools, Info, The Kitchen, newer tool folders).
+ *  Patches (live recaps and the PBE) · More (Items, Info, The Kitchen, newer tool folders).
  *  Builds for a champion are on its page.
  *  My Stats sits behind the account button; champion, augment and item pages open from the tier lists and search. */
 export function navItems(): NavItem[] {
