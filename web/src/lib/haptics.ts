@@ -36,6 +36,7 @@ export function buzz(kind: HapticKind = "tap") {
   const app = (window as unknown as AppBridge).webkit?.messageHandlers?.deeparamHaptic;
   try {
     if (app) app.postMessage({ kind: APP_KIND[kind], style: kind });
-    else if (canVibrate()) navigator.vibrate(PATTERNS[kind] as number | number[]);
+    // Before the first tap the browser blocks vibration and logs an error (a buzz from a page load, not a touch).
+    else if (canVibrate() && navigator.userActivation?.hasBeenActive !== false) navigator.vibrate(PATTERNS[kind] as number | number[]);
   } catch {}
 }

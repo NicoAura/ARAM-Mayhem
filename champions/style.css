@@ -195,6 +195,7 @@ td.num { white-space: nowrap; }
   --a-soft: rgba(63, 167, 245, 0.16);
   --a-edge: #90c3eb;
   --hue-gold-ink: #80601a;
+  --prism-ink: #6a4fd0;
   --gold-edge: rgba(128, 96, 26, 0.45);
   --accent-edge: rgba(9, 101, 157, 0.45);
   --silver-soft: rgba(89, 98, 110, 0.16);
@@ -203,13 +204,13 @@ td.num { white-space: nowrap; }
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --a-ink: #72bcf4; --a-edge: #2f628c; --hue-gold-ink: #e0a83c; --gold-edge: rgba(224, 180, 92, 0.45);
+    --a-ink: #72bcf4; --a-edge: #2f628c; --hue-gold-ink: #e0a83c; --prism-ink: #a98bff; --gold-edge: rgba(224, 180, 92, 0.45);
     --accent-edge: rgba(92, 192, 255, 0.45); --silver-soft: rgba(163, 173, 187, 0.16);
     --silver-soft-2: rgba(163, 173, 187, 0.14); --silver-edge: rgba(163, 173, 187, 0.5);
   }
 }
 :root[data-theme="dark"] {
-    --a-ink: #72bcf4; --a-edge: #2f628c; --hue-gold-ink: #e0a83c; --gold-edge: rgba(224, 180, 92, 0.45);
+    --a-ink: #72bcf4; --a-edge: #2f628c; --hue-gold-ink: #e0a83c; --prism-ink: #a98bff; --gold-edge: rgba(224, 180, 92, 0.45);
     --accent-edge: rgba(92, 192, 255, 0.45); --silver-soft: rgba(163, 173, 187, 0.16);
     --silver-soft-2: rgba(163, 173, 187, 0.14); --silver-edge: rgba(163, 173, 187, 0.5);
 }
@@ -258,16 +259,9 @@ tbody tr:hover, .build-row:hover, .aug-row:hover, .ability:hover { background: v
 .grade-s { color: var(--a-ink); background: var(--a-soft); border-color: rgba(63, 167, 245, 0.45); }
 .grade-a { color: var(--hue-gold-ink); background: rgba(224, 168, 60, 0.16); border-color: rgba(224, 168, 60, 0.5); }
 .grade-b, .grade-c { background: var(--silver-soft-2); }
-.tier-label-prismatic { color: #a98bff; }
-.tier-label-gold { color: var(--hue-gold); }
+.tier-label-prismatic { color: var(--prism-ink); }
+.tier-label-gold { color: var(--hue-gold-ink); }
 .style-head h3 { color: var(--a-ink); }
-
-/* Skins: a grid of tiles with names */
-.skins { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 0.75rem; }
-.skin { margin: 0; border-radius: var(--r); overflow: hidden; background: var(--a-soft); transition: transform 0.15s ease; }
-.skin:hover { transform: translateY(-2px); }
-.skin img { display: block; width: 100%; aspect-ratio: 1; object-fit: cover; }
-.skin figcaption { padding: 0.4rem 0.5rem; font-size: 0.8rem; line-height: 1.25; }
 table.stats td:first-child { white-space: nowrap; }
 .chip.mod-up { color: var(--good); border-color: var(--good); } .chip.mod-down { color: var(--bad); border-color: var(--bad); }
 

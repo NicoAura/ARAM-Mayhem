@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Breadcrumbs } from "@/components/JsonLd";
 import Link from "next/link";
 import ShareButton from "@/components/ShareButton";
 import ShareCard from "@/components/ShareCard";
@@ -63,6 +64,7 @@ export default async function ChampionPage({ params }: { params: Promise<{ alias
   const next = all[(at + 1) % all.length];
   return (
     <>
+      <Breadcrumbs trail={[["Champions", "/champions"], [c.name, `/champions/${c.alias}`]]} />
       <SplashAccent src={c.splash} />
       <section className="champ-hero" data-parallax style={c.splash ? ({ "--splash": `url("${c.splash}")` } as React.CSSProperties) : undefined}>
         <ChampionShowcase alias={c.alias} name={c.name} />
@@ -113,7 +115,7 @@ export default async function ChampionPage({ params }: { params: Promise<{ alias
         {c.winRate !== undefined && (
           <div className="stat-row">
             <div>
-              <b>
+              <b className="has-chip">
                 <span className={`chip tier-${c.tier?.toLowerCase()}`}>{c.tier}</span>
               </b>
               <span>

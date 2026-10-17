@@ -6,7 +6,7 @@ import { getParam, setParams } from "@/lib/url-state";
 import DataTable, { type Column } from "./DataTable";
 import { champStats, TIER_HELP, type PatchRow } from "@/lib/tiers";
 import Skeleton from "@/components/Skeleton";
-import { tagsByKind, type TagInfo } from "@/lib/tag-info";
+import { tagsByKind, tagStyle, type TagInfo } from "@/lib/tag-info";
 
 // Champion tier list over a chosen patch range: the live patch (default), any set of patches, or all time.
 // The page carries only the live and previous patch; older patches load from /data/tier-history.json when picked.
@@ -226,7 +226,7 @@ export default function ChampionTiers({ rows: initial, patches, partners, tags, 
                 data-tip={tagInfo[t].meaning}
                 aria-pressed={want.includes(t)}
                 disabled={!n && !want.includes(t)}
-                style={{ "--tag": tagInfo[t].color } as React.CSSProperties}
+                style={tagStyle(tagInfo[t].color)}
                 onClick={() => pickTag(t)}
               >
                 {t} <span className="arch-count">{n}</span>

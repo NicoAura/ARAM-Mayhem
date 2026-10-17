@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { pageMeta } from "@/lib/meta";
+import { livePatch } from "@/lib/highlights";
 import Link from "next/link";
 import augmentNames from "@/data/augment-names.json";
 import { AdvancedProvider, AdvancedToggle } from "@/components/Advanced";
@@ -22,7 +23,7 @@ import SubTabs from "@/components/SubTabs";
 import { readRepoCsv, readRepoJson } from "@/lib/repo-data";
 import { allChampionTags, championTagData } from "@/lib/champion-tags";
 
-export const metadata: Metadata = pageMeta("/tier-list", "Tier List", "ARAM Mayhem champion tier list for the current patch, with augment and duo win rates.");
+export const metadata: Metadata = pageMeta("/tier-list", `ARAM Mayhem Tier List${livePatch() ? `, Patch ${livePatch()}` : ""}`, "ARAM Mayhem champion tier list for the current patch, with augment and duo win rates.");
 
 const num = (v: string | undefined) => (v === undefined || v === "" ? null : Number(v));
 const ALIAS = Object.fromEntries(Object.entries(championIds as Record<string, number>).map(([alias, id]) => [id, alias]));

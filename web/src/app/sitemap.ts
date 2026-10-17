@@ -7,10 +7,10 @@ import { navPages } from "@/lib/tabs";
 
 const SITE = "https://deeparam.com";
 
-// Every page in the header, plus Home, My Stats and each champion, augment, item and patch page. Rebuilt with each deploy.
+// Every page in the header, plus Home, the champion list, My Stats and each champion, augment, item and patch page. Rebuilt with each deploy.
 export default function sitemap(): MetadataRoute.Sitemap {
   const now = new Date();
-  const pages = ["/", ...navPages().map((t) => t.href), "/simulator/infinite-ryze", "/info/region-teams", "/privacy", "/terms", "/status", ...championAliases().map((a) => `/champions/${a}`), ...augmentPages().map((a) => `/augments/${a.slug}`), ...itemPages().map((i) => `/items/${i.slug}`), ...recapPatches().map((p) => `/patches/${p}`)];
+  const pages = ["/", ...navPages().map((t) => t.href), "/champions", "/simulator/infinite-ryze", "/info/region-teams", "/privacy", "/terms", "/status", ...championAliases().map((a) => `/champions/${a}`), ...augmentPages().map((a) => `/augments/${a.slug}`), ...itemPages().map((i) => `/items/${i.slug}`), ...recapPatches().map((p) => `/patches/${p}`)];
   return [...new Set(pages)].map((path) => ({
     url: SITE + (path === "/" ? "" : path),
     lastModified: now,

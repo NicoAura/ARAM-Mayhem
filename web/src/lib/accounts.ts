@@ -244,6 +244,8 @@ export async function changeEmail(a: SessionAccount, email: string, password: un
 export async function deleteAccount(id: string) {
   const d = await db();
   await d.batch(["passkeys", "sessions", "link_codes", "logins", "account_profile"].map((t) => d.prepare(`DELETE FROM ${t} WHERE account = ?`).bind(id)).concat(d.prepare("DELETE FROM accounts WHERE id = ?").bind(id)));
+  // Builds sent to The Kitchen (lib/kitchen.ts); the table exists only once someone has sent one.
+  await d.prepare("DELETE FROM kitchen_submissions WHERE account = ?").bind(id).run().catch(() => undefined);
 }
 
 // ---- Riot account (through My Stats) ----

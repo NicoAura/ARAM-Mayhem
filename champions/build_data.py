@@ -1,7 +1,7 @@
 """Build data.js for the champion pages (Champions, one page per champion).
 
 Usage: python3 champions/build_data.py [--channel latest|pbe]
-Writes champions/data.js, champions/skins.js and champions/tags.json (roles, subclasses, playstyles). Python 3 standard library only. Champion files are cached in
+Writes champions/data.js and champions/tags.json (roles, subclasses, playstyles). Python 3 standard library only. Champion files are cached in
 ~/.cache/deeparam-champions/<patch>/.
 
 What it reads:
@@ -449,10 +449,6 @@ def main():
             "builds": b,
         })
     champions.sort(key=lambda c: c["name"])
-    # every skin's tile, in its own file so a page only loads it when the skins section is opened
-    skins = {c["id"]: [{"name": "Original" if s.get("isBase") else s["name"], "tile": asset(s.get("tilePath"))}
-                       for s in info.get("skins") or [] if s.get("tilePath")]
-             for c, (info, _) in zip(summary, loaded) if info}
 
     out = {
         "patch": version,
@@ -477,8 +473,6 @@ def main():
                    "meanings": {**{s: m for subs in CLASSES.values() for s, m in subs.items()}, **PLAYSTYLES},
                    "champions": dict(sorted(tags.items()))}, f, indent=1, ensure_ascii=False)
         f.write("\n")
-    with open(os.path.join(HERE, "skins.js"), "w") as f:
-        f.write("window.CHAMPS_SKINS = " + site_paths(json.dumps(skins, ensure_ascii=False, separators=(",", ":"))) + ";\n")
 
 
 if __name__ == "__main__":

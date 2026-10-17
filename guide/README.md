@@ -88,3 +88,17 @@ mode written from Riot's /dev posts and dev updates (What is Mayhem tab). Neithe
 `build_constants.py` writes `game_constants.json` from Riot's developer constants in `data/constants/` (run `data/constants/update.py` first): the public Mayhem queue id
 (`mayhemQueue`), the live ARAM-map queues, the ARAM map ids and the ARAM game modes. `build_data.py` takes the Mayhem
 queue id from it. Rerun when Riot adds a queue.
+
+## Languages
+
+The page follows the site's language (the parent page's `<html data-lang>`, else `localStorage["deeparam-lang"]`) and
+reloads when it changes. `i18n.js` (the same file is in `champions/`) loads two files before `app.js` renders:
+- `i18n/<code>.json`: page text keyed by its English wording. `python3 guide/i18n_keys.py` rewrites `en.json` (for
+  this folder and `champions/`) from the `data-t` elements in `index.html`, the `t("...")` calls and labels in
+  `app.js`, the hand-written text in `build_data.py` and the value names in the data; every other language maps the
+  same keys. Add a new string to every language file in the same change (tests/data/test_data_i18n.py checks).
+- `i18n/data/<code>.json`: the game text in that language, merged into `GUIDE_DATA` by the page, plus every augment's
+  name by id for the history tab. `python3 guide/build_data.py --languages` builds the page once per client language
+  and keeps what differs from English at text keys (`overlay()`; list items are matched by id, key or icon). It also
+  writes `i18n/augments/<code>.json`: each live augment's name, text and tooltip, for the site's augment pages.
+Rerun both after a patch, with `champions/build_i18n.py`.
