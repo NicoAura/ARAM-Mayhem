@@ -5,6 +5,7 @@ import FeedbackBox from "@/components/FeedbackBox";
 import PageTransitions from "@/components/PageTransitions";
 import TiltEffects from "@/components/TiltEffects";
 import SwipeGestures from "@/components/SwipeGestures";
+import PressDown from "@/components/PressDown";
 import CompareTray from "@/components/CompareTray";
 import HoverPreview from "@/components/HoverPreview";
 import CountUp from "@/components/CountUp";
@@ -155,6 +156,7 @@ export default function RootLayout({
         <ViewMemory />
         <BackToTop />
         <HapticTaps />
+        <PressDown />
         <MobileTabBar tabs={navGroups().map(({ href, label, group }) => ({ href, label, group }))} />
       </body>
     </html>

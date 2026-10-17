@@ -4415,7 +4415,7 @@ html[data-motion="reduce"] .btn:hover {
   }
 }
 
-/* Pull-to-refresh in the installed app (components/SwipeGestures.tsx) */
+/* Pull-to-refresh on phones (components/SwipeGestures.tsx) */
 .ptr {
   position: fixed;
   top: calc(env(safe-area-inset-top, 0px) - 2.5rem);
@@ -5575,23 +5575,87 @@ html[data-champ-accent] .champ-hero {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 0.9rem;
+  perspective: 900px;
 }
 .draft-slot {
   display: grid;
   gap: 0.5rem;
   min-width: 0;
-  animation: draft-in 0.45s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  animation: draft-in 0.3s ease-out var(--deal, 0s) both;
+}
+/* Each card is dealt face down in its rarity's colour, then flips over (like the in-game reveal) and
+   flares with that colour; Prismatic cards flare brightest. Rerolled cards flip again. */
+.draft-slot .draft-card {
+  animation:
+    draft-flip 0.62s cubic-bezier(0.3, 1.25, 0.4, 1) var(--deal, 0s) backwards,
+    draft-flare 0.9s ease-out calc(var(--deal, 0s) + 0.35s) backwards;
+}
+.draft-slot .draft-card::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  z-index: 2;
+  border-radius: inherit;
+  background:
+    radial-gradient(circle at 50% 40%, color-mix(in srgb, var(--draft-c, var(--accent)) 55%, transparent), transparent 70%),
+    repeating-linear-gradient(45deg, color-mix(in srgb, var(--draft-c, var(--accent)) 22%, var(--surface)) 0 10px, var(--surface) 10px 20px);
+  pointer-events: none;
+  animation: draft-cover 0.62s linear var(--deal, 0s) both;
 }
 .draft-slot:nth-child(2) {
-  animation-delay: 0.07s;
+  --deal: 0.12s;
 }
 .draft-slot:nth-child(3) {
-  animation-delay: 0.14s;
+  --deal: 0.24s;
 }
 @keyframes draft-in {
   from {
     opacity: 0;
-    transform: translateY(14px) rotateX(35deg);
+    transform: translateY(14px);
+  }
+}
+@keyframes draft-flip {
+  from {
+    transform: rotateY(180deg);
+  }
+}
+@keyframes draft-cover {
+  0%,
+  45% {
+    opacity: 1;
+  }
+  46%,
+  100% {
+    opacity: 0;
+  }
+}
+@keyframes draft-flare {
+  0% {
+    box-shadow: 0 0 0 0 color-mix(in srgb, var(--draft-c, var(--accent)) 70%, transparent);
+  }
+  35% {
+    box-shadow: 0 0 34px 4px color-mix(in srgb, var(--draft-c, var(--accent)) 55%, transparent);
+  }
+  100% {
+    box-shadow: 0 0 0 0 transparent;
+  }
+}
+.draft-slot .draft-card[data-rarity="prismatic"] {
+  animation:
+    draft-flip 0.62s cubic-bezier(0.3, 1.25, 0.4, 1) var(--deal, 0s) backwards,
+    draft-flare-prismatic 1.2s ease-out calc(var(--deal, 0s) + 0.35s) backwards;
+}
+@keyframes draft-flare-prismatic {
+  0% {
+    box-shadow: 0 0 0 0 transparent;
+  }
+  30% {
+    box-shadow:
+      0 0 44px 8px color-mix(in srgb, var(--prismatic) 60%, transparent),
+      0 0 18px 2px #fff6;
+  }
+  100% {
+    box-shadow: 0 0 0 0 transparent;
   }
 }
 .draft-card {
@@ -5659,15 +5723,22 @@ html[data-device="mobile"] .draft-key {
   margin-top: 1rem;
 }
 html[data-motion="reduce"] .draft-slot,
-html[data-motion="reduce"] .draft-card {
+html[data-motion="reduce"] .draft-slot .draft-card,
+html[data-motion="reduce"] .draft-slot .draft-card::before {
   animation: none;
   transition: none;
 }
+html[data-motion="reduce"] .draft-slot .draft-card::before {
+  display: none;
+}
 @media (prefers-reduced-motion: reduce) {
   .draft-slot,
-  .draft-card {
+  .draft-slot .draft-card {
     animation: none;
     transition: none;
+  }
+  .draft-slot .draft-card::before {
+    display: none;
   }
 }
 @media (max-width: 640px) {
@@ -6368,4 +6439,66 @@ td > button.deepscore:focus::after {
   width: 1.6rem;
   height: 1.6rem;
   font-size: 0.6875rem;
+}
+
+/* Sideways strips on phones stop on each item, with a light tick as they do (components/HapticTaps.tsx). */
+html[data-device="mobile"] .patch-chips {
+  scroll-snap-type: x proximity;
+}
+html[data-device="mobile"] .patch-chips > * {
+  scroll-snap-align: start;
+}
+
+/* Champion pages: the jump bar (components/QuickBar.tsx), fixed under the header once the summary scrolls away. */
+.quickbar {
+  position: fixed;
+  top: calc(var(--quickbar-top, 64px) + env(safe-area-inset-top, 0px));
+  left: 50%;
+  z-index: 19;
+  display: flex;
+  gap: 2px;
+  max-width: calc(100vw - 2rem);
+  overflow-x: auto;
+  padding: 4px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--surface) 88%, transparent);
+  -webkit-backdrop-filter: saturate(1.4) blur(14px);
+  backdrop-filter: saturate(1.4) blur(14px);
+  box-shadow: 0 10px 24px -16px rgb(0 0 0 / 0.6);
+  scrollbar-width: none;
+  opacity: 0;
+  pointer-events: none;
+  translate: -50% -0.75rem;
+  transition:
+    opacity 0.2s,
+    translate 0.25s cubic-bezier(0.2, 0.9, 0.3, 1.2);
+}
+.quickbar[data-shown] {
+  opacity: 1;
+  pointer-events: auto;
+  translate: -50% 0.5rem;
+}
+.quickbar a {
+  flex: none;
+  padding: 0.35rem 0.8rem;
+  border-radius: 999px;
+  color: var(--muted);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  text-decoration: none;
+  white-space: nowrap;
+  transition:
+    background 0.15s,
+    color 0.15s;
+}
+.quickbar a:hover {
+  color: var(--fg);
+}
+.quickbar a[aria-current] {
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+.quick-spot {
+  scroll-margin-top: calc(var(--quickbar-top, 64px) + env(safe-area-inset-top, 0px) + 3.75rem);
 }
