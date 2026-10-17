@@ -1,12 +1,12 @@
-name: iPhone app
+name: iPhone and iPad app
 
-# Builds the iPhone app and tests the shared Swift package whenever either changes.
+# Builds the iPhone and iPad app and tests the shared Swift package whenever either changes.
 on:
   pull_request:
-    paths: ["apps/ios/**", "apps/shared/**", ".github/workflows/ios-app.yml"]
+    paths: ["apps/ios/**", "apps/ipados/**", "apps/shared/**", ".github/workflows/ios-app.yml"]
   push:
     branches: [main]
-    paths: ["apps/ios/**", "apps/shared/**", ".github/workflows/ios-app.yml"]
+    paths: ["apps/ios/**", "apps/ipados/**", "apps/shared/**", ".github/workflows/ios-app.yml"]
 
 concurrency:
   group: ios-app-${{ github.ref }}
