@@ -11,7 +11,7 @@ import PlayerExtras from "./PlayerExtras";
 
 // The account page (/account): sign in or create an account, then manage it. Favorites and settings
 // sync on their own (lib/account-sync.ts); this page covers passkeys, the password, the connected Riot
-// account, the owner tools and deleting the account.
+// account, the profile, the email and deleting the account. The owner opens the 3D Simulator from the Simulator page.
 
 type Account = {
   signedIn: true;
@@ -311,7 +311,6 @@ function Manage({ account, refresh }: { account: Account; refresh: () => Promise
       {(account.providers.length > 0 || account.logins.length > 0) && <ProvidersCard account={account} refresh={refresh} />}
       <EmailCard account={account} refresh={refresh} />
       <PasswordCard account={account} />
-      {account.owner && <OwnerCard />}
       <DeleteCard account={account} refresh={refresh} />
       {account.riot && <PlayerExtras />}
     </div>
@@ -700,24 +699,6 @@ function PasswordCard({ account }: { account: Account }) {
         </button>
       </form>
       <Note msg={msg} />
-    </section>
-  );
-}
-
-function OwnerCard() {
-  const t = useT("account");
-  return (
-    <section className="card acct-card" data-accent="sim">
-      <h2>{t("Site owner")}</h2>
-      <p className="acct-hint">{t("Only this account opens these.")}</p>
-      <p className="acct-links">
-        <Link className="btn" href="/account/simulator">
-          {t("3D Simulator")}
-        </Link>
-        <Link className="btn ghost" href="/account/edit">
-          {t("Edit site text")}
-        </Link>
-      </p>
     </section>
   );
 }
