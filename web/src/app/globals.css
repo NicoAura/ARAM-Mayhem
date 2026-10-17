@@ -6089,6 +6089,16 @@ th > button[data-tip] {
   letter-spacing: 0.12em;
 }
 .acct-steps { display: grid; gap: 0.35rem; padding-left: 1.2rem; font-size: 0.875rem; }
+.acct-me { display: flex; align-items: center; gap: 0.75rem; }
+.acct-me img { border-radius: 50%; flex: none; }
+.acct-who small { display: block; color: var(--muted); font-size: 0.75rem; font-weight: 400; }
+.acct-icons summary { display: flex; align-items: center; gap: 0.5rem; cursor: pointer; }
+.acct-icons summary img { border-radius: 50%; }
+.acct-icons input[type="search"] { width: 100%; margin: 0.5rem 0; }
+.acct-icon-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(44px, 1fr)); gap: 0.35rem; max-height: 14rem; overflow-y: auto; }
+.acct-icon-grid button { display: grid; place-items: center; min-height: 44px; padding: 2px; border: 2px solid transparent; border-radius: 8px; background: none; color: inherit; font-size: 0.7rem; cursor: pointer; }
+.acct-icon-grid button img { border-radius: 6px; }
+.acct-icon-grid button.picked { border-color: var(--accent); }
 .acct-list { display: grid; gap: 0.35rem; padding: 0; list-style: none; }
 .acct-list li {
   display: flex;

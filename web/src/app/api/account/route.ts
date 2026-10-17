@@ -3,7 +3,7 @@ import { SESSION_COOKIE } from "@/lib/account-cookies";
 import { body, handle, json } from "@/lib/account-route";
 import { enabledProviders } from "@/lib/oauth";
 import { rsoEnabled } from "@/lib/rso";
-import { AccountError, accountView, checkPasswordHash, clearSessionCookies, currentAccount, db, deleteAccount, requireAccount, saveData } from "@/lib/accounts";
+import { accountView, clearSessionCookies, confirmIt, currentAccount, deleteAccount, requireAccount, saveData } from "@/lib/accounts";
 
 // GET    /api/account → the signed-in account ({signedIn: false} when nobody is)
 // PUT    /api/account {favorites, settings, theme} → saves what syncs between browsers
@@ -30,9 +30,7 @@ export const PUT = handle(async (req) => {
 export const DELETE = handle(async (req) => {
   const a = await requireAccount();
   const { password } = await body(req);
-  const row = await (await db()).prepare("SELECT pass FROM accounts WHERE id = ?").bind(a.id).first<{ pass: string | null }>();
-  const fresh = a.method === "passkey" && Date.now() - a.created < 15 * 60_000;
-  if (row?.pass && !fresh && !(typeof password === "string" && (await checkPasswordHash(password, row.pass)))) throw new AccountError("Your password is wrong.", 401);
+  await confirmIt(a, password);
   await deleteAccount(a.id);
   const res = json({ deleted: true });
   clearSessionCookies(res);
