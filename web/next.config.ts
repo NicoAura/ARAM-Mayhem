@@ -46,7 +46,6 @@ const nextConfig: NextConfig = {
       .map(([source, destination]) => ({ source, destination, permanent: true }))
       // Each augment has its own page; the bare address shows them all on the Tier List.
       .concat([
-        { source: "/augments", destination: "/tier-list?tab=augments", permanent: false },
         { source: "/items", destination: "/", permanent: false },
       ]);
   },

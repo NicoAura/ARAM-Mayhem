@@ -6,6 +6,7 @@ const PAGES = [
   "/",
   "/tier-list",
   "/tier-list?tab=augments",
+  "/augments?rarity=gold&style=ap",
   "/simulator",
   "/pbe",
   "/info",
@@ -75,7 +76,6 @@ test("old addresses redirect to the current tabs", async ({ page }) => {
     ["/tools/simulator", "/simulator"],
     ["/china", "/tier-list"],
     ["/tools/fun", "/lab"],
-    ["/augments", "/tier-list?tab=augments"],
   ]) {
     await page.goto(from);
     expect(new URL(page.url()).pathname + new URL(page.url()).search, from).toBe(to);

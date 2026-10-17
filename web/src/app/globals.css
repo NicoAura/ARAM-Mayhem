@@ -6116,3 +6116,91 @@ th > button[data-tip] {
 .helper-aug img {
   border-radius: 6px;
 }
+
+/* Augment tier list (/augments) */
+.atiers {
+  display: grid;
+  gap: 1.25rem;
+}
+.atiers-filters {
+  display: grid;
+  gap: 0.6rem;
+}
+.atiers-rows {
+  display: grid;
+  gap: 0.75rem;
+}
+.atiers-row {
+  display: grid;
+  grid-template-columns: 3rem minmax(0, 1fr);
+  gap: 0.75rem;
+  align-items: start;
+  padding: 0.75rem;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: var(--surface);
+}
+.chip.atiers-tier {
+  display: grid;
+  place-items: center;
+  width: 3rem;
+  height: 3rem;
+  padding: 0;
+  border-radius: 10px;
+  font-size: 1.25rem;
+  font-weight: 800;
+}
+.atiers-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(6.5rem, 1fr));
+  gap: 0.5rem;
+}
+.atiers-aug {
+  display: grid;
+  justify-items: center;
+  gap: 0.25rem;
+  min-width: 0;
+  padding: 0.5rem 0.35rem;
+  border-radius: 10px;
+  color: var(--fg);
+  text-align: center;
+  text-decoration: none;
+}
+.atiers-aug:hover,
+.atiers-aug:focus-visible {
+  background: var(--raised);
+}
+.atiers-aug img {
+  border-radius: 10px;
+  border: 2px solid var(--line);
+}
+.atiers-aug[data-rarity="silver"] img { border-color: var(--silver); }
+.atiers-aug[data-rarity="gold"] img { border-color: var(--gold); }
+.atiers-aug[data-rarity="prismatic"] img { border-color: #b78cf0; }
+.atiers-name {
+  max-width: 100%;
+  font-size: 0.75rem;
+  line-height: 1.2;
+  overflow-wrap: anywhere;
+}
+.atiers-wr {
+  font-size: 0.75rem;
+  font-variant-numeric: tabular-nums;
+}
+.atiers-wr { color: var(--muted); }
+.atiers-wr.wr-high { color: var(--good); font-weight: 600; }
+.atiers-wr.wr-low { color: var(--bad); }
+@media (max-width: 560px) {
+  .atiers-row {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0.5rem;
+  }
+  .chip.atiers-tier {
+    width: 2.25rem;
+    height: 2.25rem;
+    font-size: 1rem;
+  }
+  .atiers-grid {
+    grid-template-columns: repeat(auto-fill, minmax(5.25rem, 1fr));
+  }
+}
