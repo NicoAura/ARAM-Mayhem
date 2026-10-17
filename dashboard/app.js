@@ -775,8 +775,9 @@ async function watchSync() {
         ? t(added === 1 ? "Added 1 new game. {total} in your archive." : "Added {n} new games. {total} in your archive.", { n: added, total })
         : t("Up to date. {total} games in your archive.", { total });
       setSyncStatus(summary + (failed ? " " + t("{n} couldn't be fetched; import again to retry them.", { n: failed }) : "")
-        + ((s.result.notes || []).filter((n) => n.startsWith("Sharing")).map((n) => " " + t(n)).join("")));
+        + ((s.result.notes || []).filter((n) => n.startsWith("Sharing") || n.startsWith("Saving")).map((n) => " " + t(n)).join("")));
       if (s.result.shared !== undefined) showShare({ enabled: true, shared: s.result.shared });
+      if (s.result.saved !== undefined) showHistory({ enabled: true, available: true, saved: s.result.saved });
     }
   } catch (e) {
     setSyncStatus(t("Lost contact with the sync helper. Is it still running?"), true);
@@ -821,10 +822,11 @@ async function setupSync() {
       const res = await fetch("data/mayhem-backup.json", { cache: "no-store" });
       if (res.ok) await loadText(await res.text());
     } catch (e) { /* no archive yet */ }
-  }
+  } else await loadSaved();
   await setupSync();
   setupProfile();
   setupShare();
+  setupHistory();
   setupLive();
   setupLink();
 })();
@@ -976,6 +978,61 @@ async function setupShare() {
   if (!helperOnline || state.sample || !(state.games || []).length) return;
   $("share-card").hidden = false;
   try { showShare(await shareCall()); } catch (e) { /* stays off */ }
+}
+
+// ---------- games saved to the account ----------
+// The site owner can keep their games with their deeparam.com account, so My Stats on /account shows them
+// on any device. Off unless turned on here; the site only accepts it from the owner's connected Riot account.
+
+const historyBox = $("history-on");
+
+function showHistory(st) {
+  $("history-card").hidden = !st.available;
+  historyBox.checked = !!st.enabled;
+  $("history-count").textContent = st.enabled && st.saved ? t("{n} games saved", { n: st.saved.toLocaleString() }) : "";
+}
+
+async function historyCall(body) {
+  const res = await fetch("api/history", {
+    method: "POST", headers: { "X-Mayhem": "1", "Content-Type": "application/json" }, body: JSON.stringify(body || {}),
+  });
+  const j = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error(t(j.error || "Something went wrong. Try again."));
+  return j;
+}
+
+historyBox.addEventListener("change", async () => {
+  const on = historyBox.checked;
+  if (!on && !confirm(t("Stop saving and remove the games saved to your account?"))) { historyBox.checked = true; return; }
+  const note = $("history-status");
+  historyBox.disabled = true;
+  note.hidden = false;
+  note.textContent = t(on ? "Saving your games…" : "Removing your saved games…");
+  try {
+    showHistory(await historyCall({ enabled: on }));
+    note.textContent = t(on ? "Saving is on. New games are saved after each import." : "Saving is off and your saved games were removed.");
+  } catch (e) {
+    historyBox.checked = !on;
+    note.textContent = e.message;
+  } finally {
+    historyBox.disabled = false;
+  }
+});
+
+async function setupHistory() {
+  if (!helperOnline || state.sample || !(state.games || []).length) return;
+  try { showHistory(await historyCall()); } catch (e) { /* stays hidden */ }
+}
+
+// On deeparam.com, signed in: the games saved to the account, when there are any.
+async function loadSaved() {
+  if (PRESET.sample || !/(?:^|;\s*)deeparam-signed-in=1/.test(document.cookie)) return;
+  try {
+    const res = await fetch("/api/history", { cache: "no-store" });
+    if (!res.ok) return;
+    const j = await res.json();
+    if (Array.isArray(j.games) && j.games.length) await loadText(JSON.stringify(j));
+  } catch (e) { /* nothing saved */ }
 }
 
 // ---------- recently played ----------

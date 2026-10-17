@@ -212,5 +212,14 @@
  "Your Mayhem games, in one place.": "Vos parties d'ARAM du chaos, au même endroit.",
  "Import your games with the button below. You need to be connected to the Riot Client: open it on this computer and sign in first. Your games stay on your computer.": "Importez vos parties avec le bouton ci-dessous. Vous devez être connecté au Riot Client : ouvrez-le sur cet ordinateur et connectez-vous d'abord. Vos parties restent sur votre ordinateur.",
  "Sign in above to see your Mayhem games here: win rate, champions, augments and recent matches.": "Connectez-vous ci-dessus pour voir ici vos parties d'ARAM du chaos : taux de victoire, champions, augments et parties récentes.",
- "Champions you own": "Champions que vous possédez"
+ "Champions you own": "Champions que vous possédez",
+ "Save games to my account": "Enregistrer les parties sur mon compte",
+ "Off unless you turn it on. When on, each import also saves your games to your deeparam.com account, so My Stats on your account page shows them on any device. Only you can see them. Turning it off removes them from your account.": "Désactivé tant que vous ne l'activez pas. Une fois activé, chaque import enregistre aussi vos parties sur votre compte deeparam.com, pour que Mes stats sur la page de votre compte les affiche sur n'importe quel appareil. Vous seul pouvez les voir. Le désactiver les supprime de votre compte.",
+ "Save my games to my account": "Enregistrer mes parties sur mon compte",
+ "{n} games saved": "{n} parties enregistrées",
+ "Stop saving and remove the games saved to your account?": "Arrêter l'enregistrement et supprimer les parties enregistrées sur votre compte ?",
+ "Saving your games…": "Enregistrement de vos parties…",
+ "Removing your saved games…": "Suppression de vos parties enregistrées…",
+ "Saving is on. New games are saved after each import.": "L'enregistrement est activé. Les nouvelles parties sont enregistrées après chaque import.",
+ "Saving is off and your saved games were removed.": "L'enregistrement est désactivé et vos parties enregistrées ont été supprimées."
 }

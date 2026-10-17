@@ -212,5 +212,14 @@
  "Your Mayhem games, in one place.": "Game ARAM: Mayhem-mu, di satu tempat.",
  "Import your games with the button below. You need to be connected to the Riot Client: open it on this computer and sign in first. Your games stay on your computer.": "Impor game-mu dengan tombol di bawah. Kamu harus terhubung ke Riot Client: buka di komputer ini dan masuk terlebih dahulu. Game-mu tetap tersimpan di komputermu.",
  "Sign in above to see your Mayhem games here: win rate, champions, augments and recent matches.": "Masuk di atas untuk melihat game Mayhem kamu di sini: win rate, champion, augment, dan match terbaru.",
- "Champions you own": "Champion yang kamu miliki"
+ "Champions you own": "Champion yang kamu miliki",
+ "Save games to my account": "Simpan game ke akunku",
+ "Off unless you turn it on. When on, each import also saves your games to your deeparam.com account, so My Stats on your account page shows them on any device. Only you can see them. Turning it off removes them from your account.": "Nonaktif kecuali kamu mengaktifkannya. Saat aktif, setiap impor juga menyimpan game-mu ke akun deeparam.com-mu, sehingga Statistik Saya di halaman akunmu menampilkannya di perangkat apa pun. Hanya kamu yang bisa melihatnya. Menonaktifkannya akan menghapusnya dari akunmu.",
+ "Save my games to my account": "Simpan game-ku ke akunku",
+ "{n} games saved": "{n} game disimpan",
+ "Stop saving and remove the games saved to your account?": "Berhenti menyimpan dan hapus game yang tersimpan di akunmu?",
+ "Saving your games…": "Menyimpan game-mu…",
+ "Removing your saved games…": "Menghapus game yang kamu simpan…",
+ "Saving is on. New games are saved after each import.": "Penyimpanan aktif. Game baru disimpan setelah setiap impor.",
+ "Saving is off and your saved games were removed.": "Penyimpanan nonaktif dan game yang kamu simpan telah dihapus."
 }

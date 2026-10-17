@@ -21,6 +21,8 @@ function ruleFor(req: NextRequest): Rule | null {
   const path = req.nextUrl.pathname;
   if (path === "/api/log") return LOG;
   if (path === "/api/games") return req.method === "GET" ? null : SHARE;
+  // The owner's own games go to their account 100 at a time, the same way.
+  if (path === "/api/history") return req.method === "GET" ? null : SHARE;
   if (path.startsWith("/api/account")) {
     // Sign in with Riot, Google, Apple and the rest start and finish with GETs (Apple's finish is a POST).
     if (path.startsWith("/api/account/rso/") || path.startsWith("/api/account/oauth/")) return SIGNIN;
@@ -100,4 +102,4 @@ export async function middleware(req: NextRequest) {
   );
 }
 
-export const config = { matcher: ["/assets/models/:path*", "/assets/sounds/:path*", "/embed/simulator/full", "/embed/simulator/full.html", "/embed/simulator/replay-data/sounds/:path*", "/api/log", "/api/sim-scores", "/api/profile", "/api/games", "/api/account", "/api/account/:path*", "/api/kitchen/:path*"] };
+export const config = { matcher: ["/assets/models/:path*", "/assets/sounds/:path*", "/embed/simulator/full", "/embed/simulator/full.html", "/embed/simulator/replay-data/sounds/:path*", "/api/log", "/api/sim-scores", "/api/profile", "/api/games", "/api/history", "/api/account", "/api/account/:path*", "/api/kitchen/:path*"] };

@@ -212,5 +212,14 @@
  "Your Mayhem games, in one place.": "你的海克斯大乱斗对局，尽在一处。",
  "Import your games with the button below. You need to be connected to the Riot Client: open it on this computer and sign in first. Your games stay on your computer.": "点击下方按钮导入你的对局。需要连接 Riot 客户端：请先在这台电脑上打开并登录。对局只保存在你的电脑上。",
  "Sign in above to see your Mayhem games here: win rate, champions, augments and recent matches.": "在上方登录，即可在此查看你的海克斯大乱斗对局：胜率、英雄、强化符文和最近对局。",
- "Champions you own": "你拥有的英雄"
+ "Champions you own": "你拥有的英雄",
+ "Save games to my account": "将对局保存到我的账号",
+ "Off unless you turn it on. When on, each import also saves your games to your deeparam.com account, so My Stats on your account page shows them on any device. Only you can see them. Turning it off removes them from your account.": "默认关闭，除非你手动开启。开启后，每次导入也会将你的对局保存到你的 deeparam.com 账号，这样在任何设备上都能在账号页面的“我的数据”中看到。只有你能看到它们。关闭后会从你的账号中删除。",
+ "Save my games to my account": "将我的对局保存到我的账号",
+ "{n} games saved": "已保存 {n} 场对局",
+ "Stop saving and remove the games saved to your account?": "停止保存并删除保存在你账号中的对局？",
+ "Saving your games…": "正在保存你的对局…",
+ "Removing your saved games…": "正在删除你保存的对局…",
+ "Saving is on. New games are saved after each import.": "保存已开启。每次导入后都会保存新对局。",
+ "Saving is off and your saved games were removed.": "保存已关闭，你保存的对局已删除。"
 }

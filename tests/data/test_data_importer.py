@@ -34,6 +34,7 @@ def offline(mi, monkeypatch, tmp_path):
     monkeypatch.setattr(mi.subprocess, "run", no_subprocess)
     monkeypatch.setattr(mi.time, "sleep", lambda s: None)
     monkeypatch.setattr(mi, "SHARING_FILE", str(tmp_path / "support" / "sharing.json"))
+    monkeypatch.setattr(mi, "HISTORY_FILE", str(tmp_path / "support" / "history.json"))
     monkeypatch.setattr(mi, "ASSET_CACHE", str(tmp_path / "cache"))
     monkeypatch.setenv("MAYHEM_LCU_CA", str(tmp_path / "ca.pem"))
 
@@ -417,6 +418,44 @@ def test_share_new_games_sends_anonymised_batches(mi, monkeypatch, tmp_path):
     assert all(len(p["games"]) <= mi.SHARE_BATCH for p in sent)
     assert ME not in json.dumps(sent)
     assert set(mi.sharing_settings()["shared"]) == {str(g["gameId"]) for g in games}
+
+
+def test_save_new_history_is_off_by_default(mi, tmp_path):
+    assert mi.history_settings() == {"enabled": False, "saved": []}
+    assert mi.save_new_history(str(tmp_path / "x.json")) is None
+
+
+def test_private_game_keeps_only_the_players_own_stats(mi):
+    game = dict(fixture("lcu_game_mayhem.json"), killMap=[[60, 100, 200, 1, 6]])
+    g = mi.private_game(game, ME)
+    mine = [p for p in g["participants"] if p.get("puuid") == "me"]
+    assert len(mine) == 1 and len(g["participants"]) == len(game["participants"])
+    assert set(mine[0]["stats"]) == set(mi.HISTORY_STATS)
+    others = [p for p in g["participants"] if p.get("puuid") != "me"]
+    assert all(set(p) == {"participantId", "teamId", "championId"} for p in others)
+    assert ME not in json.dumps(g) and "participantIdentities" not in g
+    assert g["killMap"] == [[60, 100, 200, 1, 6]]
+    assert mi.private_game(game, "someone-else") is None
+
+
+def test_save_new_history_sends_new_games_in_batches(mi, monkeypatch, tmp_path):
+    games = [dict(fixture("lcu_game_mayhem.json"), gameId=i) for i in range(1, mi.HISTORY_BATCH + 3)]
+    path = tmp_path / "h.json"
+    path.write_text(json.dumps(games))
+    mi.save_history_settings({"enabled": True, "saved": ["1"]})
+    monkeypatch.setattr(mi, "find_client", lambda lockfile=None: FakeLcu(mi))
+    sent = []
+
+    def site_post(lcu, path_, payload):
+        sent.append((path_, payload))
+        return {"saved": 5}
+    monkeypatch.setattr(mi, "site_post", site_post)
+    assert mi.save_new_history(str(path), progress=lambda m: None) == 5
+    ids = [g["gameId"] for _, p in sent for g in p["games"]]
+    assert 1 not in ids and len(ids) == len(games) - 1
+    assert all(path_ == "/api/history" and p["action"] == "save" and len(p["games"]) <= mi.HISTORY_BATCH for path_, p in sent)
+    assert ME not in json.dumps(sent)
+    assert set(mi.history_settings()["saved"]) == {str(g["gameId"]) for g in games}
 
 
 # ---------- local helper server ----------

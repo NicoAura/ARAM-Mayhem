@@ -212,5 +212,14 @@
  "Your Mayhem games, in one place.": "مبارياتك في ARAM: الفوضى، في مكان واحد.",
  "Import your games with the button below. You need to be connected to the Riot Client: open it on this computer and sign in first. Your games stay on your computer.": "استورد مبارياتك بالزر أدناه. يجب أن تكون متصلًا بـ Riot Client: افتحه على هذا الحاسوب وسجّل الدخول أولًا. تبقى مبارياتك على حاسوبك.",
  "Sign in above to see your Mayhem games here: win rate, champions, augments and recent matches.": "سجّل الدخول أعلاه لترى مبارياتك في الفوضى هنا: نسبة الفوز والأبطال والتعزيزات وأحدث المباريات.",
- "Champions you own": "الأبطال الذين تملكهم"
+ "Champions you own": "الأبطال الذين تملكهم",
+ "Save games to my account": "احفظ المباريات في حسابي",
+ "Off unless you turn it on. When on, each import also saves your games to your deeparam.com account, so My Stats on your account page shows them on any device. Only you can see them. Turning it off removes them from your account.": "متوقف ما لم تشغّله. عند تشغيله، يحفظ كل استيراد مبارياتك أيضًا في حسابك على deeparam.com، لتعرضها إحصائياتي في صفحة حسابك على أي جهاز. أنت وحدك من يمكنه رؤيتها. إيقافه يزيلها من حسابك.",
+ "Save my games to my account": "احفظ مبارياتي في حسابي",
+ "{n} games saved": "المباريات المحفوظة: {n}",
+ "Stop saving and remove the games saved to your account?": "هل تريد إيقاف الحفظ وإزالة المباريات المحفوظة في حسابك؟",
+ "Saving your games…": "جارٍ حفظ مبارياتك…",
+ "Removing your saved games…": "جارٍ إزالة مبارياتك المحفوظة…",
+ "Saving is on. New games are saved after each import.": "الحفظ مفعّل. تُحفظ المباريات الجديدة بعد كل استيراد.",
+ "Saving is off and your saved games were removed.": "الحفظ متوقف وأُزيلت مبارياتك المحفوظة."
 }

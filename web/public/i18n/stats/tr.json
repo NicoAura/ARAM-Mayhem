@@ -212,5 +212,14 @@
  "Your Mayhem games, in one place.": "ARAM: Şamata maçların tek bir yerde.",
  "Import your games with the button below. You need to be connected to the Riot Client: open it on this computer and sign in first. Your games stay on your computer.": "Maçlarını aşağıdaki düğmeyle içe aktar. Riot İstemcisi'ne bağlı olman gerekiyor: önce bu bilgisayarda aç ve giriş yap. Maçların bilgisayarında kalır.",
  "Sign in above to see your Mayhem games here: win rate, champions, augments and recent matches.": "Şamata maçlarını burada görmek için yukarıdan giriş yap: kazanma oranı, şampiyonlar, güçlendirmeler ve son maçlar.",
- "Champions you own": "Sahip olduğun şampiyonlar"
+ "Champions you own": "Sahip olduğun şampiyonlar",
+ "Save games to my account": "Maçları hesabıma kaydet",
+ "Off unless you turn it on. When on, each import also saves your games to your deeparam.com account, so My Stats on your account page shows them on any device. Only you can see them. Turning it off removes them from your account.": "Sen açmadıkça kapalıdır. Açıkken her içe aktarma, maçlarını deeparam.com hesabına da kaydeder; böylece hesap sayfandaki İstatistiklerim bunları her cihazda gösterir. Onları yalnızca sen görebilirsin. Kapatırsan hesabından kaldırılır.",
+ "Save my games to my account": "Maçlarımı hesabıma kaydet",
+ "{n} games saved": "{n} maç kaydedildi",
+ "Stop saving and remove the games saved to your account?": "Kaydetme durdurulsun ve hesabına kaydedilen maçlar kaldırılsın mı?",
+ "Saving your games…": "Maçların kaydediliyor…",
+ "Removing your saved games…": "Kaydedilen maçların kaldırılıyor…",
+ "Saving is on. New games are saved after each import.": "Kaydetme açık. Yeni maçlar her içe aktarmadan sonra kaydedilir.",
+ "Saving is off and your saved games were removed.": "Kaydetme kapalı ve kaydedilen maçların kaldırıldı."
 }

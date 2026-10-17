@@ -212,5 +212,14 @@
  "Your Mayhem games, in one place.": "Suas partidas de ARAM: Desordem, em um só lugar.",
  "Import your games with the button below. You need to be connected to the Riot Client: open it on this computer and sign in first. Your games stay on your computer.": "Importe suas partidas com o botão abaixo. Você precisa estar conectado ao Riot Client: abra-o neste computador e faça login primeiro. Suas partidas ficam no seu computador.",
  "Sign in above to see your Mayhem games here: win rate, champions, augments and recent matches.": "Entre acima para ver aqui suas partidas de Desordem: taxa de vitória, campeões, aprimoramentos e partidas recentes.",
- "Champions you own": "Campeões que você tem"
+ "Champions you own": "Campeões que você tem",
+ "Save games to my account": "Salvar partidas na minha conta",
+ "Off unless you turn it on. When on, each import also saves your games to your deeparam.com account, so My Stats on your account page shows them on any device. Only you can see them. Turning it off removes them from your account.": "Desativado, a menos que você ative. Quando ativado, cada importação também salva suas partidas na sua conta do deeparam.com, para que Minhas estatísticas na página da sua conta as mostre em qualquer dispositivo. Só você pode vê-las. Desativar as remove da sua conta.",
+ "Save my games to my account": "Salvar minhas partidas na minha conta",
+ "{n} games saved": "{n} partidas salvas",
+ "Stop saving and remove the games saved to your account?": "Parar de salvar e remover as partidas salvas na sua conta?",
+ "Saving your games…": "Salvando suas partidas…",
+ "Removing your saved games…": "Removendo suas partidas salvas…",
+ "Saving is on. New games are saved after each import.": "O salvamento está ativado. Novas partidas são salvas após cada importação.",
+ "Saving is off and your saved games were removed.": "O salvamento está desativado e suas partidas salvas foram removidas."
 }

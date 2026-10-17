@@ -212,5 +212,14 @@
  "Your Mayhem games, in one place.": "Meciurile tale ARAM: Haos, într-un singur loc.",
  "Import your games with the button below. You need to be connected to the Riot Client: open it on this computer and sign in first. Your games stay on your computer.": "Importă-ți meciurile cu butonul de mai jos. Trebuie să fii conectat la Clientul Riot: deschide-l pe acest computer și conectează-te mai întâi. Meciurile tale rămân pe computerul tău.",
  "Sign in above to see your Mayhem games here: win rate, champions, augments and recent matches.": "Conectează-te mai sus ca să vezi aici meciurile tale de Haos: rata de victorii, campionii, augmentările și meciurile recente.",
- "Champions you own": "Campionii pe care îi deții"
+ "Champions you own": "Campionii pe care îi deții",
+ "Save games to my account": "Salvează meciurile în contul meu",
+ "Off unless you turn it on. When on, each import also saves your games to your deeparam.com account, so My Stats on your account page shows them on any device. Only you can see them. Turning it off removes them from your account.": "Oprit până îl pornești. Când e pornit, fiecare import salvează și meciurile tale în contul tău deeparam.com, astfel încât Statisticile mele de pe pagina contului să le afișeze pe orice dispozitiv. Doar tu le poți vedea. Oprirea le elimină din contul tău.",
+ "Save my games to my account": "Salvează-mi meciurile în contul meu",
+ "{n} games saved": "{n} meciuri salvate",
+ "Stop saving and remove the games saved to your account?": "Oprești salvarea și elimini meciurile salvate în contul tău?",
+ "Saving your games…": "Se salvează meciurile…",
+ "Removing your saved games…": "Se elimină meciurile salvate…",
+ "Saving is on. New games are saved after each import.": "Salvarea este pornită. Meciurile noi sunt salvate după fiecare import.",
+ "Saving is off and your saved games were removed.": "Salvarea este oprită, iar meciurile tale salvate au fost eliminate."
 }
