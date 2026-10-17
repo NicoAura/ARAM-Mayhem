@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Bricolage_Grotesque, Geist, Geist_Mono } from "next/font/google";
 import Link from "next/link";
+import FeedbackBox from "@/components/FeedbackBox";
 import AccountButton from "@/components/AccountButton";
 import BrandMark from "@/components/BrandMark";
 import MobileTabBar from "@/components/MobileTabBar";
@@ -112,6 +113,7 @@ export default function RootLayout({
         {text("banner") && <p className="site-banner">{text("banner")}</p>}
         <main>{children}</main>
         <footer className="site-footer">
+          <FeedbackBox />
           <nav className="footer-links" aria-label="Legal">
             <Link href="/privacy">Privacy</Link>
             <Link href="/terms">Terms</Link>

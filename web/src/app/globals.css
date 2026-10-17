@@ -3523,3 +3523,64 @@ html[data-motion="reduce"] .btn:hover {
 .team > .patch-note {
   margin-top: 1rem;
 }
+
+/* Footer feedback box (components/FeedbackBox.tsx) */
+.feedback-box {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem 1.5rem;
+  margin-bottom: 1.5rem;
+  padding: 1rem 1.25rem;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: var(--surface);
+  font-size: 0.8125rem;
+}
+
+.feedback-box > div:first-child {
+  display: grid;
+  gap: 0.2rem;
+  min-width: 0;
+}
+
+.feedback-box b {
+  color: var(--fg);
+  font-size: 0.9375rem;
+  font-weight: 600;
+}
+
+.feedback-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.feedback-mail {
+  padding: 0.45rem 1rem;
+  border-radius: 999px;
+  background: var(--accent);
+  color: var(--bg);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.feedback-mail:hover {
+  filter: brightness(1.08);
+}
+
+.feedback-copy {
+  padding: 0.45rem 0.8rem;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: none;
+  color: var(--muted);
+  font: inherit;
+  cursor: pointer;
+}
+
+.feedback-copy:hover {
+  color: var(--fg);
+}
