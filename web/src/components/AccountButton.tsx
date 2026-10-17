@@ -6,8 +6,8 @@ import { useEffect, useRef, useState } from "react";
 import { ACCOUNT_EVENT, loadAccount, PROFILE_FRESH_MS, profileIcon, SERVERS, signIn, signOut, type Profile } from "@/lib/account";
 import RiotIdFields from "./RiotIdFields";
 
-// Top-right account button. Signed out: a person icon that opens a Riot ID sign-in.
-// Signed in: the player's profile icon, with a menu holding My Stats and Sign out.
+// Top-right account button. Empty: a person icon that opens the Riot ID account lookup.
+// After a lookup: the player's profile icon, with a menu holding My Stats and Clear lookup.
 
 export default function AccountButton() {
   const pathname = usePathname();
@@ -71,7 +71,7 @@ export default function AccountButton() {
       <button
         type="button"
         className={profile ? "account-btn signed-in" : "account-btn"}
-        aria-label={profile ? `Account: ${profile.gameName}` : "Sign in"}
+        aria-label={profile ? `Account: ${profile.gameName}` : "Account lookup"}
         aria-expanded={open}
         aria-haspopup="dialog"
         onClick={() => setOpen((o) => !o)}
@@ -87,7 +87,7 @@ export default function AccountButton() {
         )}
       </button>
       {open && (
-        <div className="account-menu" role="dialog" aria-label={profile ? "Account" : "Sign in"}>
+        <div className="account-menu" role="dialog" aria-label={profile ? "Account" : "Account lookup"}>
           {profile ? (
             <>
               <div className="account-who">
@@ -107,15 +107,15 @@ export default function AccountButton() {
                 My Stats
               </Link>
               <button type="button" className="account-item" onClick={() => (signOut(), setOpen(false))}>
-                Sign out
+                Clear lookup
               </button>
             </>
           ) : (
             <form className="account-form" method="post" action="/stats" onSubmit={submit}>
-              <p className="account-title">Sign in with your Riot ID</p>
+              <p className="account-title">Account lookup</p>
               <RiotIdFields riotId={riotId} onRiotId={setRiotId} platform={platform} onPlatform={setPlatform} autoFocus />
               <button type="submit" className="btn" disabled={busy}>
-                {busy ? "Looking up…" : "Sign in"}
+                {busy ? "Looking up…" : "Look up"}
               </button>
               <p className={error ? "account-note error" : "account-note"}>
                 {error || "No password needed. Your Riot ID is remembered in this browser only."}
