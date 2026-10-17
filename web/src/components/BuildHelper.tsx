@@ -7,6 +7,7 @@ import type { BuildPick, HelperChamp, HelperData } from "@/lib/what-to-build";
 import { getParam, setParams } from "@/lib/url-state";
 import { LoadError } from "@/components/EmptyState";
 import Skeleton from "@/components/Skeleton";
+import ShareButton from "@/components/ShareButton";
 
 // "What should I build?" (/builds?champ=Jinx&vs=healing,tanky): the build that wins most for a
 // champion, its boots, skill order and augments to look for, and item swaps for the enemy team.
@@ -129,6 +130,7 @@ export default function BuildHelper() {
               <div className="card-head">
                 <h2>Build this</h2>
                 <Stats b={c.best} />
+                <ShareButton url={() => `/share/builds${location.search}`} title={`${c.name} build`} />
               </div>
               <Items ids={c.best.items} />
               <p className="table-note">The full build that wins most often for {c.name} among builds players commonly use.</p>
