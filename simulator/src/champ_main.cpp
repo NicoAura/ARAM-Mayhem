@@ -141,7 +141,7 @@ bool writeTrace(const Library& lib, const ChampionKit& c, const Build& b, const 
           << ", \"name\": " << jsonStr(lib.items.at(b.items[i]).name) << "}";
     o << "], \"augments\": [";
     for (size_t i = 0; i < b.augments.size(); ++i)
-        o << (i ? ", " : "") << "{\"key\": " << jsonStr(b.augments[i]) << ", \"name\": "
+        o << (i ? ", " : "") << "{\"key\": " << jsonStr(b.augments[i]) << ", \"id\": " << lib.augments.at(b.augments[i]).id << ", \"name\": "
           << jsonStr(lib.augments.at(b.augments[i]).name) << ", \"rarity\": " << jsonStr(lib.augments.at(b.augments[i]).rarity) << "}";
     o << "]},\n \"abilities\": [";
     for (size_t i = 0; i < c.abilities.size(); ++i) {
@@ -383,8 +383,8 @@ int main(int argc, char** argv) {
             for (const auto& [k, e] : m) {
                 std::string roles;
                 for (size_t i = 0; i < e.roles.size(); ++i) roles += (i ? ", " : "") + jsonStr(e.roles[i]);
-                std::printf("%s{\"key\": %s, \"name\": %s, \"slot\": %s, \"rarity\": %s, \"roles\": [%s], \"modeled\": %s%s}",
-                            first ? "" : ", ", jsonStr(k).c_str(), jsonStr(e.name).c_str(), jsonStr(e.slot).c_str(),
+                std::printf("%s{\"key\": %s, \"id\": %d, \"name\": %s, \"slot\": %s, \"rarity\": %s, \"roles\": [%s], \"modeled\": %s%s}",
+                            first ? "" : ", ", jsonStr(k).c_str(), e.id, jsonStr(e.name).c_str(), jsonStr(e.slot).c_str(),
                             jsonStr(e.rarity).c_str(), roles.c_str(), e.stats.empty() && e.effects.empty() ? "false" : "true",
                             e.group.empty() ? "" : (", \"group\": " + jsonStr(e.group)).c_str());
                 first = false;
