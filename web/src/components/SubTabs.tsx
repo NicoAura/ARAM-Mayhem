@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { buzz } from "@/lib/haptics";
 import { setParams } from "@/lib/url-state";
 
 // In-page tabs. Panels are rendered on the server and this only switches which is visible,
@@ -28,6 +29,7 @@ export default function SubTabs({ tabs }: { tabs: { id: string; label: string; c
             aria-selected={active === t.id}
             aria-controls={`panel-${t.id}`}
             onClick={() => {
+              if (t.id !== active) buzz("step");
               setActive(t.id);
               // Search and sort belong to the tab they were set on.
               setParams({ tab: t.id === tabs[0]?.id ? null : t.id, q: null, sort: null });

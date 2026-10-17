@@ -7,6 +7,7 @@ import ThemeToggle from "./ThemeToggle";
 import Link from "next/link";
 import { TOUR_EVENT } from "./FirstVisitTour";
 import { canVibrate } from "@/lib/haptics";
+import { chime } from "@/lib/ui-sound";
 
 // Gear button at the top right: theme plus the site's other per-browser settings.
 
@@ -71,6 +72,12 @@ export default function SettingsMenu() {
           </div>
           <Choice label="Motion" value={s.motion} options={[["system", "Match system"], ["reduce", "Reduce"]]} onChange={(motion) => set({ motion })} />
           <Choice label="Sound and voice lines" value={s.sound ? "on" : "off"} options={[["on", "On"], ["off", "Off"]]} onChange={(v) => set({ sound: v === "on" })} />
+          {s.sound && (
+            <Choice label="Interface sounds" value={s.uiSound ? "on" : "off"} options={[["on", "On"], ["off", "Off"]]} onChange={(v) => {
+                set({ uiSound: v === "on" });
+                if (v === "on") chime("done");
+              }} />
+          )}
           {canVibrate() && (
             <Choice label="Vibration" value={s.haptics ? "on" : "off"} options={[["on", "On"], ["off", "Off"]]} onChange={(v) => set({ haptics: v === "on" })} />
           )}
