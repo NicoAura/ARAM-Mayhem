@@ -14,8 +14,12 @@
 :root {
   --bg: #e7ebef; --surface: #f0f3f6; --raised: #e0e5eb; --fg: #1f252e; --muted: #525b68; --line: #d3dae2;
   --hover: var(--raised); --accent: #9b7bff; --accent-ink: #120a2b;
-  --accent-soft: color-mix(in srgb, var(--accent) 16%, transparent);
-  --accent-text: color-mix(in srgb, var(--accent) 70%, var(--fg));
+  /* Colour mixes worked out ahead of time, since older Safari and Firefox can't mix colours in CSS:
+     accent at 16% over transparent, accent 50% with --fg for text, accent 45%/50% with --line for
+     hover borders, --hp-low 75% with --fg. */
+  --accent-soft: rgba(155, 123, 255, 0.16);
+  --accent-text: #5d5096;
+  --accent-line: #baafef; --accent-line-strong: #b7aaf0; --foe-text: #b44844;
   --good: #197048; --bad: #a83831; --gold: #e0a83c;
   --abyss: var(--bg);
   --panel: var(--surface);
@@ -33,10 +37,12 @@
 }
 @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
   --bg: #090b0f; --surface: #11151c; --raised: #181d26; --fg: #e8ecf2; --muted: #8b94a3; --line: #222936;
-  --good: #4cc98b; --bad: #f0776f; color-scheme: dark; } }
+  --good: #4cc98b; --bad: #f0776f;
+  --accent-text: #b29dfb; --accent-line: #584e90; --accent-line-strong: #5e529a; --foe-text: #e67975; color-scheme: dark; } }
 :root[data-theme="dark"] {
   --bg: #090b0f; --surface: #11151c; --raised: #181d26; --fg: #e8ecf2; --muted: #8b94a3; --line: #222936;
-  --good: #4cc98b; --bad: #f0776f; color-scheme: dark; }
+  --good: #4cc98b; --bad: #f0776f;
+  --accent-text: #b29dfb; --accent-line: #584e90; --accent-line-strong: #5e529a; --foe-text: #e67975; color-scheme: dark; }
 * { box-sizing: border-box; }
 html, body { background: var(--abyss); color: var(--frost); }
 body { margin: 0; font: 14px/1.5 var(--body); }
@@ -52,7 +58,7 @@ label.lbl { font: 500 11px/1 var(--mono); letter-spacing: .08em; text-transform:
 select, button { font: 500 14px var(--body); color: var(--frost); background: transparent; border: 1px solid var(--line);
   border-radius: 10px; padding: 7px 12px; background: var(--surface); }
 button { cursor: pointer; }
-button:hover, select:hover { background: var(--accent-soft); border-color: color-mix(in srgb, var(--accent) 45%, var(--line)); }
+button:hover, select:hover { background: var(--accent-soft); border-color: var(--accent-line); }
 :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 6px; }
 .stage { display: grid; grid-template-columns: minmax(0, 1fr); gap: 16px; align-items: start; }
 @media (max-width: 860px) { .stage { grid-template-columns: minmax(0, 1fr); } }
@@ -133,7 +139,7 @@ fieldset { border: 1px solid var(--line); border-radius: 8px; padding: 10px 12px
 legend { font: 500 11px var(--mono); letter-spacing: .06em; text-transform: uppercase; color: var(--muted); padding: 0 6px; }
 .field { display: grid; grid-template-columns: minmax(0, 1fr) 96px; gap: 8px; align-items: center; font-size: 13px; }
 .field label { color: var(--frost); min-width: 0; }
-.field:has(select) { grid-template-columns: minmax(0, 1fr) 150px; }
+.field.has-select { grid-template-columns: minmax(0, 1fr) 150px; }
 .field small { display: block; color: var(--muted); font-size: 11px; line-height: 1.3; }
 .field.changed label::after { content: " •"; color: var(--e); }
 input[type=number], input[type=text] { width: 100%; font: 500 13px var(--mono); font-variant-numeric: tabular-nums; color: var(--frost);
@@ -144,7 +150,7 @@ fieldset select { width: 100%; min-width: 0; font-size: 13px; padding: 6px 8px; 
 .modes { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: 13px; }
 .modes label { display: flex; gap: 6px; align-items: center; cursor: pointer; }
 .enemy { display: grid; gap: 6px; padding: 8px; border: 1px solid var(--line); border-radius: 8px; background: var(--raised); }
-.enemy:hover { border-color: color-mix(in srgb, var(--accent) 50%, var(--line)); }
+.enemy:hover { border-color: var(--accent-line-strong); }
 fieldset.wide { grid-column: 1 / -1; }
 .enemy-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 10px; }
 .enemy.changed { border-color: var(--e); }
@@ -164,6 +170,8 @@ fieldset.wide { grid-column: 1 / -1; }
 .alts button { text-align: left; display: grid; grid-template-columns: 64px minmax(0, 1fr); gap: 10px; font-size: 12px; }
 .alts button b { font: 500 13px var(--mono); font-variant-numeric: tabular-nums; }
 @media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto; } .sim-status.busy::before { animation: none; } }
+/* Phones: 16px text in boxes, so iPhone Safari doesn't zoom in when one is tapped. */
+@media (pointer: coarse) { input, select, textarea { font-size: max(16px, 1em) !important; } }
 </style>
 <!-- replay-page-head-end -->
 </head>
@@ -237,7 +245,7 @@ fieldset.wide { grid-column: 1 / -1; }
     </div>
     <div class="sim-status" id="simStatus">Loading the simulator…</div>
     <div class="sim-submit" id="submitBox" hidden>
-      <button id="submitScore" type="button">Submit to Survival</button>
+      <button id="submitScore" type="button">Submit to Leaderboard</button>
       <span id="submitNote"></span>
     </div>
     <div class="sim-grid">
@@ -274,10 +282,10 @@ fieldset.wide { grid-column: 1 / -1; }
   <p class="note">The simulator is in beta: an experiment whose results can shift as the model changes. This is one typical fight (the median of 200) from the simulator, using the build it found best. Some champions' numbers are approximate, and passives that depend on allies, deaths or summons aren't counted.
   The champion icons belong to Riot Games. This project isn't endorsed by Riot Games and doesn't reflect the views or opinions of Riot Games or anyone officially involved in producing or managing League of Legends.</p>
 </div>
-<script>window.REPLAY_VERSION = "46";</script>
-<script src="replay.js?v=46"></script>
+<script>window.REPLAY_VERSION = "48";</script>
+<script src="replay.js?v=48"></script>
 <!-- full-edition-scripts -->
-<script src="sim-panel.js?v=46"></script>
+<script src="sim-panel.js?v=48"></script>
 <!-- replay-page-end -->
 </body>
 </html>

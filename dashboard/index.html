@@ -16,10 +16,16 @@
       <p id="sample-note" class="sample-note" hidden>Showing example games, not real ones. Import your games to see your stats.</p>
     </div>
     <div id="actions" class="actions" hidden>
+      <button id="banner-btn" type="button" class="btn" aria-expanded="false" aria-controls="banner-pick">Banner</button>
       <a id="to-site" class="btn" target="_blank" rel="noopener" hidden title="Shows your latest games under Recently played on deeparam.com, in this browser only">Show on deeparam.com</a>
       <button id="sync" type="button" class="btn primary sync-btn" title="Needs the Riot Client open and signed in on this computer">Import games from client</button>
     </div>
   </header>
+  <div id="banner-pick" class="banner-pick" hidden>
+    <label class="field"><span>Champion</span><select id="banner-champ"></select></label>
+    <label class="field"><span>Skin</span><select id="banner-skin"></select></label>
+    <span class="foot" id="banner-note"></span>
+  </div>
   <p id="sync-status" class="sync-status" aria-live="polite" hidden></p>
 
   <section id="loader" class="empty">
@@ -123,6 +129,12 @@
     </div>
 
     <section class="card">
+      <div class="card-h"><h3>Best teammate champions</h3>
+        <span class="foot">Allies you win most with · at least <input type="number" id="f-minally" value="5" min="1" class="tiny" aria-label="Minimum games"> games together</span></div>
+      <div class="tbl-wrap"><table id="t-allies"></table></div>
+    </section>
+
+    <section class="card">
       <div class="card-h"><h3>Recent games</h3><span class="foot" id="n-games"></span></div>
       <div class="tbl-wrap"><table id="t-games"></table></div>
     </section>
@@ -150,6 +162,16 @@
       <p class="sub">Off unless you turn it on. When on, each import also sends your games to help build stats across all players, such as matchups, augment combos and team comps. Shared games carry champions, items, augments, runes, spells and results, never names or account ids. Turning it off removes everything you shared.</p>
       <label class="share-toggle"><input type="checkbox" id="share-on"> Share my games</label>
       <p class="foot" id="share-status" hidden></p>
+    </section>
+
+    <section class="card" id="link-card" hidden>
+      <div class="card-h"><h3>Connect account</h3></div>
+      <p class="sub">Connect the Riot account signed in to this computer to your deeparam.com account. Sign in on deeparam.com, open your account page, and enter the code it shows. Only your Riot ID is connected; your games stay here.</p>
+      <form id="link-form" class="link-form">
+        <input id="link-code" maxlength="8" autocomplete="off" spellcheck="false" placeholder="ABCD1234" aria-label="Code from your account page">
+        <button type="submit" class="btn primary">Connect</button>
+      </form>
+      <p class="foot" id="link-status" hidden></p>
     </section>
 
     <section class="card" id="profile-card" hidden>

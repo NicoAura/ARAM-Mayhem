@@ -82,7 +82,7 @@ const DEVICE_SCRIPT = `try{var u=navigator.userAgent;if(/iPhone|iPad|iPod|Androi
 // New visitors start in dark mode; "system" follows the device.
 const THEME_SCRIPT = `var t="dark";try{t=localStorage.getItem(${JSON.stringify(THEME_KEY)})||"dark"}catch(e){}if(t==="light"||t==="dark")document.documentElement.dataset.theme=t;`;
 
-// The Ko-fi link Nico sets at /admin: a full ko-fi.com link or just the page name.
+// The Ko-fi link Nico sets at /account/edit: a full ko-fi.com link or just the page name.
 function kofiUrl() {
   const v = text("kofi").trim();
   if (!v) return "";

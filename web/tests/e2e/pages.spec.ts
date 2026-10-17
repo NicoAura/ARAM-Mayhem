@@ -24,6 +24,7 @@ const PAGES = [
   "/items",
   "/items?tag=crit,as",
   "/tier-list?tag=Mage,Poke",
+  "/account",
   "/privacy",
   "/terms",
 ];
@@ -108,11 +109,11 @@ test("new visitors start in dark mode", async ({ page }) => {
   await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
 });
 
-test("admin-only files stay private without the admin sign-in", async ({ request }) => {
+test("owner-only files stay private without the owner's sign-in", async ({ request }) => {
   for (const path of ["/assets/models/aphelios/523000/model.glb", "/assets/clips/0001/ability_0001_Q1.webm", "/embed/simulator/full.html"]) {
     const res = await request.get(path, { maxRedirects: 0 });
     expect(res.status(), path).toBe(404);
   }
-  const res = await request.get("/admin/simulator");
+  const res = await request.get("/account/simulator");
   expect(await res.text()).toContain("Sign in first");
 });

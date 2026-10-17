@@ -1,25 +1,31 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
-import { ADMIN_COOKIE, adminFromCookie } from "@/lib/admin-session";
+import { SESSION_COOKIE } from "@/lib/account-cookies";
+import { ownerFromCookie } from "@/lib/admin-session";
 
-// Per-visitor limits on the routes that cost something: the Riot lookups (the site's Riot API quota),
-// browser error reports (/api/log, so they can't flood the logs), and the writes (leaderboard
-// submissions, public profiles, shared games). On Cloudflare the counts come from the Worker's
+// Per-visitor limits on the routes that cost something: browser error reports (/api/log, so they can't
+// flood the logs), signing in, and the writes (leaderboard submissions, public profiles, shared games,
+// account changes). On Cloudflare the counts come from the Worker's
 // rate-limit bindings (wrangler.jsonc "ratelimits"), shared by every request in a location; elsewhere,
 // or if a binding is missing, from this instance's memory, which is approximate.
 type Rule = { binding: string; limit: number; message: string };
-const LOOKUP: Rule = { binding: "RL_LOOKUP", limit: 30, message: "Too many lookups." };
 const LOG: Rule = { binding: "RL_LOG", limit: 30, message: "Too many reports." };
 const WRITE: Rule = { binding: "RL_WRITE", limit: 10, message: "Too many submissions." };
 // My Stats sends a player's shared games 50 at a time, so a first share of 1,000 games is 20 requests.
 const SHARE: Rule = { binding: "RL_SHARE", limit: 60, message: "Too many uploads." };
+// Signing in and creating accounts: few per minute, so passwords can't be guessed quickly.
+const SIGNIN: Rule = { binding: "RL_WRITE", limit: 10, message: "Too many tries." };
 const WINDOW = 60_000; // all limits are per minute, matching the bindings' period
 
 function ruleFor(req: NextRequest): Rule | null {
   const path = req.nextUrl.pathname;
-  if (path.startsWith("/api/riot/")) return LOOKUP;
   if (path === "/api/log") return LOG;
-  if (path === "/api/games") return SHARE;
+  if (path === "/api/games") return req.method === "GET" ? null : SHARE;
+  if (path.startsWith("/api/account")) {
+    if (req.method === "GET") return null;
+    // Saving Favorites and settings happens as you click; the rest is signing in and account changes.
+    return req.method === "PUT" ? SHARE : SIGNIN;
+  }
   // GET /api/sim-scores is the public leaderboard, cached for a minute; only sending counts.
   if (req.method === "POST") return WRITE;
   return null;
@@ -45,13 +51,13 @@ function memoryAllows(key: string, limit: number) {
   return true;
 }
 
-// Admin-only files (wrangler.jsonc sends these paths through the Worker first): 3D models, ability
-// videos, and the full Simulator replay with its sounds. Admins get the file from the static assets;
-// everyone else a plain 404.
+// Owner-only files (wrangler.jsonc sends these paths through the Worker first): 3D models, ability
+// videos, and the full Simulator replay with its sounds. The signed-in site owner gets the file from the
+// static assets; everyone else a plain 404.
 const ADMIN_ONLY = /^\/(assets\/(models|clips)\/|embed\/simulator\/(full(\.html)?$|replay-data\/sounds\/))/;
 
 async function adminOnly(req: NextRequest) {
-  if (!(await adminFromCookie(req.cookies.get(ADMIN_COOKIE)?.value))) {
+  if (!(await ownerFromCookie(req.cookies.get(SESSION_COOKIE)?.value))) {
     return new NextResponse("Not found", { status: 404, headers: { "Cache-Control": "no-store" } });
   }
   // In `next dev` (and outside Cloudflare) Next serves public/ itself.
@@ -64,7 +70,7 @@ async function adminOnly(req: NextRequest) {
   }
   if (!assets) return NextResponse.next();
   const res = await assets.fetch(new Request(req.url, { method: req.method, headers: req.headers }));
-  // Private, so a shared cache never hands an admin's copy to someone else.
+  // Private, so a shared cache never hands the owner's copy to someone else.
   const out = new Response(res.body, res);
   out.headers.set("Cache-Control", "private, max-age=86400");
   return out;
@@ -90,4 +96,4 @@ export async function middleware(req: NextRequest) {
   );
 }
 
-export const config = { matcher: ["/assets/models/:path*", "/assets/clips/:path*", "/embed/simulator/full", "/embed/simulator/full.html", "/embed/simulator/replay-data/sounds/:path*", "/api/riot/:path*", "/api/log", "/api/sim-scores", "/api/profile", "/api/games"] };
+export const config = { matcher: ["/assets/models/:path*", "/assets/clips/:path*", "/embed/simulator/full", "/embed/simulator/full.html", "/embed/simulator/replay-data/sounds/:path*", "/api/log", "/api/sim-scores", "/api/profile", "/api/games", "/api/account", "/api/account/:path*"] };

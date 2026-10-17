@@ -81,7 +81,7 @@
     rows.push(["Attack range", s.range, "", s.range], ["Move speed", s.ms, "", s.ms]);
     const cell = (v, d) => (typeof v === "number" ? num(v, d) : esc(v));
     return `<div class="card"><div class="card-head"><h2>Base stats</h2><span class="muted small">Before items, augments and Mayhem's bonuses</span></div>
-      <div class="table-wrap"><table class="stats"><thead><tr><th>Stat</th><th class="num">Level 1</th><th class="num">Per level</th><th class="num">Level 18</th></tr></thead>
+      <div class="table-wrap" tabindex="0" role="region" aria-label="Base stats"><table class="stats"><thead><tr><th>Stat</th><th class="num">Level 1</th><th class="num">Per level</th><th class="num">Level 18</th></tr></thead>
       <tbody>${rows.map(([l, a, b, z]) => `<tr><td>${esc(l)}</td><td class="num">${cell(a, 3)}</td><td class="num">${b === "" ? "–" : cell(b, 3)}</td><td class="num"><b>${cell(z, l === "Attack speed" ? 3 : 1)}</b></td></tr>`).join("")}</tbody></table></div></div>`;
   }
 
@@ -106,6 +106,19 @@
     if (window.CHAMPS_MODIFIERS) return show();
     const sc = document.createElement("script");
     sc.src = "modifiers.js";
+    sc.onload = show;
+    document.head.appendChild(sc);
+  }
+
+  // Home region and official difficulty, from profile.js
+  function loadProfile(c) {
+    const show = () => {
+      const el = $("profile"), p = (window.CHAMPS_PROFILE || {})[c.alias];
+      if (el && p) el.textContent = [p.region, p.difficulty && `Difficulty: ${p.difficulty}`].filter(Boolean).join(" · ");
+    };
+    if (window.CHAMPS_PROFILE) return show();
+    const sc = document.createElement("script");
+    sc.src = "profile.js";
     sc.onload = show;
     document.head.appendChild(sc);
   }
@@ -141,7 +154,7 @@
          ["Damage share", pct(c.tier.damage)], ["Damage taken share", pct(c.tier.tank)]]
       : [];
     const changes = c.mayhem.length
-      ? `<div class="table-wrap"><table class="changes">
+      ? `<div class="table-wrap" tabindex="0" role="region" aria-label="Mayhem changes"><table class="changes">
           <thead><tr><th>Ability</th><th>Value</th><th class="num">Rift</th><th class="num">Mayhem</th></tr></thead>
           <tbody>${c.mayhem.map((m) => {
             const a = ab[m.slot] || {};
@@ -217,6 +230,7 @@
         <span class="eyebrow">${c.roles.map((r) => ROLE[r] || r).join(" · ")}</span>
         <h1>${esc(c.name)}</h1>
         <span>${esc(c.title)}</span>
+        <span class="eyebrow" id="profile" style="margin-top:0.4rem"></span>
       </div></div>
       ${facts.length ? `<div class="facts">${facts.map(([l, v]) => `<div class="card fact"><span class="eyebrow">${l}</span><span class="value">${v}</span></div>`).join("")}</div>` : ""}
       ${builds}
@@ -238,6 +252,7 @@
       </div>
       ${c.tier ? '<p class="small"><a href="/tier-list" target="_top">See the full Tier List →</a></p>' : ""}`;
     loadSkins(c);
+    loadProfile(c);
     loadMods(c);
     document.title = `${c.name} · Mayhem Champions`;
   }

@@ -18,7 +18,9 @@ from strings import key_hash  # noqa: E402
 
 BASE = "https://raw.communitydragon.org"
 TIERS = ["Silver", "Gold", "Prismatic"]
-MAYHEM_QUEUE = 2400
+# the public Mayhem queue id from Riot's official constants (build_constants.py), 2400 until that file exists
+_CONSTS = os.path.join(HERE, "game_constants.json")
+MAYHEM_QUEUE = (json.load(open(_CONSTS)).get("mayhemQueue") if os.path.exists(_CONSTS) else None) or 2400
 CHALLENGE_TIERS = ["IRON", "BRONZE", "SILVER", "GOLD", "PLATINUM", "DIAMOND", "MASTER", "GRANDMASTER", "CHALLENGER"]
 # Map skins: game-mode-mutators names them, the minimap file is per skin
 MAP_SKINS = [

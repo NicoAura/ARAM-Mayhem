@@ -83,3 +83,12 @@ export async function unshareGames(puuid: string) {
     g.prepare("DELETE FROM sharers WHERE sharer = ?").bind(sharer),
   ]);
 }
+
+/** How many shared games the site holds, in all and on one patch (Home's counts). */
+export async function sharedTotals(patch: string | null) {
+  const row = await db()
+    .prepare("SELECT count(*) AS n, sum(CASE WHEN patch = ? THEN 1 ELSE 0 END) AS p FROM games")
+    .bind(patch ?? "")
+    .first<{ n: number; p: number | null }>();
+  return { all: row?.n ?? 0, patch: row?.p ?? 0 };
+}

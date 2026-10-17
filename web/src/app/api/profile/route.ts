@@ -1,8 +1,10 @@
 import { NextRequest } from "next/server";
+import { AccountError, linkRiot } from "@/lib/accounts";
 import { cleanProfile, isPlatform, profileByPuuid, profilePath, removeProfile, saveProfile, tokenOwner } from "@/lib/profiles";
 
-// POST /api/profile {action: "publish" | "remove" | "status", token, platform, data?}, sent by the My Stats
-// helper on the player's computer. The token decides whose page it is; see lib/profiles.ts.
+// POST /api/profile {action: "publish" | "remove" | "status" | "link", token, platform, data?, code?}, sent by the
+// My Stats helper on the player's computer. The token decides whose page it is; see lib/profiles.ts.
+// "link" connects that Riot account to the site account that showed `code` (lib/accounts.ts).
 const MAX_BODY = 32_000;
 
 const json = (obj: unknown, status = 200) => Response.json(obj, { status, headers: { "Cache-Control": "no-store" } });
@@ -21,6 +23,15 @@ export async function POST(req: NextRequest) {
   const owner = await tokenOwner(token, platform);
   if (!owner) return json({ error: "Couldn't confirm your account. Make sure the Riot Client is open and signed in." }, 401);
 
+  if (action === "link") {
+    try {
+      await linkRiot(body.code, owner, platform);
+    } catch (err) {
+      if (err instanceof AccountError) return json({ error: err.message }, err.status);
+      throw err;
+    }
+    return json({ linked: true, riotId: `${owner.name}#${owner.tag}` });
+  }
   if (action === "remove") {
     await removeProfile(owner.puuid);
     return json({ published: false });

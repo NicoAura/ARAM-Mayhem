@@ -27,7 +27,7 @@ struct MoreView: View {
                 Section {
                     Toggle(isOn: $alertsOn) { Label("New patch alerts", systemImage: "bell.badge.fill") }
                         .onChange(of: alertsOn) { _, on in
-                            Haptics.shared.play(.tap)
+                            Haptics.shared.play(.tick)
                             guard on else { return }
                             Task {
                                 let ok = await PatchAlerts.shared.requestPermission()

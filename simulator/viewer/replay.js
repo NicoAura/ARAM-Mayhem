@@ -40,7 +40,7 @@
   onSettings(() => { reduceMotion = readMotion(); });
   const $ = (id) => document.getElementById(id);
 
-  let index = null, traces = null, sprite = null, byId = new Map();
+  let index = null, traces = null, byId = new Map();
   // Game art loaded at run time (not in the repo); a page that can't reach it falls back to
   // copies in replay-data/art/ when they're there.
   const CDRAGON = "/assets/cd/latest/";
@@ -77,9 +77,8 @@
   Promise.all([
     fetch(DATA + "index.json" + BUST).then((r) => r.json()),
     fetch(DATA + "traces.json" + BUST).then((r) => r.json()),
-    new Promise((ok, fail) => { const im = new Image(); im.onload = () => ok(im); im.onerror = () => ok(null); im.src = DATA + "sprites.webp" + BUST; }),
-  ]).then(([idx, tr, im]) => {
-    index = idx; traces = tr; sprite = im;
+  ]).then(([idx, tr]) => {
+    index = idx; traces = tr;
     for (const c of index.champions) byId.set(c.id.toLowerCase(), c);
     const sel = $("champ");
     const list = index.champions.filter((c) => traces[c.id]).sort((a, b) => a.name.localeCompare(b.name));
@@ -483,18 +482,15 @@
   function paintIcon(c, row, col, size) {
     const g = c.getContext("2d");
     drawIcon(g, row, col, 0, 0, size, false);
-    const im = !sprite && row >= 0 ? ddImage(row, col) : null;
+    const im = row >= 0 ? ddImage(row, col) : null;
     if (im && !(im.complete && im.naturalWidth))
       im.addEventListener("load", () => { g.clearRect(0, 0, size, size); drawIcon(g, row, col, 0, 0, size, false); }, { once: true });
   }
   function drawIcon(g, row, col, x, y, size, round) {
     g.save();
     if (round) { g.beginPath(); g.arc(x + size / 2, y + size / 2, size / 2, 0, Math.PI * 2); g.clip(); }
-    const single = row >= 0 && !sprite ? ddIcon(row, col) : null;
-    if (row >= 0 && sprite) {
-      const S = index.icon_size;
-      g.drawImage(sprite, col * S, row * S, S, S, x, y, size, size);
-    } else if (single) {
+    const single = row >= 0 ? ddIcon(row, col) : null;
+    if (single) {
       g.drawImage(single, x, y, size, size);
     } else {
       g.fillStyle = "#262626"; g.fillRect(x, y, size, size);
