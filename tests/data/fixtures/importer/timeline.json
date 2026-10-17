@@ -1,0 +1,85 @@
+{
+ "frames": [
+  {
+   "timestamp": 0,
+   "events": [
+    {
+     "type": "ITEM_PURCHASED",
+     "timestamp": 1000,
+     "participantId": 1,
+     "itemId": 1055
+    }
+   ]
+  },
+  {
+   "timestamp": 60000,
+   "events": [
+    {
+     "type": "CHAMPION_KILL",
+     "timestamp": 61499,
+     "position": {
+      "x": 4100,
+      "y": 4200
+     },
+     "killerId": 1,
+     "victimId": 7
+    },
+    {
+     "type": "champion_kill",
+     "timestamp": 75500,
+     "position": {
+      "x": 6000,
+      "y": 6100
+     },
+     "killerId": 8,
+     "victimId": 2,
+     "assistingParticipantIds": [
+      9,
+      10
+     ]
+    },
+    {
+     "type": "CHAMPION_KILL",
+     "timestamp": 80000,
+     "killerId": 3,
+     "victimId": 9
+    },
+    {
+     "type": "CHAMPION_KILL",
+     "timestamp": 90000,
+     "position": {
+      "x": 7000
+     },
+     "killerId": 3,
+     "victimId": 9
+    }
+   ]
+  },
+  {
+   "timestamp": 120000,
+   "events": [
+    {
+     "type": "CHAMPION_KILL",
+     "timestamp": 121000,
+     "position": {
+      "x": 8000,
+      "y": 8000
+     },
+     "victimId": 4
+    },
+    {
+     "type": "BUILDING_KILL",
+     "timestamp": 122000,
+     "position": {
+      "x": 9000,
+      "y": 9000
+     },
+     "killerId": 1
+    }
+   ]
+  },
+  {
+   "timestamp": 180000
+  }
+ ]
+}
