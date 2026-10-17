@@ -673,6 +673,139 @@ h1 {
   color: var(--bad);
 }
 
+.tag-mixed {
+  border-color: color-mix(in srgb, var(--gold) 45%, transparent);
+  color: var(--gold);
+}
+
+.tag-new {
+  border-color: color-mix(in srgb, var(--accent) 45%, transparent);
+  color: var(--accent);
+}
+
+/* PBE change tracker: filter bar, tag buttons and one row per champion, item or augment */
+.tracker-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.tracker-bar .seg {
+  flex: 0 1 26rem;
+}
+
+.tracker-bar .table-search {
+  flex: 1 1 12rem;
+  margin: 0;
+}
+
+.tracker-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.375rem;
+  margin: 0.75rem 0 1rem;
+}
+
+.tracker-tags button {
+  gap: 0.35rem;
+  margin: 0;
+  background: none;
+  cursor: pointer;
+}
+
+.tracker-tags button[aria-pressed="true"] {
+  background: color-mix(in srgb, currentColor 14%, transparent);
+  border-color: currentColor;
+}
+
+.tracker-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 22rem), 1fr));
+  gap: 0.75rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.tracker-more {
+  margin-top: 0.75rem;
+}
+
+.tracker-row {
+  padding: 0.75rem 0.85rem;
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--line);
+  border-radius: var(--r);
+  background: var(--surface);
+}
+
+.tracker-row.is-buff { border-left-color: var(--good); }
+.tracker-row.is-nerf { border-left-color: var(--bad); }
+.tracker-row.is-mixed { border-left-color: var(--gold); }
+.tracker-row.is-new { border-left-color: var(--accent); }
+
+.tracker-head {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.tracker-head img,
+.tracker-noicon {
+  flex: none;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: var(--raised);
+  object-fit: cover;
+}
+
+.tracker-name {
+  display: grid;
+  flex: 1;
+  min-width: 0;
+  line-height: 1.25;
+}
+
+.tracker-name .sub {
+  font-size: 0.75rem;
+}
+
+.tracker-head .tag {
+  margin: 0;
+}
+
+.tracker-lines {
+  display: grid;
+  gap: 0.3rem;
+  margin: 0.6rem 0 0;
+  padding: 0;
+  list-style: none;
+  font-size: 0.84375rem;
+}
+
+.tracker-lines li {
+  position: relative;
+  padding-left: 0.9rem;
+}
+
+.tracker-lines li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.5em;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--muted);
+}
+
+.tracker-lines .is-buff::before { background: var(--good); }
+.tracker-lines .is-nerf::before { background: var(--bad); }
+.tracker-lines .is-mixed::before { background: var(--gold); }
+.tracker-lines .is-new::before { background: var(--accent); }
+
 /* Section pages: quiet empty state */
 .placeholder {
   display: flex;
