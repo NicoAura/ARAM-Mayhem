@@ -14,7 +14,6 @@
   "dual_wield": {"id": 1225, "name": "Dual Wield", "rarity": "prismatic", "effects": {"total_as_mult": 0.1, "second_bolt": 0.4, "second_bolt_onhit": 0.4}, "confidence": "verified"},
   "infernal_conduit": {"id": 1045, "name": "Infernal Conduit", "rarity": "prismatic", "effects": {"conduit_ap": 0.036, "conduit_ad": 0.084, "conduit_duration": 3, "conduit_cdr_per_tick": 0.08}, "confidence": "verified", "note": "Burn per second is 2-20 by level + 1.2% AP + 2.8% bonus AD for 3 s; the level-based part is not modeled"},
   "eureka": {"id": 1030, "name": "Eureka", "rarity": "prismatic", "effects": {"ah_per_ap": 0.3}, "confidence": "verified"},
-  "": {"id": 3176, "name": "   ", "rarity": "gold", "note": "No effect in the simulator: it depends on an effect the simulator doesn't model yet"},
   "adapt": {"id": 1205, "name": "ADAPt", "rarity": "silver", "effects": {"ad_to_ap": 1.66666, "ap_amp": 0.15}, "confidence": "verified"},
   "adaptive_ward": {"id": 2138, "name": "Adaptive Ward", "rarity": "silver", "stats": {"armor": 24, "mr": 24}, "confidence": "approx", "note": "2 stacks assumed"},
   "all_for_you": {"id": 1141, "name": "All For You", "rarity": "gold", "note": "No effect in the simulator: it depends on allies"},
