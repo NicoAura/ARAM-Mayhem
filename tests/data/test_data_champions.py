@@ -231,25 +231,18 @@ def test_champion_list_matches_site_ids(data):
     assert all(ids[a] >= 60000 for a in set(ids) - {c["alias"] for c in data["champions"]})
 
 
-# Known bug: champion-names.json spells Fiddlesticks' key "Fiddlesticks", but the stats (data/cn/champions.csv,
-# by_patch.csv) and champion pages use the alias "FiddleSticks", so the Tier List's name lookup misses and the
-# page falls back to the raw alias ("FiddleSticks" / "Fiddle Sticks").
-KNOWN_MISSING_NAMES = {"FiddleSticks"}
-
-
 def test_every_stats_alias_has_a_display_name(data):
     """Pages look champion names up by the alias the stats files use (web/src/data/champion-names.json)."""
     import csv
     names = load_json("web/src/data/champion-names.json")
     with open(os.path.join(REPO, "data", "cn", "champions.csv"), encoding="utf-8") as f:
         aliases = {r["name"] for r in csv.DictReader(f)} | {c["alias"] for c in data["champions"]}
+    # Regression: the "FiddleSticks" alias had no name entry, so the Tier List showed "Fiddle Sticks" (#168).
     missing = {a for a in aliases if a not in names}
-    assert not missing - KNOWN_MISSING_NAMES, sorted(missing - KNOWN_MISSING_NAMES)
+    assert not missing, sorted(missing)
     for c in data["champions"]:
         if c["alias"] in names:
             assert names[c["alias"]] == c["name"], c["alias"]
-    if missing:
-        pytest.xfail(f"champion-names.json has no entry for {sorted(missing)}")
 
 
 # ---------- champions/build_data.py helpers ----------
