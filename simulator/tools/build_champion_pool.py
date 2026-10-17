@@ -445,6 +445,7 @@ def parse_spell(slot, spell_obj, strings, base_stats, attack_range=125):
         "rank": rank,
         "cooldown": round(cd, 3),
         **cast_timing(spell, rank, targeting),
+        **({"cc": cc} if (cc := parse_cc(text, ev)) else {}),
         "targeting": targeting,
         "area": area,
         "duration": round(duration, 3),
@@ -453,6 +454,41 @@ def parse_spell(slot, spell_obj, strings, base_stats, attack_range=125):
         "mode_overrides": ev.mode_overrides,
         "notes": sorted(notes),
     }
+
+
+# Crowd control named in a tooltip's <status> tags, strongest first, with typical durations
+# (seconds) for when the tooltip gives none.
+CC_KINDS = [("suppress", r"suppress", 1.5), ("stun", r"stun", 1.0), ("knockup", r"knock|airborne|pull", 0.75),
+            ("charm", r"charm", 1.25), ("fear", r"fear|flee|terrif", 1.25), ("taunt", r"taunt", 1.25),
+            ("sleep", r"sleep|drows", 1.5), ("polymorph", r"polymorph", 1.25), ("root", r"root|snare|immobil", 1.25),
+            ("silence", r"silenc", 1.25), ("slow", r"slow", 1.5)]
+
+
+def parse_cc(text, ev):
+    """The strongest crowd control an ability's tooltip names, and how long it lasts."""
+    tags = [m for m in re.finditer(r"<status>([^<]+)</status>", text)]
+    for kind, pat, default in CC_KINDS:
+        hit = next((m for m in tags if re.search(pat, m.group(1), re.I)), None)
+        if not hit:
+            continue
+        # The duration is usually the next "...Duration@" number in the same sentence.
+        dur = None
+        sentence = text[hit.end():hit.end() + 220].split(". ")[0]
+        for ref in re.finditer(r"@([A-Za-z0-9_.]+?)(?:\*[0-9.]+)?@", sentence):
+            name = ref.group(1)
+            if re.search(r"duration|time", name, re.I) and not re.search(r"cooldown|recharge", name, re.I):
+                lin, _ = ev.calc(name)
+                if lin is not None and lin.is_const() and 0.1 <= lin.const() <= 5:
+                    dur = lin.const()
+                    break
+        out = {"type": kind, "duration": round(dur if dur is not None else default, 3)}
+        if kind == "slow":
+            m = re.search(r"@([A-Za-z0-9_]*slow[A-Za-z0-9_]*)@\s*%", sentence, re.I)
+            lin = ev.calc(m.group(1))[0] if m else None
+            amt = lin.const() if lin is not None and lin.is_const() else 30.0
+            out["amount"] = round(min(0.9, amt / 100.0 if amt > 1 else amt), 3)
+        return out
+    return None
 
 
 def attack_windup(record):

@@ -240,6 +240,8 @@ void Scenario::applyEnemyPool(const json::Value& pool, int excludeChampionId) {
         p.cc = e["cc"].asNumber(1.0);
         p.physShare = e["phys_share"].asNumber(0.5);
         p.damageShare = e["damage_share"].asNumber(0.2);
+        for (const auto& x : e["build"]["items"].arr) p.items.push_back(x.asString());
+        for (const auto& x : e["build"]["augments"].arr) p.augments.push_back(x.asString());
         // Mayhem has no mirror matches, so a champion never fights itself.
         if (p.weight > 0 && (excludeChampionId == 0 || p.championId != excludeChampionId)) enemies.push_back(p);
     }

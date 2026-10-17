@@ -58,6 +58,9 @@ struct Ability {
     double lock = 0;            // seconds a channel keeps the caster busy after it fires
     double castFromAttack = 0;  // > 0: the cast time is this share of the attack wind-up
     bool attackReset = false;   // the next attack can start as soon as it's cast
+    // Crowd control it puts on enemies it hits: stun, root, knockup, slow... ("" for none).
+    std::string cc;
+    double ccDuration = 0, ccSlow = 0;
     Area area = Area::Single;
     Geometry geo;
     bool aura = false;  // per-second damage on a toggle or very short cooldown: always on
@@ -87,6 +90,9 @@ struct ChampionKit {
     double deathAct = 0, reviveFrac = 0, reviveDelay = 0, deathChance = 1;
     bool deathNeedsR = false;
     std::vector<Ability> abilities;
+    // Its abilities' crowd control that stops a champion acting (slot, kind), damaging or not:
+    // what you're hit by when this champion is the enemy.
+    std::vector<std::pair<char, std::string>> hardCc;
 };
 
 struct Effect {
@@ -154,6 +160,10 @@ struct Library {
     // The fight scenario for one champion: enemy pool without that champion and its
     // real share of team damage taken.
     Scenario scenarioFor(const ChampionKit& c) const;
+    // Sets an enemy's Health, Armor and Magic Resist from its base stats at this level plus
+    // its build (items and augments); enemies without a build keep the pool's estimate.
+    // listed: the build was given by hand, so an empty one means no items at all.
+    void equipEnemy(EnemyProfile& p, int level, bool listed = false) const;
     void validate(const Build& b) const;
 
     json::Value enemyPool;
@@ -181,6 +191,7 @@ struct TraceEvent {
     int source = -1;          // Source of a damage event
     double amount = 0;        // damage dealt; cast time for casts; wind-up for attacks; cc end time for cc
     double lock = 0;          // casts: seconds a channel keeps the caster busy after it fires
+    std::string who;          // cc on you: the enemy champion whose ability it is
     double hp = 0, maxHp = 0; // enemy HP after the event, or the champion's own HP for self/death
     bool flag = false;        // crit for attacks, the main target was hit for casts
     double x = 0, y = 0;      // casts: where it was aimed

@@ -160,6 +160,7 @@ bool writeTrace(const Library& lib, const ChampionKit& c, const Build& b, const 
         if (e.source >= 0) o << ", \"src\": " << e.source;
         if (e.amount != 0) o << ", \"a\": " << num(e.amount);
         if (e.lock > 0) o << ", \"l\": " << num(e.lock);
+        if (!e.who.empty()) o << ", \"c\": " << jsonStr(e.who);
         if (e.kind == "spawn" || e.kind == "damage" || e.kind == "kill" || e.kind == "self" || e.kind == "death")
             o << ", \"hp\": " << num(e.hp) << ", \"max\": " << num(e.maxHp);
         if (e.flag) o << ", \"f\": 1";
@@ -355,7 +356,7 @@ int main(int argc, char** argv) {
         const Scenario& sc = lib.scenario;
         const Rules& r = lib.rules;
         const std::map<std::string, double> defaults = {
-            {"level", sc.level}, {"fight_mean", sc.fightMean}, {"fight_sd", sc.fightSd}, {"fight_min", sc.fightMin},
+            {"level", sc.level}, {"enemy_level", sc.enemyLevel}, {"fight_mean", sc.fightMean}, {"fight_sd", sc.fightSd}, {"fight_min", sc.fightMin},
             {"fight_max", sc.fightMax}, {"engage_min", sc.engageMin}, {"engage_max", sc.engageMax},
             {"until_death", sc.untilDeath ? 1.0 : 0.0}, {"fight_cap", sc.fightCap},
             {"team_size", sc.teamSizeRule > 0 ? sc.teamSizeRule : 5},
@@ -374,15 +375,23 @@ int main(int argc, char** argv) {
         std::printf("],\n \"enemies\": [");
         Scenario pool = lib.scenario;
         if (lib.enemyPool.isObject()) pool.applyEnemyPool(lib.enemyPool);
+        for (auto& e : pool.enemies) lib.equipEnemy(e, pool.enemyLevel);
+        auto names = [](const std::vector<std::string>& v) {
+            std::string o = "[";
+            for (size_t j = 0; j < v.size(); ++j) o += (j ? ", " : "") + jsonStr(v[j]);
+            return o + "]";
+        };
         for (size_t i = 0; i < pool.enemies.size(); ++i) {
             const auto& e = pool.enemies[i];
             const auto it = lib.mayhemDamageTaken.find(e.championId);
             std::printf("%s{\"id\": %s, \"name\": %s, \"weight\": %s, \"hp\": %s, \"armor\": %s, \"mr\": %s, "
-                        "\"damage_share\": %s, \"phys_share\": %s, \"cc\": %s, \"damage_taken\": %s}",
+                        "\"damage_share\": %s, \"phys_share\": %s, \"cc\": %s, \"damage_taken\": %s, \"items\": %s, "
+                        "\"augments\": %s}",
                         i ? ", " : "", jsonStr(e.id).c_str(), jsonStr(e.name).c_str(), num(e.weight).c_str(),
                         num(e.hp).c_str(), num(e.armor).c_str(), num(e.mr).c_str(), num(e.damageShare).c_str(),
                         num(e.physShare).c_str(), num(e.cc).c_str(),
-                        num(it != lib.mayhemDamageTaken.end() ? it->second : e.damageTaken).c_str());
+                        num(it != lib.mayhemDamageTaken.end() ? it->second : e.damageTaken).c_str(),
+                        names(e.items).c_str(), names(e.augments).c_str());
         }
         std::printf("]}\n");
         return 0;

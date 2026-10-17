@@ -164,6 +164,13 @@ ChampionKit loadChampion(const json::Value& c, const Rules& rules) {
         ab.lock = std::max(0.0, a["lock"].asNumber(0));
         ab.castFromAttack = a["cast_from_attack"].asNumber(0);
         ab.attackReset = a["attack_reset"].asBool(false);
+        const json::Value& cc = a["cc"];
+        if (cc.isObject()) {
+            ab.cc = cc["type"].asString();
+            ab.ccDuration = cc["duration"].asNumber(1.0);
+            ab.ccSlow = cc["amount"].asNumber(0.3);
+            if (ab.cc != "slow" && ab.cc != "silence" && ab.cc != "root") k.hardCc.push_back({ab.slot, ab.cc});
+        }
         ab.duration = a["duration"].asNumber(0);
         ab.area = areaOf(a["area"].asString());
         ab.geo = geometryOf(a["geometry"], ab.area, k.attackRange);
@@ -229,7 +236,8 @@ ChampionKit loadChampion(const json::Value& c, const Rules& rules) {
 const std::vector<std::pair<std::string, std::string>>& Library::settingKeys() {
     static const std::vector<std::pair<std::string, std::string>> keys = {
         // fight
-        {"level", "champion level (1-18)"},
+        {"level", "your champion's level (1-18)"},
+        {"enemy_level", "the enemies' level (1-18); their stats come from it plus their build"},
         {"fight_mean", "average fight length, seconds"},
         {"fight_sd", "spread of fight length, seconds"},
         {"fight_min", "shortest fight, seconds"},
@@ -353,6 +361,34 @@ const ChampionKit* Library::find(const std::string& nameOrId) const {
 
 double meanExposure(const Library& lib, const ChampionKit& c, const Scenario& sc);
 
+// How far per-level stats have grown by this level (the game's level curve).
+static double statGrowth(int level) {
+    const double n = level - 1;
+    return n * (0.7025 + 0.0175 * n);
+}
+
+void Library::equipEnemy(EnemyProfile& p, int level, bool listed) const {
+    const ChampionKit* k = find(std::to_string(p.championId));
+    if (!k || (!listed && p.items.empty() && p.augments.empty())) return;
+    const double g = statGrowth(level);
+    double hp = k->hp + k->hpG * g, armor = k->armor + k->armorG * g, mr = k->mr + k->mrG * g, hpPct = 0;
+    auto stat = [](const Bag& b, const char* key) { auto f = b.find(key); return f == b.end() ? 0.0 : f->second; };
+    for (int pass = 0; pass < 2; ++pass)
+        for (const auto& name : pass ? p.augments : p.items) {
+            const auto& table = pass ? augments : items;
+            auto fx = table.find(name);
+            if (fx == table.end())
+                throw std::runtime_error("unknown " + std::string(pass ? "augment" : "item") + " '" + name + "' for enemy " + p.name);
+            hp += stat(fx->second.stats, "hp");
+            armor += stat(fx->second.stats, "armor");
+            mr += stat(fx->second.stats, "mr");
+            hpPct += stat(fx->second.effects, "hp_pct");
+        }
+    p.hp = hp * (1.0 + hpPct);
+    p.armor = armor;
+    p.mr = mr;
+}
+
 Scenario Library::scenarioFor(const ChampionKit& c) const {
     Scenario sc = scenario;
     if (enemyPool.isObject()) {
@@ -371,10 +407,19 @@ Scenario Library::scenarioFor(const ChampionKit& c) const {
     if (auto it = fight.find("team_size"); it != fight.end()) sc.teamSize = static_cast<int>(it->second);
     sc.teamSize = std::clamp(sc.teamSize, 1, 5);
 
+    auto set = [&](const char* key, auto& field) {
+        auto it = fight.find(key);
+        if (it != fight.end()) field = static_cast<std::decay_t<decltype(field)>>(it->second);
+    };
+    set("enemy_level", sc.enemyLevel);
+    sc.enemyLevel = std::clamp(sc.enemyLevel, 1, 18);
+    auto equip = [&](EnemyProfile& p, bool listed = false) { equipEnemy(p, sc.enemyLevel, listed); };
+    for (auto& e : sc.enemies) equip(e);
+
     if (!enemyTeam.empty() && enemyPool.isObject()) {
         std::vector<EnemyProfile> picked;
         for (const auto& entry : enemyTeam) {
-            // "Malphite" or "Malphite:hp=5000:armor=250" to change that enemy's stats.
+            // "Malphite" or "Malphite:hp=5000:armor=250:items=warmogs+thornmail" to change that enemy.
             std::vector<std::string> parts;
             std::stringstream ss(entry);
             for (std::string part; std::getline(ss, part, ':');) parts.push_back(part);
@@ -389,28 +434,25 @@ Scenario Library::scenarioFor(const ChampionKit& c) const {
             if (!found) throw std::runtime_error("'" + want + "' is not in the enemy pool (or is the champion itself)");
             EnemyProfile& p = picked.back();
             p.weight = 1.0;
-            double hpPct = 0;
+            // A listed build replaces the enemy's own; listed stats then replace what it gives.
+            bool rebuilt = false;
             for (size_t i = 1; i < parts.size(); ++i) {
                 const auto eq = parts[i].find('=');
                 if (eq == std::string::npos) throw std::runtime_error("enemy stat '" + parts[i] + "' needs key=value");
                 const std::string key = parts[i].substr(0, eq);
-                if (key == "items" || key == "augs") {
-                    // Extra items and augments ("items=warmogs+thornmail"): their Health, Armor,
-                    // Magic Resist and max-Health bonuses go on top of the enemy's stats.
-                    std::stringstream ls(parts[i].substr(eq + 1));
-                    for (std::string name; std::getline(ls, name, '+');) {
-                        if (name.empty()) continue;
-                        const auto& table = key == "items" ? items : augments;
-                        auto fx = table.find(name);
-                        if (fx == table.end()) throw std::runtime_error("unknown " + std::string(key == "items" ? "item" : "augment") + " '" + name + "' for enemy " + want);
-                        auto stat = [&](const Bag& b, const char* k) { auto f = b.find(k); return f == b.end() ? 0.0 : f->second; };
-                        p.hp += stat(fx->second.stats, "hp");
-                        p.armor += stat(fx->second.stats, "armor");
-                        p.mr += stat(fx->second.stats, "mr");
-                        hpPct += stat(fx->second.effects, "hp_pct");
-                    }
-                    continue;
-                }
+                if (key != "items" && key != "augs") continue;
+                auto& list = key == "items" ? p.items : p.augments;
+                list.clear();
+                std::stringstream ls(parts[i].substr(eq + 1));
+                for (std::string name; std::getline(ls, name, '+');)
+                    if (!name.empty()) list.push_back(name);
+                rebuilt = true;
+            }
+            if (rebuilt) equip(p, true);
+            for (size_t i = 1; i < parts.size(); ++i) {
+                const auto eq = parts[i].find('=');
+                const std::string key = parts[i].substr(0, eq);
+                if (key == "items" || key == "augs") continue;
                 const double v = std::stod(parts[i].substr(eq + 1));
                 if (key == "hp") p.hp = std::max(1.0, v);
                 else if (key == "armor") p.armor = std::max(0.0, v);
@@ -422,15 +464,10 @@ Scenario Library::scenarioFor(const ChampionKit& c) const {
                 else throw std::runtime_error("unknown enemy stat '" + key +
                                               "' (use hp, armor, mr, damage_share, phys_share, cc, damage_taken, items, augs)");
             }
-            p.hp *= 1.0 + hpPct;
         }
         sc.enemies = picked;
         sc.teamSize = static_cast<int>(picked.size());
     }
-    auto set = [&](const char* key, auto& field) {
-        auto it = fight.find(key);
-        if (it != fight.end()) field = static_cast<std::decay_t<decltype(field)>>(it->second);
-    };
     set("level", sc.level);
     sc.level = std::clamp(sc.level, 1, 18);
     set("fight_mean", sc.fightMean);
@@ -452,6 +489,9 @@ Scenario Library::scenarioFor(const ChampionKit& c) const {
     set("r_ready_chance", sc.rReadyChance);
     set("retarget_delay", sc.retargetDelay);
     if (auto it = fight.find("enemy_damage_scale"); it != fight.end()) sc.damageTakenFactor *= std::max(0.0, it->second);
+    // Real games' enemy damage is late-game damage; lower-level enemies hit softer (an estimate:
+    // 35% at level 1 up to all of it at 18).
+    sc.damageTakenFactor *= 0.35 + 0.65 * (sc.enemyLevel - 1) / 17.0;
     if (auto it = fight.find("cc_scale"); it != fight.end()) {
         const double k = std::max(0.0, it->second);
         sc.ccRatePerPoint *= k; sc.ccRateMin *= k; sc.ccRateMax *= k;
@@ -518,6 +558,8 @@ struct Enemy {
     double moveSpeed = 340, reach = 550, damageWeight = 0.2;
     double strafe = 0, strafeUntil = 0, dodgeUntil = -1;
     Vec dodgeVel;
+    // Your crowd control on it: can't act (stun, knockup...), can't move (root), slowed.
+    double ccUntil = -1, rootUntil = -1, slowUntil = -1, slow = 0;
 };
 
 // An item or augment effect with its own cooldown or counter.
@@ -613,10 +655,7 @@ private:
     bool deathUsed_ = false;
     double invulnUntil_ = -1, dieAt_ = -1, reviveAt_ = -1;
 
-    static double levelScale(int level) {
-        const double n = level - 1;
-        return n * (0.7025 + 0.0175 * n);
-    }
+    static double levelScale(int level) { return statGrowth(level); }
 
     void addBag(const Bag& src, Bag& dst) {
         for (const auto& [k, v] : src) {
@@ -785,6 +824,7 @@ private:
     void setupDefences() {
         // Enemy spawns and movement use their own streams so builds that kill faster
         // don't shift the rest of the fight's random draws.
+        ccLeft_ = std::clamp(1.0 - std::max<size_t>(1, team_.size()) / 5.0, 0.0, 1.0);
         targetRng_ = Rng(targetSeed_, 1);
         moveRng_ = Rng(targetSeed_, 2);
         double physShare = sc_.enemyPhysShare, teamDamage = 1.0, share = 0;
@@ -914,7 +954,10 @@ private:
             if (now > engageAt_) {
                 double share = 0;
                 for (const auto& e : enemies_)
-                    if (e.alive && distTo(e) <= e.reach + 2 * rules_.hitbox) share += e.damageWeight;
+                    if (e.alive && distTo(e) <= e.reach + 2 * rules_.hitbox)
+                        // Fewer enemies than a real team each stand in for several champions; your
+                        // crowd control stops just one of them (all of it in a five-enemy fight).
+                        share += e.damageWeight * (now < e.ccUntil ? ccLeft_ : 1.0);
                 dps = incomingDps_ * share;
                 exposureSum_ += share * dt;
                 exposureTime_ += dt;
@@ -961,6 +1004,7 @@ private:
     void moveEnemies(double now, double dt) {
         for (auto& e : enemies_) {
             if (!e.alive || e.moveSpeed <= 0) continue;
+            if (now < e.ccUntil || now < e.rootUntil) { e.vel = {0, 0}; continue; }
             const Vec toMe = me_ - e.pos;
             const Vec dir = unit(toMe, {-1, 0});
             const Vec side{-dir.y, dir.x};
@@ -981,6 +1025,7 @@ private:
                 const double sp = len(v);
                 if (sp > e.moveSpeed) v = v * (e.moveSpeed / sp);
             }
+            if (now < e.slowUntil) v = v * (1.0 - e.slow);
             e.vel = v;
             e.pos = e.pos + v * dt;
             clampLane(e.pos);
@@ -1025,8 +1070,31 @@ private:
     }
 
     void heal(double amount) {
-        if (!dead_) myHp_ = std::min(maxHp_, myHp_ + amount);
+        if (dead_ || amount <= 0) return;
+        const double got = std::min(maxHp_, myHp_ + amount) - myHp_;
+        myHp_ += got;
+        if (trace_ && got > 0) {
+            TraceEvent ev;
+            ev.t = t_; ev.kind = "heal"; ev.amount = got;
+            record(ev);
+        }
     }
+
+    // Your ability's crowd control on an enemy: stopped (stun, knockup, charm, fear...),
+    // held in place (root), slowed, or silenced (shown only).
+    void applyCc(Enemy& e, const Ability& a) {
+        const double until = t_ + a.ccDuration;
+        if (a.cc == "slow") { e.slowUntil = std::max(e.slowUntil, until); e.slow = a.ccSlow; }
+        else if (a.cc == "root") e.rootUntil = std::max(e.rootUntil, until);
+        else if (a.cc != "silence") e.ccUntil = std::max(e.ccUntil, until);
+        if (trace_) {
+            TraceEvent ev;
+            ev.t = t_; ev.kind = "ecc"; ev.target = e.uid; ev.text = a.cc; ev.amount = until;
+            record(ev);
+        }
+    }
+    bool executeHit_ = false;
+    double ccLeft_ = 0;  // share of a stopped enemy's damage that still lands (the champions it stands in for)
 
     void onKill(Enemy* target) {
         ++res_.kills;
@@ -1080,6 +1148,7 @@ private:
             record(ev);
             if (target->hp <= 0) {
                 ev.kind = "kill"; ev.amount = 0;
+                ev.flag = executed > 0 || executeHit_;  // an execute: the killing blow scaled with missing Health
                 record(ev);
             }
         }
@@ -1270,8 +1339,11 @@ private:
                     // cooldown: a recast replaces it (and channels stop other actions anyway).
                     raw *= std::min(a.duration > 0 ? a.duration : rules_.dotDuration, cooldownOf(a));
                 }
+                executeHit_ = h.target == HitTarget::MissingHp;
                 deal(e, raw, h.type, src);
+                executeHit_ = false;
             }
+            if (!a.cc.empty() && e->alive) applyCc(*e, a);
             onAbilityDamage(e, first);
             first = false;
         }
@@ -1476,9 +1548,19 @@ Result Fight::run() {
         trace_->engageAt = engageAt_;
         trace_->maxHp = maxHp_;
         for (const auto* e : team_) trace_->team.push_back(e->id);
+        // Each crowd control on you is one enemy's ability: name which, for the replay.
+        std::vector<std::pair<std::string, std::pair<char, std::string>>> sources;
+        for (const auto* p : team_)
+            if (const ChampionKit* k = lib_.find(p->id))
+                for (const auto& h : k->hardCc) sources.push_back({p->id, h});
+        size_t n = 0;
         for (const auto& [a, b] : cc_) {
             TraceEvent ev;
-            ev.t = a; ev.kind = "cc"; ev.amount = b;
+            ev.t = a; ev.kind = "cc"; ev.amount = b; ev.text = "stun";
+            if (!sources.empty()) {
+                const auto& s = sources[n++ % sources.size()];
+                ev.who = s.first; ev.slot = s.second.first; ev.text = s.second.second;
+            }
             record(ev);
         }
         recordFocus();

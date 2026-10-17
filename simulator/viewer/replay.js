@@ -117,6 +117,7 @@
     const end = ev.find((e) => e.k === "end");
     const f = { duration: Math.max(tr.fight.duration, end ? end.t : 0), length: tr.fight.duration, engage: tr.fight.engage_at, maxHp: tr.fight.max_hp, events: ev,
       casts: [], attacks: [], procs: [], cc: [], kills: [], self: [], spawns: new Map(), focus: [], numbers: [],
+      ecc: [], heals: [],
       damage: [], death: null, pos: [], geo: {}, poros: [] };
     for (const a of tr.abilities || []) f.geo[a.slot] = a;
     let lastNum = null;
@@ -127,6 +128,13 @@
         case "proc": f.procs.push(e); break;
         case "cc": f.cc.push(e); break;
         case "kill": f.kills.push(e); break;
+        case "ecc": f.ecc.push(e); break;
+        case "heal": {
+          // Healing pops up as one number per half second.
+          const last = f.heals[f.heals.length - 1];
+          if (last && e.t - last.t < 0.5) last.a += e.a || 0; else f.heals.push({ t: e.t, a: e.a || 0 });
+          break;
+        }
         case "self": f.self.push(e); break;
         case "death": f.death = e; f.self.push(e); break;
         case "defy": case "revive": f.self.push(e); break;
@@ -187,8 +195,10 @@
     for (const c of f.cc) {
       const alive = [...life].filter(([, L]) => L.born <= c.t && c.t < L.died);
       if (!alive.length) continue;
-      const [u] = alive[Math.floor(c.t * 7) % alive.length];
-      out.get(u).push({ t: Math.max(0, c.t - 0.3), s: c.t < f.engage ? "R" : comboOf(u).find((x) => x !== "R"), cc: true });
+      // The engine names whose ability it is; otherwise any living enemy.
+      const own = c.c && alive.find(([u]) => String(champs.get(u)).toLowerCase() === c.c.toLowerCase());
+      const [u] = own || alive[Math.floor(c.t * 7) % alive.length];
+      out.get(u).push({ t: Math.max(0, c.t - 0.3), s: own && c.s ? c.s : c.t < f.engage ? "R" : comboOf(u).find((x) => x !== "R"), cc: true });
     }
     for (const [u, L] of life) {
       const list = out.get(u);
@@ -284,8 +294,41 @@
     }
     s.dead = !!(fight.death && fight.death.t <= time);
     if (s.dead) s.selfHp = 0;
-    s.cc = fight.cc.some((c) => c.t <= time && time < c.a);
+    const myCc = fight.cc.find((c) => c.t <= time && time < c.a);
+    s.cc = !!myCc;
+    s.ccOn = myCc || null;
     return s;
+  }
+  // Your crowd control on an enemy at time t: the one that ends last.
+  function enemyCc(uid, time) {
+    let best = null;
+    for (const c of fight.ecc) {
+      if (c.t > time) break;
+      if (c.u === uid && time < c.a && (!best || c.a > best.a)) best = c;
+    }
+    return best;
+  }
+  const CC_LOOK = {
+    stun: ["STUNNED", "#b388ff"], knockup: ["KNOCKED UP", "#ffb35c"], charm: ["CHARMED", "#ff7fc8"],
+    fear: ["FEARED", "#9a7bff"], taunt: ["TAUNTED", "#ff6b6b"], sleep: ["ASLEEP", "#9fb7ff"],
+    suppress: ["SUPPRESSED", "#d36bff"], polymorph: ["POLYMORPHED", "#6bffb3"], root: ["ROOTED", "#7fd17f"],
+    slow: ["SLOWED", "#6bc7ff"], silence: ["SILENCED", "#c9d6e2"],
+  };
+  // How a champion under crowd control moves: the stunned clip, running when feared,
+  // tossed into the air when knocked up. Roots, slows and silences don't change the pose.
+  function ccPose(kind, age, total) {
+    if (kind === "fear") return { role: "run", t: age, loop: true };
+    if (kind === "root" || kind === "slow" || kind === "silence") return null;
+    return { role: "stunned", t: age, loop: true, lift: kind === "knockup" ? Math.sin(Math.PI * Math.min(1, age / Math.max(0.2, total))) : 0 };
+  }
+  // A badge over a head: what holds the champion and a bar for the time left.
+  function ccBadge(g, x, y, kind, left, total, u) {
+    const [label, col] = CC_LOOK[kind] || CC_LOOK.stun;
+    g.font = `600 ${11 * u}px "Geist Mono", ui-monospace, monospace`;
+    const w = g.measureText(label).width + 12 * u, h = 17 * u;
+    g.fillStyle = "rgba(10,12,18,.78)"; g.fillRect(x - w / 2, y - h, w, h);
+    g.fillStyle = col; g.fillRect(x - w / 2, y - 3 * u, w * Math.max(0, Math.min(1, left / total)), 3 * u);
+    g.textAlign = "center"; g.fillText(label, x, y - 6 * u);
   }
 
   // ---------- graphics quality ----------
@@ -408,7 +451,10 @@
     let cast = null;
     for (const c of fight.casts) { if (c.t > time) break; cast = c; }
     if (cast && time - cast.t < castWindow("me", cast)) return { role: cast.s, t: time - cast.t, loop: false, n: cast.n };
-    if (s.cc) return { role: "stunned", t: time, loop: true };
+    if (s.cc) {
+      const c = s.ccOn;
+      return (c && ccPose(c.x, time - c.t, c.a - c.t)) || { role: "stunned", t: time, loop: true };
+    }
     let atk = null;
     // An attack's animation starts with its wind-up and fires when the attack lands.
     const windup = (a) => a.a || 0.3;
@@ -421,8 +467,12 @@
     if (en.died !== null) return { role: "death", t: time - en.died, loop: false };
     // Your champion is down: the enemies who are still standing dance.
     if (fight.death && time >= fight.death.t + 0.4) return { role: "dance", t: time - fight.death.t - 0.4, loop: true };
+    const held = enemyCc(en.uid, time);
+    const pose = held && ccPose(held.x, time - held.t, held.a - held.t);
+    if (pose) return pose;
     const cast = enemyCastAt(en.uid, time);
     if (cast) return { role: cast.s, t: time - cast.t, loop: false, n: cast.n };
+    if (held && held.x === "root") return { role: "idle", t: time, loop: true };
     if (time < fight.engage) return { role: "idle", t: time + en.uid * 0.7, loop: true };
     return { role: "attack", t: time + en.uid * 0.37, loop: true };
   }
@@ -641,6 +691,7 @@
         fighters.push({ key: "e" + en.uid, champ: en.champ, x: p.x, y: p.y, face: -1, dir: world ? look(p, st.me) : null,
           scale: en.uid === s.focus ? 1 : 0.85, visible: en.died === null || time - en.died < 1.6, ...enemyAnim(time, en) });
       }
+      for (const f of fighters) if (f.lift) f.y -= f.lift * 55 * u;  // knocked up into the air
       heads = M.frame(fighters, W, H, lowQuality() ? 0.75 : 1);
     }
     const og = overlay;
@@ -695,6 +746,8 @@
           const bw = rr * 2;
           drawIcon(og, iconRow(en.champ), 0, head.x - bw / 2 - 22 * u, head.y - 10 * u, 18 * u, true);
           hpBar(og, head.x - bw / 2, head.y - 4 * u, bw, d.hp / en.max, "#f0605a");
+          const held = enemyCc(en.uid, time);
+          if (held) ccBadge(og, head.x, head.y - 10 * u, held.x, held.a - time, held.a - held.t, u);
         }
         continue;
       }
@@ -707,6 +760,8 @@
       g.strokeStyle = en.uid === s.focus ? "#f0605a" : "rgba(240,96,90,.6)"; g.lineWidth = 3 * u;
       g.beginPath(); g.arc(p.x, p.y, rr, 0, Math.PI * 2); g.stroke();
       hpBar(og, p.x - rr, p.y - rr - 14 * u, rr * 2, d.hp / en.max, "#f0605a");
+      const held = en.died === null ? enemyCc(en.uid, time) : null;
+      if (held) ccBadge(og, p.x, p.y - rr - 20 * u, held.x, held.a - time, held.a - held.t, u);
       if (en.died !== null) {
         g.strokeStyle = "#f4f4f4"; g.lineWidth = 5 * u;
         g.beginPath(); g.moveTo(p.x - rr * 0.6, p.y - rr * 0.6); g.lineTo(p.x + rr * 0.6, p.y + rr * 0.6);
@@ -741,7 +796,10 @@
         const a = time * 5 + i * 2.1;
         og.beginPath(); og.arc(meX + Math.cos(a) * R * 0.8, cy + Math.sin(a) * 6 * u, 5 * u, 0, Math.PI * 2); og.stroke();
       }
-      floatText(og, "STUNNED", meX, labelY, 1, "#b388ff", 15 * u);
+      const c = s.ccOn, kind = (c && c.x) || "stun";
+      const top = myHead ? myHead.y - 10 * u : meY - R - 22 * u;
+      if (c) ccBadge(og, meX, top, kind, c.a - time, c.a - c.t, u);
+      else floatText(og, CC_LOOK.stun[0], meX, labelY, 1, CC_LOOK.stun[1], 15 * u);
     }
     if (s.dead) floatText(og, "SLAIN", meX, labelY, 1, "#f0605a", 18 * u);
     else if (time < fight.engage) floatText(og, "ENEMIES ENGAGE IN " + (fight.engage - time).toFixed(1) + " s", meX, labelY + (s.cc ? 18 * u : 0), 0.8, "#8295a8", 13 * u);
@@ -764,13 +822,64 @@
       const baseY = head ? head.y - 20 * u : p.y - r - 26 * u;
       const jitter = ((n.t * 997) % 1 - 0.5) * 50 * u;
       const size = (n.crit ? 26 : n.a > 400 ? 22 : 16) * u;
-      floatText(overlay, Math.round(n.a).toString(), (head ? head.x : p.x) + jitter, baseY - age * 70 * u, 1 - age / 0.9,
+      floatText(overlay, Math.round(n.a).toString() + (n.crit ? "!" : ""), (head ? head.x : p.x) + jitter, baseY - age * 70 * u, 1 - age / 0.9,
         n.crit ? "#ffd36b" : TYPE_COLORS[n.x] || "#fff", size);
     }
 
     $("kills").textContent = s.kills;
     $("dmg").textContent = Math.round(s.damage).toLocaleString();
-    $("state").textContent = s.dead ? "Slain" : s.cc ? "Crowd controlled" : "";
+    // Crits: a flash where the attack lands.
+    if (!lowQuality())
+      for (const a of fight.attacks) {
+        const age = time - a.t;
+        if (!a.f || age < 0 || age > 0.25) continue;
+        const p = posOf(a.u), head = heads["e" + a.u], cx = p.x, cy = head ? (p.y + head.y) / 2 : p.y;
+        og.globalAlpha = 1 - age / 0.25; og.strokeStyle = "#ffd36b"; og.lineWidth = 3 * u;
+        og.beginPath();
+        for (let i = 0; i < 8; i++) {
+          const ang = i * Math.PI / 4 + 0.3, r0 = (10 + age * 60) * u, r1 = r0 + (i % 2 ? 14 : 24) * u;
+          og.moveTo(cx + Math.cos(ang) * r0, cy + Math.sin(ang) * r0); og.lineTo(cx + Math.cos(ang) * r1, cy + Math.sin(ang) * r1);
+        }
+        og.stroke(); og.globalAlpha = 1;
+      }
+
+    // Healing on you: green numbers.
+    for (const h of fight.heals) {
+      const age = time - h.t;
+      if (age < 0 || age > 1 || h.a < 5) continue;
+      const top = myHead ? myHead.y - 30 * u : meY - R - 40 * u;
+      floatText(og, "+" + Math.round(h.a), meX + 40 * u, top - age * 50 * u, 1 - age, "#5fd38a", 15 * u);
+    }
+
+    // Kills: a burst where the enemy falls; executes say so.
+    for (const k of fight.kills) {
+      const age = time - k.t;
+      if (age < 0 || age > 0.9) continue;
+      const p = posOf(k.u), head = heads["e" + k.u], y = head ? head.y : p.y - r;
+      if (!lowQuality() && age < 0.5) {
+        og.globalAlpha = 1 - age / 0.5; og.strokeStyle = k.f ? "#ff5a4f" : "#ffd36b"; og.lineWidth = 4 * u;
+        og.beginPath(); og.ellipse(p.x, p.y, (30 + age * 160) * u, (12 + age * 60) * u, 0, 0, Math.PI * 2); og.stroke();
+        og.globalAlpha = 1;
+      }
+      floatText(og, k.f ? "EXECUTED" : "KILL", p.x, y - 30 * u - age * 30 * u, 1 - age / 0.9, k.f ? "#ff5a4f" : "#ffd36b", (k.f ? 18 : 16) * u);
+    }
+
+    // Dashes: a streak from where you set off.
+    if (world && !lowQuality())
+      for (const c of fight.casts) {
+        if (c.t > time) break;
+        const age = time - c.land;
+        if (age < -0.05 || age > 0.35 || moveOf(champ.id, c.s) !== "dash" || !c.from) continue;
+        const a = scr(worldAt(fight, c.t).me), b = scr(c.from);
+        const grad = og.createLinearGradient(a.x, a.y, b.x, b.y);
+        grad.addColorStop(0, "rgba(233,243,255,0)"); grad.addColorStop(1, "rgba(233,243,255,.7)");
+        og.globalAlpha = Math.max(0, 1 - age / 0.35); og.strokeStyle = grad; og.lineWidth = 10 * u; og.lineCap = "round";
+        og.beginPath(); og.moveTo(a.x, a.y); og.lineTo(b.x, b.y); og.stroke();
+        og.lineCap = "butt"; og.globalAlpha = 1;
+      }
+
+    const held = s.cc ? (CC_LOOK[(s.ccOn && s.ccOn.x) || "stun"] || CC_LOOK.stun)[0] : "";
+    $("state").textContent = s.dead ? "Slain" : held ? held[0] + held.slice(1).toLowerCase() : "";
     return s;
   }
 

@@ -75,7 +75,23 @@
    "damage_share": 0.2315,
    "damage_taken_share": 0.2715,
    "avg_death_time": 303.0896,
-   "win_rate": 0.5575
+   "win_rate": 0.5575,
+   "build": {
+    "items": [
+     "spirit_visage",
+     "mercurys",
+     "shojin",
+     "deaths_dance",
+     "manamune",
+     "eclipse"
+    ],
+    "augments": [
+     "mystic_punch",
+     "tank_engine",
+     "goliath",
+     "jeweled_gauntlet"
+    ]
+   }
   },
   {
    "id": "AurelionSol",
@@ -92,7 +108,23 @@
    "damage_share": 0.2069,
    "damage_taken_share": 0.172,
    "avg_death_time": 272.8057,
-   "win_rate": 0.547
+   "win_rate": 0.547,
+   "build": {
+    "items": [
+     "blackfire",
+     "rabadons",
+     "rylais",
+     "shadowflame",
+     "liandrys",
+     "bloodletters"
+    ],
+    "augments": [
+     "infernal_conduit",
+     "eureka",
+     "jeweled_gauntlet",
+     "magic_missile"
+    ]
+   }
   },
   {
    "id": "TwistedFate",
@@ -109,7 +141,23 @@
    "damage_share": 0.2084,
    "damage_taken_share": 0.1397,
    "avg_death_time": 253.2475,
-   "win_rate": 0.5603
+   "win_rate": 0.5603,
+   "build": {
+    "items": [
+     "sorcerers",
+     "rabadons",
+     "lich_bane",
+     "void_staff",
+     "shadowflame",
+     "ludens"
+    ],
+    "augments": [
+     "magic_missile",
+     "jeweled_gauntlet",
+     "eureka",
+     "witchful_thinking"
+    ]
+   }
   },
   {
    "id": "Teemo",
@@ -126,7 +174,23 @@
    "damage_share": 0.1791,
    "damage_taken_share": 0.1319,
    "avg_death_time": 254.9473,
-   "win_rate": 0.5356
+   "win_rate": 0.5356,
+   "build": {
+    "items": [
+     "blackfire",
+     "rabadons",
+     "malignance",
+     "void_staff",
+     "shadowflame",
+     "liandrys"
+    ],
+    "augments": [
+     "eureka",
+     "magic_missile",
+     "infernal_conduit",
+     "witchful_thinking"
+    ]
+   }
   },
   {
    "id": "Yasuo",
@@ -143,7 +207,23 @@
    "damage_share": 0.2059,
    "damage_taken_share": 0.1872,
    "avg_death_time": 300.1123,
-   "win_rate": 0.5735
+   "win_rate": 0.5735,
+   "build": {
+    "items": [
+     "berserkers",
+     "infinity_edge",
+     "yuntal",
+     "botrk",
+     "deaths_dance",
+     "phantom_dancer"
+    ],
+    "augments": [
+     "mystic_punch",
+     "its_critical",
+     "deft",
+     "dual_wield"
+    ]
+   }
   },
   {
    "id": "Caitlyn",
@@ -160,7 +240,23 @@
    "damage_share": 0.2254,
    "damage_taken_share": 0.1522,
    "avg_death_time": 263.8339,
-   "win_rate": 0.5287
+   "win_rate": 0.5287,
+   "build": {
+    "items": [
+     "berserkers",
+     "infinity_edge",
+     "lord_dominiks",
+     "rapid_firecannon",
+     "botrk",
+     "collector"
+    ],
+    "augments": [
+     "dual_wield",
+     "deft",
+     "jeweled_gauntlet",
+     "its_critical"
+    ]
+   }
   },
   {
    "id": "TahmKench",
@@ -177,7 +273,23 @@
    "damage_share": 0.2018,
    "damage_taken_share": 0.3348,
    "avg_death_time": 213.2113,
-   "win_rate": 0.5308
+   "win_rate": 0.5308,
+   "build": {
+    "items": [
+     "unending_despair",
+     "spirit_visage",
+     "thornmail",
+     "warmogs",
+     "heartsteel",
+     "mercurys"
+    ],
+    "augments": [
+     "tank_engine",
+     "goliath",
+     "heavy_hitter",
+     "jeweled_gauntlet"
+    ]
+   }
   },
   {
    "id": "Morgana",
@@ -194,7 +306,23 @@
    "damage_share": 0.1786,
    "damage_taken_share": 0.1452,
    "avg_death_time": 207.4242,
-   "win_rate": 0.5516
+   "win_rate": 0.5516,
+   "build": {
+    "items": [
+     "blackfire",
+     "sorcerers",
+     "rylais",
+     "zhonyas",
+     "morellonomicon",
+     "liandrys"
+    ],
+    "augments": [
+     "infernal_conduit",
+     "eureka",
+     "magic_missile",
+     "jeweled_gauntlet"
+    ]
+   }
   },
   {
    "id": "Lillia",
@@ -211,7 +339,23 @@
    "damage_share": 0.2334,
    "damage_taken_share": 0.1951,
    "avg_death_time": 250.0668,
-   "win_rate": 0.5652
+   "win_rate": 0.5652,
+   "build": {
+    "items": [
+     "blackfire",
+     "sorcerers",
+     "rylais",
+     "cosmic_drive",
+     "riftmaker",
+     "liandrys"
+    ],
+    "augments": [
+     "infernal_conduit",
+     "eureka",
+     "jeweled_gauntlet",
+     "erosion"
+    ]
+   }
   },
   {
    "id": "Brand",
@@ -228,7 +372,23 @@
    "damage_share": 0.2173,
    "damage_taken_share": 0.1576,
    "avg_death_time": 286.3133,
-   "win_rate": 0.5195
+   "win_rate": 0.5195,
+   "build": {
+    "items": [
+     "blackfire",
+     "sorcerers",
+     "rabadons",
+     "rylais",
+     "shadowflame",
+     "liandrys"
+    ],
+    "augments": [
+     "infernal_conduit",
+     "magic_missile",
+     "eureka",
+     "jeweled_gauntlet"
+    ]
+   }
   },
   {
    "id": "MasterYi",
@@ -245,7 +405,23 @@
    "damage_share": 0.2272,
    "damage_taken_share": 0.1999,
    "avg_death_time": 319.799,
-   "win_rate": 0.5443
+   "win_rate": 0.5443,
+   "build": {
+    "items": [
+     "berserkers",
+     "infinity_edge",
+     "lord_dominiks",
+     "botrk",
+     "navori",
+     "collector"
+    ],
+    "augments": [
+     "mystic_punch",
+     "dual_wield",
+     "deft",
+     "its_critical"
+    ]
+   }
   },
   {
    "id": "Yone",
@@ -262,7 +438,23 @@
    "damage_share": 0.2404,
    "damage_taken_share": 0.1839,
    "avg_death_time": 302.3322,
-   "win_rate": 0.5605
+   "win_rate": 0.5605,
+   "build": {
+    "items": [
+     "berserkers",
+     "infinity_edge",
+     "yuntal",
+     "botrk",
+     "deaths_dance",
+     "wits_end"
+    ],
+    "augments": [
+     "mystic_punch",
+     "deft",
+     "its_critical",
+     "dual_wield"
+    ]
+   }
   },
   {
    "id": "Graves",
@@ -279,7 +471,23 @@
    "damage_share": 0.2326,
    "damage_taken_share": 0.1796,
    "avg_death_time": 306.2517,
-   "win_rate": 0.519
+   "win_rate": 0.519,
+   "build": {
+    "items": [
+     "infinity_edge",
+     "lord_dominiks",
+     "bloodthirster",
+     "mercurys",
+     "collector",
+     "mortal_reminder"
+    ],
+    "augments": [
+     "jeweled_gauntlet",
+     "its_critical",
+     "dual_wield",
+     "mystic_punch"
+    ]
+   }
   },
   {
    "id": "Vayne",
@@ -296,7 +504,23 @@
    "damage_share": 0.2136,
    "damage_taken_share": 0.1541,
    "avg_death_time": 295.4193,
-   "win_rate": 0.5183
+   "win_rate": 0.5183,
+   "build": {
+    "items": [
+     "berserkers",
+     "wits_end",
+     "rageblade",
+     "botrk",
+     "terminus",
+     "jaksho"
+    ],
+    "augments": [
+     "dual_wield",
+     "deft",
+     "its_critical",
+     "mystic_punch"
+    ]
+   }
   },
   {
    "id": "Ryze",
@@ -313,7 +537,23 @@
    "damage_share": 0.2275,
    "damage_taken_share": 0.2199,
    "avg_death_time": 273.8034,
-   "win_rate": 0.5221
+   "win_rate": 0.5221,
+   "build": {
+    "items": [
+     "sorcerers",
+     "rabadons",
+     "void_staff",
+     "shadowflame",
+     "ludens",
+     "rod_of_ages"
+    ],
+    "augments": [
+     "jeweled_gauntlet",
+     "eureka",
+     "magic_missile",
+     "goliath"
+    ]
+   }
   },
   {
    "id": "MissFortune",
@@ -330,7 +570,23 @@
    "damage_share": 0.2031,
    "damage_taken_share": 0.13,
    "avg_death_time": 244.8472,
-   "win_rate": 0.5097
+   "win_rate": 0.5097,
+   "build": {
+    "items": [
+     "blackfire",
+     "sorcerers",
+     "rabadons",
+     "void_staff",
+     "shadowflame",
+     "liandrys"
+    ],
+    "augments": [
+     "magic_missile",
+     "jeweled_gauntlet",
+     "eureka",
+     "infernal_conduit"
+    ]
+   }
   },
   {
    "id": "Sett",
@@ -347,7 +603,23 @@
    "damage_share": 0.2224,
    "damage_taken_share": 0.2972,
    "avg_death_time": 297.7373,
-   "win_rate": 0.5182
+   "win_rate": 0.5182,
+   "build": {
+    "items": [
+     "overlords_bloodmail",
+     "steraks",
+     "warmogs",
+     "heartsteel",
+     "mercurys",
+     "titanic"
+    ],
+    "augments": [
+     "tank_engine",
+     "heavy_hitter",
+     "goliath",
+     "jeweled_gauntlet"
+    ]
+   }
   },
   {
    "id": "XinZhao",
@@ -364,7 +636,23 @@
    "damage_share": 0.2102,
    "damage_taken_share": 0.2947,
    "avg_death_time": 308.2036,
-   "win_rate": 0.531
+   "win_rate": 0.531,
+   "build": {
+    "items": [
+     "spirit_visage",
+     "statikk",
+     "mercurys",
+     "botrk",
+     "deaths_dance",
+     "heartsteel"
+    ],
+    "augments": [
+     "tank_engine",
+     "deft",
+     "mystic_punch",
+     "dual_wield"
+    ]
+   }
   },
   {
    "id": "Kayn",
@@ -381,7 +669,23 @@
    "damage_share": 0.2354,
    "damage_taken_share": 0.2203,
    "avg_death_time": 325.3129,
-   "win_rate": 0.5407
+   "win_rate": 0.5407,
+   "build": {
+    "items": [
+     "lord_dominiks",
+     "mercurys",
+     "deaths_dance",
+     "axiom_arc",
+     "collector",
+     "eclipse"
+    ],
+    "augments": [
+     "jeweled_gauntlet",
+     "goliath",
+     "mystic_punch",
+     "erosion"
+    ]
+   }
   },
   {
    "id": "Smolder",
@@ -398,7 +702,23 @@
    "damage_share": 0.2248,
    "damage_taken_share": 0.1474,
    "avg_death_time": 273.9711,
-   "win_rate": 0.5098
+   "win_rate": 0.5098,
+   "build": {
+    "items": [
+     "infinity_edge",
+     "lord_dominiks",
+     "rapid_firecannon",
+     "ionian",
+     "shojin",
+     "essence_reaver"
+    ],
+    "augments": [
+     "jeweled_gauntlet",
+     "mystic_punch",
+     "magic_missile",
+     "its_critical"
+    ]
+   }
   },
   {
    "id": "Lucian",
@@ -415,7 +735,23 @@
    "damage_share": 0.236,
    "damage_taken_share": 0.1571,
    "avg_death_time": 294.4196,
-   "win_rate": 0.5049
+   "win_rate": 0.5049,
+   "build": {
+    "items": [
+     "berserkers",
+     "infinity_edge",
+     "lord_dominiks",
+     "botrk",
+     "navori",
+     "collector"
+    ],
+    "augments": [
+     "jeweled_gauntlet",
+     "dual_wield",
+     "mystic_punch",
+     "its_critical"
+    ]
+   }
   },
   {
    "id": "Kayle",
@@ -432,7 +768,23 @@
    "damage_share": 0.188,
    "damage_taken_share": 0.1651,
    "avg_death_time": 278.0177,
-   "win_rate": 0.5502
+   "win_rate": 0.5502,
+   "build": {
+    "items": [
+     "berserkers",
+     "wits_end",
+     "nashors",
+     "rageblade",
+     "botrk",
+     "terminus"
+    ],
+    "augments": [
+     "deft",
+     "dual_wield",
+     "mystic_punch",
+     "jeweled_gauntlet"
+    ]
+   }
   },
   {
    "id": "Jinx",
@@ -449,7 +801,23 @@
    "damage_share": 0.2039,
    "damage_taken_share": 0.1459,
    "avg_death_time": 278.9916,
-   "win_rate": 0.5143
+   "win_rate": 0.5143,
+   "build": {
+    "items": [
+     "berserkers",
+     "infinity_edge",
+     "lord_dominiks",
+     "runaans",
+     "botrk",
+     "collector"
+    ],
+    "augments": [
+     "dual_wield",
+     "deft",
+     "its_critical",
+     "jeweled_gauntlet"
+    ]
+   }
   },
   {
    "id": "Ekko",
@@ -466,7 +834,23 @@
    "damage_share": 0.2191,
    "damage_taken_share": 0.2019,
    "avg_death_time": 287.7427,
-   "win_rate": 0.5335
+   "win_rate": 0.5335,
+   "build": {
+    "items": [
+     "sorcerers",
+     "rabadons",
+     "void_staff",
+     "zhonyas",
+     "shadowflame",
+     "stormsurge"
+    ],
+    "augments": [
+     "eureka",
+     "jeweled_gauntlet",
+     "witchful_thinking",
+     "mystic_punch"
+    ]
+   }
   },
   {
    "id": "Seraphine",
@@ -483,7 +867,23 @@
    "damage_share": 0.1808,
    "damage_taken_share": 0.1301,
    "avg_death_time": 219.0647,
-   "win_rate": 0.5351
+   "win_rate": 0.5351,
+   "build": {
+    "items": [
+     "blackfire",
+     "sorcerers",
+     "rabadons",
+     "rylais",
+     "shadowflame",
+     "liandrys"
+    ],
+    "augments": [
+     "eureka",
+     "magic_missile",
+     "jeweled_gauntlet",
+     "infernal_conduit"
+    ]
+   }
   },
   {
    "id": "Singed",
@@ -500,7 +900,23 @@
    "damage_share": 0.1814,
    "damage_taken_share": 0.2593,
    "avg_death_time": 313.6175,
-   "win_rate": 0.5194
+   "win_rate": 0.5194,
+   "build": {
+    "items": [
+     "rylais",
+     "dead_mans",
+     "force_of_nature",
+     "liandrys",
+     "rod_of_ages",
+     "mercurys"
+    ],
+    "augments": [
+     "tank_engine",
+     "infernal_conduit",
+     "goliath",
+     "erosion"
+    ]
+   }
   },
   {
    "id": "Trundle",
@@ -517,7 +933,23 @@
    "damage_share": 0.1618,
    "damage_taken_share": 0.2544,
    "avg_death_time": 239.175,
-   "win_rate": 0.5045
+   "win_rate": 0.5045,
+   "build": {
+    "items": [
+     "blackfire",
+     "horizon_focus",
+     "shadowflame",
+     "liandrys",
+     "bloodletters",
+     "mercurys"
+    ],
+    "augments": [
+     "tank_engine",
+     "goliath",
+     "mystic_punch",
+     "heavy_hitter"
+    ]
+   }
   },
   {
    "id": "Swain",
@@ -534,7 +966,23 @@
    "damage_share": 0.2117,
    "damage_taken_share": 0.3497,
    "avg_death_time": 230.79,
-   "win_rate": 0.5035
+   "win_rate": 0.5035,
+   "build": {
+    "items": [
+     "unending_despair",
+     "spirit_visage",
+     "warmogs",
+     "heartsteel",
+     "riftmaker",
+     "rod_of_ages"
+    ],
+    "augments": [
+     "tank_engine",
+     "goliath",
+     "infernal_conduit",
+     "heavy_hitter"
+    ]
+   }
   },
   {
    "id": "Gangplank",
@@ -551,7 +999,23 @@
    "damage_share": 0.2224,
    "damage_taken_share": 0.1804,
    "avg_death_time": 257.7837,
-   "win_rate": 0.5045
+   "win_rate": 0.5045,
+   "build": {
+    "items": [
+     "infinity_edge",
+     "lord_dominiks",
+     "ionian",
+     "essence_reaver",
+     "collector",
+     "axiom_arc"
+    ],
+    "augments": [
+     "jeweled_gauntlet",
+     "its_critical",
+     "goliath",
+     "eureka"
+    ]
+   }
   },
   {
    "id": "Sion",
@@ -568,7 +1032,23 @@
    "damage_share": 0.2061,
    "damage_taken_share": 0.3927,
    "avg_death_time": 320.739,
-   "win_rate": 0.507
+   "win_rate": 0.507,
+   "build": {
+    "items": [
+     "overlords_bloodmail",
+     "unending_despair",
+     "warmogs",
+     "heartsteel",
+     "mercurys",
+     "titanic"
+    ],
+    "augments": [
+     "tank_engine",
+     "heavy_hitter",
+     "goliath",
+     "erosion"
+    ]
+   }
   },
   {
    "id": "Malzahar",
@@ -585,7 +1065,23 @@
    "damage_share": 0.176,
    "damage_taken_share": 0.142,
    "avg_death_time": 246.7487,
-   "win_rate": 0.5156
+   "win_rate": 0.5156,
+   "build": {
+    "items": [
+     "blackfire",
+     "sorcerers",
+     "rabadons",
+     "rylais",
+     "shadowflame",
+     "liandrys"
+    ],
+    "augments": [
+     "infernal_conduit",
+     "eureka",
+     "magic_missile",
+     "jeweled_gauntlet"
+    ]
+   }
   },
   {
    "id": "DrMundo",
@@ -602,7 +1098,23 @@
    "damage_share": 0.2109,
    "damage_taken_share": 0.35,
    "avg_death_time": 251.1277,
-   "win_rate": 0.4932
+   "win_rate": 0.4932,
+   "build": {
+    "items": [
+     "overlords_bloodmail",
+     "unending_despair",
+     "spirit_visage",
+     "warmogs",
+     "heartsteel",
+     "mercurys"
+    ],
+    "augments": [
+     "tank_engine",
+     "heavy_hitter",
+     "goliath",
+     "mystic_punch"
+    ]
+   }
   },
   {
    "id": "Fiora",
@@ -619,7 +1131,23 @@
    "damage_share": 0.2131,
    "damage_taken_share": 0.241,
    "avg_death_time": 293.8726,
-   "win_rate": 0.5407
+   "win_rate": 0.5407,
+   "build": {
+    "items": [
+     "ravenous",
+     "trinity",
+     "mercurys",
+     "shojin",
+     "deaths_dance",
+     "sundered_sky"
+    ],
+    "augments": [
+     "mystic_punch",
+     "tank_engine",
+     "goliath",
+     "heavy_hitter"
+    ]
+   }
   },
   {
    "id": "Hwei",
@@ -636,7 +1164,23 @@
    "damage_share": 0.2113,
    "damage_taken_share": 0.1322,
    "avg_death_time": 224.7176,
-   "win_rate": 0.545
+   "win_rate": 0.545,
+   "build": {
+    "items": [
+     "blackfire",
+     "sorcerers",
+     "rabadons",
+     "void_staff",
+     "shadowflame",
+     "liandrys"
+    ],
+    "augments": [
+     "infernal_conduit",
+     "magic_missile",
+     "eureka",
+     "jeweled_gauntlet"
+    ]
+   }
   },
   {
    "id": "Jhin",
@@ -653,7 +1197,23 @@
    "damage_share": 0.2075,
    "damage_taken_share": 0.1372,
    "avg_death_time": 253.8677,
-   "win_rate": 0.4885
+   "win_rate": 0.4885,
+   "build": {
+    "items": [
+     "infinity_edge",
+     "lord_dominiks",
+     "bloodthirster",
+     "rapid_firecannon",
+     "collector",
+     "berserkers"
+    ],
+    "augments": [
+     "its_critical",
+     "jeweled_gauntlet",
+     "magic_missile",
+     "poro_stampede"
+    ]
+   }
   },
   {
    "id": "Karthus",
@@ -670,7 +1230,23 @@
    "damage_share": 0.2657,
    "damage_taken_share": 0.179,
    "avg_death_time": 407.7778,
-   "win_rate": 0.4861
+   "win_rate": 0.4861,
+   "build": {
+    "items": [
+     "blackfire",
+     "rabadons",
+     "malignance",
+     "void_staff",
+     "shadowflame",
+     "liandrys"
+    ],
+    "augments": [
+     "eureka",
+     "magic_missile",
+     "jeweled_gauntlet",
+     "witchful_thinking"
+    ]
+   }
   },
   {
    "id": "Aurora",
@@ -687,7 +1263,23 @@
    "damage_share": 0.2356,
    "damage_taken_share": 0.1569,
    "avg_death_time": 255.9109,
-   "win_rate": 0.5157
+   "win_rate": 0.5157,
+   "build": {
+    "items": [
+     "sorcerers",
+     "rabadons",
+     "void_staff",
+     "shadowflame",
+     "stormsurge",
+     "ludens"
+    ],
+    "augments": [
+     "eureka",
+     "jeweled_gauntlet",
+     "magic_missile",
+     "witchful_thinking"
+    ]
+   }
   },
   {
    "id": "Viktor",
@@ -704,7 +1296,23 @@
    "damage_share": 0.219,
    "damage_taken_share": 0.1394,
    "avg_death_time": 247.7538,
-   "win_rate": 0.5364
+   "win_rate": 0.5364,
+   "build": {
+    "items": [
+     "blackfire",
+     "sorcerers",
+     "rabadons",
+     "void_staff",
+     "shadowflame",
+     "liandrys"
+    ],
+    "augments": [
+     "eureka",
+     "jeweled_gauntlet",
+     "magic_missile",
+     "witchful_thinking"
+    ]
+   }
   },
   {
    "id": "Veigar",
@@ -721,7 +1329,23 @@
    "damage_share": 0.1701,
    "damage_taken_share": 0.1479,
    "avg_death_time": 244.041,
-   "win_rate": 0.5022
+   "win_rate": 0.5022,
+   "build": {
+    "items": [
+     "sorcerers",
+     "rabadons",
+     "void_staff",
+     "shadowflame",
+     "stormsurge",
+     "ludens"
+    ],
+    "augments": [
+     "eureka",
+     "jeweled_gauntlet",
+     "magic_missile",
+     "witchful_thinking"
+    ]
+   }
   },
   {
    "id": "Corki",
@@ -738,7 +1362,23 @@
    "damage_share": 0.2427,
    "damage_taken_share": 0.1674,
    "avg_death_time": 299.2035,
-   "win_rate": 0.5111
+   "win_rate": 0.5111,
+   "build": {
+    "items": [
+     "berserkers",
+     "infinity_edge",
+     "lord_dominiks",
+     "bloodthirster",
+     "essence_reaver",
+     "collector"
+    ],
+    "augments": [
+     "jeweled_gauntlet",
+     "dual_wield",
+     "deft",
+     "its_critical"
+    ]
+   }
   },
   {
    "id": "Alistar",
@@ -755,7 +1395,23 @@
    "damage_share": 0.1436,
    "damage_taken_share": 0.3035,
    "avg_death_time": 264.2069,
-   "win_rate": 0.517
+   "win_rate": 0.517,
+   "build": {
+    "items": [
+     "unending_despair",
+     "spirit_visage",
+     "thornmail",
+     "warmogs",
+     "heartsteel",
+     "mercurys"
+    ],
+    "augments": [
+     "tank_engine",
+     "goliath",
+     "heavy_hitter",
+     "eureka"
+    ]
+   }
   },
   {
    "id": "Belveth",
@@ -772,7 +1428,23 @@
    "damage_share": 0.2148,
    "damage_taken_share": 0.2366,
    "avg_death_time": 281.9328,
-   "win_rate": 0.5647
+   "win_rate": 0.5647,
+   "build": {
+    "items": [
+     "wits_end",
+     "mercurys",
+     "rageblade",
+     "botrk",
+     "deaths_dance",
+     "kraken"
+    ],
+    "augments": [
+     "dual_wield",
+     "deft",
+     "mystic_punch",
+     "its_critical"
+    ]
+   }
   },
   {
    "id": "Zed",
@@ -789,7 +1461,23 @@
    "damage_share": 0.2292,
    "damage_taken_share": 0.168,
    "avg_death_time": 314.9129,
-   "win_rate": 0.4955
+   "win_rate": 0.4955,
+   "build": {
+    "items": [
+     "ionian",
+     "collector",
+     "seryldas",
+     "axiom_arc",
+     "voltaic",
+     "eclipse"
+    ],
+    "augments": [
+     "jeweled_gauntlet",
+     "goliath",
+     "mystic_punch",
+     "erosion"
+    ]
+   }
   },
   {
    "id": "Maokai",
@@ -806,7 +1494,23 @@
    "damage_share": 0.1784,
    "damage_taken_share": 0.271,
    "avg_death_time": 252.9501,
-   "win_rate": 0.4946
+   "win_rate": 0.4946,
+   "build": {
+    "items": [
+     "unending_despair",
+     "spirit_visage",
+     "thornmail",
+     "warmogs",
+     "heartsteel",
+     "mercurys"
+    ],
+    "augments": [
+     "tank_engine",
+     "heavy_hitter",
+     "goliath",
+     "eureka"
+    ]
+   }
   },
   {
    "id": "Tristana",
@@ -823,7 +1527,23 @@
    "damage_share": 0.2057,
    "damage_taken_share": 0.1557,
    "avg_death_time": 299.1081,
-   "win_rate": 0.4894
+   "win_rate": 0.4894,
+   "build": {
+    "items": [
+     "berserkers",
+     "infinity_edge",
+     "lord_dominiks",
+     "botrk",
+     "navori",
+     "collector"
+    ],
+    "augments": [
+     "dual_wield",
+     "deft",
+     "its_critical",
+     "mystic_punch"
+    ]
+   }
   },
   {
    "id": "Galio",
@@ -840,7 +1560,23 @@
    "damage_share": 0.1686,
    "damage_taken_share": 0.2812,
    "avg_death_time": 266.2322,
-   "win_rate": 0.5016
+   "win_rate": 0.5016,
+   "build": {
+    "items": [
+     "unending_despair",
+     "thornmail",
+     "warmogs",
+     "heartsteel",
+     "mercurys",
+     "hollow_radiance"
+    ],
+    "augments": [
+     "tank_engine",
+     "heavy_hitter",
+     "goliath",
+     "eureka"
+    ]
+   }
   },
   {
    "id": "Ahri",
@@ -857,7 +1593,23 @@
    "damage_share": 0.2047,
    "damage_taken_share": 0.1569,
    "avg_death_time": 249.7469,
-   "win_rate": 0.5216
+   "win_rate": 0.5216,
+   "build": {
+    "items": [
+     "sorcerers",
+     "rabadons",
+     "void_staff",
+     "shadowflame",
+     "stormsurge",
+     "ludens"
+    ],
+    "augments": [
+     "eureka",
+     "magic_missile",
+     "jeweled_gauntlet",
+     "witchful_thinking"
+    ]
+   }
   },
   {
    "id": "Rell",
@@ -874,7 +1626,23 @@
    "damage_share": 0.154,
    "damage_taken_share": 0.3066,
    "avg_death_time": 260.2111,
-   "win_rate": 0.5189
+   "win_rate": 0.5189,
+   "build": {
+    "items": [
+     "unending_despair",
+     "kaenic",
+     "thornmail",
+     "warmogs",
+     "heartsteel",
+     "mercurys"
+    ],
+    "augments": [
+     "tank_engine",
+     "heavy_hitter",
+     "goliath",
+     "erosion"
+    ]
+   }
   },
   {
    "id": "Gwen",
@@ -891,7 +1659,23 @@
    "damage_share": 0.2386,
    "damage_taken_share": 0.2463,
    "avg_death_time": 283.3563,
-   "win_rate": 0.5612
+   "win_rate": 0.5612,
+   "build": {
+    "items": [
+     "sorcerers",
+     "rabadons",
+     "nashors",
+     "riftmaker",
+     "shadowflame",
+     "spirit_visage"
+    ],
+    "augments": [
+     "mystic_punch",
+     "jeweled_gauntlet",
+     "deft",
+     "eureka"
+    ]
+   }
   },
   {
    "id": "Velkoz",
@@ -908,7 +1692,23 @@
    "damage_share": 0.2099,
    "damage_taken_share": 0.1257,
    "avg_death_time": 237.1401,
-   "win_rate": 0.5056
+   "win_rate": 0.5056,
+   "build": {
+    "items": [
+     "blackfire",
+     "sorcerers",
+     "rabadons",
+     "void_staff",
+     "shadowflame",
+     "liandrys"
+    ],
+    "augments": [
+     "eureka",
+     "magic_missile",
+     "jeweled_gauntlet",
+     "infernal_conduit"
+    ]
+   }
   },
   {
    "id": "Zilean",
@@ -925,7 +1725,23 @@
    "damage_share": 0.1414,
    "damage_taken_share": 0.1375,
    "avg_death_time": 210.7948,
-   "win_rate": 0.5224
+   "win_rate": 0.5224,
+   "build": {
+    "items": [
+     "sorcerers",
+     "rabadons",
+     "void_staff",
+     "shadowflame",
+     "stormsurge",
+     "ludens"
+    ],
+    "augments": [
+     "eureka",
+     "magic_missile",
+     "witchful_thinking",
+     "jeweled_gauntlet"
+    ]
+   }
   },
   {
    "id": "Tryndamere",
@@ -942,7 +1758,23 @@
    "damage_share": 0.204,
    "damage_taken_share": 0.2449,
    "avg_death_time": 319.6479,
-   "win_rate": 0.4954
+   "win_rate": 0.4954,
+   "build": {
+    "items": [
+     "berserkers",
+     "infinity_edge",
+     "phantom_dancer",
+     "heartsteel",
+     "botrk",
+     "navori"
+    ],
+    "augments": [
+     "deft",
+     "mystic_punch",
+     "dual_wield",
+     "its_critical"
+    ]
+   }
   },
   {
    "id": "Syndra",
@@ -959,7 +1791,23 @@
    "damage_share": 0.1994,
    "damage_taken_share": 0.1311,
    "avg_death_time": 249.9636,
-   "win_rate": 0.5057
+   "win_rate": 0.5057,
+   "build": {
+    "items": [
+     "sorcerers",
+     "rabadons",
+     "void_staff",
+     "shadowflame",
+     "stormsurge",
+     "ludens"
+    ],
+    "augments": [
+     "eureka",
+     "jeweled_gauntlet",
+     "magic_missile",
+     "witchful_thinking"
+    ]
+   }
   },
   {
    "id": "Fizz",
@@ -976,7 +1824,23 @@
    "damage_share": 0.2007,
    "damage_taken_share": 0.1905,
    "avg_death_time": 331.8993,
-   "win_rate": 0.4921
+   "win_rate": 0.4921,
+   "build": {
+    "items": [
+     "sorcerers",
+     "rabadons",
+     "lich_bane",
+     "void_staff",
+     "zhonyas",
+     "shadowflame"
+    ],
+    "augments": [
+     "eureka",
+     "jeweled_gauntlet",
+     "witchful_thinking",
+     "mystic_punch"
+    ]
+   }
   },
   {
    "id": "Katarina",
@@ -993,7 +1857,23 @@
    "damage_share": 0.2329,
    "damage_taken_share": 0.2055,
    "avg_death_time": 346.8739,
-   "win_rate": 0.488
+   "win_rate": 0.488,
+   "build": {
+    "items": [
+     "hexplate",
+     "botrk",
+     "terminus",
+     "titanic",
+     "deaths_dance",
+     "kraken"
+    ],
+    "augments": [
+     "jeweled_gauntlet",
+     "mystic_punch",
+     "dual_wield",
+     "erosion"
+    ]
+   }
   },
   {
    "id": "Ambessa",
@@ -1010,7 +1890,23 @@
    "damage_share": 0.2363,
    "damage_taken_share": 0.2187,
    "avg_death_time": 299.3843,
-   "win_rate": 0.5263
+   "win_rate": 0.5263,
+   "build": {
+    "items": [
+     "mercurys",
+     "shojin",
+     "deaths_dance",
+     "eclipse",
+     "axiom_arc",
+     "sundered_sky"
+    ],
+    "augments": [
+     "jeweled_gauntlet",
+     "goliath",
+     "mystic_punch",
+     "tank_engine"
+    ]
+   }
   },
   {
    "id": "Jax",
@@ -1027,7 +1923,23 @@
    "damage_share": 0.2011,
    "damage_taken_share": 0.2372,
    "avg_death_time": 324.1674,
-   "win_rate": 0.5065
+   "win_rate": 0.5065,
+   "build": {
+    "items": [
+     "trinity",
+     "wits_end",
+     "mercurys",
+     "botrk",
+     "deaths_dance",
+     "sundered_sky"
+    ],
+    "augments": [
+     "mystic_punch",
+     "tank_engine",
+     "deft",
+     "goliath"
+    ]
+   }
   },
   {
    "id": "Twitch",
@@ -1044,7 +1956,23 @@
    "damage_share": 0.2149,
    "damage_taken_share": 0.1473,
    "avg_death_time": 307.4187,
-   "win_rate": 0.4858
+   "win_rate": 0.4858,
+   "build": {
+    "items": [
+     "berserkers",
+     "infinity_edge",
+     "lord_dominiks",
+     "runaans",
+     "botrk",
+     "collector"
+    ],
+    "augments": [
+     "dual_wield",
+     "deft",
+     "its_critical",
+     "jeweled_gauntlet"
+    ]
+   }
   },
   {
    "id": "Shen",
@@ -1061,7 +1989,23 @@
    "damage_share": 0.1772,
    "damage_taken_share": 0.2991,
    "avg_death_time": 255.5565,
-   "win_rate": 0.5116
+   "win_rate": 0.5116,
+   "build": {
+    "items": [
+     "unending_despair",
+     "spirit_visage",
+     "thornmail",
+     "warmogs",
+     "heartsteel",
+     "mercurys"
+    ],
+    "augments": [
+     "tank_engine",
+     "heavy_hitter",
+     "goliath",
+     "mystic_punch"
+    ]
+   }
   },
   {
    "id": "Senna",
@@ -1078,7 +2022,23 @@
    "damage_share": 0.1743,
    "damage_taken_share": 0.1431,
    "avg_death_time": 238.1921,
-   "win_rate": 0.4789
+   "win_rate": 0.4789,
+   "build": {
+    "items": [
+     "berserkers",
+     "infinity_edge",
+     "lord_dominiks",
+     "rapid_firecannon",
+     "botrk",
+     "collector"
+    ],
+    "augments": [
+     "dual_wield",
+     "deft",
+     "its_critical",
+     "mystic_punch"
+    ]
+   }
   },
   {
    "id": "Viego",
@@ -1095,7 +2055,23 @@
    "damage_share": 0.2337,
    "damage_taken_share": 0.2088,
    "avg_death_time": 305.7769,
-   "win_rate": 0.5112
+   "win_rate": 0.5112,
+   "build": {
+    "items": [
+     "infinity_edge",
+     "lord_dominiks",
+     "mercurys",
+     "deaths_dance",
+     "collector",
+     "botrk"
+    ],
+    "augments": [
+     "jeweled_gauntlet",
+     "its_critical",
+     "dual_wield",
+     "deft"
+    ]
+   }
   },
   {
    "id": "Aphelios",
@@ -1112,7 +2088,23 @@
    "damage_share": 0.2258,
    "damage_taken_share": 0.1581,
    "avg_death_time": 281.0687,
-   "win_rate": 0.5146
+   "win_rate": 0.5146,
+   "build": {
+    "items": [
+     "berserkers",
+     "infinity_edge",
+     "lord_dominiks",
+     "bloodthirster",
+     "runaans",
+     "collector"
+    ],
+    "augments": [
+     "dual_wield",
+     "deft",
+     "its_critical",
+     "jeweled_gauntlet"
+    ]
+   }
   },
   {
    "id": "Rumble",
@@ -1129,7 +2121,23 @@
    "damage_share": 0.2407,
    "damage_taken_share": 0.1959,
    "avg_death_time": 316.2382,
-   "win_rate": 0.4999
+   "win_rate": 0.4999,
+   "build": {
+    "items": [
+     "sorcerers",
+     "rabadons",
+     "void_staff",
+     "zhonyas",
+     "shadowflame",
+     "liandrys"
+    ],
+    "augments": [
+     "infernal_conduit",
+     "jeweled_gauntlet",
+     "eureka",
+     "witchful_thinking"
+    ]
+   }
   },
   {
    "id": "Thresh",
@@ -1146,7 +2154,23 @@
    "damage_share": 0.1552,
    "damage_taken_share": 0.278,
    "avg_death_time": 237.6327,
-   "win_rate": 0.4991
+   "win_rate": 0.4991,
+   "build": {
+    "items": [
+     "unending_despair",
+     "kaenic",
+     "thornmail",
+     "warmogs",
+     "heartsteel",
+     "mercurys"
+    ],
+    "augments": [
+     "tank_engine",
+     "heavy_hitter",
+     "goliath",
+     "deft"
+    ]
+   }
   },
   {
    "id": "Draven",
@@ -1163,7 +2187,23 @@
    "damage_share": 0.2331,
    "damage_taken_share": 0.1689,
    "avg_death_time": 298.9776,
-   "win_rate": 0.4941
+   "win_rate": 0.4941,
+   "build": {
+    "items": [
+     "berserkers",
+     "infinity_edge",
+     "lord_dominiks",
+     "bloodthirster",
+     "collector",
+     "mortal_reminder"
+    ],
+    "augments": [
+     "dual_wield",
+     "jeweled_gauntlet",
+     "its_critical",
+     "deft"
+    ]
+   }
   },
   {
    "id": "Ezreal",
@@ -1180,7 +2220,23 @@
    "damage_share": 0.2246,
    "damage_taken_share": 0.1451,
    "avg_death_time": 237.5782,
-   "win_rate": 0.4703
+   "win_rate": 0.4703,
+   "build": {
+    "items": [
+     "infinity_edge",
+     "lord_dominiks",
+     "botrk",
+     "ionian",
+     "essence_reaver",
+     "collector"
+    ],
+    "augments": [
+     "jeweled_gauntlet",
+     "magic_missile",
+     "mystic_punch",
+     "eureka"
+    ]
+   }
   },
   {
    "id": "Shyvana",
@@ -1197,7 +2253,23 @@
    "damage_share": 0.216,
    "damage_taken_share": 0.24,
    "avg_death_time": 263.9021,
-   "win_rate": 0.5163
+   "win_rate": 0.5163,
+   "build": {
+    "items": [
+     "rabadons",
+     "void_staff",
+     "riftmaker",
+     "shadowflame",
+     "liandrys",
+     "mercurys"
+    ],
+    "augments": [
+     "tank_engine",
+     "goliath",
+     "heavy_hitter",
+     "mystic_punch"
+    ]
+   }
   },
   {
    "id": "Sona",
@@ -1214,7 +2286,23 @@
    "damage_share": 0.11,
    "damage_taken_share": 0.1553,
    "avg_death_time": 202.6983,
-   "win_rate": 0.5234
+   "win_rate": 0.5234,
+   "build": {
+    "items": [
+     "ionian",
+     "ludens",
+     "lich_bane",
+     "shadowflame",
+     "archangels",
+     "rabadons"
+    ],
+    "augments": [
+     "eureka",
+     "magic_missile",
+     "witchful_thinking",
+     "jeweled_gauntlet"
+    ]
+   }
   },
   {
    "id": "Briar",
@@ -1231,7 +2319,23 @@
    "damage_share": 0.2324,
    "damage_taken_share": 0.2467,
    "avg_death_time": 338.9729,
-   "win_rate": 0.5264
+   "win_rate": 0.5264,
+   "build": {
+    "items": [
+     "infinity_edge",
+     "lord_dominiks",
+     "deaths_dance",
+     "collector",
+     "mercurys",
+     "sundered_sky"
+    ],
+    "augments": [
+     "mystic_punch",
+     "goliath",
+     "its_critical",
+     "deft"
+    ]
+   }
   },
   {
    "id": "Sylas",
@@ -1248,7 +2352,23 @@
    "damage_share": 0.2106,
    "damage_taken_share": 0.2684,
    "avg_death_time": 303.705,
-   "win_rate": 0.4851
+   "win_rate": 0.4851,
+   "build": {
+    "items": [
+     "sorcerers",
+     "rabadons",
+     "lich_bane",
+     "void_staff",
+     "shadowflame",
+     "stormsurge"
+    ],
+    "augments": [
+     "eureka",
+     "tank_engine",
+     "jeweled_gauntlet",
+     "mystic_punch"
+    ]
+   }
   },
   {
    "id": "Nasus",
@@ -1265,7 +2385,23 @@
    "damage_share": 0.1798,
    "damage_taken_share": 0.2442,
    "avg_death_time": 269.2817,
-   "win_rate": 0.487
+   "win_rate": 0.487,
+   "build": {
+    "items": [
+     "blackfire",
+     "sorcerers",
+     "rabadons",
+     "rylais",
+     "shadowflame",
+     "liandrys"
+    ],
+    "augments": [
+     "tank_engine",
+     "goliath",
+     "heavy_hitter",
+     "jeweled_gauntlet"
+    ]
+   }
   },
   {
    "id": "Shaco",
@@ -1282,7 +2418,23 @@
    "damage_share": 0.1776,
    "damage_taken_share": 0.1444,
    "avg_death_time": 271.9099,
-   "win_rate": 0.4685
+   "win_rate": 0.4685,
+   "build": {
+    "items": [
+     "blackfire",
+     "sorcerers",
+     "rabadons",
+     "void_staff",
+     "shadowflame",
+     "liandrys"
+    ],
+    "augments": [
+     "eureka",
+     "jeweled_gauntlet",
+     "its_critical",
+     "infernal_conduit"
+    ]
+   }
   },
   {
    "id": "Malphite",
@@ -1299,7 +2451,23 @@
    "damage_share": 0.1752,
    "damage_taken_share": 0.2114,
    "avg_death_time": 299.6616,
-   "win_rate": 0.4711
+   "win_rate": 0.4711,
+   "build": {
+    "items": [
+     "sorcerers",
+     "rabadons",
+     "malignance",
+     "void_staff",
+     "shadowflame",
+     "stormsurge"
+    ],
+    "augments": [
+     "tank_engine",
+     "eureka",
+     "witchful_thinking",
+     "heavy_hitter"
+    ]
+   }
   },
   {
    "id": "Xerath",
@@ -1316,7 +2484,23 @@
    "damage_share": 0.1931,
    "damage_taken_share": 0.1119,
    "avg_death_time": 210.3046,
-   "win_rate": 0.4877
+   "win_rate": 0.4877,
+   "build": {
+    "items": [
+     "sorcerers",
+     "rabadons",
+     "void_staff",
+     "horizon_focus",
+     "shadowflame",
+     "ludens"
+    ],
+    "augments": [
+     "magic_missile",
+     "eureka",
+     "jeweled_gauntlet",
+     "witchful_thinking"
+    ]
+   }
   },
   {
    "id": "Zyra",
@@ -1333,7 +2517,23 @@
    "damage_share": 0.1824,
    "damage_taken_share": 0.1306,
    "avg_death_time": 234.8018,
-   "win_rate": 0.5038
+   "win_rate": 0.5038,
+   "build": {
+    "items": [
+     "blackfire",
+     "sorcerers",
+     "rabadons",
+     "rylais",
+     "shadowflame",
+     "liandrys"
+    ],
+    "augments": [
+     "infernal_conduit",
+     "eureka",
+     "magic_missile",
+     "jeweled_gauntlet"
+    ]
+   }
   },
   {
    "id": "Kaisa",
@@ -1350,7 +2550,23 @@
    "damage_share": 0.2139,
    "damage_taken_share": 0.13,
    "avg_death_time": 243.5293,
-   "win_rate": 0.4631
+   "win_rate": 0.4631,
+   "build": {
+    "items": [
+     "sorcerers",
+     "rabadons",
+     "void_staff",
+     "horizon_focus",
+     "shadowflame",
+     "ludens"
+    ],
+    "augments": [
+     "jeweled_gauntlet",
+     "dual_wield",
+     "magic_missile",
+     "eureka"
+    ]
+   }
   },
   {
    "id": "Mel",
@@ -1367,7 +2583,23 @@
    "damage_share": 0.205,
    "damage_taken_share": 0.1336,
    "avg_death_time": 243.7982,
-   "win_rate": 0.4722
+   "win_rate": 0.4722,
+   "build": {
+    "items": [
+     "blackfire",
+     "sorcerers",
+     "rabadons",
+     "void_staff",
+     "shadowflame",
+     "liandrys"
+    ],
+    "augments": [
+     "eureka",
+     "magic_missile",
+     "jeweled_gauntlet",
+     "infernal_conduit"
+    ]
+   }
   },
   {
    "id": "Chogath",
@@ -1384,7 +2616,23 @@
    "damage_share": 0.1814,
    "damage_taken_share": 0.3038,
    "avg_death_time": 251.5291,
-   "win_rate": 0.473
+   "win_rate": 0.473,
+   "build": {
+    "items": [
+     "unending_despair",
+     "kaenic",
+     "thornmail",
+     "warmogs",
+     "heartsteel",
+     "mercurys"
+    ],
+    "augments": [
+     "tank_engine",
+     "heavy_hitter",
+     "goliath",
+     "eureka"
+    ]
+   }
   },
   {
    "id": "Zaahen",
@@ -1401,7 +2649,23 @@
    "damage_share": 0.2069,
    "damage_taken_share": 0.2815,
    "avg_death_time": 288.7197,
-   "win_rate": 0.5235
+   "win_rate": 0.5235,
+   "build": {
+    "items": [
+     "spirit_visage",
+     "mercurys",
+     "shojin",
+     "deaths_dance",
+     "sundered_sky",
+     "heartsteel"
+    ],
+    "augments": [
+     "tank_engine",
+     "goliath",
+     "mystic_punch",
+     "heavy_hitter"
+    ]
+   }
   },
   {
    "id": "Udyr",
@@ -1418,7 +2682,23 @@
    "damage_share": 0.2367,
    "damage_taken_share": 0.1936,
    "avg_death_time": 359.4874,
-   "win_rate": 0.4853
+   "win_rate": 0.4853,
+   "build": {
+    "items": [
+     "sorcerers",
+     "rabadons",
+     "malignance",
+     "void_staff",
+     "shadowflame",
+     "liandrys"
+    ],
+    "augments": [
+     "jeweled_gauntlet",
+     "infernal_conduit",
+     "erosion",
+     "witchful_thinking"
+    ]
+   }
   },
   {
    "id": "Ashe",
@@ -1435,7 +2715,23 @@
    "damage_share": 0.1477,
    "damage_taken_share": 0.115,
    "avg_death_time": 222.0712,
-   "win_rate": 0.4496
+   "win_rate": 0.4496,
+   "build": {
+    "items": [
+     "malignance",
+     "cryptbloom",
+     "ionian",
+     "horizon_focus",
+     "axiom_arc",
+     "botrk"
+    ],
+    "augments": [
+     "deft",
+     "eureka",
+     "dual_wield",
+     "magic_missile"
+    ]
+   }
   },
   {
    "id": "Heimerdinger",
@@ -1452,7 +2748,23 @@
    "damage_share": 0.2046,
    "damage_taken_share": 0.1371,
    "avg_death_time": 240.312,
-   "win_rate": 0.5069
+   "win_rate": 0.5069,
+   "build": {
+    "items": [
+     "blackfire",
+     "sorcerers",
+     "rabadons",
+     "rylais",
+     "zhonyas",
+     "liandrys"
+    ],
+    "augments": [
+     "infernal_conduit",
+     "eureka",
+     "magic_missile",
+     "jeweled_gauntlet"
+    ]
+   }
   },
   {
    "id": "Darius",
@@ -1469,7 +2781,23 @@
    "damage_share": 0.1923,
    "damage_taken_share": 0.2863,
    "avg_death_time": 291.8568,
-   "win_rate": 0.4782
+   "win_rate": 0.4782,
+   "build": {
+    "items": [
+     "overlords_bloodmail",
+     "unending_despair",
+     "spirit_visage",
+     "warmogs",
+     "heartsteel",
+     "mercurys"
+    ],
+    "augments": [
+     "tank_engine",
+     "goliath",
+     "heavy_hitter",
+     "jeweled_gauntlet"
+    ]
+   }
   },
   {
    "id": "Pantheon",
@@ -1486,7 +2814,23 @@
    "damage_share": 0.2142,
    "damage_taken_share": 0.2225,
    "avg_death_time": 296.5368,
-   "win_rate": 0.4918
+   "win_rate": 0.4918,
+   "build": {
+    "items": [
+     "mercurys",
+     "deaths_dance",
+     "sundered_sky",
+     "collector",
+     "eclipse",
+     "infinity_edge"
+    ],
+    "augments": [
+     "tank_engine",
+     "jeweled_gauntlet",
+     "goliath",
+     "heavy_hitter"
+    ]
+   }
   },
   {
    "id": "Janna",
@@ -1503,7 +2847,23 @@
    "damage_share": 0.0805,
    "damage_taken_share": 0.1259,
    "avg_death_time": 172.9965,
-   "win_rate": 0.5233
+   "win_rate": 0.5233,
+   "build": {
+    "items": [
+     "ionian",
+     "ludens",
+     "horizon_focus",
+     "shadowflame",
+     "liandrys",
+     "rabadons"
+    ],
+    "augments": [
+     "eureka",
+     "magic_missile",
+     "witchful_thinking",
+     "jeweled_gauntlet"
+    ]
+   }
   },
   {
    "id": "JarvanIV",
@@ -1520,7 +2880,23 @@
    "damage_share": 0.1887,
    "damage_taken_share": 0.2371,
    "avg_death_time": 327.6829,
-   "win_rate": 0.4681
+   "win_rate": 0.4681,
+   "build": {
+    "items": [
+     "infinity_edge",
+     "lord_dominiks",
+     "deaths_dance",
+     "collector",
+     "axiom_arc",
+     "mercurys"
+    ],
+    "augments": [
+     "tank_engine",
+     "heavy_hitter",
+     "goliath",
+     "jeweled_gauntlet"
+    ]
+   }
   },
   {
    "id": "Lux",
@@ -1537,7 +2913,23 @@
    "damage_share": 0.1603,
    "damage_taken_share": 0.1087,
    "avg_death_time": 206.2044,
-   "win_rate": 0.4857
+   "win_rate": 0.4857,
+   "build": {
+    "items": [
+     "sorcerers",
+     "rabadons",
+     "void_staff",
+     "shadowflame",
+     "stormsurge",
+     "ludens"
+    ],
+    "augments": [
+     "eureka",
+     "magic_missile",
+     "jeweled_gauntlet",
+     "witchful_thinking"
+    ]
+   }
   },
   {
    "id": "Talon",
@@ -1554,7 +2946,23 @@
    "damage_share": 0.2398,
    "damage_taken_share": 0.1857,
    "avg_death_time": 348.4372,
-   "win_rate": 0.4961
+   "win_rate": 0.4961,
+   "build": {
+    "items": [
+     "edge_of_night",
+     "collector",
+     "seryldas",
+     "axiom_arc",
+     "voltaic",
+     "ionian"
+    ],
+    "augments": [
+     "jeweled_gauntlet",
+     "goliath",
+     "poro_stampede",
+     "eureka"
+    ]
+   }
   },
   {
    "id": "Nautilus",
@@ -1571,7 +2979,23 @@
    "damage_share": 0.1466,
    "damage_taken_share": 0.2848,
    "avg_death_time": 261.0846,
-   "win_rate": 0.4844
+   "win_rate": 0.4844,
+   "build": {
+    "items": [
+     "unending_despair",
+     "spirit_visage",
+     "thornmail",
+     "warmogs",
+     "heartsteel",
+     "mercurys"
+    ],
+    "augments": [
+     "tank_engine",
+     "heavy_hitter",
+     "goliath",
+     "erosion"
+    ]
+   }
   },
   {
    "id": "Amumu",
@@ -1588,7 +3012,23 @@
    "damage_share": 0.1736,
    "damage_taken_share": 0.2816,
    "avg_death_time": 325.6708,
-   "win_rate": 0.4868
+   "win_rate": 0.4868,
+   "build": {
+    "items": [
+     "sorcerers",
+     "rabadons",
+     "malignance",
+     "void_staff",
+     "shadowflame",
+     "stormsurge"
+    ],
+    "augments": [
+     "tank_engine",
+     "goliath",
+     "heavy_hitter",
+     "infernal_conduit"
+    ]
+   }
   },
   {
    "id": "Yuumi",
@@ -1605,7 +3045,23 @@
    "damage_share": 0.0722,
    "damage_taken_share": 0.077,
    "avg_death_time": 130.0683,
-   "win_rate": 0.5134
+   "win_rate": 0.5134,
+   "build": {
+    "items": [
+     "ionian",
+     "ludens",
+     "rabadons",
+     "shadowflame",
+     "warmogs",
+     "morellonomicon"
+    ],
+    "augments": [
+     "magic_missile",
+     "witchful_thinking",
+     "eureka",
+     "jeweled_gauntlet"
+    ]
+   }
   },
   {
    "id": "Volibear",
@@ -1622,7 +3078,23 @@
    "damage_share": 0.1976,
    "damage_taken_share": 0.2887,
    "avg_death_time": 288.7676,
-   "win_rate": 0.4971
+   "win_rate": 0.4971,
+   "build": {
+    "items": [
+     "unending_despair",
+     "spirit_visage",
+     "thornmail",
+     "warmogs",
+     "heartsteel",
+     "mercurys"
+    ],
+    "augments": [
+     "tank_engine",
+     "heavy_hitter",
+     "goliath",
+     "mystic_punch"
+    ]
+   }
   },
   {
    "id": "Jayce",
@@ -1639,7 +3111,23 @@
    "damage_share": 0.2267,
    "damage_taken_share": 0.1506,
    "avg_death_time": 277.9081,
-   "win_rate": 0.4636
+   "win_rate": 0.4636,
+   "build": {
+    "items": [
+     "ionian",
+     "collector",
+     "eclipse",
+     "seryldas",
+     "voltaic",
+     "manamune"
+    ],
+    "augments": [
+     "jeweled_gauntlet",
+     "magic_missile",
+     "goliath",
+     "dual_wield"
+    ]
+   }
   },
   {
    "id": "Poppy",
@@ -1656,7 +3144,23 @@
    "damage_share": 0.1817,
    "damage_taken_share": 0.2957,
    "avg_death_time": 263.8594,
-   "win_rate": 0.5017
+   "win_rate": 0.5017,
+   "build": {
+    "items": [
+     "unending_despair",
+     "kaenic",
+     "thornmail",
+     "warmogs",
+     "heartsteel",
+     "mercurys"
+    ],
+    "augments": [
+     "tank_engine",
+     "heavy_hitter",
+     "goliath",
+     "mystic_punch"
+    ]
+   }
   },
   {
    "id": "Mordekaiser",
@@ -1673,7 +3177,23 @@
    "damage_share": 0.2129,
    "damage_taken_share": 0.2753,
    "avg_death_time": 290.4779,
-   "win_rate": 0.4691
+   "win_rate": 0.4691,
+   "build": {
+    "items": [
+     "unending_despair",
+     "spirit_visage",
+     "heartsteel",
+     "rylais",
+     "riftmaker",
+     "liandrys"
+    ],
+    "augments": [
+     "tank_engine",
+     "goliath",
+     "heavy_hitter",
+     "infernal_conduit"
+    ]
+   }
   },
   {
    "id": "Rengar",
@@ -1690,7 +3210,23 @@
    "damage_share": 0.2185,
    "damage_taken_share": 0.203,
    "avg_death_time": 348.9539,
-   "win_rate": 0.4826
+   "win_rate": 0.4826,
+   "build": {
+    "items": [
+     "infinity_edge",
+     "lord_dominiks",
+     "collector",
+     "profane_hydra",
+     "voltaic",
+     "mercurys"
+    ],
+    "augments": [
+     "its_critical",
+     "jeweled_gauntlet",
+     "goliath",
+     "mystic_punch"
+    ]
+   }
   },
   {
    "id": "Leona",
@@ -1707,7 +3243,23 @@
    "damage_share": 0.1514,
    "damage_taken_share": 0.3066,
    "avg_death_time": 277.6723,
-   "win_rate": 0.4861
+   "win_rate": 0.4861,
+   "build": {
+    "items": [
+     "unending_despair",
+     "thornmail",
+     "warmogs",
+     "heartsteel",
+     "mercurys",
+     "jaksho"
+    ],
+    "augments": [
+     "tank_engine",
+     "heavy_hitter",
+     "goliath",
+     "mystic_punch"
+    ]
+   }
   },
   {
    "id": "Xayah",
@@ -1724,7 +3276,23 @@
    "damage_share": 0.2206,
    "damage_taken_share": 0.1512,
    "avg_death_time": 285.1304,
-   "win_rate": 0.4921
+   "win_rate": 0.4921,
+   "build": {
+    "items": [
+     "berserkers",
+     "infinity_edge",
+     "lord_dominiks",
+     "botrk",
+     "navori",
+     "collector"
+    ],
+    "augments": [
+     "dual_wield",
+     "deft",
+     "mystic_punch",
+     "its_critical"
+    ]
+   }
   },
   {
    "id": "Varus",
@@ -1741,7 +3309,23 @@
    "damage_share": 0.2159,
    "damage_taken_share": 0.1395,
    "avg_death_time": 268.6481,
-   "win_rate": 0.4689
+   "win_rate": 0.4689,
+   "build": {
+    "items": [
+     "berserkers",
+     "infinity_edge",
+     "lord_dominiks",
+     "runaans",
+     "botrk",
+     "collector"
+    ],
+    "augments": [
+     "jeweled_gauntlet",
+     "dual_wield",
+     "deft",
+     "magic_missile"
+    ]
+   }
   },
   {
    "id": "Vladimir",
@@ -1758,7 +3342,23 @@
    "damage_share": 0.2091,
    "damage_taken_share": 0.2532,
    "avg_death_time": 274.1822,
-   "win_rate": 0.477
+   "win_rate": 0.477,
+   "build": {
+    "items": [
+     "sorcerers",
+     "rabadons",
+     "void_staff",
+     "cosmic_drive",
+     "riftmaker",
+     "shadowflame"
+    ],
+    "augments": [
+     "tank_engine",
+     "eureka",
+     "goliath",
+     "witchful_thinking"
+    ]
+   }
   },
   {
    "id": "Ziggs",
@@ -1775,7 +3375,23 @@
    "damage_share": 0.197,
    "damage_taken_share": 0.1209,
    "avg_death_time": 220.6355,
-   "win_rate": 0.4862
+   "win_rate": 0.4862,
+   "build": {
+    "items": [
+     "blackfire",
+     "sorcerers",
+     "rabadons",
+     "void_staff",
+     "shadowflame",
+     "liandrys"
+    ],
+    "augments": [
+     "magic_missile",
+     "eureka",
+     "infernal_conduit",
+     "jeweled_gauntlet"
+    ]
+   }
   },
   {
    "id": "MonkeyKing",
@@ -1792,7 +3408,23 @@
    "damage_share": 0.1833,
    "damage_taken_share": 0.2403,
    "avg_death_time": 298.6056,
-   "win_rate": 0.4879
+   "win_rate": 0.4879,
+   "build": {
+    "items": [
+     "infinity_edge",
+     "lord_dominiks",
+     "deaths_dance",
+     "collector",
+     "mercurys",
+     "heartsteel"
+    ],
+    "augments": [
+     "tank_engine",
+     "goliath",
+     "mystic_punch",
+     "heavy_hitter"
+    ]
+   }
   },
   {
    "id": "KogMaw",
@@ -1809,7 +3441,23 @@
    "damage_share": 0.227,
    "damage_taken_share": 0.1459,
    "avg_death_time": 304.4504,
-   "win_rate": 0.4925
+   "win_rate": 0.4925,
+   "build": {
+    "items": [
+     "berserkers",
+     "runaans",
+     "wits_end",
+     "rageblade",
+     "botrk",
+     "terminus"
+    ],
+    "augments": [
+     "dual_wield",
+     "deft",
+     "magic_missile",
+     "jeweled_gauntlet"
+    ]
+   }
   },
   {
    "id": "Soraka",
@@ -1826,7 +3474,23 @@
    "damage_share": 0.0671,
    "damage_taken_share": 0.1457,
    "avg_death_time": 170.3811,
-   "win_rate": 0.495
+   "win_rate": 0.495,
+   "build": {
+    "items": [
+     "ionian",
+     "warmogs",
+     "rod_of_ages",
+     "spirit_visage",
+     "heartsteel",
+     "liandrys"
+    ],
+    "augments": [
+     "tank_engine",
+     "goliath",
+     "witchful_thinking",
+     "eureka"
+    ]
+   }
   },
   {
    "id": "Khazix",
@@ -1843,7 +3507,23 @@
    "damage_share": 0.2124,
    "damage_taken_share": 0.175,
    "avg_death_time": 293.9014,
-   "win_rate": 0.4725
+   "win_rate": 0.4725,
+   "build": {
+    "items": [
+     "ionian",
+     "edge_of_night",
+     "collector",
+     "seryldas",
+     "voltaic",
+     "manamune"
+    ],
+    "augments": [
+     "jeweled_gauntlet",
+     "goliath",
+     "mystic_punch",
+     "erosion"
+    ]
+   }
   },
   {
    "id": "Kassadin",
@@ -1860,7 +3540,23 @@
    "damage_share": 0.2096,
    "damage_taken_share": 0.2155,
    "avg_death_time": 312.075,
-   "win_rate": 0.5012
+   "win_rate": 0.5012,
+   "build": {
+    "items": [
+     "rabadons",
+     "lich_bane",
+     "malignance",
+     "void_staff",
+     "shadowflame",
+     "rod_of_ages"
+    ],
+    "augments": [
+     "jeweled_gauntlet",
+     "eureka",
+     "tank_engine",
+     "witchful_thinking"
+    ]
+   }
   },
   {
    "id": "Ornn",
@@ -1877,7 +3573,23 @@
    "damage_share": 0.1687,
    "damage_taken_share": 0.321,
    "avg_death_time": 246.2543,
-   "win_rate": 0.4841
+   "win_rate": 0.4841,
+   "build": {
+    "items": [
+     "unending_despair",
+     "thornmail",
+     "warmogs",
+     "heartsteel",
+     "mercurys",
+     "jaksho"
+    ],
+    "augments": [
+     "tank_engine",
+     "heavy_hitter",
+     "goliath",
+     "erosion"
+    ]
+   }
   },
   {
    "id": "Blitzcrank",
@@ -1894,7 +3606,23 @@
    "damage_share": 0.1323,
    "damage_taken_share": 0.2286,
    "avg_death_time": 268.0281,
-   "win_rate": 0.4592
+   "win_rate": 0.4592,
+   "build": {
+    "items": [
+     "sorcerers",
+     "rabadons",
+     "malignance",
+     "void_staff",
+     "shadowflame",
+     "stormsurge"
+    ],
+    "augments": [
+     "tank_engine",
+     "goliath",
+     "heavy_hitter",
+     "eureka"
+    ]
+   }
   },
   {
    "id": "Nidalee",
@@ -1911,7 +3639,23 @@
    "damage_share": 0.2066,
    "damage_taken_share": 0.1462,
    "avg_death_time": 198.0645,
-   "win_rate": 0.4697
+   "win_rate": 0.4697,
+   "build": {
+    "items": [
+     "sorcerers",
+     "rabadons",
+     "void_staff",
+     "shadowflame",
+     "stormsurge",
+     "ludens"
+    ],
+    "augments": [
+     "jeweled_gauntlet",
+     "magic_missile",
+     "eureka",
+     "witchful_thinking"
+    ]
+   }
   },
   {
    "id": "Samira",
@@ -1928,7 +3672,23 @@
    "damage_share": 0.2302,
    "damage_taken_share": 0.1865,
    "avg_death_time": 333.0493,
-   "win_rate": 0.4768
+   "win_rate": 0.4768,
+   "build": {
+    "items": [
+     "infinity_edge",
+     "lord_dominiks",
+     "bloodthirster",
+     "deaths_dance",
+     "collector",
+     "mercurys"
+    ],
+    "augments": [
+     "its_critical",
+     "jeweled_gauntlet",
+     "dual_wield",
+     "magic_missile"
+    ]
+   }
   },
   {
    "id": "Gragas",
@@ -1945,7 +3705,23 @@
    "damage_share": 0.1889,
    "damage_taken_share": 0.2298,
    "avg_death_time": 253.4991,
-   "win_rate": 0.4825
+   "win_rate": 0.4825,
+   "build": {
+    "items": [
+     "sorcerers",
+     "rabadons",
+     "void_staff",
+     "shadowflame",
+     "stormsurge",
+     "ludens"
+    ],
+    "augments": [
+     "tank_engine",
+     "eureka",
+     "jeweled_gauntlet",
+     "goliath"
+    ]
+   }
   },
   {
    "id": "Garen",
@@ -1962,7 +3738,23 @@
    "damage_share": 0.1857,
    "damage_taken_share": 0.237,
    "avg_death_time": 292.0508,
-   "win_rate": 0.4605
+   "win_rate": 0.4605,
+   "build": {
+    "items": [
+     "berserkers",
+     "infinity_edge",
+     "lord_dominiks",
+     "phantom_dancer",
+     "stridebreaker",
+     "collector"
+    ],
+    "augments": [
+     "tank_engine",
+     "goliath",
+     "its_critical",
+     "jeweled_gauntlet"
+    ]
+   }
   },
   {
    "id": "Sivir",
@@ -1979,7 +3771,23 @@
    "damage_share": 0.2016,
    "damage_taken_share": 0.1469,
    "avg_death_time": 283.1682,
-   "win_rate": 0.4741
+   "win_rate": 0.4741,
+   "build": {
+    "items": [
+     "berserkers",
+     "infinity_edge",
+     "lord_dominiks",
+     "botrk",
+     "navori",
+     "collector"
+    ],
+    "augments": [
+     "dual_wield",
+     "deft",
+     "mystic_punch",
+     "its_critical"
+    ]
+   }
   },
   {
    "id": "FiddleSticks",
@@ -1996,7 +3804,23 @@
    "damage_share": 0.1913,
    "damage_taken_share": 0.1926,
    "avg_death_time": 297.2218,
-   "win_rate": 0.4856
+   "win_rate": 0.4856,
+   "build": {
+    "items": [
+     "sorcerers",
+     "rabadons",
+     "malignance",
+     "zhonyas",
+     "shadowflame",
+     "liandrys"
+    ],
+    "augments": [
+     "eureka",
+     "jeweled_gauntlet",
+     "magic_missile",
+     "witchful_thinking"
+    ]
+   }
   },
   {
    "id": "Kalista",
@@ -2013,7 +3837,23 @@
    "damage_share": 0.2143,
    "damage_taken_share": 0.1577,
    "avg_death_time": 283.1403,
-   "win_rate": 0.4993
+   "win_rate": 0.4993,
+   "build": {
+    "items": [
+     "berserkers",
+     "runaans",
+     "rageblade",
+     "botrk",
+     "terminus",
+     "jaksho"
+    ],
+    "augments": [
+     "dual_wield",
+     "deft",
+     "its_critical",
+     "mystic_punch"
+    ]
+   }
   },
   {
    "id": "Milio",
@@ -2030,7 +3870,23 @@
    "damage_share": 0.1007,
    "damage_taken_share": 0.1202,
    "avg_death_time": 166.5016,
-   "win_rate": 0.5102
+   "win_rate": 0.5102,
+   "build": {
+    "items": [
+     "sorcerers",
+     "rabadons",
+     "void_staff",
+     "shadowflame",
+     "stormsurge",
+     "ludens"
+    ],
+    "augments": [
+     "eureka",
+     "magic_missile",
+     "jeweled_gauntlet",
+     "witchful_thinking"
+    ]
+   }
   },
   {
    "id": "Renata",
@@ -2047,7 +3903,23 @@
    "damage_share": 0.0994,
    "damage_taken_share": 0.1344,
    "avg_death_time": 218.2865,
-   "win_rate": 0.5055
+   "win_rate": 0.5055,
+   "build": {
+    "items": [
+     "ionian",
+     "malignance",
+     "liandrys",
+     "archangels",
+     "morellonomicon",
+     "rabadons"
+    ],
+    "augments": [
+     "eureka",
+     "magic_missile",
+     "witchful_thinking",
+     "erosion"
+    ]
+   }
   },
   {
    "id": "Illaoi",
@@ -2064,7 +3936,23 @@
    "damage_share": 0.2007,
    "damage_taken_share": 0.3157,
    "avg_death_time": 274.9205,
-   "win_rate": 0.4804
+   "win_rate": 0.4804,
+   "build": {
+    "items": [
+     "overlords_bloodmail",
+     "unending_despair",
+     "spirit_visage",
+     "warmogs",
+     "heartsteel",
+     "mercurys"
+    ],
+    "augments": [
+     "tank_engine",
+     "heavy_hitter",
+     "goliath",
+     "mystic_punch"
+    ]
+   }
   },
   {
    "id": "Sejuani",
@@ -2081,7 +3969,23 @@
    "damage_share": 0.1888,
    "damage_taken_share": 0.3177,
    "avg_death_time": 279.8779,
-   "win_rate": 0.4821
+   "win_rate": 0.4821,
+   "build": {
+    "items": [
+     "unending_despair",
+     "kaenic",
+     "thornmail",
+     "warmogs",
+     "heartsteel",
+     "mercurys"
+    ],
+    "augments": [
+     "tank_engine",
+     "heavy_hitter",
+     "goliath",
+     "erosion"
+    ]
+   }
   },
   {
    "id": "Nocturne",
@@ -2098,7 +4002,23 @@
    "damage_share": 0.2103,
    "damage_taken_share": 0.1964,
    "avg_death_time": 327.7244,
-   "win_rate": 0.4844
+   "win_rate": 0.4844,
+   "build": {
+    "items": [
+     "infinity_edge",
+     "lord_dominiks",
+     "hexplate",
+     "collector",
+     "axiom_arc",
+     "mercurys"
+    ],
+    "augments": [
+     "deft",
+     "its_critical",
+     "jeweled_gauntlet",
+     "mystic_punch"
+    ]
+   }
   },
   {
    "id": "Karma",
@@ -2115,7 +4035,23 @@
    "damage_share": 0.1278,
    "damage_taken_share": 0.1359,
    "avg_death_time": 204.4332,
-   "win_rate": 0.4774
+   "win_rate": 0.4774,
+   "build": {
+    "items": [
+     "sorcerers",
+     "rabadons",
+     "malignance",
+     "shadowflame",
+     "stormsurge",
+     "ludens"
+    ],
+    "augments": [
+     "eureka",
+     "magic_missile",
+     "jeweled_gauntlet",
+     "witchful_thinking"
+    ]
+   }
   },
   {
    "id": "LeeSin",
@@ -2132,7 +4068,23 @@
    "damage_share": 0.205,
    "damage_taken_share": 0.2097,
    "avg_death_time": 291.4064,
-   "win_rate": 0.4439
+   "win_rate": 0.4439,
+   "build": {
+    "items": [
+     "black_cleaver",
+     "mercurys",
+     "deaths_dance",
+     "collector",
+     "eclipse",
+     "sundered_sky"
+    ],
+    "augments": [
+     "jeweled_gauntlet",
+     "tank_engine",
+     "goliath",
+     "heavy_hitter"
+    ]
+   }
   },
   {
    "id": "Vex",
@@ -2149,7 +4101,23 @@
    "damage_share": 0.2072,
    "damage_taken_share": 0.1356,
    "avg_death_time": 257.9,
-   "win_rate": 0.4937
+   "win_rate": 0.4937,
+   "build": {
+    "items": [
+     "sorcerers",
+     "rabadons",
+     "void_staff",
+     "zhonyas",
+     "shadowflame",
+     "ludens"
+    ],
+    "augments": [
+     "eureka",
+     "magic_missile",
+     "jeweled_gauntlet",
+     "witchful_thinking"
+    ]
+   }
   },
   {
    "id": "Aatrox",
@@ -2166,7 +4134,23 @@
    "damage_share": 0.2093,
    "damage_taken_share": 0.2754,
    "avg_death_time": 276.9625,
-   "win_rate": 0.4586
+   "win_rate": 0.4586,
+   "build": {
+    "items": [
+     "spirit_visage",
+     "mercurys",
+     "deaths_dance",
+     "sundered_sky",
+     "eclipse",
+     "collector"
+    ],
+    "augments": [
+     "tank_engine",
+     "goliath",
+     "jeweled_gauntlet",
+     "heavy_hitter"
+    ]
+   }
   },
   {
    "id": "Pyke",
@@ -2183,7 +4167,23 @@
    "damage_share": 0.1428,
    "damage_taken_share": 0.1715,
    "avg_death_time": 242.387,
-   "win_rate": 0.466
+   "win_rate": 0.466,
+   "build": {
+    "items": [
+     "youmuus",
+     "edge_of_night",
+     "collector",
+     "seryldas",
+     "axiom_arc",
+     "ionian"
+    ],
+    "augments": [
+     "goliath",
+     "jeweled_gauntlet",
+     "mystic_punch",
+     "erosion"
+    ]
+   }
   },
   {
    "id": "Nilah",
@@ -2200,7 +4200,23 @@
    "damage_share": 0.1989,
    "damage_taken_share": 0.1837,
    "avg_death_time": 314.5752,
-   "win_rate": 0.4989
+   "win_rate": 0.4989,
+   "build": {
+    "items": [
+     "berserkers",
+     "infinity_edge",
+     "lord_dominiks",
+     "bloodthirster",
+     "navori",
+     "collector"
+    ],
+    "augments": [
+     "dual_wield",
+     "deft",
+     "jeweled_gauntlet",
+     "its_critical"
+    ]
+   }
   },
   {
    "id": "Annie",
@@ -2217,7 +4233,23 @@
    "damage_share": 0.1791,
    "damage_taken_share": 0.1405,
    "avg_death_time": 278.4125,
-   "win_rate": 0.4859
+   "win_rate": 0.4859,
+   "build": {
+    "items": [
+     "sorcerers",
+     "rabadons",
+     "malignance",
+     "void_staff",
+     "shadowflame",
+     "stormsurge"
+    ],
+    "augments": [
+     "eureka",
+     "jeweled_gauntlet",
+     "witchful_thinking",
+     "magic_missile"
+    ]
+   }
   },
   {
    "id": "Nami",
@@ -2234,7 +4266,23 @@
    "damage_share": 0.0973,
    "damage_taken_share": 0.1276,
    "avg_death_time": 182.3267,
-   "win_rate": 0.4918
+   "win_rate": 0.4918,
+   "build": {
+    "items": [
+     "ionian",
+     "malignance",
+     "ludens",
+     "rabadons",
+     "morellonomicon",
+     "shadowflame"
+    ],
+    "augments": [
+     "eureka",
+     "witchful_thinking",
+     "magic_missile",
+     "jeweled_gauntlet"
+    ]
+   }
   },
   {
    "id": "Ivern",
@@ -2251,7 +4299,23 @@
    "damage_share": 0.0779,
    "damage_taken_share": 0.1314,
    "avg_death_time": 180.7961,
-   "win_rate": 0.4991
+   "win_rate": 0.4991,
+   "build": {
+    "items": [
+     "ionian",
+     "malignance",
+     "rylais",
+     "liandrys",
+     "heartsteel",
+     "rabadons"
+    ],
+    "augments": [
+     "eureka",
+     "witchful_thinking",
+     "magic_missile",
+     "jeweled_gauntlet"
+    ]
+   }
   },
   {
    "id": "Kindred",
@@ -2268,7 +4332,23 @@
    "damage_share": 0.2072,
    "damage_taken_share": 0.161,
    "avg_death_time": 288.4702,
-   "win_rate": 0.4742
+   "win_rate": 0.4742,
+   "build": {
+    "items": [
+     "berserkers",
+     "infinity_edge",
+     "lord_dominiks",
+     "runaans",
+     "botrk",
+     "collector"
+    ],
+    "augments": [
+     "dual_wield",
+     "deft",
+     "mystic_punch",
+     "its_critical"
+    ]
+   }
   },
   {
    "id": "Diana",
@@ -2285,7 +4365,23 @@
    "damage_share": 0.2046,
    "damage_taken_share": 0.2374,
    "avg_death_time": 306.6335,
-   "win_rate": 0.4722
+   "win_rate": 0.4722,
+   "build": {
+    "items": [
+     "sorcerers",
+     "rabadons",
+     "void_staff",
+     "zhonyas",
+     "shadowflame",
+     "stormsurge"
+    ],
+    "augments": [
+     "tank_engine",
+     "goliath",
+     "jeweled_gauntlet",
+     "heavy_hitter"
+    ]
+   }
   },
   {
    "id": "RekSai",
@@ -2302,7 +4398,23 @@
    "damage_share": 0.1725,
    "damage_taken_share": 0.2976,
    "avg_death_time": 256.683,
-   "win_rate": 0.4964
+   "win_rate": 0.4964,
+   "build": {
+    "items": [
+     "unending_despair",
+     "spirit_visage",
+     "thornmail",
+     "heartsteel",
+     "mercurys",
+     "titanic"
+    ],
+    "augments": [
+     "tank_engine",
+     "heavy_hitter",
+     "goliath",
+     "jeweled_gauntlet"
+    ]
+   }
   },
   {
    "id": "Orianna",
@@ -2319,7 +4431,23 @@
    "damage_share": 0.1799,
    "damage_taken_share": 0.131,
    "avg_death_time": 234.3865,
-   "win_rate": 0.4725
+   "win_rate": 0.4725,
+   "build": {
+    "items": [
+     "sorcerers",
+     "rabadons",
+     "void_staff",
+     "shadowflame",
+     "stormsurge",
+     "ludens"
+    ],
+    "augments": [
+     "eureka",
+     "jeweled_gauntlet",
+     "magic_missile",
+     "witchful_thinking"
+    ]
+   }
   },
   {
    "id": "Taric",
@@ -2336,7 +4464,23 @@
    "damage_share": 0.1094,
    "damage_taken_share": 0.2817,
    "avg_death_time": 234.3769,
-   "win_rate": 0.4919
+   "win_rate": 0.4919,
+   "build": {
+    "items": [
+     "unending_despair",
+     "spirit_visage",
+     "thornmail",
+     "warmogs",
+     "heartsteel",
+     "mercurys"
+    ],
+    "augments": [
+     "tank_engine",
+     "heavy_hitter",
+     "goliath",
+     "mystic_punch"
+    ]
+   }
   },
   {
    "id": "Lulu",
@@ -2353,7 +4497,23 @@
    "damage_share": 0.0688,
    "damage_taken_share": 0.1255,
    "avg_death_time": 191.2682,
-   "win_rate": 0.489
+   "win_rate": 0.489,
+   "build": {
+    "items": [
+     "ionian",
+     "ludens",
+     "warmogs",
+     "rabadons",
+     "morellonomicon",
+     "botrk"
+    ],
+    "augments": [
+     "eureka",
+     "magic_missile",
+     "witchful_thinking",
+     "erosion"
+    ]
+   }
   },
   {
    "id": "Gnar",
@@ -2370,7 +4530,23 @@
    "damage_share": 0.2006,
    "damage_taken_share": 0.2544,
    "avg_death_time": 266.9243,
-   "win_rate": 0.4705
+   "win_rate": 0.4705,
+   "build": {
+    "items": [
+     "steraks",
+     "black_cleaver",
+     "trinity",
+     "wits_end",
+     "mercurys",
+     "deaths_dance"
+    ],
+    "augments": [
+     "tank_engine",
+     "heavy_hitter",
+     "goliath",
+     "deft"
+    ]
+   }
   },
   {
    "id": "Urgot",
@@ -2387,7 +4563,23 @@
    "damage_share": 0.1898,
    "damage_taken_share": 0.2756,
    "avg_death_time": 293.1617,
-   "win_rate": 0.4583
+   "win_rate": 0.4583,
+   "build": {
+    "items": [
+     "overlords_bloodmail",
+     "warmogs",
+     "heartsteel",
+     "mercurys",
+     "titanic",
+     "jaksho"
+    ],
+    "augments": [
+     "tank_engine",
+     "heavy_hitter",
+     "goliath",
+     "erosion"
+    ]
+   }
   },
   {
    "id": "Quinn",
@@ -2404,7 +4596,23 @@
    "damage_share": 0.2065,
    "damage_taken_share": 0.1504,
    "avg_death_time": 295.8547,
-   "win_rate": 0.4762
+   "win_rate": 0.4762,
+   "build": {
+    "items": [
+     "berserkers",
+     "infinity_edge",
+     "lord_dominiks",
+     "bloodthirster",
+     "botrk",
+     "collector"
+    ],
+    "augments": [
+     "dual_wield",
+     "deft",
+     "its_critical",
+     "jeweled_gauntlet"
+    ]
+   }
   },
   {
    "id": "Azir",
@@ -2421,7 +4629,23 @@
    "damage_share": 0.2049,
    "damage_taken_share": 0.155,
    "avg_death_time": 289.3904,
-   "win_rate": 0.4779
+   "win_rate": 0.4779,
+   "build": {
+    "items": [
+     "sorcerers",
+     "rabadons",
+     "nashors",
+     "void_staff",
+     "shadowflame",
+     "liandrys"
+    ],
+    "augments": [
+     "deft",
+     "magic_missile",
+     "jeweled_gauntlet",
+     "eureka"
+    ]
+   }
   },
   {
    "id": "Taliyah",
@@ -2438,7 +4662,23 @@
    "damage_share": 0.2044,
    "damage_taken_share": 0.1452,
    "avg_death_time": 265.669,
-   "win_rate": 0.4823
+   "win_rate": 0.4823,
+   "build": {
+    "items": [
+     "sorcerers",
+     "rabadons",
+     "void_staff",
+     "zhonyas",
+     "shadowflame",
+     "ludens"
+    ],
+    "augments": [
+     "magic_missile",
+     "jeweled_gauntlet",
+     "eureka",
+     "witchful_thinking"
+    ]
+   }
   },
   {
    "id": "Qiyana",
@@ -2455,7 +4695,23 @@
    "damage_share": 0.2252,
    "damage_taken_share": 0.1768,
    "avg_death_time": 307.2837,
-   "win_rate": 0.4683
+   "win_rate": 0.4683,
+   "build": {
+    "items": [
+     "ionian",
+     "collector",
+     "seryldas",
+     "axiom_arc",
+     "voltaic",
+     "profane_hydra"
+    ],
+    "augments": [
+     "jeweled_gauntlet",
+     "goliath",
+     "mystic_punch",
+     "erosion"
+    ]
+   }
   },
   {
    "id": "Zeri",
@@ -2472,7 +4728,23 @@
    "damage_share": 0.2195,
    "damage_taken_share": 0.1556,
    "avg_death_time": 290.0156,
-   "win_rate": 0.4782
+   "win_rate": 0.4782,
+   "build": {
+    "items": [
+     "berserkers",
+     "infinity_edge",
+     "yuntal",
+     "lord_dominiks",
+     "bloodthirster",
+     "runaans"
+    ],
+    "augments": [
+     "deft",
+     "its_critical",
+     "jeweled_gauntlet",
+     "mystic_punch"
+    ]
+   }
   },
   {
    "id": "Skarner",
@@ -2489,7 +4761,23 @@
    "damage_share": 0.2031,
    "damage_taken_share": 0.2853,
    "avg_death_time": 259.9908,
-   "win_rate": 0.4815
+   "win_rate": 0.4815,
+   "build": {
+    "items": [
+     "unending_despair",
+     "spirit_visage",
+     "thornmail",
+     "warmogs",
+     "heartsteel",
+     "mercurys"
+    ],
+    "augments": [
+     "tank_engine",
+     "heavy_hitter",
+     "goliath",
+     "erosion"
+    ]
+   }
   },
   {
    "id": "Akshan",
@@ -2506,7 +4794,23 @@
    "damage_share": 0.192,
    "damage_taken_share": 0.1433,
    "avg_death_time": 280.0453,
-   "win_rate": 0.4665
+   "win_rate": 0.4665,
+   "build": {
+    "items": [
+     "berserkers",
+     "infinity_edge",
+     "lord_dominiks",
+     "botrk",
+     "kraken",
+     "collector"
+    ],
+    "augments": [
+     "dual_wield",
+     "deft",
+     "its_critical",
+     "jeweled_gauntlet"
+    ]
+   }
   },
   {
    "id": "Zoe",
@@ -2523,7 +4827,23 @@
    "damage_share": 0.202,
    "damage_taken_share": 0.1295,
    "avg_death_time": 230.1179,
-   "win_rate": 0.473
+   "win_rate": 0.473,
+   "build": {
+    "items": [
+     "sorcerers",
+     "rabadons",
+     "void_staff",
+     "shadowflame",
+     "stormsurge",
+     "ludens"
+    ],
+    "augments": [
+     "jeweled_gauntlet",
+     "eureka",
+     "magic_missile",
+     "witchful_thinking"
+    ]
+   }
   },
   {
    "id": "Riven",
@@ -2540,7 +4860,23 @@
    "damage_share": 0.1739,
    "damage_taken_share": 0.2007,
    "avg_death_time": 300.4157,
-   "win_rate": 0.4638
+   "win_rate": 0.4638,
+   "build": {
+    "items": [
+     "mercurys",
+     "shojin",
+     "deaths_dance",
+     "sundered_sky",
+     "eclipse",
+     "collector"
+    ],
+    "augments": [
+     "tank_engine",
+     "jeweled_gauntlet",
+     "goliath",
+     "mystic_punch"
+    ]
+   }
   },
   {
    "id": "Kled",
@@ -2557,7 +4893,23 @@
    "damage_share": 0.1994,
    "damage_taken_share": 0.2993,
    "avg_death_time": 269.8698,
-   "win_rate": 0.4843
+   "win_rate": 0.4843,
+   "build": {
+    "items": [
+     "overlords_bloodmail",
+     "heartsteel",
+     "mercurys",
+     "titanic",
+     "deaths_dance",
+     "sundered_sky"
+    ],
+    "augments": [
+     "tank_engine",
+     "heavy_hitter",
+     "goliath",
+     "mystic_punch"
+    ]
+   }
   },
   {
    "id": "Warwick",
@@ -2574,7 +4926,23 @@
    "damage_share": 0.1964,
    "damage_taken_share": 0.2943,
    "avg_death_time": 294.7576,
-   "win_rate": 0.4687
+   "win_rate": 0.4687,
+   "build": {
+    "items": [
+     "spirit_visage",
+     "thornmail",
+     "mercurys",
+     "botrk",
+     "deaths_dance",
+     "sundered_sky"
+    ],
+    "augments": [
+     "tank_engine",
+     "mystic_punch",
+     "goliath",
+     "deft"
+    ]
+   }
   },
   {
    "id": "Vi",
@@ -2591,7 +4959,23 @@
    "damage_share": 0.1916,
    "damage_taken_share": 0.2135,
    "avg_death_time": 323.9504,
-   "win_rate": 0.4562
+   "win_rate": 0.4562,
+   "build": {
+    "items": [
+     "infinity_edge",
+     "lord_dominiks",
+     "deaths_dance",
+     "collector",
+     "mercurys",
+     "eclipse"
+    ],
+    "augments": [
+     "jeweled_gauntlet",
+     "tank_engine",
+     "goliath",
+     "its_critical"
+    ]
+   }
   },
   {
    "id": "Nunu",
@@ -2608,7 +4992,23 @@
    "damage_share": 0.174,
    "damage_taken_share": 0.2325,
    "avg_death_time": 290.799,
-   "win_rate": 0.4548
+   "win_rate": 0.4548,
+   "build": {
+    "items": [
+     "sorcerers",
+     "rabadons",
+     "void_staff",
+     "shadowflame",
+     "stormsurge",
+     "ludens"
+    ],
+    "augments": [
+     "tank_engine",
+     "goliath",
+     "jeweled_gauntlet",
+     "eureka"
+    ]
+   }
   },
   {
    "id": "Evelynn",
@@ -2625,7 +5025,23 @@
    "damage_share": 0.2159,
    "damage_taken_share": 0.1675,
    "avg_death_time": 275.3787,
-   "win_rate": 0.4744
+   "win_rate": 0.4744,
+   "build": {
+    "items": [
+     "sorcerers",
+     "rabadons",
+     "lich_bane",
+     "void_staff",
+     "shadowflame",
+     "stormsurge"
+    ],
+    "augments": [
+     "jeweled_gauntlet",
+     "eureka",
+     "witchful_thinking",
+     "goliath"
+    ]
+   }
   },
   {
    "id": "Leblanc",
@@ -2642,7 +5058,23 @@
    "damage_share": 0.2028,
    "damage_taken_share": 0.1508,
    "avg_death_time": 282.0237,
-   "win_rate": 0.4365
+   "win_rate": 0.4365,
+   "build": {
+    "items": [
+     "sorcerers",
+     "rabadons",
+     "void_staff",
+     "shadowflame",
+     "stormsurge",
+     "ludens"
+    ],
+    "augments": [
+     "jeweled_gauntlet",
+     "eureka",
+     "witchful_thinking",
+     "magic_missile"
+    ]
+   }
   },
   {
    "id": "Anivia",
@@ -2659,7 +5091,23 @@
    "damage_share": 0.1585,
    "damage_taken_share": 0.1728,
    "avg_death_time": 224.5651,
-   "win_rate": 0.4554
+   "win_rate": 0.4554,
+   "build": {
+    "items": [
+     "sorcerers",
+     "rabadons",
+     "rylais",
+     "malignance",
+     "shadowflame",
+     "liandrys"
+    ],
+    "augments": [
+     "magic_missile",
+     "eureka",
+     "jeweled_gauntlet",
+     "infernal_conduit"
+    ]
+   }
   },
   {
    "id": "Neeko",
@@ -2676,7 +5124,23 @@
    "damage_share": 0.1774,
    "damage_taken_share": 0.1349,
    "avg_death_time": 259.0378,
-   "win_rate": 0.4565
+   "win_rate": 0.4565,
+   "build": {
+    "items": [
+     "sorcerers",
+     "rabadons",
+     "void_staff",
+     "zhonyas",
+     "shadowflame",
+     "ludens"
+    ],
+    "augments": [
+     "magic_missile",
+     "eureka",
+     "jeweled_gauntlet",
+     "witchful_thinking"
+    ]
+   }
   },
   {
    "id": "Naafiri",
@@ -2693,7 +5157,23 @@
    "damage_share": 0.2054,
    "damage_taken_share": 0.1796,
    "avg_death_time": 292.4002,
-   "win_rate": 0.4425
+   "win_rate": 0.4425,
+   "build": {
+    "items": [
+     "deaths_dance",
+     "collector",
+     "seryldas",
+     "axiom_arc",
+     "voltaic",
+     "mercurys"
+    ],
+    "augments": [
+     "jeweled_gauntlet",
+     "goliath",
+     "tank_engine",
+     "mystic_punch"
+    ]
+   }
   },
   {
    "id": "Lissandra",
@@ -2710,7 +5190,23 @@
    "damage_share": 0.1865,
    "damage_taken_share": 0.177,
    "avg_death_time": 313.8598,
-   "win_rate": 0.4544
+   "win_rate": 0.4544,
+   "build": {
+    "items": [
+     "sorcerers",
+     "rabadons",
+     "malignance",
+     "void_staff",
+     "zhonyas",
+     "shadowflame"
+    ],
+    "augments": [
+     "eureka",
+     "magic_missile",
+     "jeweled_gauntlet",
+     "witchful_thinking"
+    ]
+   }
   },
   {
    "id": "Elise",
@@ -2727,7 +5223,23 @@
    "damage_share": 0.2007,
    "damage_taken_share": 0.1609,
    "avg_death_time": 268.7854,
-   "win_rate": 0.4714
+   "win_rate": 0.4714,
+   "build": {
+    "items": [
+     "sorcerers",
+     "rabadons",
+     "void_staff",
+     "shadowflame",
+     "stormsurge",
+     "ludens"
+    ],
+    "augments": [
+     "jeweled_gauntlet",
+     "eureka",
+     "witchful_thinking",
+     "magic_missile"
+    ]
+   }
   },
   {
    "id": "Cassiopeia",
@@ -2744,7 +5256,23 @@
    "damage_share": 0.1907,
    "damage_taken_share": 0.1831,
    "avg_death_time": 276.1429,
-   "win_rate": 0.4611
+   "win_rate": 0.4611,
+   "build": {
+    "items": [
+     "sorcerers",
+     "rabadons",
+     "rylais",
+     "riftmaker",
+     "liandrys",
+     "rod_of_ages"
+    ],
+    "augments": [
+     "magic_missile",
+     "infernal_conduit",
+     "jeweled_gauntlet",
+     "eureka"
+    ]
+   }
   },
   {
    "id": "Irelia",
@@ -2761,7 +5289,23 @@
    "damage_share": 0.2097,
    "damage_taken_share": 0.2505,
    "avg_death_time": 324.3148,
-   "win_rate": 0.4662
+   "win_rate": 0.4662,
+   "build": {
+    "items": [
+     "wits_end",
+     "mercurys",
+     "botrk",
+     "deaths_dance",
+     "sundered_sky",
+     "jaksho"
+    ],
+    "augments": [
+     "mystic_punch",
+     "deft",
+     "tank_engine",
+     "goliath"
+    ]
+   }
   },
   {
    "id": "Locke",
@@ -2778,7 +5322,23 @@
    "damage_share": 0.2114,
    "damage_taken_share": 0.1953,
    "avg_death_time": 310.5548,
-   "win_rate": 0.4397
+   "win_rate": 0.4397,
+   "build": {
+    "items": [
+     "sorcerers",
+     "rabadons",
+     "lich_bane",
+     "void_staff",
+     "shadowflame",
+     "stormsurge"
+    ],
+    "augments": [
+     "jeweled_gauntlet",
+     "eureka",
+     "witchful_thinking",
+     "goliath"
+    ]
+   }
   },
   {
    "id": "Zac",
@@ -2795,7 +5355,23 @@
    "damage_share": 0.1699,
    "damage_taken_share": 0.3185,
    "avg_death_time": 280.3746,
-   "win_rate": 0.4538
+   "win_rate": 0.4538,
+   "build": {
+    "items": [
+     "unending_despair",
+     "spirit_visage",
+     "thornmail",
+     "warmogs",
+     "heartsteel",
+     "mercurys"
+    ],
+    "augments": [
+     "tank_engine",
+     "goliath",
+     "heavy_hitter",
+     "jeweled_gauntlet"
+    ]
+   }
   },
   {
    "id": "Olaf",
@@ -2812,7 +5388,23 @@
    "damage_share": 0.204,
    "damage_taken_share": 0.2395,
    "avg_death_time": 314.8776,
-   "win_rate": 0.4625
+   "win_rate": 0.4625,
+   "build": {
+    "items": [
+     "spirit_visage",
+     "hexplate",
+     "mercurys",
+     "botrk",
+     "deaths_dance",
+     "stridebreaker"
+    ],
+    "augments": [
+     "deft",
+     "tank_engine",
+     "mystic_punch",
+     "goliath"
+    ]
+   }
   },
   {
    "id": "Rakan",
@@ -2829,7 +5421,23 @@
    "damage_share": 0.1104,
    "damage_taken_share": 0.2684,
    "avg_death_time": 237.3902,
-   "win_rate": 0.464
+   "win_rate": 0.464,
+   "build": {
+    "items": [
+     "unending_despair",
+     "thornmail",
+     "warmogs",
+     "heartsteel",
+     "mercurys",
+     "kaenic"
+    ],
+    "augments": [
+     "tank_engine",
+     "goliath",
+     "heavy_hitter",
+     "erosion"
+    ]
+   }
   },
   {
    "id": "Akali",
@@ -2846,7 +5454,23 @@
    "damage_share": 0.2033,
    "damage_taken_share": 0.1926,
    "avg_death_time": 303.6306,
-   "win_rate": 0.432
+   "win_rate": 0.432,
+   "build": {
+    "items": [
+     "sorcerers",
+     "rabadons",
+     "void_staff",
+     "gunblade",
+     "zhonyas",
+     "shadowflame"
+    ],
+    "augments": [
+     "jeweled_gauntlet",
+     "witchful_thinking",
+     "eureka",
+     "goliath"
+    ]
+   }
   },
   {
    "id": "Renekton",
@@ -2863,7 +5487,23 @@
    "damage_share": 0.1797,
    "damage_taken_share": 0.2733,
    "avg_death_time": 305.7125,
-   "win_rate": 0.4485
+   "win_rate": 0.4485,
+   "build": {
+    "items": [
+     "black_cleaver",
+     "mercurys",
+     "shojin",
+     "deaths_dance",
+     "sundered_sky",
+     "eclipse"
+    ],
+    "augments": [
+     "tank_engine",
+     "goliath",
+     "heavy_hitter",
+     "mystic_punch"
+    ]
+   }
   },
   {
    "id": "Kennen",
@@ -2880,7 +5520,23 @@
    "damage_share": 0.1885,
    "damage_taken_share": 0.1482,
    "avg_death_time": 299.8788,
-   "win_rate": 0.4494
+   "win_rate": 0.4494,
+   "build": {
+    "items": [
+     "sorcerers",
+     "rabadons",
+     "void_staff",
+     "zhonyas",
+     "shadowflame",
+     "stormsurge"
+    ],
+    "augments": [
+     "jeweled_gauntlet",
+     "eureka",
+     "magic_missile",
+     "witchful_thinking"
+    ]
+   }
   },
   {
    "id": "Camille",
@@ -2897,7 +5553,23 @@
    "damage_share": 0.1956,
    "damage_taken_share": 0.2325,
    "avg_death_time": 302.0521,
-   "win_rate": 0.4622
+   "win_rate": 0.4622,
+   "build": {
+    "items": [
+     "steraks",
+     "ravenous",
+     "trinity",
+     "mercurys",
+     "deaths_dance",
+     "sundered_sky"
+    ],
+    "augments": [
+     "goliath",
+     "tank_engine",
+     "mystic_punch",
+     "jeweled_gauntlet"
+    ]
+   }
   },
   {
    "id": "Braum",
@@ -2914,7 +5586,23 @@
    "damage_share": 0.1178,
    "damage_taken_share": 0.2908,
    "avg_death_time": 246.7373,
-   "win_rate": 0.4573
+   "win_rate": 0.4573,
+   "build": {
+    "items": [
+     "unending_despair",
+     "kaenic",
+     "thornmail",
+     "warmogs",
+     "heartsteel",
+     "mercurys"
+    ],
+    "augments": [
+     "tank_engine",
+     "heavy_hitter",
+     "goliath",
+     "erosion"
+    ]
+   }
   },
   {
    "id": "Rammus",
@@ -2931,7 +5619,23 @@
    "damage_share": 0.139,
    "damage_taken_share": 0.2882,
    "avg_death_time": 295.9343,
-   "win_rate": 0.4494
+   "win_rate": 0.4494,
+   "build": {
+    "items": [
+     "unending_despair",
+     "thornmail",
+     "warmogs",
+     "heartsteel",
+     "hollow_radiance",
+     "jaksho"
+    ],
+    "augments": [
+     "tank_engine",
+     "heavy_hitter",
+     "goliath",
+     "erosion"
+    ]
+   }
   },
   {
    "id": "Bard",
@@ -2948,7 +5652,23 @@
    "damage_share": 0.1567,
    "damage_taken_share": 0.1682,
    "avg_death_time": 219.2125,
-   "win_rate": 0.4623
+   "win_rate": 0.4623,
+   "build": {
+    "items": [
+     "sorcerers",
+     "rabadons",
+     "lich_bane",
+     "nashors",
+     "shadowflame",
+     "ludens"
+    ],
+    "augments": [
+     "dual_wield",
+     "magic_missile",
+     "tank_engine",
+     "deft"
+    ]
+   }
   },
   {
    "id": "KSante",
@@ -2965,7 +5685,23 @@
    "damage_share": 0.1695,
    "damage_taken_share": 0.284,
    "avg_death_time": 278.3922,
-   "win_rate": 0.4213
+   "win_rate": 0.4213,
+   "build": {
+    "items": [
+     "unending_despair",
+     "warmogs",
+     "heartsteel",
+     "mercurys",
+     "iceborn",
+     "jaksho"
+    ],
+    "augments": [
+     "tank_engine",
+     "heavy_hitter",
+     "goliath",
+     "mystic_punch"
+    ]
+   }
   },
   {
    "id": "Yorick",
@@ -2982,7 +5718,23 @@
    "damage_share": 0.166,
    "damage_taken_share": 0.2659,
    "avg_death_time": 234.2709,
-   "win_rate": 0.4523
+   "win_rate": 0.4523,
+   "build": {
+    "items": [
+     "spirit_visage",
+     "thornmail",
+     "heartsteel",
+     "mercurys",
+     "sundered_sky",
+     "iceborn"
+    ],
+    "augments": [
+     "tank_engine",
+     "heavy_hitter",
+     "goliath",
+     "mystic_punch"
+    ]
+   }
   }
  ]
 }

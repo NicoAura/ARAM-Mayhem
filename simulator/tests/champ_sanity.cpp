@@ -136,11 +136,28 @@ int main(int argc, char** argv) {
                   summarize(runTrials(lib, mortal, cap, ksc, 0, 300)).meanTimeAlive + 5,
               "Karthus fights on after dying");
         CHECK(sc.teamSize == 1, "one enemy by default");
+        // Enemies come with their most popular build; a listed build replaces it, and listed
+        // stats replace what the build gives.
+        bool built = true;
+        for (const auto& e : sc.enemies) built &= e.items.size() == 6 && e.augments.size() == 4;
+        CHECK(built, "every enemy has six items and four augments by default");
         Library geared = lib;
-        geared.enemyTeam = {"Malphite:hp=4000:items=warmogs"};
+        geared.enemyTeam = {"Malphite:items=warmogs:augs="};
+        const ChampionKit& malph = *lib.find("Malphite");
+        const Effect& wm = lib.items.at("warmogs");
+        const double g = 17 * (0.7025 + 0.0175 * 17);
+        const double hpPct = wm.effects.count("hp_pct") ? wm.effects.at("hp_pct") : 0.0;
         const Scenario gsc = geared.scenarioFor(*ahri);
-        CHECK(gsc.enemies.size() == 1 && gsc.enemies[0].hp == 4000 + lib.items.at("warmogs").stats.at("hp"),
-              "an enemy's items add to its stats");
+        CHECK(gsc.enemies.size() == 1 &&
+                  std::abs(gsc.enemies[0].hp - (malph.hp + malph.hpG * g + wm.stats.at("hp")) * (1 + hpPct)) < 1e-6,
+              "an enemy's listed items replace its build");
+        geared.enemyTeam = {"Malphite:hp=4000:items=warmogs"};
+        CHECK(geared.scenarioFor(*ahri).enemies[0].hp == 4000, "a listed Health replaces what the build gives");
+        Library young = Library::load(argc > 1 ? argv[1] : "data/mayhem_rules.json", {{"enemy_level", 1}});
+        young.enemyTeam = {"Malphite"};
+        geared.enemyTeam = {"Malphite"};
+        CHECK(young.scenarioFor(*ahri).enemies[0].hp < geared.scenarioFor(*ahri).enemies[0].hp,
+              "lower-level enemies have less Health");
     }
 
     {
@@ -221,6 +238,16 @@ int main(int argc, char** argv) {
         std::sort(gaps.begin(), gaps.end());
         const bool reset = gaps.size() > 4 && gaps.front() < 0.95 * gaps[gaps.size() / 2];
         CHECK(reset, "an attack-reset ability lets the next attack start right away");
+
+        // Your crowd control lands on enemies, and enemies' crowd control on you says what it is.
+        const ChampionKit& leona = *calm.find("Leona");
+        const FightTrace lt = traceFight(calm, leona, cap, calm.scenarioFor(leona), 4);
+        bool stuns = false, named = true;
+        for (const auto& e : lt.events) {
+            stuns |= e.kind == "ecc" && e.text == "stun";
+            if (e.kind == "cc") named &= !e.text.empty();
+        }
+        CHECK(stuns && named, "crowd control is recorded with its kind, on enemies and on you");
     }
 
     bool threw = false;
