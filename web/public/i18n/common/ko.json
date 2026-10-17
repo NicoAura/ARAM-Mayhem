@@ -113,8 +113,6 @@
  "Everything ARAM Mayhem.": "무작위 총력전: 아수라장의 모든 것.",
  "Every Mayhem pick, measured.": "아수라장의 모든 선택을 숫자로.",
  "Win rates for every champion and augment on the current patch, and a fight simulator for every champion.": "현재 패치의 모든 챔피언과 증강 승률, 그리고 모든 챔피언의 전투 시뮬레이터.",
- "days of games this patch": "일치 경기 (이번 패치)",
- "days of games, all time": "일치 경기 (전체)",
  "All {n} →": "전체 {n} →",
  "Best augments": "최고의 증강",
  "All →": "전체 →",
@@ -149,6 +147,7 @@
  "Silver": "실버",
  "Gold": "골드",
  "Prismatic": "프리즘",
- "patches covered": "개 패치 포함",
- "games shared by players": "개의 경기가 플레이어로부터 공유됨"
+ "Share": "공유",
+ "Link copied": "링크를 복사했습니다",
+ "Copy this link": "이 링크를 복사하세요"
 }

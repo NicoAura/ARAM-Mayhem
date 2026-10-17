@@ -113,8 +113,6 @@
  "Everything ARAM Mayhem.": "海克斯大乱斗的一切。",
  "Every Mayhem pick, measured.": "海克斯大乱斗的每个选择，用数据衡量。",
  "Win rates for every champion and augment on the current patch, and a fight simulator for every champion.": "当前版本每位英雄和每个强化符文的胜率，以及每位英雄的战斗模拟器。",
- "days of games this patch": "天的本版本对局",
- "days of games, all time": "天的全部对局",
  "All {n} →": "全部 {n} 位 →",
  "Best augments": "最佳强化符文",
  "All →": "全部 →",
@@ -149,6 +147,7 @@
  "Silver": "白银",
  "Gold": "黄金",
  "Prismatic": "棱彩",
- "patches covered": "个版本",
- "games shared by players": "场玩家分享的对局"
+ "Share": "分享",
+ "Link copied": "链接已复制",
+ "Copy this link": "复制此链接"
 }

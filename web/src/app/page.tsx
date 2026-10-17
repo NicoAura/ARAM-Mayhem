@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { text } from "@/lib/content";
-import { chefsSpecial, statsDate, counts, coverage, kitchenBuilds, livePatch, liveTiers, topAugments } from "@/lib/highlights";
+import { chefsSpecial, statsDate, counts, kitchenBuilds, livePatch, liveTiers, topAugments } from "@/lib/highlights";
 import { whatToBuildData } from "@/lib/what-to-build";
 import { championSplash } from "@/lib/champions";
 import { ChampionJump, Favorites, KitchenPick, TierSnapshot } from "@/components/HomeWidgets";
@@ -11,7 +11,6 @@ import { movers } from "@/lib/champions";
 import { KITCHEN, navPages } from "@/lib/tabs";
 import RecentPlayed from "@/components/RecentPlayed";
 import { LocalDate, ModeName, Name, T } from "@/components/I18n";
-import SharedGamesStat from "@/components/SharedGamesStat";
 
 // eslint-disable-next-line @next/next/no-img-element
 const Icon = ({ src }: { src: string }) => <img className="icon" src={src} alt="" width={24} height={24} loading="lazy" />;
@@ -43,7 +42,6 @@ export default function Home() {
   const builds = special ? [] : kitchenBuilds();
   const wins = winningBuilds();
   const n = counts();
-  const cov = coverage();
   const date = statsDate();
   const moved = movers();
 
@@ -73,27 +71,6 @@ export default function Home() {
           <T>{text("home.lede")}</T>
         </p>
         {tiers.length > 0 && <ChampionJump champs={tiers} />}
-        <div className="stat-row">
-          <div>
-            <b>{cov.patchDays}</b>
-            <span>
-              <T>days of games this patch</T>
-            </span>
-          </div>
-          <div>
-            <b>{cov.allDays}</b>
-            <span>
-              <T>days of games, all time</T>
-            </span>
-          </div>
-          <div>
-            <b>{cov.patches}</b>
-            <span>
-              <T>patches covered</T>
-            </span>
-          </div>
-          <SharedGamesStat />
-        </div>
       </section>
 
       <div className="bento">

@@ -6,6 +6,7 @@ import { type DragEvent, useEffect, useMemo, useRef, useState } from "react";
 import type { BuilderData } from "@/lib/builder";
 import { getParam, setParams } from "@/lib/url-state";
 import Skeleton from "@/components/Skeleton";
+import ShareButton from "@/components/ShareButton";
 import ShareCard from "@/components/ShareCard";
 import type { CardSpec } from "@/lib/share-card";
 import { buzz } from "@/lib/haptics";
@@ -275,6 +276,7 @@ export default function BuildEditor() {
           >
             Clear
           </button>
+          <ShareButton url={() => `/share/builds${location.search}`} title={`${champName(champ)} build`} />
           {shareSpec && <ShareCard spec={shareSpec} />}
           <Link className="inline-link" href={`/champions/${alias(champ)}`}>
             {champName(champ)} page →

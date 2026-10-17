@@ -113,8 +113,6 @@
  "Everything ARAM Mayhem.": "隨機單中：大混戰的一切。",
  "Every Mayhem pick, measured.": "大混戰的每個選擇，用數據衡量。",
  "Win rates for every champion and augment on the current patch, and a fight simulator for every champion.": "目前版本每位英雄與每個強化的勝率，以及每位英雄的戰鬥模擬器。",
- "days of games this patch": "天的本版本對戰",
- "days of games, all time": "天的全部對戰",
  "All {n} →": "全部 {n} 位 →",
  "Best augments": "最佳強化",
  "All →": "全部 →",
@@ -149,6 +147,7 @@
  "Silver": "白銀",
  "Gold": "黃金",
  "Prismatic": "稜彩",
- "patches covered": "個版本",
- "games shared by players": "場玩家分享的對戰"
+ "Share": "分享",
+ "Link copied": "已複製連結",
+ "Copy this link": "複製此連結"
 }

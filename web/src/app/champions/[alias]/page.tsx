@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import FavoriteStar from "@/components/FavoriteStar";
 import CompareToggle from "@/components/CompareToggle";
+import ShareButton from "@/components/ShareButton";
 import ShareCard from "@/components/ShareCard";
 import ChampionRadar from "@/components/ChampionRadar";
 import SplashAccent from "@/components/SplashAccent";
@@ -99,6 +100,7 @@ export default async function ChampionPage({ params }: { params: Promise<{ alias
           <Link className="inline-link" href={`/builds?tab=editor&champ=${c.alias}`}>
             Try a build
           </Link>
+          <ShareButton title={c.name} />
           {c.winRate !== undefined && (
             <ShareCard
               spec={{

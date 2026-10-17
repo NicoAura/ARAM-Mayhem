@@ -113,8 +113,6 @@
  "Everything ARAM Mayhem.": "Όλα για το ARAM: Χαμός.",
  "Every Mayhem pick, measured.": "Κάθε επιλογή στο ARAM: Χαμός, μετρημένη.",
  "Win rates for every champion and augment on the current patch, and a fight simulator for every champion.": "Ποσοστά νικών για κάθε ήρωα και βελτίωση στην τρέχουσα ενημέρωση, και προσομοιωτής μάχης για κάθε ήρωα.",
- "days of games this patch": "ημέρες παιχνιδιών σε αυτή την ενημέρωση",
- "days of games, all time": "ημέρες παιχνιδιών συνολικά",
  "All {n} →": "Όλοι οι {n} →",
  "Best augments": "Καλύτερες βελτιώσεις",
  "All →": "Όλες →",
@@ -149,6 +147,7 @@
  "Silver": "Ασημένια",
  "Gold": "Χρυσή",
  "Prismatic": "Πρισματική",
- "patches covered": "ενημερώσεις που καλύπτονται",
- "games shared by players": "παιχνίδια που μοιράστηκαν παίκτες"
+ "Share": "Κοινοποίηση",
+ "Link copied": "Ο σύνδεσμος αντιγράφηκε",
+ "Copy this link": "Αντιγράψτε αυτόν τον σύνδεσμο"
 }

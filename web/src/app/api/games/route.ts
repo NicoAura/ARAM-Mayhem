@@ -5,7 +5,7 @@ import { cleanGame, sharedCount, sharedTotals, shareGames, unshareGames } from "
 
 // POST /api/games {action: "share" | "remove" | "status", token, platform, games?}, sent by the My Stats
 // helper for players who turned sharing on. The token only proves who is sharing; see lib/shared-games.ts.
-// GET /api/games → {all, patch}: how many shared games the site holds, in all and on the live patch (Home).
+// GET /api/games → {all, patch}: how many shared games the site holds, in all and on the live patch.
 const MAX_BODY = 600_000;
 const MAX_GAMES = 50;
 

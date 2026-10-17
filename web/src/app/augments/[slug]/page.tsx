@@ -5,6 +5,7 @@ import { augmentBySlug, augmentPages } from "@/lib/augments";
 import { livePatch } from "@/lib/highlights";
 import { pageMeta } from "@/lib/meta";
 import { readRepoJson } from "@/lib/repo-data";
+import ShareButton from "@/components/ShareButton";
 import ShareCard from "@/components/ShareCard";
 
 // One page per augment, so each can be found in search (lib/augments.ts).
@@ -74,6 +75,7 @@ export default async function AugmentPage({ params }: { params: Promise<{ slug: 
           </p>
         )}
         <p className="champ-hero-links">
+          <ShareButton title={a.name} />
           <ShareCard
             spec={{
               title: a.name,
