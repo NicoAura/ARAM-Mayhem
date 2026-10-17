@@ -452,6 +452,44 @@ def site_asset(path):
     return res.stdout
 
 
+# Client region -> server id used in public profile addresses
+PLATFORM_BY_REGION = {
+    "NA": "na1", "BR": "br1", "LAN": "la1", "LA1": "la1", "LAS": "la2", "LA2": "la2",
+    "EUW": "euw1", "EUNE": "eun1", "EUN": "eun1", "TR": "tr1", "RU": "ru", "ME": "me1",
+    "KR": "kr", "JP": "jp1", "OCE": "oc1", "OC1": "oc1",
+    "SG": "sg2", "PH": "sg2", "TH": "sg2", "TW": "tw2", "VN": "vn2",
+}
+
+
+def site_profile(action, data=None, lockfile=None):
+    """Publish, remove or check this account's public page on the site.
+
+    The signed-in client's token goes with the request so the site can tell whose page it is; it's
+    sent on stdin so it never shows up in the process list."""
+    lcu = find_client(lockfile)
+    region = str((lcu.get("/riotclient/region-locale") or {}).get("region", "")).upper()
+    platform = PLATFORM_BY_REGION.get(region)
+    if not platform:
+        raise ImportFailed(f"Public pages aren't available for the {region or 'unknown'} region yet.")
+    body = json.dumps({"action": action, "token": sgp_token(lcu), "platform": platform, "data": data})
+    res = subprocess.run(["curl", "-sS", "--max-time", "30", "-X", "POST", "-H", "Content-Type: application/json",
+                          "--data-binary", "@-", "-w", "\n%{http_code}", f"{SITE}/api/profile"],
+                         input=body, capture_output=True, text=True)
+    if res.returncode != 0:
+        raise ImportFailed("Couldn't reach the site. Check your connection and try again.")
+    out, _, status = res.stdout.rpartition("\n")
+    try:
+        reply = json.loads(out) if out.strip() else {}
+    except ValueError:
+        reply = {}
+    if not 200 <= int(status or 0) < 300:
+        raise ImportFailed(reply.get("error") or f"The site answered {status}.")
+    if reply.get("path"):
+        reply["url"] = SITE + reply["path"]
+    return reply
+
+
+
 def serve(out, port, lockfile=None, sgp_host=None, open_browser=True):
     import http.server
     import threading
@@ -532,6 +570,17 @@ def serve(out, port, lockfile=None, sgp_host=None, open_browser=True):
             if not self.local_host() or self.headers.get("X-Mayhem") != "1":
                 return self.send_json({"error": "forbidden"}, 403)
             path, _, query = self.path.partition("?")
+            if path == "/api/profile":
+                try:
+                    req = json.loads(self.rfile.read(min(int(self.headers.get("Content-Length") or 0), 64000)) or b"{}")
+                    action = req.get("action")
+                    if action not in ("publish", "remove", "status"):
+                        return self.send_json({"error": "bad request"}, 400)
+                    return self.send_json(site_profile(action, req.get("data"), lockfile))
+                except ImportFailed as e:
+                    return self.send_json({"error": str(e)}, 502)
+                except Exception:
+                    return self.send_json({"error": "Couldn't reach the League client. Open it, sign in, and try again."}, 502)
             if path != "/api/sync":
                 return self.send_json({"error": "not found"}, 404)
             with lock:

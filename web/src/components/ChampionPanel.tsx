@@ -39,6 +39,18 @@ type Champ = {
 
 export const hasPanel = (alias: string) => alias in IDS;
 
+// Each ability's short preview clip, mirrored in public/assets/clips/ (some champions have none).
+const clipSrc = (id: number, key: string) => {
+  const k = String(id).padStart(4, "0");
+  return `/assets/clips/${k}/ability_${k}_${key.toUpperCase()}1.webm`;
+};
+// Clips play on hover with a mouse; on touch, with reduced motion or Low graphics they wait for a tap.
+const autoplayClips = () =>
+  matchMedia("(hover: hover) and (pointer: fine)").matches &&
+  document.documentElement.dataset.motion !== "reduce" &&
+  !matchMedia("(prefers-reduced-motion: reduce)").matches &&
+  loadSettings().graphics !== "low";
+
 export default function ChampionPanel({
   alias,
   onClose,
@@ -53,7 +65,13 @@ export default function ChampionPanel({
   const [error, setError] = useState("");
   const [playing, setPlaying] = useState(false);
   const [sound, setSound] = useState(true);
-  useEffect(() => setSound(loadSettings().sound), []);
+  const [clip, setClip] = useState<string | null>(null);
+  const [missing, setMissing] = useState<Set<string>>(() => new Set());
+  const [hoverPlay, setHoverPlay] = useState(false);
+  useEffect(() => {
+    setSound(loadSettings().sound);
+    setHoverPlay(autoplayClips());
+  }, []);
 
   useEffect(() => {
     dialog.current?.showModal();
@@ -98,6 +116,21 @@ export default function ChampionPanel({
             <img
               src={asset(skin.uncenteredSplashPath || skin.splashPath)}
               alt=""
+            />
+          )}
+          {clip && !missing.has(clip) && (
+            <video
+              key={clip}
+              className="champ-clip"
+              src={clipSrc(id, clip)}
+              autoPlay
+              loop
+              muted
+              playsInline
+              onError={() => {
+                setMissing((m) => new Set(m).add(clip));
+                setClip(null);
+              }}
             />
           )}
           <button
@@ -161,29 +194,43 @@ export default function ChampionPanel({
             Champion page →
           </Link>
           <ul className="champ-abilities">
-            {abilities.map((a) => (
-              <li key={a.spellKey}>
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src={asset(a.abilityIconPath)}
-                  alt=""
-                  width={40}
-                  height={40}
-                  loading="lazy"
-                />
-                <div>
-                  <b>
-                    <span className="champ-key">
-                      {a.spellKey === "passive"
-                        ? "Passive"
-                        : a.spellKey?.toUpperCase()}
-                    </span>
-                    {a.name}
-                  </b>
-                  <p>{plain(a.description)}</p>
-                </div>
-              </li>
-            ))}
+            {abilities.map((a) => {
+              const key = a.spellKey ?? "";
+              const hasClip = key !== "passive" && !missing.has(key);
+              const open = clip === key && hasClip;
+              return (
+                <li
+                  key={a.spellKey}
+                  data-clip={hasClip || undefined}
+                  onPointerEnter={() => hoverPlay && hasClip && setClip(key)}
+                  onPointerLeave={() => hoverPlay && setClip((c) => (c === key ? null : c))}
+                  data-playing={open || undefined}
+                >
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={asset(a.abilityIconPath)} alt="" width={40} height={40} loading="lazy" />
+                  <div>
+                    <b>
+                      <span className="champ-key">{key === "passive" ? "Passive" : key.toUpperCase()}</span>
+                      {a.name}
+                      {hasClip && (
+                        <button
+                          type="button"
+                          className="champ-clip-btn"
+                          aria-expanded={open}
+                          aria-label={open ? `Hide ${a.name} clip` : `Play ${a.name} clip`}
+                          onClick={() => setClip(open ? null : key)}
+                        >
+                          <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor" aria-hidden="true">
+                            {open ? <path d="M7 5h4v14H7zM13 5h4v14h-4z" /> : <path d="M8 5v14l11-7z" />}
+                          </svg>
+                        </button>
+                      )}
+                    </b>
+                    <p>{plain(a.description)}</p>
+                  </div>
+                </li>
+              );
+            })}
           </ul>
         </div>
       </div>

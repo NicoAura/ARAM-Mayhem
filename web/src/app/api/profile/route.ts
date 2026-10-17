@@ -1,0 +1,36 @@
+import { NextRequest } from "next/server";
+import { cleanProfile, isPlatform, profileByPuuid, profilePath, removeProfile, saveProfile, tokenOwner } from "@/lib/profiles";
+
+// POST /api/profile {action: "publish" | "remove" | "status", token, platform, data?}, sent by the My Stats
+// helper on the player's computer. The token decides whose page it is; see lib/profiles.ts.
+const MAX_BODY = 32_000;
+
+const json = (obj: unknown, status = 200) => Response.json(obj, { status, headers: { "Cache-Control": "no-store" } });
+
+export async function POST(req: NextRequest) {
+  const text = await req.text();
+  if (text.length > MAX_BODY) return json({ error: "Too large" }, 413);
+  let body: Record<string, unknown>;
+  try {
+    body = JSON.parse(text);
+  } catch {
+    return json({ error: "Bad request" }, 400);
+  }
+  const { action, token, platform } = body ?? {};
+  if (typeof token !== "string" || !isPlatform(platform)) return json({ error: "Bad request" }, 400);
+  const owner = await tokenOwner(token, platform);
+  if (!owner) return json({ error: "Couldn't confirm your account. Make sure the Riot Client is open and signed in." }, 401);
+
+  if (action === "remove") {
+    await removeProfile(owner.puuid);
+    return json({ published: false });
+  }
+  if (action === "publish") {
+    const data = cleanProfile(body.data);
+    if (!data) return json({ error: "No games to publish" }, 400);
+    await saveProfile(owner, platform, data);
+    return json({ published: true, path: profilePath(platform, owner.name, owner.tag) });
+  }
+  const p = await profileByPuuid(owner.puuid);
+  return json(p ? { published: true, path: profilePath(p.platform, p.name, p.tag), updated: p.updated } : { published: false });
+}

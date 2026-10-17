@@ -5,6 +5,7 @@ import { useEffect, useMemo, useState } from "react";
 import augmentNames from "@/data/augment-names.json";
 import type { CompareChampion } from "@/lib/compare";
 import { getParam, setParams } from "@/lib/url-state";
+import Skeleton from "@/components/Skeleton";
 
 // Two champions side by side (/compare?a=Jinx&b=Ezreal). Data comes from /data/compare.json.
 
@@ -95,7 +96,7 @@ export default function ChampionCompare() {
   };
 
   const [ca, cb] = useMemo(() => [data?.champions.find((c) => c.id === a), data?.champions.find((c) => c.id === b)], [data, a, b]);
-  if (!data) return <p className="table-note">{failed ? "Compare didn't load. Reload the page to try again." : "Loading champions…"}</p>;
+  if (!data) return failed ? <p className="table-note">Compare didn&apos;t load. Reload the page to try again.</p> : <Skeleton kind="cards" rows={2} label="Loading champions…" />;
   if (!ca || !cb) return null;
 
   const better = (row: (typeof ROWS)[number], mine: CompareChampion, theirs: CompareChampion) => {

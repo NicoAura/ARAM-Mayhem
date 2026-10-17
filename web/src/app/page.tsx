@@ -3,6 +3,7 @@ import { text } from "@/lib/content";
 import { statsDate, counts, kitchenBuilds, livePatch, liveTiers, topAugments, topDps } from "@/lib/highlights";
 import { ChampionJump, Favorites, KitchenPick, TierSnapshot } from "@/components/HomeWidgets";
 import { BETA } from "@/lib/beta";
+import HeroParticles from "@/components/HeroParticles";
 import { augmentHref } from "@/lib/augments";
 import { movers } from "@/lib/champions";
 import { KITCHEN, navPages } from "@/lib/tabs";
@@ -25,7 +26,8 @@ export default function Home() {
 
   return (
     <>
-      <section className="hero">
+      <section className="hero has-particles">
+        <HeroParticles />
         <p className="eyebrow">
           ARAM Mayhem{patch ? ` · Patch ${patch}` : ""}{date ? ` · Stats from ${date.toLocaleDateString("en-US", { month: "short", day: "numeric", timeZone: "UTC" })}` : ""}
         </p>

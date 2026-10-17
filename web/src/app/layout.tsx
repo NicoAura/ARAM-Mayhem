@@ -4,6 +4,12 @@ import Link from "next/link";
 import FeedbackBox from "@/components/FeedbackBox";
 import PageTransitions from "@/components/PageTransitions";
 import TiltEffects from "@/components/TiltEffects";
+import SwipeGestures from "@/components/SwipeGestures";
+import CompareTray from "@/components/CompareTray";
+import HoverPreview from "@/components/HoverPreview";
+import CountUp from "@/components/CountUp";
+import KeyboardShortcuts from "@/components/KeyboardShortcuts";
+import HeaderScroll from "@/components/HeaderScroll";
 import AccountButton from "@/components/AccountButton";
 import BrandMark from "@/components/BrandMark";
 import MobileTabBar from "@/components/MobileTabBar";
@@ -125,6 +131,12 @@ export default function RootLayout({
         </footer>
         <PageTransitions />
         <TiltEffects />
+        <SwipeGestures />
+        <CompareTray />
+        <HoverPreview />
+        <CountUp />
+        <KeyboardShortcuts />
+        <HeaderScroll />
         <MobileTabBar tabs={navPages().map(({ href, label }) => ({ href, label }))} />
       </body>
     </html>

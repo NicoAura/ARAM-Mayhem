@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { augmentBySlug, augmentPages } from "@/lib/augments";
 import { livePatch } from "@/lib/highlights";
 import { pageMeta } from "@/lib/meta";
+import ShareCard from "@/components/ShareCard";
 
 // One page per augment, so each can be found in search (lib/augments.ts).
 
@@ -59,6 +60,22 @@ export default async function AugmentPage({ params }: { params: Promise<{ slug: 
             <span>pick rate{a.pickRank ? `, #${a.pickRank} of ${a.of}` : ""}</span>
           </div>
         </div>
+        <p className="champ-hero-links">
+          <ShareCard
+            spec={{
+              title: a.name,
+              subtitle: `${RARITY[a.tier] ?? a.tier} augment · Patch ${patch ?? ""}`,
+              icon: `/icons/augments/${a.id}.webp`,
+              stats: [
+                { label: "Win rate", value: pct(a.winRate), tone: a.winRate >= 0.52 ? "good" : a.winRate <= 0.48 ? "bad" : undefined },
+                { label: "Pick rate", value: pct(a.pickRate) },
+                ...(a.winRank ? [{ label: "Win rank", value: `#${a.winRank} of ${a.of}` }] : []),
+              ],
+              row: a.best.length ? { label: "Best on", icons: a.best.slice(0, 6).map((b) => `/icons/champions/${b.id}.webp`) } : undefined,
+              url: `https://deeparam.com/augments/${a.slug}`,
+            }}
+          />
+        </p>
       </section>
       <div className="bento">
         {a.best.length > 0 && (
