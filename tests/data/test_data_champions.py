@@ -294,3 +294,40 @@ def test_regions():
     assert set(r["champions"]) == set(tags)
     for alias, regions in r["champions"].items():
         assert regions and set(regions) <= set(keys), alias
+
+
+MOD_STATS = {"damage_dealt", "damage_taken", "healing", "shielding", "tenacity", "ability_haste", "attack_speed",
+             "energy_regen"}
+
+
+def test_mayhem_modifiers():
+    full = load_json("data/wiki/mayhem_modifiers.json")
+    shipped = load_js_data("champions/modifiers.js", "CHAMPS_MODIFIERS")
+    tags = load_json("champions/tags.json")["champions"]
+    assert len(full["champions"]) > 100 and set(full["champions"]) <= set(tags)
+    assert shipped == {a: c["mayhem"] for a, c in full["champions"].items() if c["mayhem"]}
+    for alias, c in full["champions"].items():
+        assert c["source"] in full["pages"].values(), alias
+        for side in ("aram", "mayhem"):
+            assert set(c[side]) <= MOD_STATS, alias
+            assert all(isinstance(v, (int, float)) and abs(v) <= 100 for v in c[side].values()), alias
+
+
+def test_official_patch_notes():
+    notes = load_json("data/official/patch_notes.json")["patches"]
+    patches = [p["patch"] for p in notes]
+    assert len(patches) == len(set(patches)) >= 20
+    for p in notes:
+        assert p["url"].startswith("https://www.leagueoflegends.com/"), p["patch"]
+        for c in p["champions"] + p["augments"]:
+            assert c["name"] and all(isinstance(x, str) and x for x in c["changes"]), (p["patch"], c["name"])
+
+def test_official_profile():
+    o = load_json("champions/official.json")
+    tags = load_json("champions/tags.json")["champions"]
+    assert set(o["champions"]) == set(tags) and len(o["difficulty"]) == 3
+    for alias, c in o["champions"].items():
+        assert c["roles"] and set(c["roles"]) <= {"Assassin", "Fighter", "Mage", "Marksman", "Support", "Tank"}, alias
+        assert 1 <= c["difficulty"] <= len(o["difficulty"]), alias
+    profile = load_js_data("champions/profile.js", "CHAMPS_PROFILE")
+    assert set(profile) == set(tags) and all(p["difficulty"] in o["difficulty"] for p in profile.values())

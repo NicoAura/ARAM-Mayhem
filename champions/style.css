@@ -249,3 +249,4 @@ tbody tr:hover, .build-row:hover, .aug-row:hover, .ability:hover { background: v
 .skin img { display: block; width: 100%; aspect-ratio: 1; object-fit: cover; }
 .skin figcaption { padding: 0.4rem 0.5rem; font-size: 0.8rem; line-height: 1.25; }
 table.stats td:first-child { white-space: nowrap; }
+.chip.mod-up { color: var(--good); border-color: var(--good); } .chip.mod-down { color: var(--bad); border-color: var(--bad); }

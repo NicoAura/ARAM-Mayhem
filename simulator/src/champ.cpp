@@ -339,8 +339,9 @@ Library Library::load(const std::string& rulesPath, const Settings& settings, co
     lib.rules.mayhemHpRanged = ruleValue(r, "mayhem_health_ranged", 400);
     lib.rules.mayhemResistMelee = ruleValue(r, "mayhem_resists_melee", 15);
     lib.rules.mayhemResistRanged = ruleValue(r, "mayhem_resists_ranged", 0);
-    lib.rules.longRangeNear = ruleValue(r, "long_range_damage_1000", 0.85);
-    lib.rules.longRangeFar = ruleValue(r, "long_range_damage_2000", 0.70);
+    lib.rules.longRangeStart = ruleValue(r, "long_range_start", 1000);
+    lib.rules.longRangeNear = ruleValue(r, "long_range_damage_near", 0.85);
+    lib.rules.longRangeFar = ruleValue(r, "long_range_damage_far", 0.70);
     lib.rules.comboTenacity = ruleValue(r, "combo_breaker_tenacity", 0.2);
     lib.rules.comboDuration = ruleValue(r, "combo_breaker_duration", 3.25);
     lib.rules.fireAs = ruleValue(r, "on_fire_attack_speed", 0.2);

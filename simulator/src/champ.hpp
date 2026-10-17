@@ -141,17 +141,17 @@ struct Rules {
         return top <= 0 ? 0.0 : 20.0 + (top - 20.0) * (std::clamp(level, 1, 18) - 1) / 17.0;
     }
     double mayhemResist(bool ranged) const { return ranged ? mayhemResistRanged : mayhemResistMelee; }
-    // ARAM: damage from enemy champions further than 1000 units away is cut to longRangeNear, falling to
-    // longRangeFar at 2000 units (not damage over time or ultimates).
-    double longRangeNear = 0.85, longRangeFar = 0.70;
+    // ARAM: damage from enemy champions further than longRangeStart units away is cut to longRangeNear,
+    // falling to longRangeFar at twice that distance (not damage over time or ultimates).
+    double longRangeStart = 1000, longRangeNear = 0.85, longRangeFar = 0.70;
     // Combo Breaker (Mayhem): each separate immobilize grants comboTenacity more tenacity (stacking) for
     // comboDuration seconds, refreshed by the next one.
     double comboTenacity = 0.2, comboDuration = 3.25;
     // On Fire! (an optional fight setting): bonus attack and move speed, less healing, more damage taken.
     double fireAs = 0.2, fireMs = 0.2, fireHeal = 0.25, fireTakenMelee = 1.25, fireTakenRanged = 1.35;
     double longRange(double dist) const {
-        if (dist <= 1000) return 1.0;
-        return longRangeNear + (longRangeFar - longRangeNear) * std::min(1.0, (dist - 1000) / 1000.0);
+        if (dist <= longRangeStart) return 1.0;
+        return longRangeNear + (longRangeFar - longRangeNear) * std::min(1.0, (dist - longRangeStart) / longRangeStart);
     }
     double extraHitWeight = 0.5;
     double castMin = 0.0, castMax = 1.5, minCooldown = 0.75, dotDuration = 3.0, spellbladeWindow = 10.0;

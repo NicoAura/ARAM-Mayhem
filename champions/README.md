@@ -49,3 +49,19 @@ Spatula). The list comes from `guide/augment_rules.json`, so run `guide/build_da
 League of Legends Universe site's champion index, using the aliases in `tags.json`. Universe gives each champion one
 home region; champions without one are under `unaffiliated` ("Runeterra"). The Lab and the Team Builder's region
 filter read it.
+
+## Mayhem balance changes
+
+`build_modifiers.py` reads each champion's mode-wide adjustments (damage dealt and taken, healing, shielding,
+tenacity, ability haste, attack speed, energy regen) from the official League wiki's ARAM and ARAM: Mayhem pages.
+Riot's servers apply these, so no client file has them. The full table, with the page each value came from and the
+date it was read, is `data/wiki/mayhem_modifiers.json` (kept out of the published folder so the source never ships);
+`mismatches` lists champions whose ARAM page value differs from the Mayhem page's "from" value. The page's "Mayhem
+changes" card reads the Mayhem values from `modifiers.js`. Rerun after each patch's wiki update.
+
+## Official roles, difficulty and region
+
+`build_official.py` reads each champion's official roles and difficulty (Low, Medium, High) from Riot's champion
+pages into `official.json` (`difficulty` is 1 to 3), for color-coded tags. It also writes `profile.js` (region from
+`regions.json`, roles and difficulty), which the champion page shows under the champion's title. Run
+`build_regions.py` first. Riot's ability preview videos are on an outside host, so they aren't used.

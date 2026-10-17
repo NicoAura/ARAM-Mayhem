@@ -215,3 +215,18 @@ td.delta-down::before { content: "▼ "; font-size: .7em; }
 #live-card .two-col { margin-top: 28px; }
 #live-card h4 { margin: 0 0 2px; font-size: 14px; }
 #live-card .foot { margin: 0 0 8px; }
+
+/* Connect account */
+.link-form { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0 4px; }
+.link-form input { width: 14ch; min-width: 0; padding: 8px 10px; border: 1px solid var(--line); border-radius: 10px;
+  background: var(--surface); color: var(--fg); font: inherit; font-family: var(--mono, monospace); letter-spacing: 0.08em; text-transform: uppercase; }
+
+/* Banner: the player's chosen splash art behind the header */
+.head.has-banner {
+  min-height: 220px; padding: 24px; border-radius: var(--r);
+  background: linear-gradient(to top, rgba(8, 10, 14, .85), rgba(8, 10, 14, .15) 70%), var(--banner) center 20% / cover no-repeat;
+}
+.head.has-banner h1 { color: #fff; }
+.head.has-banner .label, .head.has-banner .titles .sub { color: rgba(255, 255, 255, .8); }
+.banner-pick { display: flex; flex-wrap: wrap; align-items: end; gap: 12px; }
+.banner-pick .foot { color: var(--muted); font-size: 12.5px; }

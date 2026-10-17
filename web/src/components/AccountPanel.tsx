@@ -22,8 +22,11 @@ type Account = {
   passkeys: { id: string; label: string; created: string }[];
   riot: { name: string; platform: string | null; page: string | null } | null;
   passkeySession: boolean;
+<<<<<<< HEAD
   /** Sign in with Riot is switched on (lib/rso.ts). */
   rso: boolean;
+=======
+>>>>>>> origin/main
 };
 
 type Msg = { kind: "ok" | "error"; text: string } | null;
@@ -49,6 +52,7 @@ function Note({ msg }: { msg: Msg }) {
 
 export default function AccountPanel() {
   const [account, setAccount] = useState<Account | null | undefined>(undefined);
+<<<<<<< HEAD
   const [rso, setRso] = useState(false);
   // Coming back from Sign in with Riot: /account?riot=connected or ?riot-error=<what went wrong>.
   const [riotMsg, setRiotMsg] = useState<Msg>(null);
@@ -56,11 +60,17 @@ export default function AccountPanel() {
   const refresh = useCallback(async () => {
     const a = await fetch("/api/account", { cache: "no-store" }).then((r) => r.json()).catch(() => null);
     setRso(Boolean(a?.rso));
+=======
+
+  const refresh = useCallback(async () => {
+    const a = await fetch("/api/account", { cache: "no-store" }).then((r) => r.json()).catch(() => null);
+>>>>>>> origin/main
     setAccount(a?.signedIn ? a : null);
   }, []);
 
   useEffect(() => {
     void refresh();
+<<<<<<< HEAD
     const q = new URLSearchParams(location.search);
     const error = q.get("riot-error");
     if (error || q.get("riot") === "connected") {
@@ -68,6 +78,8 @@ export default function AccountPanel() {
       history.replaceState(null, "", location.pathname);
       if (!error) void syncAccount().then(() => window.dispatchEvent(new Event(ACCOUNT_EVENT)));
     }
+=======
+>>>>>>> origin/main
   }, [refresh]);
 
   const signedIn = async () => {
@@ -77,6 +89,7 @@ export default function AccountPanel() {
   };
 
   if (account === undefined) return <p className="acct-loading">Loading your account…</p>;
+<<<<<<< HEAD
   return (
     <>
       <Note msg={riotMsg} />
@@ -86,6 +99,13 @@ export default function AccountPanel() {
 }
 
 function SignIn({ onDone, rso }: { onDone: () => Promise<void>; rso: boolean }) {
+=======
+  if (!account) return <SignIn onDone={signedIn} />;
+  return <Manage account={account} refresh={refresh} />;
+}
+
+function SignIn({ onDone }: { onDone: () => Promise<void> }) {
+>>>>>>> origin/main
   const [mode, setMode] = useState<"signin" | "signup">("signin");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -159,6 +179,7 @@ function SignIn({ onDone, rso }: { onDone: () => Promise<void>; rso: boolean }) 
           {busy ? "One moment…" : signup ? "Create account" : "Sign in"}
         </button>
       </form>
+<<<<<<< HEAD
       {(passkeys || rso) && <p className="acct-or">or</p>}
       {passkeys && (
         <button type="button" className="btn ghost acct-passkey" onClick={passkey} disabled={busy}>
@@ -169,6 +190,15 @@ function SignIn({ onDone, rso }: { onDone: () => Promise<void>; rso: boolean }) 
         <a className="btn ghost acct-passkey" href="/api/account/rso/start?mode=signin">
           Sign in with Riot
         </a>
+=======
+      {passkeys && (
+        <>
+          <p className="acct-or">or</p>
+          <button type="button" className="btn ghost acct-passkey" onClick={passkey} disabled={busy}>
+            Sign in with a passkey
+          </button>
+        </>
+>>>>>>> origin/main
       )}
       <Note msg={msg} />
       <p className="acct-hint">
@@ -191,7 +221,11 @@ function Manage({ account, refresh }: { account: Account; refresh: () => Promise
     <div className="acct-grid">
       <section className="card acct-card">
         <h2>Signed in</h2>
+<<<<<<< HEAD
         <p className="acct-who">{account.email ?? account.riot?.name ?? "Your account"}</p>
+=======
+        <p className="acct-who">{account.email ?? "Your account"}</p>
+>>>>>>> origin/main
         <p className="acct-hint">
           Your {account.data.favorites.length ? `${account.data.favorites.length} starred champion${account.data.favorites.length === 1 ? "" : "s"}` : "starred champions"} and
           settings follow you to every browser you sign in on.
@@ -280,6 +314,7 @@ function RiotCard({ account, refresh }: { account: Account; refresh: () => Promi
           <button type="button" className="btn" onClick={getCode}>
             Connect a Riot account
           </button>
+<<<<<<< HEAD
           {account.rso ? (
             <a className="btn ghost" href="/api/account/rso/start?mode=connect">
               Connect with Riot sign-in
@@ -287,6 +322,9 @@ function RiotCard({ account, refresh }: { account: Account; refresh: () => Promi
           ) : (
             <p className="acct-hint">Coming soon: connect straight from this page with your Riot sign-in.</p>
           )}
+=======
+          <p className="acct-hint">Coming soon: connect straight from this page with your Riot sign-in.</p>
+>>>>>>> origin/main
         </>
       )}
       <Note msg={msg} />

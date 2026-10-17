@@ -355,3 +355,30 @@ def test_site_paths_point_at_mirror(build_data, build_history):
         out = mod.site_paths(f'"{url}"')
         assert out == '"/assets/cd/latest/game/assets/ux/kiwi/icon.png"'
         assert "communitydragon" not in out
+
+
+def test_mode_mechanics():
+    r = load_json("guide/mode_rules.json")
+    assert r["startLevel"] == 3
+    times = list(r["respawn"]["byLevel"].values())
+    assert list(r["respawn"]["byLevel"])[0] == "3" and times == sorted(times) and len(times) == 16
+    assert 0 < r["longRange"]["reductionMin"] < r["longRange"]["reductionMax"] < 1 and r["longRange"]["range"] > 0
+    assert r["critConversion"]["adPerPercent"] > 0 and r["critConversion"]["apPerPercent"] > 0
+    assert 0 < r["structures"]["bonusMax"] < 1 and r["structures"]["from"] < r["structures"]["to"]
+    assert 0 < r["minions"]["aoeMultiplier"] <= 1 and r["minions"]["blackout"]["range"] > 0
+    assert 0 < r["relics"]["pickup"] < r["relics"]["beam"] < 1
+    assert {f["map"] for f in r["fastTravel"]} >= {"Howling Abyss", "Koeshin's Crossing", "Butcher's Bridge"}
+
+
+
+def test_official_track_and_story(guide):
+    t = guide["track"]
+    if t.get("totalXp"):
+        assert sum(r["xp"] for r in t["levels"]) == t["totalXp"] and all(o["xp"] > 0 for o in t["objectives"])
+        assert "A title" not in [r["name"] for r in t["levels"]]
+    assert guide["story"] and all(e["date"] and e["text"] for e in guide["story"])
+
+def test_game_constants():
+    c = load_json("guide/game_constants.json")
+    assert c["mayhemQueue"] in c["mayhemQueues"] and {m["id"] for m in c["maps"]} >= {12}
+    assert all(q["id"] and q["name"] for q in c["queues"])

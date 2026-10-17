@@ -18,7 +18,9 @@ from strings import key_hash  # noqa: E402
 
 BASE = "https://raw.communitydragon.org"
 TIERS = ["Silver", "Gold", "Prismatic"]
-MAYHEM_QUEUE = 2400
+# the public Mayhem queue id from Riot's official constants (build_constants.py), 2400 until that file exists
+_CONSTS = os.path.join(HERE, "game_constants.json")
+MAYHEM_QUEUE = (json.load(open(_CONSTS)).get("mayhemQueue") if os.path.exists(_CONSTS) else None) or 2400
 CHALLENGE_TIERS = ["IRON", "BRONZE", "SILVER", "GOLD", "PLATINUM", "DIAMOND", "MASTER", "GRANDMASTER", "CHALLENGER"]
 # Map skins: game-mode-mutators names them, the minimap file is per skin
 MAP_SKINS = [
@@ -209,6 +211,8 @@ def main():
         "onFire": {"text": tip("Kiwi_OnFireBuff"), "values": dv("Kiwi_OnFireBuff")},
     }
 
+    rules["mechanics"] = mechanics(m12, modes, spells, dv)
+
     # ---- Summoner spells allowed in Mayhem, and augments that add one
     summoner_spells = get(f"{gd}/v1/summoner-spells.json")
     allowed = [{"name": x["name"], "cooldown": x["cooldown"], "text": x["description"], "icon": asset(x["iconPath"])}
@@ -341,7 +345,7 @@ def main():
 
     # ---- Mayhem progression track. The event hub has each track's dates and level count; the client's reward list
     # holds every track's rewards in order, one per level, so the current track is the last block of Mayhem rewards.
-    track = build_track(gd, asset, augments, s)
+    track = official_track(build_track(gd, asset, augments, s))
     unlocks = {r["augmentId"]: r["level"] for r in (track["levels"] if track else []) if r.get("augmentId")}
     augment_rules["unlocks"] = {str(k): v for k, v in sorted(unlocks.items())}
 
@@ -371,11 +375,12 @@ def main():
         "augmentRules": {k: v for k, v in augment_rules.items() if k != "tiers"},
         "champSelect": champ_select,
         "track": track,
+        "story": STORY,
     }
     # mode-wide numbers the simulator and site pages use
     mode_rules = {"patch": version, "attackSpeedCap": rules["attackSpeedCap"], "aramAttackSpeedCap": rules["aramAttackSpeedCap"],
                   "critOverflow": rules["critOverflow"], "runes": rules["runes"], "aura": rules["aura"],
-                  "keystoneAugments": {str(a["id"]): a["runes"] for a in keystones}}
+                  "keystoneAugments": {str(a["id"]): a["runes"] for a in keystones}, **rules["mechanics"]}
     with open(os.path.join(HERE, "mode_rules.json"), "w") as f:
         json.dump(mode_rules, f, indent=1, ensure_ascii=False)
         f.write("\n")
@@ -388,6 +393,111 @@ def main():
         f.write("window.GUIDE_DATA = " + site_paths(json.dumps(out, indent=1, ensure_ascii=False)) + ";\n")
     print(f"{version}: {len(quests)} quests, {len(challenges)} challenges "
           f"({sum(c['mayhem'] for c in challenges)} count Mayhem), {len(items)} items, pool {tier_counts}")
+
+
+# Mode mechanics the client files don't hold. Read from the official League wiki's ARAM, ARAM: Mayhem, Health Relic and
+# map pages on 2026-10-17 (Nico allowed the official wiki that day). Everything else in mechanics() is read from map12.bin.
+WIKI_MECHANICS = {
+    "startLevel": 3,
+    "longRangeReductionMax": 0.30,  # 85% -> 70% damage taken, by distance past the range
+    "longRangeExcludes": ["damage over time", "ultimate abilities"],
+    "critOverflow": {"adPerPercent": 0.45, "apPerPercent": 0.75},  # per 1% Critical Strike Chance over 100%
+    "relicPickup": 0.08, "relicFirstOuter": 105, "relicFirstInner": 150, "relicRespawn": 90,
+    "fastTravel": [
+        {"map": "Howling Abyss", "name": "Frost Gates",
+         "text": "Gates behind each Nexus send you from base to just in front of your outer turret, or your inhibitor turret once the outer turret falls. They only go one way, out of base."},
+        {"map": "Koeshin's Crossing", "name": "Portals",
+         "text": "One pair sends you out of base, one way only. A second pair by the side wall goes both ways. Entering takes a short channel that damage interrupts."},
+        {"map": "Butcher's Bridge", "name": "Cannon Launchers",
+         "text": "Launchers next to each base fire you out into the lane."},
+        {"map": "Bridge of Progress", "name": "Hex gates and Acceleration Pads",
+         "text": "Hex gates (manholes on the Zaun side) send you out of base. Acceleration Pads give 25% bonus Move Speed for 1 second."},
+    ],
+}
+
+
+# How the mode has changed, in our own words from Riot's /dev posts and dev updates (read 2026-10-17)
+STORY = [
+    {"date": "2025-10", "text": "Mayhem arrives as its own queue next to regular ARAM, with Arena augments plus over 40 new ones. Augments with an always-on effect are left out so ten players stay readable."},
+    {"date": "2026-01", "text": "The mode's run is extended, and patch 26.3 adds Augment Sets and the progression track."},
+    {"date": "2026-03", "text": "Mayhem stays with no planned end date."},
+    {"date": "2026-06", "text": "Patch 26.12 removes Augment Sets, since builds and games felt too alike. Popular set effects come back as single augments, and Ability Augments arrive, each one powering up a single ability."},
+    {"date": "2026-07", "text": "Mayhem Classic-ish runs for a limited time in its own queue: only the 60 original champions in their current form, a Classic-style map, Classic items and Classic-themed augments."},
+    {"date": "Next", "text": "A music-themed set with new augments, a musical act on stage at spawn, and missions with rewards of their own."},
+]
+
+
+def mechanics(m12, modes, spells, dv):
+    """Mode-wide mechanics for the Info page and the Simulator: map12.bin numbers, with WIKI_MECHANICS for the rest."""
+    W = WIKI_MECHANICS
+    script = {v["mName"]: {k: c.get("mValue") for k, c in v.get("mConstants", {}).items()}
+              for v in m12.values() if isinstance(v, dict) and v.get("__type") == "ScriptDataObject"}
+    pace, trap = script.get("ARAMGamePacingScriptData", {}), script.get("ARAMMinionTrapDetectionScriptData", {})
+    death = m12.get(modes.get("KIWI", {}).get("mDeathTimes"), {})
+    relic_spell = (spells.get("HowlingAbyssRelicAura_AOE", {}).get("mSpell") or {})
+    relic = dv("HowlingAbyssRelicAura_AOE")
+    kiwi_relic = {d["name"]: d["values"][0] for d in
+                  ((relic_spell.get("DataValuesModeOverride") or {}).get("Kiwi") or {}).get("SpellDataValues", [])}
+    gate = dv("Bloom_Hexgate_SpeedBuff")
+    per_level = death.get("mTimeDeadPerLevel") or []
+    start = W["startLevel"]
+    return {
+        "startLevel": start,
+        "respawn": {
+            "byLevel": {str(lvl): per_level[lvl - 1] for lvl in range(start, len(per_level) + 1)},
+            # past scaleFrom seconds, timers grow scalePerStep every scaleStep seconds, up to scaleCap times
+            "scaleFrom": death.get("mScalingStartTime"), "scaleStep": death.get("mScalingIncrementTime"),
+            "scalePerStep": round(death.get("mScalingPercentIncrease") or 0, 4), "scaleCap": round(death.get("mScalingPercentCap") or 0, 4),
+        } if per_level else None,
+        "longRange": {"range": pace.get("PokeDamageReductionRange"), "reductionMin": round(pace.get("PokeDamageReduction") or 0, 4),
+                      "reductionMax": W["longRangeReductionMax"], "excludes": W["longRangeExcludes"]}
+        if pace.get("PokeDamageReductionRange") else None,
+        "critConversion": W["critOverflow"],
+        "structures": {"bonusMax": round((pace.get("TowerDamageLateMultiplier") or 1) - 1, 4),
+                       "from": pace.get("TowerDamageMultiplierMinTime"), "to": pace.get("TowerDamageMultiplierMaxTime")}
+        if pace.get("TowerDamageLateMultiplier") else None,
+        "minions": {"aoeMultiplier": round(pace.get("MinionAoEDamageMultiplierLate") or 0, 4) or None,
+                    "blackout": {"units": ["siege", "super"], "range": trap.get("DetectionRange"),
+                                 "revealSeconds": trap.get("TrapSightDuration")} if trap else None},
+        "relics": {"pickup": W["relicPickup"], "beam": round(kiwi_relic.get("MissingHealthRestoreMult", relic.get("MissingHealthRestoreMult", 0)), 4),
+                   "aramBeam": round(relic.get("MissingHealthRestoreMult", 0), 4),
+                   "radius": relic.get("HealingRadius"), "delay": relic.get("AoEDelay"),
+                   "firstOuter": W["relicFirstOuter"], "firstInner": W["relicFirstInner"], "respawn": W["relicRespawn"]}
+        if relic else None,
+        "fastTravel": W["fastTravel"],
+        "portalSpeed": {"bonus": round(gate["BonusMS"], 4), "seconds": gate.get("Duration")} if gate.get("BonusMS") else None,
+    }
+
+
+# What Riot's support article on ARAM: Mayhem adds to the client's track data (read 2026-10-17). It applies only while
+# the track it was written for is live: XP per level, reward names the client leaves blank, and how XP is earned.
+OFFICIAL_TRACK = {
+    "size": 32,
+    "xp": [150] * 6 + [200] * 6 + [250] * 6 + [350] * 6 + [400] * 6 + [450] * 2,
+    "names": {5: "Blessed Card+", 9: "Ability Augment+", 23: "Celebration Selfie Icon", 29: "Agent of Chaos"},
+    "notes": {1: "Rerolls have a better chance to land on a higher-tier augment.",
+              5: "A better chance of the ARAM Blessing in champion select.",
+              9: "A better chance of an Ability Augment at the start of the game.",
+              13: "A new kind of Poro Snax.", 21: "A new hat."},
+    "objectives": [{"text": "Play Mayhem", "xp": 1, "per": "minute"}, {"text": "Play a game as a Marksman or Tank", "xp": 60, "per": "day"},
+                   {"text": "Play 6 games", "xp": 300, "per": "week"}, {"text": "Reroll augments 20 times", "xp": 450, "per": "once"}],
+    "guaranteed": "A newly unlocked Gold or Prismatic augment is sure to be offered in your next game if it fits the draft.",
+}
+
+
+def official_track(track):
+    """Add OFFICIAL_TRACK's XP, names and notes when the live track has its 32 levels; otherwise leave the track as is."""
+    O = OFFICIAL_TRACK
+    if not track or track["size"] != O["size"] or len(track["levels"]) != O["size"]:
+        return track
+    for row in track["levels"]:
+        n = row["level"]
+        row["xp"] = O["xp"][n - 1]
+        row["name"] = O["names"].get(n, row["name"])
+        if n in O["notes"]:
+            row["note"] = O["notes"][n]
+    track.update(totalXp=sum(O["xp"]), objectives=O["objectives"], guaranteed=O["guaranteed"])
+    return track
 
 
 def build_track(gd, asset, augments, s):

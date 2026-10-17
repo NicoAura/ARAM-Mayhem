@@ -1413,6 +1413,98 @@ window.GUIDE_DATA = {
     "DamageTakenAmp_Range": 1.350000023841858,
     "DamageTakenAmp_Melee": 1.25
    }
+  },
+  "mechanics": {
+   "startLevel": 3,
+   "respawn": {
+    "byLevel": {
+     "3": 11.0,
+     "4": 13.0,
+     "5": 15.0,
+     "6": 17.0,
+     "7": 19.0,
+     "8": 21.0,
+     "9": 22.0,
+     "10": 24.0,
+     "11": 26.0,
+     "12": 28.0,
+     "13": 30.0,
+     "14": 32.0,
+     "15": 34.0,
+     "16": 36.0,
+     "17": 38.0,
+     "18": 40.0
+    },
+    "scaleFrom": 1440,
+    "scaleStep": 60,
+    "scalePerStep": 0.025,
+    "scaleCap": 1.25
+   },
+   "longRange": {
+    "range": 1000,
+    "reductionMin": 0.15,
+    "reductionMax": 0.3,
+    "excludes": [
+     "damage over time",
+     "ultimate abilities"
+    ]
+   },
+   "critConversion": {
+    "adPerPercent": 0.45,
+    "apPerPercent": 0.75
+   },
+   "structures": {
+    "bonusMax": 0.25,
+    "from": 1080,
+    "to": 1800
+   },
+   "minions": {
+    "aoeMultiplier": 0.75,
+    "blackout": {
+     "units": [
+      "siege",
+      "super"
+     ],
+     "range": 1100,
+     "revealSeconds": 3.0
+    }
+   },
+   "relics": {
+    "pickup": 0.08,
+    "beam": 0.22,
+    "aramBeam": 0.16,
+    "radius": 850.0,
+    "delay": 2.5,
+    "firstOuter": 105,
+    "firstInner": 150,
+    "respawn": 90
+   },
+   "fastTravel": [
+    {
+     "map": "Howling Abyss",
+     "name": "Frost Gates",
+     "text": "Gates behind each Nexus send you from base to just in front of your outer turret, or your inhibitor turret once the outer turret falls. They only go one way, out of base."
+    },
+    {
+     "map": "Koeshin's Crossing",
+     "name": "Portals",
+     "text": "One pair sends you out of base, one way only. A second pair by the side wall goes both ways. Entering takes a short channel that damage interrupts."
+    },
+    {
+     "map": "Butcher's Bridge",
+     "name": "Cannon Launchers",
+     "text": "Launchers next to each base fire you out into the lane."
+    },
+    {
+     "map": "Bridge of Progress",
+     "name": "Hex gates and Acceleration Pads",
+     "text": "Hex gates (manholes on the Zaun side) send you out of base. Acceleration Pads give 25% bonus Move Speed for 1 second."
+    }
+   ],
+   "portalSpeed": {
+    "bonus": 0.5,
+    "seconds": 1.5
+   }
   }
  },
  "spells": [
@@ -2178,7 +2270,9 @@ window.GUIDE_DATA = {
     "level": 1,
     "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/rewards/kiwi/goldenreroll.png",
     "kind": "Reward",
-    "name": "Golden Reroll"
+    "name": "Golden Reroll",
+    "xp": 150,
+    "note": "Rerolls have a better chance to land on a higher-tier augment."
    },
    {
     "level": 2,
@@ -2186,13 +2280,15 @@ window.GUIDE_DATA = {
     "kind": "Augment",
     "name": "Pat On The Back",
     "augmentId": 2137,
-    "tier": "Gold"
+    "tier": "Gold",
+    "xp": 150
    },
    {
     "level": 3,
     "icon": null,
     "kind": "Emote",
-    "name": "Impeccable"
+    "name": "Impeccable",
+    "xp": 150
    },
    {
     "level": 4,
@@ -2200,13 +2296,16 @@ window.GUIDE_DATA = {
     "kind": "Augment",
     "name": "Forged By The Master",
     "augmentId": 2127,
-    "tier": "Silver"
+    "tier": "Silver",
+    "xp": 150
    },
    {
     "level": 5,
     "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/rewards/kiwi/blessedcard.png",
     "kind": "Reward",
-    "name": "Blessed Card"
+    "name": "Blessed Card+",
+    "xp": 150,
+    "note": "A better chance of the ARAM Blessing in champion select."
    },
    {
     "level": 6,
@@ -2214,13 +2313,15 @@ window.GUIDE_DATA = {
     "kind": "Augment",
     "name": "Shark Bait",
     "augmentId": 2032,
-    "tier": "Gold"
+    "tier": "Gold",
+    "xp": 150
    },
    {
     "level": 7,
     "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/summonericons/7142.jpg",
     "kind": "Icon",
-    "name": "Poro Blaster Icon"
+    "name": "Poro Blaster Icon",
+    "xp": 200
    },
    {
     "level": 8,
@@ -2228,13 +2329,16 @@ window.GUIDE_DATA = {
     "kind": "Augment",
     "name": "Hellbent",
     "augmentId": 2107,
-    "tier": "Prismatic"
+    "tier": "Prismatic",
+    "xp": 200
    },
    {
     "level": 9,
     "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/rewards/kiwi/abilityaugments.png",
     "kind": "Reward",
-    "name": "Ability Augments"
+    "name": "Ability Augment+",
+    "xp": 200,
+    "note": "A better chance of an Ability Augment at the start of the game."
    },
    {
     "level": 10,
@@ -2242,13 +2346,15 @@ window.GUIDE_DATA = {
     "kind": "Augment",
     "name": "Shark Tempest",
     "augmentId": 2034,
-    "tier": "Gold"
+    "tier": "Gold",
+    "xp": 200
    },
    {
     "level": 11,
     "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/summonericons/7143.jpg",
     "kind": "Icon",
-    "name": "Dead By Ping Icon"
+    "name": "Dead By Ping Icon",
+    "xp": 200
    },
    {
     "level": 12,
@@ -2256,13 +2362,16 @@ window.GUIDE_DATA = {
     "kind": "Augment",
     "name": "Spirit Bomb",
     "augmentId": 2104,
-    "tier": "Prismatic"
+    "tier": "Prismatic",
+    "xp": 200
    },
    {
     "level": 13,
     "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/rewards/kiwi/rainbowcrystalcandy.png",
     "kind": "Reward",
-    "name": "Rainbow Crystal Candy"
+    "name": "Rainbow Crystal Candy",
+    "xp": 250,
+    "note": "A new kind of Poro Snax."
    },
    {
     "level": 14,
@@ -2270,13 +2379,15 @@ window.GUIDE_DATA = {
     "kind": "Augment",
     "name": "Nature is Healing",
     "augmentId": 2043,
-    "tier": "Gold"
+    "tier": "Gold",
+    "xp": 250
    },
    {
     "level": 15,
     "icon": null,
     "kind": "Emote",
-    "name": "Shark Snack"
+    "name": "Shark Snack",
+    "xp": 250
    },
    {
     "level": 16,
@@ -2284,13 +2395,15 @@ window.GUIDE_DATA = {
     "kind": "Augment",
     "name": "Surge Field",
     "augmentId": 2134,
-    "tier": "Prismatic"
+    "tier": "Prismatic",
+    "xp": 250
    },
    {
     "level": 17,
     "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/summonericons/7145.jpg",
     "kind": "Icon",
-    "name": "On Fire Icon"
+    "name": "On Fire Icon",
+    "xp": 250
    },
    {
     "level": 18,
@@ -2298,13 +2411,15 @@ window.GUIDE_DATA = {
     "kind": "Augment",
     "name": "Tooth Fairy",
     "augmentId": 2083,
-    "tier": "Gold"
+    "tier": "Gold",
+    "xp": 250
    },
    {
     "level": 19,
     "icon": null,
     "kind": "Emote",
-    "name": "Queen Of The Dead"
+    "name": "Queen Of The Dead",
+    "xp": 350
    },
    {
     "level": 20,
@@ -2312,13 +2427,16 @@ window.GUIDE_DATA = {
     "kind": "Augment",
     "name": "Squishy Slappy Grab",
     "augmentId": 2115,
-    "tier": "Prismatic"
+    "tier": "Prismatic",
+    "xp": 350
    },
    {
     "level": 21,
     "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/rewards/kiwi/demaciacrown.png",
     "kind": "Reward",
-    "name": "Demacia Crown"
+    "name": "Demacia Crown",
+    "xp": 350,
+    "note": "A new hat."
    },
    {
     "level": 22,
@@ -2326,13 +2444,15 @@ window.GUIDE_DATA = {
     "kind": "Augment",
     "name": "Endless Decimation",
     "augmentId": 2091,
-    "tier": "Gold"
+    "tier": "Gold",
+    "xp": 350
    },
    {
     "level": 23,
     "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/summonericons/7146.jpg",
     "kind": "Icon",
-    "name": "Incoming Icon"
+    "name": "Celebration Selfie Icon",
+    "xp": 350
    },
    {
     "level": 24,
@@ -2340,13 +2460,15 @@ window.GUIDE_DATA = {
     "kind": "Augment",
     "name": "DropBear",
     "augmentId": 2031,
-    "tier": "Prismatic"
+    "tier": "Prismatic",
+    "xp": 350
    },
    {
     "level": 25,
     "icon": null,
     "kind": "Emote",
-    "name": "Loading..."
+    "name": "Loading...",
+    "xp": 400
    },
    {
     "level": 26,
@@ -2354,13 +2476,15 @@ window.GUIDE_DATA = {
     "kind": "Augment",
     "name": "Snowblast",
     "augmentId": 2080,
-    "tier": "Gold"
+    "tier": "Gold",
+    "xp": 400
    },
    {
     "level": 27,
     "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/summonericons/7144.jpg",
     "kind": "Icon",
-    "name": "Droppybara Icon"
+    "name": "Droppybara Icon",
+    "xp": 400
    },
    {
     "level": 28,
@@ -2368,13 +2492,15 @@ window.GUIDE_DATA = {
     "kind": "Augment",
     "name": "Ult Bot",
     "augmentId": 2118,
-    "tier": "Prismatic"
+    "tier": "Prismatic",
+    "xp": 400
    },
    {
     "level": 29,
     "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/seasons/images/generic/achievement_title_212x212.png",
     "kind": "Title",
-    "name": "A title"
+    "name": "Agent of Chaos",
+    "xp": 400
    },
    {
     "level": 30,
@@ -2382,13 +2508,15 @@ window.GUIDE_DATA = {
     "kind": "Augment",
     "name": "Poro Stampede",
     "augmentId": 2046,
-    "tier": "Prismatic"
+    "tier": "Prismatic",
+    "xp": 400
    },
    {
     "level": 31,
     "icon": null,
     "kind": "Emote",
-    "name": "It's Okay, I'm Okay"
+    "name": "It's Okay, I'm Okay",
+    "xp": 450
    },
    {
     "level": 32,
@@ -2396,8 +2524,59 @@ window.GUIDE_DATA = {
     "kind": "Augment",
     "name": "Dimension Shift",
     "augmentId": 2063,
-    "tier": "Prismatic"
+    "tier": "Prismatic",
+    "xp": 450
    }
-  ]
- }
+  ],
+  "totalXp": 9000,
+  "objectives": [
+   {
+    "text": "Play Mayhem",
+    "xp": 1,
+    "per": "minute"
+   },
+   {
+    "text": "Play a game as a Marksman or Tank",
+    "xp": 60,
+    "per": "day"
+   },
+   {
+    "text": "Play 6 games",
+    "xp": 300,
+    "per": "week"
+   },
+   {
+    "text": "Reroll augments 20 times",
+    "xp": 450,
+    "per": "once"
+   }
+  ],
+  "guaranteed": "A newly unlocked Gold or Prismatic augment is sure to be offered in your next game if it fits the draft."
+ },
+ "story": [
+  {
+   "date": "2025-10",
+   "text": "Mayhem arrives as its own queue next to regular ARAM, with Arena augments plus over 40 new ones. Augments with an always-on effect are left out so ten players stay readable."
+  },
+  {
+   "date": "2026-01",
+   "text": "The mode's run is extended, and patch 26.3 adds Augment Sets and the progression track."
+  },
+  {
+   "date": "2026-03",
+   "text": "Mayhem stays with no planned end date."
+  },
+  {
+   "date": "2026-06",
+   "text": "Patch 26.12 removes Augment Sets, since builds and games felt too alike. Popular set effects come back as single augments, and Ability Augments arrive, each one powering up a single ability."
+  },
+  {
+   "date": "2026-07",
+   "text": "Mayhem Classic-ish runs for a limited time in its own queue: only the 60 original champions in their current form, a Classic-style map, Classic items and Classic-themed augments."
+  },
+  {
+   "date": "Next",
+   "text": "A music-themed set with new augments, a musical act on stage at spawn, and missions with rewards of their own."
+  }
+ ]
 };
