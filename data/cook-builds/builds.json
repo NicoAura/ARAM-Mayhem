@@ -94,26 +94,25 @@
       "play": "Turn on Overdrive, hook someone, then Power Fist them as they land so they eat two rounds of on-hit. Pop Static Field to proc everything on everyone nearby, and keep auto-attacking until Mystic Punch hands the hook back."
     },
     {
-      "id": "tryndamere-battlemage",
+      "id": "tryndamere-bloodlust-doctor",
       "champion": "Tryndamere",
-      "title": "The Battlemage King",
+      "title": "The Bloodlust Doctor",
       "augments": [
-        "ADAPt",
-        "Marksmage",
-        "Master of Duality",
-        "Witchful Thinking"
+        "Critical Healing",
+        "Circle of Death",
+        "Tank It Or Leave It"
       ],
-      "core": 3,
+      "core": 2,
       "items": [
-        "Berserker's Greaves",
-        "Kraken Slayer",
-        "Guinsoo's Rageblade",
-        "Nashor's Tooth",
-        "Blade of The Ruined King",
+        "Rite of Ruin",
+        "Spirit Visage",
+        "Riftmaker",
+        "Warmog's Armor",
+        "Mercury's Treads",
         "Rabadon's Deathcap"
       ],
-      "why": "Tryndamere is the purest crit swordsman in the game, so this one makes him a mage. ADAPt turns all the bonus Attack Damage from Kraken Slayer and Blade of The Ruined King into Ability Power, plus 15% more, and Rabadon's Deathcap multiplies the lot. Marksmage hands it straight back: every attack deals extra physical damage equal to 75% of his Ability Power, and Master of Duality grows that Ability Power with every swing.",
-      "play": "Spin in, press Undying Rage and keep hitting. You are a mage whose only spell is right-click.",
+      "why": "Tryndamere already crits for free: his Fury raises his crit chance as he fights, and Bloodlust spends it to heal him. Critical Healing lets heals crit for 40% more off that same crit chance, and Circle of Death turns 70% of all his healing and Health Regen into magic damage on the nearest enemy champion, so every Bloodlust is a crit roll that blasts someone. Rite of Ruin adds crit chance on every spell cast and Spirit Visage makes his heals 25% bigger. Bloodlust's heal grows with Ability Power, so the crit carry becomes an AP healer whose heals do the killing.",
+      "play": "Fill your Fury, then Bloodlust next to the enemy you want hit. Undying Rage keeps you alive long enough to cast it again. Tank It Or Leave It is the flex pick.",
       "chef": "2026-10-17"
     }
   ]
