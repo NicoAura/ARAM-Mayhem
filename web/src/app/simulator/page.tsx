@@ -1,6 +1,5 @@
 import Link from "next/link";
 import type { Metadata } from "next";
-import Link from "next/link";
 import { pageMeta } from "@/lib/meta";
 import DataTable, { type Row } from "@/components/DataTable";
 import Embed from "@/components/Embed";
