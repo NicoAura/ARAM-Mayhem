@@ -5702,3 +5702,50 @@ html[data-motion="reduce"] .draft-card {
 .draft-list-v {
   font-variant-numeric: tabular-nums;
 }
+
+/* Status page (/status) */
+.status-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+.status-card ul {
+  display: grid;
+  gap: 0.35rem;
+  color: var(--muted);
+  font-size: 0.9375rem;
+}
+.status-card ul li:first-child {
+  color: var(--fg);
+  font-weight: 600;
+}
+.status-card .card-head {
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+.fresh {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: var(--muted);
+  font-size: 0.8125rem;
+  white-space: nowrap;
+}
+.fresh::before {
+  content: "";
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--muted);
+}
+.fresh[data-state="fresh"]::before {
+  background: var(--good);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--good) 25%, transparent);
+}
+.fresh[data-state="ageing"]::before {
+  background: var(--gold);
+}
+.fresh[data-state="stale"]::before {
+  background: var(--bad);
+}
