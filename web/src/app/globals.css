@@ -1639,7 +1639,7 @@ html[data-device="mobile"] .theme-toggle button {
   height: 28px;
 }
 
-/* Augment offer cards (PBE tab): the in-game card art from game/assets/ux/kiwi/augments/augmentselection.
+/* Augment offer cards (PBE tab): the in-game card art in public/augment-card.
    The card face stays dark in both themes, like the game. */
 .aug-grid {
   display: grid;

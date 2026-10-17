@@ -11,7 +11,6 @@ type Change = { stat: string; live: string; pbe: string };
 type Pbe = {
   meta: {
     label: string;
-    codename: string;
     dataAsOf: string;
     caveat: string;
     builds: { pbe: string; live: string };
@@ -72,9 +71,9 @@ export default function PbePage() {
 
   return (
     <>
-      <Intro eyebrow={`PBE · ${meta.label}`} title={`Mayhem ${meta.label} (${meta.codename}) on the test server.`}>
-        PBE {meta.builds.pbe} compared with live {meta.builds.live}, as of {meta.dataAsOf}. Augment pool{" "}
-        {meta.augmentPool.live} → {meta.augmentPool.pbe}. {meta.caveat}
+      <Intro eyebrow={`PBE · ${meta.label}`} title={`Mayhem ${meta.label} on the test server.`}>
+        What&apos;s changing from live patch {meta.builds.live} to test server build {meta.builds.pbe} (updated {meta.dataAsOf}). The
+        augment pool goes from {meta.augmentPool.live} to {meta.augmentPool.pbe}. {meta.caveat}
       </Intro>
 
       <nav className="toc" aria-label="On this page">
@@ -123,7 +122,7 @@ export default function PbePage() {
               .filter((a) => a.tier === tier)
               .map((a, i) => (
                 <AugmentCard key={`${a.name}-${i}`} name={a.name ?? "Unnamed"} tier={tier} icon={a.icon} set={a.set}>
-                  {a.description ?? "No tooltip summary yet."}
+                  {a.description ?? "Details not revealed yet."}
                 </AugmentCard>
               )),
           )}
@@ -212,7 +211,7 @@ export default function PbePage() {
             <li key={m}>{m}</li>
           ))}
         </ul>
-        <h3>Notes on this data</h3>
+        <h3>Notes</h3>
         <ul className="bullets sub">
           {meta.notes.map((n) => (
             <li key={n}>{n}</li>
