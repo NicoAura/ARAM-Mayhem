@@ -4727,3 +4727,38 @@ html[data-device="mobile"] .cmp-tray {
   margin: 0;
   color: var(--muted);
 }
+
+/* Ability clips in the champion panel (components/ChampionPanel.tsx) */
+.champ-clip-btn {
+  display: inline-grid;
+  width: 1.5rem;
+  height: 1.5rem;
+  margin-left: auto;
+  place-items: center;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  background: none;
+  color: var(--muted);
+  cursor: pointer;
+}
+
+.champ-clip-btn:hover,
+.champ-clip-btn[aria-expanded="true"] {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.champ-splash .champ-clip {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  background: #000;
+  object-fit: cover;
+  animation: fade-in 0.2s ease both;
+}
+
+.champ-abilities li[data-playing] .champ-key {
+  background: var(--accent);
+  color: var(--bg);
+}
