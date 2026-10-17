@@ -1,6 +1,6 @@
 {
  "meta": {
-  "built_at": "2026-10-16T21:14:36+00:00",
+  "built_at": "2026-10-17T01:06:15+00:00",
   "game_version": "16.20",
   "cdragon": "latest",
   "mayhem_balance_patch": "26.19",
@@ -81,8 +81,8 @@
        "type": "physical",
        "calc": "QDamage",
        "scaling": {
-        "const": 200.5,
-        "bonus_ad": 0.9
+        "const": 751.875,
+        "bonus_ad": 3.375
        },
        "target": "flat",
        "per_second": false,
@@ -92,16 +92,18 @@
        "type": "physical",
        "calc": "QEdgeDamage",
        "scaling": {
-        "const": 350.875,
-        "bonus_ad": 1.575
+        "const": 1315.7812,
+        "bonus_ad": 5.9062
        },
        "target": "flat",
        "per_second": false,
-       "alt": false
+       "alt": true
       }
      ],
      "mode_overrides": [],
-     "notes": []
+     "notes": [
+      "hand override: The Darkin Blade is three casts per cooldown, dealing 100/125/150%"
+     ]
     },
     {
      "slot": "W",
@@ -1297,6 +1299,17 @@
        "target": "flat",
        "per_second": false,
        "alt": false
+      },
+      {
+       "type": "magic",
+       "calc": "TotalHealthDamage",
+       "scaling": {
+        "const": 0.02,
+        "ap": 0.0
+       },
+       "target": "target_max_hp",
+       "per_second": false,
+       "alt": false
       }
      ],
      "mode_overrides": [],
@@ -1519,7 +1532,7 @@
        },
        "target": "flat",
        "per_second": false,
-       "alt": false
+       "alt": true
       }
      ],
      "mode_overrides": [],
@@ -1572,7 +1585,12 @@
     }
    ],
    "parse_quality": "good",
-   "notes": []
+   "notes": [],
+   "death": {
+    "revive_frac": 1.0,
+    "revive_delay": 6,
+    "chance": 0.5
+   }
   },
   {
    "id": "Annie",
@@ -1903,6 +1921,16 @@
         "const": 225.0,
         "bonus_ad": 0.2,
         "ap": 1.0
+       },
+       "target": "flat",
+       "per_second": false,
+       "alt": false
+      },
+      {
+       "type": "physical",
+       "calc": "CalibrumRMarkBonusDamage",
+       "scaling": {
+        "const": 110.0
        },
        "target": "flat",
        "per_second": false,
@@ -2979,6 +3007,16 @@
        "target": "flat",
        "per_second": false,
        "alt": false
+      },
+      {
+       "type": "true",
+       "calc": "MissingHealthDamage",
+       "scaling": {
+        "const": 0.2
+       },
+       "target": "target_missing_hp",
+       "per_second": false,
+       "alt": false
       }
      ],
      "mode_overrides": [
@@ -3286,7 +3324,7 @@
        },
        "target": "flat",
        "per_second": false,
-       "alt": false
+       "alt": true
       }
      ],
      "mode_overrides": [],
@@ -3636,6 +3674,17 @@
         "bonus_ad": 1.05
        },
        "target": "flat",
+       "per_second": false,
+       "alt": false
+      },
+      {
+       "type": "physical",
+       "calc": "TotalAttackPercentMissingHealth",
+       "scaling": {
+        "const": 0.09,
+        "bonus_ad": 0.0003
+       },
+       "target": "target_missing_hp",
        "per_second": false,
        "alt": false
       }
@@ -4462,11 +4511,22 @@
        "target": "flat",
        "per_second": false,
        "alt": false
+      },
+      {
+       "type": "magic",
+       "calc": "MaxHealthPercentCalc",
+       "scaling": {
+        "const": 0.039
+       },
+       "target": "target_max_hp",
+       "per_second": false,
+       "alt": false
       }
      ],
      "mode_overrides": [],
      "notes": [
-      "cooldown is the ammo recharge time"
+      "cooldown is the ammo recharge time",
+      "stack-based scaling ignored"
      ]
     },
     {
@@ -4505,7 +4565,7 @@
      "notes": []
     }
    ],
-   "parse_quality": "good",
+   "parse_quality": "partial",
    "notes": []
   },
   {
@@ -5166,7 +5226,18 @@
       "speed": 2000,
       "on_self": false
      },
-     "hits": [],
+     "hits": [
+      {
+       "type": "magic",
+       "calc": "CurrentHealthDamage",
+       "scaling": {
+        "const": 0.3
+       },
+       "target": "target_current_hp",
+       "per_second": false,
+       "alt": false
+      }
+     ],
      "mode_overrides": [],
      "notes": []
     },
@@ -5568,7 +5639,19 @@
       "speed": 0,
       "on_self": false
      },
-     "hits": [],
+     "hits": [
+      {
+       "type": "magic",
+       "calc": "MissingHealthPercent",
+       "scaling": {
+        "const": 0.03,
+        "ap": 0.0003
+       },
+       "target": "target_missing_hp",
+       "per_second": false,
+       "alt": false
+      }
+     ],
      "mode_overrides": [],
      "notes": []
     },
@@ -5714,6 +5797,17 @@
        "target": "flat",
        "per_second": false,
        "alt": false
+      },
+      {
+       "type": "magic",
+       "calc": "HumanPercentHealth",
+       "scaling": {
+        "const": 0.04,
+        "ap": 0.0003
+       },
+       "target": "target_current_hp",
+       "per_second": false,
+       "alt": false
       }
      ],
      "mode_overrides": [],
@@ -5737,7 +5831,19 @@
       "speed": 0,
       "on_self": false
      },
-     "hits": [],
+     "hits": [
+      {
+       "type": "magic",
+       "calc": "TotalDamage",
+       "scaling": {
+        "const": 220.0,
+        "ap": 0.75
+       },
+       "target": "flat",
+       "per_second": false,
+       "alt": false
+      }
+     ],
      "mode_overrides": [],
      "notes": []
     },
@@ -5787,7 +5893,7 @@
      "notes": []
     }
    ],
-   "parse_quality": "partial",
+   "parse_quality": "good",
    "notes": []
   },
   {
@@ -5939,11 +6045,33 @@
       },
       {
        "type": "magic",
+       "calc": "PercentHealthBaseTOOLTIP",
+       "scaling": {
+        "const": 0.03,
+        "ap": 0.0001
+       },
+       "target": "target_max_hp",
+       "per_second": false,
+       "alt": false
+      },
+      {
+       "type": "magic",
        "calc": "EmpoweredDamage",
        "scaling": {
         "const": 240.0
        },
        "target": "flat",
+       "per_second": false,
+       "alt": false
+      },
+      {
+       "type": "magic",
+       "calc": "PercentHealthEmpoweredTOOLTIP",
+       "scaling": {
+        "const": 0.04,
+        "ap": 0.0002
+       },
+       "target": "target_max_hp",
        "per_second": false,
        "alt": false
       }
@@ -6248,7 +6376,30 @@
       "speed": 0,
       "on_self": false
      },
-     "hits": [],
+     "hits": [
+      {
+       "type": "magic",
+       "calc": "TotalPercentHealthDamage",
+       "scaling": {
+        "const": 0.06,
+        "ap": 0.0003
+       },
+       "target": "target_current_hp",
+       "per_second": false,
+       "alt": false
+      },
+      {
+       "type": "magic",
+       "calc": "TotalPercentHealthDamageFeared",
+       "scaling": {
+        "const": 0.12,
+        "ap": 0.0006
+       },
+       "target": "target_current_hp",
+       "per_second": false,
+       "alt": true
+      }
+     ],
      "mode_overrides": [],
      "notes": []
     },
@@ -7016,7 +7167,19 @@
       "speed": 0,
       "on_self": false
      },
-     "hits": [],
+     "hits": [
+      {
+       "type": "physical",
+       "calc": "ShotDamage",
+       "scaling": {
+        "const": 265.4,
+        "bonus_ad": 1.0
+       },
+       "target": "flat",
+       "per_second": false,
+       "alt": false
+      }
+     ],
      "mode_overrides": [],
      "notes": []
     },
@@ -7374,7 +7537,19 @@
       "speed": 1200,
       "on_self": false
      },
-     "hits": [],
+     "hits": [
+      {
+       "type": "physical",
+       "calc": "MiniTotalDamage",
+       "scaling": {
+        "const": 308.0,
+        "bonus_ad": 1.25
+       },
+       "target": "flat",
+       "per_second": false,
+       "alt": false
+      }
+     ],
      "mode_overrides": [],
      "notes": []
     },
@@ -7396,7 +7571,29 @@
       "speed": 0,
       "on_self": true
      },
-     "hits": [],
+     "hits": [
+      {
+       "type": "magic",
+       "calc": "MiniTotalDamage",
+       "scaling": {
+        "const": 40.0,
+        "ap": 1.0
+       },
+       "target": "flat",
+       "per_second": false,
+       "alt": false
+      },
+      {
+       "type": "magic",
+       "calc": "MiniPercentHPDamage",
+       "scaling": {
+        "const": 0.14
+       },
+       "target": "target_max_hp",
+       "per_second": false,
+       "alt": false
+      }
+     ],
      "mode_overrides": [],
      "notes": []
     },
@@ -7419,7 +7616,19 @@
       "on_self": false,
       "move": "dash"
      },
-     "hits": [],
+     "hits": [
+      {
+       "type": "physical",
+       "calc": "MiniTotalDamage",
+       "scaling": {
+        "const": 302.98,
+        "bonus_hp": 0.06
+       },
+       "target": "flat",
+       "per_second": false,
+       "alt": false
+      }
+     ],
      "mode_overrides": [],
      "notes": []
     },
@@ -7471,7 +7680,7 @@
      "notes": []
     }
    ],
-   "parse_quality": "partial",
+   "parse_quality": "good",
    "notes": []
   },
   {
@@ -7929,8 +8138,8 @@
        "type": "magic",
        "calc": "MiniSwipeDamage",
        "scaling": {
-        "const": 26.0,
-        "ap": 0.05
+        "const": 130.0,
+        "ap": 0.25
        },
        "target": "flat",
        "per_second": false,
@@ -7951,7 +8160,9 @@
      "mode_overrides": [
       "ARAM:APRatio"
      ],
-     "notes": []
+     "notes": [
+      "hand override: Snip Snip! snips 5 times at full stacks before the final cut"
+     ]
     },
     {
      "slot": "W",
@@ -8219,12 +8430,13 @@
        },
        "target": "flat",
        "per_second": false,
-       "alt": false
+       "alt": true
       }
      ],
      "mode_overrides": [],
      "notes": [
-      "ARAM cooldown"
+      "ARAM cooldown",
+      "hand override: Devastating Charge deals min to max damage by distance, not both"
      ]
     },
     {
@@ -8820,7 +9032,20 @@
       "speed": 0,
       "on_self": false
      },
-     "hits": [],
+     "hits": [
+      {
+       "type": "physical",
+       "calc": "TentacleDamageTotal",
+       "scaling": {
+        "const": 448.5,
+        "bonus_ad": 1.43,
+        "ap": 0.52
+       },
+       "target": "flat",
+       "per_second": false,
+       "alt": false
+      }
+     ],
      "mode_overrides": [],
      "notes": []
     },
@@ -8842,7 +9067,19 @@
       "speed": 0,
       "on_self": true
      },
-     "hits": [],
+     "hits": [
+      {
+       "type": "physical",
+       "calc": "HealthPercentTotal",
+       "scaling": {
+        "const": 0.1025,
+        "bonus_ad": 0.0003
+       },
+       "target": "target_max_hp",
+       "per_second": false,
+       "alt": false
+      }
+     ],
      "mode_overrides": [],
      "notes": []
     },
@@ -8903,7 +9140,7 @@
      "notes": []
     }
    ],
-   "parse_quality": "partial",
+   "parse_quality": "good",
    "notes": []
   },
   {
@@ -9771,12 +10008,32 @@
       },
       {
        "type": "magic",
+       "calc": "PercentHealthDamage",
+       "scaling": {
+        "const": 0.04
+       },
+       "target": "target_max_hp",
+       "per_second": false,
+       "alt": false
+      },
+      {
+       "type": "magic",
        "calc": "MaxDamage",
        "scaling": {
         "const": 320.0,
         "ap": 1.4
        },
        "target": "flat",
+       "per_second": false,
+       "alt": true
+      },
+      {
+       "type": "magic",
+       "calc": "MaxPercentHealthDamage",
+       "scaling": {
+        "const": 0.08
+       },
+       "target": "target_max_hp",
        "per_second": false,
        "alt": true
       }
@@ -9892,7 +10149,19 @@
       "on_self": false,
       "move": "dash"
      },
-     "hits": [],
+     "hits": [
+      {
+       "type": "physical",
+       "calc": "Damage",
+       "scaling": {
+        "const": 260.0,
+        "bonus_ad": 1.35
+       },
+       "target": "flat",
+       "per_second": false,
+       "alt": false
+      }
+     ],
      "mode_overrides": [],
      "notes": []
     },
@@ -9914,7 +10183,19 @@
       "speed": 0,
       "on_self": true
      },
-     "hits": [],
+     "hits": [
+      {
+       "type": "magic",
+       "calc": "Damage",
+       "scaling": {
+        "const": 380.0,
+        "ap": 1.0
+       },
+       "target": "flat",
+       "per_second": false,
+       "alt": false
+      }
+     ],
      "mode_overrides": [],
      "notes": [
       "cooldown from the champion's ability list"
@@ -9938,7 +10219,28 @@
       "speed": 0,
       "on_self": false
      },
-     "hits": [],
+     "hits": [
+      {
+       "type": "magic",
+       "calc": "FlatDamage",
+       "scaling": {
+        "bonus_ad": 1.0
+       },
+       "target": "flat",
+       "per_second": false,
+       "alt": false
+      },
+      {
+       "type": "magic",
+       "calc": "PercHPDamage",
+       "scaling": {
+        "const": 0.192
+       },
+       "target": "target_max_hp",
+       "per_second": false,
+       "alt": false
+      }
+     ],
      "mode_overrides": [],
      "notes": []
     },
@@ -9965,7 +10267,7 @@
      "notes": []
     }
    ],
-   "parse_quality": "none",
+   "parse_quality": "good",
    "notes": []
   },
   {
@@ -10423,6 +10725,18 @@
        "target": "flat",
        "per_second": false,
        "alt": false
+      },
+      {
+       "type": "physical",
+       "calc": "TotalMaxHealthDamage",
+       "scaling": {
+        "const": 0.08,
+        "bonus_armor": 0.0002,
+        "bonus_mr": 0.0002
+       },
+       "target": "target_max_hp",
+       "per_second": false,
+       "alt": false
       }
      ],
      "mode_overrides": [
@@ -10759,7 +11073,18 @@
       "speed": 0,
       "on_self": false
      },
-     "hits": [],
+     "hits": [
+      {
+       "type": "magic",
+       "calc": "MaxHealthDamage",
+       "scaling": {
+        "const": 0.18
+       },
+       "target": "target_max_hp",
+       "per_second": false,
+       "alt": false
+      }
+     ],
      "mode_overrides": [],
      "notes": [
       "cooldown is the ammo recharge time"
@@ -10898,7 +11223,19 @@
       "speed": 902,
       "on_self": false
      },
-     "hits": [],
+     "hits": [
+      {
+       "type": "magic",
+       "calc": "TotalDamage",
+       "scaling": {
+        "const": 260.0,
+        "ap": 0.7
+       },
+       "target": "flat",
+       "per_second": false,
+       "alt": false
+      }
+     ],
      "mode_overrides": [],
      "notes": []
     },
@@ -10994,7 +11331,7 @@
      "notes": []
     }
    ],
-   "parse_quality": "partial",
+   "parse_quality": "good",
    "notes": []
   },
   {
@@ -11176,7 +11513,10 @@
     }
    ],
    "parse_quality": "good",
-   "notes": []
+   "notes": [],
+   "death": {
+    "act": 7
+   }
   },
   {
    "id": "Kassadin",
@@ -11769,7 +12109,11 @@
     }
    ],
    "parse_quality": "good",
-   "notes": []
+   "notes": [],
+   "death": {
+    "act": 2.5,
+    "needs_r": true
+   }
   },
   {
    "id": "Kayn",
@@ -11830,7 +12174,41 @@
       "on_self": false,
       "move": "dash"
      },
-     "hits": [],
+     "hits": [
+      {
+       "type": "physical",
+       "calc": "TotalDamage",
+       "scaling": {
+        "const": 195.0,
+        "bonus_ad": 0.95
+       },
+       "target": "flat",
+       "per_second": false,
+       "alt": false
+      },
+      {
+       "type": "physical",
+       "calc": "DarkinFlatDamage",
+       "scaling": {
+        "const": 80.665,
+        "bonus_ad": 0.65
+       },
+       "target": "flat",
+       "per_second": false,
+       "alt": true
+      },
+      {
+       "type": "physical",
+       "calc": "DarkinPercentDamage",
+       "scaling": {
+        "const": 0.06,
+        "bonus_ad": 0.0003
+       },
+       "target": "target_max_hp",
+       "per_second": false,
+       "alt": true
+      }
+     ],
      "mode_overrides": [
       "ARAM:BonusADRatio"
      ],
@@ -11854,7 +12232,19 @@
       "speed": 0,
       "on_self": false
      },
-     "hits": [],
+     "hits": [
+      {
+       "type": "physical",
+       "calc": "TotalDamage",
+       "scaling": {
+        "const": 265.0,
+        "bonus_ad": 1.1
+       },
+       "target": "flat",
+       "per_second": false,
+       "alt": false
+      }
+     ],
      "mode_overrides": [],
      "notes": []
     },
@@ -11903,12 +12293,35 @@
       "on_self": false,
       "move": "dash"
      },
-     "hits": [],
+     "hits": [
+      {
+       "type": "physical",
+       "calc": "Damage",
+       "scaling": {
+        "const": 350.0,
+        "bonus_ad": 1.5
+       },
+       "target": "flat",
+       "per_second": false,
+       "alt": false
+      },
+      {
+       "type": "physical",
+       "calc": "SlayerDamage",
+       "scaling": {
+        "const": 0.15,
+        "bonus_ad": 0.001
+       },
+       "target": "target_max_hp",
+       "per_second": false,
+       "alt": true
+      }
+     ],
      "mode_overrides": [],
      "notes": []
     }
    ],
-   "parse_quality": "none",
+   "parse_quality": "good",
    "notes": []
   },
   {
@@ -12160,7 +12573,30 @@
       "speed": 0,
       "on_self": false
      },
-     "hits": [],
+     "hits": [
+      {
+       "type": "physical",
+       "calc": "BaseDamage",
+       "scaling": {
+        "const": 180.0,
+        "bonus_ad": 1.05
+       },
+       "target": "flat",
+       "per_second": false,
+       "alt": false
+      },
+      {
+       "type": "physical",
+       "calc": "IsoDamage",
+       "scaling": {
+        "const": 378.0,
+        "bonus_ad": 2.205
+       },
+       "target": "flat",
+       "per_second": false,
+       "alt": true
+      }
+     ],
      "mode_overrides": [],
      "notes": []
     },
@@ -12182,7 +12618,19 @@
       "speed": 828,
       "on_self": false
      },
-     "hits": [],
+     "hits": [
+      {
+       "type": "physical",
+       "calc": "BaseDamage",
+       "scaling": {
+        "const": 195.0,
+        "bonus_ad": 1.0
+       },
+       "target": "flat",
+       "per_second": false,
+       "alt": false
+      }
+     ],
      "mode_overrides": [],
      "notes": []
     },
@@ -12205,7 +12653,19 @@
       "on_self": false,
       "move": "dash"
      },
-     "hits": [],
+     "hits": [
+      {
+       "type": "physical",
+       "calc": "TotalDamage",
+       "scaling": {
+        "const": 205.0,
+        "bonus_ad": 0.4
+       },
+       "target": "flat",
+       "per_second": false,
+       "alt": false
+      }
+     ],
      "mode_overrides": [],
      "notes": []
     },
@@ -12232,7 +12692,7 @@
      "notes": []
     }
    ],
-   "parse_quality": "none",
+   "parse_quality": "good",
    "notes": []
   },
   {
@@ -12427,7 +12887,11 @@
     }
    ],
    "parse_quality": "partial",
-   "notes": []
+   "notes": [],
+   "death": {
+    "act": 4,
+    "needs_r": true
+   }
   },
   {
    "id": "Kled",
@@ -12727,7 +13191,19 @@
       "speed": 0,
       "on_self": true
      },
-     "hits": [],
+     "hits": [
+      {
+       "type": "magic",
+       "calc": "TotalHealthDamage",
+       "scaling": {
+        "const": 0.045,
+        "ap": 0.0001
+       },
+       "target": "target_max_hp",
+       "per_second": false,
+       "alt": false
+      }
+     ],
      "mode_overrides": [
       "ARAM:MaxHealthDamage"
      ],
@@ -12800,6 +13276,16 @@
       },
       {
        "type": "magic",
+       "calc": "TooltipMissingHealthDamageAmp",
+       "scaling": {
+        "const": 0.0083
+       },
+       "target": "target_missing_hp",
+       "per_second": false,
+       "alt": false
+      },
+      {
+       "type": "magic",
        "calc": "MaxDamageCalc",
        "scaling": {
         "const": 360.0,
@@ -12816,7 +13302,10 @@
     }
    ],
    "parse_quality": "good",
-   "notes": []
+   "notes": [],
+   "death": {
+    "act": 4
+   }
   },
   {
    "id": "Leblanc",
@@ -13258,7 +13747,7 @@
        "type": "physical",
        "calc": "PercentHPCarryThrough",
        "scaling": {
-        "const": 0.18
+        "const": 0.054
        },
        "target": "target_max_hp",
        "per_second": false,
@@ -13266,7 +13755,9 @@
       }
      ],
      "mode_overrides": [],
-     "notes": []
+     "notes": [
+      "target bonus health counted as 30% of max health"
+     ]
     }
    ],
    "parse_quality": "good",
@@ -13579,7 +14070,7 @@
        },
        "target": "flat",
        "per_second": false,
-       "alt": false
+       "alt": true
       }
      ],
      "mode_overrides": [],
@@ -13942,7 +14433,18 @@
       "speed": 0,
       "on_self": true
      },
-     "hits": [],
+     "hits": [
+      {
+       "type": "true",
+       "calc": "HealthCost",
+       "scaling": {
+        "const": 0.02
+       },
+       "target": "target_current_hp",
+       "per_second": true,
+       "alt": false
+      }
+     ],
      "mode_overrides": [],
      "notes": []
     },
@@ -15007,6 +15509,16 @@
         "ap": 0.5
        },
        "target": "flat",
+       "per_second": false,
+       "alt": false
+      },
+      {
+       "type": "magic",
+       "calc": "BasePercentHealth",
+       "scaling": {
+        "const": 0.04
+       },
+       "target": "target_max_hp",
        "per_second": false,
        "alt": false
       }
@@ -16324,7 +16836,52 @@
       "speed": 1700,
       "on_self": false
      },
-     "hits": [],
+     "hits": [
+      {
+       "type": "physical",
+       "calc": "TotalDamageFirstCast",
+       "scaling": {
+        "const": 55.0,
+        "bonus_ad": 0.2
+       },
+       "target": "flat",
+       "per_second": false,
+       "alt": false
+      },
+      {
+       "type": "physical",
+       "calc": "TotalBleedDamage",
+       "scaling": {
+        "const": 135.0,
+        "bonus_ad": 0.8
+       },
+       "target": "flat",
+       "per_second": false,
+       "alt": false
+      },
+      {
+       "type": "physical",
+       "calc": "TotalMinDamageSecondCast",
+       "scaling": {
+        "const": 80.0,
+        "bonus_ad": 0.4
+       },
+       "target": "flat",
+       "per_second": false,
+       "alt": false
+      },
+      {
+       "type": "physical",
+       "calc": "TotalMaxDamageSecondCast",
+       "scaling": {
+        "const": 160.0,
+        "bonus_ad": 1.4
+       },
+       "target": "flat",
+       "per_second": false,
+       "alt": false
+      }
+     ],
      "mode_overrides": [],
      "notes": []
     },
@@ -18581,7 +19138,7 @@
        },
        "target": "flat",
        "per_second": false,
-       "alt": false
+       "alt": true
       },
       {
        "type": "physical",
@@ -18618,6 +19175,18 @@
       "move": "dash"
      },
      "hits": [
+      {
+       "type": "physical",
+       "calc": "MaxHealthDamageCalc",
+       "scaling": {
+        "const": 0.08,
+        "bonus_hp": 0.0,
+        "ap": 0.0002
+       },
+       "target": "target_max_hp",
+       "per_second": false,
+       "alt": false
+      },
       {
        "type": "physical",
        "calc": "EmpoweredDamageMultCalcModified",
@@ -18778,12 +19347,32 @@
       },
       {
        "type": "physical",
+       "calc": "HealthDamagePercent",
+       "scaling": {
+        "const": 0.09
+       },
+       "target": "target_max_hp",
+       "per_second": false,
+       "alt": false
+      },
+      {
+       "type": "physical",
        "calc": "BaseDamage",
        "scaling": {
         "const": 130.0,
         "bonus_ad": 0.75
        },
        "target": "flat",
+       "per_second": false,
+       "alt": false
+      },
+      {
+       "type": "physical",
+       "calc": "HealthDamagePercent",
+       "scaling": {
+        "const": 0.09
+       },
+       "target": "target_max_hp",
        "per_second": false,
        "alt": false
       }
@@ -19284,6 +19873,16 @@
         "bonus_ad": 1.25
        },
        "target": "flat",
+       "per_second": false,
+       "alt": false
+      },
+      {
+       "type": "physical",
+       "calc": "MissingHealthDamageRock",
+       "scaling": {
+        "const": 0.1
+       },
+       "target": "target_max_hp",
        "per_second": false,
        "alt": false
       }
@@ -19922,7 +20521,30 @@
       "speed": 4000,
       "on_self": false
      },
-     "hits": [],
+     "hits": [
+      {
+       "type": "physical",
+       "calc": "BaseDamageCalculation",
+       "scaling": {
+        "const": 170.0,
+        "bonus_ad": 0.6
+       },
+       "target": "flat",
+       "per_second": false,
+       "alt": false
+      },
+      {
+       "type": "true",
+       "calc": "EmpoweredDamageCalculation",
+       "scaling": {
+        "const": 204.0,
+        "bonus_ad": 0.72
+       },
+       "target": "flat",
+       "per_second": false,
+       "alt": true
+      }
+     ],
      "mode_overrides": [],
      "notes": []
     },
@@ -19954,6 +20576,16 @@
         "bonus_ad": 1.0
        },
        "target": "flat",
+       "per_second": false,
+       "alt": false
+      },
+      {
+       "type": "physical",
+       "calc": "PercentHealthDamage",
+       "scaling": {
+        "const": 0.25
+       },
+       "target": "target_max_hp",
        "per_second": false,
        "alt": false
       }
@@ -20058,7 +20690,19 @@
       "on_self": false,
       "move": "dash"
      },
-     "hits": [],
+     "hits": [
+      {
+       "type": "magic",
+       "calc": "DismountDamage",
+       "scaling": {
+        "const": 180.0,
+        "ap": 0.6
+       },
+       "target": "flat",
+       "per_second": false,
+       "alt": false
+      }
+     ],
      "mode_overrides": [],
      "notes": [
       "cooldown from the champion's ability list"
@@ -20082,7 +20726,19 @@
       "speed": 0,
       "on_self": false
      },
-     "hits": [],
+     "hits": [
+      {
+       "type": "magic",
+       "calc": "MaxHealthDamageCalc",
+       "scaling": {
+        "const": 0.07,
+        "ap": 0.0003
+       },
+       "target": "target_max_hp",
+       "per_second": false,
+       "alt": false
+      }
+     ],
      "mode_overrides": [],
      "notes": []
     },
@@ -20461,7 +21117,7 @@
        },
        "target": "flat",
        "per_second": false,
-       "alt": false
+       "alt": true
       }
      ],
      "mode_overrides": [],
@@ -21013,12 +21669,32 @@
       },
       {
        "type": "magic",
+       "calc": "HealthDamage",
+       "scaling": {
+        "const": 0.08
+       },
+       "target": "target_max_hp",
+       "per_second": false,
+       "alt": false
+      },
+      {
+       "type": "magic",
        "calc": "EmpoweredDamage",
        "scaling": {
         "const": 225.0,
         "ap": 1.575
        },
        "target": "flat",
+       "per_second": false,
+       "alt": true
+      },
+      {
+       "type": "magic",
+       "calc": "EmpoweredHealth",
+       "scaling": {
+        "const": 0.12
+       },
+       "target": "target_max_hp",
        "per_second": false,
        "alt": true
       }
@@ -21088,7 +21764,7 @@
        },
        "target": "flat",
        "per_second": false,
-       "alt": false
+       "alt": true
       }
      ],
      "mode_overrides": [],
@@ -22122,6 +22798,17 @@
        "target": "flat",
        "per_second": false,
        "alt": false
+      },
+      {
+       "type": "physical",
+       "calc": "MaxHealthDamageCalc",
+       "scaling": {
+        "const": 0.0484,
+        "bonus_ad": 0.0003
+       },
+       "target": "target_max_hp",
+       "per_second": false,
+       "alt": false
       }
      ],
      "mode_overrides": [],
@@ -22230,10 +22917,22 @@
        "target": "flat",
        "per_second": false,
        "alt": false
+      },
+      {
+       "type": "physical",
+       "calc": "MaxHealthDamage",
+       "scaling": {
+        "const": 0.18
+       },
+       "target": "target_max_hp",
+       "per_second": false,
+       "alt": false
       }
      ],
      "mode_overrides": [],
-     "notes": []
+     "notes": [
+      "target bonus health counted as 30% of max health"
+     ]
     }
    ],
    "parse_quality": "good",
@@ -22405,7 +23104,7 @@
        },
        "target": "flat",
        "per_second": false,
-       "alt": false
+       "alt": true
       }
      ],
      "mode_overrides": [
@@ -22543,6 +23242,17 @@
       },
       {
        "type": "magic",
+       "calc": "BasePercentHealth",
+       "scaling": {
+        "const": 0.04,
+        "ap": 0.0001
+       },
+       "target": "target_max_hp",
+       "per_second": false,
+       "alt": false
+      },
+      {
+       "type": "magic",
        "calc": "BaseFlatDamage",
        "scaling": {
         "const": 40.0
@@ -22550,6 +23260,17 @@
        "target": "flat",
        "per_second": false,
        "alt": true
+      },
+      {
+       "type": "magic",
+       "calc": "EmpPercentHealth",
+       "scaling": {
+        "const": 0.07,
+        "ap": 0.0002
+       },
+       "target": "target_max_hp",
+       "per_second": false,
+       "alt": false
       }
      ],
      "mode_overrides": [],
@@ -22700,6 +23421,17 @@
      },
      "hits": [
       {
+       "type": "magic",
+       "calc": "Calc_Max_Health_Damage",
+       "scaling": {
+        "const": 0.01,
+        "bonus_ad": 0.0001
+       },
+       "target": "target_max_hp",
+       "per_second": false,
+       "alt": false
+      },
+      {
        "type": "physical",
        "calc": "Calc_Damage",
        "scaling": {
@@ -22793,12 +23525,32 @@
       },
       {
        "type": "magic",
+       "calc": "Calc_Max_Health_Damage",
+       "scaling": {
+        "const": 0.05
+       },
+       "target": "target_max_hp",
+       "per_second": false,
+       "alt": false
+      },
+      {
+       "type": "magic",
        "calc": "Calc_Dragon_Damage",
        "scaling": {
         "const": 137.5,
         "ap": 1.0
        },
        "target": "flat",
+       "per_second": false,
+       "alt": false
+      },
+      {
+       "type": "magic",
+       "calc": "Calc_Max_Health_Dragon_Damage",
+       "scaling": {
+        "const": 0.0625
+       },
+       "target": "target_max_hp",
        "per_second": false,
        "alt": false
       },
@@ -23219,7 +23971,10 @@
     }
    ],
    "parse_quality": "good",
-   "notes": []
+   "notes": [],
+   "death": {
+    "act": 9
+   }
   },
   {
    "id": "Sivir",
@@ -23442,6 +24197,28 @@
       "self_buff": true
      },
      "hits": [
+      {
+       "type": "physical",
+       "calc": "AbilityDamage",
+       "scaling": {
+        "const": 50.0,
+        "bonus_ad": 0.9,
+        "bonus_hp": 0.03
+       },
+       "target": "flat",
+       "per_second": false,
+       "alt": false
+      },
+      {
+       "type": "physical",
+       "calc": "MaxHPPercent",
+       "scaling": {
+        "const": 0.11
+       },
+       "target": "target_max_hp",
+       "per_second": false,
+       "alt": false
+      },
       {
        "type": "physical",
        "calc": "AbilityDamage",
@@ -23795,7 +24572,7 @@
        },
        "target": "flat",
        "per_second": false,
-       "alt": false
+       "alt": true
       }
      ],
      "mode_overrides": [],
@@ -24651,7 +25428,19 @@
       "speed": 1450,
       "on_self": false
      },
-     "hits": [],
+     "hits": [
+      {
+       "type": "magic",
+       "calc": "ThrowDamage",
+       "scaling": {
+        "const": 190.0,
+        "ap": 0.65
+       },
+       "target": "flat",
+       "per_second": false,
+       "alt": false
+      }
+     ],
      "mode_overrides": [],
      "notes": [
       "ARAM cooldown"
@@ -25471,7 +26260,11 @@
     }
    ],
    "parse_quality": "partial",
-   "notes": []
+   "notes": [],
+   "death": {
+    "act": 2.5,
+    "needs_r": true
+   }
   },
   {
    "id": "Teemo",
@@ -26378,7 +27171,11 @@
     }
    ],
    "parse_quality": "partial",
-   "notes": []
+   "notes": [],
+   "death": {
+    "act": 5,
+    "needs_r": true
+   }
   },
   {
    "id": "TwistedFate",
@@ -28114,7 +28911,30 @@
       "on_self": false,
       "move": "dash"
      },
-     "hits": [],
+     "hits": [
+      {
+       "type": "magic",
+       "calc": "RDamageCalc",
+       "scaling": {
+        "const": 175.0,
+        "ap": 0.2
+       },
+       "target": "flat",
+       "per_second": false,
+       "alt": false
+      },
+      {
+       "type": "magic",
+       "calc": "RecastDamageCalc",
+       "scaling": {
+        "const": 350.0,
+        "ap": 0.5
+       },
+       "target": "flat",
+       "per_second": false,
+       "alt": false
+      }
+     ],
      "mode_overrides": [],
      "notes": []
     }
@@ -28372,6 +29192,16 @@
      "hits": [
       {
        "type": "physical",
+       "calc": "TotalPercentHealthOnHit",
+       "scaling": {
+        "const": 0.06
+       },
+       "target": "target_current_hp",
+       "per_second": false,
+       "alt": false
+      },
+      {
+       "type": "physical",
        "calc": "SecondAttackDamage",
        "scaling": {
         "const": 25.0,
@@ -28484,6 +29314,17 @@
         "bonus_ad": 1.2
        },
        "target": "flat",
+       "per_second": false,
+       "alt": false
+      },
+      {
+       "type": "physical",
+       "calc": "TotalPercentHealth",
+       "scaling": {
+        "const": 0.2,
+        "bonus_ad": 0.0005
+       },
+       "target": "target_missing_hp",
        "per_second": false,
        "alt": false
       },
@@ -28791,7 +29632,7 @@
        },
        "target": "flat",
        "per_second": false,
-       "alt": false
+       "alt": true
       }
      ],
      "mode_overrides": [],
@@ -29771,7 +30612,7 @@
        },
        "target": "flat",
        "per_second": false,
-       "alt": false
+       "alt": true
       }
      ],
      "mode_overrides": [],
@@ -30044,6 +30885,16 @@
         "ap": 1.1
        },
        "target": "flat",
+       "per_second": false,
+       "alt": false
+      },
+      {
+       "type": "physical",
+       "calc": "PercentCurrentHealthDamage",
+       "scaling": {
+        "const": 0.15
+       },
+       "target": "target_current_hp",
        "per_second": false,
        "alt": false
       }
@@ -30359,12 +31210,32 @@
        "alt": false
       },
       {
+       "type": "physical",
+       "calc": "MaxHealthDamage",
+       "scaling": {
+        "const": 0.06
+       },
+       "target": "target_max_hp",
+       "per_second": false,
+       "alt": false
+      },
+      {
        "type": "magic",
        "calc": "BaseDamage",
        "scaling": {
         "const": 25.0
        },
        "target": "flat",
+       "per_second": false,
+       "alt": false
+      },
+      {
+       "type": "magic",
+       "calc": "MaxHealthDamage",
+       "scaling": {
+        "const": 0.06
+       },
+       "target": "target_max_hp",
        "per_second": false,
        "alt": false
       }
@@ -30562,7 +31433,19 @@
       "speed": 0,
       "on_self": false
      },
-     "hits": [],
+     "hits": [
+      {
+       "type": "magic",
+       "calc": "Calc_HealthDamage",
+       "scaling": {
+        "const": 0.08,
+        "ap": 0.0003
+       },
+       "target": "target_max_hp",
+       "per_second": false,
+       "alt": false
+      }
+     ],
      "mode_overrides": [],
      "notes": []
     },
@@ -31190,7 +32073,7 @@
        },
        "target": "target_max_hp",
        "per_second": false,
-       "alt": false
+       "alt": true
       }
      ],
      "mode_overrides": [],
@@ -31448,7 +32331,12 @@
     }
    ],
    "parse_quality": "good",
-   "notes": []
+   "notes": [],
+   "death": {
+    "revive_frac": 0.3,
+    "revive_delay": 8,
+    "chance": 0.5
+   }
   },
   {
    "id": "Zed",
@@ -32189,7 +33077,12 @@
     }
    ],
    "parse_quality": "partial",
-   "notes": []
+   "notes": [],
+   "death": {
+    "revive_frac": 0.35,
+    "revive_delay": 3,
+    "needs_r": true
+   }
   },
   {
    "id": "Zoe",

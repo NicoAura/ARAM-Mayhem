@@ -75,6 +75,11 @@ struct ChampionKit {
     double reach = 0;  // how far its damage reaches: attack range, or its abilities' typical range
     double apRatios = 0, adRatios = 0;  // summed ability scalings, to tell AP from AD kits
     std::string combo;  // recommended cast order, e.g. "EQRW" (data/combos.json); empty = by damage
+    // Cheating death once a fight (Karthus, Sion, Zilean R, Anivia's egg...): keep acting for
+    // deathAct seconds before dying, or go down for reviveDelay seconds and come back with
+    // reviveFrac of max Health. deathNeedsR: only while the ultimate is ready (it's used up).
+    double deathAct = 0, reviveFrac = 0, reviveDelay = 0, deathChance = 1;
+    bool deathNeedsR = false;
     std::vector<Ability> abilities;
 };
 

@@ -205,6 +205,10 @@ Scenario Scenario::fromJson(const json::Value& s) {
     sc.engageMax = s["engage_max"].asNumber(sc.engageMax);
     sc.startDistance = s["start_distance"].asNumber(sc.startDistance);
     sc.enemySpread = s["enemy_spread"].asNumber(sc.enemySpread);
+    sc.untilDeath = s["until_death"].asNumber(0) > 0;
+    sc.fightCap = s["fight_cap"].asNumber(sc.fightCap);
+    sc.deathDamageScale = s["until_death_damage_scale"].asNumber(1.0);
+    sc.teamSizeRule = static_cast<int>(s["team_size"].asNumber(0));
     for (const auto& e : s["enemy_team"].arr) {
         EnemyProfile p;
         p.id = e["id"].asString();

@@ -85,6 +85,11 @@ struct Scenario {
     double engageMin = 2, engageMax = 6;
     // All-champion sim: how far away the enemy team starts and how spread out it stands.
     double startDistance = 1300, enemySpread = 250;
+    // All-champion sim: fight until the champion dies (fightCap seconds at most) instead of
+    // for a drawn fight length, and how many enemies a fight has (0 = the enemy pool's size).
+    bool untilDeath = false;
+    double fightCap = 90, deathDamageScale = 1;
+    int teamSizeRule = 0;
 
     static Scenario fromJson(const json::Value& s);
     // Replaces the enemy team with a champion pool built by tools/build_enemy_pool.py

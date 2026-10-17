@@ -110,9 +110,9 @@ int main(int argc, char** argv) {
 
     {
         Library harsh = Library::load(argc > 1 ? argv[1] : "data/mayhem_rules.json", {{"enemy_damage_scale", 3.0}});
-        CHECK(summarize(runTrials(harsh, *harsh.find("Ahri"), cap, harsh.scenarioFor(*harsh.find("Ahri")), 0, 800)).survivalRate <
-                  summarize(runTrials(lib, *ahri, cap, sc, 0, 800)).survivalRate,
-              "tripling enemy damage lowers survival");
+        CHECK(summarize(runTrials(harsh, *harsh.find("Ahri"), cap, harsh.scenarioFor(*harsh.find("Ahri")), 0, 800)).meanTimeAlive <
+                  summarize(runTrials(lib, *ahri, cap, sc, 0, 800)).meanTimeAlive,
+              "tripling enemy damage shortens how long you live");
         Library picked = lib;
         picked.enemyTeam = {"Malphite:hp=6000:armor=300", "Brand"};
         const Scenario psc = picked.scenarioFor(*ahri);
@@ -122,6 +122,25 @@ int main(int argc, char** argv) {
         bool rejected = false;
         try { Library::load(argc > 1 ? argv[1] : "data/mayhem_rules.json", {{"not_a_setting", 1}}); } catch (...) { rejected = true; }
         CHECK(rejected, "unknown settings are rejected");
+    }
+
+    {
+        // Fights last until the champion dies; Karthus keeps fighting after his death.
+        const Result r = runTrials(lib, *ahri, cap, sc, 3, 1).front();
+        CHECK(r.died && std::abs(r.duration - r.timeAlive) < 1e-9, "a fight ends when the champion dies");
+        const ChampionKit* karthus = lib.find("Karthus");
+        const Scenario ksc = lib.scenarioFor(*karthus);
+        ChampionKit mortal = *karthus;
+        mortal.deathAct = 0;
+        CHECK(summarize(runTrials(lib, *karthus, cap, ksc, 0, 300)).meanTimeAlive >
+                  summarize(runTrials(lib, mortal, cap, ksc, 0, 300)).meanTimeAlive + 5,
+              "Karthus fights on after dying");
+        CHECK(sc.teamSize == 1, "one enemy by default");
+        Library geared = lib;
+        geared.enemyTeam = {"Malphite:hp=4000:items=warmogs"};
+        const Scenario gsc = geared.scenarioFor(*ahri);
+        CHECK(gsc.enemies.size() == 1 && gsc.enemies[0].hp == 4000 + lib.items.at("warmogs").stats.at("hp"),
+              "an enemy's items add to its stats");
     }
 
     {

@@ -77,5 +77,100 @@
    "skip": true,
    "why": "Ranger's Focus is an attack speed steroid, not a separate hit"
   }
+ },
+ "Aatrox": {
+  "Q": {
+   "hit_mults": {
+    "QDamage": 3.75,
+    "QEdgeDamage": 3.75
+   },
+   "why": "The Darkin Blade is three casts per cooldown, dealing 100/125/150%"
+  }
+ },
+ "Gwen": {
+  "Q": {
+   "hit_mults": {
+    "MiniSwipeDamage": 5
+   },
+   "why": "Snip Snip! snips 5 times at full stacks before the final cut"
+  }
+ },
+ "Hecarim": {
+  "E": {
+   "alt_calcs": [
+    "MaxDamage"
+   ],
+   "why": "Devastating Charge deals min to max damage by distance, not both"
+  }
+ },
+ "Karthus": {
+  "death": {
+   "act": 7,
+   "why": "Death Defied: keeps casting for 7 seconds after dying"
+  }
+ },
+ "Sion": {
+  "death": {
+   "act": 9,
+   "why": "Glory in Death: fights on as a decaying zombie for about 9 seconds"
+  }
+ },
+ "KogMaw": {
+  "death": {
+   "act": 4,
+   "why": "Icathian Surprise: keeps going for 4 seconds after dying"
+  }
+ },
+ "Zilean": {
+  "death": {
+   "revive_frac": 0.35,
+   "revive_delay": 3,
+   "needs_r": true,
+   "why": "Chronoshift on himself: revives after 3 seconds if his ultimate is ready"
+  }
+ },
+ "Anivia": {
+  "death": {
+   "revive_frac": 1.0,
+   "revive_delay": 6,
+   "chance": 0.5,
+   "why": "Rebirth: back at full Health if the egg survives 6 seconds (about half the time in a fight)"
+  }
+ },
+ "Zac": {
+  "death": {
+   "revive_frac": 0.3,
+   "revive_delay": 8,
+   "chance": 0.5,
+   "why": "Cell Division: reforms if a blob survives 8 seconds (about half the time)"
+  }
+ },
+ "Tryndamere": {
+  "death": {
+   "act": 5,
+   "needs_r": true,
+   "why": "Undying Rage: can't die for 5 seconds"
+  }
+ },
+ "Kindred": {
+  "death": {
+   "act": 4,
+   "needs_r": true,
+   "why": "Lamb's Respite: nobody can die for 4 seconds"
+  }
+ },
+ "Kayle": {
+  "death": {
+   "act": 2.5,
+   "needs_r": true,
+   "why": "Divine Judgment: invulnerable for 2.5 seconds"
+  }
+ },
+ "Taric": {
+  "death": {
+   "act": 2.5,
+   "needs_r": true,
+   "why": "Cosmic Radiance: invulnerable for 2.5 seconds"
+  }
  }
 }

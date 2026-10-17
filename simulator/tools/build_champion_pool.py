@@ -78,7 +78,7 @@ LINE_TARGETING = {"Direction", "DragDirection"}
 # main hit (an empowered or maximum version) rather than extra damage.
 ALT_WORDS = ("up to", "increased to", "instead", "empowered", "maximum of", "minimum of", "at most")
 # Formula names that are never champion damage.
-SKIP_CALC = re.compile(r"minion|monster|structure|turret|tower|heal|shield", re.I)
+SKIP_CALC = re.compile(r"minion|monster|structure|turret|tower|heal(?!th)|shield", re.I)
 # Mode layers in Riot's DataValuesModeOverride, applied in order.
 MODE_LAYERS = ("ARAM", "Kiwi")
 # Per-mode cooldowns sit under this hashed key in each spell, with the same ARAM/Kiwi layers.
@@ -296,7 +296,7 @@ class Evaluator:
 # ---------------------------------------------------------------------------
 
 DAMAGE_TAG = re.compile(r"<(magicDamage|physicalDamage|trueDamage)>(.*?)</\1>", re.S | re.I)
-REF = re.compile(r"@([A-Za-z0-9_.{}]+?)(?:\*(-?[0-9.]+))?@")
+REF = re.compile(r"@(?:spell\.[A-Za-z0-9_]+:)?([A-Za-z0-9_.{}]+?)(?:\*(-?[0-9.]+))?@")
 TYPE = {"magicdamage": "magic", "physicaldamage": "physical", "truedamage": "true"}
 
 
@@ -317,8 +317,15 @@ def tooltip_for(spell, strings):
 def resolve_includes(text, strings, depth=0):
     if depth > 3:
         return text
-    return re.sub(r"\{\{\s*([A-Za-z0-9_]+)\s*\}\}",
-                  lambda m: resolve_includes(strings.get(m.group(1).lower(), ""), strings, depth + 1), text)
+
+    def sub(m):
+        # Keys can pick a variant by a runtime value ("Spell_KarmaQ_Tooltip_@IsEmpowered@"): use the base state.
+        key = m.group(1).lower()
+        if "@" in key:
+            stem = re.sub(r"@[^@]*@", "", key)
+            key = next((stem + v for v in ("0", "1", "") if stem + v in strings), stem)
+        return resolve_includes(strings.get(key, ""), strings, depth + 1)
+    return re.sub(r"\{\{\s*([A-Za-z0-9_@.]+)\s*\}\}", sub, text)
 
 
 def flat_is_range(inner, refs, i):
@@ -361,6 +368,11 @@ def parse_spell(slot, spell_obj, strings, base_stats, attack_range=125):
                 # A percent: target health damage if the text says so, else a ratio display.
                 if "health" not in words:
                     continue
+                if "bonus health" in words[:40]:
+                    # % of the target's bonus Health: champions in a Mayhem fight carry about 30% of
+                    # their Health as bonus, so count it as a share of max Health.
+                    lin = lin.scale(0.3)
+                    notes.add("target bonus health counted as 30% of max health")
                 target = ("target_missing_hp" if "missing" in words else
                           "target_current_hp" if "current" in words else "target_max_hp")
                 if mult:
@@ -402,7 +414,7 @@ def parse_spell(slot, spell_obj, strings, base_stats, attack_range=125):
             continue
         inner_l = inner.lower()
         per_second = "per second" in inner_l or "per second" in after or "every second" in after
-        alt = any(w in before for w in ALT_WORDS)
+        alt = any(w in before for w in ALT_WORDS) or re.match(r"\s*(?:\S+\s+){0,1}instead\b", after) is not None
         if flat:
             hits.append({"type": kind, "calc": flat_names[0], "scaling": round_lin(flat[0]), "target": "flat",
                          "per_second": per_second, "alt": alt})
@@ -673,11 +685,21 @@ def main():
                 a["cooldown"] = DEFAULT_R_COOLDOWN if a["slot"] == "R" else DEFAULT_COOLDOWN
                 a["notes"].append(f"cooldown unknown; assumed {a['cooldown']:g}s")
         for slot, fix in overrides.get(c["id"], {}).items():
+            if slot == "death":
+                continue
             for a in abilities:
                 if a["slot"] == slot:
                     for k, v in fix.items():
                         if k == "geometry":
                             a["geometry"].update(v)
+                        elif k == "hit_mults":  # {calc name: multiplier}, e.g. a recast or a hit count
+                            for h in a["hits"]:
+                                if h["calc"] in v:
+                                    h["scaling"] = {s: round(c * v[h["calc"]], 4) for s, c in h["scaling"].items()}
+                        elif k == "alt_calcs":  # damage numbers that replace the main hit rather than add to it
+                            for h in a["hits"]:
+                                if h["calc"] in v:
+                                    h["alt"] = True
                         elif k != "why":
                             a[k] = v
                     a["notes"].append("hand override: " + fix.get("why", ""))
@@ -724,6 +746,9 @@ def main():
             "parse_quality": quality,
             "notes": notes,
         }
+        death = overrides.get(c["id"], {}).get("death")
+        if death:  # cheating death once a fight (champion_overrides.json)
+            entry["death"] = {k: v for k, v in death.items() if k != "why"}
         out.append(entry)
 
     if YUNARA_ID not in cn and pool.get("yunara"):
