@@ -294,3 +294,20 @@ def test_regions():
     assert set(r["champions"]) == set(tags)
     for alias, regions in r["champions"].items():
         assert regions and set(regions) <= set(keys), alias
+
+
+MOD_STATS = {"damage_dealt", "damage_taken", "healing", "shielding", "tenacity", "ability_haste", "attack_speed",
+             "energy_regen"}
+
+
+def test_mayhem_modifiers():
+    full = load_json("data/wiki/mayhem_modifiers.json")
+    shipped = load_js_data("champions/modifiers.js", "CHAMPS_MODIFIERS")
+    tags = load_json("champions/tags.json")["champions"]
+    assert len(full["champions"]) > 100 and set(full["champions"]) <= set(tags)
+    assert shipped == {a: c["mayhem"] for a, c in full["champions"].items() if c["mayhem"]}
+    for alias, c in full["champions"].items():
+        assert c["source"] in full["pages"].values(), alias
+        for side in ("aram", "mayhem"):
+            assert set(c[side]) <= MOD_STATS, alias
+            assert all(isinstance(v, (int, float)) and abs(v) <= 100 for v in c[side].values()), alias
