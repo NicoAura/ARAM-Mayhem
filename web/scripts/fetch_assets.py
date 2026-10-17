@@ -4,12 +4,19 @@ so the whole site loads from deeparam.com.
 Where things land (the full map, for the other tabs, is /mnt/project-files/website/assets-map.md):
   raw.communitydragon.org/<channel>/<path>   -> /assets/cd/<channel>/<path, lower case>   (channel: latest or pbe)
   ddragon.leagueoflegends.com/cdn/<v>/img/<p> -> /assets/dd/<v>/img/<p>                  (live patch's version only)
+  ddragon.leagueoflegends.com/cdn/img/<p>     -> /assets/dd/img/<p>                      (splash, loading, tile art; runes)
   ability preview clips <k>/ability_<k>_<s>1.webm -> /assets/clips/<k>/ability_<k>_<s>1.webm (re-encoded, 480 px)
   cdn.modelviewer.lol/lol/models/<id>/<n>/model.glb -> /assets/models/<id>/<n>/model.glb + models.json
                                                   (slimmed: the replay's clips only, 512 px WebP textures)
   Google Fonts (Bricolage Grotesque, Geist, Geist Mono) -> /assets/fonts/fonts.css
   three.js 0.160.0 (the replay's 3D)           -> /assets/lib/three-0.160.0/{build,examples/jsm}/...
 Player profile icons (5,000+) aren't mirrored; the site serves them at /assets/profile-icon/<id>.jpg.
+
+Official versions first: where Data Dragon has an image (champion icons, splash, loading and tile art,
+ability, item, summoner spell, rune and profile icons), pages show that copy instead of the client file.
+web/src/data/dd-swap.json maps each client-file path pages name to its Data Dragon copy; sync-embeds.mjs
+and src/lib/assets.ts apply it, and the swapped splash art and pick quotes are no longer kept. Mayhem
+augment and item icons, challenge tokens and minimaps have no Data Dragon version and stay as they are.
 
 What gets fetched: every such URL written anywhere in the repo's pages and data, plus the sets pages build
 from ids at runtime (each champion's icon, pick quote, client JSON, splash and ability icons; items; augments;
@@ -57,7 +64,7 @@ URL_RE = re.compile(
 # Pages that already point at the mirror (/assets/cd/<channel>/..., /assets/dd/<ver>/img/...) still name a
 # source file, so they keep getting mirrored after a patch.
 LOCAL_RE = re.compile(
-    r"/assets/(cd/(?:latest|pbe)/|dd/[\d.]+/img/)[^\s\"'`<>()\\]+?\.(?:" + ASSET_EXT + r")(?=[\s\"'`<>()\\?#]|$)", re.I)
+    r"/assets/(cd/(?:latest|pbe)/|dd/(?:[\d.]+/)?img/)[^\s\"'`<>()\\]+?\.(?:" + ASSET_EXT + r")(?=[\s\"'`<>()\\?#]|$)", re.I)
 SCAN_EXT = {".js", ".mjs", ".ts", ".tsx", ".json", ".html", ".css", ".csv"}
 SCAN_SKIP = {".git", "node_modules", ".next", ".open-next", "mac-imports", "assets", "embed", "importer"}
 
@@ -86,8 +93,8 @@ def local_path(url):
         channel, _, rest = u.path.lstrip("/").partition("/")
         return f"cd/{channel}/{urllib.parse.unquote(rest).lower()}".replace("kiwi", "mayhem")
     if u.netloc == "ddragon.leagueoflegends.com":
-        m = re.match(r"/cdn/([\d.]+)/img/(.+)", u.path)
-        return f"dd/{m.group(1)}/img/{urllib.parse.unquote(m.group(2))}" if m else None
+        m = re.match(r"/cdn/(?:([\d.]+)/)?((?:img|data)/.+)", u.path)
+        return f"dd/{m.group(1) + '/' if m.group(1) else ''}{urllib.parse.unquote(m.group(2))}" if m else None
     return None
 
 
@@ -97,7 +104,8 @@ def scan_repo():
     for root, dirs, files in os.walk(REPO):
         dirs[:] = [d for d in dirs if d not in SCAN_SKIP and not d.startswith(".")]
         for f in files:
-            if os.path.splitext(f)[1].lower() not in SCAN_EXT:
+            # dd-swap.json names every client file with an official copy; pages don't use those.
+            if os.path.splitext(f)[1].lower() not in SCAN_EXT or f == "dd-swap.json":
                 continue
             try:
                 text = open(os.path.join(root, f), encoding="utf-8", errors="ignore").read()
@@ -113,6 +121,8 @@ def source_url(path):
     rest = path.removeprefix("/assets/")
     if rest.startswith("cd/"):
         return f"{CD}/{rest[3:].replace('mayhem', 'kiwi')}"
+    if rest.startswith("dd/img/"):
+        return f"{DD}/cdn/{rest[3:]}"
     ver, _, img = rest[3:].partition("/")
     return f"{DD}/cdn/{ver}/{img}"
 
@@ -137,7 +147,7 @@ def runtime_sets(summary, champ_json):
     for c in summary:
         if not real_champion(c):
             continue
-        for f in (f"champion-icons/{c['id']}.png", f"champion-choose-vo/{c['id']}.ogg", f"champions/{c['id']}.json"):
+        for f in (f"champion-icons/{c['id']}.png", f"champions/{c['id']}.json"):
             urls.add(f"{CD}/latest/{GD}/v1/{f}")
         data = champ_json.get(c["id"])
         if data:
@@ -237,6 +247,115 @@ def write_large_icon_list():
                 have.append("/assets/" + os.path.relpath(os.path.join(root, f), OUT).replace(os.sep, "/"))
     with open(os.path.join(REPO, "web", "src", "data", "augment-large-icons.json"), "w") as fh:
         json.dump(sorted(have), fh, indent=0)
+
+
+SWAP = os.path.join(WEB, "src", "data", "dd-swap.json")
+
+
+def dd_data(ver, rel, refresh):
+    """A Data Dragon data file, kept under /assets/dd/<ver>/data/en_US/ (the champion panel reads them too)."""
+    path = os.path.join(OUT, "dd", ver, "data", "en_US", rel)
+    if os.path.exists(path) and not refresh:
+        with open(path, encoding="utf-8") as f:
+            return json.load(f)
+    body = fetch(f"{DD}/cdn/{ver}/data/en_US/{rel}")
+    os.makedirs(os.path.dirname(path), exist_ok=True)
+    with open(path, "wb") as f:
+        f.write(body)
+    return json.loads(body)
+
+
+def client_json(rel):
+    """A client data file (v1/...), from the mirror when it's there."""
+    path = os.path.join(OUT, "cd", "latest", GD, "v1", rel)
+    if os.path.exists(path):
+        with open(path, encoding="utf-8") as f:
+            return json.load(f)
+    return json.loads(fetch(f"{CD}/latest/{GD}/v1/{rel}"))
+
+
+def dd_swap(ver, champ_json, refresh):
+    """Client-file path -> its Data Dragon copy, both relative to /assets/, for every image Data Dragon has."""
+    rel = lambda p: local_path(client_path(p)) if p else None  # noqa: E731
+    swap = {}
+    champs = dd_data(ver, "champion.json", refresh)["data"]
+    keys = {int(c["key"]): k for k, c in champs.items()}
+    with cf.ThreadPoolExecutor(16) as pool:
+        full = dict(pool.map(lambda k: (k, dd_data(ver, f"champion/{k}.json", refresh)["data"][k]), keys.values()))
+    art = (("tilePath", "tiles"), ("uncenteredSplashPath", "splash"), ("splashPath", "centered"), ("loadScreenPath", "loading"))
+    for cid, key in keys.items():
+        swap[f"cd/latest/{GD}/v1/champion-icons/{cid}.png"] = f"dd/{ver}/img/champion/{key}.png"
+        client, d = champ_json.get(cid), full[key]
+        if not client:
+            continue
+        nums = {s["num"] for s in d["skins"]}
+        for skin in client.get("skins", []):
+            num = skin["id"] % 1000
+            if num in nums:
+                for field, folder in art:
+                    if rel(skin.get(field)):
+                        swap[rel(skin[field])] = f"dd/img/champion/{folder}/{key}_{num}.jpg"
+        pairs = [(client.get("passive", {}), f"passive/{d['passive']['image']['full']}")]
+        pairs += [(a, f"spell/{b['image']['full']}") for a, b in zip(client.get("spells", []), d["spells"])]
+        for a, to in pairs:
+            if rel(a.get("abilityIconPath")):
+                swap[rel(a["abilityIconPath"])] = f"dd/{ver}/img/{to}"
+    items = dd_data(ver, "item.json", refresh)["data"]
+    for i in client_json("items.json"):
+        if str(i["id"]) in items and rel(i.get("iconPath")):
+            swap[rel(i["iconPath"])] = f"dd/{ver}/img/item/{i['id']}.png"
+    spells = {int(s["key"]): s["image"]["full"] for s in dd_data(ver, "summoner.json", refresh)["data"].values()}
+    for s in client_json("summoner-spells.json"):
+        if s["id"] in spells and rel(s.get("iconPath")):
+            swap[rel(s["iconPath"])] = f"dd/{ver}/img/spell/{spells[s['id']]}"
+    runes = {}
+    for style in dd_data(ver, "runesReforged.json", refresh):
+        runes[style["id"]] = style["icon"]
+        for slot in style["slots"]:
+            runes.update((r["id"], r["icon"]) for r in slot["runes"])
+    for p in client_json("perks.json") + client_json("perkstyles.json").get("styles", []):
+        if p["id"] in runes and rel(p.get("iconPath")):
+            swap[rel(p["iconPath"])] = f"dd/img/{runes[p['id']]}"
+    return swap
+
+
+def reachable(swap, named):
+    """The part of the swap pages can reach: paths they name, and the kinds they build from ids at runtime
+    (champion, ability, item, rune and summoner spell icons; each champion's base splash and tile)."""
+    runtime = ("/champion-icons/", "/hud/icons2d/", "/items/icons2d/", "/perk-images/", "/summoner")
+    base_art = re.compile(r"/skins/base/images/[^/]+_splash_(tile|uncentered)_\d+\.jpg$")
+    return {k: v for k, v in swap.items() if k in named or any(r in k for r in runtime) or base_art.search(k)}
+
+
+def write_swap(ver, swap):
+    with open(SWAP, "w") as f:
+        json.dump({"version": ver, "paths": {f"/assets/{k}": f"/assets/{v}" for k, v in sorted(swap.items())}}, f, indent=0)
+    with open(os.path.join(WEB, "src", "data", "dd-version.json"), "w") as f:  # small, for browser code
+        json.dump({"version": ver}, f)
+
+
+def swapped_art(rel, swap, keep_client):
+    """Champion art whose official copy is in place (the replay still names some client files directly)."""
+    return rel in swap and "/skins/" in rel and rel not in keep_client
+
+
+def prune_swapped(swap, keep_client, used):
+    """Drop client copies of champion art that now comes from Data Dragon, the pick quotes, and official
+    champion art no page uses any more."""
+    gone = 0
+    art = os.path.join(OUT, "dd", "img", "champion")
+    for root, _, files in os.walk(art):
+        for f in files:
+            rel = os.path.relpath(os.path.join(root, f), OUT).replace(os.sep, "/")
+            if rel not in used:
+                os.remove(os.path.join(root, f))
+    for root, _, files in os.walk(os.path.join(OUT, "cd", "latest")):
+        for f in files:
+            rel = os.path.relpath(os.path.join(root, f), OUT).replace(os.sep, "/")
+            if swapped_art(rel, swap, keep_client) or "/champion-choose-vo/" in rel:
+                os.remove(os.path.join(root, f))
+                gone += 1
+    print(f"official versions: {len(swap)} client files have one; removed {gone} client copies")
 
 
 def replay_index():
@@ -375,14 +494,26 @@ def main():
     cd_urls -= {u for u in cd_urls if "ddragon" in u}
     dd_urls |= {u for u in literal if "ddragon" in u}
 
-    errors = fetch_all(cd_urls, args.refresh, "client files")
+    # Official versions first: fetch the Data Dragon copy of every client image pages name that has one.
+    swap = dd_swap(ver, champ_json, args.refresh)
+    named = {local_path(u) for u in cd_urls}
+    wanted = reachable(swap, named)
+    errors = fetch_all(dd_urls | {source_url("/assets/" + v) for v in wanted.values()}, args.refresh, "official versions and replay icons")
+    # A copy that couldn't be fetched leaves the client file in use.
+    swap = {k: v for k, v in swap.items() if os.path.exists(os.path.join(OUT, v))}
+    used = reachable(swap, named)
+    write_swap(ver, used)
+    replay_files = {local_path(source_url(base + r.lower())) for r in icons} if base.startswith("/assets/") else set()
+    cd_urls = {u for u in cd_urls if not swapped_art(local_path(u), swap, replay_files) and "/champion-choose-vo/" not in u}
+
+    errors += fetch_all(cd_urls, args.refresh, "client files")
     # Pages show each augment's large icon, which carries its rarity colour (the small ones are grey; see
     # sync-embeds.mjs). Arena augments have no large icon, so those misses are expected and not counted.
     large = {re.sub(r"_small\.png$", "_large.png", u) for u in cd_urls if re.search(r"/augments/icons/[^/]+_small\.png$", u, re.I)}
     fetch_all(large - cd_urls, args.refresh, "augment large icons (Arena ones have none)")
-    errors += fetch_all(dd_urls, args.refresh, "replay icons")
-    for old in os.listdir(os.path.join(OUT, "dd")):  # keep only the live patch's copies
-        if old != ver:
+    prune_swapped(swap, replay_files, set(used.values()))
+    for old in os.listdir(os.path.join(OUT, "dd")):  # keep only the live patch's copies (img/ isn't versioned)
+        if old not in (ver, "img"):
             shutil.rmtree(os.path.join(OUT, "dd", old))
     fetch_fonts()
     fetch_three()

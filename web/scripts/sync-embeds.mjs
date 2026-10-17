@@ -72,6 +72,12 @@ const LOCAL = [
   [/<link[^>]+rel="preconnect"[^>]+fonts\.g(?:oogleapis|static)\.com[^>]*>\s*/g, ""],
   [/https:\/\/fonts\.googleapis\.com\/css2\?[^"')\s]+/g, "/assets/fonts/fonts.css"],
 ];
+// Official versions first: client images with a Data Dragon copy point at that copy (fetch_assets.py writes the map).
+const swapFile = join(web, "src", "data", "dd-swap.json");
+const SWAP = existsSync(swapFile) ? JSON.parse(readFileSync(swapFile, "utf8")).paths : {};
+LOCAL.push([/\/assets\/cd\/latest\/[^"'`\s()\\<>]+/g, (m) => SWAP[m] ?? m]);
+// Pick quotes (game voice lines) aren't kept, so data that names one gets none.
+LOCAL.push([/"\/assets\/cd\/latest\/[^"]*\/champion-choose-vo\/\d+\.ogg"/g, "null"]);
 const ACTIVE = LOCAL.filter(([, , needs]) => !needs || existsSync(join(web, "public", "assets", needs)));
 const TEXT = /\.(html|js|mjs|css|json)$/;
 function localize(dir) {

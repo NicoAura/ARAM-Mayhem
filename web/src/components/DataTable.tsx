@@ -109,7 +109,7 @@ function Champion({ id, onOpen, star }: { id: string; onOpen: (id: string) => vo
   const name = NAMES[id] ?? id.replace(/([a-z])([A-Z])/g, "$1 $2");
   const named = <Named src={`/icons/champions/${id}.webp`} name={name} />;
   const body = hasPanel(id) ? (
-    <button type="button" className="champ-open" onClick={() => onOpen(id)} title="Splash, pick quote and abilities">
+    <button type="button" className="champ-open" onClick={() => onOpen(id)} title="Splash art and abilities">
       {named}
     </button>
   ) : (
