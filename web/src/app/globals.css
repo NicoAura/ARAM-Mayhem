@@ -3857,3 +3857,27 @@ html[data-motion="reduce"] .btn:hover {
 [data-tilt="soft"] {
   border-radius: 10px;
 }
+
+/* Public player pages (/profile/...) */
+.profile-tag {
+  margin-left: 0.25em;
+  color: var(--muted);
+  font-weight: 400;
+}
+.profile-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+.card .muted {
+  color: var(--muted);
+  font-size: 0.8125rem;
+  font-weight: 400;
+}
+.rank-v.wr-high {
+  color: var(--good);
+  font-weight: 600;
+}
+.rank-v.wr-low {
+  color: var(--bad);
+}
