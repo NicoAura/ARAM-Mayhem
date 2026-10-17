@@ -45,12 +45,15 @@
   }
 
   const day = (iso) => new Date(iso + "T12:00:00").toLocaleDateString("en-US", { month: "short", day: "numeric" });
-  // The Chef's Special is the build with the newest `chef` date; a new one is added every day.
-  const chef = data.builds.filter((b) => b.chef).sort((a, b) => b.chef.localeCompare(a.chef))[0] || null;
+  const fullDay = (iso) => new Date(iso + "T12:00:00").toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric", year: "numeric" });
+  // Every build with a `chef` date was the Chef Special that day; a new one is added every day and the
+  // older ones stay in the archive. Today's is the newest; the rest of the page lists the other builds.
+  const specials = data.builds.filter((b) => b.chef).sort((a, b) => b.chef.localeCompare(a.chef));
+  const chef = specials[0] || null;
   const rest = data.builds.filter((b) => b !== chef);
 
   function card(b) {
-    const pastSpecial = b.chef && b !== chef ? ` <span class="chip" title="Chef's Special on ${esc(day(b.chef))}">Chef's Special ${esc(day(b.chef))}</span>` : "";
+    const pastSpecial = b.chef && b !== chef ? ` <a class="chip chef-chip" href="#chefs-special-${esc(b.chef)}" title="Chef Special on ${esc(fullDay(b.chef))}">Chef Special · ${esc(day(b.chef))}</a>` : "";
     return `<article class="card" id="${esc(b.id)}">
       <div class="card-head">
         <img src="${icon(b.champion_icon)}" alt="" width="52" height="52" loading="lazy">
@@ -92,12 +95,41 @@
     }
   }
 
-  if (chef) {
+  // The Chef Special box shows today's special, or an older one picked from the archive.
+  function showSpecial(b) {
     const box = document.getElementById("chefs-special");
-    box.innerHTML = `<div class="chef-head"><p class="eyebrow" id="chef-label">Chef's Special · ${esc(day(chef.chef))}</p>
-      <p class="muted small">A new unconventional build every day, built on an augment or item gimmick.</p></div>${card(chef)}`;
+    const i = specials.indexOf(b);
+    const today = b === chef;
+    const label = today ? `Today's Chef Special · ${esc(day(b.chef))}` : `Chef Special · ${esc(day(b.chef))}`;
+    const opts = specials.map((s) => `<option value="${esc(s.chef)}"${s === b ? " selected" : ""}>${esc(day(s.chef))} · ${esc(s.title)} (${esc(s.champion_name)})</option>`).join("");
+    box.innerHTML = `<div class="chef-head"><p class="eyebrow" id="chef-label">${label}</p>
+      <p class="muted small">${today ? "A new unconventional build every day, built on an augment or item gimmick." : `Served ${esc(fullDay(b.chef))}. <a href="#chefs-special">Back to today's</a>`}</p></div>
+      <div class="chef-archive" id="chef-archive" role="group" aria-label="Chef Special archive">
+        <span class="eyebrow">Archive · ${specials.length} ${specials.length === 1 ? "special" : "specials"}</span>
+        <button type="button" data-go="${i + 1}"${i + 1 >= specials.length ? " disabled" : ""}>‹ Earlier</button>
+        <select aria-label="Pick a day">${opts}</select>
+        <button type="button" data-go="${i - 1}"${i <= 0 ? " disabled" : ""}>Later ›</button>
+      </div>${card(b)}`;
     box.hidden = false;
+    box.querySelector("select").addEventListener("change", (e) => go(specials.find((s) => s.chef === e.target.value)));
+    for (const btn of box.querySelectorAll("button[data-go]")) btn.addEventListener("click", () => go(specials[+btn.dataset.go]));
   }
+  function go(b) {
+    if (!b) return;
+    history.replaceState(null, "", b === chef ? "#chefs-special" : "#chefs-special-" + b.chef);
+    showSpecial(b);
+  }
+  // #chefs-special-YYYY-MM-DD opens that day's special; #chefs-special and #chef-archive open today's.
+  function fromHash() {
+    const m = location.hash.match(/^#chefs-special-(\d{4}-\d{2}-\d{2})$/);
+    return (m && specials.find((s) => s.chef === m[1])) || chef;
+  }
+  if (chef) showSpecial(fromHash());
+  window.addEventListener("hashchange", () => {
+    if (!chef || !/^#(chefs-special|chef-archive)/.test(location.hash)) return;
+    showSpecial(fromHash());
+    document.getElementById("chefs-special").scrollIntoView();
+  });
 
   const tiers = ["All"].concat(TIERS.filter((t) => rest.some((b) => b.tier === t)), rest.some((b) => b.lab) ? [LAB] : []);
   document.getElementById("filters").innerHTML = tiers
@@ -126,6 +158,6 @@
     <p>Stats as of ${d(m.cn_augment_date)}. Updated ${esc(m.generated)}.</p>`;
 
   render();
-  // Open at the Chef's Special when linked to it (#chefs-special), once the cards exist.
-  if (location.hash === "#chefs-special" && chef) document.getElementById("chefs-special").scrollIntoView();
+  // Open at the Chef Special when linked to it (#chefs-special, a dated one, or #chef-archive), once the cards exist.
+  if (chef && /^#(chefs-special|chef-archive)/.test(location.hash)) document.getElementById("chefs-special").scrollIntoView();
 })();

@@ -226,12 +226,14 @@ def main():
     }
     with open(os.path.join(PAGE, "data.js"), "w", encoding="utf-8") as f:
         f.write("window.COOK_DATA = " + json.dumps({"meta": meta, "builds": out}, indent=1, ensure_ascii=False) + ";\n")
-    # The Lab's front page names today's Chef's Special (the build with the newest `chef` date) without loading all of data.js.
-    chef = max((b for b in out if b.get("chef")), key=lambda b: b["chef"], default=None)
-    pick = {k: chef[k] for k in ("id", "title", "champion_name", "chef", "tier")} if chef else None
+    # The Lab's front page names today's Chef Special (the build with the newest `chef` date) and counts the
+    # archive (every build with a `chef` date) without loading all of data.js.
+    specials = [b for b in out if b.get("chef")]
+    chef = max(specials, key=lambda b: b["chef"], default=None)
+    pick = dict({k: chef[k] for k in ("id", "title", "champion_name", "chef", "tier")}, count=len(specials)) if chef else None
     with open(os.path.join(PAGE, "chef.js"), "w", encoding="utf-8") as f:
         f.write("window.COOK_CHEF = " + json.dumps(pick, ensure_ascii=False) + ";\n")
-    # Home shows today's Chef's Special too; this file has everything its card needs, with icon paths as the
+    # Home shows today's Chef Special too; this file has everything its card needs, with icon paths as the
     # site serves them (The Lab is published at /embed/fun/) and the link to the full build.
     site = "/embed/fun/cook-builds/"
     special = None
@@ -243,10 +245,11 @@ def main():
             "augments": [{"name": r["name"], "rarity": r["rarity"], "core": r["core"], "win_rate": r["win_rate"],
                           "icon": site + r["icon"]} for r in chef["augments"]],
             "href": "/lab#chefs-special",
+            "archive_href": "/lab#chef-archive",
         })
     with open(os.path.join(HERE, "chefs-special.json"), "w", encoding="utf-8") as f:
         f.write(json.dumps(special, indent=2, ensure_ascii=False) + "\n")
-    print(f"wrote {len(out)} builds" + (f"; Chef's Special {chef['chef']}: {chef['title']}" if chef else ""))
+    print(f"wrote {len(out)} builds" + (f"; Today's Chef Special {chef['chef']}: {chef['title']}" if chef else ""))
 
 
 if __name__ == "__main__":

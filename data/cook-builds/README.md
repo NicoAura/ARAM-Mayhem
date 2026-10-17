@@ -41,16 +41,20 @@ the live client's Mayhem (KIWI) augment pool on CommunityDragon.
 Add an entry to `builds.json` with augment names exactly as the client spells them and item
 names as the simulator spells them (`./mayhem_sim --list`), then rerun `build_data.py`.
 
-## Chef's Special
+## Today's Chef Special
 
-A build with a `"chef": "YYYY-MM-DD"` field was the Chef's Special that day. The Cook Builds page
-features the build with the newest date at the top (`/lab#chefs-special`); earlier specials stay in the
-list with a "Chef's Special" chip. `build_data.py` also writes `tools/fun/cook-builds/chef.js`, a
-small file The Lab's front page reads to name today's special, and `data/cook-builds/chefs-special.json`,
-which Home reads for its Chef's Special card (title, champion, augments, items, text, icon paths as the
-site serves them, and the link `/lab#chefs-special`).
+A build with a `"chef": "YYYY-MM-DD"` field was the Chef Special that day. The Cook Builds page
+features the newest one as Today's Chef Special at the top (`/lab#chefs-special`), with an archive of
+every earlier special browsable by date (`/lab#chef-archive`, or `/lab#chefs-special-YYYY-MM-DD` for one
+day). Earlier specials also stay in the list with a dated "Chef Special" chip. `build_data.py` also writes
+`tools/fun/cook-builds/chef.js`, a small file The Lab's front page reads to name today's special and count
+the archive, and `data/cook-builds/chefs-special.json`, which Home reads for its Chef Special card (title,
+champion, augments, items, text, icon paths as the site serves them, and the links `/lab#chefs-special`
+and `/lab#chef-archive`).
 
-A scheduled task adds a new special every day at 7:50 PM New York, next to the PBE update. It writes
-one new build (a champion played completely against type, built on an augment or item gimmick,
-whose core augments aren't already on that champion's best-champion list), dates it, reruns
-`build_data.py` and merges the PR once Tests pass.
+A Chef Special ignores win rate and pick rate. It is a rarely used build that completely changes what
+the champion is (abilities applying on-hit with Ethereal Weapon, an Attack Damage champion turned mage
+with ADAPt, a mage turned marksman with escAPADe), built on an augment or item gimmick. A scheduled task
+adds a new one every day at 7:50 PM New York, next to the PBE update: it appends one dated build (never
+removing or redating earlier ones, so the archive grows), reruns `build_data.py` and merges the PR once
+Tests pass.

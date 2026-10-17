@@ -94,26 +94,26 @@
       "play": "Turn on Overdrive, hook someone, then Power Fist them as they land so they eat two rounds of on-hit. Pop Static Field to proc everything on everyone nearby, and keep auto-attacking until Mystic Punch hands the hook back."
     },
     {
-      "id": "janna-giant",
-      "champion": "Janna",
-      "title": "The Eye of the Storm",
+      "id": "tryndamere-battlemage",
+      "champion": "Tryndamere",
+      "title": "The Battlemage King",
       "augments": [
-        "Goliath",
-        "Tank Engine",
-        "Steel Your Heart",
-        "Celestial Body"
+        "ADAPt",
+        "Marksmage",
+        "Master of Duality",
+        "Witchful Thinking"
       ],
       "core": 3,
       "items": [
-        "Plated Steelcaps",
-        "Heartsteel",
-        "Warmog's Armor",
-        "Sunfire Aegis",
-        "Unending Despair",
-        "Jak'Sho, The Protean"
+        "Berserker's Greaves",
+        "Kraken Slayer",
+        "Guinsoo's Rageblade",
+        "Nashor's Tooth",
+        "Blade of The Ruined King",
+        "Rabadon's Deathcap"
       ],
-      "why": "Janna is a feather that floats behind her team and throws shields. Here she eats every Health augment in the pool instead. Goliath makes her large, Tank Engine grows her with every takedown, and Steel Your Heart triples her Heartsteel stacks once they pass 300. She ends the game as the biggest thing on the bridge, and Monsoon now knocks enemies away from a wall of Health.",
-      "play": "Walk in first. Tornado the backline, then Monsoon when they finally reach you.",
+      "why": "Tryndamere is the purest crit swordsman in the game, so this one makes him a mage. ADAPt turns all the bonus Attack Damage from Kraken Slayer and Blade of The Ruined King into Ability Power, plus 15% more, and Rabadon's Deathcap multiplies the lot. Marksmage hands it straight back: every attack deals extra physical damage equal to 75% of his Ability Power, and Master of Duality grows that Ability Power with every swing.",
+      "play": "Spin in, press Undying Rage and keep hitting. You are a mage whose only spell is right-click.",
       "chef": "2026-10-17"
     }
   ]

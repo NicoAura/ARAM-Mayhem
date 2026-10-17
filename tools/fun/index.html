@@ -22,7 +22,10 @@
     <h2 class="group" id="cook-builds">Cook builds</h2>
     <nav class="tools" aria-label="Cook builds">
       <a class="tool chef-tool" href="cook-builds/index.html#chefs-special">
-        <span><b>Chef's Special</b><span id="chef-text">A new unconventional build every day, built on an augment or item gimmick</span></span><span class="arrow" aria-hidden="true">→</span>
+        <span><b>Today's Chef Special</b><span id="chef-text">A new unconventional build every day, built on an augment or item gimmick</span></span><span class="arrow" aria-hidden="true">→</span>
+      </a>
+      <a class="tool chef-archive-tool" href="cook-builds/index.html#chef-archive">
+        <span><b>Chef Special archive</b><span id="chef-archive-text">Every past Chef Special, by date</span></span><span class="arrow" aria-hidden="true">→</span>
       </a>
       <a class="tool" href="cook-builds/index.html">
         <span><b>Cook Builds</b><span>Troll builds built on strange augment interactions, checked against Mayhem win rates and the simulator</span></span><span class="arrow" aria-hidden="true">→</span>
@@ -31,15 +34,19 @@
   </main>
   <script src="cook-builds/chef.js"></script>
   <script>
-    // Today's Chef's Special by name.
+    // Today's Chef Special by date and name.
     (function () {
       var c = window.COOK_CHEF;
-      if (c) document.getElementById("chef-text").textContent = "Today: " + c.title + " (" + c.champion_name + "), a new unconventional build every day";
+      if (!c) return;
+      var day = new Date(c.chef + "T12:00:00").toLocaleDateString("en-US", { month: "short", day: "numeric" });
+      document.getElementById("chef-text").textContent = day + ": " + c.title + " (" + c.champion_name + "), a new unconventional build every day";
+      if (c.count) document.getElementById("chef-archive-text").textContent = "Every Chef Special by date, " + c.count + (c.count === 1 ? " so far" : " and counting");
     })();
-    // Deep links: /lab#cook-builds, #chefs-special (or #<tool folder>) opens that page straight away.
+    // Deep links: /lab#cook-builds, #chefs-special, #chefs-special-YYYY-MM-DD, #chef-archive (or #<tool folder>) open that page straight away.
     (function () {
-      var go = location.hash.slice(1).replace(/[^a-z-]/g, "");
-      var a = go && document.querySelector(go === "chefs-special" ? ".chef-tool" : '.tool[href="' + go + '/index.html"]');
+      var go = location.hash.slice(1).replace(/[^a-z0-9-]/g, "");
+      if (/^(chefs-special|chef-archive)/.test(go)) return location.replace("cook-builds/index.html#" + go);
+      var a = go && document.querySelector('.tool[href="' + go + '/index.html"]');
       if (a) location.replace(a.getAttribute("href"));
     })();
   </script>

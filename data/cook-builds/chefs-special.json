@@ -1,54 +1,55 @@
 {
-  "id": "janna-giant",
-  "title": "The Eye of the Storm",
-  "champion": "Janna",
-  "champion_name": "Janna",
+  "id": "tryndamere-battlemage",
+  "title": "The Battlemage King",
+  "champion": "Tryndamere",
+  "champion_name": "Tryndamere",
   "chef": "2026-10-17",
-  "tier": "Secretly strong",
-  "core_win_rate": 0.5914,
-  "champion_win_rate": 0.5229,
-  "why": "Janna is a feather that floats behind her team and throws shields. Here she eats every Health augment in the pool instead. Goliath makes her large, Tank Engine grows her with every takedown, and Steel Your Heart triples her Heartsteel stacks once they pass 300. She ends the game as the biggest thing on the bridge, and Monsoon now knocks enemies away from a wall of Health.",
-  "play": "Walk in first. Tornado the backline, then Monsoon when they finally reach you.",
+  "tier": "Holds up",
+  "core_win_rate": 0.5311,
+  "champion_win_rate": 0.4952,
+  "why": "Tryndamere is the purest crit swordsman in the game, so this one makes him a mage. ADAPt turns all the bonus Attack Damage from Kraken Slayer and Blade of The Ruined King into Ability Power, plus 15% more, and Rabadon's Deathcap multiplies the lot. Marksmage hands it straight back: every attack deals extra physical damage equal to 75% of his Ability Power, and Master of Duality grows that Ability Power with every swing.",
+  "play": "Spin in, press Undying Rage and keep hitting. You are a mage whose only spell is right-click.",
   "items": [
-    "Plated Steelcaps",
-    "Heartsteel",
-    "Warmog's Armor",
-    "Sunfire Aegis",
-    "Unending Despair",
-    "Jak'Sho, The Protean"
+    "Berserker's Greaves",
+    "Kraken Slayer",
+    "Guinsoo's Rageblade",
+    "Nashor's Tooth",
+    "Blade of The Ruined King",
+    "Rabadon's Deathcap"
   ],
   "core_usual": 0,
   "core": 3,
-  "champion_icon": "/embed/fun/cook-builds/icons/champions/40.png",
+  "champion_icon": "/embed/fun/cook-builds/icons/champions/23.png",
   "augments": [
     {
-      "name": "Goliath",
+      "name": "ADAPt",
+      "rarity": "Silver",
+      "core": true,
+      "win_rate": 0.5585,
+      "icon": "/embed/fun/cook-builds/icons/augments/adapt.png"
+    },
+    {
+      "name": "Marksmage",
+      "rarity": "Gold",
+      "core": true,
+      "win_rate": 0.5313,
+      "icon": "/embed/fun/cook-builds/icons/augments/marksmage.png"
+    },
+    {
+      "name": "Master of Duality",
       "rarity": "Prismatic",
       "core": true,
-      "win_rate": 0.5755,
-      "icon": "/embed/fun/cook-builds/icons/augments/goliath.png"
+      "win_rate": 0.5035,
+      "icon": "/embed/fun/cook-builds/icons/augments/master-of-duality.png"
     },
     {
-      "name": "Tank Engine",
-      "rarity": "Gold",
-      "core": true,
-      "win_rate": 0.6025,
-      "icon": "/embed/fun/cook-builds/icons/augments/tank-engine.png"
-    },
-    {
-      "name": "Steel Your Heart",
-      "rarity": "Gold",
-      "core": true,
-      "win_rate": 0.5962,
-      "icon": "/embed/fun/cook-builds/icons/augments/steel-your-heart.png"
-    },
-    {
-      "name": "Celestial Body",
-      "rarity": "Gold",
+      "name": "Witchful Thinking",
+      "rarity": "Silver",
       "core": false,
-      "win_rate": 0.5472,
-      "icon": "/embed/fun/cook-builds/icons/augments/celestial-body.png"
+      "win_rate": 0.5256,
+      "icon": "/embed/fun/cook-builds/icons/augments/witchful-thinking.png"
     }
   ],
-  "href": "/lab#chefs-special"
+  "href": "/lab#chefs-special",
+  "archive_href": "/lab#chef-archive"
 }
