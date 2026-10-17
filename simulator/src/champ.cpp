@@ -289,6 +289,7 @@ const std::vector<std::pair<std::string, std::string>>& Library::settingKeys() {
         {"fight_min", "shortest fight, seconds"},
         {"fight_max", "longest fight, seconds"},
         {"until_death", "1: each fight runs until your champion dies; 0: fights last the drawn length"},
+        {"on_fire", "1: your champion is On Fire! (faster attacks and movement, less healing, more damage taken)"},
         {"fight_cap", "longest a fight can run when it lasts until you die, seconds"},
         {"team_size", "how many enemies are in the fight (1-5)"},
         {"engage_min", "earliest time enemies start hitting you, seconds"},
@@ -332,8 +333,21 @@ Library Library::load(const std::string& rulesPath, const Settings& settings, co
     const json::Value& r = root["rules"];
     lib.rules.critMult = ruleValue(r, "base_crit_multiplier", 2.0);
     lib.rules.grievous = ruleValue(r, "grievous_wounds", 0.4);
-    lib.rules.critOverflowAd = ruleValue(r, "crit_overflow_ad_per_percent", 0.45);
+    lib.rules.critOverflowAf = ruleValue(r, "crit_overflow_adaptive_per_percent", 0.75);
     lib.rules.asCap = ruleValue(r, "attack_speed_cap", 5.0);
+    lib.rules.mayhemHpMelee = ruleValue(r, "mayhem_health_melee", 600);
+    lib.rules.mayhemHpRanged = ruleValue(r, "mayhem_health_ranged", 400);
+    lib.rules.mayhemResistMelee = ruleValue(r, "mayhem_resists_melee", 15);
+    lib.rules.mayhemResistRanged = ruleValue(r, "mayhem_resists_ranged", 0);
+    lib.rules.longRangeNear = ruleValue(r, "long_range_damage_1000", 0.85);
+    lib.rules.longRangeFar = ruleValue(r, "long_range_damage_2000", 0.70);
+    lib.rules.comboTenacity = ruleValue(r, "combo_breaker_tenacity", 0.2);
+    lib.rules.comboDuration = ruleValue(r, "combo_breaker_duration", 3.25);
+    lib.rules.fireAs = ruleValue(r, "on_fire_attack_speed", 0.2);
+    lib.rules.fireMs = ruleValue(r, "on_fire_move_speed", 0.2);
+    lib.rules.fireHeal = ruleValue(r, "on_fire_healing_cut", 0.25);
+    lib.rules.fireTakenMelee = ruleValue(r, "on_fire_damage_taken_melee", 1.25);
+    lib.rules.fireTakenRanged = ruleValue(r, "on_fire_damage_taken_ranged", 1.35);
     const json::Value& m = root["model"];
     lib.rules.extraHitWeight = m["extra_hit_weight"].asNumber(lib.rules.extraHitWeight);
     lib.rules.dodgeChance = m["dodge_chance"].asNumber(lib.rules.dodgeChance);
@@ -490,7 +504,9 @@ void Library::equipEnemy(EnemyProfile& p, int level, bool listed) const {
     p.power = std::min(3.0, offense(*k, level, gear, p.physShare) / offense(*k, 15, early, p.physShare));
     if (!listed && gear.empty()) return;
     const double g = statGrowth(level);
-    double hp = k->hp + k->hpG * g, armor = k->armor + k->armorG * g, mr = k->mr + k->mrG * g, hpPct = 0;
+    const double extra = rules.mayhemResist(k->ranged);  // Mayhem stats every champion gets
+    double hp = k->hp + k->hpG * g + rules.mayhemHp(level, k->ranged), armor = k->armor + k->armorG * g + extra,
+           mr = k->mr + k->mrG * g + extra, hpPct = 0;
     p.lethality = p.armorPen = p.magicPen = p.magicPenPct = 0;
     auto stat = [](const Bag& b, const char* key) { auto f = b.find(key); return f == b.end() ? 0.0 : f->second; };
     for (const Effect* e : gear) {
@@ -606,6 +622,7 @@ Scenario Library::scenarioFor(const ChampionKit& c) const {
     set("fight_min", sc.fightMin);
     set("fight_max", sc.fightMax);
     if (auto it = fight.find("until_death"); it != fight.end()) sc.untilDeath = it->second > 0;
+    if (auto it = fight.find("on_fire"); it != fight.end()) sc.onFire = it->second > 0;
     set("fight_cap", sc.fightCap);
     sc.fightCap = std::clamp(sc.fightCap, 5.0, 600.0);
     sc.fightMax = std::max(sc.fightMax, sc.fightMin + 0.5);
@@ -697,6 +714,7 @@ struct Enemy {
     Vec dodgeVel;
     // Your crowd control on it: can't act (stun, knockup...), can't move (root), slowed.
     double ccUntil = -1, rootUntil = -1, slowUntil = -1, slow = 0, silenceUntil = -1;
+    int combo = 0; double comboUntil = -1;  // Combo Breaker stacks
     bool antiHeal = false;  // its build applies Grievous Wounds (Morellonomicon, Thornmail...)
     double armor = 0, amp = 1;  // its own Armor and damage-taken factor, for armor shred that builds up
     int cleaver = 0;            // Black Cleaver stacks on it (up to 5)
@@ -825,6 +843,7 @@ private:
     std::vector<double> readyAt_;
     std::vector<size_t> order_;
     std::vector<std::pair<double, double>> cc_;
+    int myCombo_ = 0; double myComboUntil_ = -1;  // Combo Breaker on you
     std::vector<const EnemyProfile*> team_;
     double totalWeight_ = 0;
     // Everyone on the field. enemies_[primary_] is the current target (-1: none alive).
@@ -974,8 +993,8 @@ private:
         ap_ *= 1.0 + get(fx_, "ap_amp");
         crit_ = get(stats, "crit") + get(fx_, "crit_per_ap") * ap_;
         crit_ *= 1.0 + get(fx_, "crit_chance_mult");  // Yasuo, Yone: double crit chance
-        if (crit_ > 1.0) {  // Mayhem: crit chance above 100% becomes AD
-            bonusAd_ += (crit_ - 1.0) * 100.0 * rules_.critOverflowAd;
+        if (crit_ > 1.0) {  // Mayhem: crit chance above 100% becomes Adaptive Force (AP or 0.6 AD each)
+            addAdaptive((crit_ - 1.0) * 100.0 * rules_.critOverflowAf);
             crit_ = 1.0;
         }
         critDamage_ = get(stats, "crit_damage") + get(fx_, "crit_damage_per_crit") * crit_;
@@ -985,7 +1004,8 @@ private:
         ad_ = baseAd_ + bonusAd_;
         bonusAd_ += (get(fx_, "ad_pct") + sword * get(fx_, "sword_ad")) * ad_;  // "% Attack Damage" (Blunt Force)
         ad_ = baseAd_ + bonusAd_;
-        bonusAs_ = ch_.asG * g + get(stats, "as") + get(fx_, "as_per_ap") * ap_ + sword * get(fx_, "sword_as");
+        bonusAs_ = ch_.asG * g + get(stats, "as") + get(fx_, "as_per_ap") * ap_ + sword * get(fx_, "sword_as") +
+                   (sc_.onFire ? rules_.fireAs : 0.0);
         double ahFromAs = 0;
         if (get(fx_, "as_to_ah") > 0) {  // Purist - Caster: all bonus attack speed becomes ability haste
             ahFromAs = get(fx_, "as_to_ah") * 100.0 * bonusAs_;
@@ -1007,15 +1027,15 @@ private:
         costMult_ = 1.0 + get(fx_, "cost_mult");
         bonusHp_ = get(stats, "hp") + (hasImmobilize_ ? get(fx_, "cc_hp") : 0.0) +
                    (ch_.resource == 1 ? get(fx_, "mana_to_hp") * maxMana_ : 0.0);
-        const double baseHp = ch_.hp + ch_.hpG * g;
+        const double baseHp = ch_.hp + ch_.hpG * g + rules_.mayhemHp(sc_.level, ch_.ranged);  // Mayhem bonus base health
         maxHp_ = (baseHp + bonusHp_) * (1.0 + get(fx_, "hp_pct") + sword * get(fx_, "sword_hp")) * (1.0 + get(fx_, "hp_mult"));
         bonusHp_ = maxHp_ - baseHp;
         // Health-to-AD items (Overlord's Bloodmail) and base-AD bonuses (Sterak's Gage).
         bonusAd_ += get(fx_, "ad_per_bonus_hp") * bonusHp_ + get(fx_, "base_ad_pct") * baseAd_;
         ad_ = baseAd_ + bonusAd_;
-        bonusArmor_ = get(stats, "armor") + (hasDash_ ? get(fx_, "dash_armor") : 0.0);
+        bonusArmor_ = get(stats, "armor") + (hasDash_ ? get(fx_, "dash_armor") : 0.0) + rules_.mayhemResist(ch_.ranged);
         armor_ = ch_.armor + ch_.armorG * g + bonusArmor_;
-        bonusMr_ = get(stats, "mr") + (hasDash_ ? get(fx_, "dash_mr") : 0.0);
+        bonusMr_ = get(stats, "mr") + (hasDash_ ? get(fx_, "dash_mr") : 0.0) + rules_.mayhemResist(ch_.ranged);
         mr_ = ch_.mr + ch_.mrG * g + bonusMr_;
         ah_ = get(stats, "ah") + ch_.mayhemAh + get(fx_, "ah_per_ap") * ap_ + get(fx_, "ah_per_crit") * crit_ + ahFromAs;
         lethality_ = get(stats, "lethality");
@@ -1030,7 +1050,7 @@ private:
         damageAmp_ = (1.0 + get(fx_, "damage_amp")) * (1.0 + overflow) * ch_.damageDealt;
         abilityAmp_ = 1.0 + get(fx_, "ability_amp");
         myHp_ = maxHp_;
-        moveSpeed_ = ch_.moveSpeed + get(fx_, "ms") + get(fx_, "ms_per_ah") * ah_;
+        moveSpeed_ = (ch_.moveSpeed + get(fx_, "ms") + get(fx_, "ms_per_ah") * ah_) * (sc_.onFire ? 1.0 + rules_.fireMs : 1.0);
         for (const auto& id : b.items)
             if (lib_.items.at(id).slot == "boots") moveSpeed_ += 45;  // every tier-2 boot gives +45 move speed
         moveSpeed_ *= 1.0 + get(fx_, "ms_pct") + sword * get(fx_, "sword_ms");
@@ -1046,6 +1066,7 @@ private:
                get(fx_, "heal_shield_crit") * crit_ + overflow;
         cdr_ = get(fx_, "cdr");
         incomingMult_ = 1.0 - get(fx_, "crit_defend") * std::min(crit_, get(fx_, "crit_defend_cap", 1.0));
+        if (sc_.onFire) incomingMult_ *= ranged_ ? rules_.fireTakenRanged : rules_.fireTakenMelee;
         shrink_ = get(fx_, "shrink");
         rWindowAmp_ = get(fx_, "r_window_amp");
         openAmp_ = get(fx_, "open_amp");
@@ -1179,6 +1200,17 @@ private:
         // Tenacity shortens the crowd control drawn for the fight.
         if (const double ten = tenacity(); ten > 0)
             for (auto& [a, b] : cc_) b = a + (b - a) * (1.0 - ten);
+        // Combo Breaker on you: each separate stun after the first in a few seconds is shorter.
+        std::sort(cc_.begin(), cc_.end());
+        double chainEnd = -1, comboUntil = -1;
+        int stacks = 0;
+        for (auto& [a, b] : cc_) {
+            if (a >= comboUntil) stacks = 0;
+            b = a + (b - a) * std::pow(1.0 - rules_.comboTenacity, stacks);
+            if (a >= chainEnd) { ++stacks; comboUntil = a + rules_.comboDuration; }
+            chainEnd = std::max(chainEnd, b);
+        }
+        myCombo_ = stacks; myComboUntil_ = comboUntil;
         // Enemy spawns and movement use their own streams so builds that kill faster
         // don't shift the rest of the fight's random draws.
         ccLeft_ = std::clamp(1.0 - std::max<size_t>(1, team_.size()) / 5.0, 0.0, 1.0);
@@ -1318,13 +1350,20 @@ private:
                 const double acting = now < e.ccUntil ? ccLeft_ : 1.0;
                 if (!abilityRng_.chance(c.land)) continue;
                 double dmg = incomingDps_ * e.damageWeight * c.burst * acting * (now < e.shrinkUntil ? 1.0 - shrink_ : 1.0);
+                if (c.slot != 'R') dmg *= rules_.longRange(distTo(e));  // ARAM long-range cut
                 burstRaw_ += dmg / throughResists_;
                 if (now < reductionUntil_) dmg *= 1.0 - get(fx_, "r_reduction");
                 total += dmg;
                 if (!c.cc.empty() && abilityRng_.chance(c.ccChance * acting)) {
                     // Tenacity shortens it, except knock-ups.
                     const double ten = c.cc == "knockup" ? 0.0 : tenacity();
-                    cc_.push_back({now, now + c.ccDuration * (1.0 - ten)});
+                    double inChain = -1;
+                    for (const auto& [a, b] : cc_) if (a <= now) inChain = std::max(inChain, b);
+                    const double keep = t_;
+                    t_ = now;
+                    const double dur = comboBreaker(myCombo_, myComboUntil_, now < inChain, c.ccDuration * (1.0 - ten), c.cc == "knockup");
+                    t_ = keep;
+                    cc_.push_back({now, now + dur});
                     if (trace_ && e.profile) {
                         TraceEvent ev;
                         ev.t = now; ev.kind = "cc"; ev.amount = cc_.back().second;
@@ -1641,6 +1680,7 @@ private:
     void heal(double amount) {
         if (dead_ || amount <= 0) return;
         amount *= (1.0 + get(fx_, "healing_received")) * ch_.mayhemHealing;  // Spirit Visage, Mayhem balance
+        if (sc_.onFire) amount *= 1.0 - rules_.fireHeal;
         // Grievous Wounds: an enemy whose build applies it and who can reach you cuts your healing by 40%.
         for (const auto& e : enemies_)
             if (e.alive && e.antiHeal && distTo(e) <= e.reach + 2 * rules_.hitbox) { amount *= 1.0 - rules_.grievous; break; }
@@ -1664,8 +1704,17 @@ private:
 
     // Your ability's crowd control on an enemy: stopped (stun, knockup, charm, fear...),
     // held in place (root), slowed, or silenced (shown only).
+    // Combo Breaker: an immobilize that lands outside a chain shortens by the stacks it finds, then adds one.
+    double comboBreaker(int& stacks, double& until, bool chained, double duration, bool knockup) const {
+        if (t_ >= until) stacks = 0;
+        if (!knockup) duration *= std::pow(1.0 - rules_.comboTenacity, stacks);
+        if (!chained) { ++stacks; until = t_ + rules_.comboDuration; }
+        return duration;
+    }
     void applyCc(Enemy& e, const Ability& a) {
-        const double until = t_ + a.ccDuration;
+        double dur = a.ccDuration;
+        if (immobilizes(a)) dur = comboBreaker(e.combo, e.comboUntil, t_ < std::max(e.ccUntil, e.rootUntil), dur, a.cc == "knockup");
+        const double until = t_ + dur;
         double& held = a.cc == "slow" ? e.slowUntil : a.cc == "root" ? e.rootUntil : a.cc == "silence" ? e.silenceUntil : e.ccUntil;
         res_.ccDealt += std::max(0.0, until - std::max(t_, held));
         // Only the strongest slow counts while several overlap.
@@ -1680,6 +1729,7 @@ private:
     // Crowd control from an item or augment: the enemy can't act for a while.
     void ccEnemy(Enemy& e, double duration, const char* kind) {
         if (!e.alive || duration <= 0) return;
+        duration = comboBreaker(e.combo, e.comboUntil, t_ < std::max(e.ccUntil, e.rootUntil), duration, false);
         res_.ccDealt += std::max(0.0, t_ + duration - std::max(t_, e.ccUntil));
         e.ccUntil = std::max(e.ccUntil, t_ + duration);
         if (trace_) {
@@ -1995,6 +2045,7 @@ private:
             const double from = distTo(*e);
             for (const auto& h : a.hits) {
                 double raw = hitRaw(h, *e) * amp * w;
+                if (!h.perSecond && a.slot != 'R') raw *= rules_.longRange(from);  // ARAM long-range cut
                 if (h.perSecond) {
                     // Damage over time lasts its duration, but no longer than the ability's
                     // cooldown: a recast replaces it (and channels stop other actions anyway).

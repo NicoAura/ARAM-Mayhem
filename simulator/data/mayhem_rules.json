@@ -3,7 +3,21 @@
  "rules": {
   "base_crit_multiplier": {"value": 2.0, "confidence": "likely", "note": "Mayhem raised base crit damage 175% -> 200% in 26.1"},
   "crit_overflow_ad_per_percent": {"value": 0.45, "confidence": "approx"},
+  "crit_overflow_adaptive_per_percent": {"value": 0.75, "confidence": "verified", "note": "Adaptive Force per 1% crit chance over 100% (0.75 AP or 0.45 bonus AD); crit_overflow_ad_per_percent is the Yunara simulator's AD-only version"},
   "attack_speed_cap": {"value": 5.0, "confidence": "verified"},
+  "mayhem_health_melee": {"value": 600, "confidence": "verified", "note": "bonus base health at level 18 for melee champions, growing from 20 at level 1"},
+  "mayhem_health_ranged": {"value": 400, "confidence": "verified", "note": "the same for ranged champions"},
+  "mayhem_resists_melee": {"value": 15, "confidence": "likely", "note": "bonus armor and magic resist for melee champions"},
+  "mayhem_resists_ranged": {"value": 0, "confidence": "likely", "note": "ranged champions are meant to get bonus armor and magic resist too, but currently get none (a known game bug)"},
+  "long_range_damage_1000": {"value": 0.85, "confidence": "verified", "note": "ARAM: share of damage taken from an enemy champion just over 1000 units away (not damage over time or ultimates)"},
+  "long_range_damage_2000": {"value": 0.70, "confidence": "verified", "note": "the same at 2000 units or more, falling in a straight line from 1000"},
+  "combo_breaker_tenacity": {"value": 0.2, "confidence": "verified", "note": "Combo Breaker: tenacity gained (stacking) for each separate immobilize, from the mode's game data"},
+  "on_fire_attack_speed": {"value": 0.2, "confidence": "verified", "note": "On Fire!: bonus attack speed (the mode's game data)"},
+  "on_fire_move_speed": {"value": 0.2, "confidence": "verified", "note": "On Fire!: bonus move speed toward enemies (10% otherwise)"},
+  "on_fire_healing_cut": {"value": 0.25, "confidence": "verified", "note": "On Fire!: share of healing received that is lost"},
+  "on_fire_damage_taken_melee": {"value": 1.25, "confidence": "verified", "note": "On Fire!: damage taken multiplier, melee"},
+  "on_fire_damage_taken_ranged": {"value": 1.35, "confidence": "verified", "note": "On Fire!: damage taken multiplier, ranged"},
+  "combo_breaker_duration": {"value": 3.25, "confidence": "verified", "note": "how long Combo Breaker's tenacity lasts, refreshed by each new immobilize"},
   "grievous_wounds": {"value": 0.4, "confidence": "verified", "note": "healing cut while an enemy's Grievous Wounds item (Morellonomicon, Thornmail, Mortal Reminder, Chempunk Chainsword) reaches you"}
  },
  "model": {

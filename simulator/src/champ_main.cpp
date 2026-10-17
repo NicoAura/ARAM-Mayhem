@@ -391,7 +391,7 @@ int main(int argc, char** argv) {
         const std::map<std::string, double> defaults = {
             {"level", sc.level}, {"enemy_level", sc.enemyLevel}, {"fight_mean", sc.fightMean}, {"fight_sd", sc.fightSd}, {"fight_min", sc.fightMin},
             {"fight_max", sc.fightMax}, {"engage_min", sc.engageMin}, {"engage_max", sc.engageMax},
-            {"until_death", sc.untilDeath ? 1.0 : 0.0}, {"fight_cap", sc.fightCap},
+            {"until_death", sc.untilDeath ? 1.0 : 0.0}, {"on_fire", sc.onFire ? 1.0 : 0.0}, {"fight_cap", sc.fightCap},
             {"team_size", sc.teamSizeRule > 0 ? sc.teamSizeRule : 5},
             {"enemy_damage_scale", 1}, {"cc_scale", 1}, {"cc_min", sc.ccMin}, {"cc_max", sc.ccMax},
             {"start_distance", sc.startDistance}, {"enemy_spread", sc.enemySpread}, {"r_ready_chance", sc.rReadyChance},

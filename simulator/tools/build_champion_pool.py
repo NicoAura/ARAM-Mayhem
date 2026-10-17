@@ -10,9 +10,10 @@ Sources (all fetched live, then cached; CommunityDragon's latest/ is the live pa
     of ability values and cooldowns.
   - The English string table (tooltips, which say whether a number is magic,
     physical or true damage).
-  - aramnerfs.com/mayhem, only for the per-champion modifiers Riot applies on
-    the server and ships in no client file: damage dealt/taken, ability haste
-    and attack speed.
+  - The official League wiki, only for the per-champion modifiers Riot applies
+    on the server and ships in no client file (damage dealt/taken, healing,
+    shielding, tenacity, ability haste, attack speed): its ARAM overrides
+    (Module:ChampionData/data) with the ARAM: Mayhem page's champion table on top.
   - simulator/data/cn_enemy_pool.json (built by build_enemy_pool.py): role,
     CC rating and China-server Mayhem damage shares, used to check results.
 
@@ -57,7 +58,8 @@ GAME_DATA = CDRAGON + "/plugins/rcp-be-lol-game-data/global/default/v1"
 CONTENT_METADATA = CDRAGON + "/content-metadata.json"
 STRINGTABLE = CDRAGON + "/game/en_us/data/menu/en_us/lol.stringtable.json"
 CHAMP_BIN = CDRAGON + "/game/data/characters/{c}/{c}.bin.json"
-MAYHEM_BALANCE = "https://www.aramnerfs.com/mayhem"
+WIKI_API = "https://wiki.leagueoflegends.com/en-us/api.php?action=parse&prop=wikitext|revid&format=json&page="
+WIKI_CHAMPION_DATA, WIKI_MAYHEM = "Module:ChampionData/data", "ARAM:_Mayhem"
 
 LEVEL = 18
 RANKS = {"Q": 5, "W": 5, "E": 5, "R": 3}
@@ -749,27 +751,44 @@ def find_spell(bin_data, path):
 # ARAM Mayhem balance table
 # ---------------------------------------------------------------------------
 
-def parse_mayhem_balance(page):
-    t = re.sub(r"<script.*?</script>|<style.*?</style>", "", page, flags=re.S)
-    t = re.sub(r"<[^>]+>", "|", t)
-    t = html.unescape(re.sub(r"(\s*\|\s*)+", "|", t))
-    patch = re.search(r"Patch\|([0-9.]+)\|", t)
-    out = {}
-    starts = list(re.finditer(r"(?<=\|)([^|]+)\|Dmg Dealt\|([^|]+)\|Dmg Taken\|([^|]+)\|", t))
-    for i, m in enumerate(starts):
-        end = starts[i + 1].start() if i + 1 < len(starts) else len(t)
-        rest = t[m.end():end].strip("|")
-        pctv = lambda s: float(s.replace("%", "").replace("+", "")) / 100.0 if re.match(r"^[+-]?[0-9.]+%$", s) else 0.0
-        entry = {"damage_dealt": round(1 + pctv(m.group(2)), 4), "damage_taken": round(1 + pctv(m.group(3)), 4),
-                 "ability_haste": 0.0, "attack_speed": 0.0}
-        ah = re.search(r"Ability haste (increased|reduced) by ([0-9.]+)", rest)
-        if ah:
-            entry["ability_haste"] = float(ah.group(2)) * (1 if ah.group(1) == "increased" else -1)
-        asp = re.search(r"Total attack speed (increased|reduced) by ([0-9.]+)%", rest)
-        if asp:
-            entry["attack_speed"] = float(asp.group(2)) / 100 * (1 if asp.group(1) == "increased" else -1)
-        out[norm(m.group(1))] = entry
-    return out, (patch.group(1) if patch else "")
+PCT = r"([+-]?[0-9.]+)%"
+
+def parse_mayhem_balance(champdata, mayhem):
+    """Per-champion Mayhem modifiers: the wiki's ARAM overrides (Module:ChampionData/data), with the
+    ARAM: Mayhem page's champion table applied on top."""
+    out, names = {}, {}
+    for m in re.finditer(r'^  \["([^"]+)"\] = \{(.*?)^  \},?$', champdata, re.S | re.M):
+        name, body = m.group(1), m.group(2)
+        api = re.search(r'\["apiname"\]\s*=\s*"([^"]+)"', body)
+        aram = re.search(r'\["aram"\]\s*=\s*\{(.*?)\}', body, re.S)
+        vals = dict((k, float(v)) for k, v in re.findall(r'\["(\w+)"\]\s*=\s*([-0-9.]+)', aram.group(1))) if aram else {}
+        e = {"damage_dealt": vals.get("dmg_dealt", 1.0), "damage_taken": vals.get("dmg_taken", 1.0),
+             "ability_haste": vals.get("ability_haste", 0.0), "attack_speed": round(vals.get("total_as", 1.0) - 1, 4),
+             "healing": vals.get("healing", 1.0), "shielding": vals.get("shielding", 1.0),
+             "tenacity": round(vals.get("tenacity", 1.0) - 1, 4)}
+        key = norm(api.group(1) if api else name)
+        out[key] = e
+        names[norm(name)] = key
+    table = mayhem.split("|-|")[0] if "|-|" in mayhem else mayhem
+    table = table[table.find("Champions="):]
+    fields = {"damage dealt": ("damage_dealt", 1), "damage received": ("damage_taken", 1), "healing done": ("healing", 1),
+              "shielding done": ("shielding", 1), "tenacity": ("tenacity", 0), "total attack speed": ("attack_speed", 0)}
+    for row in table.split("\n|-")[1:]:
+        ci = re.search(r"\{\{ci\|([^}|]+)", row)
+        if not ci:
+            continue
+        cells = row.split("\n| ")
+        general = cells[2] if len(cells) > 2 else ""
+        key = names.get(norm(ci.group(1)), norm(ci.group(1)))
+        e = out.setdefault(key, {"damage_dealt": 1.0, "damage_taken": 1.0, "ability_haste": 0.0, "attack_speed": 0.0,
+                                 "healing": 1.0, "shielding": 1.0, "tenacity": 0.0})
+        for label, val in re.findall(r"^\* ([A-Za-z ]+?) changed to " + PCT, general, re.M):
+            f = fields.get(label.lower())
+            if f:
+                e[f[0]] = round(f[1] + float(val) / 100, 4)
+        for val in re.findall(r"^\* Ability haste changed to ([+-]?[0-9.]+)", general, re.M):
+            e["ability_haste"] = float(val)
+    return out
 
 
 def norm(name):
@@ -810,8 +829,11 @@ def main():
               for c in summary if 0 < c["id"] < 10000}
     log(f"game version {version}: {len(champs)} champions")
     strings = {k.lower(): v for k, v in json.loads(fetch(STRINGTABLE, cache, "stringtable.json"))["entries"].items()}
-    balance, balance_patch = parse_mayhem_balance(fetch(MAYHEM_BALANCE, cache, "mayhem-balance.html"))
-    log(f"Mayhem balance table (patch {balance_patch}): {len(balance)} champions")
+    wiki = {page: json.loads(fetch(WIKI_API + page, cache, f"wiki/{norm(page)}.json"))["parse"]
+            for page in (WIKI_CHAMPION_DATA, WIKI_MAYHEM)}
+    balance = parse_mayhem_balance(wiki[WIKI_CHAMPION_DATA]["wikitext"]["*"], wiki[WIKI_MAYHEM]["wikitext"]["*"])
+    balance_patch = f"wiki revision {wiki[WIKI_MAYHEM]['revid']}"
+    log(f"Mayhem balance table ({balance_patch}): {len(balance)} champions")
 
     with open(args.pool, encoding="utf-8") as f:
         pool = json.load(f)
@@ -948,7 +970,9 @@ def main():
                 "damage_taken": (bal or {}).get("damage_taken", 1.0),
                 "ability_haste": (bal or {}).get("ability_haste", 0.0),
                 "attack_speed": (bal or {}).get("attack_speed", 0.0),
-                **{k: bal[k] for k in ("healing", "shielding", "tenacity") if k in (bal or {})},
+                "healing": (bal or {}).get("healing", 1.0),
+                "shielding": (bal or {}).get("shielding", 1.0),
+                "tenacity": (bal or {}).get("tenacity", 0.0),
             },
             "resource": resource(record),
             "cn": {k: p[k] for k in ("weight", "damage_share", "damage_taken_share", "win_rate", "cc", "phys_share")} if p else None,
@@ -987,8 +1011,8 @@ def main():
                 "bonus_hp, bonus_armor, bonus_mr, as (bonus attack speed), crit, lethality.",
                 "target is flat or a fraction of the target's max/current/missing health. alt marks numbers that look like "
                 "alternatives (empowered, maximum, recast) rather than extra hits.",
-                "mayhem holds the server-side ARAM Mayhem modifiers (damage dealt/taken, ability haste, attack speed) "
-                "from aramnerfs.com; ability values and cooldowns use Riot's own ARAM/Kiwi overrides from each bin.",
+                "mayhem holds the server-side ARAM Mayhem modifiers (damage dealt/taken, healing, shielding, tenacity, "
+                "ability haste, attack speed) from the official League wiki; ability values and cooldowns use Riot's own ARAM/Kiwi overrides from each bin.",
                 "cn holds 101.qq.com China-server Mayhem stats: damage_share is the average share of the team's damage.",
             ],
         },
