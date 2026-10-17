@@ -5,7 +5,8 @@ import PlayerExtras from "./PlayerExtras";
 import RiotIdFields from "./RiotIdFields";
 import { ACCOUNT_EVENT, loadAccount, PROFILE_FRESH_MS, profileIcon as ICON, SERVERS, signIn, signOut as forget, type Profile } from "@/lib/account";
 
-// The My Stats account lookup card. The account itself (stored Riot ID, lookup, clearing it) is shared
+// The My Stats account lookup card. Looking up other players without signing in isn't allowed, so until
+// Riot account sign-in exists it only shows for the site admin (the owner's own account). The account itself (stored Riot ID, lookup, clearing it) is shared
 // with the header's account button through @/lib/account, so a lookup or clear in either updates both.
 
 const QUEUES: Record<string, string> = { RANKED_SOLO_5x5: "Solo/Duo", RANKED_FLEX_SR: "Flex" };
@@ -18,6 +19,7 @@ export default function RiotIdSignIn() {
   const [profile, setProfile] = useState<Profile | null>(null);
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
+  const [allowed, setAllowed] = useState(false);
 
   async function lookUp(id: string, server: string) {
     setBusy(true);
@@ -33,6 +35,11 @@ export default function RiotIdSignIn() {
   }
 
   useEffect(() => {
+    setAllowed(document.cookie.split("; ").includes("deeparam-admin-ui=1"));
+  }, []);
+
+  useEffect(() => {
+    if (!allowed) return;
     const sync = () => {
       const saved = loadAccount();
       if (!saved) {
@@ -49,11 +56,13 @@ export default function RiotIdSignIn() {
     if (saved && (!saved.profile || Date.now() - (saved.at ?? 0) > PROFILE_FRESH_MS)) lookUp(saved.riotId, saved.platform);
     window.addEventListener(ACCOUNT_EVENT, sync);
     return () => window.removeEventListener(ACCOUNT_EVENT, sync);
-  }, []);
+  }, [allowed]);
 
   function signOut() {
     forget();
   }
+
+  if (!allowed) return null;
 
   if (profile) {
     const server = SERVERS.find(([v]) => v === profile.platform)?.[1] ?? profile.platform;

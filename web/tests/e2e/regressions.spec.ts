@@ -3,7 +3,9 @@ import { expect, test } from "@playwright/test";
 // Bugs that were fixed once and must stay fixed.
 
 // #91: the Riot ID sign-in box overflowed its card on phones.
-test("Riot ID sign-in fits on the screen", async ({ page }) => {
+// The card only shows to the site admin until Riot account sign-in exists.
+test("Riot ID sign-in fits on the screen", async ({ page, context, baseURL }) => {
+  await context.addCookies([{ name: "deeparam-admin-ui", value: "1", url: baseURL! }]);
   await page.goto("/stats");
   const name = page.locator('[name="riot-name"], #riot-name').first();
   await expect(name).toBeVisible();

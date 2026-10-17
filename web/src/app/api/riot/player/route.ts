@@ -1,11 +1,16 @@
 import { NextRequest, NextResponse } from "next/server";
+import { isAdmin } from "@/lib/admin-session";
 import { profileByPuuid, profilePath } from "@/lib/profiles";
 import { getPlayerExtras, PLATFORMS, type Platform } from "@/lib/riot";
 
 // GET /api/riot/player?platform=na1&puuid=...
 // My Stats calls this after a Riot ID lookup for mastery, challenge standing and the player's ARAM Clash team.
 // Clash teammates who published a public page get a link to it and their most-played Mayhem champions.
+// No looking up other players without signing in: until Riot account sign-in exists, only the admin can call it.
 export async function GET(req: NextRequest) {
+  if (!(await isAdmin())) {
+    return NextResponse.json({ error: "Sign in to see your account" }, { status: 403 });
+  }
   const params = req.nextUrl.searchParams;
   const puuid = params.get("puuid") ?? "";
   const platform = (params.get("platform") ?? "na1").toLowerCase() as Platform;
