@@ -260,6 +260,15 @@ int main(int argc, char** argv) {
         double shielded = 0;
         for (const auto& r : runTrials(lib, dar, Build{{"steraks"}, {}}, dsc, 0, 40)) shielded += r.shielded;
         CHECK(shielded > 0, "Sterak's Gage shields you when your Health drops low");
+
+        // Passives: Darius's Hemorrhage and Caitlyn's Headshot add their own damage.
+        for (const char* who : {"Darius", "Caitlyn"}) {
+            const ChampionKit& k = *lib.find(who);
+            double passive = 0;
+            for (const auto& r : runTrials(lib, k, cap, lib.scenarioFor(k), 0, 40)) passive += r.bySource[SrcPassive];
+            const std::string msg = std::string(who) + "'s passive deals damage";
+            CHECK(!k.passives.empty() && passive > 0, msg.c_str());
+        }
     }
 
     {

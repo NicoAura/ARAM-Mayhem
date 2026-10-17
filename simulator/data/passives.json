@@ -1,0 +1,498 @@
+{
+ "_note": "Which champion passives deal damage in the simulator and when, on top of the damage numbers read from each passive's tooltip. trigger: attack (every Nth attack), ability (every Nth ability cast that hits), hit (attacks and ability hits both count), after_ability (each cast grants `charges` empowered attacks, up to max_charges). every, cooldown, max_charges and below_hp take a number or the passive's own value name. per_target: the cooldown is per enemy. calcs: which of the tooltip's damage numbers count (default: all). mult: scales them (average stacks, uptime). aoe: also hits enemies near the target. Passives left out (allies, deaths, summons, stat-only) deal no damage here.",
+ "Aatrox": [
+  {
+   "trigger": "attack",
+   "cooldown": "PCooldown",
+   "calcs": [
+    "PDamage"
+   ]
+  }
+ ],
+ "Akali": [
+  {
+   "trigger": "after_ability",
+   "max_charges": 1,
+   "calcs": [
+    "Damage"
+   ]
+  }
+ ],
+ "Akshan": [
+  {
+   "trigger": "attack",
+   "calcs": [
+    "SecondAutoDamage"
+   ]
+  },
+  {
+   "trigger": "hit",
+   "every": 3,
+   "calcs": [
+    "PassiveProcDamage"
+   ]
+  }
+ ],
+ "Ambessa": [
+  {
+   "trigger": "after_ability",
+   "max_charges": 2,
+   "calcs": [
+    "Calc_OnHit_Damage_Flat"
+   ]
+  }
+ ],
+ "Aurora": [
+  {
+   "trigger": "hit",
+   "every": 3,
+   "calcs": [
+    "ProcDamage"
+   ]
+  }
+ ],
+ "Brand": [
+  {
+   "trigger": "ability",
+   "calcs": [
+    "PercentHealthDamage"
+   ]
+  },
+  {
+   "trigger": "ability",
+   "every": 3,
+   "calcs": [
+    "ExplosionDamage"
+   ],
+   "aoe": true
+  }
+ ],
+ "Braum": [
+  {
+   "trigger": "attack",
+   "every": "StackCap",
+   "cooldown": "StunCD",
+   "per_target": true,
+   "calcs": [
+    "TotalDamage"
+   ]
+  }
+ ],
+ "Briar": [
+  {
+   "trigger": "hit",
+   "cooldown": "BleedDuration",
+   "per_target": true
+  }
+ ],
+ "Caitlyn": [
+  {
+   "trigger": "attack",
+   "every": "AttacksPerHeadshot",
+   "calcs": [
+    "HeadShotBonusDamage"
+   ]
+  }
+ ],
+ "Corki": [
+  {
+   "trigger": "attack",
+   "calcs": [
+    "BasicAttackTOOLTIP"
+   ]
+  }
+ ],
+ "Darius": [
+  {
+   "trigger": "hit",
+   "cooldown": 1.0,
+   "per_target": true
+  }
+ ],
+ "Diana": [
+  {
+   "trigger": "attack",
+   "every": 3,
+   "aoe": true
+  }
+ ],
+ "Ekko": [
+  {
+   "trigger": "hit",
+   "every": 3,
+   "cooldown": "LockoutTime",
+   "per_target": true
+  }
+ ],
+ "Fiora": [
+  {
+   "trigger": "hit",
+   "cooldown": 4.0,
+   "per_target": true
+  }
+ ],
+ "Galio": [
+  {
+   "trigger": "attack",
+   "cooldown": 5.0,
+   "aoe": true
+  }
+ ],
+ "Gangplank": [
+  {
+   "trigger": "attack",
+   "cooldown": 13.0
+  }
+ ],
+ "Gwen": [
+  {
+   "trigger": "attack"
+  }
+ ],
+ "Hwei": [
+  {
+   "trigger": "ability",
+   "every": 2,
+   "aoe": true
+  }
+ ],
+ "Irelia": [
+  {
+   "trigger": "attack",
+   "mult": 0.7
+  }
+ ],
+ "JarvanIV": [
+  {
+   "trigger": "attack",
+   "cooldown": "TooltipCooldown",
+   "per_target": true
+  }
+ ],
+ "Jhin": [
+  {
+   "trigger": "attack",
+   "every": 4
+  }
+ ],
+ "Kaisa": [
+  {
+   "trigger": "attack",
+   "calcs": [
+    "PBaseDamage"
+   ]
+  },
+  {
+   "trigger": "attack",
+   "every": 5,
+   "calcs": [
+    "PExecutePercentage"
+   ]
+  }
+ ],
+ "Katarina": [
+  {
+   "trigger": "ability",
+   "every": 2,
+   "aoe": true
+  }
+ ],
+ "Kayle": [
+  {
+   "trigger": "attack",
+   "aoe": true
+  }
+ ],
+ "Khazix": [
+  {
+   "trigger": "attack",
+   "cooldown": 12.0
+  }
+ ],
+ "KSante": [
+  {
+   "trigger": "after_ability",
+   "max_charges": 1,
+   "calcs": [
+    "FlatDamage"
+   ]
+  }
+ ],
+ "Lillia": [
+  {
+   "trigger": "ability",
+   "cooldown": "Duration",
+   "per_target": true
+  }
+ ],
+ "Locke": [
+  {
+   "trigger": "attack",
+   "mult": 0.5
+  }
+ ],
+ "Lucian": [
+  {
+   "trigger": "after_ability",
+   "max_charges": 1,
+   "calcs": [
+    "TotalDamage"
+   ]
+  }
+ ],
+ "Lulu": [
+  {
+   "trigger": "attack"
+  }
+ ],
+ "Lux": [
+  {
+   "trigger": "after_ability",
+   "max_charges": 1
+  }
+ ],
+ "MasterYi": [
+  {
+   "trigger": "attack",
+   "every": "AttackCount"
+  }
+ ],
+ "MissFortune": [
+  {
+   "trigger": "attack",
+   "cooldown": 1000000000.0,
+   "per_target": true
+  }
+ ],
+ "Mordekaiser": [
+  {
+   "trigger": "attack",
+   "calcs": [
+    "BonusAPAuto"
+   ]
+  },
+  {
+   "trigger": "hit",
+   "cooldown": 1.0,
+   "calcs": [
+    "AuraDamagePerStack",
+    "PercentHealthForAura"
+   ]
+  }
+ ],
+ "Naafiri": [
+  {
+   "trigger": "attack",
+   "mult": 2,
+   "calcs": [
+    "PackmateTotalDamage"
+   ]
+  }
+ ],
+ "Nautilus": [
+  {
+   "trigger": "attack",
+   "cooldown": 8.0,
+   "per_target": true
+  }
+ ],
+ "Nocturne": [
+  {
+   "trigger": "attack",
+   "cooldown": "Cooldown",
+   "aoe": true
+  }
+ ],
+ "Orianna": [
+  {
+   "trigger": "attack",
+   "calcs": [
+    "TotalDamage",
+    "StackDamageMax"
+   ]
+  }
+ ],
+ "Poppy": [
+  {
+   "trigger": "attack",
+   "cooldown": "ActualCooldown"
+  }
+ ],
+ "Qiyana": [
+  {
+   "trigger": "hit",
+   "cooldown": 25.0,
+   "per_target": true
+  }
+ ],
+ "Quinn": [
+  {
+   "trigger": "attack",
+   "cooldown": 8.0
+  }
+ ],
+ "Rell": [
+  {
+   "trigger": "attack"
+  }
+ ],
+ "Renata": [
+  {
+   "trigger": "attack",
+   "cooldown": "PassiveDuration",
+   "per_target": true,
+   "calcs": [
+    "PercentAmpCalcSelf"
+   ]
+  }
+ ],
+ "Riven": [
+  {
+   "trigger": "after_ability",
+   "max_charges": "Charges"
+  }
+ ],
+ "Samira": [
+  {
+   "trigger": "hit",
+   "mult": 0.5,
+   "calcs": [
+    "BonusMeleeDamage"
+   ]
+  }
+ ],
+ "Sejuani": [
+  {
+   "trigger": "attack",
+   "cooldown": 12.0,
+   "per_target": true
+  }
+ ],
+ "Senna": [
+  {
+   "trigger": "hit",
+   "every": 2,
+   "cooldown": 8.0,
+   "per_target": true,
+   "calcs": [
+    "BonusCurentHealthDamage"
+   ]
+  }
+ ],
+ "Sett": [
+  {
+   "trigger": "attack",
+   "every": 2
+  }
+ ],
+ "Shaco": [
+  {
+   "trigger": "attack",
+   "mult": 0.35,
+   "calcs": [
+    "BasicAttackDamage"
+   ]
+  }
+ ],
+ "Skarner": [
+  {
+   "trigger": "hit",
+   "every": 3,
+   "cooldown": "Duration",
+   "per_target": true
+  }
+ ],
+ "Sona": [
+  {
+   "trigger": "ability",
+   "every": 3
+  }
+ ],
+ "Sylas": [
+  {
+   "trigger": "after_ability",
+   "max_charges": "PassiveCharges",
+   "calcs": [
+    "PassiveDamage"
+   ]
+  }
+ ],
+ "TahmKench": [
+  {
+   "trigger": "attack"
+  }
+ ],
+ "Talon": [
+  {
+   "trigger": "ability",
+   "every": 3,
+   "cooldown": 6.0,
+   "per_target": true
+  }
+ ],
+ "Taric": [
+  {
+   "trigger": "after_ability",
+   "charges": 2,
+   "max_charges": 2
+  }
+ ],
+ "Twitch": [
+  {
+   "trigger": "attack",
+   "cooldown": 1.0,
+   "per_target": true,
+   "mult": 5
+  }
+ ],
+ "Urgot": [
+  {
+   "trigger": "attack",
+   "cooldown": "PerLegCD",
+   "mult": 1.5
+  }
+ ],
+ "Velkoz": [
+  {
+   "trigger": "ability",
+   "every": 3
+  }
+ ],
+ "Volibear": [
+  {
+   "trigger": "attack",
+   "mult": 0.8
+  }
+ ],
+ "Warwick": [
+  {
+   "trigger": "attack"
+  }
+ ],
+ "XinZhao": [
+  {
+   "trigger": "attack",
+   "every": 3
+  }
+ ],
+ "Zed": [
+  {
+   "trigger": "attack",
+   "cooldown": "PerUnitCD",
+   "per_target": true,
+   "below_hp": "CurrentHealthThreshold"
+  }
+ ],
+ "Ziggs": [
+  {
+   "trigger": "attack",
+   "cooldown": 6.0
+  }
+ ],
+ "Zoe": [
+  {
+   "trigger": "after_ability",
+   "max_charges": 1
+  }
+ ]
+}

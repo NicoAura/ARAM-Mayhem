@@ -6,9 +6,9 @@
   "use strict";
   const DATA = "replay-data/";
   const BUST = "?v=" + (window.REPLAY_VERSION || "0");
-  const SLOT_COLORS = { Q: "#4fc3f7", W: "#7bd88f", E: "#f4b860", R: "#e66ad2" };
+  const SLOT_COLORS = { P: "#ffd36b", Q: "#4fc3f7", W: "#7bd88f", E: "#f4b860", R: "#e66ad2" };
   const TYPE_COLORS = { physical: "#f08a4b", magic: "#7aa2ff", true: "#f4f4f4" };
-  const SOURCE_COLORS = ["#c9d6e2", SLOT_COLORS.Q, SLOT_COLORS.W, SLOT_COLORS.E, SLOT_COLORS.R, "#b9a3ff"];
+  const SOURCE_COLORS = ["#c9d6e2", SLOT_COLORS.Q, SLOT_COLORS.W, SLOT_COLORS.E, SLOT_COLORS.R, "#b9a3ff", SLOT_COLORS.P];
   const SLOT_COL = { P: 1, Q: 2, W: 3, E: 4, R: 5 };
   // The site's settings menu (gear) saves {motion, sound, graphics, ...} as JSON under "deeparam-settings"
   // and fires a "deeparam-settings" event on its page. This viewer is embedded on the same origin, so it
@@ -269,7 +269,7 @@
 
   // ---------- state at time t ----------
   function stateAt(time) {
-    const s = { enemies: new Map(), focus: -1, kills: 0, damage: 0, bySource: [0, 0, 0, 0, 0, 0], selfHp: fight.maxHp,
+    const s = { enemies: new Map(), focus: -1, kills: 0, damage: 0, bySource: (trace.sources || []).map(() => 0), selfHp: fight.maxHp,
       cc: false, dead: false };
     for (const e of fight.events) {
       if (e.t > time) break;
@@ -1253,7 +1253,8 @@
   }
   function renderBars(s) {
     const box = $("bars");
-    if (!box.childElementCount) {
+    if (box.childElementCount !== trace.sources.length) {
+      box.replaceChildren(); box.drawn = null;
       trace.sources.forEach((name, i) => {
         const row = document.createElement("div"); row.className = "bar";
         const label = document.createElement("span"); label.textContent = name;

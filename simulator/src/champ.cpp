@@ -17,7 +17,7 @@
 
 namespace mayhem {
 
-const char* const kSourceNames[SrcCount] = {"Basic attacks", "Q", "W", "E", "R", "Items and augments"};
+const char* const kSourceNames[SrcCount] = {"Basic attacks", "Q", "W", "E", "R", "Items and augments", "Passive"};
 
 double get(const Bag& b, const std::string& key, double fallback) {
     auto it = b.find(key);
@@ -154,6 +154,35 @@ ChampionKit loadChampion(const json::Value& c, const Rules& rules) {
         k.cnWeight = cn["weight"].asNumber(0.0);
         k.cnWinRate = cn["win_rate"].asNumber(0.5);
     }
+    auto hitOf = [](const json::Value& h) {
+        Hit hit;
+        const std::string type = h["type"].asString("magic");
+        hit.type = type == "physical" ? DamageType::Physical : type == "true" ? DamageType::True : DamageType::Magic;
+        const std::string target = h["target"].asString("flat");
+        hit.target = target == "target_max_hp"       ? HitTarget::MaxHp
+                     : target == "target_current_hp" ? HitTarget::CurrentHp
+                     : target == "target_missing_hp" ? HitTarget::MissingHp
+                                                     : HitTarget::Flat;
+        hit.perSecond = h["per_second"].asBool(false);
+        hit.calc = h["calc"].asString();
+        hit.scaling = bagOf(h["scaling"]);
+        return hit;
+    };
+    for (const auto& p : c["passives"].arr) {
+        Passive ps;
+        const std::string t = p["trigger"].asString("attack");
+        ps.trigger = t == "ability" ? Passive::Trigger::Ability : t == "hit" ? Passive::Trigger::Hit
+                     : t == "after_ability" ? Passive::Trigger::AfterAbility : Passive::Trigger::Attack;
+        ps.every = std::max(1, static_cast<int>(p["every"].asNumber(1)));
+        ps.cooldown = std::max(0.0, p["cooldown"].asNumber(0));
+        ps.perTarget = p["per_target"].asBool(false);
+        ps.charges = std::max(1, static_cast<int>(p["charges"].asNumber(1)));
+        ps.maxCharges = std::max(1, static_cast<int>(p["max_charges"].asNumber(1)));
+        ps.aoe = p["aoe"].asBool(false);
+        ps.belowHp = p["below_hp"].asNumber(0);
+        for (const auto& h : p["hits"].arr) ps.hits.push_back(hitOf(h));
+        if (!ps.hits.empty()) k.passives.push_back(ps);
+    }
     for (const auto& a : c["abilities"].arr) {
         Ability ab;
         const std::string slot = a["slot"].asString("Q");
@@ -186,17 +215,7 @@ ChampionKit loadChampion(const json::Value& c, const Rules& rules) {
         // ability has nothing else.
         std::vector<Hit> main, alts;
         for (const auto& h : a["hits"].arr) {
-            Hit hit;
-            const std::string type = h["type"].asString("magic");
-            hit.type = type == "physical" ? DamageType::Physical : type == "true" ? DamageType::True : DamageType::Magic;
-            const std::string target = h["target"].asString("flat");
-            hit.target = target == "target_max_hp"       ? HitTarget::MaxHp
-                         : target == "target_current_hp" ? HitTarget::CurrentHp
-                         : target == "target_missing_hp" ? HitTarget::MissingHp
-                                                         : HitTarget::Flat;
-            hit.perSecond = h["per_second"].asBool(false);
-            hit.calc = h["calc"].asString();
-            hit.scaling = bagOf(h["scaling"]);
+            Hit hit = hitOf(h);
             (h["alt"].asBool(false) ? alts : main).push_back(hit);
         }
         if (main.empty() && !alts.empty()) main.push_back(alts.front());
@@ -786,6 +805,7 @@ private:
         // Ability order: the champion's recommended combo when it has one (and the
         // combo_order setting is on), otherwise R when it's up, then the rest by damage per cast.
         readyAt_.assign(ch_.abilities.size(), 0.0);
+        passiveState_.assign(ch_.passives.size(), PassiveState{});
         std::vector<std::pair<double, size_t>> byDamage;
         for (size_t i = 0; i < ch_.abilities.size(); ++i) {
             const Ability& a = ch_.abilities[i];
@@ -1471,8 +1491,10 @@ private:
             }
             if (!a.cc.empty() && e->alive) applyCc(*e, a);
             onAbilityDamage(e, first);
+            if (first && !a.hits.empty() && e->alive) passivesOn(e, false);
             first = false;
         }
+        passivesCast();
         if (spellblade_ && t_ >= spellbladeReady_) {
             spellbladeArmed_ = true;
             spellbladeArmedAt_ = t_;
@@ -1645,8 +1667,52 @@ private:
             }
             for (const auto& h : a->hits) deal(e, hitRaw(h, *e) * abilityAmp_, h.type, src);
         }
+        if (e->alive) passivesOn(e, true);
         reduceCooldowns(get(fx_, "attack_cdr_flat"), get(fx_, "attack_cdr_pct"), false);
     }
+
+    // The champion's passive: an attack (attack = true) or an ability hit landed on e.
+    void passivesOn(Enemy* e, bool attack) {
+        for (size_t i = 0; i < ch_.passives.size() && e->alive; ++i) {
+            const Passive& p = ch_.passives[i];
+            PassiveState& st = passiveState_[i];
+            using T = Passive::Trigger;
+            if (attack ? p.trigger == T::Ability : (p.trigger == T::Attack || p.trigger == T::AfterAbility)) continue;
+            double& ready = p.perTarget ? st.targetReady[e->uid] : st.readyAt;
+            if (t_ < ready) continue;
+            if (p.belowHp > 0 && e->hp > p.belowHp * e->maxHp) continue;
+            if (p.trigger == T::AfterAbility) {
+                if (st.charges <= 0) continue;
+                --st.charges;
+            } else if (++st.count < p.every) {
+                continue;
+            }
+            st.count = 0;
+            if (p.cooldown > 0) ready = t_ + p.cooldown;
+            if (trace_) {
+                TraceEvent ev;
+                ev.t = t_; ev.kind = "proc"; ev.slot = 'P'; ev.target = e->uid;
+                record(ev);
+            }
+            std::vector<Enemy*> targets{e};
+            if (p.aoe)
+                for (Enemy* o : near(e->pos, 350, e)) targets.push_back(o);
+            for (Enemy* t : targets)
+                for (const auto& h : p.hits)
+                    if (t->alive) deal(t, hitRaw(h, *t), h.type, SrcPassive);
+        }
+    }
+    // Abilities charge "after using an Ability" passives (Riven, Zoe, Lucian...).
+    void passivesCast() {
+        for (size_t i = 0; i < ch_.passives.size(); ++i) {
+            const Passive& p = ch_.passives[i];
+            if (p.trigger != Passive::Trigger::AfterAbility) continue;
+            PassiveState& st = passiveState_[i];
+            st.charges = std::min(p.maxCharges, st.charges + p.charges);
+        }
+    }
+    struct PassiveState { int count = 0, charges = 0; double readyAt = 0; std::map<int, double> targetReady; };
+    std::vector<PassiveState> passiveState_;
 
     void tickAuras(double until) {
         if (until <= auraClock_) return;

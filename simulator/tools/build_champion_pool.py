@@ -64,6 +64,7 @@ RANKS = {"Q": 5, "W": 5, "E": 5, "R": 3}
 DEFAULT_COOLDOWN, DEFAULT_R_COOLDOWN = 8.0, 90.0
 DEFAULT_OVERRIDES = os.path.join(DATA, "champion_overrides.json")
 DEFAULT_ANIMS = os.path.join(HERE, "..", "viewer", "replay-data", "anims.json")
+DEFAULT_PASSIVES = os.path.join(DATA, "passives.json")
 YUNARA_ID = 804
 
 # Stat ids used by the game's ability formulas (mStat). Inferred from how
@@ -339,7 +340,7 @@ def round_lin(lin):
 
 def parse_spell(slot, spell_obj, strings, base_stats, attack_range=125):
     spell = spell_obj.get("mSpell") or {}
-    rank = RANKS[slot]
+    rank = RANKS.get(slot, 1)
     notes = set()
     ev = Evaluator(spell, rank, base_stats, notes)
     text = clean(resolve_includes(tooltip_for(spell, strings), strings))
@@ -576,7 +577,7 @@ def parse_geometry(spell, slot, area, attack_range):
     """Where an ability reaches and what it covers, in game units, from the targeter
     the game draws when aiming it (mTargeterDefinitions), falling back to the spell's
     own cast range, radius and line width. Missile speed 0 means it lands at once."""
-    rank = RANKS[slot]
+    rank = RANKS.get(slot, 1)
     targeting = (spell.get("mTargetingTypeData") or {}).get("__type", "")
     targeters = ((spell.get("mClientData") or {}).get("mTargeterDefinitions")) or []
     by_type = {}
@@ -636,6 +637,55 @@ def parse_geometry(spell, slot, area, attack_range):
     for k in ("range", "radius", "width", "angle"):
         g[k] = round(float(g[k]), 1)
     return g
+
+
+def parse_passives(bin_data, record, rules, strings, base, attack_range, notes):
+    """The champion's passive damage (its tooltip's damage numbers, as for abilities) with
+    when it lands, from data/passives.json."""
+    path = record.get("mCharacterPassiveSpell")
+    obj = find_spell(bin_data, path) if rules and path else None
+    if obj is None:
+        if rules:
+            notes.append("P: passive spell data not found")
+        return []
+    parsed = parse_spell("P", obj, strings, base, attack_range)
+    ev = Evaluator(obj.get("mSpell") or {}, RANKS.get("P", 1), base, set())
+
+    def value(v, default):
+        if isinstance(v, (int, float)):
+            return float(v)
+        if isinstance(v, str):
+            lin, _ = ev.calc(v)
+            if lin is not None and lin.is_const():
+                return lin.const()
+            notes.append(f"P: value {v} not found")
+        return default
+
+    out = []
+    for rule in rules:
+        want = rule.get("calcs")
+        hits = [dict(h, per_second=False) for h in parsed["hits"]
+                if (want is None and not h["alt"]) or (want and h["calc"].split("~")[0] in want)]
+        mult = float(rule.get("mult", 1.0))
+        if mult != 1.0:
+            for h in hits:
+                h["scaling"] = {k: round(c * mult, 4) for k, c in h["scaling"].items()}
+        hits = [h for h in hits if h["scaling"]]
+        if not hits:
+            notes.append(f"P: no damage for {rule.get('calcs') or 'its passive'}")
+            continue
+        out.append({
+            "trigger": rule["trigger"],
+            "every": max(1, int(round(value(rule.get("every"), 1)))),
+            "cooldown": round(value(rule.get("cooldown"), 0.0), 3),
+            "per_target": bool(rule.get("per_target")),
+            "charges": int(rule.get("charges", 1)),
+            "max_charges": max(1, int(round(value(rule.get("max_charges"), 1)))),
+            "aoe": bool(rule.get("aoe")),
+            "below_hp": round(value(rule.get("below_hp"), 0.0), 3),
+            "hits": hits,
+        })
+    return out
 
 
 def find_spell(bin_data, path):
@@ -704,6 +754,7 @@ def main():
     ap.add_argument("--only", default="", help="comma-separated champion names (for debugging)")
     ap.add_argument("--overrides", default=DEFAULT_OVERRIDES, help="hand fixes per champion and ability")
     ap.add_argument("--anims", default=DEFAULT_ANIMS, help="anims.json with which abilities dash or blink")
+    ap.add_argument("--passives", default=DEFAULT_PASSIVES, help="when each champion's passive deals its damage")
     args = ap.parse_args()
     cache = args.cache
 
@@ -723,6 +774,8 @@ def main():
         pool = json.load(f)
     with open(args.overrides, encoding="utf-8") as f:
         overrides = {k: v for k, v in json.load(f).items() if not k.startswith("_")}
+    with open(args.passives, encoding="utf-8") as f:
+        passive_rules = {k: v for k, v in json.load(f).items() if not k.startswith("_")}
     cn = {int(e["champion_id"]): e for e in pool["enemies"]}
     anims = {}
     if os.path.exists(args.anims):
@@ -810,6 +863,8 @@ def main():
             if move and "move" not in a["geometry"]:
                 a["geometry"]["move"] = move  # "dash" or "blink": the caster travels with the ability
 
+        passives = parse_passives(bin_data, record, passive_rules.get(c["id"]), strings, base, s["attackrange"], notes)
+
         bal = balance.get(norm(c["name"])) or balance.get(norm(c["id"]))
         if not bal:
             notes.append("no Mayhem damage dealt/taken modifiers listed")
@@ -847,6 +902,7 @@ def main():
             },
             "cn": {k: p[k] for k in ("weight", "damage_share", "damage_taken_share", "win_rate", "cc", "phys_share")} if p else None,
             "abilities": abilities,
+            **({"passives": passives} if passives else {}),
             "parse_quality": quality,
             "notes": notes,
         }

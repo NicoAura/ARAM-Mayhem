@@ -70,6 +70,18 @@ struct Ability {
     std::vector<Hit> hits;
 };
 
+// A champion passive's damage and when it lands (data/passives.json via data/champions.json).
+struct Passive {
+    enum class Trigger { Attack, Ability, Hit, AfterAbility } trigger = Trigger::Attack;
+    int every = 1;          // every Nth attack / ability hit / either
+    double cooldown = 0;    // seconds between procs (per enemy when perTarget)
+    bool perTarget = false;
+    int charges = 1, maxCharges = 1;  // AfterAbility: empowered attacks per cast, and how many can be stored
+    bool aoe = false;       // also hits enemies near the target
+    double belowHp = 0;     // only against targets below this share of their max Health
+    std::vector<Hit> hits;
+};
+
 struct ChampionKit {
     std::string id, name, role, parseQuality;
     int championId = 0;
@@ -92,6 +104,7 @@ struct ChampionKit {
     double deathAct = 0, reviveFrac = 0, reviveDelay = 0, deathChance = 1;
     bool deathNeedsR = false;
     std::vector<Ability> abilities;
+    std::vector<Passive> passives;
     // Its abilities' crowd control that stops a champion acting (slot, kind), damaging or not:
     // what you're hit by when this champion is the enemy.
     std::vector<std::pair<char, std::string>> hardCc;
@@ -171,7 +184,7 @@ struct Library {
     json::Value enemyPool;
 };
 
-enum Source : int { SrcAttack = 0, SrcQ, SrcW, SrcE, SrcR, SrcItems, SrcCount };
+enum Source : int { SrcAttack = 0, SrcQ, SrcW, SrcE, SrcR, SrcItems, SrcPassive, SrcCount };
 extern const char* const kSourceNames[SrcCount];
 
 struct Result {
