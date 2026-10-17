@@ -3353,3 +3353,173 @@ html[data-motion="reduce"] .btn:hover {
   color: var(--muted);
   font-size: 0.75rem;
 }
+
+/* Team Builder (/synergy) */
+.team-slots {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.team-slot {
+  position: relative;
+  display: grid;
+  justify-items: center;
+  width: 6.5rem;
+  padding: 0.75rem 0.5rem;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: var(--surface);
+}
+
+.team-slot > a {
+  display: grid;
+  justify-items: center;
+  gap: 0.4rem;
+  min-width: 0;
+  color: inherit;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  text-align: center;
+  text-decoration: none;
+}
+
+.team-slot > a span {
+  max-width: 5.5rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.team-slot img {
+  border-radius: 12px;
+}
+
+.team-remove {
+  position: absolute;
+  top: 0.25rem;
+  right: 0.25rem;
+  width: 1.5rem;
+  height: 1.5rem;
+  border: 0;
+  border-radius: 50%;
+  background: none;
+  color: var(--muted);
+  font-size: 1.1rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.team-remove:hover {
+  color: var(--fg);
+}
+
+.team-add {
+  align-content: center;
+  gap: 0.4rem;
+  border-style: dashed;
+  color: var(--muted);
+  cursor: pointer;
+}
+
+.team-plus {
+  display: grid;
+  place-items: center;
+  width: 56px;
+  height: 56px;
+  font-size: 1.75rem;
+  font-weight: 300;
+}
+
+.team-add select {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.team-add:focus-within {
+  border-color: var(--accent);
+  color: var(--fg);
+}
+
+.team-clear {
+  margin: 0.75rem 0 1rem;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--accent);
+  font: inherit;
+  font-size: 0.8125rem;
+  cursor: pointer;
+}
+
+.team .bento {
+  margin-top: 0.5rem;
+}
+
+.rank.plain.team-pairs > div,
+.rank.plain.team-fits > div {
+  display: grid;
+  align-items: center;
+  gap: 0.625rem;
+  padding: 0.375rem 0.5rem;
+}
+
+.rank.plain.team-pairs > div {
+  grid-template-columns: 44px minmax(0, 1fr) 3.5rem;
+}
+
+.rank.plain.team-fits > div {
+  grid-template-columns: 24px minmax(0, 1fr) 3.5rem 1.75rem;
+}
+
+.team-duo {
+  display: flex;
+}
+
+.team-duo img {
+  border: 2px solid var(--bg);
+  border-radius: 50%;
+}
+
+.team-duo img + img {
+  margin-left: -6px;
+}
+
+.team-n {
+  color: var(--muted);
+  font-size: 0.75rem;
+  font-weight: 400;
+}
+
+.team-addbtn {
+  width: 1.75rem;
+  height: 1.75rem;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  background: none;
+  color: var(--fg);
+  font-size: 1rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.team-addbtn:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.rank-v.wr-high {
+  color: var(--good);
+}
+
+.rank-v.wr-low {
+  color: var(--bad);
+}
+
+.team > .patch-note {
+  margin-top: 1rem;
+}

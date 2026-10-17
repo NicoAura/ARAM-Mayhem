@@ -101,6 +101,7 @@ export default async function ChampionPage({ params }: { params: Promise<{ alias
             <section className="card span-5" data-accent="tier">
               <div className="card-head">
                 <h2>Best teammates</h2>
+                <Link href={`/synergy?team=${c.alias}`}>Team Builder →</Link>
               </div>
               <div className="rank plain">
                 {c.partners.map((p) => (
