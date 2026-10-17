@@ -1,10 +1,13 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import AugmentDraft from "@/components/AugmentDraft";
+import AugmentGroups from "@/components/AugmentGroups";
 import AugmentTiers from "@/components/AugmentTiers";
 import SubTabs from "@/components/SubTabs";
 import Intro from "@/components/Intro";
+import { augmentGroups } from "@/lib/augment-groups";
 import { augmentTiers, STYLES } from "@/lib/augment-tiers";
+import { AUGMENT_DEEPSCORE_HELP } from "@/lib/deepscore";
 import { livePatch } from "@/lib/highlights";
 import { pageMeta } from "@/lib/meta";
 
@@ -37,6 +40,19 @@ export default function AugmentTierPage() {
                   </Link>
                   .
                 </p>
+              </>
+            ),
+          },
+          {
+            id: "groups",
+            label: "By icon",
+            lazy: true,
+            content: (
+              <>
+                <p className="patch-note subtab-note">
+                  Augments that share an icon usually share a job. Each group shows what most of its members have in common, then every member, best first.
+                </p>
+                <AugmentGroups groups={augmentGroups()} help={AUGMENT_DEEPSCORE_HELP} />
               </>
             ),
           },

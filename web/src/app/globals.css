@@ -6292,6 +6292,69 @@ th > button[data-tip] {
   }
 }
 
+/* Augments by icon (/augments?tab=groups) */
+.aug-groups {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 22rem), 1fr));
+  gap: 1rem;
+  align-items: start;
+}
+.aug-group {
+  display: grid;
+  gap: 0.6rem;
+  min-width: 0;
+}
+.aug-group-head {
+  display: grid;
+  grid-template-columns: 3rem minmax(0, 1fr) auto;
+  gap: 0.75rem;
+  align-items: center;
+}
+.aug-group-head h3 { margin: 0; font-size: 1.05rem; }
+.aug-group-icon { border-radius: 10px; }
+.aug-group-traits {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin: 0;
+}
+.aug-group-trait,
+.aug-group-word {
+  padding: 0.15rem 0.5rem;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  font-size: 0.75rem;
+}
+.aug-group-trait { background: var(--raised); font-weight: 600; text-transform: capitalize; }
+.aug-group-word small { color: var(--muted); }
+.aug-group-wr { margin: 0; color: var(--muted); font-size: 0.85rem; font-variant-numeric: tabular-nums; }
+.aug-group-wr b { color: var(--fg); }
+.aug-group-members {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(5.5rem, 1fr));
+  gap: 0.35rem;
+}
+.group-aug {
+  display: grid;
+  justify-items: center;
+  gap: 0.2rem;
+  min-width: 0;
+  padding: 0.4rem 0.25rem;
+  border-radius: 10px;
+  color: var(--fg);
+  text-align: center;
+  text-decoration: none;
+}
+.group-aug:hover,
+.group-aug:focus-visible { background: var(--raised); }
+.group-aug img { border-radius: 8px; border: 2px solid var(--line); }
+.group-aug[data-rarity="silver"] img { border-color: var(--silver); }
+.group-aug[data-rarity="gold"] img { border-color: var(--gold); }
+.group-aug[data-rarity="prismatic"] img { border-color: #b78cf0; }
+.group-aug-name { max-width: 100%; font-size: 0.72rem; line-height: 1.2; overflow-wrap: anywhere; }
+.aug-group-more summary { cursor: pointer; color: var(--accent); font-size: 0.85rem; }
+.aug-group-more[open] summary { margin-bottom: 0.4rem; }
+
 /* Item page: simulated damage */
 .item-sim { margin-top: 1.5rem; }
 .item-sim .stat-row { margin-top: 0.25rem; margin-bottom: 0.75rem; }
