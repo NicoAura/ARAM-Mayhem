@@ -343,7 +343,7 @@ def main():
 
     # ---- Mayhem progression track. The event hub has each track's dates and level count; the client's reward list
     # holds every track's rewards in order, one per level, so the current track is the last block of Mayhem rewards.
-    track = build_track(gd, asset, augments, s)
+    track = official_track(build_track(gd, asset, augments, s))
     unlocks = {r["augmentId"]: r["level"] for r in (track["levels"] if track else []) if r.get("augmentId")}
     augment_rules["unlocks"] = {str(k): v for k, v in sorted(unlocks.items())}
 
@@ -373,6 +373,7 @@ def main():
         "augmentRules": {k: v for k, v in augment_rules.items() if k != "tiers"},
         "champSelect": champ_select,
         "track": track,
+        "story": STORY,
     }
     # mode-wide numbers the simulator and site pages use
     mode_rules = {"patch": version, "attackSpeedCap": rules["attackSpeedCap"], "aramAttackSpeedCap": rules["aramAttackSpeedCap"],
@@ -411,6 +412,17 @@ WIKI_MECHANICS = {
          "text": "Hex gates (manholes on the Zaun side) send you out of base. Acceleration Pads give 25% bonus Move Speed for 1 second."},
     ],
 }
+
+
+# How the mode has changed, in our own words from Riot's /dev posts and dev updates (read 2026-10-17)
+STORY = [
+    {"date": "2025-10", "text": "Mayhem arrives as its own queue next to regular ARAM, with Arena augments plus over 40 new ones. Augments with an always-on effect are left out so ten players stay readable."},
+    {"date": "2026-01", "text": "The mode's run is extended, and patch 26.3 adds Augment Sets and the progression track."},
+    {"date": "2026-03", "text": "Mayhem stays with no planned end date."},
+    {"date": "2026-06", "text": "Patch 26.12 removes Augment Sets, since builds and games felt too alike. Popular set effects come back as single augments, and Ability Augments arrive, each one powering up a single ability."},
+    {"date": "2026-07", "text": "Mayhem Classic-ish runs for a limited time in its own queue: only the 60 original champions in their current form, a Classic-style map, Classic items and Classic-themed augments."},
+    {"date": "Next", "text": "A music-themed set with new augments, a musical act on stage at spawn, and missions with rewards of their own."},
+]
 
 
 def mechanics(m12, modes, spells, dv):
@@ -453,6 +465,37 @@ def mechanics(m12, modes, spells, dv):
         "fastTravel": W["fastTravel"],
         "portalSpeed": {"bonus": round(gate["BonusMS"], 4), "seconds": gate.get("Duration")} if gate.get("BonusMS") else None,
     }
+
+
+# What Riot's support article on ARAM: Mayhem adds to the client's track data (read 2026-10-17). It applies only while
+# the track it was written for is live: XP per level, reward names the client leaves blank, and how XP is earned.
+OFFICIAL_TRACK = {
+    "size": 32,
+    "xp": [150] * 6 + [200] * 6 + [250] * 6 + [350] * 6 + [400] * 6 + [450] * 2,
+    "names": {5: "Blessed Card+", 9: "Ability Augment+", 23: "Celebration Selfie Icon", 29: "Agent of Chaos"},
+    "notes": {1: "Rerolls have a better chance to land on a higher-tier augment.",
+              5: "A better chance of the ARAM Blessing in champion select.",
+              9: "A better chance of an Ability Augment at the start of the game.",
+              13: "A new kind of Poro Snax.", 21: "A new hat."},
+    "objectives": [{"text": "Play Mayhem", "xp": 1, "per": "minute"}, {"text": "Play a game as a Marksman or Tank", "xp": 60, "per": "day"},
+                   {"text": "Play 6 games", "xp": 300, "per": "week"}, {"text": "Reroll augments 20 times", "xp": 450, "per": "once"}],
+    "guaranteed": "A newly unlocked Gold or Prismatic augment is sure to be offered in your next game if it fits the draft.",
+}
+
+
+def official_track(track):
+    """Add OFFICIAL_TRACK's XP, names and notes when the live track has its 32 levels; otherwise leave the track as is."""
+    O = OFFICIAL_TRACK
+    if not track or track["size"] != O["size"] or len(track["levels"]) != O["size"]:
+        return track
+    for row in track["levels"]:
+        n = row["level"]
+        row["xp"] = O["xp"][n - 1]
+        row["name"] = O["names"].get(n, row["name"])
+        if n in O["notes"]:
+            row["note"] = O["notes"][n]
+    track.update(totalXp=sum(O["xp"]), objectives=O["objectives"], guaranteed=O["guaranteed"])
+    return track
 
 
 def build_track(gd, asset, augments, s):

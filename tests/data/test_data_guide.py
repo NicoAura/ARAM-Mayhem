@@ -368,3 +368,12 @@ def test_mode_mechanics():
     assert 0 < r["minions"]["aoeMultiplier"] <= 1 and r["minions"]["blackout"]["range"] > 0
     assert 0 < r["relics"]["pickup"] < r["relics"]["beam"] < 1
     assert {f["map"] for f in r["fastTravel"]} >= {"Howling Abyss", "Koeshin's Crossing", "Butcher's Bridge"}
+
+
+
+def test_official_track_and_story(guide):
+    t = guide["track"]
+    if t.get("totalXp"):
+        assert sum(r["xp"] for r in t["levels"]) == t["totalXp"] and all(o["xp"] > 0 for o in t["objectives"])
+        assert "A title" not in [r["name"] for r in t["levels"]]
+    assert guide["story"] and all(e["date"] and e["text"] for e in guide["story"])

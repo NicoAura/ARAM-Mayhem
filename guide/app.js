@@ -43,6 +43,10 @@
   $("facts").innerHTML = facts.map(([l, v]) => `<div class="card fact"><span class="eyebrow">${l}</span><span class="value">${v}</span></div>`).join("");
   $("queues").innerHTML = D.queues.map((q) => `<span class="chip">${q.id} · ${esc(q.name.replace("ARAM: ", ""))}</span>`).join("");
 
+  $("story").innerHTML = (D.story || [])
+    .map((e) => `<div class="row" style="align-items:flex-start"><span class="chip">${esc(e.date)}</span><p class="muted small" style="margin:0">${esc(e.text)}</p></div>`)
+    .join("");
+
   // ---- Rules
   const R = D.rules, B = R.balance, F = R.onFire.values;
   const pct = (x) => `${fmt(x * 100)}%`;
@@ -50,7 +54,8 @@
   const rules = [
     ["Augments", [
       `One augment at levels ${R.augmentLevels.join(", ")}.`,
-      "You can still pick it while you're dead.",
+      "Everyone picks from the same rarity at each selection.",
+      "You choose augments while your champion is dead.",
       R.rerolls != null ? `Each selection shows ${R.cards} augments of one rarity, and each of the ${R.cards} can be rerolled ${R.rerolls === 1 ? "once" : `${fmt(R.rerolls)} times`}, so you can see up to ${R.cards * (1 + R.rerolls)}.` : "",
     ]],
     ["Attack speed and crits", [
@@ -149,9 +154,12 @@
       $("track-dates").textContent = `${day(T.start)} to ${day(T.end)}`;
       $("track-intro").textContent =
         `Playing Mayhem fills a ${T.size}-level track. ${augs} levels unlock a new augment, which can then show up in your selections; ` +
-        "the rest give emotes, icons, a title and other rewards.";
+        "the rest give emotes, icons, a title and other rewards." +
+        (T.totalXp ? ` The track is free and takes ${fmt(T.totalXp)} Mayhem XP in all. ${T.guaranteed || ""}` : "");
+      $("track-xp").innerHTML = (T.objectives || [])
+        .map((o) => `<span class="chip">${esc(o.text)}: ${fmt(o.xp)} XP${o.per === "once" ? " (once)" : ` per ${o.per}`}</span>`).join("");
       $("track-list").innerHTML = T.levels
-        .map((r) => `<div class="row">${r.icon ? img(r.icon) : ""}<div><div class="eyebrow">Level ${r.level} · ${esc(r.kind)}</div><div class="title">${esc(r.name)} ${tierChip(r.tier)}</div></div></div>`)
+        .map((r) => `<div class="row">${r.icon ? img(r.icon) : ""}<div><div class="eyebrow">Level ${r.level} · ${esc(r.kind)}${r.xp ? ` · ${fmt(r.xp)} XP` : ""}</div><div class="title">${esc(r.name)} ${tierChip(r.tier)}</div>${r.note ? `<div class="muted small">${esc(r.note)}</div>` : ""}</div></div>`)
         .join("");
     }
     const gi = AR.grantedItems.filter((g, i, all) => all.findIndex((x) => x.name === g.name) === i);
