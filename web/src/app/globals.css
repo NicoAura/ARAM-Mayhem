@@ -5063,3 +5063,121 @@ html[data-scrolled] .site-header {
   font: 500 0.8125rem var(--mono);
   text-align: right;
 }
+
+/* Champion radar (components/ChampionRadar.tsx) */
+.radar {
+  display: grid;
+  grid-template-columns: minmax(0, 380px) minmax(0, 1fr);
+  align-items: center;
+  gap: 1.5rem 2.5rem;
+}
+
+@media (max-width: 720px) {
+  .radar {
+    grid-template-columns: minmax(0, 1fr);
+    justify-items: center;
+  }
+}
+
+.radar svg {
+  width: 100%;
+  max-width: 380px;
+  height: auto;
+  overflow: visible;
+}
+
+.radar-grid {
+  fill: none;
+  stroke: var(--line);
+  stroke-width: 1;
+}
+
+.radar-mid {
+  fill: none;
+  stroke: var(--muted);
+  stroke-dasharray: 3 4;
+  stroke-width: 1;
+  opacity: 0.6;
+}
+
+.radar-shape {
+  fill: color-mix(in srgb, var(--a, var(--accent)) 24%, transparent);
+  stroke: var(--a, var(--accent));
+  stroke-linejoin: round;
+  stroke-width: 2;
+  transform-origin: 50% 50%;
+  animation: radar-in 0.7s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+.radar-dot {
+  fill: var(--a, var(--accent));
+  animation: radar-in 0.7s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  transform-origin: 130px 130px;
+}
+
+@keyframes radar-in {
+  from {
+    opacity: 0;
+    transform: scale(0.2);
+  }
+}
+
+[data-motion="reduce"] .radar-shape,
+[data-motion="reduce"] .radar-dot {
+  animation: none;
+}
+
+.radar-label {
+  fill: var(--muted);
+  font-size: 11px;
+  font-weight: 500;
+}
+
+.radar-ranks {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(8.5rem, 1fr));
+  gap: 0.9rem 1.5rem;
+  width: 100%;
+  margin: 0;
+}
+
+.radar-ranks div {
+  display: grid;
+  gap: 0.15rem;
+}
+
+.radar-ranks dt {
+  color: var(--muted);
+  font-size: 0.75rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.radar-ranks dd {
+  display: grid;
+  margin: 0;
+}
+
+.radar-ranks b {
+  font-size: 1.25rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.radar-ranks b span {
+  color: var(--muted);
+  font-size: 0.8125rem;
+  font-weight: 400;
+}
+
+.radar-ranks b.wr-high {
+  color: var(--good);
+}
+
+.radar-ranks b.wr-low {
+  color: var(--bad);
+}
+
+.radar-ranks dd > span {
+  color: var(--muted);
+  font-size: 0.8125rem;
+}

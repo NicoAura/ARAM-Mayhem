@@ -3,6 +3,7 @@ import Link from "next/link";
 import FavoriteStar from "@/components/FavoriteStar";
 import CompareToggle from "@/components/CompareToggle";
 import ShareCard from "@/components/ShareCard";
+import ChampionRadar from "@/components/ChampionRadar";
 import { TIER_COLORS } from "@/lib/share-card";
 import WinRateChart from "@/components/WinRateChart";
 import ChampionShowcase from "@/components/ChampionShowcase";
@@ -147,6 +148,11 @@ export default async function ChampionPage({ params }: { params: Promise<{ alias
               </div>
             </section>
           )}
+        </div>
+      )}
+      {c.radar.length >= 3 && (
+        <div className="bento">
+          <ChampionRadar name={c.name} axes={c.radar} />
         </div>
       )}
       <div className="bento">
