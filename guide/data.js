@@ -1400,6 +1400,7 @@ window.GUIDE_DATA = {
    "PassiveGold": 50.0
   },
   "onFire": {
+   "name": "On Fire!",
    "text": "Burn nearby enemies and gain faster spell Cooldowns, increased Movement Speed towards enemy champions, increased Attack Speed, and increased Mana Regen. However, become more vulnerable to damage and receive reduced shielding and healing.",
    "values": {
     "GrievousAmount": -0.25,
@@ -1414,6 +1415,7 @@ window.GUIDE_DATA = {
     "DamageTakenAmp_Melee": 1.25
    }
   },
+  "auraName": "Mayhemic Magic",
   "mechanics": {
    "startLevel": 3,
    "respawn": {

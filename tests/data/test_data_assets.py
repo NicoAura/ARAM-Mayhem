@@ -44,7 +44,7 @@ def test_shipped_page_assets_exist(path):
 
 def test_generated_data_has_asset_paths():
     """Guard against the scan silently finding nothing (a path format change would make every check pass)."""
-    for f in ("guide/data.js", "guide/history.js", "champions/data.js", "champions/skins.js"):
+    for f in ("guide/data.js", "guide/history.js", "champions/data.js"):
         assert len(_refs([f])) > 10, f
 
 

@@ -23,10 +23,10 @@ Not in the client: per-champion damage dealt/taken, healing, tenacity and abilit
 Rebuild: `python3 champions/build_data.py` (live patch, standard library only; writes `data.js`). Build stats change
 daily, so the daily routine should rerun it. Page text doesn't mention where data comes from (Nico, 2026-10-16).
 
-## Base stats and skins
+## Base stats
 
-Each champion page has a Base stats table (level 1, growth per level and level 18, from the champion's game data)
-and a Skins grid. Skin tiles are in `skins.js`, which the page loads only when the Skins section scrolls into view.
+Each champion page has a Base stats table (level 1, growth per level and level 18, from the champion's game data).
+The site doesn't show skins (Nico, 2026-10-17).
 
 Build stats leave out items that only augments give (quest rewards such as Wooglet's Witchcap or the Golden
 Spatula). The list comes from `guide/augment_rules.json`, so run `guide/build_data.py` first after a patch.
@@ -65,3 +65,12 @@ changes" card reads the Mayhem values from `modifiers.js`. Rerun after each patc
 pages into `official.json` (`difficulty` is 1 to 3), for color-coded tags. It also writes `profile.js` (region from
 `regions.json`, roles and difficulty), which the champion page shows under the champion's title. Run
 `build_regions.py` first. Riot's ability preview videos are on an outside host, so they aren't used.
+
+## Languages
+
+The page follows the site's language like the Info page (`i18n.js`, the same file as `guide/i18n.js`; see the Info
+README). Page text is in `i18n/<code>.json` (keys from `python3 guide/i18n_keys.py`). Game text comes from
+`python3 champions/build_i18n.py` (after `build_data.py`): `i18n/data/<code>.json` holds champion names, titles and
+ability names and text by alias and slot, and item and augment names by id, from each language's Data Dragon
+`championFull.json` and the client's item and augment lists. Only text that differs from English is kept. The Thai and
+Indonesian clients keep item and augment names in English, so those files are small.

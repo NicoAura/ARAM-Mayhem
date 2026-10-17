@@ -1,4 +1,4 @@
-"""Champion pages data: champions/data.js and champions/skins.js (champions/build_data.py), and the builder's
+"""Champion pages data: champions/data.js (champions/build_data.py), and the builder's
 build-row helpers."""
 import math
 import os
@@ -18,11 +18,6 @@ STORMRAZOR_TENCENT, STORMRAZOR = 3097, 3095
 @pytest.fixture(scope="module")
 def data():
     return load_js_data("champions/data.js", "CHAMPS_DATA")
-
-
-@pytest.fixture(scope="module")
-def skins():
-    return load_js_data("champions/skins.js", "CHAMPS_SKINS")
 
 
 def all_build_rows(b):
@@ -212,14 +207,11 @@ def test_quest_reward_items_left_out_of_builds(data):
             assert not reward & set(all_build_items(c["builds"])), c["alias"]
 
 
-def test_skins(data, skins):
-    ids = {str(c["id"]) for c in data["champions"]}
-    assert set(skins) == ids
-    for cid, rows in skins.items():
-        assert rows and rows[0]["name"] == "Original", cid
-        assert sum(1 for r in rows if r["name"] == "Original") == 1, cid
-        for r in rows:
-            assert r["name"] and r["tile"].startswith("/assets/cd/"), cid
+def test_no_skins():
+    """The site doesn't show skins (Nico, 2026-10-17): no skin file, section or skin names ship."""
+    assert not os.path.exists(os.path.join(REPO, "champions/skins.js"))
+    assert not os.path.exists(os.path.join(REPO, "champions/i18n/skins"))
+    assert "skin" not in read("champions/app.js").lower()
 
 
 def test_champion_list_matches_site_ids(data):

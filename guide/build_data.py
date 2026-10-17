@@ -10,9 +10,19 @@ What it reads:
   v1/queues.json, v1/game-mode-mutators.json    Mayhem queues and the Howling Abyss map skins
   v1/items.json, v1/augment-lists.json          Mayhem-only items, augment pool sizes
 """
-import argparse, json, os, re, sys, time, urllib.error, urllib.request
+import argparse, http.client, json, os, re, sys, time, urllib.error, urllib.request
 
 HERE = os.path.dirname(os.path.abspath(__file__))
+# A quest's "{{SpellName}}": the ability the player picks with the augment, named in each client language
+CHOSEN_ABILITY = {
+    "en_us": "your chosen ability", "ar_ae": "القدرة التي تختارها", "cs_cz": "zvolená schopnost", "de_de": "deine gewählte Fähigkeit",
+    "el_gr": "η ικανότητα που επέλεξες", "es_es": "la habilidad elegida", "es_mx": "la habilidad elegida",
+    "fr_fr": "la compétence choisie", "hu_hu": "a választott képesség", "id_id": "kemampuan pilihanmu",
+    "it_it": "l'abilità scelta", "ja_jp": "選択したスキル", "ko_kr": "선택한 스킬", "pl_pl": "wybrana umiejętność",
+    "pt_br": "a habilidade escolhida", "ro_ro": "abilitatea aleasă", "ru_ru": "выбранное умение", "th_th": "สกิลที่เลือก",
+    "tr_tr": "seçtiğin yetenek", "vi_vn": "kỹ năng đã chọn", "zh_cn": "所选技能", "zh_tw": "所選技能",
+}
+SPELL_NAME = CHOSEN_ABILITY["en_us"]
 sys.path.insert(0, os.path.join(os.path.dirname(HERE), "tools", "datamine"))
 from strings import key_hash  # noqa: E402
 
@@ -51,17 +61,30 @@ SPELL_AUGMENTS = ["PoroCharge_Active", "DimensionShift_Active", "Flash2"]
 MAYHEM_ITEMS = [550001, 550002, 550003, 550004, 550006, 550005, 550007, 226668, 223069]
 
 
-def get(url, tries=4):
+_FETCHED = {}  # files every language's build shares (the string tables are too big to keep)
+
+
+def get(url, tries=6):
+    if url in _FETCHED:
+        return _FETCHED[url]
     # CommunityDragon refuses Python's default User-Agent
     req = urllib.request.Request(url, headers={"User-Agent": "deeparam-guide"})
     for attempt in range(tries):
         try:
             with urllib.request.urlopen(req, timeout=300) as r:
-                return json.load(r)
-        except (urllib.error.URLError, ConnectionError):
+                data = json.load(r)
+            break
+        except urllib.error.HTTPError as e:
+            if e.code == 404 or attempt == tries - 1:
+                raise
+            time.sleep(2 ** attempt)
+        except (urllib.error.URLError, ConnectionError, http.client.HTTPException):  # a big file can be cut off
             if attempt == tries - 1:
                 raise
             time.sleep(2 ** attempt)
+    if "stringtable" not in url:
+        _FETCHED[url] = data
+    return data
 
 
 def site_paths(text):
@@ -69,11 +92,21 @@ def site_paths(text):
     return re.sub(re.escape(BASE) + r"/([^\s\"']+)", lambda m: "/assets/cd/" + m.group(1).lower(), text)
 
 
-def main():
-    ap = argparse.ArgumentParser()
-    ap.add_argument("--channel", default="latest")
-    ch = ap.parse_args().channel
+def build(ch, lo="en_us"):
+    """Everything the Info page and the site read, with game text in one client language (lo, like fr_fr)."""
+    global SPELL_NAME
+    SPELL_NAME = CHOSEN_ABILITY.get(lo, CHOSEN_ABILITY["en_us"])
     gd = f"{BASE}/{ch}/plugins/rcp-be-lol-game-data/global/default"
+
+    def client(path):
+        """A client file with text in it, in the build's language (the English copy when that one is missing)."""
+        if lo != "en_us":
+            try:
+                return get(f"{BASE}/{ch}/plugins/rcp-be-lol-game-data/global/{lo}/{path}")
+            except urllib.error.HTTPError as e:
+                if e.code != 404:
+                    raise
+        return get(f"{gd}/{path}")
 
     def asset(path):
         """A game or client asset path as a CommunityDragon PNG URL."""
@@ -84,7 +117,7 @@ def main():
 
     version = get(f"{BASE}/{ch}/content-metadata.json")["version"].split("+")[0]
     kiwi = get(f"{BASE}/{ch}/game/maps/modespecificdata/kiwi.bin.json")
-    entries = get(f"{BASE}/{ch}/game/en_us/data/menu/en_us/lol.stringtable.json")["entries"]
+    entries = get(f"{BASE}/{ch}/game/{lo}/data/menu/en_us/lol.stringtable.json")["entries"]
 
     def s(key, default=""):
         if not key:
@@ -107,7 +140,7 @@ def main():
             values = {d["name"].lower(): d["values"][0] for d in sp.get("DataValues", []) if d.get("values")}
         milestones, notes = [], []
         for i, m in enumerate(q.get("Milestones", [])):
-            parts = split_quest(fill(s(m.get("MilestoneDescriptionTra")), values, m.get("{7fec0982}"), i + 1))
+            parts = split_quest(fill(quest_labels(s(m.get("MilestoneDescriptionTra"))), values, m.get("{7fec0982}"), i + 1))
             milestones.append({"need": m.get("{7fec0982}"), "quest": parts["quest"], "reward": parts["reward"]})
             notes += [n for n in parts["notes"] if n not in notes]
         quests.append({
@@ -123,7 +156,7 @@ def main():
     quests.sort(key=lambda q: (not q["inPool"], TIERS.index(q["tier"]) if q["tier"] else 9, q["name"]))
 
     # ---- ARAM challenges: the permanent 101xxx group (seasonal copies have ended)
-    data = get(f"{gd}/v1/challenges.json")["challenges"]
+    data = client("v1/challenges.json")["challenges"]
     groups, challenges = {}, []
     for cid, c in data.items():
         if not cid.startswith("101") or c.get("seasons"):
@@ -145,15 +178,16 @@ def main():
     challenges.sort(key=lambda c: c["id"])
 
     # ---- Mode facts
-    queues = get(f"{gd}/v1/queues.json")
-    queues = queues.values() if isinstance(queues, dict) else queues
-    mayhem_queues = sorted({q["id"]: q["name"] for q in queues if str(q.get("name", "")).startswith("ARAM: Mayhem")}.items())
-    mutators = get(f"{gd}/v1/game-mode-mutators.json")
+    # Mayhem's queues are picked by their English names; their names come in the build's language
+    listed = lambda qs: qs.values() if isinstance(qs, dict) else qs  # noqa: E731
+    ids = {q["id"] for q in listed(get(f"{gd}/v1/queues.json")) if str(q.get("name", "")).startswith("ARAM: Mayhem")}
+    mayhem_queues = sorted({q["id"]: q["name"] for q in listed(client("v1/queues.json")) if q["id"] in ids}.items())
+    mutators = client("v1/game-mode-mutators.json")
     skin_names = {m["Mutator"]["ExpandedMutator"]: m["MapNameOverride"] for g in mutators for m in g.get("Mutators", [])}
     maps = [{"name": skin_names.get(mut, name) if mut else name,
              "minimap": f"{BASE}/{ch}/game/assets/maps/info/map12/{file}"} for name, mut, file in MAP_SKINS]
 
-    items_by_id = {i["id"]: i for i in get(f"{gd}/v1/items.json")}
+    items_by_id = {i["id"]: i for i in client("v1/items.json")}
     items = []
     for iid in MAYHEM_ITEMS:
         it = items_by_id.get(iid)
@@ -208,13 +242,14 @@ def main():
         "rerolls": dv("ARAM_Augment_Manager").get("InitialReroll"),
         "comboBreakerTenacity": dv("Kiwi_ComboBreaker").get("TenacityAmp"),
         "balance": consts.get("Kiwi_Balance", {}),
-        "onFire": {"text": tip("Kiwi_OnFireBuff"), "values": dv("Kiwi_OnFireBuff")},
+        "onFire": {"name": clean(s("Kiwi_OnFireBuff_Name")), "text": tip("Kiwi_OnFireBuff"), "values": dv("Kiwi_OnFireBuff")},
+        "auraName": clean((re.search(r"<titleLeft>(.*?)</titleLeft>", s("buff_desc_MayhemicMagic")) or [None, ""])[1]),
     }
 
     rules["mechanics"] = mechanics(m12, modes, spells, dv)
 
     # ---- Summoner spells allowed in Mayhem, and augments that add one
-    summoner_spells = get(f"{gd}/v1/summoner-spells.json")
+    summoner_spells = client("v1/summoner-spells.json")
     allowed = [{"name": x["name"], "cooldown": x["cooldown"], "text": x["description"], "icon": asset(x["iconPath"])}
                for x in summoner_spells if "KIWI" in x.get("gameModes", [])]
     allowed.sort(key=lambda x: x["name"])
@@ -242,11 +277,11 @@ def main():
             sp = (kiwi.get(a.get("RootSpell")) or {}).get("mSpell") or {}
             values = {d["name"].lower(): d["values"][0] for d in sp.get("DataValues") or [] if d.get("values")}
             text = " ".join(fill(expand(s(a.get("DescriptionTra"))), values, None, None).split())
-            text = " ".join(x for x in re.split(r"(?<=[.!])\s+", text) if not re.search(r"\?(?=[\s%.,/)s]|$)", x))
+            text = " ".join(x for x in re.split(r"(?<=[.!])\s+|(?<=[。！])", text) if not re.search(r"\?(?=[\s%.,/)s\u0e00-\u0e7f\u3000-\u9fff\uac00-\ud7af\uff00-\uffef]|$)", x))
             raw_tip = expand(s(a.get("AugmentTooltipTra")) or s(a.get("DescriptionTra")))
             tip = fill(raw_tip, values, None, None)
             # a sentence with a number the client doesn't hold (a live counter or a formula) is dropped, not half-shown
-            tip = "\n".join(" ".join(x for x in re.split(r"(?<=[.!])\s+", l) if not re.search(r"\?(?=[\s%.,/)]|$)", x)).strip()
+            tip = "\n".join(" ".join(x for x in re.split(r"(?<=[.!])\s+|(?<=[。！])", l) if not re.search(r"\?(?=[\s%.,/)\u0e00-\u0e7f\u3000-\u9fff\uac00-\ud7af\uff00-\uffef]|$)", x)).strip()
                             for l in tip.split("\n"))
             if "{{" in tip:  # a pulled-in string the client doesn't have: use the short description instead
                 tip = text
@@ -345,15 +380,13 @@ def main():
 
     # ---- Mayhem progression track. The event hub has each track's dates and level count; the client's reward list
     # holds every track's rewards in order, one per level, so the current track is the last block of Mayhem rewards.
-    track = official_track(build_track(gd, asset, augments, s))
+    track = official_track(build_track(client, asset, augments, s))
     unlocks = {r["augmentId"]: r["level"] for r in (track["levels"] if track else []) if r.get("augmentId")}
     augment_rules["unlocks"] = {str(k): v for k, v in sorted(unlocks.items())}
 
     # ---- Every live augment's full text, what it grants, its numbers and its track level, for the augment pages
     details = {str(a["id"]): {**{k: a[k] for k in ("name", "tier", "text", "tooltip", "grants", "values")},
                               "unlockLevel": unlocks.get(a["id"])} for a in live}
-    with open(os.path.join(HERE, "augment_details.json"), "w") as f:
-        f.write(site_paths(json.dumps({"patch": version, "augments": details}, indent=1, ensure_ascii=False)) + "\n")
 
     # ---- Archive: Augment Sets
     sets = []
@@ -381,18 +414,126 @@ def main():
     mode_rules = {"patch": version, "attackSpeedCap": rules["attackSpeedCap"], "aramAttackSpeedCap": rules["aramAttackSpeedCap"],
                   "critOverflow": rules["critOverflow"], "runes": rules["runes"], "aura": rules["aura"],
                   "keystoneAugments": {str(a["id"]): a["runes"] for a in keystones}, **rules["mechanics"]}
+    return {"out": out, "mode_rules": mode_rules, "augment_rules": augment_rules, "details": details,
+            # names in the build's language, by id, for the translations (localize())
+            "runes": {p["id"]: p["name"] for p in client("v1/perks.json")},
+            "augmentNames": {str(a["id"]): a.get("nameTRA") for a in client("v1/cherry-augments.json") if a.get("nameTRA")},
+            "itemNames": {str(i): it["name"] for i, it in items_by_id.items()}}
+
+
+def main():
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--channel", default="latest")
+    ap.add_argument("--languages", action="store_true",
+                    help="also write i18n/data and i18n/augments: the game text in each of the site's other languages")
+    args = ap.parse_args()
+    en = build(args.channel)
+    out, version = en["out"], en["out"]["patch"]
+    with open(os.path.join(HERE, "augment_details.json"), "w") as f:
+        f.write(site_paths(json.dumps({"patch": version, "augments": en["details"]}, indent=1, ensure_ascii=False)) + "\n")
     with open(os.path.join(HERE, "mode_rules.json"), "w") as f:
-        json.dump(mode_rules, f, indent=1, ensure_ascii=False)
+        json.dump(en["mode_rules"], f, indent=1, ensure_ascii=False)
         f.write("\n")
     # the same rules plus each augment's rarity, for the site's augment pages and build tables
     with open(os.path.join(HERE, "augment_rules.json"), "w") as f:
-        json.dump(augment_rules, f, indent=1, ensure_ascii=False)
+        json.dump(en["augment_rules"], f, indent=1, ensure_ascii=False)
         f.write("\n")
     with open(os.path.join(HERE, "data.js"), "w") as f:
         # no header comment: the file ships to the site, and pages don't say where data comes from
         f.write("window.GUIDE_DATA = " + site_paths(json.dumps(out, indent=1, ensure_ascii=False)) + ";\n")
-    print(f"{version}: {len(quests)} quests, {len(challenges)} challenges "
-          f"({sum(c['mayhem'] for c in challenges)} count Mayhem), {len(items)} items, pool {tier_counts}")
+    print(f"{version}: {len(out['quests'])} quests, {len(out['challenges'])} challenges "
+          f"({sum(c['mayhem'] for c in out['challenges'])} count Mayhem), {len(out['items'])} items, pool {out['augmentCounts']}")
+    if args.languages:
+        for code, lo in languages():
+            data, augs = localize(en, build(args.channel, lo))
+            write_json(os.path.join(HERE, "i18n", "data", f"{code}.json"), data)
+            write_json(os.path.join(HERE, "i18n", "augments", f"{code}.json"), {"patch": version, "augments": augs})
+            print(f"{code}: {len(json.dumps(data, ensure_ascii=False)) // 1024} KB of game text")
+
+
+def languages():
+    """The site's other languages as (site code, client folder): ("fr", "fr_fr"), from web/src/i18n/languages.json."""
+    with open(os.path.join(os.path.dirname(HERE), "web", "src", "i18n", "languages.json"), encoding="utf-8") as f:
+        return [(l["code"], l["riot"].lower()) for l in json.load(f) if l["code"] != "en"]
+
+
+def write_json(path, obj):
+    os.makedirs(os.path.dirname(path), exist_ok=True)
+    with open(path, "w", encoding="utf-8") as f:
+        json.dump(obj, f, ensure_ascii=False, separators=(",", ":"), sort_keys=True)
+        f.write("\n")
+
+
+# Text keys localize() copies from another language's build; everything else (ids, tiers, kinds, numbers) stays English
+TEXT_KEYS = {"name", "title", "text", "tooltip", "quest", "reward", "notes", "bonus", "aura", "auraName", "group", "augment"}
+# List items are matched by the first of these they have, so a list sorted by name still lines up
+MATCH_KEYS = ("id", "key", "augmentId", "level", "icon", "minimap")
+
+
+def overlay(en, lo, key=None):
+    """The parts of lo (another language's build) that differ from en at text keys, as a sparse tree; lists become
+    {index: ...} with items matched by MATCH_KEYS, else by position when both lists are the same length."""
+    if isinstance(en, str):
+        return lo if key in TEXT_KEYS and isinstance(lo, str) and lo and lo != en else None
+    if isinstance(en, dict) and isinstance(lo, dict):
+        out = {k: overlay(v, lo.get(k), k) for k, v in en.items() if k in lo}
+        return {k: v for k, v in out.items() if v is not None} or None
+    if isinstance(en, list) and isinstance(lo, list):
+        match = next((m for m in MATCH_KEYS if en and all(isinstance(x, dict) and x.get(m) is not None for x in en + lo)), None)
+        if match:
+            by = {x[match]: x for x in lo}
+            pairs = [(i, x, by.get(x[match])) for i, x in enumerate(en)]
+        elif len(en) == len(lo):
+            pairs = [(i, x, lo[i]) for i, x in enumerate(en)]
+        else:
+            return None
+        out = {str(i): overlay(x, y, key) for i, x, y in pairs if y is not None}
+        return {k: v for k, v in out.items() if v is not None} or None
+    return None
+
+
+def localize(en, lo):
+    """Another language's game text for the Info page (merged into GUIDE_DATA by the page) and every live augment's
+    name, text and tooltip (for the site's augment pages). Where English-only parsing leaves a gap in the other build,
+    names and text are filled by id."""
+    E, L = en["out"], lo["out"]
+    tree = overlay(E, L) or {}
+    det, names, items = lo["details"], lo["augmentNames"], lo["itemNames"]
+    runes = {en["runes"][i]: n for i, n in lo["runes"].items() if i in en["runes"] and en["runes"][i] != n}
+
+    def put(path, value, english):
+        if not value or value == english:
+            return
+        node = tree
+        for p in path[:-1]:
+            node = node.setdefault(str(p), {})
+        node.setdefault(str(path[-1]), value)
+
+    for k in ("keystoneAugments",):
+        for i, a in enumerate(E["champSelect"][k]):
+            d = det.get(str(a["id"]), {})
+            put(["champSelect", k, i, "name"], d.get("name"), a["name"])
+            put(["champSelect", k, i, "text"], d.get("text"), a["text"])
+            for j, r in enumerate(a["runes"]):
+                put(["champSelect", k, i, "runes", j], runes.get(r), r)
+    for i, a in enumerate(E["augmentRules"].get("selectionAugments") or []):
+        d = det.get(str(a["id"]), {})
+        put(["augmentRules", "selectionAugments", i, "name"], d.get("name"), a["name"])
+        put(["augmentRules", "selectionAugments", i, "text"], d.get("text"), a["text"])
+    for i, g in enumerate(E["augmentRules"].get("grantedItems") or []):
+        put(["augmentRules", "grantedItems", i, "name"], items.get(str(g["id"])), g["name"])
+        put(["augmentRules", "grantedItems", i, "augment"], names.get(str(g["augmentId"])), g["augment"])
+    for i, it in enumerate(E["itemChanges"]):
+        put(["itemChanges", i, "name"], items.get(str(it["id"])), it["name"])
+    for i, r in enumerate((E.get("track") or {}).get("levels") or []):
+        if r.get("augmentId"):
+            put(["track", "levels", i, "name"], names.get(str(r["augmentId"])), r["name"])
+    data = {"guide": tree, "augmentNames": {i: n for i, n in names.items() if n != en["augmentNames"].get(i)}}
+    augs = {i: {k: d[k] for k in ("name", "text", "tooltip") if d.get(k)} for i, d in det.items()}
+    for i, d in en["details"].items():  # an augment only English parsing found still gets its name
+        if i not in augs and names.get(i):
+            augs[i] = {"name": names[i]}
+    return data, augs
 
 
 # Mode mechanics the client files don't hold. Read from the official League wiki's ARAM, ARAM: Mayhem, Health Relic and
@@ -500,9 +641,9 @@ def official_track(track):
     return track
 
 
-def build_track(gd, asset, augments, s):
+def build_track(client, asset, augments, s):
     """The current Mayhem progression track: name, dates and what each level gives (augment, emote, icon or other)."""
-    events = [e["event"] for e in get(f"{gd}/v1/event-hub.json")
+    events = [e["event"] for e in client("v1/event-hub.json")
               if e.get("event", {}).get("seasonPassSubType") == "kMayhem"]
     if not events:
         return None
@@ -511,7 +652,7 @@ def build_track(gd, asset, augments, s):
     def image(r):
         first = ((r or {}).get("rewards") or [None])[0] or {}
         return (first.get("media") or {}).get("image") or ""
-    rewards = get(f"{gd}/v1/rewards.json")
+    rewards = client("v1/rewards.json")
     mayhem = [i for i, r in enumerate(rewards) if re.search(r"/Kiwi/|/AramMayhem/", image(r))]
     if not size or not mayhem or mayhem[-1] + 1 < size:
         return None
@@ -523,8 +664,8 @@ def build_track(gd, asset, augments, s):
         stem = a["AugmentLargeIconPath"].split("/")[-1].lower().split(".")[0].removesuffix("_large")
         by_icon.setdefault(stem, a)
         by_icon.setdefault(a["AugmentNameId"].lower().removeprefix("aram_").removesuffix("_active"), a)
-    emotes = {e["inventoryIcon"].split("/")[-1].lower(): e for e in get(f"{gd}/v1/summoner-emotes.json") if e.get("inventoryIcon")}
-    icons = {str(i["id"]): i for i in get(f"{gd}/v1/summoner-icons.json")}
+    emotes = {e["inventoryIcon"].split("/")[-1].lower(): e for e in client("v1/summoner-emotes.json") if e.get("inventoryIcon")}
+    icons = {str(i["id"]): i for i in client("v1/summoner-icons.json")}
     words = lambda n: re.sub(r"(?<=[a-z])(?=[A-Z])", " ", n)  # noqa: E731
     levels = []
     for n, r in enumerate(block, 1):
@@ -574,9 +715,16 @@ def fill(text, values, need, tier):
             return "?"
         return f"{v:g}"
     text = re.sub(r"@([A-Za-z0-9_.*]+)@", rep, text or "")
-    text = re.sub(r"your \{\{ ?SpellName ?\}\}", "your chosen ability", text)
-    text = re.sub(r"\{\{ ?SpellName ?\}\}", "your chosen ability", text)
+    if SPELL_NAME == CHOSEN_ABILITY["en_us"]:
+        text = re.sub(r"your \{\{ ?SpellName ?\}\}", SPELL_NAME, text)
+    text = re.sub(r"\{\{ ?SpellName ?\}\}", SPELL_NAME, text)
     return clean(text)
+
+
+def quest_labels(text):
+    """A milestone's highlighted labels, in any language, as the English QUEST: and REWARD: (first and second)."""
+    n = iter(("QUEST:", "REWARD:"))
+    return re.sub(r"<font color='#F0C200'>[^<]*</font>", lambda m: next(n, m.group(0)), text or "")
 
 
 def split_quest(text):
@@ -587,19 +735,24 @@ def split_quest(text):
         lines = [l.strip() for l in para.split("\n") if l.strip()]
         if lines and lines[0].upper().startswith(("QUEST:", "REWARD:")):
             # keep the line, drop just the unknown number ("dealing ? damage" -> "dealing damage")
-            lines = [re.sub(r"\s*\?(?=[\s%.,]|$)", "", l) for l in lines if not re.search(r":\s*\?", l)]
+            lines = [re.sub(r"\s*\?(?=[\s%.,\u0e00-\u0e7f\u3000-\u9fff\uac00-\ud7af\uff00-\uffef]|$)", "", l) for l in lines if not re.search(r":\s*\?", l)]
         else:
             lines = [l for l in lines if "?" not in l]
         para = re.sub(r"\s+([.,])", r"\1", " ".join(lines))
         if not para:
             continue
         if para.upper().startswith("QUEST:"):
-            out["quest"] = para[6:].strip()
+            out["quest"] = upper_first(para[6:].strip())
         elif para.upper().startswith("REWARD:"):
-            out["reward"] = para[7:].strip()
+            out["reward"] = upper_first(para[7:].strip())
         elif out["quest"] and (para.startswith('"') or " - " in para):
             out["notes"].append(para)
     return out
+
+
+def upper_first(text):
+    """Some languages start the text after "QUEST:" in lower case; on its own line it starts a sentence."""
+    return text[:1].upper() + text[1:]
 
 
 def strip_unknown(text):
