@@ -69,9 +69,8 @@ select:hover { border-color: var(--muted); }
 .card-head img { width: 52px; height: 52px; border-radius: 12px; flex: none; }
 .card-head .who { flex: 1; min-width: 0; }
 .card-head .sub { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-top: 4px; font-size: 13px; color: var(--a-ink); font-weight: 500; }
-.share { display: inline-flex; align-items: center; gap: 6px; flex: none; align-self: flex-start; min-height: 32px; padding: 5px 11px; border-radius: 8px; border: 1px solid var(--line); background: var(--raised); color: var(--fg); font: inherit; font-size: 13px; font-weight: 500; cursor: pointer; transition: border-color 0.15s, color 0.15s; }
-.share:hover, .share:focus-visible { border-color: var(--a-line); color: var(--a-ink); }
-.share.done { border-color: var(--a-40); color: var(--a-ink); }
+.share { display: inline-flex; align-items: center; gap: 6px; flex: none; align-self: flex-start; padding: 4px; border: 0; background: none; color: var(--a-ink); font: inherit; font-size: 14px; cursor: pointer; }
+.share:hover span { text-decoration: underline; text-underline-offset: 3px; }
 
 .chip { display: inline-flex; align-items: center; height: 22px; padding: 0 8px; border-radius: 999px; font: 500 11.5px var(--mono); border: 1px solid var(--line); color: var(--muted); white-space: nowrap; }
 .chip.prismatic { border: 0; color: #1a1030; background: linear-gradient(100deg, #9fe7ff, #c9b8ff 40%, #ffb8e0 70%, #ffe2a3); }

@@ -22,8 +22,9 @@ LabI18n.ready(function () {
     try { if (window.top !== window && window.top.location.origin === location.origin) page = window.top.location.origin + window.top.location.pathname; } catch (e) { /* not same origin */ }
     return page + "#" + hash;
   }
-  const SHARE_ICON = '<svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15V3M7 8l5-5 5 5M5 13v6a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-6"/></svg>';
-  const shareButton = (b) => `<button type="button" class="share" data-share="chefs-special-${esc(b.chef)}" data-title="${esc(T(b.title))}" aria-label="${esc(T("Share {title}", { title: T(b.title) }))}">${SHARE_ICON}<span>${T("Share")}</span></button>`;
+  // Same look and words as the site's Share button (web/src/components/ShareButton.tsx).
+  const SHARE_ICON = '<svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M10 14a4 4 0 0 0 5.66 0l3-3a4 4 0 0 0-5.66-5.66l-1 1M14 10a4 4 0 0 0-5.66 0l-3 3a4 4 0 0 0 5.66 5.66l1-1"/></svg>';
+  const shareButton = (b) => `<button type="button" class="share" data-share="chefs-special-${esc(b.chef)}" data-title="${esc(T(b.title))}" aria-label="${esc(T("Share {title}", { title: T(b.title) }))}">${SHARE_ICON}<span aria-live="polite">${T("Share")}</span></button>`;
   // Phones open the share sheet; elsewhere the link is copied.
   document.addEventListener("click", async (e) => {
     const btn = e.target.closest("button[data-share]");
@@ -35,9 +36,8 @@ LabI18n.ready(function () {
       catch (err) { if (err && err.name === "AbortError") return; }
     }
     try { await navigator.clipboard.writeText(url); label.textContent = T("Link copied"); }
-    catch (err) { label.textContent = T("Copy the address bar"); history.replaceState(null, "", "#" + btn.dataset.share); }
-    btn.classList.add("done");
-    setTimeout(() => { label.textContent = T("Share"); btn.classList.remove("done"); }, 1800);
+    catch (err) { window.prompt(T("Copy this link"), url); }
+    setTimeout(() => { label.textContent = T("Share"); }, 2500);
   });
 
   function augRow(a) {
