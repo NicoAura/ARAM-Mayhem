@@ -7114,3 +7114,23 @@ html[dir="rtl"] .jump-wr {
     min-height: 44px;
   }
 }
+
+/* The site owner's 3D Simulator switch, at the top of the Simulator page. */
+.sim-view-switch {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 14px;
+  margin: 0 0 16px;
+  padding: 10px 14px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--surface);
+}
+.sim-view-switch .seg button {
+  min-width: 56px;
+}
+.sim-view-switch span {
+  color: var(--muted);
+  font-size: 13px;
+}
