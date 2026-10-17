@@ -201,7 +201,8 @@ export async function claimOwner(id: string) {
 export async function newLinkCode(id: string): Promise<string> {
   const d = await db();
   const alphabet = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
-  const code = [...crypto.getRandomValues(new Uint8Array(8))].map((b) => alphabet[b % alphabet.length]).join("");
+  // 32 letters, so the low 5 bits of a random byte pick one evenly.
+  const code = [...crypto.getRandomValues(new Uint8Array(8))].map((b) => alphabet[b & 31]).join("");
   await d.batch([
     d.prepare("DELETE FROM link_codes WHERE account = ? OR expires < ?").bind(id, Date.now()),
     d.prepare("INSERT INTO link_codes (code, account, expires) VALUES (?, ?, ?)").bind(code, id, Date.now() + 15 * 60_000),
