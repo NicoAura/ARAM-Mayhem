@@ -21,10 +21,15 @@ public final class Haptics: ObservableObject {
         case done
         /// Something didn't work, such as going offline.
         case warning
+        /// Very light: scroll snaps, slider steps (the site's "tick" style).
+        case tick
+        /// A heavy hit: a Prismatic augment (the site's "thud" style).
+        case thud
+        /// A win: a Simulator fight won (the site's "win" style).
+        case win
     }
 
     @Published public private(set) var enabled: Bool
-    private var lastPlayed = Date.distantPast
 
     private init() {
         enabled = UserDefaults.standard.object(forKey: Self.enabledKey) as? Bool ?? true
@@ -32,16 +37,15 @@ public final class Haptics: ObservableObject {
 
     public func play(_ kind: Kind) {
         guard enabled else { return }
-        // The site may report one tap through both routes (navigator.vibrate and deeparamHaptic); feel it once.
-        let now = Date()
-        guard now.timeIntervalSince(lastPlayed) > 0.06 else { return }
-        lastPlayed = now
         #if os(iOS)
         switch kind {
         case .tap: UIImpactFeedbackGenerator(style: .light).impactOccurred()
         case .step: UISelectionFeedbackGenerator().selectionChanged()
         case .done: UINotificationFeedbackGenerator().notificationOccurred(.success)
         case .warning: UINotificationFeedbackGenerator().notificationOccurred(.warning)
+        case .tick: UIImpactFeedbackGenerator(style: .soft).impactOccurred(intensity: 0.5)
+        case .thud: UIImpactFeedbackGenerator(style: .heavy).impactOccurred()
+        case .win: UINotificationFeedbackGenerator().notificationOccurred(.success)
         }
         #endif
     }
@@ -87,7 +91,7 @@ enum HapticsBridge {
         "(function(){try{var k='deeparam-settings',s=JSON.parse(localStorage.getItem(k)||'{}');s.haptics=\(on);localStorage.setItem(k,JSON.stringify(s));window.dispatchEvent(new Event(k))}catch(e){}})();"
     }
 
-    /// The name the site's own app hook posts {kind: "tap" | "step" | "done"} to (web/src/lib/haptics.ts).
+    /// The name the site's own app hook posts {kind: "tap" | "step" | "done", style?: "tick" | "thud" | "win"} to (web/src/lib/haptics.ts).
     static let siteName = "deeparamHaptic"
 
     static func install(in content: WKUserContentController) {
@@ -100,11 +104,17 @@ enum HapticsBridge {
     private static let handler = Handler()
 
     private final class Handler: NSObject, WKScriptMessageHandler {
+        /// Once the site's own hook has spoken, its navigator.vibrate calls are the same taps again; skip them.
+        private var siteHookSeen = false
+
         func userContentController(_ controller: WKUserContentController, didReceive message: WKScriptMessage) {
             guard let body = message.body as? [String: Any] else { return }
+            if message.name == HapticsBridge.siteName { siteHookSeen = true } else if siteHookSeen, body["buzz"] != nil { return }
             MainActor.assumeIsolated {
                 if let on = body["haptics"] as? Bool { Haptics.shared.siteSettingChanged(on) }
-                if let kind = ((body["buzz"] ?? body["kind"]) as? String).flatMap(Haptics.Kind.init(rawValue:)) { Haptics.shared.play(kind) }
+                // The site's hook sends {kind, style}: style says what it means, kind is the fallback.
+                let names = [body["style"], body["kind"], body["buzz"]].compactMap { $0 as? String }
+                if let kind = names.lazy.compactMap(Haptics.Kind.init(rawValue:)).first { Haptics.shared.play(kind) }
             }
         }
     }
