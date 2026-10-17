@@ -774,6 +774,8 @@ def main():
         pool = json.load(f)
     with open(args.overrides, encoding="utf-8") as f:
         overrides = {k: v for k, v in json.load(f).items() if not k.startswith("_")}
+    with open(os.path.join(DATA, "kit_passives.json"), encoding="utf-8") as f:
+        kit_passives = {k: v for k, v in json.load(f).items() if not k.startswith("_")}
     with open(args.passives, encoding="utf-8") as f:
         passive_rules = {k: v for k, v in json.load(f).items() if not k.startswith("_")}
     cn = {int(e["champion_id"]): e for e in pool["enemies"]}
@@ -850,6 +852,10 @@ def main():
                             for h in a["hits"]:
                                 if h["calc"] in v:
                                     h["scaling"] = {s: round(c * v[h["calc"]], 4) for s, c in h["scaling"].items()}
+                        elif k == "hit_adds":  # {calc name: {stat: amount}}: stacks added to a hit (Nasus Q)
+                            for h in a["hits"]:
+                                for stat, amt in v.get(h["calc"], {}).items():
+                                    h["scaling"][stat] = round(h["scaling"].get(stat, 0) + amt, 4)
                         elif k == "alt_calcs":  # damage numbers that replace the main hit rather than add to it
                             for h in a["hits"]:
                                 if h["calc"] in v:
@@ -906,6 +912,9 @@ def main():
             "parse_quality": quality,
             "notes": notes,
         }
+        kit = kit_passives.get(c["id"])
+        if kit:  # stat and stacking passives (data/kit_passives.json)
+            entry["kit"] = {k: v for k, v in kit.items() if k in ("stats", "effects")}
         death = overrides.get(c["id"], {}).get("death")
         if death:  # cheating death once a fight (champion_overrides.json)
             entry["death"] = {k: v for k, v in death.items() if k != "why"}

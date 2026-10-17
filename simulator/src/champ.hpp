@@ -105,6 +105,8 @@ struct ChampionKit {
     bool deathNeedsR = false;
     std::vector<Ability> abilities;
     std::vector<Passive> passives;
+    // Stat and stacking passives (data/kit_passives.json), in the same keys as augments.
+    Bag kitStats, kitEffects;
     // Its abilities' crowd control that stops a champion acting (slot, kind), damaging or not:
     // what you're hit by when this champion is the enemy.
     std::vector<std::pair<char, std::string>> hardCc;

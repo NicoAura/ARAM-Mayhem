@@ -1,0 +1,118 @@
+{
+ "_note": "Champions' stat and stacking passives, in the same stats/effects keys as augments (see README). Applied by tools/build_champion_pool.py. Values ending _l1/_l18 grow with level. Stacks that build up over a game use an assumed count at level 18, noted in `why`; damage passives live in passives.json, and stacks that only add to one ability's damage are `hit_adds` in champion_overrides.json (Nasus Q).",
+ "Veigar": {
+  "stats": {
+   "ap_l1": 0,
+   "ap_l18": 300
+  },
+  "why": "Phenomenal Evil: 300 AP of stacks assumed by level 18"
+ },
+ "Senna": {
+  "stats": {
+   "ad_l1": 0,
+   "ad_l18": 45,
+   "crit_l1": 0,
+   "crit_l18": 0.3
+  },
+  "effects": {
+   "range_ranged_l1": 0,
+   "range_ranged_l18": 75
+  },
+  "why": "Absolution: 60 souls assumed by level 18 (0.75 AD each, 10% crit and 25 range per 20)"
+ },
+ "Thresh": {
+  "stats": {
+   "armor_l1": 0,
+   "armor_l18": 70,
+   "ap_l1": 0,
+   "ap_l18": 52
+  },
+  "why": "Damnation: 70 souls assumed by level 18 (1 armor and 0.75 AP each)"
+ },
+ "Chogath": {
+  "stats": {
+   "hp_l1": 0,
+   "hp_l18": 480
+  },
+  "why": "Feast: 6 stacks assumed by level 18 (80 Health each)"
+ },
+ "Sion": {
+  "stats": {
+   "hp_l1": 0,
+   "hp_l18": 500
+  },
+  "why": "Soul Furnace: 500 Health of kill stacks assumed by level 18"
+ },
+ "Swain": {
+  "stats": {
+   "hp_l1": 0,
+   "hp_l18": 300
+  },
+  "why": "Ravenous Flock: 300 Health of Soul Fragments assumed by level 18"
+ },
+ "Garen": {
+  "stats": {
+   "armor": 30,
+   "mr": 30
+  },
+  "why": "Courage: full 30 Armor and Magic Resist stacks"
+ },
+ "Kayle": {
+  "effects": {
+   "attack_range_set": 525,
+   "attack_range_level": 6
+  },
+  "why": "Divine Ascent: attacks from 525 range from level 6"
+ },
+ "Tryndamere": {
+  "stats": {
+   "crit": 0.25
+  },
+  "why": "Battle Fury: 0.4% crit per Fury, about 60 Fury on average"
+ },
+ "Belveth": {
+  "stats": {
+   "as_l1": 0,
+   "as_l18": 0.5
+  },
+  "why": "Death in Lavender: 50% attack speed of permanent stacks assumed by level 18"
+ },
+ "Ezreal": {
+  "effects": {
+   "stack_on": 2,
+   "stack_max": 5,
+   "stack_duration": 6,
+   "stack_as": 0.1
+  },
+  "why": "Rising Spell Force: 10% attack speed per ability hit, up to 5"
+ },
+ "Jinx": {
+  "effects": {
+   "stack_on": 1,
+   "stack_max": 3,
+   "stack_duration": 2.5,
+   "stack_as": 0.43
+  },
+  "why": "Switcheroo! minigun: Rev'd up attack speed per attack, up to 3 (130% at max rank)"
+ },
+ "Jax": {
+  "effects": {
+   "stack_on": 1,
+   "stack_max": 8,
+   "stack_duration": 2.5,
+   "stack_as_l1": 0.035,
+   "stack_as_l18": 0.11
+  },
+  "why": "Relentless Assault: 3.5-11% attack speed per attack (by level), up to 8"
+ },
+ "Irelia": {
+  "effects": {
+   "stack_on": 2,
+   "stack_max": 4,
+   "stack_duration": 6,
+   "stack_as_l1": 0.075,
+   "stack_as_l18": 0.15
+  },
+  "why": "Ionian Fervor: attack speed per ability hit, up to 4 (approximate per-stack values)"
+ }
+}

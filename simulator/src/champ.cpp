@@ -143,6 +143,8 @@ ChampionKit loadChampion(const json::Value& c, const Rules& rules) {
     k.damageTaken = m["damage_taken"].asNumber(1.0);
     k.mayhemAh = m["ability_haste"].asNumber(0.0);
     k.mayhemAs = m["attack_speed"].asNumber(0.0);
+    k.kitStats = bagOf(c["kit"]["stats"]);
+    k.kitEffects = bagOf(c["kit"]["effects"]);
     const json::Value& d = c["death"];
     k.deathAct = d["act"].asNumber(0.0);
     k.reviveFrac = d["revive_frac"].asNumber(0.0);
@@ -729,6 +731,7 @@ private:
     double rInvulnReady_ = 0, rBuffReady_ = 0, rRefreshReady_ = 0, rAwakenReady_ = 0, rWindowReady_ = 0, rCcReady_ = 0;
     double rUnstopReady_ = 0, rReductionReady_ = 0, rVampUntil_ = -1, rBasicAhUntil_ = -1, rWindowUntil_ = -1;
     double reductionUntil_ = -1, firstHitAt_ = -1, lowHealReady_ = 0, nextInvuln_ = 1e18, reviveFrac_ = 0;
+    Effect kitFx_;  // the champion's own stat and stacking passives
     bool converting_ = false, snipeHit_ = false, augReviveUsed_ = false, augRevive_ = false;
     double poroReady_ = 0;
     bool hasMissile_ = false, hasKraken_ = false, hasStorm_ = false, hasEclipse_ = false;
@@ -820,6 +823,11 @@ private:
             if (!a.needsItem.empty() && std::find(b.items.begin(), b.items.end(), a.needsItem) == b.items.end()) continue;
             effects.push_back(&a);
         }
+        if (!ch_.kitStats.empty() || !ch_.kitEffects.empty()) {
+            kitFx_.stats = ch_.kitStats;
+            kitFx_.effects = ch_.kitEffects;
+            effects.push_back(&kitFx_);
+        }
         ranged_ = ch_.ranged;
         attackRange_ = ch_.attackRange;
         for (const auto& a : ch_.abilities) {
@@ -869,6 +877,10 @@ private:
             const double floor = get(fx_, "sword_floor", 500), ceil = get(fx_, "sword_ceiling", 650);
             sword = 1.0 + std::clamp((attackRange_ - floor) / std::max(1.0, ceil - floor), 0.0, 1.0);
             if (attackRange_ > get(fx_, "sword_range")) { attackRange_ = get(fx_, "sword_range"); ranged_ = false; }
+        }
+        if (get(fx_, "attack_range_set") > attackRange_ && sc_.level >= get(fx_, "attack_range_level")) {  // Kayle: ranged from level 6
+            attackRange_ = get(fx_, "attack_range_set");
+            ranged_ = true;
         }
         attackRange_ += ranged_ ? get(fx_, "range_ranged") : get(fx_, "range_melee");
         // Flat Adaptive Force (stat anvils, Slap Around's stacks when the kit can immobilize).

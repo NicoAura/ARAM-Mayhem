@@ -313,6 +313,19 @@ int main(int argc, char** argv) {
               "Hellbent's revive keeps you fighting longer");
     }
 
+    {
+        // Stat and stacking passives: Veigar's AP stacks add damage.
+        const ChampionKit* veigar = lib.find("Veigar");
+        CHECK(veigar && !veigar->kitStats.empty(), "Veigar has his Phenomenal Evil stacks");
+        if (veigar) {
+            ChampionKit plain = *veigar;
+            plain.kitStats.clear();
+            const Scenario vsc = lib.scenarioFor(*veigar);
+            CHECK(meanDps(lib, *veigar, cap, vsc, 600) > meanDps(lib, plain, cap, vsc, 600),
+                  "Veigar's AP stacks add damage");
+        }
+    }
+
     bool threw = false;
     try { runTrials(lib, *ahri, Build{{"not_an_item"}, {}}, sc, 0, 1); } catch (...) { threw = true; }
     CHECK(threw, "unknown item ids are rejected");

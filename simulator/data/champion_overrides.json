@@ -472,7 +472,12 @@
  "Nasus": {
   "Q": {
    "attack_reset": true,
-   "why": "resets the basic attack timer"
+   "hit_adds": {
+    "TotalDamage": {
+     "const": 350
+    }
+   },
+   "why": "resets the basic attack timer; Siphoning Strike stacks assumed at 350 by level 18"
   },
   "R": {
    "hit_mults": {

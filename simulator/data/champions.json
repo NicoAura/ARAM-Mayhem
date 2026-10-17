@@ -1,6 +1,6 @@
 {
  "meta": {
-  "built_at": "2026-10-17T06:54:03+00:00",
+  "built_at": "2026-10-17T07:16:53+00:00",
   "game_version": "16.20",
   "cdragon": "latest",
   "mayhem_balance_patch": "26.19",
@@ -3358,7 +3358,13 @@
     }
    ],
    "parse_quality": "good",
-   "notes": []
+   "notes": [],
+   "kit": {
+    "stats": {
+     "as_l1": 0,
+     "as_l18": 0.5
+    }
+   }
   },
   {
    "id": "Blitzcrank",
@@ -5141,7 +5147,13 @@
     }
    ],
    "parse_quality": "partial",
-   "notes": []
+   "notes": [],
+   "kit": {
+    "stats": {
+     "hp_l1": 0,
+     "hp_l18": 480
+    }
+   }
   },
   {
    "id": "Corki",
@@ -7085,7 +7097,15 @@
     }
    ],
    "parse_quality": "good",
-   "notes": []
+   "notes": [],
+   "kit": {
+    "effects": {
+     "stack_on": 2,
+     "stack_max": 5,
+     "stack_duration": 6,
+     "stack_as": 0.1
+    }
+   }
   },
   {
    "id": "Fiddlesticks",
@@ -8422,7 +8442,13 @@
     }
    ],
    "parse_quality": "good",
-   "notes": []
+   "notes": [],
+   "kit": {
+    "stats": {
+     "armor": 30,
+     "mr": 30
+    }
+   }
   },
   {
    "id": "Gnar",
@@ -10498,7 +10524,16 @@
     }
    ],
    "parse_quality": "good",
-   "notes": []
+   "notes": [],
+   "kit": {
+    "effects": {
+     "stack_on": 2,
+     "stack_max": 4,
+     "stack_duration": 6,
+     "stack_as_l1": 0.075,
+     "stack_as_l18": 0.15
+    }
+   }
   },
   {
    "id": "Ivern",
@@ -11336,7 +11371,16 @@
     }
    ],
    "parse_quality": "good",
-   "notes": []
+   "notes": [],
+   "kit": {
+    "effects": {
+     "stack_on": 1,
+     "stack_max": 8,
+     "stack_duration": 2.5,
+     "stack_as_l1": 0.035,
+     "stack_as_l18": 0.11
+    }
+   }
   },
   {
    "id": "Jayce",
@@ -11934,7 +11978,15 @@
     }
    ],
    "parse_quality": "good",
-   "notes": []
+   "notes": [],
+   "kit": {
+    "effects": {
+     "stack_on": 1,
+     "stack_max": 3,
+     "stack_duration": 2.5,
+     "stack_as": 0.43
+    }
+   }
   },
   {
    "id": "KSante",
@@ -13624,6 +13676,12 @@
    ],
    "parse_quality": "good",
    "notes": [],
+   "kit": {
+    "effects": {
+     "attack_range_set": 525,
+     "attack_range_level": 6
+    }
+   },
    "death": {
     "act": 2.5,
     "needs_r": true
@@ -19418,7 +19476,7 @@
        "type": "physical",
        "calc": "TotalDamage",
        "scaling": {
-        "const": 245.0,
+        "const": 595.0,
         "bonus_ad": 1.0
        },
        "target": "flat",
@@ -19432,7 +19490,7 @@
      ],
      "notes": [
       "stack-based scaling ignored",
-      "hand override: resets the basic attack timer"
+      "hand override: resets the basic attack timer; Siphoning Strike stacks assumed at 350 by level 18"
      ],
      "attack_reset": true
     },
@@ -25349,7 +25407,19 @@
     }
    ],
    "parse_quality": "partial",
-   "notes": []
+   "notes": [],
+   "kit": {
+    "stats": {
+     "ad_l1": 0,
+     "ad_l18": 45,
+     "crit_l1": 0,
+     "crit_l18": 0.3
+    },
+    "effects": {
+     "range_ranged_l1": 0,
+     "range_ranged_l18": 75
+    }
+   }
   },
   {
    "id": "Seraphine",
@@ -26936,6 +27006,12 @@
    ],
    "parse_quality": "good",
    "notes": [],
+   "kit": {
+    "stats": {
+     "hp_l1": 0,
+     "hp_l18": 500
+    }
+   },
    "death": {
     "act": 9
    }
@@ -28263,7 +28339,13 @@
     }
    ],
    "parse_quality": "good",
-   "notes": []
+   "notes": [],
+   "kit": {
+    "stats": {
+     "hp_l1": 0,
+     "hp_l18": 300
+    }
+   }
   },
   {
    "id": "Sylas",
@@ -29975,7 +30057,15 @@
     }
    ],
    "parse_quality": "partial",
-   "notes": []
+   "notes": [],
+   "kit": {
+    "stats": {
+     "armor_l1": 0,
+     "armor_l18": 70,
+     "ap_l1": 0,
+     "ap_l18": 52
+    }
+   }
   },
   {
    "id": "Tristana",
@@ -30531,6 +30621,11 @@
    ],
    "parse_quality": "partial",
    "notes": [],
+   "kit": {
+    "stats": {
+     "crit": 0.25
+    }
+   },
    "death": {
     "act": 5,
     "needs_r": true
@@ -32081,7 +32176,13 @@
     }
    ],
    "parse_quality": "good",
-   "notes": []
+   "notes": [],
+   "kit": {
+    "stats": {
+     "ap_l1": 0,
+     "ap_l18": 300
+    }
+   }
   },
   {
    "id": "Velkoz",
