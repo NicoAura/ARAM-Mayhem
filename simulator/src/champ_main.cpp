@@ -57,6 +57,8 @@ Usage: mayhem_sim [options]
                       enemies the same way (default: the five most likely enemies)
   --combo EQRW        with --champ: cast order when several abilities are ready
                       (default: the champion's recommended combo, data/combos.json)
+  --metric M          what the build search ranks by: damage (per second, the default), or per
+                      fight taken (damage taken), mitigated, healing, or cc (seconds dealt)
   --list --json       champions, items, augments, settings and the enemy pool as JSON
   --help              show this help
 )";
@@ -112,19 +114,19 @@ std::string num(double v) {
     return s == "-0" ? "0" : s;
 }
 
-// The fight with the median DPS out of the first 200, so a replay shows a typical fight.
-uint64_t typicalTrial(const Library& lib, const ChampionKit& c, const Build& b, const Scenario& sc) {
+// The fight with the median DPS (or the chosen measure) out of the first 200, so a replay shows a typical fight.
+uint64_t typicalTrial(const Library& lib, const ChampionKit& c, const Build& b, const Scenario& sc, Metric metric) {
     const auto res = runTrials(lib, c, b, sc, 0, 200);
     std::vector<std::pair<double, size_t>> dps;
-    for (size_t i = 0; i < res.size(); ++i) dps.push_back({res[i].totalDamage / res[i].duration, i});
+    for (size_t i = 0; i < res.size(); ++i) dps.push_back({metricOf(res[i], metric), i});
     std::sort(dps.begin(), dps.end());
     return dps[dps.size() / 2].second;
 }
 
 // Writes a fight trace for the replay viewer (viewer/). Short keys keep the files small.
 bool writeTrace(const Library& lib, const ChampionKit& c, const Build& b, const Scenario& sc, const Summary& summary,
-                const std::string& path) {
-    const uint64_t trial = typicalTrial(lib, c, b, sc);
+                const std::string& path, Metric metric = Metric::Damage) {
+    const uint64_t trial = typicalTrial(lib, c, b, sc, metric);
     const FightTrace tr = traceFight(lib, c, b, sc, trial);
     std::ostringstream o;
     o << "{\"champion\": " << jsonStr(c.id) << ", \"name\": " << jsonStr(c.name) << ", \"key\": " << c.championId
@@ -150,7 +152,9 @@ bool writeTrace(const Library& lib, const ChampionKit& c, const Build& b, const 
     o << ",\n \"fight\": {\"trial\": " << trial << ", \"seed\": " << sc.seed << ", \"duration\": " << num(tr.result.duration)
       << ", \"engage_at\": " << num(tr.engageAt) << ", \"max_hp\": " << num(tr.maxHp)
       << ", \"died\": " << (tr.result.died ? "true" : "false") << ", \"time_alive\": " << num(tr.result.timeAlive)
-      << ", \"total_damage\": " << num(tr.result.totalDamage) << ", \"kills\": " << tr.result.kills << ", \"team\": [";
+      << ", \"total_damage\": " << num(tr.result.totalDamage) << ", \"damage_taken\": " << num(tr.result.damageTaken)
+      << ", \"damage_mitigated\": " << num(tr.result.mitigated) << ", \"healing\": " << num(tr.result.healed)
+      << ", \"cc_seconds\": " << num(tr.result.ccDealt) << ", \"kills\": " << tr.result.kills << ", \"team\": [";
     for (size_t i = 0; i < tr.team.size(); ++i) o << (i ? ", " : "") << jsonStr(tr.team[i]);
     o << "]},\n \"sources\": [";
     for (int i = 0; i < SrcCount; ++i) o << (i ? ", " : "") << jsonStr(kSourceNames[i]);
@@ -168,6 +172,8 @@ bool writeTrace(const Library& lib, const ChampionKit& c, const Build& b, const 
         if (e.kind == "spawn" || e.kind == "damage" || e.kind == "kill" || e.kind == "self" || e.kind == "death")
             o << ", \"hp\": " << num(e.hp) << ", \"max\": " << num(e.maxHp);
         if (e.shield > 0) o << ", \"sh\": " << num(e.shield);
+        if (e.kind == "self" || e.kind == "death") o << ", \"tk\": " << std::lround(e.taken) << ", \"mt\": " << std::lround(e.mitigated);
+        if (e.total > 0) o << ", \"tot\": " << num(e.total);
         if (e.flag) o << ", \"f\": 1";
         if (e.kind == "cast" || e.kind == "poro") o << ", \"ax\": " << std::lround(e.x) << ", \"ay\": " << std::lround(e.y) << ", \"fl\": " << num(e.flight);
         if (!e.pos.empty()) {
@@ -187,13 +193,15 @@ bool writeTrace(const Library& lib, const ChampionKit& c, const Build& b, const 
 }
 
 std::string summaryJson(const Summary& s) {
-    char buf[512];
+    char buf[768];
     std::snprintf(buf, sizeof buf,
                   "{\"mean_dps\": %.1f, \"ci95\": %.1f, \"p5\": %.1f, \"median\": %.1f, \"p95\": %.1f, "
                   "\"single_target_dps\": %.1f, \"kills_per_minute\": %.3f, \"survival_rate\": %.4f, "
-                  "\"time_alive\": %.2f, \"damage_taken_per_s\": %.1f, \"dps_short_fight\": %.1f, \"dps_long_fight\": %.1f, \"share_by_source\": {",
+                  "\"time_alive\": %.2f, \"damage_taken_per_s\": %.1f, \"dps_short_fight\": %.1f, \"dps_long_fight\": %.1f, "
+                  "\"damage_taken\": %.0f, \"damage_mitigated\": %.0f, \"healing\": %.0f, \"cc_seconds\": %.2f, \"share_by_source\": {",
                   s.meanDps, s.ci95, s.p5, s.median, s.p95, s.singleTargetDps, s.killsPerMinute, s.survivalRate,
-                  s.meanTimeAlive, s.damageTakenPerSec, s.shortDps, s.longDps);
+                  s.meanTimeAlive, s.damageTakenPerSec, s.shortDps, s.longDps, s.damageTaken, s.damageMitigated, s.healing,
+                  s.ccSeconds);
     std::string out = buf;
     for (int i = 0; i < SrcCount; ++i) {
         std::snprintf(buf, sizeof buf, "%s\"%s\": %.4f", i ? ", " : "", kSourceNames[i], s.shareBySource[i]);
@@ -273,6 +281,7 @@ int main(int argc, char** argv) {
     std::vector<std::string> items, augs;
     bool all = false, asJson = false, list = false, customBuild = false, anyItems = false;
     std::string tracePath, traceDir, combo;
+    Metric metric = Metric::Damage;
     Library::Settings settings;
     std::vector<std::string> team, allies;
     int trials = 0;
@@ -304,6 +313,10 @@ int main(int argc, char** argv) {
         else if (a == "--team") team = splitList(next());
         else if (a == "--allies") allies = splitList(next());
         else if (a == "--combo") combo = next();
+        else if (a == "--metric") {
+            const std::string m = next();
+            if (!parseMetric(m, metric)) { std::cerr << "--metric must be damage, taken, mitigated, healing or cc, got " << m << "\n"; return 2; }
+        }
         else if (a == "--set") {
             for (const auto& kv : splitList(next())) {
                 const auto eq = kv.find('=');
@@ -540,9 +553,9 @@ int main(int argc, char** argv) {
 #endif
                 ranked.push_back({b, summarize(res)});
             } else {
-                ranked = optimize(lib, *c, sc, threads);
+                ranked = optimize(lib, *c, sc, threads, 5, metric);
             }
-            if (!tracePath.empty() && !writeTrace(lib, *c, ranked.front().build, sc, ranked.front().summary, tracePath))
+            if (!tracePath.empty() && !writeTrace(lib, *c, ranked.front().build, sc, ranked.front().summary, tracePath, metric))
                 return 1;
             if (asJson) {
                 std::printf("{\"champion\": %s, \"builds\": [", jsonStr(c->id).c_str());

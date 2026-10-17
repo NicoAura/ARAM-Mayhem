@@ -4,21 +4,39 @@
   "use strict";
   const $ = (id) => document.getElementById(id);
   const DUMMY_KEYS = ["fixed_target", "target_hp", "target_armor", "target_mr"];
-  // The Fight box shows the few settings most people change; the rest sit under "Advanced settings".
-  const BASIC_KEYS = ["level", "enemy_level", "enemy_damage_scale", "cc_scale", "dodge_chance"];
+  // The Fight box shows the four settings most people change; the rest sit under "Advanced settings", by topic.
+  const BASIC_KEYS = ["level", "enemy_level", "until_death", "enemy_damage_scale"];
   const WHOLE_KEYS = ["level", "enemy_level", "until_death", "team_size", "fixed_target", "combo_order"];  // integer steps
   const ADVANCED = [
-    ["Fight timing", ["until_death", "fight_cap", "fight_mean", "fight_sd", "fight_min", "fight_max", "engage_min", "engage_max",
-      "retarget_delay", "r_ready_chance"]],
-    ["Positions and skillshots", ["start_distance", "enemy_spread", "reaction_time", "aim_lead"]],
-    ["Crowd control and casting", ["cc_min", "cc_max", "combo_order"]],
+    ["Fight length", ["fight_cap", "fight_mean", "fight_sd", "fight_min", "fight_max", "engage_min", "engage_max"]],
+    ["Crowd control on you", ["cc_scale", "cc_min", "cc_max"]],
+    ["Skillshots and movement", ["dodge_chance", "reaction_time", "aim_lead", "start_distance", "enemy_spread", "retarget_delay"]],
+    ["Your abilities", ["r_ready_chance", "combo_order"]],
     ["Training dummy", ["target_hp", "target_armor", "target_mr"]],
   ];
+  // Short names for the settings; the engine's own description shows under each in small print.
+  const LABELS = {
+    level: "Your level", enemy_level: "Enemy level", until_death: "Fight lasts", enemy_damage_scale: "Enemy damage ×",
+    team_size: "Number of enemies", fight_cap: "Time limit (s)", fight_mean: "Usual length (s)", fight_sd: "Length spread (s)",
+    fight_min: "Shortest usual fight (s)", fight_max: "Longest usual fight (s)", engage_min: "Enemies engage from (s)",
+    engage_max: "Enemies engage by (s)", cc_scale: "How often ×", cc_min: "Shortest (s)", cc_max: "Longest (s)",
+    dodge_chance: "Enemy dodge chance", reaction_time: "Dodge reaction (s)", aim_lead: "Aim ahead (0-1)",
+    start_distance: "Enemy start distance", enemy_spread: "Enemy spread", retarget_delay: "Time to next target (s)",
+    r_ready_chance: "Ultimate ready at start", combo_order: "Cast order", target_hp: "Dummy HP",
+    target_armor: "Dummy armor", target_mr: "Dummy magic resist",
+  };
+  // Settings that are a choice rather than a number.
+  const CHOICES = {
+    until_death: [[1, "Until you fall"], [0, "A usual fight length"]],
+    combo_order: [[1, "Recommended combo"], [0, "Strongest first"]],
+  };
   const ENEMY_STATS = [
     ["hp", "HP", 1], ["armor", "Armor", 1], ["mr", "MR", 1], ["damage_share", "Dmg share", 0.01],
   ];
 
   let meta = null, champ = null, trace = null, busy = false;
+  // What the simulator measures and Find the best build looks for (MODES in replay.js).
+  let mode = "damage";
   // Live patch by default; PBE runs the same model on the test server's numbers (data/pbe).
   let patch = "live";
   const patchArgs = () => (patch === "pbe" ? ["--game-data", "data/pbe"] : []);
@@ -53,14 +71,14 @@
 
   // Champions, items, augments and settings for the chosen patch.
   function loadMeta() {
-    for (const b of ["runBuild", "findBest", "resetAll", "patchSel"]) $(b).disabled = true;
+    for (const b of ["runBuild", "findBest", "resetAll", "patchSel", "modeSel"]) $(b).disabled = true;
     return call(["--list", "--json", ...patchArgs()]).then((r) => {
       if (!r.ok) { status("The simulator couldn't load its data: " + r.stderr, "err"); return false; }
       meta = JSON.parse(r.stdout);
       enemyById.clear();
       for (const e of meta.enemies) enemyById.set(e.id.toLowerCase(), e);
       buildFightForm();
-      for (const b of ["runBuild", "findBest", "resetAll", "patchSel"]) $(b).disabled = false;
+      for (const b of ["runBuild", "findBest", "resetAll", "patchSel", "modeSel"]) $(b).disabled = false;
       if (champ) fillFromTrace();
       runLinked();
       return true;
@@ -74,6 +92,15 @@
         ? "PBE patch: simulations now use the test server's numbers. The replay above changes when you simulate."
         : "Live patch: simulations use the current patch's numbers again.");
     });
+  });
+
+  $("modeSel").addEventListener("change", (e) => {
+    mode = e.target.value;
+    window.ReplayViewer.setMode(mode);
+    const label = window.ReplayViewer.modes[mode].label.toLowerCase();
+    status(mode === "damage"
+      ? "Mode: damage. Find the best build looks for the most damage per second."
+      : `Mode: ${label}. Simulate shows ${label} per fight, and Find the best build looks for the most ${label} per fight.`);
   });
 
   window.onReplayLoad = (c, tr, isCustom) => {
@@ -185,7 +212,7 @@
     if (!meta) return;
     const size = meta.settings.find((s) => s.key === "team_size");
     if (size) {
-      const f = field(size);
+      const f = field(size, false);
       f.querySelector("input").min = 1; f.querySelector("input").max = 5;
       f.querySelector("input").addEventListener("change", renderEnemies);
       box.append(f);
@@ -308,18 +335,32 @@
 
   // ---------- fight settings ----------
   const fieldValues = {};
-  function field(s) {
+  function field(s, hint = true) {
     const wrap = document.createElement("div"); wrap.className = "field";
     const id = "set_" + s.key;
     const l = document.createElement("label"); l.htmlFor = id;
     const words = s.description.charAt(0).toUpperCase() + s.description.slice(1);
-    l.textContent = words;
-    const inp = document.createElement("input");
-    inp.type = "number"; inp.id = id;
-    inp.step = WHOLE_KEYS.includes(s.key) ? 1 : Math.abs(s.default) <= 1 ? 0.05 : s.default >= 100 ? 10 : 1;
+    l.textContent = LABELS[s.key] || words;
+    if (LABELS[s.key]) {
+      l.title = words;
+      // The description under the name, unless it only repeats it.
+      if (hint && !words.toLowerCase().startsWith(LABELS[s.key].toLowerCase())) {
+        const sm = document.createElement("small"); sm.textContent = words; l.append(sm);
+      }
+    }
+    let inp;
+    if (CHOICES[s.key]) {
+      inp = document.createElement("select");
+      for (const [v, name] of CHOICES[s.key]) inp.add(new Option(name, v));
+    } else {
+      inp = document.createElement("input");
+      inp.type = "number";
+      inp.step = WHOLE_KEYS.includes(s.key) ? 1 : Math.abs(s.default) <= 1 ? 0.05 : s.default >= 100 ? 10 : 1;
+    }
+    inp.id = id;
     inp.value = fieldValues[s.key] !== undefined ? fieldValues[s.key] : s.default;
     const mark = () => wrap.classList.toggle("changed", Math.abs(parseFloat(inp.value) - s.default) > 1e-9);
-    inp.addEventListener("input", () => {
+    inp.addEventListener(inp.tagName === "SELECT" ? "change" : "input", () => {
       const v = parseFloat(inp.value);
       if (Number.isFinite(v) && Math.abs(v - s.default) > 1e-9) fieldValues[s.key] = v; else delete fieldValues[s.key];
       mark();
@@ -336,7 +377,7 @@
     const byKey = new Map(meta.settings.map((s) => [s.key, s]));
     const box = $("fightBox");
     box.querySelectorAll(".field, .sub").forEach((n) => n.remove());
-    for (const k of BASIC_KEYS) if (byKey.has(k)) box.append(field(byKey.get(k)));
+    for (const k of BASIC_KEYS) if (byKey.has(k)) box.append(field(byKey.get(k), false));  // short names only; Advanced settings explain each
     const grid = $("advGrid");
     grid.textContent = "";
     const placed = new Set([...BASIC_KEYS, ...DUMMY_KEYS, "team_size"]);
@@ -350,6 +391,7 @@
       const fs = document.createElement("fieldset");
       const lg = document.createElement("legend"); lg.textContent = name; fs.append(lg);
       if (keys.includes("combo_order")) fs.id = "castBox";
+      if (!keys.length) continue;
       for (const k of keys) fs.append(field(byKey.get(k)));
       grid.append(fs);
     }
@@ -387,6 +429,7 @@
   // ---------- running ----------
   function args(withBuild) {
     const a = ["--champ", champ.id, "--json", "--trace", "/trace.json", ...patchArgs()];
+    if (mode !== "damage") a.push("--metric", mode);
     const set = Object.entries(fieldValues).filter(([k]) => !DUMMY_KEYS.includes(k) || enemyMode() === "dummy");
     if (enemyMode() === "dummy") set.push(["fixed_target", 1]);
     if (set.length) a.push("--set", set.map(([k, v]) => `${k}=${v}`).join(","));
@@ -414,12 +457,12 @@
     let a;
     try { a = args(withBuild); } catch (e) { status(e.message, "err"); return; }
     busy = true;
-    for (const b of ["runBuild", "findBest", "resetAll", "patchSel"]) $(b).disabled = true;
+    for (const b of ["runBuild", "findBest", "resetAll", "patchSel", "modeSel"]) $(b).disabled = true;
     status(withBuild ? "Simulating 2,000 fights…" : "Searching item and augment builds. This takes a few seconds…", "busy");
     const t0 = performance.now();
     const r = await call(a);
     busy = false;
-    for (const b of ["runBuild", "findBest", "resetAll", "patchSel"]) $(b).disabled = false;
+    for (const b of ["runBuild", "findBest", "resetAll", "patchSel", "modeSel"]) $(b).disabled = false;
     if (!r.ok || !r.trace) {
       status((r.stderr || "The simulation failed.").replace(/^error:\s*/, ""), "err");
       return;
@@ -430,15 +473,24 @@
     const best = res.builds[0].summary;
     const def = window.ReplayViewer.defaultTrace().summary.mean_dps;
     const secs = ((performance.now() - t0) / 1000).toFixed(1);
-    status(`Done in ${secs} s${patch === "pbe" ? " on the PBE patch" : ""}. Average DPS ${Math.round(best.mean_dps).toLocaleString()} ` +
-      `(±${Math.round(best.ci95)}), alive for ${best.time_alive.toFixed(1)} s on average. ` +
-      `The default setup averaged ${Math.round(def).toLocaleString()}. The replay above now shows a typical fight with these settings.`);
+    const M = window.ReplayViewer.modes[mode], fmt = window.ReplayViewer.modeValue;
+    const defSum = window.ReplayViewer.defaultTrace().summary;
+    const defVal = mode === "damage" ? def : defSum[M.key];
+    const where = `Done in ${secs} s${patch === "pbe" ? " on the PBE patch" : ""}. `;
+    const after = "The replay above now shows a typical fight with these settings.";
+    if (mode === "damage")
+      status(where + `Average DPS ${Math.round(best.mean_dps).toLocaleString()} (±${Math.round(best.ci95)}), alive for ` +
+        `${best.time_alive.toFixed(1)} s on average. The default setup averaged ${Math.round(def).toLocaleString()}. ` + after);
+    else
+      status(where + `${M.label}: ${fmt(mode, best[M.key])} per fight on average, alive for ${best.time_alive.toFixed(1)} s ` +
+        `(average DPS ${Math.round(best.mean_dps).toLocaleString()}).` +
+        (defVal !== undefined ? ` The default setup averaged ${fmt(mode, defVal)}. ` : " ") + after);
     // ▲/▼ against the default setup, coloured.
-    const change = (best.mean_dps - def) / Math.max(1, def);
+    const change = defVal !== undefined ? (best[M.key] - defVal) / Math.max(1, defVal) : 0;
     if (Math.abs(change) >= 0.005) {
       const d = document.createElement("span");
       d.className = change > 0 ? "up" : "down";
-      d.textContent = ` ${change > 0 ? "▲" : "▼"} ${Math.abs(change * 100).toFixed(1)}% DPS vs default`;
+      d.textContent = ` ${change > 0 ? "▲" : "▼"} ${Math.abs(change * 100).toFixed(1)}% ${mode === "damage" ? "DPS" : M.label.toLowerCase()} vs default`;
       $("simStatus").append(d);
     }
     // Any live-patch build can go on the leaderboard: it's simulated again on our side against the Survival
@@ -515,7 +567,8 @@
     const name = (k, list) => (list.find((x) => x.key === k) || { name: k }).name;
     builds.slice(1).forEach((b) => {
       const btn = document.createElement("button"); btn.type = "button";
-      const dps = document.createElement("b"); dps.textContent = Math.round(b.summary.mean_dps).toLocaleString();
+      const M = window.ReplayViewer.modes[mode];
+      const dps = document.createElement("b"); dps.textContent = window.ReplayViewer.modeValue(mode, b.summary[M.key]);
       const txt = document.createElement("span");
       txt.textContent = b.build.items.map((k) => name(k, meta.items)).join(", ") + " | " + b.build.augments.map((k) => name(k, meta.augments)).join(", ");
       btn.append(dps, txt);
@@ -534,6 +587,8 @@
     for (const k of Object.keys(fieldValues)) delete fieldValues[k];
     for (const k of Object.keys(combos)) delete combos[k];
     $("emodePool").checked = true;
+    mode = $("modeSel").value = "damage";
+    window.ReplayViewer.setMode(mode);
     picks = null;
     $("alts").hidden = true;
     offerSubmit(null);

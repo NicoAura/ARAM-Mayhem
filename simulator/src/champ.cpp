@@ -685,7 +685,7 @@ struct Enemy {
     double strafe = 0, strafeUntil = 0, dodgeUntil = -1;
     Vec dodgeVel;
     // Your crowd control on it: can't act (stun, knockup...), can't move (root), slowed.
-    double ccUntil = -1, rootUntil = -1, slowUntil = -1, slow = 0;
+    double ccUntil = -1, rootUntil = -1, slowUntil = -1, slow = 0, silenceUntil = -1;
     std::vector<double> castReady;  // its own abilities: when each is next up
 };
 
@@ -742,6 +742,7 @@ private:
         lastSelfAt_ = t;
         TraceEvent e;
         e.t = t; e.kind = kind; e.hp = myHp_; e.maxHp = maxHp_; e.shield = shieldLeft(t);
+        e.taken = res_.damageTaken; e.mitigated = res_.mitigated;
         record(e);
     }
     void recordFocus() {
@@ -824,6 +825,7 @@ private:
     static constexpr double kStep = 0.05;     // movement and damage-taken step, seconds
     static constexpr double kPosEvery = 0.2;  // replay position snapshots, seconds
     bool rUp_ = false;
+    double throughResists_ = 1, burstRaw_ = 0;  // for damage mitigated: see setupDefences and enemyCasts
     double myHp_ = 0, incomingDps_ = 0, engageAt_ = 0, damageClock_ = 0, auraClock_ = 0, auraDps_ = 0;
     std::vector<std::pair<const Ability*, const Hit*>> auraHits_;
     std::vector<const Ability*> onhitAbilities_;
@@ -1179,6 +1181,16 @@ private:
         else
             mitigation = through(nullptr);
         incomingDps_ = incomingRoll_ * sc_.damageTakenFactor * teamDamage * mitigation * rules_.inRangeBoost * incomingMult_;
+        // The share of enemy damage your Armor and Magic Resist let through, for damage mitigated.
+        double unresisted = 0;
+        auto power = [](const EnemyProfile* p) { return p ? p->power : 1.0; };
+        if (sc_.teamDrivenDamage && !team_.empty() && share > 0)
+            for (const auto* e : team_) unresisted += e->damageShare / share * power(e);
+        else if (!team_.empty())
+            for (const auto* e : team_) unresisted += power(e) / static_cast<double>(team_.size());
+        else
+            unresisted = 1.0;
+        throughResists_ = unresisted > 0 ? std::clamp(mitigation / unresisted, 1e-6, 1.0) : 1.0;
         setupEnemyKits();
         magicShare_ = 1.0 - sc_.enemyPhysShare;
         if (!team_.empty()) {
@@ -1278,6 +1290,7 @@ private:
                 const double acting = now < e.ccUntil ? ccLeft_ : 1.0;
                 if (!abilityRng_.chance(c.land)) continue;
                 double dmg = incomingDps_ * e.damageWeight * c.burst * acting * (now < e.shrinkUntil ? 1.0 - shrink_ : 1.0);
+                burstRaw_ += dmg / throughResists_;
                 if (now < reductionUntil_) dmg *= 1.0 - get(fx_, "r_reduction");
                 total += dmg;
                 if (!c.cc.empty() && abilityRng_.chance(c.ccChance * acting)) {
@@ -1396,7 +1409,7 @@ private:
             if (!inCc(posClock_) && posClock_ >= busyUntil_) moveMe(dt);
             tickAuras(now);
             // Damage taken: each enemy hits you only while you're within its reach.
-            double dps = 0;
+            double dps = 0, rawTick = 0;  // rawTick: this tick's damage before your resists and reductions
             if (now > engageAt_) {
                 double share = 0;
                 for (const auto& e : enemies_)
@@ -1406,6 +1419,7 @@ private:
                         share += e.damageWeight * (now < e.ccUntil ? ccLeft_ : 1.0) * (now < e.shrinkUntil ? 1.0 - shrink_ : 1.0) *
                                  streamShare(e);
                 dps = incomingDps_ * share;
+                rawTick = dps * dt / throughResists_;
                 if (now < reductionUntil_) dps *= 1.0 - get(fx_, "r_reduction");
                 exposureSum_ += share * dt;
                 exposureTime_ += dt;
@@ -1415,10 +1429,15 @@ private:
                 invulnUntil_ = std::max(invulnUntil_, now + get(fx_, "invuln_duration"));
                 nextInvuln_ += get(fx_, "invuln_every");
             }
+            burstRaw_ = 0;
             double burst = enemyCasts(now);
+            rawTick += burstRaw_;
             if (now < invulnUntil_) dps = burst = 0;
+            if (dps <= 0 && burst <= 0) res_.mitigated += rawTick;  // invulnerable
             if (dps > 0 || burst > 0) {
                 const double lost = absorb(dps * dt + burst, now);
+                // Everything the enemies threw at you that didn't come off your Health.
+                res_.mitigated += std::max(0.0, rawTick - std::min(lost, myHp_));
                 if (lost >= myHp_) {
                     const double at = burst > 0 ? now : now - dt + myHp_ / dps;
                     res_.damageTaken += myHp_;
@@ -1582,6 +1601,7 @@ private:
         if (dead_ || amount <= 0) return;
         const double got = std::min(maxHp_, myHp_ + amount) - myHp_;
         myHp_ += got;
+        res_.healed += got;
         // Circle of Death: healing also hurts the nearest enemy (not the healing that damage brings back).
         if (get(fx_, "heal_to_damage") > 0 && !converting_) {
             converting_ = true;
@@ -1592,7 +1612,7 @@ private:
         }
         if (trace_ && got > 0) {
             TraceEvent ev;
-            ev.t = t_; ev.kind = "heal"; ev.amount = got;
+            ev.t = t_; ev.kind = "heal"; ev.amount = got; ev.total = res_.healed;
             record(ev);
         }
     }
@@ -1601,22 +1621,24 @@ private:
     // held in place (root), slowed, or silenced (shown only).
     void applyCc(Enemy& e, const Ability& a) {
         const double until = t_ + a.ccDuration;
-        if (a.cc == "slow") { e.slowUntil = std::max(e.slowUntil, until); e.slow = a.ccSlow; }
-        else if (a.cc == "root") e.rootUntil = std::max(e.rootUntil, until);
-        else if (a.cc != "silence") e.ccUntil = std::max(e.ccUntil, until);
+        double& held = a.cc == "slow" ? e.slowUntil : a.cc == "root" ? e.rootUntil : a.cc == "silence" ? e.silenceUntil : e.ccUntil;
+        res_.ccDealt += std::max(0.0, until - std::max(t_, held));
+        held = std::max(held, until);
+        if (a.cc == "slow") e.slow = a.ccSlow;
         if (trace_) {
             TraceEvent ev;
-            ev.t = t_; ev.kind = "ecc"; ev.target = e.uid; ev.text = a.cc; ev.amount = until;
+            ev.t = t_; ev.kind = "ecc"; ev.target = e.uid; ev.text = a.cc; ev.amount = until; ev.total = res_.ccDealt;
             record(ev);
         }
     }
     // Crowd control from an item or augment: the enemy can't act for a while.
     void ccEnemy(Enemy& e, double duration, const char* kind) {
         if (!e.alive || duration <= 0) return;
+        res_.ccDealt += std::max(0.0, t_ + duration - std::max(t_, e.ccUntil));
         e.ccUntil = std::max(e.ccUntil, t_ + duration);
         if (trace_) {
             TraceEvent ev;
-            ev.t = t_; ev.kind = "ecc"; ev.target = e.uid; ev.text = kind; ev.amount = t_ + duration;
+            ev.t = t_; ev.kind = "ecc"; ev.target = e.uid; ev.text = kind; ev.amount = t_ + duration; ev.total = res_.ccDealt;
             record(ev);
         }
     }
@@ -2646,6 +2668,10 @@ Summary summarize(const std::vector<Result>& results) {
         s.survivalRate += r.died ? 0.0 : 1.0;
         s.meanTimeAlive += r.timeAlive;
         s.damageTakenPerSec += r.timeAlive > 0 ? r.damageTaken / r.timeAlive : 0.0;
+        s.damageTaken += r.damageTaken;
+        s.damageMitigated += r.mitigated;
+        s.healing += r.healed;
+        s.ccSeconds += r.ccDealt;
         total += r.totalDamage;
         for (int i = 0; i < SrcCount; ++i) s.shareBySource[i] += r.bySource[i];
     }
@@ -2665,6 +2691,10 @@ Summary summarize(const std::vector<Result>& results) {
     s.survivalRate /= n;
     s.meanTimeAlive /= n;
     s.damageTakenPerSec /= n;
+    s.damageTaken /= n;
+    s.damageMitigated /= n;
+    s.healing /= n;
+    s.ccSeconds /= n;
     s.shortDps /= n;
     s.longDps /= n;
     if (total > 0)
@@ -2675,6 +2705,34 @@ Summary summarize(const std::vector<Result>& results) {
 // ---------------------------------------------------------------------------
 // Build optimizer
 // ---------------------------------------------------------------------------
+
+bool parseMetric(const std::string& name, Metric& out) {
+    static const std::pair<const char*, Metric> names[] = {{"damage", Metric::Damage}, {"taken", Metric::Taken},
+        {"mitigated", Metric::Mitigated}, {"healing", Metric::Healing}, {"cc", Metric::Cc}};
+    for (const auto& [n, m] : names)
+        if (name == n) { out = m; return true; }
+    return false;
+}
+
+double metricOf(const Result& r, Metric m) {
+    switch (m) {
+        case Metric::Taken: return r.damageTaken;
+        case Metric::Mitigated: return r.mitigated;
+        case Metric::Healing: return r.healed;
+        case Metric::Cc: return r.ccDealt;
+        default: return r.totalDamage / r.duration;
+    }
+}
+
+double metricOf(const Summary& s, Metric m) {
+    switch (m) {
+        case Metric::Taken: return s.damageTaken;
+        case Metric::Mitigated: return s.damageMitigated;
+        case Metric::Healing: return s.healing;
+        case Metric::Cc: return s.ccSeconds;
+        default: return s.meanDps;
+    }
+}
 
 std::vector<std::string> fittingRoles(const ChampionKit& c) {
     // AP or AD kit, from the summed ability ratios; close calls get both.
@@ -2697,9 +2755,10 @@ std::vector<std::string> fittingRoles(const ChampionKit& c) {
 
 namespace {
 
-double score(const Library& lib, const ChampionKit& c, const Build& b, const Scenario& sc, int trials) {
+double score(const Library& lib, const ChampionKit& c, const Build& b, const Scenario& sc, int trials,
+             Metric m = Metric::Damage) {
     double sum = 0;
-    for (const auto& r : runTrials(lib, c, b, sc, 0, trials)) sum += r.totalDamage / r.duration;
+    for (const auto& r : runTrials(lib, c, b, sc, 0, trials)) sum += metricOf(r, m);
     return sum / trials;
 }
 
@@ -2735,7 +2794,7 @@ void combinations(int n, int k, int start, std::vector<int>& cur, std::vector<st
 
 }  // namespace
 
-std::vector<Ranked> optimize(const Library& lib, const ChampionKit& c, const Scenario& sc, int threads, int top) {
+std::vector<Ranked> optimize(const Library& lib, const ChampionKit& c, const Scenario& sc, int threads, int top, Metric metric) {
     const OptimizerSettings& os = lib.optimizer;
     std::vector<std::string> boots, legendaries;
     const auto roles = fittingRoles(c);
@@ -2754,29 +2813,38 @@ std::vector<Ranked> optimize(const Library& lib, const ChampionKit& c, const Sce
     std::set<std::string> candidates;
     std::vector<double> sc1(std::max(boots.size(), legendaries.size()));
     parallelFor(static_cast<int>(boots.size()), threads,
-                [&](int i) { sc1[i] = score(lib, c, Build{{boots[i]}, {}}, sc, screen); });
+                [&](int i) { sc1[i] = score(lib, c, Build{{boots[i]}, {}}, sc, screen, metric); });
     std::string bestBoots = boots[std::max_element(sc1.begin(), sc1.begin() + boots.size()) - sc1.begin()];
     greedy.items.push_back(bestBoots);
-    for (int slot = 0; slot < os.legendarySlots; ++slot) {
-        std::vector<std::pair<double, std::string>> scored(legendaries.size());
-        parallelFor(static_cast<int>(legendaries.size()), threads, [&](int i) {
-            Build b = greedy;
-            if (std::find(b.items.begin(), b.items.end(), legendaries[i]) != b.items.end()) {
-                scored[i] = {-1, legendaries[i]};
-                return;
-            }
-            b.items.push_back(legendaries[i]);
-            scored[i] = {score(lib, c, b, sc, screen), legendaries[i]};
-        });
-        std::sort(scored.rbegin(), scored.rend());
-        greedy.items.push_back(scored[0].second);
-        const int keep = std::max(3, os.candidates / os.legendarySlots + 1);
-        for (int i = 0; i < keep && i < static_cast<int>(scored.size()); ++i) candidates.insert(scored[i].second);
-    }
+    auto addGreedily = [&](Build& g, Metric m) {
+        for (int slot = 0; slot < os.legendarySlots; ++slot) {
+            std::vector<std::pair<double, std::string>> scored(legendaries.size());
+            parallelFor(static_cast<int>(legendaries.size()), threads, [&](int i) {
+                Build b = g;
+                if (std::find(b.items.begin(), b.items.end(), legendaries[i]) != b.items.end()) {
+                    scored[i] = {-1, legendaries[i]};
+                    return;
+                }
+                b.items.push_back(legendaries[i]);
+                scored[i] = {score(lib, c, b, sc, screen, m), legendaries[i]};
+            });
+            std::sort(scored.rbegin(), scored.rend());
+            g.items.push_back(scored[0].second);
+            const int keep = std::max(3, os.candidates / os.legendarySlots + 1);
+            for (int i = 0; i < keep && i < static_cast<int>(scored.size()); ++i) candidates.insert(scored[i].second);
+        }
+    };
+    addGreedily(greedy, metric);
+    // Healing, mitigation and crowd control pile up the longer you stay alive, which a build of one or
+    // two items can't show; the items that keep you up longest (most damage taken) are candidates too.
+    Build sturdy{{bestBoots}, {}};
+    if (metric == Metric::Healing || metric == Metric::Mitigated || metric == Metric::Cc) addGreedily(sturdy, Metric::Taken);
     std::vector<std::string> pool(candidates.begin(), candidates.end());
     // Keep the pool to the configured size, preferring the greedy picks.
     if (static_cast<int>(pool.size()) > os.candidates) {
         std::vector<std::string> trimmed(greedy.items.begin() + 1, greedy.items.end());
+        for (const auto& p : std::vector<std::string>(sturdy.items.begin() + 1, sturdy.items.end()))
+            if (std::find(trimmed.begin(), trimmed.end(), p) == trimmed.end()) trimmed.push_back(p);
         for (const auto& p : pool)
             if (static_cast<int>(trimmed.size()) < os.candidates &&
                 std::find(trimmed.begin(), trimmed.end(), p) == trimmed.end())
@@ -2793,7 +2861,7 @@ std::vector<Ranked> optimize(const Library& lib, const ChampionKit& c, const Sce
     parallelFor(static_cast<int>(combos.size()), threads, [&](int i) {
         Build b{{bestBoots}, {}};
         for (int j : combos[i]) b.items.push_back(pool[j]);
-        results[i] = {score(lib, c, b, sc, os.screenTrials), i};
+        results[i] = {score(lib, c, b, sc, os.screenTrials, metric), i};
     });
     std::sort(results.rbegin(), results.rend());
 
@@ -2812,7 +2880,7 @@ std::vector<Ranked> optimize(const Library& lib, const ChampionKit& c, const Sce
             Build b = best;
             b.augments = chosenAugs;
             b.augments.push_back(augs[i]);
-            scored[i] = {score(lib, c, b, sc, screen), augs[i]};
+            scored[i] = {score(lib, c, b, sc, screen, metric), augs[i]};
         });
         std::sort(scored.rbegin(), scored.rend());
         chosenAugs.push_back(scored[0].second);
@@ -2837,7 +2905,7 @@ std::vector<Ranked> optimize(const Library& lib, const ChampionKit& c, const Sce
         ranked[i] = {finalists[i], summarize(runTrials(lib, c, finalists[i], sc, 0, os.finalTrials))};
     });
     std::sort(ranked.begin(), ranked.end(),
-              [](const Ranked& a, const Ranked& b) { return a.summary.meanDps > b.summary.meanDps; });
+              [&](const Ranked& a, const Ranked& b) { return metricOf(a.summary, metric) > metricOf(b.summary, metric); });
     if (static_cast<int>(ranked.size()) > top) ranked.resize(static_cast<size_t>(top));
     return ranked;
 }

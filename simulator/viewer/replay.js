@@ -8,6 +8,17 @@
   const BUST = "?v=" + (window.REPLAY_VERSION || "0");
   const SLOT_COLORS = { P: "#ffd36b", Q: "#4fc3f7", W: "#7bd88f", E: "#f4b860", R: "#e66ad2" };
   const TYPE_COLORS = { physical: "#f08a4b", magic: "#7aa2ff", true: "#f4f4f4" };
+  // What the simulator measures (the Mode picker in sim-panel.js): damage per second, or per fight the damage
+  // you take, the damage you mitigate, the Health you restore and the seconds of crowd control you deal.
+  const MODES = {
+    damage: { label: "Damage", key: "mean_dps", fight: "total_damage", now: (s) => s.damage },
+    taken: { label: "Damage taken", key: "damage_taken", fight: "damage_taken", now: (s) => s.taken },
+    mitigated: { label: "Damage mitigated", key: "damage_mitigated", fight: "damage_mitigated", now: (s) => s.mitigated },
+    healing: { label: "Healing done", key: "healing", fight: "healing", now: (s) => s.healing },
+    cc: { label: "Crowd control", key: "cc_seconds", fight: "cc_seconds", now: (s) => s.ccDealt, seconds: true },
+  };
+  const modeValue = (m, v) => (MODES[m].seconds ? (v || 0).toFixed(1) + " s" : Math.round(v || 0).toLocaleString());
+  let mode = "damage";
   const SOURCE_COLORS = ["#c9d6e2", SLOT_COLORS.Q, SLOT_COLORS.W, SLOT_COLORS.E, SLOT_COLORS.R, "#b9a3ff", SLOT_COLORS.P];
   const SLOT_COL = { P: 1, Q: 2, W: 3, E: 4, R: 5 };
   // The site's settings menu (gear) saves {motion, sound, graphics, ...} as JSON under "deeparam-settings"
@@ -110,6 +121,9 @@
     champion: () => champ,
     defaultTrace: () => traces[champ.id],
     showTrace(tr) { custom[champ.id] = tr; load(champ.id); },
+    modes: MODES,
+    modeValue,
+    setMode(m) { mode = MODES[m] ? m : "damage"; if (trace) renderBuild(); },
     resetTrace() { delete custom[champ.id]; load(champ.id); },
   };
 
@@ -275,7 +289,7 @@
   // ---------- state at time t ----------
   function stateAt(time) {
     const s = { enemies: new Map(), focus: -1, kills: 0, damage: 0, bySource: (trace.sources || []).map(() => 0), selfHp: fight.maxHp,
-      cc: false, dead: false };
+      cc: false, dead: false, taken: 0, mitigated: 0, healing: 0, ccDealt: 0 };
     for (const e of fight.events) {
       if (e.t > time) break;
       if (e.k === "spawn") s.enemies.set(e.u, { uid: e.u, champ: e.x, hp: e.hp, max: e.max, born: e.t, died: null });
@@ -289,7 +303,8 @@
         const en = s.enemies.get(e.u);
         if (en) { en.hp = 0; en.died = e.t; }
         s.kills++;
-      }
+      } else if (e.k === "heal" && e.tot) s.healing = e.tot;
+      else if (e.k === "ecc" && e.tot) s.ccDealt = e.tot;
     }
     // Own HP falls steadily between samples.
     let prev = null, next = null;
@@ -297,10 +312,14 @@
     if (prev) {
       s.selfHp = prev.hp;
       s.shield = prev.sh || 0;
+      s.taken = prev.tk || 0;
+      s.mitigated = prev.mt || 0;
       if (next && next.t > prev.t) {
         const k = (time - prev.t) / (next.t - prev.t);
         s.selfHp = prev.hp + (next.hp - prev.hp) * k;
         s.shield = (prev.sh || 0) + ((next.sh || 0) - (prev.sh || 0)) * k;
+        if (next.tk !== undefined) s.taken += (next.tk - s.taken) * k;
+        if (next.mt !== undefined) s.mitigated += (next.mt - s.mitigated) * k;
       }
       // Shields end on their own between samples.
       if (s.shield > 0 && !fight.shields.some((sh) => sh.t <= time && time < sh.t + (sh.l || 0))) s.shield = 0;
@@ -858,6 +877,10 @@
 
     $("kills").textContent = s.kills;
     $("dmg").textContent = Math.round(s.damage).toLocaleString();
+    // The chosen mode's running total for this fight, next to the damage (older replays don't carry it).
+    const showMode = mode !== "damage" && trace.fight[MODES[mode].fight] !== undefined;
+    $("modeHud").hidden = !showMode;
+    if (showMode) { $("modeName").textContent = MODES[mode].label; $("modeVal").textContent = modeValue(mode, MODES[mode].now(s)); }
     // Crits: a flash where the attack lands.
     if (!lowQuality())
       for (const a of fight.attacks) {
@@ -1253,7 +1276,9 @@
     for (const it of trace.build.items) { const s = document.createElement("span"); s.textContent = it.name; b.append(s); }
     for (const a of trace.build.augments) { const s = document.createElement("span"); s.className = "aug " + (a.rarity || ""); s.textContent = a.name; b.append(s); }
     const sm = trace.summary, f = trace.fight;
+    const has = mode !== "damage" && sm[MODES[mode].key] !== undefined;
     const st = [
+      ...(has ? [[MODES[mode].label + " / fight", modeValue(mode, sm[MODES[mode].key])]] : []),
       ["Average DPS", Math.round(sm.mean_dps).toLocaleString()],
       ["Time alive", (sm.time_alive || 0).toFixed(1) + " s"],
       ["Kills / min", sm.kills_per_minute.toFixed(1)],
