@@ -81,7 +81,7 @@
     if (window.onReplayData) window.onReplayData(index);
   }).catch((err) => {
     $("title").textContent = "Replays could not be loaded";
-    $("clipNote").textContent = "Build them with tools/build_replay_assets.py, then serve this folder over HTTP. (" + err + ")";
+    $("state").textContent = "Build them with tools/build_replay_assets.py, then serve this folder over HTTP. (" + err + ")";
   });
 
   // ---------- one champion's fight ----------
@@ -113,7 +113,9 @@
   // Turns the event list into lookups the renderer needs at any time t.
   function prepare(tr) {
     const ev = tr.events;
-    const f = { duration: tr.fight.duration, engage: tr.fight.engage_at, maxHp: tr.fight.max_hp, events: ev,
+    // A fight that ends with your death plays on for a few seconds after it (the enemies dance).
+    const end = ev.find((e) => e.k === "end");
+    const f = { duration: Math.max(tr.fight.duration, end ? end.t : 0), length: tr.fight.duration, engage: tr.fight.engage_at, maxHp: tr.fight.max_hp, events: ev,
       casts: [], attacks: [], procs: [], cc: [], kills: [], self: [], spawns: new Map(), focus: [], numbers: [],
       damage: [], death: null, pos: [], geo: {}, poros: [] };
     for (const a of tr.abilities || []) f.geo[a.slot] = a;
@@ -127,6 +129,7 @@
         case "kill": f.kills.push(e); break;
         case "self": f.self.push(e); break;
         case "death": f.death = e; f.self.push(e); break;
+        case "defy": case "revive": f.self.push(e); break;
         case "spawn": f.spawns.set(e.u, e); break;
         case "pos": {
           // Where everyone stands: uid, x, y triples in game units; uid -1 is you.
@@ -175,7 +178,7 @@
   function enemyCasts(f) {
     const life = new Map(), champs = new Map();
     for (const e of f.events) {
-      if (e.k === "spawn") { life.set(e.u, { born: e.t, died: f.duration }); champs.set(e.u, e.x); }
+      if (e.k === "spawn") { life.set(e.u, { born: e.t, died: f.length }); champs.set(e.u, e.x); }
       else if (e.k === "kill" && life.has(e.u)) life.get(e.u).died = e.t;
     }
     const comboOf = (u) => ((byId.get(String(champs.get(u)).toLowerCase()) || {}).combo || "QWER").split("");
@@ -411,6 +414,8 @@
   }
   function enemyAnim(time, en) {
     if (en.died !== null) return { role: "death", t: time - en.died, loop: false };
+    // Your champion is down: the enemies who are still standing dance.
+    if (fight.death && time >= fight.death.t + 0.4) return { role: "dance", t: time - fight.death.t - 0.4, loop: true };
     const cast = enemyCastAt(en.uid, time);
     if (cast) return { role: cast.s, t: time - cast.t, loop: false, n: cast.n };
     if (time < fight.engage) return { role: "idle", t: time + en.uid * 0.7, loop: true };
@@ -1038,7 +1043,7 @@
   video.addEventListener("timeupdate", () => { if (video.currentTime >= clipState.end) video.pause(); });
   // A new cast takes over the clip once the current one has had a moment, or at once for an ultimate.
   function maybeClip(slot) {
-    if (modelMode) { showCaption(slot); return; }
+    if (modelMode || document.querySelector(".clip").hidden) { showCaption(slot); return; }
     const playedFor = (performance.now() - clipState.startedAt) / 1000;
     const busy = clipState.slot && !video.paused && playedFor < 1.2;
     if (!busy || (slot === "R" && clipState.slot !== "R")) playClip(slot);
@@ -1081,14 +1086,14 @@
   function renderBuild() {
     const b = $("build"); b.textContent = "";
     for (const it of trace.build.items) { const s = document.createElement("span"); s.textContent = it.name; b.append(s); }
-    for (const a of trace.build.augments) { const s = document.createElement("span"); s.className = "aug"; s.textContent = a.name; b.append(s); }
+    for (const a of trace.build.augments) { const s = document.createElement("span"); s.className = "aug " + (a.rarity || ""); s.textContent = a.name; b.append(s); }
     const sm = trace.summary, f = trace.fight;
     const st = [
       ["Average DPS", Math.round(sm.mean_dps).toLocaleString()],
-      ["Survives", Math.round(sm.survival_rate * 100) + "%"],
+      ["Time alive", (sm.time_alive || 0).toFixed(1) + " s"],
       ["Kills / min", sm.kills_per_minute.toFixed(1)],
       ["This fight", f.duration.toFixed(1) + " s"],
-      ["Enemy team", f.team.join(", ")],
+      [f.team.length === 1 ? "Enemy" : "Enemies", f.team.join(", ")],
     ];
     const box = $("stats"); box.textContent = "";
     for (const [k, v] of st) {

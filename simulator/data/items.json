@@ -637,8 +637,10 @@
    "stats": {
     "hp": 400
    },
-   "effects": {},
-   "confidence": "verified"
+   "effects": {
+    "base_ad_pct": 0.5
+   },
+   "confidence": "approx"
   },
   "shojin": {
    "id": 3161,
@@ -736,8 +738,10 @@
     "ad": 30,
     "hp": 550
    },
-   "effects": {},
-   "confidence": "verified"
+   "effects": {
+    "ad_per_bonus_hp": 0.025
+   },
+   "confidence": "approx"
   },
   "maw": {
    "id": 3156,
@@ -1325,8 +1329,12 @@
    "stats": {
     "hp": 1300
    },
-   "effects": {},
-   "confidence": "verified",
+   "effects": {
+    "heartsteel_flat": 70,
+    "heartsteel_own_hp": 0.06,
+    "heartsteel_cd": 30
+   },
+   "confidence": "approx",
    "note": "extra HP stands in for stacks gained by the late game"
   },
   "warmogs": {
@@ -1463,8 +1471,12 @@
     "armor": 50,
     "ah": 15
    },
-   "effects": {},
-   "confidence": "verified"
+   "effects": {
+    "drain_bonus_hp": 0.03,
+    "drain_cd": 4,
+    "drain_range": 650
+   },
+   "confidence": "approx"
   },
   "iceborn": {
    "id": 6662,

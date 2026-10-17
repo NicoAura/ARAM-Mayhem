@@ -138,6 +138,12 @@ ChampionKit loadChampion(const json::Value& c, const Rules& rules) {
     k.damageTaken = m["damage_taken"].asNumber(1.0);
     k.mayhemAh = m["ability_haste"].asNumber(0.0);
     k.mayhemAs = m["attack_speed"].asNumber(0.0);
+    const json::Value& d = c["death"];
+    k.deathAct = d["act"].asNumber(0.0);
+    k.reviveFrac = d["revive_frac"].asNumber(0.0);
+    k.reviveDelay = d["revive_delay"].asNumber(0.0);
+    k.deathChance = d["chance"].asNumber(1.0);
+    k.deathNeedsR = d["needs_r"].asBool(false);
     const json::Value& cn = c["cn"];
     if (cn.isObject()) {
         k.hasCn = true;
@@ -223,6 +229,9 @@ const std::vector<std::pair<std::string, std::string>>& Library::settingKeys() {
         {"fight_sd", "spread of fight length, seconds"},
         {"fight_min", "shortest fight, seconds"},
         {"fight_max", "longest fight, seconds"},
+        {"until_death", "1: each fight runs until your champion dies; 0: fights last the drawn length"},
+        {"fight_cap", "longest a fight can run when it lasts until you die, seconds"},
+        {"team_size", "how many enemies are in the fight (1-5)"},
         {"engage_min", "earliest time enemies start hitting you, seconds"},
         {"engage_max", "latest time enemies start hitting you, seconds"},
         {"enemy_damage_scale", "multiplies the damage enemies deal to you"},
@@ -353,6 +362,9 @@ Scenario Library::scenarioFor(const ChampionKit& c) const {
         }
     }
     sc.damageTakenFactor = c.damageTaken;
+    if (scenario.teamSizeRule > 0) sc.teamSize = scenario.teamSizeRule;
+    if (auto it = fight.find("team_size"); it != fight.end()) sc.teamSize = static_cast<int>(it->second);
+    sc.teamSize = std::clamp(sc.teamSize, 1, 5);
 
     if (!enemyTeam.empty() && enemyPool.isObject()) {
         std::vector<EnemyProfile> picked;
@@ -372,10 +384,28 @@ Scenario Library::scenarioFor(const ChampionKit& c) const {
             if (!found) throw std::runtime_error("'" + want + "' is not in the enemy pool (or is the champion itself)");
             EnemyProfile& p = picked.back();
             p.weight = 1.0;
+            double hpPct = 0;
             for (size_t i = 1; i < parts.size(); ++i) {
                 const auto eq = parts[i].find('=');
                 if (eq == std::string::npos) throw std::runtime_error("enemy stat '" + parts[i] + "' needs key=value");
                 const std::string key = parts[i].substr(0, eq);
+                if (key == "items" || key == "augs") {
+                    // Extra items and augments ("items=warmogs+thornmail"): their Health, Armor,
+                    // Magic Resist and max-Health bonuses go on top of the enemy's stats.
+                    std::stringstream ls(parts[i].substr(eq + 1));
+                    for (std::string name; std::getline(ls, name, '+');) {
+                        if (name.empty()) continue;
+                        const auto& table = key == "items" ? items : augments;
+                        auto fx = table.find(name);
+                        if (fx == table.end()) throw std::runtime_error("unknown " + std::string(key == "items" ? "item" : "augment") + " '" + name + "' for enemy " + want);
+                        auto stat = [&](const Bag& b, const char* k) { auto f = b.find(k); return f == b.end() ? 0.0 : f->second; };
+                        p.hp += stat(fx->second.stats, "hp");
+                        p.armor += stat(fx->second.stats, "armor");
+                        p.mr += stat(fx->second.stats, "mr");
+                        hpPct += stat(fx->second.effects, "hp_pct");
+                    }
+                    continue;
+                }
                 const double v = std::stod(parts[i].substr(eq + 1));
                 if (key == "hp") p.hp = std::max(1.0, v);
                 else if (key == "armor") p.armor = std::max(0.0, v);
@@ -385,8 +415,9 @@ Scenario Library::scenarioFor(const ChampionKit& c) const {
                 else if (key == "cc") p.cc = std::max(0.0, v);
                 else if (key == "damage_taken") p.damageTaken = std::max(0.0, v);
                 else throw std::runtime_error("unknown enemy stat '" + key +
-                                              "' (use hp, armor, mr, damage_share, phys_share, cc, damage_taken)");
+                                              "' (use hp, armor, mr, damage_share, phys_share, cc, damage_taken, items, augs)");
             }
+            p.hp *= 1.0 + hpPct;
         }
         sc.enemies = picked;
         sc.teamSize = static_cast<int>(picked.size());
@@ -401,6 +432,9 @@ Scenario Library::scenarioFor(const ChampionKit& c) const {
     set("fight_sd", sc.fightSd);
     set("fight_min", sc.fightMin);
     set("fight_max", sc.fightMax);
+    if (auto it = fight.find("until_death"); it != fight.end()) sc.untilDeath = it->second > 0;
+    set("fight_cap", sc.fightCap);
+    sc.fightCap = std::clamp(sc.fightCap, 5.0, 600.0);
     sc.fightMax = std::max(sc.fightMax, sc.fightMin + 0.5);
     set("engage_min", sc.engageMin);
     set("engage_max", sc.engageMax);
@@ -430,8 +464,10 @@ Scenario Library::scenarioFor(const ChampionKit& c) const {
     // follows real games (this champion's share of its team's damage taken). Where you
     // stand decides when it lands and from whom: the damage while in reach is scaled by
     // how much of the enemies' damage reaches this champion in a typical fight.
+    // In fights that last until you die, the enemies simply hit you whenever you're in their
+    // reach, so their damage isn't rescaled to a typical fight's total.
     const double share = c.hasCn ? c.cnTakenShare / 0.2 : 1.0;
-    const double exposure = meanExposure(*this, c, sc);
+    const double exposure = sc.untilDeath ? 1.0 / sc.deathDamageScale : meanExposure(*this, c, sc);
     sc.damageTakenFactor *= share / std::max(0.15, exposure);
     return sc;
 }
@@ -469,7 +505,7 @@ struct Enemy {
     double hp = 0, maxHp = 0;
     double physMult = 1, magicMult = 1, trueMult = 1;
     bool alive = true;
-    double respawnAt = 0, burnUntil = -1, conduitAt = -1;
+    double respawnAt = 0, burnUntil = -1, conduitAt = -1, heartsteelAt = 0;
     int uid = -1;
     // where it stands and how it moves
     const EnemyProfile* profile = nullptr;
@@ -485,6 +521,8 @@ struct Proc {
     double readyAt = 0;
     int counter = 0;
 };
+
+constexpr double kDanceTail = 4.0;  // seconds the replay keeps going after the fight-ending death
 
 class Fight {
 public:
@@ -566,6 +604,9 @@ private:
     std::vector<std::pair<const Ability*, const Hit*>> auraHits_;
     std::vector<const Ability*> onhitAbilities_;
     bool dead_ = false;
+    // Cheating death (ChampionKit::deathAct / reviveFrac): used once a fight.
+    bool deathUsed_ = false;
+    double invulnUntil_ = -1, dieAt_ = -1, reviveAt_ = -1;
 
     static double levelScale(int level) {
         const double n = level - 1;
@@ -626,6 +667,9 @@ private:
         const double baseHp = ch_.hp + ch_.hpG * g;
         maxHp_ = (baseHp + bonusHp_) * (1.0 + get(fx_, "hp_pct"));
         bonusHp_ = maxHp_ - baseHp;
+        // Health-to-AD items (Overlord's Bloodmail) and base-AD bonuses (Sterak's Gage).
+        bonusAd_ += get(fx_, "ad_per_bonus_hp") * bonusHp_ + get(fx_, "base_ad_pct") * baseAd_;
+        ad_ = baseAd_ + bonusAd_;
         bonusArmor_ = get(stats, "armor");
         armor_ = ch_.armor + ch_.armorG * g + bonusArmor_;
         bonusMr_ = get(stats, "mr");
@@ -712,7 +756,8 @@ private:
 
     // Draws everything about the fight that doesn't depend on the build.
     void setupScenario() {
-        duration_ = std::clamp(rng_.normal(sc_.fightMean, sc_.fightSd), sc_.fightMin, sc_.fightMax);
+        duration_ = sc_.untilDeath ? sc_.fightCap
+                                   : std::clamp(rng_.normal(sc_.fightMean, sc_.fightSd), sc_.fightMin, sc_.fightMax);
         for (const auto& e : sc_.enemies) totalWeight_ += e.weight;
         if (!sc_.fixedTarget) drawTeam();
         double ccRate = rng_.uniform(sc_.ccRateMin, sc_.ccRateMax);
@@ -845,6 +890,17 @@ private:
             const double now = posClock_ + dt;
             for (auto& e : enemies_)
                 if (!e.alive && now >= e.respawnAt) respawn(e, now);
+            if (dieAt_ >= 0 && now >= dieAt_) {  // the borrowed time is up
+                dieAt_ = -1;
+                posClock_ = now;
+                die(now);
+                return true;
+            }
+            if (reviveAt_ >= 0 && now >= reviveAt_) {
+                reviveAt_ = -1;
+                myHp_ = ch_.reviveFrac * maxHp_;
+                recordSelf(now, "revive");
+            }
             moveEnemies(now, dt);
             if (!inCc(posClock_) && posClock_ >= busyUntil_) moveMe(dt);
             tickAuras(now);
@@ -859,16 +915,15 @@ private:
                 exposureTime_ += dt;
             }
             posClock_ = now;
+            if (dps > 0 && now < invulnUntil_) dps = 0;
             if (dps > 0) {
                 const double lost = dps * dt;
                 if (lost >= myHp_) {
+                    const double at = now - dt + myHp_ / dps;
                     res_.damageTaken += myHp_;
-                    dead_ = true;
-                    res_.died = true;
-                    res_.timeAlive = now - dt + myHp_ / dps;
                     myHp_ = 0;
-                    recordSelf(res_.timeAlive, "death");
-                    recordPositions(res_.timeAlive, true);
+                    if (cheatDeath(at)) continue;
+                    die(at);
                     return true;
                 }
                 myHp_ -= lost;
@@ -885,8 +940,9 @@ private:
         t_ = now;
         e = spawnEnemy(e.profile);
         t_ = saved;
-        // The next enemy walks in from behind their team.
-        e.home = {me_.x + sc_.startDistance, std::clamp(moveRng_.normal(0, sc_.enemySpread), -rules_.laneHalfWidth,
+        // The next enemy steps in from just beyond its reach (the rest of its team is already
+        // in the fight, not back at the start line).
+        e.home = {me_.x + std::min(sc_.startDistance, std::max(e.reach, 550.0) + 250.0), std::clamp(moveRng_.normal(0, sc_.enemySpread), -rules_.laneHalfWidth,
                                                          rules_.laneHalfWidth)};
         e.pos = e.home;
         if (primary_ < 0 || !enemies_[static_cast<size_t>(primary_)].alive) {
@@ -1273,6 +1329,38 @@ private:
         deal(e, scale * phys, DamageType::Physical, SrcItems, true);
     }
 
+    void die(double at) {
+        dead_ = true;
+        res_.died = true;
+        res_.timeAlive = at;
+        myHp_ = 0;
+        recordSelf(at, "death");
+        recordPositions(at, true);
+    }
+
+    // Lethal damage at time `at`: true if a passive or the ultimate keeps the champion going.
+    bool cheatDeath(double at) {
+        if (deathUsed_ || (ch_.deathAct <= 0 && ch_.reviveFrac <= 0)) return false;
+        deathUsed_ = true;
+        if (ch_.deathNeedsR) {
+            size_t r = ch_.abilities.size();
+            for (size_t i = 0; i < ch_.abilities.size(); ++i)
+                if (ch_.abilities[i].slot == 'R') r = i;
+            if (r == ch_.abilities.size() || readyAt_[r] > at) return false;
+            readyAt_[r] = at + cooldownOf(ch_.abilities[r]);
+        }
+        if (!rng_.chance(ch_.deathChance)) return false;
+        if (ch_.deathAct > 0) {  // keeps fighting, then dies
+            invulnUntil_ = dieAt_ = at + ch_.deathAct;
+            myHp_ = 1;
+        } else {  // down (can't act or be hurt), then back with some Health
+            invulnUntil_ = reviveAt_ = at + ch_.reviveDelay;
+            cc_.push_back({at, at + ch_.reviveDelay});
+        }
+        recordSelf(at, "defy");
+        return true;
+    }
+
     void basicAttack() {
         Enemy* e = &P();
         ++attacks_;
@@ -1296,6 +1384,11 @@ private:
         if (hasStorm_ && ++storm_.counter >= static_cast<int>(get(*storm_.fx, "storm_every")) && e->alive) {
             storm_.counter = 0;
             deal(e, get(*storm_.fx, "storm_magic"), DamageType::Magic, SrcItems);
+        }
+        // Heartsteel: a charged attack per target, on its own per-target cooldown.
+        if (get(fx_, "heartsteel_cd") > 0 && t_ >= e->heartsteelAt && e->alive) {
+            e->heartsteelAt = t_ + get(fx_, "heartsteel_cd");
+            deal(e, get(fx_, "heartsteel_flat") + get(fx_, "heartsteel_own_hp") * maxHp_, DamageType::Physical, SrcItems);
         }
         if (hasEclipse_ && t_ >= eclipse_.readyAt && e->alive) {
             eclipse_.readyAt = t_ + get(*eclipse_.fx, "maxhp_proc_cd");
@@ -1341,6 +1434,10 @@ private:
         if (until <= auraClock_) return;
         const double dt = until - auraClock_;
         auraClock_ = until;
+        // Unending Despair: drains bonus Health from everyone in range on a short cooldown.
+        if (get(fx_, "drain_cd") > 0)
+            for (Enemy* e : near(me_, get(fx_, "drain_range")))
+                deal(e, get(fx_, "drain_bonus_hp") * bonusHp_ / get(fx_, "drain_cd") * dt, DamageType::Magic, SrcItems);
         if (auraDps_ <= 0 && auraHits_.empty()) return;
         // Auras burn whoever stands close: item auras (Sunfire) reach 325, ability
         // auras their own radius.
@@ -1457,12 +1554,18 @@ Result Fight::run() {
         advance(duration_);
         if (!dead_) res_.timeAlive = duration_;
     }
+    // A fight that lasts until you die ends when you do.
+    if (sc_.untilDeath && dead_) res_.duration = std::max(res_.timeAlive, 0.5);
     res_.exposure = exposureTime_ > 0 ? exposureSum_ / exposureTime_ : 0.0;
     if (trace_) {
         lastSelfAt_ = -1;
         recordSelf(dead_ ? res_.timeAlive : duration_);
         TraceEvent ev;
-        ev.t = duration_; ev.kind = "end";
+        // After a death that ends the fight, the replay runs on a few seconds for the enemies' dance.
+        ev.t = sc_.untilDeath && dead_ ? res_.timeAlive + kDanceTail : duration_; ev.kind = "end";
+        // Crowd control is drawn for the longest possible fight; drop what falls after the end.
+        auto& evs = trace_->events;
+        evs.erase(std::remove_if(evs.begin(), evs.end(), [&](const TraceEvent& x) { return x.t > ev.t; }), evs.end());
         record(ev);
         std::stable_sort(trace_->events.begin(), trace_->events.end(),
                          [](const TraceEvent& a, const TraceEvent& b) { return a.t < b.t; });

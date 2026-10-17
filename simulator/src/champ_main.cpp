@@ -31,7 +31,7 @@ Usage: mayhem_sim [options]
   --items a,b,...     simulate this build instead of searching for the best one
   --augs a,b,...      augments for --items
   --all               find the best build for every champion and compare with
-                      China-server damage shares
+                      real-game damage shares
   --kit NAME          show what the simulator read from a champion's abilities
   --any-items         search every item, not just ones that fit the champion
   --list              list champions, items and augments
@@ -49,7 +49,8 @@ Usage: mayhem_sim [options]
                       e.g. --set level=13,fight_mean=12,enemy_damage_scale=1.5
   --team a,b,...      fight exactly these enemy champions; change one's stats with
                       Name:hp=5000:armor=250 (hp, armor, mr, damage_share, phys_share,
-                      cc, damage_taken)
+                      cc, damage_taken); add items and augments with
+                      Name:items=warmogs+thornmail:augs=goliath (their HP, armor, MR)
   --combo EQRW        with --champ: cast order when several abilities are ready
                       (default: the champion's recommended combo, data/combos.json)
   --list --json       champions, items, augments, settings and the enemy pool as JSON
@@ -132,7 +133,7 @@ bool writeTrace(const Library& lib, const ChampionKit& c, const Build& b, const 
     o << "], \"augments\": [";
     for (size_t i = 0; i < b.augments.size(); ++i)
         o << (i ? ", " : "") << "{\"key\": " << jsonStr(b.augments[i]) << ", \"name\": "
-          << jsonStr(lib.augments.at(b.augments[i]).name) << "}";
+          << jsonStr(lib.augments.at(b.augments[i]).name) << ", \"rarity\": " << jsonStr(lib.augments.at(b.augments[i]).rarity) << "}";
     o << "]},\n \"abilities\": [";
     for (size_t i = 0; i < c.abilities.size(); ++i) {
         const Ability& a = c.abilities[i];
@@ -200,7 +201,7 @@ void printKit(const ChampionKit& c) {
     std::printf("Mayhem: damage dealt x%.2f, taken x%.2f, ability haste %+.0f, attack speed %+.1f%%\n", c.damageDealt,
                 c.damageTaken, c.mayhemAh, c.mayhemAs * 100);
     if (c.hasCn)
-        std::printf("China-server Mayhem: %.1f%% of team damage, %.1f%% of damage taken, %.1f%% win rate\n",
+        std::printf("Real Mayhem games: %.1f%% of team damage, %.1f%% of damage taken, %.1f%% win rate\n",
                     c.cnDamageShare * 100, c.cnTakenShare * 100, c.cnWinRate * 100);
     for (const auto& a : c.abilities) {
         std::printf("  %c %-28s cd %5.1fs  %s%s\n", a.slot, a.name.c_str(), a.cooldown,
@@ -355,6 +356,8 @@ int main(int argc, char** argv) {
         const std::map<std::string, double> defaults = {
             {"level", sc.level}, {"fight_mean", sc.fightMean}, {"fight_sd", sc.fightSd}, {"fight_min", sc.fightMin},
             {"fight_max", sc.fightMax}, {"engage_min", sc.engageMin}, {"engage_max", sc.engageMax},
+            {"until_death", sc.untilDeath ? 1.0 : 0.0}, {"fight_cap", sc.fightCap},
+            {"team_size", sc.teamSizeRule > 0 ? sc.teamSizeRule : 5},
             {"enemy_damage_scale", 1}, {"cc_scale", 1}, {"cc_min", sc.ccMin}, {"cc_max", sc.ccMax},
             {"start_distance", sc.startDistance}, {"enemy_spread", sc.enemySpread}, {"r_ready_chance", sc.rReadyChance},
             {"retarget_delay", sc.retargetDelay}, {"fixed_target", 0}, {"target_hp", sc.targetHp},
@@ -490,7 +493,7 @@ int main(int argc, char** argv) {
                 std::printf("\n]}\n");
             } else {
                 std::printf("%-4s %-14s %-9s %-7s %6s %8s %7s  %s\n", "#", "Champion", "Role", "Parse", "DPS",
-                            "Survives", "CN dmg", "Best build");
+                            "Survives", "Real dmg", "Best build");
                 int i = 0;
                 for (const auto& r : rows) {
                     char cn[16] = "  -";
@@ -499,7 +502,7 @@ int main(int argc, char** argv) {
                                 r.c->parseQuality.c_str(), r.best.summary.meanDps, r.best.summary.survivalRate * 100, cn,
                                 buildNames(lib, r.best.build).c_str());
                 }
-                std::printf("\nRank correlation between simulated DPS and China-server damage share "
+                std::printf("\nRank correlation between simulated DPS and real-game damage share "
                             "(champions with a good parse): %.2f over %zu champions\n",
                             rho, sim.size());
             }

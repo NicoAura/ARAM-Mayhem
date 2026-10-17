@@ -10,7 +10,7 @@ mkdir -p data/pbe viewer/replay-data/pbe
 python3 tools/build_champion_pool.py --pbe
 python3 tools/build_items.py --pbe
 python3 tools/build_augments.py --pbe
-cp data/pbe/champions.json data/pbe/items.json data/pbe/augments.json viewer/replay-data/pbe/
+python3 tools/strip_notes.py viewer/replay-data/pbe data/pbe/champions.json data/pbe/items.json data/pbe/augments.json
 # A new build time alone isn't a change: put the old files back so there's nothing to commit.
 if git diff --quiet -I '"built_at"' -- data/pbe viewer/replay-data/pbe 2>/dev/null &&
    [ -z "$(git ls-files --others --exclude-standard -- data/pbe viewer/replay-data/pbe)" ]; then

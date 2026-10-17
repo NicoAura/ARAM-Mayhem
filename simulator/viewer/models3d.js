@@ -12,7 +12,7 @@ const DATA = "replay-data/models/";
 const BUST = "?v=" + (window.REPLAY_VERSION || "0");
 const HEIGHT = 2.6;              // world units for a champion of average size
 const FALLBACK = { Q: ["attack"], W: ["attack"], E: ["attack"], R: ["attack"], crit: ["attack"],
-  stunned: ["idle"], death: ["idle"], attack: ["idle"], run: ["idle"] };
+  stunned: ["idle"], death: ["idle"], attack: ["idle"], run: ["idle"], dance: ["idle"] };
 
 // Models built next to the page (replay-data/models/) win; otherwise the website's copies in /assets/models/.
 const SITE = "/assets/models/";
