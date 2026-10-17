@@ -48,6 +48,16 @@ function show(v: Row[string], format: Column["format"]) {
   }
 }
 
+// Numbers get a colour where it means something: win rates above or below an even 50%, and changes up or down.
+function cellClass(c: Column, v: Row[string]) {
+  if (!c.format || ["text", "champion", "augment", "tier"].includes(c.format)) return "";
+  const n = Number(v);
+  if (v === null || v === "" || Number.isNaN(n)) return "num";
+  if (c.format === "pct" && /win/.test(c.key)) return n >= 0.52 ? "num wr-high" : n <= 0.48 ? "num wr-low" : "num";
+  if (/change|delta/.test(c.key)) return n > 0 ? "num delta-up" : n < 0 ? "num delta-down" : "num";
+  return "num";
+}
+
 // Champion and augment icons come from the League client (web/scripts/fetch_icons.py).
 function Named({ src, name }: { src: string; name: string }) {
   const [broken, setBroken] = useState(false);
@@ -169,7 +179,7 @@ export default function DataTable({
               <tr key={i}>
                 <td className="num muted-cell">{i + 1}</td>
                 {columns.map((c) => (
-                  <td key={c.key} className={c.format && !["text", "champion", "augment", "tier"].includes(c.format) ? "num" : ""}>
+                  <td key={c.key} className={cellClass(c, r[c.key])}>
                     {c.format === "champion" ? (
                       <Champion id={String(r[c.key])} onOpen={setPanel} />
                     ) : c.format === "augment" ? (
