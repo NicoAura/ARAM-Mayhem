@@ -212,5 +212,14 @@
  "Your Mayhem games, in one place.": "เกม ARAM: Mayhem ของคุณ รวมไว้ในที่เดียว",
  "Import your games with the button below. You need to be connected to the Riot Client: open it on this computer and sign in first. Your games stay on your computer.": "นำเข้าเกมของคุณด้วยปุ่มด้านล่าง คุณต้องเชื่อมต่อกับ Riot Client: เปิดบนคอมพิวเตอร์เครื่องนี้และเข้าสู่ระบบก่อน เกมของคุณจะอยู่บนคอมพิวเตอร์ของคุณเท่านั้น",
  "Sign in above to see your Mayhem games here: win rate, champions, augments and recent matches.": "ลงชื่อเข้าใช้ด้านบนเพื่อดูเกม Mayhem ของคุณที่นี่: อัตราชนะ แชมเปี้ยน Augment และแมตช์ล่าสุด",
- "Champions you own": "แชมเปี้ยนที่คุณมี"
+ "Champions you own": "แชมเปี้ยนที่คุณมี",
+ "Save games to my account": "บันทึกเกมลงในบัญชีของฉัน",
+ "Off unless you turn it on. When on, each import also saves your games to your deeparam.com account, so My Stats on your account page shows them on any device. Only you can see them. Turning it off removes them from your account.": "ปิดอยู่จนกว่าคุณจะเปิด เมื่อเปิด ทุกครั้งที่นำเข้าจะบันทึกเกมของคุณลงในบัญชี deeparam.com ของคุณด้วย เพื่อให้สถิติของฉันในหน้าบัญชีของคุณแสดงเกมเหล่านั้นบนอุปกรณ์ใดก็ได้ มีเพียงคุณเท่านั้นที่เห็นได้ การปิดจะลบเกมเหล่านั้นออกจากบัญชีของคุณ",
+ "Save my games to my account": "บันทึกเกมของฉันลงในบัญชีของฉัน",
+ "{n} games saved": "บันทึกแล้ว {n} เกม",
+ "Stop saving and remove the games saved to your account?": "หยุดบันทึกและลบเกมที่บันทึกไว้ในบัญชีของคุณหรือไม่?",
+ "Saving your games…": "กำลังบันทึกเกมของคุณ…",
+ "Removing your saved games…": "กำลังลบเกมที่คุณบันทึกไว้…",
+ "Saving is on. New games are saved after each import.": "เปิดการบันทึกแล้ว เกมใหม่จะถูกบันทึกหลังการนำเข้าแต่ละครั้ง",
+ "Saving is off and your saved games were removed.": "ปิดการบันทึกแล้ว และลบเกมที่คุณบันทึกไว้แล้ว"
 }

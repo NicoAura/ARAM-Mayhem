@@ -212,5 +212,14 @@
  "Your Mayhem games, in one place.": "Ваши игры в ARAM: Хаос в одном месте.",
  "Import your games with the button below. You need to be connected to the Riot Client: open it on this computer and sign in first. Your games stay on your computer.": "Импортируйте игры кнопкой ниже. Нужно подключение к клиенту Riot: сначала откройте его на этом компьютере и войдите в аккаунт. Ваши игры остаются на вашем компьютере.",
  "Sign in above to see your Mayhem games here: win rate, champions, augments and recent matches.": "Войдите выше, чтобы увидеть здесь свои игры в режиме «Хаос»: процент побед, чемпионов, аугменты и последние матчи.",
- "Champions you own": "Ваши чемпионы"
+ "Champions you own": "Ваши чемпионы",
+ "Save games to my account": "Сохранять игры в моём аккаунте",
+ "Off unless you turn it on. When on, each import also saves your games to your deeparam.com account, so My Stats on your account page shows them on any device. Only you can see them. Turning it off removes them from your account.": "Выключено, пока вы не включите. Когда включено, при каждом импорте ваши игры также сохраняются в вашем аккаунте deeparam.com, и раздел «Моя статистика» на странице аккаунта показывает их на любом устройстве. Видите их только вы. Если выключить, они будут удалены из аккаунта.",
+ "Save my games to my account": "Сохранять мои игры в моём аккаунте",
+ "{n} games saved": "Сохранено игр: {n}",
+ "Stop saving and remove the games saved to your account?": "Прекратить сохранение и удалить игры, сохранённые в аккаунте?",
+ "Saving your games…": "Сохранение игр…",
+ "Removing your saved games…": "Удаление сохранённых игр…",
+ "Saving is on. New games are saved after each import.": "Сохранение включено. Новые игры сохраняются после каждого импорта.",
+ "Saving is off and your saved games were removed.": "Сохранение выключено, сохранённые игры удалены."
 }

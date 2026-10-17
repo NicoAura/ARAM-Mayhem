@@ -212,5 +212,14 @@
  "Your Mayhem games, in one place.": "Tvoje hry v ARAM: Mela na jednom místě.",
  "Import your games with the button below. You need to be connected to the Riot Client: open it on this computer and sign in first. Your games stay on your computer.": "Importuj své hry tlačítkem níže. Musíš být připojen k Riot Clientu: nejdřív ho na tomto počítači otevři a přihlas se. Tvoje hry zůstanou v tvém počítači.",
  "Sign in above to see your Mayhem games here: win rate, champions, augments and recent matches.": "Přihlas se výše a uvidíš tu své zápasy v režimu Mela: procento výher, šampiony, augmenty a nedávné zápasy.",
- "Champions you own": "Šampioni, které vlastníš"
+ "Champions you own": "Šampioni, které vlastníš",
+ "Save games to my account": "Ukládat hry do mého účtu",
+ "Off unless you turn it on. When on, each import also saves your games to your deeparam.com account, so My Stats on your account page shows them on any device. Only you can see them. Turning it off removes them from your account.": "Vypnuto, dokud to nezapneš. Když je to zapnuté, každý import uloží tvoje hry také do tvého účtu na deeparam.com, takže je Moje statistiky na stránce účtu zobrazí na jakémkoli zařízení. Vidíš je jen ty. Vypnutím se z účtu odstraní.",
+ "Save my games to my account": "Ukládat moje hry do mého účtu",
+ "{n} games saved": "Uložené hry: {n}",
+ "Stop saving and remove the games saved to your account?": "Přestat ukládat a odstranit hry uložené v tvém účtu?",
+ "Saving your games…": "Ukládám tvoje hry…",
+ "Removing your saved games…": "Odstraňuji tvoje uložené hry…",
+ "Saving is on. New games are saved after each import.": "Ukládání je zapnuté. Nové hry se ukládají po každém importu.",
+ "Saving is off and your saved games were removed.": "Ukládání je vypnuté a tvoje uložené hry byly odstraněny."
 }

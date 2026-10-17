@@ -212,5 +212,14 @@
  "Your Mayhem games, in one place.": "내 아수라장 게임을 한곳에서.",
  "Import your games with the button below. You need to be connected to the Riot Client: open it on this computer and sign in first. Your games stay on your computer.": "아래 버튼으로 게임을 가져오세요. 라이엇 클라이언트에 연결되어 있어야 합니다. 먼저 이 컴퓨터에서 클라이언트를 열고 로그인하세요. 게임 기록은 내 컴퓨터에만 저장됩니다.",
  "Sign in above to see your Mayhem games here: win rate, champions, augments and recent matches.": "위에서 로그인하면 여기에서 아수라장 게임을 볼 수 있습니다: 승률, 챔피언, 증강, 최근 게임.",
- "Champions you own": "보유한 챔피언"
+ "Champions you own": "보유한 챔피언",
+ "Save games to my account": "내 계정에 게임 저장",
+ "Off unless you turn it on. When on, each import also saves your games to your deeparam.com account, so My Stats on your account page shows them on any device. Only you can see them. Turning it off removes them from your account.": "직접 켜기 전까지는 꺼져 있습니다. 켜면 가져올 때마다 게임이 deeparam.com 계정에도 저장되어, 어느 기기에서든 계정 페이지의 내 전적에서 볼 수 있습니다. 나만 볼 수 있습니다. 끄면 계정에서 삭제됩니다.",
+ "Save my games to my account": "내 게임을 내 계정에 저장",
+ "{n} games saved": "{n}게임 저장됨",
+ "Stop saving and remove the games saved to your account?": "저장을 중단하고 계정에 저장된 게임을 삭제할까요?",
+ "Saving your games…": "게임 저장 중…",
+ "Removing your saved games…": "저장한 게임 삭제 중…",
+ "Saving is on. New games are saved after each import.": "저장이 켜져 있습니다. 새 게임은 가져올 때마다 저장됩니다.",
+ "Saving is off and your saved games were removed.": "저장이 꺼졌고 저장한 게임이 삭제되었습니다."
 }

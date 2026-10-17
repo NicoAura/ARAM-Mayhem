@@ -212,5 +212,14 @@
  "Your Mayhem games, in one place.": "Các trận ARAM: Hỗn Loạn của bạn, ở cùng một nơi.",
  "Import your games with the button below. You need to be connected to the Riot Client: open it on this computer and sign in first. Your games stay on your computer.": "Nhập trận của bạn bằng nút bên dưới. Bạn cần kết nối với Riot Client: hãy mở nó trên máy tính này và đăng nhập trước. Trận của bạn được lưu trên máy tính của bạn.",
  "Sign in above to see your Mayhem games here: win rate, champions, augments and recent matches.": "Đăng nhập ở trên để xem các trận Hỗn Loạn của bạn tại đây: tỉ lệ thắng, tướng, lõi nâng cấp và các trận gần đây.",
- "Champions you own": "Tướng bạn sở hữu"
+ "Champions you own": "Tướng bạn sở hữu",
+ "Save games to my account": "Lưu trận vào tài khoản của tôi",
+ "Off unless you turn it on. When on, each import also saves your games to your deeparam.com account, so My Stats on your account page shows them on any device. Only you can see them. Turning it off removes them from your account.": "Tắt trừ khi bạn bật. Khi bật, mỗi lần nhập cũng lưu trận của bạn vào tài khoản deeparam.com của bạn, để Thống kê của tôi trên trang tài khoản hiển thị chúng trên mọi thiết bị. Chỉ bạn mới xem được. Tắt đi sẽ xóa chúng khỏi tài khoản của bạn.",
+ "Save my games to my account": "Lưu trận của tôi vào tài khoản của tôi",
+ "{n} games saved": "Đã lưu {n} trận",
+ "Stop saving and remove the games saved to your account?": "Dừng lưu và xóa các trận đã lưu vào tài khoản của bạn?",
+ "Saving your games…": "Đang lưu trận của bạn…",
+ "Removing your saved games…": "Đang xóa các trận bạn đã lưu…",
+ "Saving is on. New games are saved after each import.": "Đã bật lưu. Trận mới sẽ được lưu sau mỗi lần nhập.",
+ "Saving is off and your saved games were removed.": "Đã tắt lưu và các trận bạn đã lưu đã được xóa."
 }

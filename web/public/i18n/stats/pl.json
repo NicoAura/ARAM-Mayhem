@@ -212,5 +212,14 @@
  "Your Mayhem games, in one place.": "Twoje gry w ARAM: Chaos w jednym miejscu.",
  "Import your games with the button below. You need to be connected to the Riot Client: open it on this computer and sign in first. Your games stay on your computer.": "Zaimportuj swoje gry przyciskiem poniżej. Musisz być połączony z Klientem Riot: najpierw otwórz go na tym komputerze i zaloguj się. Twoje gry pozostają na twoim komputerze.",
  "Sign in above to see your Mayhem games here: win rate, champions, augments and recent matches.": "Zaloguj się powyżej, aby zobaczyć tu swoje gry w Chaosie: współczynnik zwycięstw, bohaterów, ulepszenia i ostatnie mecze.",
- "Champions you own": "Posiadani bohaterowie"
+ "Champions you own": "Posiadani bohaterowie",
+ "Save games to my account": "Zapisuj gry na moim koncie",
+ "Off unless you turn it on. When on, each import also saves your games to your deeparam.com account, so My Stats on your account page shows them on any device. Only you can see them. Turning it off removes them from your account.": "Wyłączone, dopóki tego nie włączysz. Po włączeniu każdy import zapisuje też twoje gry na twoim koncie deeparam.com, więc Moje statystyki na stronie konta pokażą je na każdym urządzeniu. Tylko ty je widzisz. Wyłączenie usuwa je z twojego konta.",
+ "Save my games to my account": "Zapisuj moje gry na moim koncie",
+ "{n} games saved": "Zapisane gry: {n}",
+ "Stop saving and remove the games saved to your account?": "Przestać zapisywać i usunąć gry zapisane na twoim koncie?",
+ "Saving your games…": "Zapisywanie gier…",
+ "Removing your saved games…": "Usuwanie zapisanych gier…",
+ "Saving is on. New games are saved after each import.": "Zapisywanie jest włączone. Nowe gry są zapisywane po każdym imporcie.",
+ "Saving is off and your saved games were removed.": "Zapisywanie jest wyłączone, a zapisane gry zostały usunięte."
 }

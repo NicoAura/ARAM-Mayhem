@@ -656,6 +656,93 @@ def set_sharing(enabled, out, lockfile=None):
     return {"enabled": False, "shared": reply.get("shared", 0)}
 
 
+# ---------- saving games to the owner's account ----------
+# Off unless turned on in My Stats, and only the site owner's account can use it: the site checks that this
+# Riot account is connected to the owner account. Each game keeps this player's own stats and only the
+# champion and team of everyone else, with no names or account ids but the player's own Riot ID.
+
+HISTORY_FILE = os.path.expanduser("~/Library/Application Support/Mayhem Stats/history.json")
+HISTORY_BATCH = 100
+HISTORY_STATS = ("win", "kills", "deaths", "assists", "totalDamageDealtToChampions", "totalDamageTaken", "totalHeal",
+                 "largestKillingSpree", "pentaKills", "quadraKills",
+                 *(f"playerAugment{i}" for i in range(1, 7)), *(f"item{i}" for i in range(7)))
+
+
+def history_settings():
+    try:
+        with open(HISTORY_FILE) as f:
+            s = json.load(f)
+        return {"enabled": bool(s.get("enabled")), "saved": list(s.get("saved") or [])}
+    except (OSError, ValueError):
+        return {"enabled": False, "saved": []}
+
+
+def save_history_settings(settings):
+    os.makedirs(os.path.dirname(HISTORY_FILE), exist_ok=True)
+    with open(HISTORY_FILE, "w") as f:
+        json.dump(settings, f)
+
+
+def private_game(game, owner):
+    """The game as the owner's account keeps it; None if the owner isn't in it."""
+    ids = {pi.get("participantId"): (pi.get("player") or {}) for pi in game.get("participantIdentities") or []}
+    participants, mine = [], False
+    for p in game.get("participants") or []:
+        row = {"participantId": p.get("participantId"), "teamId": p.get("teamId"), "championId": p.get("championId")}
+        player = ids.get(p.get("participantId")) or {}
+        if player.get("puuid") == owner:
+            mine = True
+            s = p.get("stats") or {}
+            row.update(puuid="me", championName=p.get("championName"), riotIdGameName=player.get("gameName"),
+                       riotIdTagline=player.get("tagLine"), stats={k: s.get(k) for k in HISTORY_STATS})
+        participants.append(row)
+    if not mine or not game.get("gameId"):
+        return None
+    out = {k: game.get(k) for k in ("gameId", "gameCreation", "gameDuration", "queueId", "gameVersion")}
+    out["participants"] = participants
+    if isinstance(game.get("killMap"), list):
+        out["killMap"] = game["killMap"]
+    return out
+
+
+def save_new_history(out, lockfile=None, progress=log):
+    """Sends games not saved to the account yet. Returns how many the account holds, or None when off."""
+    settings = history_settings()
+    if not settings["enabled"]:
+        return None
+    container, games = load_archive(out)
+    owner = archive_owner(container, games)
+    done = set(settings["saved"])
+    todo = [g for g in games if str(g.get("gameId")) not in done]
+    lcu = find_client(lockfile)
+    total = None
+    for i in range(0, len(todo), HISTORY_BATCH):
+        batch = todo[i:i + HISTORY_BATCH]
+        clean = [x for x in (private_game(g, owner) for g in batch) if x]
+        total = site_post(lcu, "/api/history", {"action": "save", "games": clean}).get("saved")
+        done.update(str(g.get("gameId")) for g in batch)
+        settings["saved"] = sorted(done)
+        save_history_settings(settings)
+        progress(f"Saved {min(i + HISTORY_BATCH, len(todo))} of {len(todo)} games to your account.")
+    if total is None:
+        total = site_post(lcu, "/api/history", {"action": "status"}).get("saved")
+    return total
+
+
+def set_history(enabled, out, lockfile=None):
+    if enabled:
+        save_history_settings({**history_settings(), "enabled": True})
+        return {"enabled": True, "available": True, "saved": save_new_history(out, lockfile)}
+    reply = site_post(find_client(lockfile), "/api/history", {"action": "remove"})
+    save_history_settings({"enabled": False, "saved": []})
+    return {"enabled": False, "available": True, "saved": reply.get("saved", 0)}
+
+
+def history_status(lockfile=None):
+    reply = site_post(find_client(lockfile), "/api/history", {"action": "status"})
+    return {"enabled": history_settings()["enabled"], "available": bool(reply.get("available")), "saved": reply.get("saved", 0)}
+
+
 # ---------- live game recording (Live Client Data API) ----------
 # League serves the game in progress on 127.0.0.1:2999 while a match runs. The
 # helper polls it and saves one file per game under LIVE_DIR. Record only: it
@@ -868,6 +955,12 @@ def serve(out, port, lockfile=None, sgp_host=None, open_browser=True, record_liv
                     result["shared"] = shared
             except (ImportFailed, HttpError, ConnectionError) as e:
                 result["notes"] = result.get("notes", []) + [f"Sharing will retry next import: {e}"]
+            try:
+                saved = save_new_history(out, lockfile, progress)
+                if saved is not None:
+                    result["saved"] = saved
+            except (ImportFailed, HttpError, ConnectionError) as e:
+                result["notes"] = result.get("notes", []) + [f"Saving to your account will retry next import: {e}"]
             with lock:
                 state["result"] = result
         except (ImportFailed, HttpError, ConnectionError) as e:
@@ -942,6 +1035,16 @@ def serve(out, port, lockfile=None, sgp_host=None, open_browser=True, record_liv
                         return self.send_json(set_sharing(bool(req["enabled"]), out, lockfile))
                     return self.send_json({"enabled": sharing_settings()["enabled"],
                                            "shared": len(sharing_settings()["shared"])})
+                except ImportFailed as e:
+                    return self.send_json({"error": str(e)}, 502)
+                except Exception:
+                    return self.send_json({"error": "Couldn't reach the League client. Open it, sign in, and try again."}, 502)
+            if path == "/api/history":
+                try:
+                    req = json.loads(self.rfile.read(min(int(self.headers.get("Content-Length") or 0), 4000)) or b"{}")
+                    if "enabled" in req:
+                        return self.send_json(set_history(bool(req["enabled"]), out, lockfile))
+                    return self.send_json(history_status(lockfile))
                 except ImportFailed as e:
                     return self.send_json({"error": str(e)}, 502)
                 except Exception:

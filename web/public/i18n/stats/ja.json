@@ -212,5 +212,14 @@
  "Your Mayhem games, in one place.": "メイヘムの試合を、ひとつの場所に。",
  "Import your games with the button below. You need to be connected to the Riot Client: open it on this computer and sign in first. Your games stay on your computer.": "下のボタンで試合をインポートしましょう。Riotクライアントへの接続が必要です。先にこのコンピューターでRiotクライアントを開いてログインしてください。試合データはお使いのコンピューターに保存されます。",
  "Sign in above to see your Mayhem games here: win rate, champions, augments and recent matches.": "上でサインインすると、ここにメイヘムの試合が表示されます：勝率、チャンピオン、オーグメント、最近の試合。",
- "Champions you own": "所持チャンピオン"
+ "Champions you own": "所持チャンピオン",
+ "Save games to my account": "試合をアカウントに保存",
+ "Off unless you turn it on. When on, each import also saves your games to your deeparam.com account, so My Stats on your account page shows them on any device. Only you can see them. Turning it off removes them from your account.": "オンにしない限りオフです。オンにすると、インポートのたびに試合がdeeparam.comのアカウントにも保存され、アカウントページの「マイ戦績」でどのデバイスからでも確認できます。見られるのはあなただけです。オフにするとアカウントから削除されます。",
+ "Save my games to my account": "自分の試合をアカウントに保存",
+ "{n} games saved": "{n}試合を保存済み",
+ "Stop saving and remove the games saved to your account?": "保存を停止して、アカウントに保存した試合を削除しますか?",
+ "Saving your games…": "試合を保存中…",
+ "Removing your saved games…": "保存した試合を削除中…",
+ "Saving is on. New games are saved after each import.": "保存はオンです。新しい試合はインポートのたびに保存されます。",
+ "Saving is off and your saved games were removed.": "保存をオフにし、保存した試合を削除しました。"
 }

@@ -212,5 +212,14 @@
  "Your Mayhem games, in one place.": "Τα παιχνίδια σου στο ARAM: Χαμός, σε ένα μέρος.",
  "Import your games with the button below. You need to be connected to the Riot Client: open it on this computer and sign in first. Your games stay on your computer.": "Εισήγαγε τα παιχνίδια σου με το παρακάτω κουμπί. Πρέπει να είσαι συνδεδεμένος στο Riot Client: άνοιξέ το σε αυτόν τον υπολογιστή και συνδέσου πρώτα. Τα παιχνίδια σου μένουν στον υπολογιστή σου.",
  "Sign in above to see your Mayhem games here: win rate, champions, augments and recent matches.": "Συνδέσου παραπάνω για να δεις εδώ τα παιχνίδια σου στο Χαμό: ποσοστό νικών, πρωταθλητές, ενισχύσεις και πρόσφατους αγώνες.",
- "Champions you own": "Πρωταθλητές που έχεις"
+ "Champions you own": "Πρωταθλητές που έχεις",
+ "Save games to my account": "Αποθήκευση παιχνιδιών στον λογαριασμό μου",
+ "Off unless you turn it on. When on, each import also saves your games to your deeparam.com account, so My Stats on your account page shows them on any device. Only you can see them. Turning it off removes them from your account.": "Απενεργοποιημένο, εκτός αν το ενεργοποιήσεις. Όταν είναι ενεργό, κάθε εισαγωγή αποθηκεύει επίσης τα παιχνίδια σου στον λογαριασμό σου στο deeparam.com, ώστε τα Στατιστικά μου στη σελίδα του λογαριασμού σου να τα δείχνουν σε οποιαδήποτε συσκευή. Μόνο εσύ μπορείς να τα δεις. Αν το απενεργοποιήσεις, αφαιρούνται από τον λογαριασμό σου.",
+ "Save my games to my account": "Αποθήκευση των παιχνιδιών μου στον λογαριασμό μου",
+ "{n} games saved": "{n} αποθηκευμένα παιχνίδια",
+ "Stop saving and remove the games saved to your account?": "Διακοπή αποθήκευσης και αφαίρεση των παιχνιδιών που έχουν αποθηκευτεί στον λογαριασμό σου;",
+ "Saving your games…": "Αποθήκευση των παιχνιδιών σου…",
+ "Removing your saved games…": "Αφαίρεση των αποθηκευμένων παιχνιδιών σου…",
+ "Saving is on. New games are saved after each import.": "Η αποθήκευση είναι ενεργή. Τα νέα παιχνίδια αποθηκεύονται μετά από κάθε εισαγωγή.",
+ "Saving is off and your saved games were removed.": "Η αποθήκευση είναι ανενεργή και τα αποθηκευμένα παιχνίδια σου αφαιρέθηκαν."
 }
