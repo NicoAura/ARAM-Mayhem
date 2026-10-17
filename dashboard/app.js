@@ -10,6 +10,7 @@ const state = {
   augRarity: {},    // augmentId -> kSilver | kGold | kPrismatic
   owner: null,
   sample: false,
+  boots: new Set(), // item ids that count as boots
 };
 
 // A page can ship name tables and an example archive ahead of time.
@@ -48,7 +49,7 @@ async function loadText(text, { sample = false } = {}) {
   $("sample-note").hidden = !sample;
   setupFilters();
   render();
-  loadNames().then(render);
+  Promise.all([loadNames(), loadItems()]).then(render);
 }
 
 function findGames(data) {
@@ -122,10 +123,18 @@ function normalize(g, owner) {
     spree: s.largestKillingSpree || 0,
     heal: s.totalHeal || 0,
     taken: s.totalDamageTaken || 0,
+    items: [0, 1, 2, 3, 4, 5, 6].map((i) => s["item" + i]).filter((x) => x > 0),
   };
 }
 
 // Champion and augment names; if unavailable the page falls back to ids.
+async function loadItems() {
+  try {
+    const items = await (await fetch("/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/items.json")).json();
+    for (const it of items) if ((it.categories || []).includes("Boots") && !(it.id >= 550000 && it.id < 560000)) state.boots.add(it.id);
+  } catch (e) { console.warn("item data unavailable", e); }
+}
+
 async function loadNames() {
   try {
     const champs = await (await fetch("/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-summary.json")).json();
@@ -175,7 +184,7 @@ function setupFilters() {
   $("account").textContent = `${name ? name + " · " : ""}${state.games.length} games, ${fmtDate(first)} to ${fmtDate(last)}`;
   if (filtersReady) return;
   filtersReady = true;
-  for (const id of ["f-patch", "f-queue", "f-from", "f-to", "f-champ", "f-minaug"]) $(id).addEventListener("input", render);
+  for (const id of ["f-patch", "f-queue", "f-from", "f-to", "f-champ", "f-minaug", "f-minpair"]) $(id).addEventListener("input", render);
   $("f-reset").addEventListener("click", () => {
     for (const id of ["f-queue", "f-from", "f-to", "f-champ"]) $(id).value = "";
     $("f-patch").value = latestPatch;
@@ -209,6 +218,11 @@ function render() {
   renderKillMap(games);
   renderChamps(games);
   renderAugs(games);
+  renderLength(games);
+  renderBoots(games);
+  renderRecords(state.games);
+  renderCurve(state.games);
+  renderPairs(games);
   renderGames(games);
 }
 
@@ -485,6 +499,115 @@ function renderAugs(games) {
     { label: "Picks", get: (r) => r.n },
     { label: "Pick rate", get: (r) => r.n / total, fmt: (r) => pct(r.n / total) },
     { label: "Win rate", get: (r) => r.w / r.n, fmt: (r) => pct(r.w / r.n), cls: (r) => wrClass(r.w / r.n) },
+  ], rows, 2);
+}
+
+// ---------- game length, boots, records, learning curve, augment pairs ----------
+
+const mmss = (sec) => `${Math.floor(sec / 60)}:${String(Math.round(sec % 60)).padStart(2, "0")}`;
+
+// Rows of {label, n, w} drawn as win-rate bars; the dashed line marks 50%.
+function wrBars(id, rows) {
+  const shown = rows.filter((r) => r.n);
+  $(id).innerHTML = shown.length ? shown.map((r) => {
+    const rate = r.w / r.n;
+    return `<div class="wrbar"><span class="wb-label">${esc(r.label)}</span>
+      <span class="wb-track"><span class="wb-fill ${wrClass(rate)}" style="width:${(rate * 100).toFixed(1)}%"></span></span>
+      <span class="wb-v ${wrClass(rate)}">${pct(rate)}</span><span class="wb-n">${r.n.toLocaleString()}</span></div>`;
+  }).join("") : `<p class="foot">No games in this view.</p>`;
+}
+
+const LENGTHS = [[0, 900, "Under 15 min"], [900, 1080, "15–18 min"], [1080, 1260, "18–21 min"], [1260, 1440, "21–24 min"], [1440, 1e9, "24 min or more"]];
+
+function renderLength(games) {
+  const timed = games.filter((g) => g.duration > 0);
+  $("n-length").textContent = timed.length ? `Average ${mmss(sum(timed, (g) => g.duration) / timed.length)}` : "";
+  wrBars("wr-length", LENGTHS.map(([lo, hi, label]) => {
+    const G = timed.filter((g) => g.duration >= lo && g.duration < hi);
+    return { label, n: G.length, w: count(G, (g) => g.win) };
+  }));
+}
+
+function renderBoots(games) {
+  if (!state.boots.size) return wrBars("wr-boots", []);
+  const G = games.filter((g) => g.items && g.items.length);
+  const has = (g) => g.items.some((i) => state.boots.has(i));
+  wrBars("wr-boots", [
+    { label: "With boots", n: count(G, has), w: count(G, (g) => g.win && has(g)) },
+    { label: "No boots", n: count(G, (g) => !has(g)), w: count(G, (g) => g.win && !has(g)) },
+  ]);
+}
+
+const RECORDS = [
+  ["Most kills", (g) => g.kills, (v) => v],
+  ["Most assists", (g) => g.assists, (v) => v],
+  ["Most deaths", (g) => g.deaths, (v) => v],
+  ["Most damage", (g) => g.damage, (v) => v.toLocaleString()],
+  ["Most damage taken", (g) => g.taken, (v) => v.toLocaleString()],
+  ["Most healing", (g) => g.heal, (v) => v.toLocaleString()],
+  ["Longest killing spree", (g) => g.spree, (v) => v],
+  ["Best KDA", (g) => (g.kills + g.assists) / Math.max(1, g.deaths), (v) => v.toFixed(2)],
+  ["Longest game", (g) => g.duration, mmss],
+  ["Fastest win", (g) => (g.win && g.duration > 0 ? -g.duration : -Infinity), (v) => mmss(-v)],
+];
+
+function renderRecords(G) {
+  $("records").innerHTML = RECORDS.map(([label, f, fmt]) => {
+    let best = null, bv = -Infinity;
+    for (const g of G) { const v = f(g); if (v > bv) { bv = v; best = g; } }
+    if (!best || !Number.isFinite(bv) || bv <= 0 && !label.startsWith("Fastest")) return "";
+    return `<div class="record"><div class="r-v">${fmt(bv)}</div><div class="r-label">${label}</div>
+      <div class="r-sub">${esc(champName(best))} · ${fmtDate(new Date(best.time))}</div></div>`;
+  }).join("");
+}
+
+const CURVE = [[1, 5, "Games 1–5"], [6, 10, "6–10"], [11, 20, "11–20"], [21, 1e9, "21+"]];
+
+function renderCurve(G) {
+  const byChamp = new Map();
+  for (const g of [...G].sort((a, b) => a.time - b.time)) {
+    const list = byChamp.get(g.champId) || [];
+    list.push(g);
+    byChamp.set(g.champId, list);
+  }
+  const rows = [...byChamp.values()].filter((l) => l.length >= 10).map((l) => {
+    const r = { sample: l[0], n: l.length, b: CURVE.map(([lo, hi]) => l.slice(lo - 1, hi)) };
+    const first = r.b[0], last = r.b.filter((x) => x.length).at(-1);
+    r.change = count(last, (g) => g.win) / last.length - count(first, (g) => g.win) / first.length;
+    return r;
+  });
+  const cell = (i) => ({
+    label: CURVE[i][2], get: (r) => (r.b[i].length ? count(r.b[i], (g) => g.win) / r.b[i].length : -1),
+    fmt: (r) => (r.b[i].length ? pct(count(r.b[i], (g) => g.win) / r.b[i].length) : "–"),
+    cls: (r) => (r.b[i].length >= 3 ? wrClass(count(r.b[i], (g) => g.win) / r.b[i].length) : ""),
+  });
+  table("t-curve", [
+    { label: "Champion", get: (r) => champName(r.sample), fmt: (r) => esc(champName(r.sample)) },
+    { label: "Matches", get: (r) => r.n },
+    cell(0), cell(1), cell(2), cell(3),
+    { label: "Change", get: (r) => r.change, fmt: (r) => `${r.change > 0 ? "+" : ""}${(r.change * 100).toFixed(1)}`,
+      cls: (r) => (r.change > 0 ? "delta-up" : r.change < 0 ? "delta-down" : "") },
+  ], rows, 1);
+}
+
+function renderPairs(games) {
+  const min = +$("f-minpair").value || 1;
+  const map = new Map();
+  for (const g of games) {
+    const a = [...new Set(g.augs)].sort((x, y) => x - y);
+    for (let i = 0; i < a.length; i++) for (let j = i + 1; j < a.length; j++) {
+      const k = a[i] + "-" + a[j];
+      const r = map.get(k) || { a: a[i], b: a[j], n: 0, w: 0 };
+      r.n++; r.w += g.win ? 1 : 0;
+      map.set(k, r);
+    }
+  }
+  // The 100 best pairs; ties go to the pair seen in more games
+  const rows = [...map.values()].filter((r) => r.n >= min).sort((x, y) => y.w / y.n - x.w / x.n || y.n - x.n).slice(0, 100);
+  table("t-pairs", [
+    { label: "Augments", get: (r) => augName(r.a) + augName(r.b), fmt: (r) => `${esc(augName(r.a))} + ${esc(augName(r.b))}` },
+    { label: "Games", get: (r) => r.n },
+    { label: "Win rate", get: (r) => r.w / r.n + r.n / 1e6, fmt: (r) => pct(r.w / r.n), cls: (r) => wrClass(r.w / r.n) },
   ], rows, 2);
 }
 
