@@ -149,7 +149,7 @@ int main(int argc, char** argv) {
         const double hpPct = wm.effects.count("hp_pct") ? wm.effects.at("hp_pct") : 0.0;
         const Scenario gsc = geared.scenarioFor(*ahri);
         CHECK(gsc.enemies.size() == 1 &&
-                  std::abs(gsc.enemies[0].hp - (malph.hp + malph.hpG * g + wm.stats.at("hp")) * (1 + hpPct)) < 1e-6,
+                  std::abs(gsc.enemies[0].hp - (malph.hp + malph.hpG * g + lib.rules.mayhemHp(18, malph.ranged) + wm.stats.at("hp")) * (1 + hpPct)) < 1e-6,
               "an enemy's listed items replace its build");
         geared.enemyTeam = {"Malphite:hp=4000:items=warmogs"};
         CHECK(geared.scenarioFor(*ahri).enemies[0].hp == 4000, "a listed Health replaces what the build gives");

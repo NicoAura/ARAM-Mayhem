@@ -93,6 +93,7 @@ struct Scenario {
     // All-champion sim: fight until the champion dies (fightCap seconds at most) instead of
     // for a drawn fight length, and how many enemies a fight has (0 = the enemy pool's size).
     bool untilDeath = false;
+    bool onFire = false;  // Mayhem's On Fire! buff on your champion
     double fightCap = 90, deathDamageScale = 1;
     int teamSizeRule = 0;
     int enemyLevel = 18;  // all-champion sim: the enemies' level

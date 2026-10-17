@@ -3,7 +3,7 @@
   "built_at": "2026-10-17T07:23:46+00:00",
   "game_version": "16.20",
   "cdragon": "latest",
-  "mayhem_balance_patch": "26.19",
+  "mayhem_balance_patch": "wiki revision 4078384",
   "level": 18,
   "ranks": {
    "Q": 5,
@@ -14,7 +14,7 @@
   "notes": [
    "Ability damage is parsed from Riot's game data (CommunityDragon) and tooltips: every number tagged as magic, physical or true damage, evaluated at level 18 with max ranks. scaling keys: const, ap, bonus_ad, bonus_hp, bonus_armor, bonus_mr, as (bonus attack speed), crit, lethality.",
    "target is flat or a fraction of the target's max/current/missing health. alt marks numbers that look like alternatives (empowered, maximum, recast) rather than extra hits.",
-   "mayhem holds the server-side ARAM Mayhem modifiers (damage dealt/taken, ability haste, attack speed) from aramnerfs.com; ability values and cooldowns use Riot's own ARAM/Kiwi overrides from each bin.",
+   "mayhem holds the server-side ARAM Mayhem modifiers (damage dealt/taken, healing, shielding, tenacity, ability haste, attack speed) from the official League wiki; ability values and cooldowns use Riot's own ARAM/Kiwi overrides from each bin.",
    "cn holds 101.qq.com China-server Mayhem stats: damage_share is the average share of the team's damage."
   ]
  },
@@ -49,7 +49,10 @@
     "damage_dealt": 1.05,
     "damage_taken": 1.0,
     "ability_haste": 0.0,
-    "attack_speed": 0.0
+    "attack_speed": 0.0,
+    "healing": 1.0,
+    "shielding": 1.0,
+    "tenacity": 0.0
    },
    "resource": {
     "kind": "none"
@@ -261,7 +264,10 @@
     "damage_dealt": 1.0,
     "damage_taken": 1.0,
     "ability_haste": 0.0,
-    "attack_speed": 0.0
+    "attack_speed": 0.0,
+    "healing": 1.0,
+    "shielding": 1.0,
+    "tenacity": 0.0
    },
    "resource": {
     "kind": "mana",
@@ -484,7 +490,10 @@
     "damage_dealt": 1.0,
     "damage_taken": 0.95,
     "ability_haste": 0.0,
-    "attack_speed": 0.0
+    "attack_speed": 0.0,
+    "healing": 1.0,
+    "shielding": 1.0,
+    "tenacity": 0.2
    },
    "resource": {
     "kind": "energy",
@@ -743,7 +752,10 @@
     "damage_dealt": 1.0,
     "damage_taken": 1.0,
     "ability_haste": 0.0,
-    "attack_speed": 0.0
+    "attack_speed": 0.0,
+    "healing": 1.0,
+    "shielding": 1.0,
+    "tenacity": 0.0
    },
    "resource": {
     "kind": "mana",
@@ -992,7 +1004,10 @@
     "damage_dealt": 1.0,
     "damage_taken": 1.05,
     "ability_haste": 0.0,
-    "attack_speed": 0.0
+    "attack_speed": 0.0,
+    "healing": 1.0,
+    "shielding": 1.0,
+    "tenacity": 0.0
    },
    "resource": {
     "kind": "mana",
@@ -1197,7 +1212,10 @@
     "damage_dealt": 1.0,
     "damage_taken": 1.0,
     "ability_haste": 0.0,
-    "attack_speed": 0.0
+    "attack_speed": 0.0,
+    "healing": 1.0,
+    "shielding": 1.0,
+    "tenacity": 0.0
    },
    "resource": {
     "kind": "energy",
@@ -1481,7 +1499,10 @@
     "damage_dealt": 1.0,
     "damage_taken": 1.0,
     "ability_haste": 0.0,
-    "attack_speed": 0.0
+    "attack_speed": 0.0,
+    "healing": 1.0,
+    "shielding": 1.0,
+    "tenacity": 0.0
    },
    "resource": {
     "kind": "mana",
@@ -1694,7 +1715,10 @@
     "damage_dealt": 1.05,
     "damage_taken": 1.0,
     "ability_haste": 0.0,
-    "attack_speed": 0.0
+    "attack_speed": 0.0,
+    "healing": 1.0,
+    "shielding": 1.0,
+    "tenacity": 0.0
    },
    "resource": {
     "kind": "mana",
@@ -1928,7 +1952,10 @@
     "damage_dealt": 0.95,
     "damage_taken": 1.0,
     "ability_haste": 0.0,
-    "attack_speed": 0.0
+    "attack_speed": 0.0,
+    "healing": 1.0,
+    "shielding": 1.0,
+    "tenacity": 0.0
    },
    "resource": {
     "kind": "mana",
@@ -2140,7 +2167,10 @@
     "damage_dealt": 1.0,
     "damage_taken": 1.0,
     "ability_haste": 0.0,
-    "attack_speed": 0.0
+    "attack_speed": 0.0,
+    "healing": 1.0,
+    "shielding": 1.0,
+    "tenacity": 0.0
    },
    "resource": {
     "kind": "mana",
@@ -2311,7 +2341,10 @@
     "damage_dealt": 1.0,
     "damage_taken": 1.0,
     "ability_haste": 0.0,
-    "attack_speed": 0.0
+    "attack_speed": 0.0,
+    "healing": 1.0,
+    "shielding": 1.0,
+    "tenacity": 0.0
    },
    "resource": {
     "kind": "mana",
@@ -2466,7 +2499,10 @@
     "damage_dealt": 1.0,
     "damage_taken": 1.0,
     "ability_haste": 0.0,
-    "attack_speed": 0.0
+    "attack_speed": 0.0,
+    "healing": 1.0,
+    "shielding": 1.0,
+    "tenacity": 0.0
    },
    "resource": {
     "kind": "mana",
@@ -2700,7 +2736,10 @@
     "damage_dealt": 1.0,
     "damage_taken": 1.0,
     "ability_haste": 10.0,
-    "attack_speed": 0.0
+    "attack_speed": 0.0,
+    "healing": 1.0,
+    "shielding": 1.0,
+    "tenacity": 0.0
    },
    "resource": {
     "kind": "mana",
@@ -2929,7 +2968,10 @@
     "damage_dealt": 1.0,
     "damage_taken": 0.95,
     "ability_haste": 20.0,
-    "attack_speed": 0.025
+    "attack_speed": 0.025,
+    "healing": 1.0,
+    "shielding": 1.0,
+    "tenacity": 0.0
    },
    "resource": {
     "kind": "mana",
@@ -3141,7 +3183,10 @@
     "damage_dealt": 1.15,
     "damage_taken": 0.85,
     "ability_haste": 0.0,
-    "attack_speed": 0.0
+    "attack_speed": 0.0,
+    "healing": 1.2,
+    "shielding": 1.0,
+    "tenacity": 0.0
    },
    "resource": {
     "kind": "mana",
@@ -3316,10 +3361,13 @@
     "move_speed": 340.0
    },
    "mayhem": {
-    "damage_dealt": 1.05,
-    "damage_taken": 0.95,
+    "damage_dealt": 1.0,
+    "damage_taken": 1.0,
     "ability_haste": 0.0,
-    "attack_speed": 0.0
+    "attack_speed": 0.0,
+    "healing": 1.0,
+    "shielding": 1.0,
+    "tenacity": 0.0
    },
    "resource": {
     "kind": "none"
@@ -3559,7 +3607,10 @@
     "damage_dealt": 1.0,
     "damage_taken": 1.0,
     "ability_haste": 0.0,
-    "attack_speed": 0.0
+    "attack_speed": 0.0,
+    "healing": 1.0,
+    "shielding": 1.0,
+    "tenacity": 0.0
    },
    "resource": {
     "kind": "mana",
@@ -3776,7 +3827,10 @@
     "damage_dealt": 0.95,
     "damage_taken": 1.1,
     "ability_haste": -10.0,
-    "attack_speed": 0.0
+    "attack_speed": 0.0,
+    "healing": 1.0,
+    "shielding": 1.0,
+    "tenacity": 0.0
    },
    "resource": {
     "kind": "mana",
@@ -4036,7 +4090,10 @@
     "damage_dealt": 1.0,
     "damage_taken": 1.0,
     "ability_haste": 0.0,
-    "attack_speed": 0.0
+    "attack_speed": 0.0,
+    "healing": 1.0,
+    "shielding": 1.0,
+    "tenacity": 0.0
    },
    "resource": {
     "kind": "mana",
@@ -4239,7 +4296,10 @@
     "damage_dealt": 1.05,
     "damage_taken": 1.0,
     "ability_haste": 0.0,
-    "attack_speed": 0.0
+    "attack_speed": 0.0,
+    "healing": 1.1,
+    "shielding": 1.0,
+    "tenacity": 0.0
    },
    "resource": {
     "kind": "none"
@@ -4513,7 +4573,10 @@
     "damage_dealt": 1.0,
     "damage_taken": 1.0,
     "ability_haste": 0.0,
-    "attack_speed": 0.0
+    "attack_speed": 0.0,
+    "healing": 1.0,
+    "shielding": 1.0,
+    "tenacity": 0.0
    },
    "resource": {
     "kind": "mana",
@@ -4760,7 +4823,10 @@
     "damage_dealt": 1.05,
     "damage_taken": 0.95,
     "ability_haste": 10.0,
-    "attack_speed": 0.0
+    "attack_speed": 0.0,
+    "healing": 1.2,
+    "shielding": 1.1,
+    "tenacity": 0.0
    },
    "resource": {
     "kind": "mana",
@@ -4991,7 +5057,10 @@
     "damage_dealt": 1.0,
     "damage_taken": 1.0,
     "ability_haste": 0.0,
-    "attack_speed": 0.0
+    "attack_speed": 0.0,
+    "healing": 1.0,
+    "shielding": 1.0,
+    "tenacity": 0.0
    },
    "resource": {
     "kind": "mana",
@@ -5208,7 +5277,10 @@
     "damage_dealt": 1.0,
     "damage_taken": 0.95,
     "ability_haste": 0.0,
-    "attack_speed": 0.0
+    "attack_speed": 0.0,
+    "healing": 1.0,
+    "shielding": 1.0,
+    "tenacity": 0.0
    },
    "resource": {
     "kind": "mana",
@@ -5438,7 +5510,10 @@
     "damage_dealt": 1.0,
     "damage_taken": 0.95,
     "ability_haste": -20.0,
-    "attack_speed": 0.0
+    "attack_speed": 0.0,
+    "healing": 1.0,
+    "shielding": 1.0,
+    "tenacity": 0.0
    },
    "resource": {
     "kind": "mana",
@@ -5672,7 +5747,10 @@
     "damage_dealt": 1.05,
     "damage_taken": 1.0,
     "ability_haste": 0.0,
-    "attack_speed": 0.0
+    "attack_speed": 0.0,
+    "healing": 1.0,
+    "shielding": 1.0,
+    "tenacity": 0.0
    },
    "resource": {
     "kind": "mana",
@@ -5915,7 +5993,10 @@
     "damage_dealt": 1.0,
     "damage_taken": 1.0,
     "ability_haste": 0.0,
-    "attack_speed": 0.0
+    "attack_speed": 0.0,
+    "healing": 1.0,
+    "shielding": 1.0,
+    "tenacity": 0.0
    },
    "resource": {
     "kind": "mana",
@@ -6184,7 +6265,10 @@
     "damage_dealt": 0.9,
     "damage_taken": 1.05,
     "ability_haste": 0.0,
-    "attack_speed": 0.0
+    "attack_speed": 0.0,
+    "healing": 0.9,
+    "shielding": 1.0,
+    "tenacity": 0.0
    },
    "resource": {
     "kind": "none"
@@ -6398,7 +6482,10 @@
     "damage_dealt": 1.05,
     "damage_taken": 0.95,
     "ability_haste": 0.0,
-    "attack_speed": 0.0
+    "attack_speed": 0.0,
+    "healing": 1.0,
+    "shielding": 1.0,
+    "tenacity": 0.0
    },
    "resource": {
     "kind": "mana",
@@ -6589,7 +6676,10 @@
     "damage_dealt": 1.05,
     "damage_taken": 1.0,
     "ability_haste": 0.0,
-    "attack_speed": 0.0
+    "attack_speed": 0.0,
+    "healing": 1.0,
+    "shielding": 1.0,
+    "tenacity": 0.2
    },
    "resource": {
     "kind": "mana",
@@ -6845,7 +6935,10 @@
     "damage_dealt": 1.05,
     "damage_taken": 0.9,
     "ability_haste": 0.0,
-    "attack_speed": 0.0
+    "attack_speed": 0.0,
+    "healing": 1.0,
+    "shielding": 1.0,
+    "tenacity": 0.1
    },
    "resource": {
     "kind": "mana",
@@ -7028,7 +7121,10 @@
     "damage_dealt": 1.1,
     "damage_taken": 0.9,
     "ability_haste": 0.0,
-    "attack_speed": 0.0
+    "attack_speed": 0.0,
+    "healing": 1.0,
+    "shielding": 1.0,
+    "tenacity": 0.2
    },
    "resource": {
     "kind": "mana",
@@ -7283,7 +7379,10 @@
     "damage_dealt": 1.0,
     "damage_taken": 1.0,
     "ability_haste": 0.0,
-    "attack_speed": 0.0
+    "attack_speed": 0.0,
+    "healing": 1.0,
+    "shielding": 1.0,
+    "tenacity": 0.0
    },
    "resource": {
     "kind": "mana",
@@ -7490,7 +7589,10 @@
     "damage_dealt": 1.0,
     "damage_taken": 1.0,
     "ability_haste": 0.0,
-    "attack_speed": 0.0
+    "attack_speed": 0.0,
+    "healing": 1.0,
+    "shielding": 1.0,
+    "tenacity": 0.0
    },
    "resource": {
     "kind": "mana",
@@ -7717,7 +7819,10 @@
     "damage_dealt": 1.0,
     "damage_taken": 0.95,
     "ability_haste": 0.0,
-    "attack_speed": 0.0
+    "attack_speed": 0.0,
+    "healing": 1.0,
+    "shielding": 1.0,
+    "tenacity": 0.0
    },
    "resource": {
     "kind": "mana",
@@ -7934,7 +8039,10 @@
     "damage_dealt": 1.0,
     "damage_taken": 1.0,
     "ability_haste": 0.0,
-    "attack_speed": 0.0
+    "attack_speed": 0.0,
+    "healing": 1.0,
+    "shielding": 1.0,
+    "tenacity": 0.0
    },
    "resource": {
     "kind": "mana",
@@ -8173,7 +8281,10 @@
     "damage_dealt": 0.9,
     "damage_taken": 1.05,
     "ability_haste": 0.0,
-    "attack_speed": 0.0
+    "attack_speed": 0.0,
+    "healing": 1.0,
+    "shielding": 1.0,
+    "tenacity": 0.0
    },
    "resource": {
     "kind": "mana",
@@ -8454,7 +8565,10 @@
     "damage_dealt": 1.05,
     "damage_taken": 1.0,
     "ability_haste": 0.0,
-    "attack_speed": 0.0
+    "attack_speed": 0.0,
+    "healing": 1.0,
+    "shielding": 1.0,
+    "tenacity": 0.0
    },
    "resource": {
     "kind": "mana",
@@ -8683,7 +8797,10 @@
     "damage_dealt": 1.0,
     "damage_taken": 0.95,
     "ability_haste": 0.0,
-    "attack_speed": 0.0
+    "attack_speed": 0.0,
+    "healing": 1.0,
+    "shielding": 1.0,
+    "tenacity": 0.0
    },
    "resource": {
     "kind": "none"
@@ -8896,7 +9013,10 @@
     "damage_dealt": 1.05,
     "damage_taken": 0.95,
     "ability_haste": 0.0,
-    "attack_speed": 0.025
+    "attack_speed": 0.025,
+    "healing": 1.0,
+    "shielding": 1.0,
+    "tenacity": 0.0
    },
    "resource": {
     "kind": "none"
@@ -9122,7 +9242,10 @@
     "damage_dealt": 1.0,
     "damage_taken": 0.95,
     "ability_haste": 0.0,
-    "attack_speed": 0.0
+    "attack_speed": 0.0,
+    "healing": 1.0,
+    "shielding": 1.0,
+    "tenacity": 0.0
    },
    "resource": {
     "kind": "mana",
@@ -9353,7 +9476,10 @@
     "damage_dealt": 1.0,
     "damage_taken": 1.0,
     "ability_haste": 0.0,
-    "attack_speed": 0.0
+    "attack_speed": 0.0,
+    "healing": 1.0,
+    "shielding": 1.0,
+    "tenacity": 0.0
    },
    "resource": {
     "kind": "mana",
@@ -9568,7 +9694,10 @@
     "damage_dealt": 1.0,
     "damage_taken": 1.0,
     "ability_haste": 0.0,
-    "attack_speed": 0.0
+    "attack_speed": 0.0,
+    "healing": 1.0,
+    "shielding": 1.0,
+    "tenacity": 0.0
    },
    "resource": {
     "kind": "mana",
@@ -9820,7 +9949,10 @@
     "damage_dealt": 1.05,
     "damage_taken": 0.9,
     "ability_haste": 10.0,
-    "attack_speed": 0.0
+    "attack_speed": 0.0,
+    "healing": 1.2,
+    "shielding": 1.0,
+    "tenacity": 0.0
    },
    "resource": {
     "kind": "mana",
@@ -10038,7 +10170,10 @@
     "damage_dealt": 0.9,
     "damage_taken": 1.1,
     "ability_haste": 0.0,
-    "attack_speed": 0.0
+    "attack_speed": 0.0,
+    "healing": 1.0,
+    "shielding": 1.0,
+    "tenacity": 0.0
    },
    "resource": {
     "kind": "mana",
@@ -10289,7 +10424,10 @@
     "damage_dealt": 0.95,
     "damage_taken": 1.0,
     "ability_haste": 0.0,
-    "attack_speed": 0.0
+    "attack_speed": 0.0,
+    "healing": 1.0,
+    "shielding": 1.0,
+    "tenacity": 0.0
    },
    "resource": {
     "kind": "mana",
@@ -10621,7 +10759,10 @@
     "damage_dealt": 0.95,
     "damage_taken": 1.0,
     "ability_haste": 0.0,
-    "attack_speed": 0.0
+    "attack_speed": 0.0,
+    "healing": 0.9,
+    "shielding": 1.0,
+    "tenacity": 0.0
    },
    "resource": {
     "kind": "mana",
@@ -10812,7 +10953,10 @@
     "damage_dealt": 1.05,
     "damage_taken": 1.0,
     "ability_haste": 20.0,
-    "attack_speed": 0.0
+    "attack_speed": 0.0,
+    "healing": 1.0,
+    "shielding": 1.0,
+    "tenacity": 0.0
    },
    "resource": {
     "kind": "mana",
@@ -11079,7 +11223,10 @@
     "damage_dealt": 1.0,
     "damage_taken": 1.0,
     "ability_haste": 0.0,
-    "attack_speed": 0.0
+    "attack_speed": 0.0,
+    "healing": 1.0,
+    "shielding": 1.0,
+    "tenacity": 0.0
    },
    "resource": {
     "kind": "mana",
@@ -11306,7 +11453,10 @@
     "damage_dealt": 1.0,
     "damage_taken": 1.0,
     "ability_haste": 0.0,
-    "attack_speed": 0.0
+    "attack_speed": 0.0,
+    "healing": 1.0,
+    "shielding": 1.0,
+    "tenacity": 0.0
    },
    "resource": {
     "kind": "mana",
@@ -11504,7 +11654,10 @@
     "damage_dealt": 1.0,
     "damage_taken": 1.0,
     "ability_haste": 0.0,
-    "attack_speed": 0.0
+    "attack_speed": 0.0,
+    "healing": 1.0,
+    "shielding": 1.0,
+    "tenacity": 0.0
    },
    "resource": {
     "kind": "mana",
@@ -11725,7 +11878,10 @@
     "damage_dealt": 1.05,
     "damage_taken": 0.97,
     "ability_haste": 0.0,
-    "attack_speed": 0.0
+    "attack_speed": 0.0,
+    "healing": 1.0,
+    "shielding": 1.0,
+    "tenacity": 0.0
    },
    "resource": {
     "kind": "mana",
@@ -11977,7 +12133,10 @@
     "damage_dealt": 1.05,
     "damage_taken": 1.0,
     "ability_haste": 0.0,
-    "attack_speed": 0.0
+    "attack_speed": 0.0,
+    "healing": 1.0,
+    "shielding": 1.0,
+    "tenacity": 0.0
    },
    "resource": {
     "kind": "mana",
@@ -12180,7 +12339,10 @@
     "damage_dealt": 0.95,
     "damage_taken": 1.0,
     "ability_haste": 0.0,
-    "attack_speed": 0.0
+    "attack_speed": 0.0,
+    "healing": 1.0,
+    "shielding": 1.0,
+    "tenacity": 0.0
    },
    "resource": {
     "kind": "mana",
@@ -12441,7 +12603,10 @@
     "damage_dealt": 0.9,
     "damage_taken": 1.05,
     "ability_haste": 0.0,
-    "attack_speed": 0.0
+    "attack_speed": 0.0,
+    "healing": 1.0,
+    "shielding": 1.0,
+    "tenacity": 0.0
    },
    "resource": {
     "kind": "mana",
@@ -12627,7 +12792,10 @@
     "damage_dealt": 1.05,
     "damage_taken": 1.0,
     "ability_haste": 0.0,
-    "attack_speed": 0.0
+    "attack_speed": 0.0,
+    "healing": 1.0,
+    "shielding": 1.0,
+    "tenacity": 0.0
    },
    "resource": {
     "kind": "mana",
@@ -12883,7 +13051,10 @@
     "damage_dealt": 1.0,
     "damage_taken": 1.0,
     "ability_haste": 0.0,
-    "attack_speed": 0.025
+    "attack_speed": 0.025,
+    "healing": 1.0,
+    "shielding": 1.0,
+    "tenacity": 0.0
    },
    "resource": {
     "kind": "mana",
@@ -13115,7 +13286,10 @@
     "damage_dealt": 1.05,
     "damage_taken": 0.95,
     "ability_haste": 0.0,
-    "attack_speed": 0.0
+    "attack_speed": 0.0,
+    "healing": 1.0,
+    "shielding": 1.0,
+    "tenacity": 0.0
    },
    "resource": {
     "kind": "mana",
@@ -13286,7 +13460,10 @@
     "damage_dealt": 1.0,
     "damage_taken": 1.0,
     "ability_haste": 0.0,
-    "attack_speed": 0.0
+    "attack_speed": 0.0,
+    "healing": 1.0,
+    "shielding": 1.0,
+    "tenacity": 0.0
    },
    "resource": {
     "kind": "mana",
@@ -13486,7 +13663,10 @@
     "damage_dealt": 0.93,
     "damage_taken": 1.05,
     "ability_haste": 0.0,
-    "attack_speed": 0.0
+    "attack_speed": 0.0,
+    "healing": 1.0,
+    "shielding": 1.0,
+    "tenacity": 0.0
    },
    "resource": {
     "kind": "mana",
@@ -13694,7 +13874,10 @@
     "damage_dealt": 1.0,
     "damage_taken": 0.95,
     "ability_haste": 0.0,
-    "attack_speed": 0.0
+    "attack_speed": 0.0,
+    "healing": 1.0,
+    "shielding": 1.0,
+    "tenacity": 0.0
    },
    "resource": {
     "kind": "mana",
@@ -13931,7 +14114,10 @@
     "damage_dealt": 1.0,
     "damage_taken": 1.0,
     "ability_haste": 10.0,
-    "attack_speed": 0.0
+    "attack_speed": 0.0,
+    "healing": 1.0,
+    "shielding": 1.0,
+    "tenacity": 0.2
    },
    "resource": {
     "kind": "none"
@@ -14167,7 +14353,10 @@
     "damage_dealt": 0.95,
     "damage_taken": 1.1,
     "ability_haste": 0.0,
-    "attack_speed": 0.0
+    "attack_speed": 0.0,
+    "healing": 1.0,
+    "shielding": 1.0,
+    "tenacity": 0.0
    },
    "resource": {
     "kind": "mana",
@@ -14408,7 +14597,10 @@
     "damage_dealt": 1.0,
     "damage_taken": 1.0,
     "ability_haste": 0.0,
-    "attack_speed": 0.0
+    "attack_speed": 0.0,
+    "healing": 0.8,
+    "shielding": 1.0,
+    "tenacity": 0.2
    },
    "resource": {
     "kind": "mana",
@@ -14639,7 +14831,10 @@
     "damage_dealt": 1.0,
     "damage_taken": 1.0,
     "ability_haste": 0.0,
-    "attack_speed": 0.0
+    "attack_speed": 0.0,
+    "healing": 1.0,
+    "shielding": 1.0,
+    "tenacity": 0.0
    },
    "resource": {
     "kind": "energy",
@@ -14845,7 +15040,10 @@
     "damage_dealt": 1.1,
     "damage_taken": 0.9,
     "ability_haste": 0.0,
-    "attack_speed": 0.0
+    "attack_speed": 0.0,
+    "healing": 1.2,
+    "shielding": 1.0,
+    "tenacity": 0.2
    },
    "resource": {
     "kind": "mana",
@@ -15068,7 +15266,10 @@
     "damage_dealt": 1.0,
     "damage_taken": 0.9,
     "ability_haste": 0.0,
-    "attack_speed": 0.025
+    "attack_speed": 0.025,
+    "healing": 1.0,
+    "shielding": 1.0,
+    "tenacity": 0.0
    },
    "resource": {
     "kind": "mana",
@@ -15294,9 +15495,12 @@
    },
    "mayhem": {
     "damage_dealt": 1.05,
-    "damage_taken": 1.0,
+    "damage_taken": 0.9,
     "ability_haste": 0.0,
-    "attack_speed": 0.0
+    "attack_speed": 0.0,
+    "healing": 1.0,
+    "shielding": 1.0,
+    "tenacity": 0.0
    },
    "resource": {
     "kind": "none"
@@ -15524,7 +15728,10 @@
     "damage_dealt": 0.9,
     "damage_taken": 1.1,
     "ability_haste": 0.0,
-    "attack_speed": 0.0
+    "attack_speed": 0.0,
+    "healing": 1.0,
+    "shielding": 1.0,
+    "tenacity": 0.0
    },
    "resource": {
     "kind": "mana",
@@ -15756,7 +15963,10 @@
     "damage_dealt": 1.1,
     "damage_taken": 0.9,
     "ability_haste": 20.0,
-    "attack_speed": 0.0
+    "attack_speed": 0.0,
+    "healing": 1.0,
+    "shielding": 1.0,
+    "tenacity": 0.0
    },
    "resource": {
     "kind": "mana",
@@ -16023,7 +16233,10 @@
     "damage_dealt": 1.05,
     "damage_taken": 0.95,
     "ability_haste": 0.0,
-    "attack_speed": 0.0
+    "attack_speed": 0.0,
+    "healing": 1.1,
+    "shielding": 1.2,
+    "tenacity": 0.0
    },
    "resource": {
     "kind": "energy",
@@ -16260,7 +16473,10 @@
     "damage_dealt": 0.95,
     "damage_taken": 1.05,
     "ability_haste": 0.0,
-    "attack_speed": 0.0
+    "attack_speed": 0.0,
+    "healing": 1.0,
+    "shielding": 1.0,
+    "tenacity": 0.0
    },
    "resource": {
     "kind": "mana",
@@ -16469,7 +16685,10 @@
     "damage_dealt": 0.95,
     "damage_taken": 1.05,
     "ability_haste": 0.0,
-    "attack_speed": 0.0
+    "attack_speed": 0.0,
+    "healing": 1.0,
+    "shielding": 1.0,
+    "tenacity": 0.0
    },
    "resource": {
     "kind": "mana",
@@ -16721,7 +16940,10 @@
     "damage_dealt": 0.95,
     "damage_taken": 1.05,
     "ability_haste": 0.0,
-    "attack_speed": 0.0
+    "attack_speed": 0.0,
+    "healing": 1.0,
+    "shielding": 1.0,
+    "tenacity": 0.0
    },
    "resource": {
     "kind": "mana",
@@ -16931,7 +17153,10 @@
     "damage_dealt": 1.05,
     "damage_taken": 0.95,
     "ability_haste": 0.0,
-    "attack_speed": 0.0
+    "attack_speed": 0.0,
+    "healing": 1.0,
+    "shielding": 1.0,
+    "tenacity": 0.2
    },
    "resource": {
     "kind": "mana",
@@ -17185,7 +17410,10 @@
     "damage_dealt": 1.0,
     "damage_taken": 0.95,
     "ability_haste": 10.0,
-    "attack_speed": 0.0
+    "attack_speed": 0.0,
+    "healing": 1.0,
+    "shielding": 1.0,
+    "tenacity": 0.2
    },
    "resource": {
     "kind": "mana",
@@ -17410,7 +17638,10 @@
     "damage_dealt": 1.0,
     "damage_taken": 1.0,
     "ability_haste": 0.0,
-    "attack_speed": 0.0
+    "attack_speed": 0.0,
+    "healing": 1.0,
+    "shielding": 1.0,
+    "tenacity": 0.0
    },
    "resource": {
     "kind": "mana",
@@ -17637,7 +17868,10 @@
     "damage_dealt": 0.9,
     "damage_taken": 1.1,
     "ability_haste": 0.0,
-    "attack_speed": 0.0
+    "attack_speed": 0.0,
+    "healing": 1.0,
+    "shielding": 0.9,
+    "tenacity": 0.0
    },
    "resource": {
     "kind": "mana",
@@ -17863,7 +18097,10 @@
     "damage_dealt": 1.0,
     "damage_taken": 1.0,
     "ability_haste": 0.0,
-    "attack_speed": 0.0
+    "attack_speed": 0.0,
+    "healing": 1.0,
+    "shielding": 1.0,
+    "tenacity": 0.0
    },
    "resource": {
     "kind": "mana",
@@ -18079,7 +18316,10 @@
     "damage_dealt": 0.9,
     "damage_taken": 1.1,
     "ability_haste": 0.0,
-    "attack_speed": 0.0
+    "attack_speed": 0.0,
+    "healing": 1.0,
+    "shielding": 1.0,
+    "tenacity": 0.0
    },
    "resource": {
     "kind": "mana",
@@ -18295,7 +18535,10 @@
     "damage_dealt": 0.95,
     "damage_taken": 1.0,
     "ability_haste": 0.0,
-    "attack_speed": 0.0
+    "attack_speed": 0.0,
+    "healing": 1.0,
+    "shielding": 1.0,
+    "tenacity": 0.0
    },
    "resource": {
     "kind": "mana",
@@ -18536,7 +18779,10 @@
     "damage_dealt": 1.0,
     "damage_taken": 1.0,
     "ability_haste": 0.0,
-    "attack_speed": 0.0
+    "attack_speed": 0.0,
+    "healing": 1.0,
+    "shielding": 1.0,
+    "tenacity": 0.0
    },
    "resource": {
     "kind": "mana",
@@ -18771,7 +19017,10 @@
     "damage_dealt": 1.0,
     "damage_taken": 1.0,
     "ability_haste": -10.0,
-    "attack_speed": 0.0
+    "attack_speed": 0.0,
+    "healing": 1.0,
+    "shielding": 1.0,
+    "tenacity": 0.0
    },
    "resource": {
     "kind": "mana",
@@ -19008,7 +19257,10 @@
     "damage_dealt": 1.0,
     "damage_taken": 1.0,
     "ability_haste": 0.0,
-    "attack_speed": 0.0
+    "attack_speed": 0.0,
+    "healing": 1.0,
+    "shielding": 1.0,
+    "tenacity": 0.0
    },
    "resource": {
     "kind": "mana",
@@ -19192,7 +19444,10 @@
     "damage_dealt": 0.95,
     "damage_taken": 1.0,
     "ability_haste": 0.0,
-    "attack_speed": 0.0
+    "attack_speed": 0.0,
+    "healing": 1.0,
+    "shielding": 1.0,
+    "tenacity": 0.0
    },
    "resource": {
     "kind": "mana",
@@ -19462,7 +19717,10 @@
     "damage_dealt": 1.0,
     "damage_taken": 1.0,
     "ability_haste": 0.0,
-    "attack_speed": 0.0
+    "attack_speed": 0.0,
+    "healing": 1.0,
+    "shielding": 1.0,
+    "tenacity": 0.0
    },
    "resource": {
     "kind": "none"
@@ -19701,7 +19959,10 @@
     "damage_dealt": 0.95,
     "damage_taken": 1.0,
     "ability_haste": 0.0,
-    "attack_speed": 0.0
+    "attack_speed": 0.0,
+    "healing": 1.0,
+    "shielding": 1.0,
+    "tenacity": 0.0
    },
    "resource": {
     "kind": "mana",
@@ -19923,7 +20184,10 @@
     "damage_dealt": 1.1,
     "damage_taken": 1.0,
     "ability_haste": 10.0,
-    "attack_speed": 0.0
+    "attack_speed": 0.0,
+    "healing": 1.0,
+    "shielding": 1.0,
+    "tenacity": 0.0
    },
    "resource": {
     "kind": "mana",
@@ -20224,7 +20488,10 @@
     "damage_dealt": 1.0,
     "damage_taken": 1.0,
     "ability_haste": 0.0,
-    "attack_speed": 0.0
+    "attack_speed": 0.0,
+    "healing": 1.0,
+    "shielding": 1.0,
+    "tenacity": 0.0
    },
    "resource": {
     "kind": "mana",
@@ -20440,7 +20707,10 @@
     "damage_dealt": 1.0,
     "damage_taken": 1.0,
     "ability_haste": 0.0,
-    "attack_speed": 0.0
+    "attack_speed": 0.0,
+    "healing": 1.0,
+    "shielding": 1.0,
+    "tenacity": 0.0
    },
    "resource": {
     "kind": "mana",
@@ -20651,7 +20921,10 @@
     "damage_dealt": 1.0,
     "damage_taken": 1.0,
     "ability_haste": 0.0,
-    "attack_speed": 0.0
+    "attack_speed": 0.0,
+    "healing": 1.0,
+    "shielding": 1.0,
+    "tenacity": 0.0
    },
    "resource": {
     "kind": "mana",
@@ -20906,7 +21179,10 @@
     "damage_dealt": 1.0,
     "damage_taken": 1.0,
     "ability_haste": 0.0,
-    "attack_speed": 0.0
+    "attack_speed": 0.0,
+    "healing": 1.0,
+    "shielding": 1.0,
+    "tenacity": 0.0
    },
    "resource": {
     "kind": "mana",
@@ -21119,7 +21395,10 @@
     "damage_dealt": 1.1,
     "damage_taken": 1.0,
     "ability_haste": 0.0,
-    "attack_speed": 0.0
+    "attack_speed": 0.0,
+    "healing": 1.0,
+    "shielding": 1.0,
+    "tenacity": 0.0
    },
    "resource": {
     "kind": "mana",
@@ -21305,7 +21584,10 @@
     "damage_dealt": 1.0,
     "damage_taken": 1.0,
     "ability_haste": 0.0,
-    "attack_speed": 0.0
+    "attack_speed": 0.0,
+    "healing": 1.0,
+    "shielding": 1.0,
+    "tenacity": 0.0
    },
    "resource": {
     "kind": "mana",
@@ -21507,7 +21789,10 @@
     "damage_dealt": 1.1,
     "damage_taken": 0.9,
     "ability_haste": 0.0,
-    "attack_speed": 0.0
+    "attack_speed": 0.0,
+    "healing": 1.2,
+    "shielding": 1.0,
+    "tenacity": 0.0
    },
    "resource": {
     "kind": "mana",
@@ -21731,7 +22016,10 @@
     "damage_dealt": 1.1,
     "damage_taken": 0.9,
     "ability_haste": 0.0,
-    "attack_speed": 0.0
+    "attack_speed": 0.0,
+    "healing": 1.1,
+    "shielding": 1.2,
+    "tenacity": 0.2
    },
    "resource": {
     "kind": "mana",
@@ -21984,7 +22272,10 @@
     "damage_dealt": 1.05,
     "damage_taken": 1.0,
     "ability_haste": 0.0,
-    "attack_speed": 0.0
+    "attack_speed": 0.0,
+    "healing": 1.0,
+    "shielding": 1.0,
+    "tenacity": 0.0
    },
    "resource": {
     "kind": "mana",
@@ -22167,7 +22458,10 @@
     "damage_dealt": 1.0,
     "damage_taken": 1.0,
     "ability_haste": 0.0,
-    "attack_speed": 0.0
+    "attack_speed": 0.0,
+    "healing": 1.0,
+    "shielding": 1.0,
+    "tenacity": 0.0
    },
    "resource": {
     "kind": "mana",
@@ -22411,7 +22705,10 @@
     "damage_dealt": 0.9,
     "damage_taken": 1.05,
     "ability_haste": 0.0,
-    "attack_speed": 0.0
+    "attack_speed": 0.0,
+    "healing": 1.0,
+    "shielding": 1.0,
+    "tenacity": 0.0
    },
    "resource": {
     "kind": "mana",
@@ -22644,7 +22941,10 @@
     "damage_dealt": 1.0,
     "damage_taken": 1.0,
     "ability_haste": 0.0,
-    "attack_speed": 0.0
+    "attack_speed": 0.0,
+    "healing": 1.0,
+    "shielding": 1.0,
+    "tenacity": 0.0
    },
    "resource": {
     "kind": "mana",
@@ -22900,7 +23200,10 @@
     "damage_dealt": 1.0,
     "damage_taken": 1.0,
     "ability_haste": 0.0,
-    "attack_speed": 0.0
+    "attack_speed": 0.0,
+    "healing": 1.0,
+    "shielding": 1.0,
+    "tenacity": 0.0
    },
    "resource": {
     "kind": "mana",
@@ -23193,7 +23496,10 @@
     "damage_dealt": 1.1,
     "damage_taken": 0.9,
     "ability_haste": 0.0,
-    "attack_speed": 0.0
+    "attack_speed": 0.0,
+    "healing": 1.0,
+    "shielding": 1.0,
+    "tenacity": 0.2
    },
    "resource": {
     "kind": "mana",
@@ -23397,7 +23703,10 @@
     "damage_dealt": 1.1,
     "damage_taken": 0.9,
     "ability_haste": 20.0,
-    "attack_speed": 0.0
+    "attack_speed": 0.0,
+    "healing": 1.0,
+    "shielding": 1.0,
+    "tenacity": 0.2
    },
    "resource": {
     "kind": "mana",
@@ -23650,7 +23959,10 @@
     "damage_dealt": 1.1,
     "damage_taken": 0.9,
     "ability_haste": 0.0,
-    "attack_speed": 0.025
+    "attack_speed": 0.025,
+    "healing": 1.0,
+    "shielding": 1.0,
+    "tenacity": 0.2
    },
    "resource": {
     "kind": "mana",
@@ -23827,7 +24139,10 @@
     "damage_dealt": 1.0,
     "damage_taken": 0.95,
     "ability_haste": 10.0,
-    "attack_speed": 0.0
+    "attack_speed": 0.0,
+    "healing": 1.0,
+    "shielding": 1.0,
+    "tenacity": 0.0
    },
    "resource": {
     "kind": "mana",
@@ -23999,7 +24314,10 @@
     "damage_dealt": 1.0,
     "damage_taken": 1.0,
     "ability_haste": 0.0,
-    "attack_speed": 0.0
+    "attack_speed": 0.0,
+    "healing": 1.0,
+    "shielding": 1.0,
+    "tenacity": 0.0
    },
    "resource": {
     "kind": "mana",
@@ -24198,7 +24516,10 @@
     "damage_dealt": 1.05,
     "damage_taken": 0.9,
     "ability_haste": 0.0,
-    "attack_speed": 0.0
+    "attack_speed": 0.0,
+    "healing": 1.0,
+    "shielding": 1.0,
+    "tenacity": 0.0
    },
    "resource": {
     "kind": "none"
@@ -24406,7 +24727,10 @@
     "damage_dealt": 0.95,
     "damage_taken": 1.0,
     "ability_haste": 0.0,
-    "attack_speed": 0.0
+    "attack_speed": 0.0,
+    "healing": 1.0,
+    "shielding": 0.9,
+    "tenacity": 0.0
    },
    "resource": {
     "kind": "mana",
@@ -24612,7 +24936,10 @@
     "damage_dealt": 1.0,
     "damage_taken": 1.05,
     "ability_haste": 0.0,
-    "attack_speed": 0.0
+    "attack_speed": 0.0,
+    "healing": 1.0,
+    "shielding": 1.0,
+    "tenacity": 0.0
    },
    "resource": {
     "kind": "mana",
@@ -24835,7 +25162,10 @@
     "damage_dealt": 1.0,
     "damage_taken": 1.0,
     "ability_haste": 0.0,
-    "attack_speed": 0.0
+    "attack_speed": 0.0,
+    "healing": 1.1,
+    "shielding": 1.0,
+    "tenacity": 0.0
    },
    "resource": {
     "kind": "none"
@@ -25075,7 +25405,10 @@
     "damage_dealt": 1.05,
     "damage_taken": 0.92,
     "ability_haste": 0.0,
-    "attack_speed": 0.0
+    "attack_speed": 0.0,
+    "healing": 1.0,
+    "shielding": 1.0,
+    "tenacity": 0.2
    },
    "resource": {
     "kind": "none"
@@ -25319,7 +25652,10 @@
     "damage_dealt": 1.05,
     "damage_taken": 0.92,
     "ability_haste": 0.0,
-    "attack_speed": 0.0
+    "attack_speed": 0.0,
+    "healing": 1.0,
+    "shielding": 1.0,
+    "tenacity": 0.0
    },
    "resource": {
     "kind": "none"
@@ -25573,7 +25909,10 @@
     "damage_dealt": 1.0,
     "damage_taken": 1.0,
     "ability_haste": 0.0,
-    "attack_speed": 0.0
+    "attack_speed": 0.0,
+    "healing": 1.0,
+    "shielding": 1.0,
+    "tenacity": 0.0
    },
    "resource": {
     "kind": "none"
@@ -25808,7 +26147,10 @@
     "damage_dealt": 1.0,
     "damage_taken": 1.0,
     "ability_haste": 0.0,
-    "attack_speed": 0.0
+    "attack_speed": 0.0,
+    "healing": 1.0,
+    "shielding": 1.0,
+    "tenacity": 0.0
    },
    "resource": {
     "kind": "mana",
@@ -26001,7 +26343,10 @@
     "damage_dealt": 1.0,
     "damage_taken": 1.0,
     "ability_haste": 0.0,
-    "attack_speed": 0.0
+    "attack_speed": 0.0,
+    "healing": 1.0,
+    "shielding": 1.0,
+    "tenacity": 0.0
    },
    "resource": {
     "kind": "mana",
@@ -26236,7 +26581,10 @@
     "damage_dealt": 1.0,
     "damage_taken": 1.0,
     "ability_haste": 0.0,
-    "attack_speed": 0.0
+    "attack_speed": 0.0,
+    "healing": 1.0,
+    "shielding": 1.0,
+    "tenacity": 0.0
    },
    "resource": {
     "kind": "mana",
@@ -26499,7 +26847,10 @@
     "damage_dealt": 1.0,
     "damage_taken": 1.05,
     "ability_haste": 0.0,
-    "attack_speed": 0.0
+    "attack_speed": 0.0,
+    "healing": 1.0,
+    "shielding": 1.0,
+    "tenacity": 0.0
    },
    "resource": {
     "kind": "mana",
@@ -26741,7 +27092,10 @@
     "damage_dealt": 1.0,
     "damage_taken": 1.2,
     "ability_haste": 0.0,
-    "attack_speed": 0.0
+    "attack_speed": 0.0,
+    "healing": 0.8,
+    "shielding": 0.8,
+    "tenacity": 0.0
    },
    "resource": {
     "kind": "mana",
@@ -26951,7 +27305,10 @@
     "damage_dealt": 1.0,
     "damage_taken": 1.0,
     "ability_haste": 0.0,
-    "attack_speed": 0.0
+    "attack_speed": 0.0,
+    "healing": 1.0,
+    "shielding": 1.0,
+    "tenacity": 0.0
    },
    "resource": {
     "kind": "none"
@@ -27209,7 +27566,10 @@
     "damage_dealt": 1.05,
     "damage_taken": 1.0,
     "ability_haste": 0.0,
-    "attack_speed": 0.0
+    "attack_speed": 0.0,
+    "healing": 1.0,
+    "shielding": 1.0,
+    "tenacity": 0.0
    },
    "resource": {
     "kind": "mana",
@@ -27496,7 +27856,10 @@
     "damage_dealt": 0.95,
     "damage_taken": 1.05,
     "ability_haste": 0.0,
-    "attack_speed": 0.0
+    "attack_speed": 0.0,
+    "healing": 1.0,
+    "shielding": 1.0,
+    "tenacity": 0.0
    },
    "resource": {
     "kind": "energy",
@@ -27685,7 +28048,10 @@
     "damage_dealt": 1.0,
     "damage_taken": 1.0,
     "ability_haste": 0.0,
-    "attack_speed": 0.0
+    "attack_speed": 0.0,
+    "healing": 1.0,
+    "shielding": 1.0,
+    "tenacity": 0.0
    },
    "resource": {
     "kind": "none"
@@ -27967,7 +28333,10 @@
     "damage_dealt": 1.0,
     "damage_taken": 1.0,
     "ability_haste": 0.0,
-    "attack_speed": 0.0
+    "attack_speed": 0.0,
+    "healing": 1.0,
+    "shielding": 1.0,
+    "tenacity": 0.0
    },
    "resource": {
     "kind": "mana",
@@ -28157,7 +28526,10 @@
     "damage_dealt": 0.9,
     "damage_taken": 1.0,
     "ability_haste": -10.0,
-    "attack_speed": 0.0
+    "attack_speed": 0.0,
+    "healing": 1.0,
+    "shielding": 1.0,
+    "tenacity": 0.0
    },
    "resource": {
     "kind": "mana",
@@ -28400,7 +28772,10 @@
     "damage_dealt": 0.93,
     "damage_taken": 1.05,
     "ability_haste": 0.0,
-    "attack_speed": 0.0
+    "attack_speed": 0.0,
+    "healing": 1.0,
+    "shielding": 1.0,
+    "tenacity": 0.0
    },
    "resource": {
     "kind": "mana",
@@ -28581,7 +28956,10 @@
     "damage_dealt": 1.05,
     "damage_taken": 0.95,
     "ability_haste": 0.0,
-    "attack_speed": 0.0
+    "attack_speed": 0.0,
+    "healing": 1.0,
+    "shielding": 1.0,
+    "tenacity": 0.0
    },
    "resource": {
     "kind": "mana",
@@ -28860,7 +29238,10 @@
     "damage_dealt": 1.0,
     "damage_taken": 1.0,
     "ability_haste": 0.0,
-    "attack_speed": 0.0
+    "attack_speed": 0.0,
+    "healing": 1.0,
+    "shielding": 1.0,
+    "tenacity": 0.0
    },
    "resource": {
     "kind": "mana",
@@ -29118,7 +29499,10 @@
     "damage_dealt": 1.0,
     "damage_taken": 1.0,
     "ability_haste": 0.0,
-    "attack_speed": 0.0
+    "attack_speed": 0.0,
+    "healing": 1.0,
+    "shielding": 1.0,
+    "tenacity": 0.0
    },
    "resource": {
     "kind": "mana",
@@ -29363,8 +29747,11 @@
    "mayhem": {
     "damage_dealt": 1.0,
     "damage_taken": 1.0,
-    "ability_haste": 0.0,
-    "attack_speed": 0.0
+    "ability_haste": 10.0,
+    "attack_speed": 0.0,
+    "healing": 1.0,
+    "shielding": 1.0,
+    "tenacity": 0.0
    },
    "resource": {
     "kind": "mana",
@@ -29571,9 +29958,12 @@
    },
    "mayhem": {
     "damage_dealt": 1.0,
-    "damage_taken": 1.05,
+    "damage_taken": 1.0,
     "ability_haste": 0.0,
-    "attack_speed": 0.0
+    "attack_speed": 0.0,
+    "healing": 1.0,
+    "shielding": 1.0,
+    "tenacity": 0.0
    },
    "resource": {
     "kind": "mana",
@@ -29831,7 +30221,10 @@
     "damage_dealt": 1.05,
     "damage_taken": 1.0,
     "ability_haste": 0.0,
-    "attack_speed": 0.0
+    "attack_speed": 0.0,
+    "healing": 1.0,
+    "shielding": 1.0,
+    "tenacity": 0.0
    },
    "resource": {
     "kind": "mana",
@@ -30069,7 +30462,10 @@
     "damage_dealt": 1.05,
     "damage_taken": 1.0,
     "ability_haste": 5.0,
-    "attack_speed": 0.0
+    "attack_speed": 0.0,
+    "healing": 1.0,
+    "shielding": 1.0,
+    "tenacity": 0.0
    },
    "resource": {
     "kind": "mana",
@@ -30301,7 +30697,10 @@
     "damage_dealt": 1.0,
     "damage_taken": 1.0,
     "ability_haste": 0.0,
-    "attack_speed": 0.0
+    "attack_speed": 0.0,
+    "healing": 1.0,
+    "shielding": 1.0,
+    "tenacity": 0.0
    },
    "resource": {
     "kind": "mana",
@@ -30544,7 +30943,10 @@
     "damage_dealt": 1.0,
     "damage_taken": 1.0,
     "ability_haste": 0.0,
-    "attack_speed": 0.0
+    "attack_speed": 0.0,
+    "healing": 1.0,
+    "shielding": 1.0,
+    "tenacity": 0.0
    },
    "resource": {
     "kind": "mana",
@@ -30746,7 +31148,10 @@
     "damage_dealt": 1.05,
     "damage_taken": 0.95,
     "ability_haste": 0.0,
-    "attack_speed": 0.0
+    "attack_speed": 0.0,
+    "healing": 1.0,
+    "shielding": 1.0,
+    "tenacity": 0.2
    },
    "resource": {
     "kind": "mana",
@@ -31010,7 +31415,10 @@
     "damage_dealt": 1.0,
     "damage_taken": 1.1,
     "ability_haste": 0.0,
-    "attack_speed": 0.0
+    "attack_speed": 0.0,
+    "healing": 1.0,
+    "shielding": 1.0,
+    "tenacity": 0.0
    },
    "resource": {
     "kind": "mana",
@@ -31210,7 +31618,10 @@
     "damage_dealt": 0.95,
     "damage_taken": 1.1,
     "ability_haste": 0.0,
-    "attack_speed": 0.0
+    "attack_speed": 0.0,
+    "healing": 1.0,
+    "shielding": 1.0,
+    "tenacity": 0.0
    },
    "resource": {
     "kind": "mana",
@@ -31421,7 +31832,10 @@
     "damage_dealt": 1.0,
     "damage_taken": 1.0,
     "ability_haste": 0.0,
-    "attack_speed": 0.0
+    "attack_speed": 0.0,
+    "healing": 1.0,
+    "shielding": 1.0,
+    "tenacity": 0.0
    },
    "resource": {
     "kind": "mana",
@@ -31655,7 +32069,10 @@
     "damage_dealt": 1.0,
     "damage_taken": 1.0,
     "ability_haste": 0.0,
-    "attack_speed": 0.0
+    "attack_speed": 0.0,
+    "healing": 1.0,
+    "shielding": 1.0,
+    "tenacity": 0.0
    },
    "resource": {
     "kind": "mana",
@@ -31876,7 +32293,10 @@
     "damage_dealt": 1.0,
     "damage_taken": 1.0,
     "ability_haste": 0.0,
-    "attack_speed": 0.0
+    "attack_speed": 0.0,
+    "healing": 1.0,
+    "shielding": 1.0,
+    "tenacity": 0.0
    },
    "resource": {
     "kind": "mana",
@@ -32077,7 +32497,10 @@
     "damage_dealt": 1.1,
     "damage_taken": 0.9,
     "ability_haste": 0.0,
-    "attack_speed": 0.0
+    "attack_speed": 0.0,
+    "healing": 1.2,
+    "shielding": 1.0,
+    "tenacity": 0.0
    },
    "resource": {
     "kind": "none"
@@ -32250,7 +32673,10 @@
     "damage_dealt": 1.0,
     "damage_taken": 1.0,
     "ability_haste": 0.0,
-    "attack_speed": 0.0
+    "attack_speed": 0.0,
+    "healing": 1.0,
+    "shielding": 1.0,
+    "tenacity": 0.0
    },
    "resource": {
     "kind": "mana",
@@ -32471,7 +32897,10 @@
     "damage_dealt": 1.0,
     "damage_taken": 1.0,
     "ability_haste": 0.0,
-    "attack_speed": 0.0
+    "attack_speed": 0.0,
+    "healing": 1.0,
+    "shielding": 1.0,
+    "tenacity": 0.0
    },
    "resource": {
     "kind": "mana",
@@ -32701,7 +33130,10 @@
     "damage_dealt": 1.0,
     "damage_taken": 1.0,
     "ability_haste": 0.0,
-    "attack_speed": 0.0
+    "attack_speed": 0.0,
+    "healing": 1.0,
+    "shielding": 1.0,
+    "tenacity": 0.0
    },
    "resource": {
     "kind": "mana",
@@ -32947,7 +33379,10 @@
     "damage_dealt": 1.0,
     "damage_taken": 1.0,
     "ability_haste": 0.0,
-    "attack_speed": 0.0
+    "attack_speed": 0.0,
+    "healing": 1.0,
+    "shielding": 1.0,
+    "tenacity": 0.0
    },
    "resource": {
     "kind": "mana",
@@ -33204,7 +33639,10 @@
     "damage_dealt": 1.0,
     "damage_taken": 1.0,
     "ability_haste": 0.0,
-    "attack_speed": 0.0
+    "attack_speed": 0.0,
+    "healing": 1.0,
+    "shielding": 1.0,
+    "tenacity": 0.0
    },
    "resource": {
     "kind": "mana",
@@ -33471,7 +33909,10 @@
     "damage_dealt": 1.0,
     "damage_taken": 1.0,
     "ability_haste": 0.0,
-    "attack_speed": 0.0
+    "attack_speed": 0.0,
+    "healing": 1.0,
+    "shielding": 1.0,
+    "tenacity": 0.0
    },
    "resource": {
     "kind": "mana",
@@ -33687,7 +34128,10 @@
     "damage_dealt": 0.93,
     "damage_taken": 1.1,
     "ability_haste": 0.0,
-    "attack_speed": 0.0
+    "attack_speed": 0.0,
+    "healing": 1.0,
+    "shielding": 1.0,
+    "tenacity": 0.0
    },
    "resource": {
     "kind": "mana",
@@ -33883,7 +34327,10 @@
     "damage_dealt": 0.95,
     "damage_taken": 1.05,
     "ability_haste": 0.0,
-    "attack_speed": 0.0
+    "attack_speed": 0.0,
+    "healing": 1.0,
+    "shielding": 1.0,
+    "tenacity": 0.0
    },
    "resource": {
     "kind": "mana",
@@ -34129,7 +34576,10 @@
     "damage_dealt": 0.95,
     "damage_taken": 1.0,
     "ability_haste": 0.0,
-    "attack_speed": 0.0
+    "attack_speed": 0.0,
+    "healing": 1.0,
+    "shielding": 1.0,
+    "tenacity": 0.0
    },
    "resource": {
     "kind": "mana",
@@ -34348,7 +34798,10 @@
     "damage_dealt": 1.05,
     "damage_taken": 0.95,
     "ability_haste": 0.0,
-    "attack_speed": 0.0
+    "attack_speed": 0.0,
+    "healing": 1.0,
+    "shielding": 1.0,
+    "tenacity": 0.0
    },
    "resource": {
     "kind": "mana",
@@ -34562,7 +35015,10 @@
     "damage_dealt": 1.05,
     "damage_taken": 1.0,
     "ability_haste": 0.0,
-    "attack_speed": 0.0
+    "attack_speed": 0.0,
+    "healing": 1.0,
+    "shielding": 1.0,
+    "tenacity": 0.0
    },
    "resource": {
     "kind": "mana",
@@ -34799,7 +35255,10 @@
     "damage_dealt": 1.0,
     "damage_taken": 1.0,
     "ability_haste": 0.0,
-    "attack_speed": 0.0
+    "attack_speed": 0.0,
+    "healing": 1.0,
+    "shielding": 1.0,
+    "tenacity": 0.0
    },
    "resource": {
     "kind": "mana",
@@ -35030,7 +35489,10 @@
     "damage_dealt": 1.0,
     "damage_taken": 1.0,
     "ability_haste": 0.0,
-    "attack_speed": 0.0
+    "attack_speed": 0.0,
+    "healing": 1.0,
+    "shielding": 1.0,
+    "tenacity": 0.0
    },
    "resource": {
     "kind": "none"
@@ -35270,7 +35732,10 @@
     "damage_dealt": 1.0,
     "damage_taken": 1.0,
     "ability_haste": 0.0,
-    "attack_speed": 0.0
+    "attack_speed": 0.0,
+    "healing": 1.0,
+    "shielding": 1.0,
+    "tenacity": 0.0
    },
    "resource": {
     "kind": "mana",
@@ -35546,7 +36011,10 @@
     "damage_dealt": 1.05,
     "damage_taken": 0.95,
     "ability_haste": 0.0,
-    "attack_speed": 0.0
+    "attack_speed": 0.0,
+    "healing": 1.0,
+    "shielding": 1.0,
+    "tenacity": 0.0
    },
    "resource": {
     "kind": "mana",
@@ -35766,7 +36234,10 @@
     "damage_dealt": 1.0,
     "damage_taken": 1.0,
     "ability_haste": 0.0,
-    "attack_speed": 0.0
+    "attack_speed": 0.0,
+    "healing": 1.0,
+    "shielding": 1.0,
+    "tenacity": 0.0
    },
    "resource": {
     "kind": "mana",
@@ -35970,7 +36441,10 @@
     "damage_dealt": 1.0,
     "damage_taken": 1.0,
     "ability_haste": 0.0,
-    "attack_speed": 0.0
+    "attack_speed": 0.0,
+    "healing": 1.0,
+    "shielding": 1.0,
+    "tenacity": 0.0
    },
    "resource": {
     "kind": "mana",
@@ -36171,7 +36645,10 @@
     "damage_dealt": 0.93,
     "damage_taken": 1.05,
     "ability_haste": 0.0,
-    "attack_speed": 0.0
+    "attack_speed": 0.0,
+    "healing": 1.0,
+    "shielding": 1.0,
+    "tenacity": 0.0
    },
    "resource": {
     "kind": "mana",
@@ -36409,7 +36886,10 @@
     "damage_dealt": 1.0,
     "damage_taken": 1.0,
     "ability_haste": 0.0,
-    "attack_speed": 0.0
+    "attack_speed": 0.0,
+    "healing": 1.0,
+    "shielding": 1.0,
+    "tenacity": 0.0
    },
    "resource": {
     "kind": "mana",
@@ -36674,7 +37154,10 @@
     "damage_dealt": 1.0,
     "damage_taken": 1.0,
     "ability_haste": 0.0,
-    "attack_speed": 0.025
+    "attack_speed": 0.025,
+    "healing": 1.0,
+    "shielding": 1.0,
+    "tenacity": 0.0
    },
    "resource": {
     "kind": "none"
@@ -36884,7 +37367,10 @@
     "damage_dealt": 1.05,
     "damage_taken": 0.97,
     "ability_haste": 0.0,
-    "attack_speed": 0.025
+    "attack_speed": 0.025,
+    "healing": 1.0,
+    "shielding": 1.0,
+    "tenacity": 0.0
    },
    "resource": {
     "kind": "none"
@@ -37136,7 +37622,10 @@
     "damage_dealt": 1.0,
     "damage_taken": 1.0,
     "ability_haste": 0.0,
-    "attack_speed": 0.0
+    "attack_speed": 0.0,
+    "healing": 1.0,
+    "shielding": 1.0,
+    "tenacity": 0.0
    },
    "resource": {
     "kind": "mana",
@@ -37344,7 +37833,10 @@
     "damage_dealt": 1.0,
     "damage_taken": 1.0,
     "ability_haste": 0.0,
-    "attack_speed": 0.0
+    "attack_speed": 0.0,
+    "healing": 1.0,
+    "shielding": 1.0,
+    "tenacity": 0.0
    },
    "resource": {
     "kind": "mana",
@@ -37566,7 +38058,10 @@
     "damage_dealt": 1.0,
     "damage_taken": 1.0,
     "ability_haste": 0.0,
-    "attack_speed": 0.0
+    "attack_speed": 0.0,
+    "healing": 1.0,
+    "shielding": 1.0,
+    "tenacity": 0.0
    },
    "resource": {
     "kind": "mana",
@@ -37801,7 +38296,10 @@
     "damage_dealt": 1.0,
     "damage_taken": 1.0,
     "ability_haste": 0.0,
-    "attack_speed": 0.0
+    "attack_speed": 0.0,
+    "healing": 1.0,
+    "shielding": 1.0,
+    "tenacity": 0.0
    },
    "resource": {
     "kind": "mana",
@@ -38047,7 +38545,10 @@
     "damage_dealt": 1.0,
     "damage_taken": 0.96,
     "ability_haste": 0.0,
-    "attack_speed": 0.0
+    "attack_speed": 0.0,
+    "healing": 1.1,
+    "shielding": 1.0,
+    "tenacity": 0.0
    },
    "resource": {
     "kind": "none"
@@ -38287,7 +38788,10 @@
     "damage_dealt": 1.05,
     "damage_taken": 0.95,
     "ability_haste": 0.0,
-    "attack_speed": 0.0
+    "attack_speed": 0.0,
+    "healing": 1.0,
+    "shielding": 1.0,
+    "tenacity": 0.2
    },
    "resource": {
     "kind": "energy",
@@ -38510,7 +39014,10 @@
     "damage_dealt": 1.1,
     "damage_taken": 0.95,
     "ability_haste": 0.0,
-    "attack_speed": 0.0
+    "attack_speed": 0.0,
+    "healing": 1.0,
+    "shielding": 1.0,
+    "tenacity": 0.0
    },
    "resource": {
     "kind": "mana",
@@ -38742,8 +39249,11 @@
    "mayhem": {
     "damage_dealt": 0.9,
     "damage_taken": 1.2,
-    "ability_haste": 0.0,
-    "attack_speed": 0.0
+    "ability_haste": -20.0,
+    "attack_speed": 0.0,
+    "healing": 1.0,
+    "shielding": 1.0,
+    "tenacity": 0.0
    },
    "resource": {
     "kind": "mana",
@@ -38991,7 +39501,10 @@
     "damage_dealt": 1.0,
     "damage_taken": 1.0,
     "ability_haste": 0.0,
-    "attack_speed": 0.0
+    "attack_speed": 0.0,
+    "healing": 1.0,
+    "shielding": 1.0,
+    "tenacity": 0.0
    },
    "resource": {
     "kind": "mana",
@@ -39170,7 +39683,10 @@
     "damage_dealt": 1.1,
     "damage_taken": 0.95,
     "ability_haste": 0.0,
-    "attack_speed": 0.0
+    "attack_speed": 0.0,
+    "healing": 1.0,
+    "shielding": 1.0,
+    "tenacity": 0.0
    },
    "resource": {
     "kind": "mana",
@@ -39396,7 +39912,10 @@
     "damage_dealt": 0.9,
     "damage_taken": 1.05,
     "ability_haste": -10.0,
-    "attack_speed": 0.0
+    "attack_speed": 0.0,
+    "healing": 1.0,
+    "shielding": 1.0,
+    "tenacity": 0.0
    },
    "resource": {
     "kind": "mana",
