@@ -39,14 +39,6 @@ export async function riotFetch<T>(
 
 export type Account = { puuid: string; gameName: string; tagLine: string };
 
-export function getAccountByRiotId(region: Region, gameName: string, tagLine: string) {
-  // account-v1 only answers on americas, asia and europe; SEA players' accounts are on asia.
-  return riotFetch<Account>(
-    region === "sea" ? "asia" : region,
-    `/riot/account/v1/accounts/by-riot-id/${encodeURIComponent(gameName)}/${encodeURIComponent(tagLine)}`,
-  );
-}
-
 // Platform routing values (one per server) and the regional host each one's accounts live on.
 export const PLATFORMS = {
   na1: "americas", br1: "americas", la1: "americas", la2: "americas",
@@ -60,32 +52,6 @@ export type Platform = keyof typeof PLATFORMS;
 const PLATFORM_HOST: Partial<Record<Platform, string>> = { ph2: "sg2", th2: "sg2" };
 
 export type ChallengeProgress = { challenges: { challengeId: number; level: string; value: number; percentile: number }[] };
-
-/** A player's challenge progress (challenges-v1), looked up by Riot ID. */
-export async function getChallengesByRiotId(platform: Platform, gameName: string, tagLine: string) {
-  const { puuid } = await getAccountByRiotId(PLATFORMS[platform], gameName, tagLine);
-  return riotFetch<ChallengeProgress>(platform, `/lol/challenges/v1/player-data/${encodeURIComponent(puuid)}`);
-}
-
-export type RankedEntry = { queueType: string; tier: string; rank: string; leaguePoints: number; wins: number; losses: number };
-export type Profile = Account & { platform: Platform; profileIconId: number; summonerLevel: number; ranked: RankedEntry[] };
-
-/** Account, level, icon and ranked standing for a Riot ID on one server. */
-export async function getProfileByRiotId(platform: Platform, gameName: string, tagLine: string): Promise<Profile> {
-  const account = await getAccountByRiotId(PLATFORMS[platform], gameName, tagLine);
-  const id = encodeURIComponent(account.puuid);
-  const [summoner, ranked] = await Promise.all([
-    riotFetch<{ profileIconId: number; summonerLevel: number }>(platform, `/lol/summoner/v4/summoners/by-puuid/${id}`),
-    riotFetch<RankedEntry[]>(platform, `/lol/league/v4/entries/by-puuid/${id}`).catch(() => []),
-  ]);
-  return {
-    ...account,
-    platform,
-    profileIconId: summoner.profileIconId,
-    summonerLevel: summoner.summonerLevel,
-    ranked: ranked.map(({ queueType, tier, rank, leaguePoints, wins, losses }) => ({ queueType, tier, rank, leaguePoints, wins, losses })),
-  };
-}
 
 export type Mastery = { championId: number; championLevel: number; championPoints: number };
 export type ChallengeSummary = {
@@ -150,7 +116,7 @@ async function aramClashTeam(platform: Platform, puuid: string): Promise<ClashTe
   return null;
 }
 
-/** Mastery, challenge standing and ARAM Clash team for a player already looked up by Riot ID. */
+/** Mastery, challenge standing and ARAM Clash team for a Riot account connected to a site account. */
 export async function getPlayerExtras(platform: Platform, puuid: string): Promise<PlayerExtras> {
   const [mastery, challenges, clash] = await Promise.all([
     topMastery(platform, puuid, 20),

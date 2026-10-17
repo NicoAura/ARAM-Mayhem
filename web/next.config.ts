@@ -4,7 +4,7 @@ import type { NextConfig } from "next";
 // The content policy only reports for now (inline theme scripts, embeds); enforce it once it's quiet.
 const CSP = [
   "default-src 'self'",
-  // challenges.cloudflare.com: the Simulator leaderboard's bot check (lib/bot-check.ts), script and frame.
+  // challenges.cloudflare.com: the bot check on the Simulator leaderboard and account sign-in (lib/bot-check.ts), script and frame.
   "script-src 'self' 'unsafe-inline' 'wasm-unsafe-eval' https://static.cloudflareinsights.com https://challenges.cloudflare.com",
   "style-src 'self' 'unsafe-inline'",
   "img-src 'self' data: blob:",
@@ -43,6 +43,9 @@ const nextConfig: NextConfig = {
       ["/tools/cook-builds", "/lab#cook-builds"],
       ["/tools/kitchen", "/lab#cook-builds"],
       ["/kitchen", "/lab#cook-builds"],
+      // The owner's tools moved under the account page when accounts replaced the editor password.
+      ["/admin", "/account/edit"],
+      ["/admin/simulator", "/account/simulator"],
     ]
       .map(([source, destination]) => ({ source, destination, permanent: true }))
       .concat([
