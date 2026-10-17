@@ -3,7 +3,7 @@
   "built_at": "2026-10-17T07:23:46+00:00",
   "game_version": "16.20",
   "cdragon": "latest",
-  "mayhem_balance_patch": "wiki revision 4078384",
+  "mayhem_balance_patch": "wiki read 2026-10-17",
   "level": 18,
   "ranks": {
    "Q": 5,
@@ -15495,7 +15495,7 @@
    },
    "mayhem": {
     "damage_dealt": 1.05,
-    "damage_taken": 0.9,
+    "damage_taken": 1.0,
     "ability_haste": 0.0,
     "attack_speed": 0.0,
     "healing": 1.0,
