@@ -228,6 +228,17 @@ def fetch_three():
     print(f"three.js: {len(seen)} files (import map: \"three\" -> /assets/lib/three-0.160.0/build/three.module.js)")
 
 
+def write_large_icon_list():
+    """Augment small icons whose large (rarity-coloured) copy is mirrored, for src/lib/assets.ts."""
+    have = []
+    for root, _, files in os.walk(os.path.join(OUT, "cd")):
+        for f in files:
+            if f.endswith("_small.png") and "/augments/icons" in root.replace(os.sep, "/") and f[:-10] + "_large.png" in files:
+                have.append("/assets/" + os.path.relpath(os.path.join(root, f), OUT).replace(os.sep, "/"))
+    with open(os.path.join(REPO, "web", "src", "data", "augment-large-icons.json"), "w") as fh:
+        json.dump(sorted(have), fh, indent=0)
+
+
 def replay_index():
     with open(os.path.join(REPO, "simulator", "viewer", "replay-data", "index.json")) as f:
         return json.load(f)
@@ -365,6 +376,10 @@ def main():
     dd_urls |= {u for u in literal if "ddragon" in u}
 
     errors = fetch_all(cd_urls, args.refresh, "client files")
+    # Pages show each augment's large icon, which carries its rarity colour (the small ones are grey; see
+    # sync-embeds.mjs). Arena augments have no large icon, so those misses are expected and not counted.
+    large = {re.sub(r"_small\.png$", "_large.png", u) for u in cd_urls if re.search(r"/augments/icons/[^/]+_small\.png$", u, re.I)}
+    fetch_all(large - cd_urls, args.refresh, "augment large icons (Arena ones have none)")
     errors += fetch_all(dd_urls, args.refresh, "replay icons")
     for old in os.listdir(os.path.join(OUT, "dd")):  # keep only the live patch's copies
         if old != ver:
@@ -375,6 +390,7 @@ def main():
         fetch_clips(args.refresh)
     if args.models:
         fetch_models(args.refresh)
+    write_large_icon_list()
     split = split_large()
 
     versions = json.loads(fetch(f"{DD}/api/versions.json"))
