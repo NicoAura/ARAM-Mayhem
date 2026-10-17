@@ -1652,6 +1652,9 @@ private:
         target->hp -= dmg;
         res_.bySource[src] += dmg;
         res_.totalDamage += dmg;
+        if (res_.firstHit < 0) res_.firstHit = t_;
+        if (t_ < res_.firstHit + kShortFight) res_.inShort += dmg;
+        if (t_ < res_.firstHit + kLongFight) res_.inLong += dmg;
         const bool isPrimary = hasPrimary() && target == &P();
         if (isPrimary) res_.primaryDamage += dmg;
         const double execute = execute_;
@@ -1660,6 +1663,8 @@ private:
             executed = target->hp;
             res_.bySource[src] += target->hp;
             res_.totalDamage += target->hp;
+            if (t_ < res_.firstHit + kShortFight) res_.inShort += target->hp;
+            if (t_ < res_.firstHit + kLongFight) res_.inLong += target->hp;
             if (isPrimary) res_.primaryDamage += target->hp;
             target->hp = 0;
         }
@@ -2611,6 +2616,8 @@ Summary summarize(const std::vector<Result>& results) {
     dps.reserve(results.size());
     double single = 0, kpm = 0, total = 0;
     for (const auto& r : results) {
+        s.shortDps += r.inShort / kShortFight;
+        s.longDps += r.inLong / kLongFight;
         dps.push_back(r.totalDamage / r.duration);
         single += r.primaryDamage / r.duration;
         kpm += r.kills / r.duration * 60.0;
@@ -2636,6 +2643,8 @@ Summary summarize(const std::vector<Result>& results) {
     s.survivalRate /= n;
     s.meanTimeAlive /= n;
     s.damageTakenPerSec /= n;
+    s.shortDps /= n;
+    s.longDps /= n;
     if (total > 0)
         for (auto& x : s.shareBySource) x /= total;
     return s;
