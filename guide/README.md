@@ -75,3 +75,10 @@ aren't in any client file.
 `augment_groups.py` (needs Pillow and numpy) clusters the live augments by how their icon glyph looks. It names each
 group after its glyph, from the hand-kept `GLYPHS` map. It then lists what most members share: rarity, build style,
 stat or effect words, and the win-rate range. It writes `augment_groups.json`. Run it after `build_data.py`.
+
+## Official track details and the mode's story
+
+`OFFICIAL_TRACK` in `build_data.py` adds what Riot's support article gives for the live 32-level track: XP per level,
+reward names the client leaves blank, notes on the reward-only levels, how Mayhem XP is earned and the guaranteed-offer
+rule. It's applied only while the track has 32 levels; update it with each new set. `STORY` is a short history of the
+mode written from Riot's /dev posts and dev updates (What is Mayhem tab). Neither names its source on the page.
