@@ -263,11 +263,9 @@
   }
   renderChallenges();
 
-  // Show the progress form only when the lookup is available.
+  // The site answers the lookup; the page only calls it once a Riot ID is entered.
   const API = "/api/riot/challenges";
-  fetch(API)
-    .then((r) => { if (r.status !== 404) $("lookup").hidden = false; })
-    .catch(() => {});
+  $("lookup").hidden = false;
   $("lookup").addEventListener("submit", async (e) => {
     e.preventDefault();
     const f = new FormData(e.target);

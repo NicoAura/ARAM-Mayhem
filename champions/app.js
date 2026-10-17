@@ -81,7 +81,7 @@
     rows.push(["Attack range", s.range, "", s.range], ["Move speed", s.ms, "", s.ms]);
     const cell = (v, d) => (typeof v === "number" ? num(v, d) : esc(v));
     return `<div class="card"><div class="card-head"><h2>Base stats</h2><span class="muted small">Before items, augments and Mayhem's bonuses</span></div>
-      <div class="table-wrap"><table class="stats"><thead><tr><th>Stat</th><th class="num">Level 1</th><th class="num">Per level</th><th class="num">Level 18</th></tr></thead>
+      <div class="table-wrap" tabindex="0" role="region" aria-label="Base stats"><table class="stats"><thead><tr><th>Stat</th><th class="num">Level 1</th><th class="num">Per level</th><th class="num">Level 18</th></tr></thead>
       <tbody>${rows.map(([l, a, b, z]) => `<tr><td>${esc(l)}</td><td class="num">${cell(a, 3)}</td><td class="num">${b === "" ? "–" : cell(b, 3)}</td><td class="num"><b>${cell(z, l === "Attack speed" ? 3 : 1)}</b></td></tr>`).join("")}</tbody></table></div></div>`;
   }
 
@@ -154,7 +154,7 @@
          ["Damage share", pct(c.tier.damage)], ["Damage taken share", pct(c.tier.tank)]]
       : [];
     const changes = c.mayhem.length
-      ? `<div class="table-wrap"><table class="changes">
+      ? `<div class="table-wrap" tabindex="0" role="region" aria-label="Mayhem changes"><table class="changes">
           <thead><tr><th>Ability</th><th>Value</th><th class="num">Rift</th><th class="num">Mayhem</th></tr></thead>
           <tbody>${c.mayhem.map((m) => {
             const a = ab[m.slot] || {};
