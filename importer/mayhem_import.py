@@ -500,17 +500,19 @@ def site_asset(path):
     rel = path.lstrip("/")
     if ".." in rel.split("/") or not rel.startswith(("assets/", "i18n/")):
         return None
-    cached = os.path.join(ASSET_CACHE, rel)
-    fresh = rel.startswith("i18n/")
-    if os.path.exists(cached) and not fresh:
+    base = os.path.realpath(ASSET_CACHE)
+    cached = os.path.realpath(os.path.join(base, rel))
+    if not cached.startswith(base + os.sep):
+        return None
+    if os.path.exists(cached) and not rel.startswith("i18n/"):
         with open(cached, "rb") as f:
             return f.read()
     res = subprocess.run(["curl", "-sSf", "--max-time", "30", f"{SITE}/{rel}"], capture_output=True)
     if res.returncode != 0:
-        if os.path.exists(cached):
-            with open(cached, "rb") as f:
-                return f.read()
-        return None
+        if not os.path.exists(cached):
+            return None
+        with open(cached, "rb") as f:
+            return f.read()
     os.makedirs(os.path.dirname(cached), exist_ok=True)
     with open(cached, "wb") as f:
         f.write(res.stdout)
