@@ -22,8 +22,28 @@ const git = (...args) => {
     return "";
   }
 };
+// Build servers often clone without history; fetch recent commits (no file contents) so folder
+// dates can be read. Skipped quietly when the fetch isn't allowed or takes too long.
+if (git("rev-parse", "--is-shallow-repository") === "true") {
+  try {
+    execFileSync("git", ["-C", repo, "fetch", "--quiet", "--deepen=400", "--filter=blob:none", "origin"], { stdio: "ignore", timeout: 60000 });
+  } catch {}
+}
 const shallow = git("rev-parse", "--is-shallow-repository") !== "false";
-const changed = (...paths) => (shallow ? null : git("log", "-1", "--format=%cI", "--", ...paths) || null);
+// In a shallow checkout the oldest commit stands in for all earlier history, so a date that lands on it
+// isn't trusted.
+const boundary = new Set(shallow ? readShallow() : []);
+function readShallow() {
+  try {
+    return readFileSync(join(repo, ".git", "shallow"), "utf8").split("\n").filter(Boolean);
+  } catch {
+    return [];
+  }
+}
+const changed = (...paths) => {
+  const [sha, date] = git("log", "-1", "--format=%H %cI", "--", ...paths).split(" ");
+  return sha && date && !boundary.has(sha) ? date : null;
+};
 const ymd = (s) => (s && /^\d{8}$/.test(s) ? `${s.slice(0, 4)}-${s.slice(4, 6)}-${s.slice(6)}` : s ?? null);
 
 const meta = json("data/cn/augments.json")?.meta ?? {};
@@ -51,7 +71,7 @@ const status = {
     changes: Object.values(tracker.counts ?? {}).reduce((a, b) => a + b, 0) || null,
   },
   simulator: {
-    updated: changed("simulator/data", "simulator/viewer/replay-data", "simulator/src"),
+    updated: sim.generated_at ?? changed("simulator/data", "simulator/viewer/replay-data", "simulator/src"),
     patch: sim.game_version ?? null,
   },
 };
