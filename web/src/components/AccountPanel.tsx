@@ -221,7 +221,7 @@ function SignIn({ onDone, rso, providers }: { onDone: () => Promise<void>; rso: 
 
   const signup = mode === "signup";
   return (
-    <div className="acct-signin card">
+    <div className="acct-signin card" data-accent="gold">
       <div className="acct-tabs" role="tablist" aria-label={t("Sign in or create an account")}>
         {(["signin", "signup"] as const).map((m) => (
           <button key={m} type="button" role="tab" aria-selected={mode === m} className={mode === m ? "active" : ""} onClick={() => (setMode(m), setMsg(null))}>
@@ -282,7 +282,7 @@ function Manage({ account, refresh }: { account: Account; refresh: () => Promise
 
   return (
     <div className="acct-grid">
-      <section className="card acct-card">
+      <section className="card acct-card" data-accent="gold">
         <h2>{t("Signed in")}</h2>
         <div className="acct-me">
           {account.icon && (
@@ -305,8 +305,8 @@ function Manage({ account, refresh }: { account: Account; refresh: () => Promise
           {t("Sign out")}
         </button>
       </section>
-      <ProfileCard account={account} refresh={refresh} />
       <RiotCard account={account} refresh={refresh} />
+      <ProfileCard account={account} refresh={refresh} />
       <PasskeyCard account={account} refresh={refresh} />
       {(account.providers.length > 0 || account.logins.length > 0) && <ProvidersCard account={account} refresh={refresh} />}
       <EmailCard account={account} refresh={refresh} />
@@ -344,7 +344,7 @@ function ProfileCard({ account, refresh }: { account: Account; refresh: () => Pr
   };
 
   return (
-    <section className="card acct-card">
+    <section className="card acct-card" data-accent="lab">
       <h2>{t("Profile")}</h2>
       <form className="acct-form" method="post" action="/account" onSubmit={save}>
         <label>
@@ -405,7 +405,7 @@ function EmailCard({ account, refresh }: { account: Account; refresh: () => Prom
   };
 
   return (
-    <section className="card acct-card">
+    <section className="card acct-card" data-accent="info">
       <h2>{account.email ? t("Change email") : t("Add an email")}</h2>
       {account.email && <p className="acct-who">{account.email}</p>}
       <form className="acct-form" method="post" action="/account" onSubmit={submit}>
@@ -428,18 +428,51 @@ function EmailCard({ account, refresh }: { account: Account; refresh: () => Prom
   );
 }
 
+const CODE_MINUTES = 15;
+
+/** Connecting the Riot account: a code from here, entered in My Stats, which checks it with the Riot Client. */
 function RiotCard({ account, refresh }: { account: Account; refresh: () => Promise<void> }) {
   const [code, setCode] = useState("");
+  const [expires, setExpires] = useState(0);
+  const [now, setNow] = useState(0);
+  const [copied, setCopied] = useState(false);
   const [msg, setMsg] = useState<Msg>(null);
   const t = useT("account");
 
+  // While a code is out, check every few seconds whether My Stats used it, so there's nothing to click.
+  useEffect(() => {
+    if (!code) return;
+    const tick = setInterval(async () => {
+      setNow(Date.now());
+      if (Date.now() > expires) return;
+      const a = await fetch("/api/account", { cache: "no-store" }).then((r) => r.json()).catch(() => null);
+      if (a?.riot) {
+        setCode("");
+        setMsg({ kind: "ok", text: "Your Riot account is connected." });
+        await refresh();
+      }
+    }, 4000);
+    return () => clearInterval(tick);
+  }, [code, expires, refresh]);
+
   const getCode = async () => {
     setMsg(null);
+    setCopied(false);
     try {
       setCode((await call("/api/account/riot-code", "POST")).code);
+      setExpires(Date.now() + CODE_MINUTES * 60_000);
+      setNow(Date.now());
     } catch (err) {
       setMsg({ kind: "error", text: errText(err) });
     }
+  };
+
+  const copy = async () => {
+    try {
+      await navigator.clipboard.writeText(code);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch {}
   };
 
   const disconnect = async () => {
@@ -451,9 +484,21 @@ function RiotCard({ account, refresh }: { account: Account; refresh: () => Promi
     }
   };
 
+  const expired = Boolean(code) && now > expires;
+  const step = account.riot ? 3 : code ? 2 : 1;
+  const steps = [t("Get a code"), t("Enter it in My Stats"), t("Connected")];
+
   return (
-    <section className="card acct-card">
+    <section className="card acct-card acct-riot-card" data-accent="tier">
       <h2>{t("Riot account")}</h2>
+      <ol className="acct-progress" aria-label={t("Step {n} of 3", { n: step })}>
+        {steps.map((label, i) => (
+          <li key={label} className={i + 1 < step || step === 3 ? "done" : i + 1 === step ? "now" : ""} aria-current={i + 1 === step ? "step" : undefined}>
+            <span className="dot">{i + 1 < step || step === 3 ? "✓" : i + 1}</span>
+            <span className="label">{label}</span>
+          </li>
+        ))}
+      </ol>
       {account.riot ? (
         <>
           <p className="acct-who">{account.riot.name}</p>
@@ -470,46 +515,46 @@ function RiotCard({ account, refresh }: { account: Account; refresh: () => Promi
             {t("Disconnect")}
           </button>
         </>
-      ) : code ? (
+      ) : code && !expired ? (
         <>
-          <p className="acct-code" aria-label={t("Your code: {code}", { code: code.split("").join(" ") })}>
-            {code.slice(0, 4)} {code.slice(4)}
-          </p>
+          <div className="acct-code-row">
+            <p className="acct-code" aria-label={t("Your code: {code}", { code: code.split("").join(" ") })}>
+              {code.slice(0, 4)} {code.slice(4)}
+            </p>
+            <button type="button" className="btn ghost" onClick={copy}>
+              {copied ? t("Copied") : t("Copy code")}
+            </button>
+          </div>
           <ol className="acct-steps">
             <li>
               {around(
-                t("Open {link} on the computer where you play, with the Riot Client signed in."),
+                t("On the computer where you play, open {link} with the Riot Client signed in."),
                 "link",
                 <Link className="inline-link" href="/stats">
                   {t("My Stats")}
                 </Link>,
               )}
             </li>
-            <li>{t("Choose Connect account and enter this code. It works for 15 minutes.")}</li>
-            <li>
-              {around(
-                t("Come back here and {link}."),
-                "link",
-                <button type="button" className="inline-link" onClick={() => void refresh()}>
-                  {t("refresh")}
-                </button>,
-              )}
-            </li>
+            <li>{t("Choose Connect account and paste this code.")}</li>
           </ol>
+          <p className="acct-waiting" role="status">
+            <span className="pulse" aria-hidden="true" />
+            {t("Waiting for My Stats… This page updates by itself. The code works for {n} minutes.", { n: Math.max(1, Math.ceil((expires - now) / 60_000)) })}
+          </p>
         </>
       ) : (
         <>
-          <p className="acct-hint">{t("Connect the Riot account you play on. My Stats confirms it with the Riot Client on your computer, so only you can connect yours.")}</p>
-          <button type="button" className="btn" onClick={getCode}>
-            {t("Connect a Riot account")}
-          </button>
-          {account.rso ? (
-            <a className="btn ghost" href="/api/account/rso/start?mode=connect">
+          {expired && <p className="acct-note error">{t("That code expired. Get a new one.")}</p>}
+          <p className="acct-hint">{t("Connect the Riot account you play on to see your rank, mastery and Clash team here. Only you can connect yours: My Stats checks it with the Riot Client on your computer.")}</p>
+          {account.rso && (
+            <a className="btn" href="/api/account/rso/start?mode=connect">
               {t("Connect with Riot sign-in")}
             </a>
-          ) : (
-            <p className="acct-hint">{t("Coming soon: connect straight from this page with your Riot sign-in.")}</p>
           )}
+          <button type="button" className={account.rso ? "btn ghost" : "btn"} onClick={getCode}>
+            {expired ? t("Get a new code") : account.rso ? t("Use a code from My Stats instead") : t("Get my code")}
+          </button>
+          {!account.rso && <p className="acct-hint">{t("Coming soon: connect straight from this page with your Riot sign-in.")}</p>}
         </>
       )}
       <Note msg={msg} />
@@ -532,7 +577,7 @@ function ProvidersCard({ account, refresh }: { account: Account; refresh: () => 
   const missing = account.providers.filter((p) => !account.logins.some((l) => l.provider === p));
 
   return (
-    <section className="card acct-card">
+    <section className="card acct-card" data-accent="info">
       <h2>{t("Other ways to sign in")}</h2>
       <p className="acct-hint">{t("Sign in to this account with another service you use, instead of a password.")}</p>
       {account.logins.length > 0 && (
@@ -585,7 +630,7 @@ function PasskeyCard({ account, refresh }: { account: Account; refresh: () => Pr
   };
 
   return (
-    <section className="card acct-card">
+    <section className="card acct-card" data-accent="pbe">
       <h2>{t("Passkeys")}</h2>
       <p className="acct-hint">{t("Sign in with your fingerprint, face or device PIN instead of a password. A passkey is also how you get back in if you forget your password.")}</p>
       {account.passkeys.length > 0 && (
@@ -636,7 +681,7 @@ function PasswordCard({ account }: { account: Account }) {
   };
 
   return (
-    <section className="card acct-card">
+    <section className="card acct-card" data-accent="sim">
       <h2>{account.hasPassword ? t("Change password") : t("Set a password")}</h2>
       <form className="acct-form" method="post" action="/account" onSubmit={submit}>
         <input type="text" name="username" autoComplete="username" value={account.email ?? ""} readOnly tabIndex={-1} aria-hidden="true" className="visually-hidden" />
@@ -662,7 +707,7 @@ function PasswordCard({ account }: { account: Account }) {
 function OwnerCard() {
   const t = useT("account");
   return (
-    <section className="card acct-card">
+    <section className="card acct-card" data-accent="sim">
       <h2>{t("Site owner")}</h2>
       <p className="acct-hint">{t("Only this account opens these.")}</p>
       <p className="acct-links">
