@@ -16,8 +16,10 @@ export default function AccountPage() {
       <Intro eyebrow={<T ns="account">Account</T>} title={<T ns="account">Your account.</T>}>
         <T ns="account">Sign in to keep your settings on every device, and connect the Riot account you play on.</T>
       </Intro>
-      <AccountPanel />
-      <KitchenSubmissions />
+      {/* Sections from other parts of the site sit inside the signed-in page, after the Riot account. */}
+      <AccountPanel>
+        <KitchenSubmissions />
+      </AccountPanel>
     </>
   );
 }
