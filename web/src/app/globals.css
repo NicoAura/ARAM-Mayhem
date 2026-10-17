@@ -4424,3 +4424,181 @@ html[data-motion="reduce"] .btn:hover {
 .embed[data-loading] iframe {
   visibility: hidden;
 }
+
+/* Compare tray (components/CompareTray.tsx, CompareToggle.tsx) */
+.cmp-toggle {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.25rem;
+  border: 0;
+  border-radius: 999px;
+  background: none;
+  color: var(--muted);
+  font: inherit;
+  cursor: pointer;
+}
+
+.cmp-toggle:hover,
+.cmp-toggle[aria-pressed="true"] {
+  color: var(--accent);
+}
+
+.data-table .champ-fav .cmp-toggle:not([aria-pressed="true"]) {
+  opacity: 0;
+}
+
+.data-table tr:hover .champ-fav .cmp-toggle,
+.data-table .champ-fav .cmp-toggle:focus-visible {
+  opacity: 1;
+}
+
+@media (hover: none) {
+  .data-table .champ-fav .cmp-toggle:not([aria-pressed="true"]) {
+    opacity: 0.35;
+  }
+}
+
+.champ-hero-links .cmp-toggle span {
+  font-size: 0.875rem;
+}
+
+.cmp-tray {
+  position: fixed;
+  bottom: calc(1rem + env(safe-area-inset-bottom, 0px));
+  left: 50%;
+  z-index: 40;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.6rem 1rem;
+  width: min(36rem, calc(100% - 2rem));
+  padding: 0.6rem 0.6rem 0.6rem 0.9rem;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: color-mix(in srgb, var(--surface) 88%, transparent);
+  box-shadow: 0 16px 40px -18px rgb(0 0 0 / 0.6);
+  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
+  translate: -50% 0;
+  animation: cmp-in 0.3s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+[data-motion="reduce"] .cmp-tray {
+  animation: none;
+}
+
+@keyframes cmp-in {
+  from {
+    opacity: 0;
+    translate: -50% 1rem;
+  }
+}
+
+html[data-device="mobile"] .cmp-tray {
+  bottom: calc(var(--tabbar-h) + var(--tabbar-gap) + 0.6rem);
+}
+
+.cmp-tray ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.cmp-tray li {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  min-width: 0;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.cmp-tray li img {
+  border-radius: 8px;
+}
+
+.cmp-tray li button {
+  padding: 0 0.25rem;
+  border: 0;
+  background: none;
+  color: var(--muted);
+  font-size: 1.1rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.cmp-tray li button:hover {
+  color: var(--fg);
+}
+
+.cmp-tray li + li::before {
+  content: "vs";
+  margin-right: 0.15rem;
+  color: var(--muted);
+  font: 500 0.75rem var(--mono);
+}
+
+.cmp-tray .cmp-empty {
+  display: inline-flex;
+  align-items: center;
+  height: 32px;
+  padding: 0 0.75rem;
+  border: 1px dashed var(--line);
+  border-radius: 8px;
+  color: var(--muted);
+  font-size: 0.8125rem;
+  font-weight: 400;
+}
+
+@media (max-width: 520px) {
+  .cmp-tray {
+    flex-wrap: nowrap;
+    gap: 0.5rem;
+    padding-left: 0.6rem;
+  }
+  .cmp-tray ul {
+    flex-wrap: nowrap;
+  }
+  .cmp-tray li > span:not(.cmp-empty) {
+    display: none;
+  }
+  .cmp-tray .cmp-empty {
+    padding: 0 0.5rem;
+    font-size: 0.75rem;
+    white-space: nowrap;
+  }
+}
+
+.cmp-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-left: auto;
+}
+
+.cmp-clear {
+  border: 0;
+  background: none;
+  color: var(--muted);
+  font: inherit;
+  font-size: 0.8125rem;
+  cursor: pointer;
+}
+
+.cmp-go {
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none;
+}
+
+.cmp-go[aria-disabled] {
+  opacity: 0.45;
+  pointer-events: none;
+}

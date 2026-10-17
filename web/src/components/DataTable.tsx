@@ -6,6 +6,7 @@ import championNames from "@/data/champion-names.json";
 import { useFavorites } from "@/lib/favorites";
 import { setParams } from "@/lib/url-state";
 import FavoriteStar from "./FavoriteStar";
+import CompareToggle from "./CompareToggle";
 import { useAdvanced } from "./Advanced";
 import ChampionPanel, { hasPanel } from "./ChampionPanel";
 
@@ -93,6 +94,7 @@ function Champion({ id, onOpen, star }: { id: string; onOpen: (id: string) => vo
     <span className="champ-fav">
       <FavoriteStar id={id} name={name} />
       {body}
+      <CompareToggle id={id} name={name} />
     </span>
   );
 }

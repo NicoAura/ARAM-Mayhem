@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import FavoriteStar from "@/components/FavoriteStar";
+import CompareToggle from "@/components/CompareToggle";
 import WinRateChart from "@/components/WinRateChart";
 import ChampionShowcase from "@/components/ChampionShowcase";
 import { notFound } from "next/navigation";
@@ -54,6 +55,7 @@ export default async function ChampionPage({ params }: { params: Promise<{ alias
         {c.title && <p className="lede">{c.title.charAt(0).toUpperCase() + c.title.slice(1)}</p>}
         <p className="champ-hero-links">
           <FavoriteStar id={c.alias} name={c.name} label />
+          <CompareToggle id={c.alias} name={c.name} label />
           <Link className="inline-link" href={`/compare?a=${c.alias}`}>
             Compare with another champion
           </Link>
