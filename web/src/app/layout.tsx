@@ -27,6 +27,8 @@ import { navItems, navPages } from "@/lib/tabs";
 import "./globals.css";
 import OfflineSupport from "@/components/OfflineSupport";
 import SkipLink from "@/components/SkipLink";
+import ViewMemory from "@/components/ViewMemory";
+import { VIEW_SCRIPT } from "@/lib/url-state";
 
 const sans = Geist({ subsets: ["latin"], variable: "--font-sans" });
 const mono = Geist_Mono({ subsets: ["latin"], variable: "--font-mono" });
@@ -92,7 +94,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${sans.variable} ${mono.variable} ${display.variable}`} suppressHydrationWarning>
       <head>
-        <script dangerouslySetInnerHTML={{ __html: DEVICE_SCRIPT + THEME_SCRIPT + SETTINGS_SCRIPT }} />
+        <script dangerouslySetInnerHTML={{ __html: DEVICE_SCRIPT + THEME_SCRIPT + SETTINGS_SCRIPT + VIEW_SCRIPT }} />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: STRUCTURED_DATA }} />
       </head>
       <body>
@@ -148,6 +150,7 @@ export default function RootLayout({
         <FirstVisitTour />
         <UpdateToast />
         <OfflineSupport />
+        <ViewMemory />
         <MobileTabBar tabs={navPages().map(({ href, label }) => ({ href, label }))} />
       </body>
     </html>

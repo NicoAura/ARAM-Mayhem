@@ -2,6 +2,7 @@
 
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useRef } from "react";
+import { savedView } from "@/lib/url-state";
 
 // Smooth page changes: every in-site link click runs inside a View Transition, so pages cross-fade
 // and a champion's icon (or the Tier List panel's splash) morphs into the champion page's hero.
@@ -47,7 +48,8 @@ export default function PageTransitions() {
         if (!named.length) name(a.closest("dialog")?.querySelector(".champ-splash"), "champ-hero");
       }
 
-      const target = url.pathname + url.search + url.hash;
+      // A plain link to a remembered page opens its saved view (lib/url-state.ts, ViewMemory).
+      const target = url.pathname + (url.search || savedView(url.pathname)) + url.hash;
       doc.startViewTransition(
         () =>
           new Promise<void>((resolve) => {
