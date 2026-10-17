@@ -5876,3 +5876,151 @@ html[data-text="larger"] {
 html[data-device="mobile"] .settings-menu {
   max-height: calc(100dvh - 100px - var(--tabbar-h) - var(--tabbar-gap));
 }
+
+/* Recently viewed (Home) */
+.recent .team-clear {
+  margin: 0;
+}
+.recent-row {
+  display: flex;
+  gap: 0.6rem;
+  overflow-x: auto;
+  padding-bottom: 0.25rem;
+  scrollbar-width: thin;
+}
+.recent-item {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 0.6rem;
+  max-width: 15rem;
+  padding: 0.5rem 0.85rem 0.5rem 0.5rem;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--raised);
+}
+.recent-item:hover {
+  border-color: var(--accent);
+}
+.recent-item img,
+.recent-dot {
+  flex: none;
+  width: 36px;
+  height: 36px;
+  border-radius: 9px;
+}
+.recent-dot {
+  display: grid;
+  place-items: center;
+  background: var(--accent-soft);
+  color: var(--accent);
+  font-weight: 700;
+}
+.recent-item span {
+  display: grid;
+  min-width: 0;
+}
+.recent-item b {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 0.875rem;
+}
+.recent-item small {
+  color: var(--muted);
+  font-size: 0.75rem;
+}
+
+/* Table header tooltips: the column's plain-language meaning on hover or keyboard focus. */
+th > button[data-tip] {
+  position: relative;
+}
+@media (hover: hover) {
+  th > button[data-tip]:hover::after,
+  th > button[data-tip]:focus-visible::after {
+    content: attr(data-tip);
+    position: absolute;
+    top: calc(100% + 6px);
+    left: 0;
+    z-index: 5;
+    width: max-content;
+    max-width: 16rem;
+    padding: 0.5rem 0.65rem;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background: var(--raised);
+    color: var(--fg);
+    box-shadow: 0 10px 24px -14px rgb(0 0 0 / 0.6);
+    font: 400 0.8125rem/1.4 var(--font-sans), system-ui, sans-serif;
+    letter-spacing: normal;
+    text-align: left;
+    text-transform: none;
+    white-space: normal;
+    pointer-events: none;
+  }
+  th.num > button[data-tip]:hover::after,
+  th.num > button[data-tip]:focus-visible::after {
+    left: auto;
+    right: 0;
+  }
+}
+
+/* "What do these columns mean?" under each table */
+.table-glossary {
+  margin-top: 0.75rem;
+  color: var(--muted);
+  font-size: 0.875rem;
+}
+.table-glossary summary {
+  width: fit-content;
+  cursor: pointer;
+  color: var(--accent);
+}
+.table-glossary dl {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 18rem), 1fr));
+  gap: 0.6rem 1.5rem;
+  margin-top: 0.75rem;
+}
+.table-glossary dt {
+  color: var(--fg);
+  font-weight: 600;
+}
+
+/* Empty and error states */
+.empty-state {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.9rem;
+  margin: 1rem 0;
+  padding: 1.1rem 1.2rem;
+  border: 1px dashed var(--line);
+  border-radius: var(--r);
+  color: var(--muted);
+}
+.empty-state svg {
+  flex: none;
+  color: var(--accent);
+}
+.empty-state[data-kind="error"] svg {
+  color: var(--bad);
+}
+.empty-state b {
+  display: block;
+  color: var(--fg);
+}
+.empty-state p {
+  margin-top: 0.25rem;
+  max-width: 60ch;
+}
+.empty-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.8rem;
+}
+.empty-actions .btn {
+  display: inline-grid;
+  place-items: center;
+}

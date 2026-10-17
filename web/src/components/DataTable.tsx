@@ -9,6 +9,8 @@ import FavoriteStar from "./FavoriteStar";
 import CompareToggle from "./CompareToggle";
 import { useAdvanced } from "./Advanced";
 import ChampionPanel, { hasPanel } from "./ChampionPanel";
+import { hintFor } from "@/lib/glossary";
+import { EmptyState } from "@/components/EmptyState";
 
 export type Column = {
   key: string;
@@ -201,10 +203,11 @@ export default function DataTable({
                     <button
                       type="button"
                       onClick={() => toggle(c.sortKey ?? c.key)}
-                      title={c.hint}
+                      data-tip={hintFor(c.label, c.hint)}
+                      aria-description={hintFor(c.label, c.hint)}
                     >
                       {c.label}
-                      {c.hint && <span className="col-hint" aria-hidden="true">?</span>}
+                      {hintFor(c.label, c.hint) && <span className="col-hint" aria-hidden="true">?</span>}
                       <span className="sort-mark">{sort.key === (c.sortKey ?? c.key) ? (sort.desc ? "↓" : "↑") : ""}</span>
                     </button>
                   )}
@@ -244,7 +247,47 @@ export default function DataTable({
           </tbody>
         </table>
       </div>
-      {sorted.length === 0 && <p className="table-note">No matches.</p>}
+      {sorted.length === 0 &&
+        (query.trim() ? (
+          <EmptyState
+            title={`Nothing matches “${query.trim()}”.`}
+            action={
+              <button
+                type="button"
+                className="btn ghost"
+                onClick={() => {
+                  setQuery("");
+                  share({ q: null });
+                }}
+              >
+                Clear search
+              </button>
+            }
+          >
+            Check the spelling, or search for part of the name.
+          </EmptyState>
+        ) : (
+          <EmptyState title="Nothing to show here yet.">There&apos;s no data for this view on the chosen patches.</EmptyState>
+        ))}
+      {(() => {
+        const terms = columns.flatMap((c) => {
+          const h = hintFor(c.label, c.hint);
+          return h ? [[c.label, h] as const] : [];
+        });
+        return terms.length ? (
+          <details className="table-glossary">
+            <summary>What do these columns mean?</summary>
+            <dl>
+              {terms.map(([t, h]) => (
+                <div key={t}>
+                  <dt>{t}</dt>
+                  <dd>{h}</dd>
+                </div>
+              ))}
+            </dl>
+          </details>
+        ) : null;
+      })()}
       {sorted.length > shown && (
         <button type="button" className="show-more" onClick={() => setShown((n) => n + PAGE * 2)}>
           Show more ({sorted.length - shown} left)
