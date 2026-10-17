@@ -1,6 +1,6 @@
 {
  "meta": {
-  "built_at": "2026-10-16T21:53:50+00:00",
+  "built_at": "2026-10-17T02:05:10+00:00",
   "game_version": "16.21",
   "cdragon": "pbe",
   "mayhem_balance_patch": "26.19",
@@ -41,6 +41,8 @@
     "attack_speed_per_level": 0.025,
     "attack_speed_ratio": 0.651,
     "attack_range": 175.0,
+    "attack_windup": 0.1974,
+    "attack_windup_mod": 1.0,
     "move_speed": 345.0
    },
    "mayhem": {
@@ -63,7 +65,7 @@
      "name": "AatroxQ",
      "rank": 5,
      "cooldown": 6.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "Direction",
      "area": "line",
      "duration": 0.25,
@@ -81,8 +83,8 @@
        "type": "physical",
        "calc": "QDamage",
        "scaling": {
-        "const": 200.5,
-        "bonus_ad": 0.9
+        "const": 751.875,
+        "bonus_ad": 3.375
        },
        "target": "flat",
        "per_second": false,
@@ -92,16 +94,18 @@
        "type": "physical",
        "calc": "QEdgeDamage",
        "scaling": {
-        "const": 350.875,
-        "bonus_ad": 1.575
+        "const": 1315.7812,
+        "bonus_ad": 5.9062
        },
        "target": "flat",
        "per_second": false,
-       "alt": false
+       "alt": true
       }
      ],
      "mode_overrides": [],
-     "notes": []
+     "notes": [
+      "hand override: The Darkin Blade is three casts per cooldown, dealing 100/125/150%"
+     ]
     },
     {
      "slot": "W",
@@ -209,6 +213,8 @@
     "attack_speed_per_level": 0.022000000000000002,
     "attack_speed_ratio": 0.625,
     "attack_range": 550.0,
+    "attack_windup": 0.2,
+    "attack_windup_mod": 1.0,
     "move_speed": 330.0
    },
    "mayhem": {
@@ -355,7 +361,7 @@
      "name": "AhriR",
      "rank": 3,
      "cooldown": 100.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "Location",
      "area": "aoe",
      "duration": 10.0,
@@ -411,6 +417,8 @@
     "attack_speed_per_level": 0.032,
     "attack_speed_ratio": 0.625,
     "attack_range": 125.0,
+    "attack_windup": 0.139,
+    "attack_windup_mod": 1.0,
     "move_speed": 345.0
    },
    "mayhem": {
@@ -625,6 +633,8 @@
     "attack_speed_per_level": 0.04,
     "attack_speed_ratio": 0.4,
     "attack_range": 500.0,
+    "attack_windup": 0.1333,
+    "attack_windup_mod": 1.0,
     "move_speed": 330.0
    },
    "mayhem": {
@@ -681,7 +691,7 @@
      "name": "AkshanW",
      "rank": 5,
      "cooldown": 2.0,
-     "cast_time": 0.5,
+     "cast_time": 0.0,
      "targeting": "Self",
      "area": "aoe",
      "duration": 10.0,
@@ -741,7 +751,8 @@
      "name": "AkshanR",
      "rank": 3,
      "cooldown": 70.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
+     "lock": 1.5,
      "targeting": "",
      "area": "single",
      "duration": 2.5,
@@ -759,8 +770,8 @@
        "type": "physical",
        "calc": "DamagePerBulletWithCrit",
        "scaling": {
-        "const": 60.45,
-        "bonus_ad": 0.15
+        "const": 302.25,
+        "bonus_ad": 0.75
        },
        "target": "flat",
        "per_second": false,
@@ -780,7 +791,8 @@
      ],
      "mode_overrides": [],
      "notes": [
-      "unsupported stat 9"
+      "unsupported stat 9",
+      "hand override: about five bullets after a full charge"
      ]
     }
    ],
@@ -810,6 +822,8 @@
     "attack_speed_per_level": 0.02125,
     "attack_speed_ratio": 0.625,
     "attack_range": 125.0,
+    "attack_windup": 0.3,
+    "attack_windup_mod": 1.0,
     "move_speed": 335.0
    },
    "mayhem": {
@@ -866,7 +880,7 @@
      "name": "Headbutt",
      "rank": 5,
      "cooldown": 10.0,
-     "cast_time": 0.25,
+     "cast_time": 0.506,
      "targeting": "",
      "area": "single",
      "duration": 0.75,
@@ -945,7 +959,7 @@
      "name": "FerociousHowl",
      "rank": 3,
      "cooldown": 80.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "Self",
      "area": "aoe",
      "duration": 7.0,
@@ -990,6 +1004,8 @@
     "attack_speed_per_level": 0.025,
     "attack_speed_ratio": 0.625,
     "attack_range": 125.0,
+    "attack_windup": 0.1562,
+    "attack_windup_mod": 1.0,
     "move_speed": 335.0
    },
    "mayhem": {
@@ -1012,7 +1028,7 @@
      "name": "AmbessaQ",
      "rank": 5,
      "cooldown": 10.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "Location",
      "area": "aoe",
      "duration": 4.0,
@@ -1079,7 +1095,7 @@
      "name": "AmbessaW",
      "rank": 5,
      "cooldown": 14.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "Self",
      "area": "aoe",
      "duration": 0.5,
@@ -1125,7 +1141,7 @@
      "name": "AmbessaE",
      "rank": 5,
      "cooldown": 9.0,
-     "cast_time": 0.25,
+     "cast_time": 0.225,
      "targeting": "Location",
      "area": "aoe",
      "duration": 1.0,
@@ -1215,6 +1231,8 @@
     "attack_speed_per_level": 0.0218,
     "attack_speed_ratio": 0.638,
     "attack_range": 125.0,
+    "attack_windup": 0.2338,
+    "attack_windup_mod": 1.0,
     "move_speed": 335.0
    },
    "mayhem": {
@@ -1274,7 +1292,7 @@
      "name": "AuraofDespair",
      "rank": 5,
      "cooldown": 1.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "SelfAoe",
      "area": "aoe",
      "duration": 0.0,
@@ -1295,6 +1313,17 @@
         "const": 10.0
        },
        "target": "flat",
+       "per_second": false,
+       "alt": false
+      },
+      {
+       "type": "magic",
+       "calc": "TotalHealthDamage",
+       "scaling": {
+        "const": 0.02,
+        "ap": 0.0
+       },
+       "target": "target_max_hp",
        "per_second": false,
        "alt": false
       }
@@ -1396,6 +1425,8 @@
     "attack_speed_per_level": 0.0168,
     "attack_speed_ratio": 0.625,
     "attack_range": 600.0,
+    "attack_windup": 0.2,
+    "attack_windup_mod": 1.0,
     "move_speed": 325.0
    },
    "mayhem": {
@@ -1519,7 +1550,7 @@
        },
        "target": "flat",
        "per_second": false,
-       "alt": false
+       "alt": true
       }
      ],
      "mode_overrides": [],
@@ -1572,7 +1603,12 @@
     }
    ],
    "parse_quality": "good",
-   "notes": []
+   "notes": [],
+   "death": {
+    "revive_frac": 1.0,
+    "revive_delay": 6,
+    "chance": 0.5
+   }
   },
   {
    "id": "Annie",
@@ -1597,6 +1633,8 @@
     "attack_speed_per_level": 0.013600000000000001,
     "attack_speed_ratio": 0.625,
     "attack_range": 625.0,
+    "attack_windup": 0.1958,
+    "attack_windup_mod": 1.0,
     "move_speed": 335.0
    },
    "mayhem": {
@@ -1687,7 +1725,7 @@
      "name": "AnnieE",
      "rank": 5,
      "cooldown": 10.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "TargetOrLocation",
      "area": "aoe",
      "duration": 3.0,
@@ -1789,6 +1827,8 @@
     "attack_speed_per_level": 0.021,
     "attack_speed_ratio": 0.658,
     "attack_range": 550.0,
+    "attack_windup": 0.1533,
+    "attack_windup_mod": 1.0,
     "move_speed": 325.0
    },
    "mayhem": {
@@ -1833,7 +1873,7 @@
      "name": "ApheliosW",
      "rank": 5,
      "cooldown": 8.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "Self",
      "area": "aoe",
      "duration": 0.0,
@@ -1858,7 +1898,7 @@
      "name": "ApheliosE_ClientTooltipWrapper",
      "rank": 5,
      "cooldown": 8.0,
-     "cast_time": 0.5,
+     "cast_time": 0.0,
      "targeting": "Self",
      "area": "aoe",
      "duration": 0.0,
@@ -1907,6 +1947,16 @@
        "target": "flat",
        "per_second": false,
        "alt": false
+      },
+      {
+       "type": "physical",
+       "calc": "CalibrumRMarkBonusDamage",
+       "scaling": {
+        "const": 110.0
+       },
+       "target": "flat",
+       "per_second": false,
+       "alt": false
       }
      ],
      "mode_overrides": [],
@@ -1939,6 +1989,8 @@
     "attack_speed_per_level": 0.03,
     "attack_speed_ratio": 0.658,
     "attack_range": 600.0,
+    "attack_windup": 0.2193,
+    "attack_windup_mod": 1.0,
     "move_speed": 325.0
    },
    "mayhem": {
@@ -2078,6 +2130,8 @@
     "attack_speed_per_level": 0.015,
     "attack_speed_ratio": 0.625,
     "attack_range": 550.0,
+    "attack_windup": 0.1533,
+    "attack_windup_mod": 1.0,
     "move_speed": 340.0
    },
    "mayhem": {
@@ -2100,7 +2154,8 @@
      "name": "AurelionSolQ",
      "rank": 5,
      "cooldown": 3.0,
-     "cast_time": 0.25,
+     "cast_time": 0.01,
+     "lock": 1.625,
      "targeting": "Direction",
      "area": "line",
      "duration": 9999.0,
@@ -2155,7 +2210,7 @@
      "name": "AurelionSolW",
      "rank": 5,
      "cooldown": 16.0,
-     "cast_time": 0.25,
+     "cast_time": 0.375,
      "targeting": "LocationClamped",
      "area": "aoe",
      "duration": 0.0,
@@ -2214,7 +2269,7 @@
      "name": "AurelionSolR",
      "rank": 3,
      "cooldown": 100.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "Location",
      "area": "aoe",
      "duration": 1.0,
@@ -2292,6 +2347,8 @@
     "attack_speed_per_level": 0.02,
     "attack_speed_ratio": 0.668,
     "attack_range": 550.0,
+    "attack_windup": 0.2005,
+    "attack_windup_mod": 1.0,
     "move_speed": 335.0
    },
    "mayhem": {
@@ -2415,7 +2472,7 @@
      "name": "AuroraR",
      "rank": 3,
      "cooldown": 100.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "Location",
      "area": "aoe",
      "duration": 4.0,
@@ -2471,6 +2528,8 @@
     "attack_speed_per_level": 0.05,
     "attack_speed_ratio": 0.694,
     "attack_range": 525.0,
+    "attack_windup": 0.1562,
+    "attack_windup_mod": 1.0,
     "move_speed": 330.0
    },
    "mayhem": {
@@ -2563,7 +2622,7 @@
      "name": "AzirEWrapper",
      "rank": 5,
      "cooldown": 16.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "Area",
      "area": "aoe",
      "duration": 1.5,
@@ -2654,6 +2713,8 @@
     "attack_speed_per_level": 0.02,
     "attack_speed_ratio": 0.658,
     "attack_range": 500.0,
+    "attack_windup": 0.1875,
+    "attack_windup_mod": 1.0,
     "move_speed": 335.0
    },
    "mayhem": {
@@ -2809,6 +2870,8 @@
     "attack_speed_per_level": 0.0,
     "attack_speed_ratio": 0.67,
     "attack_range": 150.0,
+    "attack_windup": 0.1474,
+    "attack_windup_mod": 1.0,
     "move_speed": 340.0
    },
    "mayhem": {
@@ -2831,7 +2894,7 @@
      "name": "BelvethQ",
      "rank": 5,
      "cooldown": 1.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "LocationClamped",
      "area": "aoe",
      "duration": 4.0,
@@ -2899,7 +2962,7 @@
      "name": "BelvethE",
      "rank": 5,
      "cooldown": 12.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "Self",
      "area": "aoe",
      "duration": 1.5,
@@ -2979,6 +3042,16 @@
        "target": "flat",
        "per_second": false,
        "alt": false
+      },
+      {
+       "type": "true",
+       "calc": "MissingHealthDamage",
+       "scaling": {
+        "const": 0.2
+       },
+       "target": "target_missing_hp",
+       "per_second": false,
+       "alt": false
       }
      ],
      "mode_overrides": [
@@ -3013,6 +3086,8 @@
     "attack_speed_per_level": 0.0113,
     "attack_speed_ratio": 0.625,
     "attack_range": 125.0,
+    "attack_windup": 0.27,
+    "attack_windup_mod": 1.0,
     "move_speed": 325.0
    },
    "mayhem": {
@@ -3069,7 +3144,7 @@
      "name": "Overdrive",
      "rank": 5,
      "cooldown": 15.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "Self",
      "area": "aoe",
      "duration": 5.0,
@@ -3092,7 +3167,7 @@
      "name": "PowerFist",
      "rank": 5,
      "cooldown": 5.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "Self",
      "area": "aoe",
      "duration": 1.0,
@@ -3120,7 +3195,10 @@
       }
      ],
      "mode_overrides": [],
-     "notes": []
+     "notes": [
+      "hand override: resets the basic attack timer"
+     ],
+     "attack_reset": true
     },
     {
      "slot": "R",
@@ -3196,6 +3274,8 @@
     "attack_speed_per_level": 0.02,
     "attack_speed_ratio": 0.625,
     "attack_range": 550.0,
+    "attack_windup": 0.1875,
+    "attack_windup_mod": 1.0,
     "move_speed": 340.0
    },
    "mayhem": {
@@ -3286,7 +3366,7 @@
        },
        "target": "flat",
        "per_second": false,
-       "alt": false
+       "alt": true
       }
      ],
      "mode_overrides": [],
@@ -3387,6 +3467,8 @@
     "attack_speed_per_level": 0.035,
     "attack_speed_ratio": 0.644,
     "attack_range": 125.0,
+    "attack_windup": 0.23,
+    "attack_windup_mod": 1.0,
     "move_speed": 335.0
    },
    "mayhem": {
@@ -3409,7 +3491,7 @@
      "name": "BraumQ",
      "rank": 5,
      "cooldown": 6.0,
-     "cast_time": 0.25,
+     "cast_time": 0.389,
      "targeting": "Location",
      "area": "aoe",
      "duration": 2.0,
@@ -3443,7 +3525,7 @@
      "name": "BraumW",
      "rank": 5,
      "cooldown": 8.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "",
      "area": "single",
      "duration": 3.0,
@@ -3544,6 +3626,8 @@
     "attack_speed_per_level": 0.02,
     "attack_speed_ratio": 0.669,
     "attack_range": 125.0,
+    "attack_windup": 0.1932,
+    "attack_windup_mod": 1.0,
     "move_speed": 340.0
    },
    "mayhem": {
@@ -3602,7 +3686,7 @@
      "name": "BriarW",
      "rank": 5,
      "cooldown": 10.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "Direction",
      "area": "line",
      "duration": 5.0,
@@ -3638,6 +3722,17 @@
        "target": "flat",
        "per_second": false,
        "alt": false
+      },
+      {
+       "type": "physical",
+       "calc": "TotalAttackPercentMissingHealth",
+       "scaling": {
+        "const": 0.09,
+        "bonus_ad": 0.0003
+       },
+       "target": "target_missing_hp",
+       "per_second": false,
+       "alt": false
       }
      ],
      "mode_overrides": [],
@@ -3648,7 +3743,8 @@
      "name": "BriarE",
      "rank": 5,
      "cooldown": 16.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
+     "lock": 0.5,
      "targeting": "Direction",
      "area": "line",
      "duration": 0.5,
@@ -3754,6 +3850,8 @@
     "attack_speed_per_level": 0.04,
     "attack_speed_ratio": 0.625,
     "attack_range": 650.0,
+    "attack_windup": 0.1771,
+    "attack_windup_mod": 1.0,
     "move_speed": 325.0
    },
    "mayhem": {
@@ -3776,7 +3874,7 @@
      "name": "CaitlynQ",
      "rank": 5,
      "cooldown": 6.0,
-     "cast_time": 0.25,
+     "cast_time": 0.625,
      "targeting": "Direction",
      "area": "line",
      "duration": 0.0,
@@ -3859,7 +3957,7 @@
      "name": "CaitlynE",
      "rank": 5,
      "cooldown": 8.0,
-     "cast_time": 0.25,
+     "cast_time": 0.15,
      "targeting": "Location",
      "area": "aoe",
      "duration": 1.0,
@@ -3894,7 +3992,7 @@
      "name": "CaitlynR",
      "rank": 3,
      "cooldown": 90.0,
-     "cast_time": 0.25,
+     "cast_time": 0.375,
      "targeting": "",
      "area": "single",
      "duration": 0.0,
@@ -3952,6 +4050,8 @@
     "attack_speed_per_level": 0.025,
     "attack_speed_ratio": 0.644,
     "attack_range": 125.0,
+    "attack_windup": 0.1933,
+    "attack_windup_mod": 1.0,
     "move_speed": 340.0
    },
    "mayhem": {
@@ -3974,7 +4074,7 @@
      "name": "CamilleQ",
      "rank": 5,
      "cooldown": 5.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "Self",
      "area": "aoe",
      "duration": 1.0,
@@ -4012,7 +4112,10 @@
       }
      ],
      "mode_overrides": [],
-     "notes": []
+     "notes": [
+      "hand override: resets the basic attack timer"
+     ],
+     "attack_reset": true
     },
     {
      "slot": "W",
@@ -4154,6 +4257,8 @@
     "attack_speed_per_level": 0.015,
     "attack_speed_ratio": 0.647,
     "attack_range": 550.0,
+    "attack_windup": 0.192,
+    "attack_windup_mod": 1.0,
     "move_speed": 335.0
    },
    "mayhem": {
@@ -4244,7 +4349,7 @@
      "name": "CassiopeiaE",
      "rank": 5,
      "cooldown": 0.75,
-     "cast_time": 0.25,
+     "cast_time": 0.125,
      "targeting": "",
      "area": "single",
      "duration": 0.0,
@@ -4292,7 +4397,7 @@
      "name": "CassiopeiaR",
      "rank": 3,
      "cooldown": 80.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "Cone",
      "area": "aoe",
      "duration": 2.0,
@@ -4348,6 +4453,8 @@
     "attack_speed_per_level": 0.0144,
     "attack_speed_ratio": 0.625,
     "attack_range": 125.0,
+    "attack_windup": 0.219,
+    "attack_windup_mod": 1.0,
     "move_speed": 345.0
    },
    "mayhem": {
@@ -4370,7 +4477,7 @@
      "name": "Rupture",
      "rank": 5,
      "cooldown": 6.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "Area",
      "area": "aoe",
      "duration": 0.0,
@@ -4404,7 +4511,7 @@
      "name": "FeralScream",
      "rank": 5,
      "cooldown": 9.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "Cone",
      "area": "aoe",
      "duration": 0.0,
@@ -4438,7 +4545,7 @@
      "name": "VorpalSpikes",
      "rank": 5,
      "cooldown": 6.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "Self",
      "area": "aoe",
      "duration": 1.5,
@@ -4462,11 +4569,22 @@
        "target": "flat",
        "per_second": false,
        "alt": false
+      },
+      {
+       "type": "magic",
+       "calc": "MaxHealthPercentCalc",
+       "scaling": {
+        "const": 0.039
+       },
+       "target": "target_max_hp",
+       "per_second": false,
+       "alt": false
       }
      ],
      "mode_overrides": [],
      "notes": [
-      "cooldown is the ammo recharge time"
+      "cooldown is the ammo recharge time",
+      "stack-based scaling ignored"
      ]
     },
     {
@@ -4505,7 +4623,7 @@
      "notes": []
     }
    ],
-   "parse_quality": "good",
+   "parse_quality": "partial",
    "notes": []
   },
   {
@@ -4531,6 +4649,8 @@
     "attack_speed_per_level": 0.027999999999999997,
     "attack_speed_ratio": 0.644,
     "attack_range": 550.0,
+    "attack_windup": 0.1159,
+    "attack_windup_mod": 1.0,
     "move_speed": 325.0
    },
    "mayhem": {
@@ -4588,7 +4708,7 @@
      "name": "CarpetBomb",
      "rank": 5,
      "cooldown": 12.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "Location",
      "area": "aoe",
      "duration": 2.5,
@@ -4727,6 +4847,8 @@
     "attack_speed_per_level": 0.01,
     "attack_speed_ratio": 0.625,
     "attack_range": 175.0,
+    "attack_windup": 0.2,
+    "attack_windup_mod": 0.5,
     "move_speed": 340.0
    },
    "mayhem": {
@@ -4749,7 +4871,7 @@
      "name": "DariusCleave",
      "rank": 5,
      "cooldown": 5.0,
-     "cast_time": 0.234,
+     "cast_time": 0.75,
      "targeting": "SelfAoe",
      "area": "aoe",
      "duration": 0.0,
@@ -4787,14 +4909,16 @@
       }
      ],
      "mode_overrides": [],
-     "notes": []
+     "notes": [
+      "hand override: Decimate spins for 0.75 seconds before it hits"
+     ]
     },
     {
      "slot": "W",
      "name": "DariusNoxianTacticsONH",
      "rank": 5,
      "cooldown": 5.0,
-     "cast_time": 0.367,
+     "cast_time": 0.0,
      "targeting": "Self",
      "area": "aoe",
      "duration": 1.0,
@@ -4821,7 +4945,10 @@
       }
      ],
      "mode_overrides": [],
-     "notes": []
+     "notes": [
+      "hand override: resets the basic attack timer"
+     ],
+     "attack_reset": true
     },
     {
      "slot": "E",
@@ -4917,6 +5044,8 @@
     "attack_speed_per_level": 0.02,
     "attack_speed_ratio": 0.694,
     "attack_range": 150.0,
+    "attack_windup": 0.2083,
+    "attack_windup_mod": 1.0,
     "move_speed": 345.0
    },
    "mayhem": {
@@ -4973,7 +5102,7 @@
      "name": "DianaOrbs",
      "rank": 5,
      "cooldown": 9.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "Self",
      "area": "aoe",
      "duration": 5.0,
@@ -5053,7 +5182,7 @@
      "name": "DianaR",
      "rank": 3,
      "cooldown": 80.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "SelfAoe",
      "area": "aoe",
      "duration": 2.0,
@@ -5131,6 +5260,8 @@
     "attack_speed_per_level": 0.033,
     "attack_speed_ratio": 0.625,
     "attack_range": 125.0,
+    "attack_windup": 0.1603,
+    "attack_windup_mod": 1.0,
     "move_speed": 345.0
    },
    "mayhem": {
@@ -5166,7 +5297,18 @@
       "speed": 2000,
       "on_self": false
      },
-     "hits": [],
+     "hits": [
+      {
+       "type": "magic",
+       "calc": "CurrentHealthDamage",
+       "scaling": {
+        "const": 0.3
+       },
+       "target": "target_current_hp",
+       "per_second": false,
+       "alt": false
+      }
+     ],
      "mode_overrides": [],
      "notes": []
     },
@@ -5175,7 +5317,7 @@
      "name": "DrMundoW",
      "rank": 5,
      "cooldown": 15.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "SelfAoe",
      "area": "aoe",
      "duration": 3.0,
@@ -5219,7 +5361,7 @@
      "name": "DrMundoE",
      "rank": 5,
      "cooldown": 6.0,
-     "cast_time": 1.0,
+     "cast_time": 0.0,
      "targeting": "Self",
      "area": "aoe",
      "duration": 4.0,
@@ -5276,7 +5418,7 @@
      "name": "DrMundoR",
      "rank": 3,
      "cooldown": 120.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "Self",
      "area": "aoe",
      "duration": 10.0,
@@ -5319,6 +5461,8 @@
     "attack_speed_per_level": 0.027000000000000003,
     "attack_speed_ratio": 0.679,
     "attack_range": 550.0,
+    "attack_windup": 0.1561,
+    "attack_windup_mod": 1.0,
     "move_speed": 330.0
    },
    "mayhem": {
@@ -5341,7 +5485,7 @@
      "name": "DravenSpinning",
      "rank": 5,
      "cooldown": 8.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "Self",
      "area": "aoe",
      "duration": 6.0,
@@ -5375,7 +5519,7 @@
      "name": "DravenFury",
      "rank": 5,
      "cooldown": 12.0,
-     "cast_time": 0.242,
+     "cast_time": 0.0,
      "targeting": "Self",
      "area": "aoe",
      "duration": 3.0,
@@ -5431,7 +5575,7 @@
      "name": "DravenRCast",
      "rank": 3,
      "cooldown": 80.0,
-     "cast_time": 0.5,
+     "cast_time": 1.0,
      "targeting": "Location",
      "area": "aoe",
      "duration": 0.0,
@@ -5488,6 +5632,8 @@
     "attack_speed_per_level": 0.033,
     "attack_speed_ratio": 0.625,
     "attack_range": 125.0,
+    "attack_windup": 0.1625,
+    "attack_windup_mod": 1.0,
     "move_speed": 340.0
    },
    "mayhem": {
@@ -5568,7 +5714,19 @@
       "speed": 0,
       "on_self": false
      },
-     "hits": [],
+     "hits": [
+      {
+       "type": "magic",
+       "calc": "MissingHealthPercent",
+       "scaling": {
+        "const": 0.03,
+        "ap": 0.0003
+       },
+       "target": "target_missing_hp",
+       "per_second": false,
+       "alt": false
+      }
+     ],
      "mode_overrides": [],
      "notes": []
     },
@@ -5605,14 +5763,17 @@
       }
      ],
      "mode_overrides": [],
-     "notes": []
+     "notes": [
+      "hand override: resets the basic attack timer"
+     ],
+     "attack_reset": true
     },
     {
      "slot": "R",
      "name": "EkkoR",
      "rank": 3,
      "cooldown": 50.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "Self",
      "area": "aoe",
      "duration": 0.0,
@@ -5669,6 +5830,8 @@
     "attack_speed_per_level": 0.0175,
     "attack_speed_ratio": 0.625,
     "attack_range": 550.0,
+    "attack_windup": 0.1875,
+    "attack_windup_mod": 1.0,
     "move_speed": 330.0
    },
    "mayhem": {
@@ -5691,7 +5854,7 @@
      "name": "EliseHumanQ",
      "rank": 5,
      "cooldown": 6.0,
-     "cast_time": 0.25,
+     "cast_time": 0.125,
      "targeting": "",
      "area": "single",
      "duration": 0.0,
@@ -5714,6 +5877,17 @@
        "target": "flat",
        "per_second": false,
        "alt": false
+      },
+      {
+       "type": "magic",
+       "calc": "HumanPercentHealth",
+       "scaling": {
+        "const": 0.04,
+        "ap": 0.0003
+       },
+       "target": "target_current_hp",
+       "per_second": false,
+       "alt": false
       }
      ],
      "mode_overrides": [],
@@ -5724,7 +5898,7 @@
      "name": "EliseHumanW",
      "rank": 5,
      "cooldown": 12.0,
-     "cast_time": 0.25,
+     "cast_time": 0.125,
      "targeting": "Direction",
      "area": "line",
      "duration": 0.0,
@@ -5737,7 +5911,19 @@
       "speed": 0,
       "on_self": false
      },
-     "hits": [],
+     "hits": [
+      {
+       "type": "magic",
+       "calc": "TotalDamage",
+       "scaling": {
+        "const": 220.0,
+        "ap": 0.75
+       },
+       "target": "flat",
+       "per_second": false,
+       "alt": false
+      }
+     ],
      "mode_overrides": [],
      "notes": []
     },
@@ -5768,7 +5954,7 @@
      "name": "EliseR",
      "rank": 3,
      "cooldown": 3.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "Self",
      "area": "aoe",
      "duration": 0.0,
@@ -5787,7 +5973,7 @@
      "notes": []
     }
    ],
-   "parse_quality": "partial",
+   "parse_quality": "good",
    "notes": []
   },
   {
@@ -5813,6 +5999,8 @@
     "attack_speed_per_level": 0.021,
     "attack_speed_ratio": 0.667,
     "attack_range": 125.0,
+    "attack_windup": 0.1533,
+    "attack_windup_mod": 1.0,
     "move_speed": 335.0
    },
    "mayhem": {
@@ -5939,11 +6127,33 @@
       },
       {
        "type": "magic",
+       "calc": "PercentHealthBaseTOOLTIP",
+       "scaling": {
+        "const": 0.03,
+        "ap": 0.0001
+       },
+       "target": "target_max_hp",
+       "per_second": false,
+       "alt": false
+      },
+      {
+       "type": "magic",
        "calc": "EmpoweredDamage",
        "scaling": {
         "const": 240.0
        },
        "target": "flat",
+       "per_second": false,
+       "alt": false
+      },
+      {
+       "type": "magic",
+       "calc": "PercentHealthEmpoweredTOOLTIP",
+       "scaling": {
+        "const": 0.04,
+        "ap": 0.0002
+       },
+       "target": "target_max_hp",
        "per_second": false,
        "alt": false
       }
@@ -6027,6 +6237,8 @@
     "attack_speed_per_level": 0.025,
     "attack_speed_ratio": 0.625,
     "attack_range": 550.0,
+    "attack_windup": 0.1884,
+    "attack_windup_mod": 1.0,
     "move_speed": 325.0
    },
    "mayhem": {
@@ -6155,7 +6367,7 @@
      "name": "EzrealR",
      "rank": 3,
      "cooldown": 90.0,
-     "cast_time": 0.25,
+     "cast_time": 1.0,
      "targeting": "Location",
      "area": "aoe",
      "duration": 0.0,
@@ -6213,6 +6425,8 @@
     "attack_speed_per_level": 0.021099999999999997,
     "attack_speed_ratio": 0.625,
     "attack_range": 480.0,
+    "attack_windup": 0.3,
+    "attack_windup_mod": 1.0,
     "move_speed": 335.0
    },
    "mayhem": {
@@ -6235,7 +6449,7 @@
      "name": "FiddleSticksQ",
      "rank": 5,
      "cooldown": 13.0,
-     "cast_time": 0.25,
+     "cast_time": 0.35,
      "targeting": "",
      "area": "single",
      "duration": 2.0,
@@ -6248,7 +6462,30 @@
       "speed": 0,
       "on_self": false
      },
-     "hits": [],
+     "hits": [
+      {
+       "type": "magic",
+       "calc": "TotalPercentHealthDamage",
+       "scaling": {
+        "const": 0.06,
+        "ap": 0.0003
+       },
+       "target": "target_current_hp",
+       "per_second": false,
+       "alt": false
+      },
+      {
+       "type": "magic",
+       "calc": "TotalPercentHealthDamageFeared",
+       "scaling": {
+        "const": 0.12,
+        "ap": 0.0006
+       },
+       "target": "target_current_hp",
+       "per_second": false,
+       "alt": true
+      }
+     ],
      "mode_overrides": [],
      "notes": []
     },
@@ -6257,7 +6494,8 @@
      "name": "FiddleSticksW",
      "rank": 5,
      "cooldown": 8.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
+     "lock": 2.0,
      "targeting": "Self",
      "area": "aoe",
      "duration": 2.0,
@@ -6335,7 +6573,7 @@
      "name": "FiddleSticksR",
      "rank": 3,
      "cooldown": 80.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "Location",
      "area": "aoe",
      "duration": 5.0,
@@ -6363,7 +6601,10 @@
       }
      ],
      "mode_overrides": [],
-     "notes": []
+     "notes": [
+      "hand override: Crowstorm channels 1.5 seconds before the blink"
+     ],
+     "lock": 1.5
     }
    ],
    "parse_quality": "good",
@@ -6392,6 +6633,8 @@
     "attack_speed_per_level": 0.032,
     "attack_speed_ratio": 0.69,
     "attack_range": 150.0,
+    "attack_windup": 0.1379,
+    "attack_windup_mod": 1.0,
     "move_speed": 345.0
    },
    "mayhem": {
@@ -6414,7 +6657,7 @@
      "name": "FioraQ",
      "rank": 5,
      "cooldown": 6.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "Direction",
      "area": "line",
      "duration": 0.0,
@@ -6450,7 +6693,7 @@
      "name": "FioraW",
      "rank": 5,
      "cooldown": 16.0,
-     "cast_time": 0.01,
+     "cast_time": 0.25,
      "targeting": "Location",
      "area": "aoe",
      "duration": 0.75,
@@ -6484,7 +6727,7 @@
      "name": "FioraE",
      "rank": 5,
      "cooldown": 7.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "Self",
      "area": "aoe",
      "duration": 3.0,
@@ -6499,7 +6742,10 @@
      },
      "hits": [],
      "mode_overrides": [],
-     "notes": []
+     "notes": [
+      "hand override: resets the basic attack timer"
+     ],
+     "attack_reset": true
     },
     {
      "slot": "R",
@@ -6550,6 +6796,8 @@
     "attack_speed_per_level": 0.031,
     "attack_speed_ratio": 0.658,
     "attack_range": 175.0,
+    "attack_windup": 0.203,
+    "attack_windup_mod": 1.0,
     "move_speed": 335.0
    },
    "mayhem": {
@@ -6618,7 +6866,7 @@
      "name": "FizzW",
      "rank": 5,
      "cooldown": 3.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "Self",
      "area": "aoe",
      "duration": 3.0,
@@ -6667,7 +6915,10 @@
       }
      ],
      "mode_overrides": [],
-     "notes": []
+     "notes": [
+      "hand override: resets the basic attack timer"
+     ],
+     "attack_reset": true
     },
     {
      "slot": "E",
@@ -6765,6 +7016,8 @@
     "attack_speed_per_level": 0.015,
     "attack_speed_ratio": 0.625,
     "attack_range": 150.0,
+    "attack_windup": 0.2063,
+    "attack_windup_mod": 1.0,
     "move_speed": 340.0
    },
    "mayhem": {
@@ -6832,7 +7085,8 @@
      "name": "GalioW",
      "rank": 5,
      "cooldown": 14.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
+     "lock": 0.625,
      "targeting": "SelfAoe",
      "area": "aoe",
      "duration": 2.0,
@@ -6877,7 +7131,7 @@
      "name": "GalioE",
      "rank": 5,
      "cooldown": 7.0,
-     "cast_time": 0.25,
+     "cast_time": 0.4,
      "targeting": "Location",
      "area": "aoe",
      "duration": 0.75,
@@ -6923,7 +7177,8 @@
      "name": "GalioR",
      "rank": 3,
      "cooldown": 140.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
+     "lock": 2.75,
      "targeting": "TargetOrLocation",
      "area": "aoe",
      "duration": 0.75,
@@ -6981,6 +7236,8 @@
     "attack_speed_per_level": 0.032,
     "attack_speed_ratio": 0.69,
     "attack_range": 125.0,
+    "attack_windup": 0.1645,
+    "attack_windup_mod": 1.0,
     "move_speed": 345.0
    },
    "mayhem": {
@@ -7003,7 +7260,7 @@
      "name": "GangplankQWrapper",
      "rank": 5,
      "cooldown": 4.5,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "",
      "area": "single",
      "duration": 0.0,
@@ -7016,7 +7273,19 @@
       "speed": 0,
       "on_self": false
      },
-     "hits": [],
+     "hits": [
+      {
+       "type": "physical",
+       "calc": "ShotDamage",
+       "scaling": {
+        "const": 265.4,
+        "bonus_ad": 1.0
+       },
+       "target": "flat",
+       "per_second": false,
+       "alt": false
+      }
+     ],
      "mode_overrides": [],
      "notes": []
     },
@@ -7025,7 +7294,7 @@
      "name": "GangplankW",
      "rank": 5,
      "cooldown": 14.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "Self",
      "area": "aoe",
      "duration": 0.25,
@@ -7151,6 +7420,8 @@
     "attack_speed_per_level": 0.0365,
     "attack_speed_ratio": 0.625,
     "attack_range": 175.0,
+    "attack_windup": 0.18,
+    "attack_windup_mod": 0.5,
     "move_speed": 340.0
    },
    "mayhem": {
@@ -7173,7 +7444,7 @@
      "name": "GarenQ",
      "rank": 5,
      "cooldown": 8.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "Self",
      "area": "aoe",
      "duration": 1.5,
@@ -7200,14 +7471,17 @@
       }
      ],
      "mode_overrides": [],
-     "notes": []
+     "notes": [
+      "hand override: resets the basic attack timer"
+     ],
+     "attack_reset": true
     },
     {
      "slot": "W",
      "name": "GarenW",
      "rank": 5,
      "cooldown": 12.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "Self",
      "area": "aoe",
      "duration": 4.0,
@@ -7236,7 +7510,7 @@
      "name": "GarenE",
      "rank": 5,
      "cooldown": 6.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "SelfAoe",
      "area": "aoe",
      "duration": 6.0,
@@ -7273,7 +7547,7 @@
      "name": "GarenR",
      "rank": 3,
      "cooldown": 80.0,
-     "cast_time": 0.25,
+     "cast_time": 0.435,
      "targeting": "",
      "area": "single",
      "duration": 1.0,
@@ -7339,6 +7613,8 @@
     "attack_speed_per_level": 0.06,
     "attack_speed_ratio": 0.625,
     "attack_range": 175.0,
+    "attack_windup": 0.146,
+    "attack_windup_mod": 1.0,
     "move_speed": 335.0
    },
    "mayhem": {
@@ -7374,7 +7650,19 @@
       "speed": 1200,
       "on_self": false
      },
-     "hits": [],
+     "hits": [
+      {
+       "type": "physical",
+       "calc": "MiniTotalDamage",
+       "scaling": {
+        "const": 308.0,
+        "bonus_ad": 1.25
+       },
+       "target": "flat",
+       "per_second": false,
+       "alt": false
+      }
+     ],
      "mode_overrides": [],
      "notes": []
     },
@@ -7383,7 +7671,7 @@
      "name": "GnarW",
      "rank": 5,
      "cooldown": 7.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "SelfAoe",
      "area": "aoe",
      "duration": 3.0,
@@ -7396,7 +7684,29 @@
       "speed": 0,
       "on_self": true
      },
-     "hits": [],
+     "hits": [
+      {
+       "type": "magic",
+       "calc": "MiniTotalDamage",
+       "scaling": {
+        "const": 40.0,
+        "ap": 1.0
+       },
+       "target": "flat",
+       "per_second": false,
+       "alt": false
+      },
+      {
+       "type": "magic",
+       "calc": "MiniPercentHPDamage",
+       "scaling": {
+        "const": 0.14
+       },
+       "target": "target_max_hp",
+       "per_second": false,
+       "alt": false
+      }
+     ],
      "mode_overrides": [],
      "notes": []
     },
@@ -7419,7 +7729,19 @@
       "on_self": false,
       "move": "dash"
      },
-     "hits": [],
+     "hits": [
+      {
+       "type": "physical",
+       "calc": "MiniTotalDamage",
+       "scaling": {
+        "const": 302.98,
+        "bonus_hp": 0.06
+       },
+       "target": "flat",
+       "per_second": false,
+       "alt": false
+      }
+     ],
      "mode_overrides": [],
      "notes": []
     },
@@ -7471,7 +7793,7 @@
      "notes": []
     }
    ],
-   "parse_quality": "partial",
+   "parse_quality": "good",
    "notes": []
   },
   {
@@ -7497,6 +7819,8 @@
     "attack_speed_per_level": 0.020499999999999997,
     "attack_speed_ratio": 0.625,
     "attack_range": 125.0,
+    "attack_windup": 0.25,
+    "attack_windup_mod": 1.0,
     "move_speed": 330.0
    },
    "mayhem": {
@@ -7564,7 +7888,8 @@
      "name": "GragasW",
      "rank": 5,
      "cooldown": 5.0,
-     "cast_time": 0.001,
+     "cast_time": 0.0,
+     "lock": 0.75,
      "targeting": "Self",
      "area": "aoe",
      "duration": 2.5,
@@ -7699,6 +8024,8 @@
     "attack_speed_per_level": 0.03,
     "attack_speed_ratio": 0.49,
     "attack_range": 425.0,
+    "attack_windup": 0.005,
+    "attack_windup_mod": 0.1,
     "move_speed": 340.0
    },
    "mayhem": {
@@ -7816,7 +8143,10 @@
      },
      "hits": [],
      "mode_overrides": [],
-     "notes": []
+     "notes": [
+      "hand override: resets the basic attack timer"
+     ],
+     "attack_reset": true
     },
     {
      "slot": "R",
@@ -7889,6 +8219,8 @@
     "attack_speed_per_level": 0.0225,
     "attack_speed_ratio": 0.69,
     "attack_range": 150.0,
+    "attack_windup": 0.1967,
+    "attack_windup_mod": 1.0,
     "move_speed": 340.0
    },
    "mayhem": {
@@ -7929,8 +8261,8 @@
        "type": "magic",
        "calc": "MiniSwipeDamage",
        "scaling": {
-        "const": 26.0,
-        "ap": 0.05
+        "const": 130.0,
+        "ap": 0.25
        },
        "target": "flat",
        "per_second": false,
@@ -7951,14 +8283,16 @@
      "mode_overrides": [
       "ARAM:APRatio"
      ],
-     "notes": []
+     "notes": [
+      "hand override: Snip Snip! snips 5 times at full stacks before the final cut"
+     ]
     },
     {
      "slot": "W",
      "name": "GwenW",
      "rank": 5,
      "cooldown": 18.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "Self",
      "area": "aoe",
      "duration": 4.0,
@@ -7980,7 +8314,7 @@
      "name": "GwenE",
      "rank": 5,
      "cooldown": 11.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "Location",
      "area": "aoe",
      "duration": 4.0,
@@ -8095,6 +8429,8 @@
     "attack_speed_per_level": 0.025,
     "attack_speed_ratio": 0.67,
     "attack_range": 175.0,
+    "attack_windup": 0.25,
+    "attack_windup_mod": 1.0,
     "move_speed": 345.0
    },
    "mayhem": {
@@ -8117,7 +8453,7 @@
      "name": "HecarimRapidSlash",
      "rank": 5,
      "cooldown": 4.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "SelfAoe",
      "area": "aoe",
      "duration": 6.0,
@@ -8151,7 +8487,7 @@
      "name": "HecarimW",
      "rank": 5,
      "cooldown": 14.0,
-     "cast_time": 0.25,
+     "cast_time": 0,
      "targeting": "SelfAoe",
      "area": "aoe",
      "duration": 4.0,
@@ -8178,14 +8514,16 @@
       }
      ],
      "mode_overrides": [],
-     "notes": []
+     "notes": [
+      "hand override: Spirit of Dread is instant"
+     ]
     },
     {
      "slot": "E",
      "name": "HecarimRamp",
      "rank": 5,
      "cooldown": 12.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "Self",
      "area": "aoe",
      "duration": 4.0,
@@ -8219,12 +8557,13 @@
        },
        "target": "flat",
        "per_second": false,
-       "alt": false
+       "alt": true
       }
      ],
      "mode_overrides": [],
      "notes": [
-      "ARAM cooldown"
+      "ARAM cooldown",
+      "hand override: Devastating Charge deals min to max damage by distance, not both"
      ]
     },
     {
@@ -8232,7 +8571,7 @@
      "name": "HecarimUlt",
      "rank": 3,
      "cooldown": 100.0,
-     "cast_time": 0.01,
+     "cast_time": 0.75,
      "targeting": "Area",
      "area": "aoe",
      "duration": 0.75,
@@ -8289,6 +8628,8 @@
     "attack_speed_per_level": 0.013600000000000001,
     "attack_speed_ratio": 0.625,
     "attack_range": 550.0,
+    "attack_windup": 0.2,
+    "attack_windup_mod": 1.0,
     "move_speed": 340.0
    },
    "mayhem": {
@@ -8414,7 +8755,7 @@
      "name": "HeimerdingerR",
      "rank": 3,
      "cooldown": 70.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "SelfAoe",
      "area": "aoe",
      "duration": 0.0,
@@ -8515,6 +8856,8 @@
     "attack_speed_per_level": 0.025,
     "attack_speed_ratio": 0.658,
     "attack_range": 550.0,
+    "attack_windup": 0.1873,
+    "attack_windup_mod": 1.0,
     "move_speed": 330.0
    },
    "mayhem": {
@@ -8537,7 +8880,7 @@
      "name": "HweiQ",
      "rank": 5,
      "cooldown": 6.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "Self",
      "area": "aoe",
      "duration": 0.0,
@@ -8626,7 +8969,7 @@
      "name": "HweiW",
      "rank": 5,
      "cooldown": 16.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "Self",
      "area": "aoe",
      "duration": 6.0,
@@ -8661,7 +9004,7 @@
      "name": "HweiE",
      "rank": 5,
      "cooldown": 11.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "Self",
      "area": "aoe",
      "duration": 2.0,
@@ -8718,7 +9061,7 @@
      "name": "HweiR",
      "rank": 3,
      "cooldown": 80.0,
-     "cast_time": 0.25,
+     "cast_time": 0.375,
      "targeting": "Direction",
      "area": "line",
      "duration": 3.0,
@@ -8785,6 +9128,8 @@
     "attack_speed_per_level": 0.025,
     "attack_speed_ratio": 0.625,
     "attack_range": 125.0,
+    "attack_windup": 0.2143,
+    "attack_windup_mod": 1.0,
     "move_speed": 350.0
    },
    "mayhem": {
@@ -8820,7 +9165,20 @@
       "speed": 0,
       "on_self": false
      },
-     "hits": [],
+     "hits": [
+      {
+       "type": "physical",
+       "calc": "TentacleDamageTotal",
+       "scaling": {
+        "const": 448.5,
+        "bonus_ad": 1.43,
+        "ap": 0.52
+       },
+       "target": "flat",
+       "per_second": false,
+       "alt": false
+      }
+     ],
      "mode_overrides": [],
      "notes": []
     },
@@ -8829,7 +9187,7 @@
      "name": "IllaoiW",
      "rank": 5,
      "cooldown": 4.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "Self",
      "area": "aoe",
      "duration": 6.0,
@@ -8842,9 +9200,24 @@
       "speed": 0,
       "on_self": true
      },
-     "hits": [],
+     "hits": [
+      {
+       "type": "physical",
+       "calc": "HealthPercentTotal",
+       "scaling": {
+        "const": 0.1025,
+        "bonus_ad": 0.0003
+       },
+       "target": "target_max_hp",
+       "per_second": false,
+       "alt": false
+      }
+     ],
      "mode_overrides": [],
-     "notes": []
+     "notes": [
+      "hand override: resets the basic attack timer"
+     ],
+     "attack_reset": true
     },
     {
      "slot": "E",
@@ -8873,7 +9246,7 @@
      "name": "IllaoiR",
      "rank": 3,
      "cooldown": 70.0,
-     "cast_time": 0.5,
+     "cast_time": 0.375,
      "targeting": "AreaClamped",
      "area": "aoe",
      "duration": 8.0,
@@ -8903,7 +9276,7 @@
      "notes": []
     }
    ],
-   "parse_quality": "partial",
+   "parse_quality": "good",
    "notes": []
   },
   {
@@ -8929,6 +9302,8 @@
     "attack_speed_per_level": 0.025,
     "attack_speed_ratio": 0.656,
     "attack_range": 200.0,
+    "attack_windup": 0.1967,
+    "attack_windup_mod": 1.0,
     "move_speed": 335.0
    },
    "mayhem": {
@@ -8951,7 +9326,7 @@
      "name": "IreliaQ",
      "rank": 5,
      "cooldown": 6.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "",
      "area": "single",
      "duration": 0.0,
@@ -8986,7 +9361,8 @@
      "name": "IreliaW",
      "rank": 5,
      "cooldown": 12.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
+     "lock": 0.75,
      "targeting": "Direction",
      "area": "line",
      "duration": 1.5,
@@ -9033,7 +9409,7 @@
      "name": "IreliaE",
      "rank": 5,
      "cooldown": 10.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "Location",
      "area": "aoe",
      "duration": 0.75,
@@ -9067,7 +9443,7 @@
      "name": "IreliaR",
      "rank": 3,
      "cooldown": 85.0,
-     "cast_time": 0.25,
+     "cast_time": 0.4,
      "targeting": "Direction",
      "area": "line",
      "duration": 1.5,
@@ -9134,6 +9510,8 @@
     "attack_speed_per_level": 0.034,
     "attack_speed_ratio": 0.644,
     "attack_range": 475.0,
+    "attack_windup": 0.2,
+    "attack_windup_mod": 1.0,
     "move_speed": 330.0
    },
    "mayhem": {
@@ -9237,7 +9615,7 @@
      "name": "IvernE",
      "rank": 5,
      "cooldown": 7.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "",
      "area": "single",
      "duration": 2.0,
@@ -9327,6 +9705,8 @@
     "attack_speed_per_level": 0.03,
     "attack_speed_ratio": 0.625,
     "attack_range": 550.0,
+    "attack_windup": 0.2,
+    "attack_windup_mod": 1.0,
     "move_speed": 325.0
    },
    "mayhem": {
@@ -9349,7 +9729,7 @@
      "name": "HowlingGale",
      "rank": 5,
      "cooldown": 16.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "Direction",
      "area": "line",
      "duration": 3.0,
@@ -9385,7 +9765,7 @@
      "name": "SowTheWind",
      "rank": 5,
      "cooldown": 6.0,
-     "cast_time": 0.245,
+     "cast_time": 0.0,
      "targeting": "",
      "area": "single",
      "duration": 2.0,
@@ -9442,7 +9822,7 @@
      "name": "ReapTheWhirlwind",
      "rank": 3,
      "cooldown": 100.0,
-     "cast_time": 0.001,
+     "cast_time": 0.25,
      "targeting": "SelfAoe",
      "area": "aoe",
      "duration": 3.0,
@@ -9486,6 +9866,8 @@
     "attack_speed_per_level": 0.025,
     "attack_speed_ratio": 0.658,
     "attack_range": 175.0,
+    "attack_windup": 0.1754,
+    "attack_windup_mod": 1.0,
     "move_speed": 340.0
    },
    "mayhem": {
@@ -9542,7 +9924,7 @@
      "name": "JarvanIVGoldenAegis",
      "rank": 5,
      "cooldown": 9.0,
-     "cast_time": 0.25,
+     "cast_time": 0.125,
      "targeting": "SelfAoe",
      "area": "aoe",
      "duration": 0.0,
@@ -9598,7 +9980,7 @@
      "name": "JarvanIVCataclysm",
      "rank": 3,
      "cooldown": 90.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "",
      "area": "single",
      "duration": 3.5,
@@ -9653,6 +10035,8 @@
     "attack_speed_per_level": 0.034,
     "attack_speed_ratio": 0.638,
     "attack_range": 125.0,
+    "attack_windup": 0.2081,
+    "attack_windup_mod": 1.0,
     "move_speed": 350.0
    },
    "mayhem": {
@@ -9710,7 +10094,7 @@
      "name": "JaxW",
      "rank": 5,
      "cooldown": 3.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "Self",
      "area": "aoe",
      "duration": 0.0,
@@ -9737,14 +10121,17 @@
       }
      ],
      "mode_overrides": [],
-     "notes": []
+     "notes": [
+      "hand override: resets the basic attack timer"
+     ],
+     "attack_reset": true
     },
     {
      "slot": "E",
      "name": "JaxE",
      "rank": 5,
      "cooldown": 9.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "Self",
      "area": "aoe",
      "duration": 1.0,
@@ -9771,12 +10158,32 @@
       },
       {
        "type": "magic",
+       "calc": "PercentHealthDamage",
+       "scaling": {
+        "const": 0.04
+       },
+       "target": "target_max_hp",
+       "per_second": false,
+       "alt": false
+      },
+      {
+       "type": "magic",
        "calc": "MaxDamage",
        "scaling": {
         "const": 320.0,
         "ap": 1.4
        },
        "target": "flat",
+       "per_second": false,
+       "alt": true
+      },
+      {
+       "type": "magic",
+       "calc": "MaxPercentHealthDamage",
+       "scaling": {
+        "const": 0.08
+       },
+       "target": "target_max_hp",
        "per_second": false,
        "alt": true
       }
@@ -9789,7 +10196,7 @@
      "name": "JaxR",
      "rank": 3,
      "cooldown": 90.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "SelfAoe",
      "area": "aoe",
      "duration": 8.0,
@@ -9856,6 +10263,8 @@
     "attack_speed_per_level": 0.03,
     "attack_speed_ratio": 0.658,
     "attack_range": 125.0,
+    "attack_windup": 0.095,
+    "attack_windup_mod": 0.005,
     "move_speed": 335.0
    },
    "mayhem": {
@@ -9878,7 +10287,7 @@
      "name": "JayceToTheSkies",
      "rank": 5,
      "cooldown": 8.0,
-     "cast_time": 0.25,
+     "cast_time": 0.125,
      "targeting": "",
      "area": "single",
      "duration": 2.0,
@@ -9892,7 +10301,19 @@
       "on_self": false,
       "move": "dash"
      },
-     "hits": [],
+     "hits": [
+      {
+       "type": "physical",
+       "calc": "Damage",
+       "scaling": {
+        "const": 260.0,
+        "bonus_ad": 1.35
+       },
+       "target": "flat",
+       "per_second": false,
+       "alt": false
+      }
+     ],
      "mode_overrides": [],
      "notes": []
     },
@@ -9914,11 +10335,25 @@
       "speed": 0,
       "on_self": true
      },
-     "hits": [],
+     "hits": [
+      {
+       "type": "magic",
+       "calc": "Damage",
+       "scaling": {
+        "const": 380.0,
+        "ap": 1.0
+       },
+       "target": "flat",
+       "per_second": false,
+       "alt": false
+      }
+     ],
      "mode_overrides": [],
      "notes": [
-      "cooldown from the champion's ability list"
-     ]
+      "cooldown from the champion's ability list",
+      "hand override: resets the basic attack timer"
+     ],
+     "attack_reset": true
     },
     {
      "slot": "E",
@@ -9938,7 +10373,28 @@
       "speed": 0,
       "on_self": false
      },
-     "hits": [],
+     "hits": [
+      {
+       "type": "magic",
+       "calc": "FlatDamage",
+       "scaling": {
+        "bonus_ad": 1.0
+       },
+       "target": "flat",
+       "per_second": false,
+       "alt": false
+      },
+      {
+       "type": "magic",
+       "calc": "PercHPDamage",
+       "scaling": {
+        "const": 0.192
+       },
+       "target": "target_max_hp",
+       "per_second": false,
+       "alt": false
+      }
+     ],
      "mode_overrides": [],
      "notes": []
     },
@@ -9947,7 +10403,7 @@
      "name": "JayceStanceHtG",
      "rank": 3,
      "cooldown": 6.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "Self",
      "area": "aoe",
      "duration": 5.0,
@@ -9965,7 +10421,7 @@
      "notes": []
     }
    ],
-   "parse_quality": "none",
+   "parse_quality": "good",
    "notes": []
   },
   {
@@ -9991,6 +10447,8 @@
     "attack_speed_per_level": 0.0,
     "attack_speed_ratio": 0.625,
     "attack_range": 550.0,
+    "attack_windup": 0.1562,
+    "attack_windup_mod": 1.0,
     "move_speed": 330.0
    },
    "mayhem": {
@@ -10137,8 +10595,8 @@
        "type": "physical",
        "calc": "DamageCalc",
        "scaling": {
-        "const": 225.95,
-        "bonus_ad": 0.25
+        "const": 903.8,
+        "bonus_ad": 1.0
        },
        "target": "flat",
        "per_second": false,
@@ -10153,11 +10611,14 @@
        },
        "target": "flat",
        "per_second": false,
-       "alt": false
+       "alt": true
       }
      ],
      "mode_overrides": [],
-     "notes": []
+     "notes": [
+      "hand override: Curtain Call: four shots over about 4 seconds; four shots; the maximum is the execute version of one shot"
+     ],
+     "lock": 4
     }
    ],
    "parse_quality": "good",
@@ -10185,6 +10646,8 @@
     "attack_speed_per_level": 0.01,
     "attack_speed_ratio": 0.625,
     "attack_range": 525.0,
+    "attack_windup": 0.1771,
+    "attack_windup_mod": 1.0,
     "move_speed": 325.0
    },
    "mayhem": {
@@ -10241,7 +10704,7 @@
      "name": "JinxE",
      "rank": 5,
      "cooldown": 10.0,
-     "cast_time": 0.25,
+     "cast_time": 0.375,
      "targeting": "LocationClamped",
      "area": "aoe",
      "duration": 1.5,
@@ -10342,6 +10805,8 @@
     "attack_speed_per_level": 0.025,
     "attack_speed_ratio": 0.625,
     "attack_range": 150.0,
+    "attack_windup": 0.1953,
+    "attack_windup_mod": 1.0,
     "move_speed": 330.0
    },
    "mayhem": {
@@ -10399,7 +10864,8 @@
      "name": "KSanteW",
      "rank": 5,
      "cooldown": 10.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
+     "lock": 0.5,
      "targeting": "Direction",
      "area": "line",
      "duration": 1.0,
@@ -10423,6 +10889,18 @@
        "target": "flat",
        "per_second": false,
        "alt": false
+      },
+      {
+       "type": "physical",
+       "calc": "TotalMaxHealthDamage",
+       "scaling": {
+        "const": 0.08,
+        "bonus_armor": 0.0002,
+        "bonus_mr": 0.0002
+       },
+       "target": "target_max_hp",
+       "per_second": false,
+       "alt": false
       }
      ],
      "mode_overrides": [
@@ -10437,7 +10915,7 @@
      "name": "KSanteE",
      "rank": 5,
      "cooldown": 8.0,
-     "cast_time": 0.25,
+     "cast_time": 0.4,
      "targeting": "TargetOrLocation",
      "area": "aoe",
      "duration": 2.0,
@@ -10529,6 +11007,8 @@
     "attack_speed_per_level": 0.018000000000000002,
     "attack_speed_ratio": 0.644,
     "attack_range": 525.0,
+    "attack_windup": 0.1611,
+    "attack_windup_mod": 1.0,
     "move_speed": 335.0
    },
    "mayhem": {
@@ -10551,7 +11031,7 @@
      "name": "KaisaQ",
      "rank": 5,
      "cooldown": 6.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "Self",
      "area": "aoe",
      "duration": 0.0,
@@ -10624,7 +11104,7 @@
      "name": "KaisaE",
      "rank": 5,
      "cooldown": 10.0,
-     "cast_time": 1.5,
+     "cast_time": 0.0,
      "targeting": "Self",
      "area": "aoe",
      "duration": 0.0,
@@ -10690,6 +11170,8 @@
     "attack_speed_per_level": 0.045,
     "attack_speed_ratio": 0.694,
     "attack_range": 525.0,
+    "attack_windup": 0.36,
+    "attack_windup_mod": 0.75,
     "move_speed": 330.0
    },
    "mayhem": {
@@ -10759,7 +11241,18 @@
       "speed": 0,
       "on_self": false
      },
-     "hits": [],
+     "hits": [
+      {
+       "type": "magic",
+       "calc": "MaxHealthDamage",
+       "scaling": {
+        "const": 0.18
+       },
+       "target": "target_max_hp",
+       "per_second": false,
+       "alt": false
+      }
+     ],
      "mode_overrides": [],
      "notes": [
       "cooldown is the ammo recharge time"
@@ -10770,7 +11263,7 @@
      "name": "KalistaExpungeWrapper",
      "rank": 5,
      "cooldown": 8.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "SelfAoe",
      "area": "aoe",
      "duration": 2.0,
@@ -10819,7 +11312,7 @@
      "name": "KalistaRx",
      "rank": 3,
      "cooldown": 120.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "Self",
      "area": "aoe",
      "duration": 2.0,
@@ -10863,6 +11356,8 @@
     "attack_speed_per_level": 0.023,
     "attack_speed_ratio": 0.625,
     "attack_range": 525.0,
+    "attack_windup": 0.1615,
+    "attack_windup_mod": 1.0,
     "move_speed": 335.0
    },
    "mayhem": {
@@ -10898,7 +11393,19 @@
       "speed": 902,
       "on_self": false
      },
-     "hits": [],
+     "hits": [
+      {
+       "type": "magic",
+       "calc": "TotalDamage",
+       "scaling": {
+        "const": 260.0,
+        "ap": 0.7
+       },
+       "target": "flat",
+       "per_second": false,
+       "alt": false
+      }
+     ],
      "mode_overrides": [],
      "notes": []
     },
@@ -10907,7 +11414,7 @@
      "name": "KarmaSpiritBind",
      "rank": 5,
      "cooldown": 12.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "",
      "area": "single",
      "duration": 2.0,
@@ -10951,7 +11458,7 @@
      "name": "KarmaMantra",
      "rank": 3,
      "cooldown": 36.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "Self",
      "area": "aoe",
      "duration": 1.5,
@@ -10994,7 +11501,7 @@
      "notes": []
     }
    ],
-   "parse_quality": "partial",
+   "parse_quality": "good",
    "notes": []
   },
   {
@@ -11019,6 +11526,8 @@
     "attack_speed_per_level": 0.021099999999999997,
     "attack_speed_ratio": 0.625,
     "attack_range": 450.0,
+    "attack_windup": 0.3,
+    "attack_windup_mod": 1.0,
     "move_speed": 335.0
    },
    "mayhem": {
@@ -11110,7 +11619,7 @@
      "name": "KarthusDefile",
      "rank": 5,
      "cooldown": 0.5,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "SelfAoe",
      "area": "aoe",
      "duration": 0.0,
@@ -11145,7 +11654,7 @@
      "name": "KarthusFallenOne",
      "rank": 3,
      "cooldown": 160.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "Self",
      "area": "aoe",
      "duration": 0.0,
@@ -11172,11 +11681,17 @@
       }
      ],
      "mode_overrides": [],
-     "notes": []
+     "notes": [
+      "hand override: Requiem channels for 3 seconds"
+     ],
+     "lock": 3
     }
    ],
    "parse_quality": "good",
-   "notes": []
+   "notes": [],
+   "death": {
+    "act": 7
+   }
   },
   {
    "id": "Kassadin",
@@ -11201,6 +11716,8 @@
     "attack_speed_per_level": 0.037000000000000005,
     "attack_speed_ratio": 0.64,
     "attack_range": 150.0,
+    "attack_windup": 0.15,
+    "attack_windup_mod": 1.0,
     "move_speed": 335.0
    },
    "mayhem": {
@@ -11257,7 +11774,7 @@
      "name": "NetherBlade",
      "rank": 5,
      "cooldown": 7.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "Self",
      "area": "aoe",
      "duration": 0.0,
@@ -11296,7 +11813,10 @@
       }
      ],
      "mode_overrides": [],
-     "notes": []
+     "notes": [
+      "hand override: resets the basic attack timer"
+     ],
+     "attack_reset": true
     },
     {
      "slot": "E",
@@ -11410,6 +11930,8 @@
     "attack_speed_per_level": 0.0274,
     "attack_speed_ratio": 0.658,
     "attack_range": 125.0,
+    "attack_windup": 0.15,
+    "attack_windup_mod": 1.0,
     "move_speed": 335.0
    },
    "mayhem": {
@@ -11466,7 +11988,7 @@
      "name": "KatarinaW",
      "rank": 5,
      "cooldown": 11.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "Self",
      "area": "aoe",
      "duration": 1.25,
@@ -11489,7 +12011,7 @@
      "name": "KatarinaEWrapper",
      "rank": 5,
      "cooldown": 8.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "Location",
      "area": "aoe",
      "duration": 0.0,
@@ -11525,7 +12047,7 @@
      "name": "KatarinaR",
      "rank": 3,
      "cooldown": 45.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "SelfAoe",
      "area": "aoe",
      "duration": 2.5,
@@ -11548,7 +12070,7 @@
        },
        "target": "flat",
        "per_second": false,
-       "alt": false
+       "alt": true
       },
       {
        "type": "physical",
@@ -11558,7 +12080,7 @@
        },
        "target": "flat",
        "per_second": false,
-       "alt": false
+       "alt": true
       },
       {
        "type": "magic",
@@ -11575,7 +12097,7 @@
        "type": "physical",
        "calc": "TotalADDamageCalc",
        "scaling": {
-        "bonus_ad": 2.4
+        "bonus_ad": 4.8
        },
        "target": "flat",
        "per_second": false,
@@ -11583,7 +12105,10 @@
       }
      ],
      "mode_overrides": [],
-     "notes": []
+     "notes": [
+      "hand override: Death Lotus channels for 2.5 seconds; the totals are the whole channel; per-dagger numbers are part of them"
+     ],
+     "lock": 2.5
     }
    ],
    "parse_quality": "good",
@@ -11612,6 +12137,8 @@
     "attack_speed_per_level": 0.015,
     "attack_speed_ratio": 0.667,
     "attack_range": 175.0,
+    "attack_windup": 0.1935,
+    "attack_windup_mod": 1.0,
     "move_speed": 335.0
    },
    "mayhem": {
@@ -11635,6 +12162,7 @@
      "rank": 5,
      "cooldown": 8.0,
      "cast_time": 0.25,
+     "cast_from_attack": 1.0,
      "targeting": "AreaClamped",
      "area": "aoe",
      "duration": 2.0,
@@ -11691,7 +12219,7 @@
      "name": "KayleE",
      "rank": 5,
      "cooldown": 6.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "Self",
      "area": "aoe",
      "duration": 5.0,
@@ -11769,7 +12297,11 @@
     }
    ],
    "parse_quality": "good",
-   "notes": []
+   "notes": [],
+   "death": {
+    "act": 2.5,
+    "needs_r": true
+   }
   },
   {
    "id": "Kayn",
@@ -11794,6 +12326,8 @@
     "attack_speed_per_level": 0.027000000000000003,
     "attack_speed_ratio": 0.669,
     "attack_range": 175.0,
+    "attack_windup": 0.1873,
+    "attack_windup_mod": 1.0,
     "move_speed": 340.0
    },
    "mayhem": {
@@ -11830,7 +12364,41 @@
       "on_self": false,
       "move": "dash"
      },
-     "hits": [],
+     "hits": [
+      {
+       "type": "physical",
+       "calc": "TotalDamage",
+       "scaling": {
+        "const": 195.0,
+        "bonus_ad": 0.95
+       },
+       "target": "flat",
+       "per_second": false,
+       "alt": false
+      },
+      {
+       "type": "physical",
+       "calc": "DarkinFlatDamage",
+       "scaling": {
+        "const": 80.665,
+        "bonus_ad": 0.65
+       },
+       "target": "flat",
+       "per_second": false,
+       "alt": true
+      },
+      {
+       "type": "physical",
+       "calc": "DarkinPercentDamage",
+       "scaling": {
+        "const": 0.06,
+        "bonus_ad": 0.0003
+       },
+       "target": "target_max_hp",
+       "per_second": false,
+       "alt": true
+      }
+     ],
      "mode_overrides": [
       "ARAM:BonusADRatio"
      ],
@@ -11854,7 +12422,19 @@
       "speed": 0,
       "on_self": false
      },
-     "hits": [],
+     "hits": [
+      {
+       "type": "physical",
+       "calc": "TotalDamage",
+       "scaling": {
+        "const": 265.0,
+        "bonus_ad": 1.1
+       },
+       "target": "flat",
+       "per_second": false,
+       "alt": false
+      }
+     ],
      "mode_overrides": [],
      "notes": []
     },
@@ -11863,7 +12443,7 @@
      "name": "KaynE",
      "rank": 5,
      "cooldown": 13.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "Self",
      "area": "aoe",
      "duration": 9.0,
@@ -11903,12 +12483,35 @@
       "on_self": false,
       "move": "dash"
      },
-     "hits": [],
+     "hits": [
+      {
+       "type": "physical",
+       "calc": "Damage",
+       "scaling": {
+        "const": 350.0,
+        "bonus_ad": 1.5
+       },
+       "target": "flat",
+       "per_second": false,
+       "alt": false
+      },
+      {
+       "type": "physical",
+       "calc": "SlayerDamage",
+       "scaling": {
+        "const": 0.15,
+        "bonus_ad": 0.001
+       },
+       "target": "target_max_hp",
+       "per_second": false,
+       "alt": true
+      }
+     ],
      "mode_overrides": [],
      "notes": []
     }
    ],
-   "parse_quality": "none",
+   "parse_quality": "good",
    "notes": []
   },
   {
@@ -11933,6 +12536,8 @@
     "attack_speed_per_level": 0.034,
     "attack_speed_ratio": 0.69,
     "attack_range": 550.0,
+    "attack_windup": 0.2,
+    "attack_windup_mod": 1.0,
     "move_speed": 335.0
    },
    "mayhem": {
@@ -11955,7 +12560,7 @@
      "name": "KennenShurikenHurlMissile1",
      "rank": 5,
      "cooldown": 4.0,
-     "cast_time": 0.25,
+     "cast_time": 0.175,
      "targeting": "Direction",
      "area": "line",
      "duration": 0.0,
@@ -12035,7 +12640,7 @@
      "name": "KennenLightningRush",
      "rank": 5,
      "cooldown": 6.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "Self",
      "area": "aoe",
      "duration": 2.0,
@@ -12125,6 +12730,8 @@
     "attack_speed_per_level": 0.027000000000000003,
     "attack_speed_ratio": 0.668,
     "attack_range": 125.0,
+    "attack_windup": 0.2005,
+    "attack_windup_mod": 1.0,
     "move_speed": 345.0
    },
    "mayhem": {
@@ -12160,7 +12767,30 @@
       "speed": 0,
       "on_self": false
      },
-     "hits": [],
+     "hits": [
+      {
+       "type": "physical",
+       "calc": "BaseDamage",
+       "scaling": {
+        "const": 180.0,
+        "bonus_ad": 1.05
+       },
+       "target": "flat",
+       "per_second": false,
+       "alt": false
+      },
+      {
+       "type": "physical",
+       "calc": "IsoDamage",
+       "scaling": {
+        "const": 378.0,
+        "bonus_ad": 2.205
+       },
+       "target": "flat",
+       "per_second": false,
+       "alt": true
+      }
+     ],
      "mode_overrides": [],
      "notes": []
     },
@@ -12182,7 +12812,19 @@
       "speed": 828,
       "on_self": false
      },
-     "hits": [],
+     "hits": [
+      {
+       "type": "physical",
+       "calc": "BaseDamage",
+       "scaling": {
+        "const": 195.0,
+        "bonus_ad": 1.0
+       },
+       "target": "flat",
+       "per_second": false,
+       "alt": false
+      }
+     ],
      "mode_overrides": [],
      "notes": []
     },
@@ -12205,7 +12847,19 @@
       "on_self": false,
       "move": "dash"
      },
-     "hits": [],
+     "hits": [
+      {
+       "type": "physical",
+       "calc": "TotalDamage",
+       "scaling": {
+        "const": 205.0,
+        "bonus_ad": 0.4
+       },
+       "target": "flat",
+       "per_second": false,
+       "alt": false
+      }
+     ],
      "mode_overrides": [],
      "notes": []
     },
@@ -12214,7 +12868,7 @@
      "name": "KhazixR",
      "rank": 3,
      "cooldown": 70.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "Self",
      "area": "aoe",
      "duration": 1.25,
@@ -12232,7 +12886,7 @@
      "notes": []
     }
    ],
-   "parse_quality": "none",
+   "parse_quality": "good",
    "notes": []
   },
   {
@@ -12257,6 +12911,8 @@
     "attack_speed_per_level": 0.035,
     "attack_speed_ratio": 0.625,
     "attack_range": 500.0,
+    "attack_windup": 0.1754,
+    "attack_windup_mod": 1.0,
     "move_speed": 325.0
    },
    "mayhem": {
@@ -12279,7 +12935,7 @@
      "name": "KindredQ",
      "rank": 5,
      "cooldown": 9.0,
-     "cast_time": 0.01,
+     "cast_time": 0.25,
      "targeting": "Location",
      "area": "aoe",
      "duration": 4.0,
@@ -12307,7 +12963,10 @@
       }
      ],
      "mode_overrides": [],
-     "notes": []
+     "notes": [
+      "hand override: resets the basic attack timer"
+     ],
+     "attack_reset": true
     },
     {
      "slot": "W",
@@ -12427,7 +13086,11 @@
     }
    ],
    "parse_quality": "partial",
-   "notes": []
+   "notes": [],
+   "death": {
+    "act": 4,
+    "needs_r": true
+   }
   },
   {
    "id": "Kled",
@@ -12451,6 +13114,8 @@
     "attack_speed_per_level": 0.035,
     "attack_speed_ratio": 0.625,
     "attack_range": 125.0,
+    "attack_windup": 0.175,
+    "attack_windup_mod": 1.0,
     "move_speed": 345.0
    },
    "mayhem": {
@@ -12518,7 +13183,7 @@
      "name": "KledW",
      "rank": 5,
      "cooldown": 9.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "Self",
      "area": "aoe",
      "duration": 4.0,
@@ -12564,7 +13229,7 @@
      "name": "KledE",
      "rank": 5,
      "cooldown": 9.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "LocationClamped",
      "area": "aoe",
      "duration": 1.0,
@@ -12599,7 +13264,7 @@
      "name": "KledR",
      "rank": 3,
      "cooldown": 110.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "Location",
      "area": "aoe",
      "duration": 0.0,
@@ -12656,6 +13321,8 @@
     "attack_speed_per_level": 0.0265,
     "attack_speed_ratio": 0.665,
     "attack_range": 500.0,
+    "attack_windup": 0.1662,
+    "attack_windup_mod": 1.0,
     "move_speed": 330.0
    },
    "mayhem": {
@@ -12679,6 +13346,7 @@
      "rank": 5,
      "cooldown": 7.0,
      "cast_time": 0.25,
+     "cast_from_attack": 1.0,
      "targeting": "Direction",
      "area": "line",
      "duration": 4.0,
@@ -12714,7 +13382,7 @@
      "name": "KogMawBioArcaneBarrage",
      "rank": 5,
      "cooldown": 17.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "Self",
      "area": "aoe",
      "duration": 8.0,
@@ -12727,7 +13395,19 @@
       "speed": 0,
       "on_self": true
      },
-     "hits": [],
+     "hits": [
+      {
+       "type": "magic",
+       "calc": "TotalHealthDamage",
+       "scaling": {
+        "const": 0.045,
+        "ap": 0.0001
+       },
+       "target": "target_max_hp",
+       "per_second": false,
+       "alt": false
+      }
+     ],
      "mode_overrides": [
       "ARAM:MaxHealthDamage"
      ],
@@ -12800,6 +13480,16 @@
       },
       {
        "type": "magic",
+       "calc": "TooltipMissingHealthDamageAmp",
+       "scaling": {
+        "const": 0.0083
+       },
+       "target": "target_missing_hp",
+       "per_second": false,
+       "alt": false
+      },
+      {
+       "type": "magic",
        "calc": "MaxDamageCalc",
        "scaling": {
         "const": 360.0,
@@ -12816,7 +13506,10 @@
     }
    ],
    "parse_quality": "good",
-   "notes": []
+   "notes": [],
+   "death": {
+    "act": 4
+   }
   },
   {
    "id": "Leblanc",
@@ -12841,6 +13534,8 @@
     "attack_speed_per_level": 0.015,
     "attack_speed_ratio": 0.625,
     "attack_range": 525.0,
+    "attack_windup": 0.1667,
+    "attack_windup_mod": 1.0,
     "move_speed": 340.0
    },
    "mayhem": {
@@ -12988,7 +13683,7 @@
      "name": "LeblancR",
      "rank": 3,
      "cooldown": 25.0,
-     "cast_time": 0.25,
+     "cast_time": 0.425,
      "targeting": "Location",
      "area": "aoe",
      "duration": 3.5,
@@ -13089,6 +13784,8 @@
     "attack_speed_per_level": 0.03,
     "attack_speed_ratio": 0.651,
     "attack_range": 125.0,
+    "attack_windup": 0.1953,
+    "attack_windup_mod": 1.0,
     "move_speed": 345.0
    },
    "mayhem": {
@@ -13159,7 +13856,7 @@
      "name": "LeeSinWOne",
      "rank": 5,
      "cooldown": 7.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "TargetOrLocation",
      "area": "aoe",
      "duration": 2.0,
@@ -13184,7 +13881,7 @@
      "name": "LeeSinEOne",
      "rank": 5,
      "cooldown": 8.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "SelfAoe",
      "area": "aoe",
      "duration": 4.0,
@@ -13258,7 +13955,7 @@
        "type": "physical",
        "calc": "PercentHPCarryThrough",
        "scaling": {
-        "const": 0.18
+        "const": 0.054
        },
        "target": "target_max_hp",
        "per_second": false,
@@ -13266,7 +13963,9 @@
       }
      ],
      "mode_overrides": [],
-     "notes": []
+     "notes": [
+      "target bonus health counted as 30% of max health"
+     ]
     }
    ],
    "parse_quality": "good",
@@ -13295,6 +13994,8 @@
     "attack_speed_per_level": 0.028999999999999998,
     "attack_speed_ratio": 0.625,
     "attack_range": 125.0,
+    "attack_windup": 0.2292,
+    "attack_windup_mod": 1.0,
     "move_speed": 335.0
    },
    "mayhem": {
@@ -13317,7 +14018,7 @@
      "name": "LeonaShieldOfDaybreak",
      "rank": 5,
      "cooldown": 5.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "Self",
      "area": "aoe",
      "duration": 1.0,
@@ -13344,7 +14045,10 @@
       }
      ],
      "mode_overrides": [],
-     "notes": []
+     "notes": [
+      "hand override: resets the basic attack timer"
+     ],
+     "attack_reset": true
     },
     {
      "slot": "W",
@@ -13476,6 +14180,8 @@
     "attack_speed_per_level": 0.027000000000000003,
     "attack_speed_ratio": 0.625,
     "attack_range": 325.0,
+    "attack_windup": 0.1471,
+    "attack_windup_mod": 1.0,
     "move_speed": 330.0
    },
    "mayhem": {
@@ -13498,7 +14204,7 @@
      "name": "LilliaQ",
      "rank": 5,
      "cooldown": 4.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "Self",
      "area": "aoe",
      "duration": 6.5,
@@ -13579,7 +14285,7 @@
        },
        "target": "flat",
        "per_second": false,
-       "alt": false
+       "alt": true
       }
      ],
      "mode_overrides": [],
@@ -13626,7 +14332,7 @@
      "name": "LilliaR",
      "rank": 3,
      "cooldown": 110.0,
-     "cast_time": 0.4,
+     "cast_time": 0.0,
      "targeting": "Self",
      "area": "aoe",
      "duration": 1.5,
@@ -13681,6 +14387,8 @@
     "attack_speed_per_level": 0.015,
     "attack_speed_ratio": 0.625,
     "attack_range": 550.0,
+    "attack_windup": 0.1875,
+    "attack_windup_mod": 1.0,
     "move_speed": 325.0
    },
    "mayhem": {
@@ -13862,6 +14570,8 @@
     "attack_speed_per_level": 0.033,
     "attack_speed_ratio": 0.625,
     "attack_range": 125.0,
+    "attack_windup": 0.1562,
+    "attack_windup_mod": 1.0,
     "move_speed": 340.0
    },
    "mayhem": {
@@ -13884,7 +14594,7 @@
      "name": "LockeQ",
      "rank": 5,
      "cooldown": 6.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "Direction",
      "area": "line",
      "duration": 4.0,
@@ -13929,7 +14639,7 @@
      "name": "LockeW",
      "rank": 5,
      "cooldown": 12.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "Self",
      "area": "aoe",
      "duration": 6.0,
@@ -13942,7 +14652,18 @@
       "speed": 0,
       "on_self": true
      },
-     "hits": [],
+     "hits": [
+      {
+       "type": "true",
+       "calc": "HealthCost",
+       "scaling": {
+        "const": 0.02
+       },
+       "target": "target_current_hp",
+       "per_second": true,
+       "alt": false
+      }
+     ],
      "mode_overrides": [],
      "notes": []
     },
@@ -14055,6 +14776,8 @@
     "attack_speed_per_level": 0.025,
     "attack_speed_ratio": 0.638,
     "attack_range": 500.0,
+    "attack_windup": 0.15,
+    "attack_windup_mod": 1.0,
     "move_speed": 335.0
    },
    "mayhem": {
@@ -14145,7 +14868,7 @@
      "name": "LucianE",
      "rank": 5,
      "cooldown": 14.0,
-     "cast_time": 0.25,
+     "cast_time": 0.15,
      "targeting": "Location",
      "area": "aoe",
      "duration": 0.0,
@@ -14161,7 +14884,10 @@
      },
      "hits": [],
      "mode_overrides": [],
-     "notes": []
+     "notes": [
+      "hand override: resets the basic attack timer"
+     ],
+     "attack_reset": true
     },
     {
      "slot": "R",
@@ -14186,9 +14912,9 @@
        "type": "physical",
        "calc": "DamagePerBullet",
        "scaling": {
-        "const": 72.325,
-        "bonus_ad": 0.25,
-        "ap": 0.15
+        "const": 1591.15,
+        "bonus_ad": 5.5,
+        "ap": 3.3
        },
        "target": "flat",
        "per_second": false,
@@ -14203,13 +14929,15 @@
        },
        "target": "flat",
        "per_second": false,
-       "alt": false
+       "alt": true
       }
      ],
      "mode_overrides": [],
      "notes": [
-      "unsupported stat 9"
-     ]
+      "unsupported stat 9",
+      "hand override: The Culling fires for 3 seconds, no attacks; 22 bullets per cast; TotalDamage is the bullet count, not damage"
+     ],
+     "lock": 3
     }
    ],
    "parse_quality": "partial",
@@ -14238,6 +14966,8 @@
     "attack_speed_per_level": 0.0225,
     "attack_speed_ratio": 0.625,
     "attack_range": 550.0,
+    "attack_windup": 0.1875,
+    "attack_windup_mod": 1.0,
     "move_speed": 330.0
    },
    "mayhem": {
@@ -14305,7 +15035,7 @@
      "name": "LuluW",
      "rank": 5,
      "cooldown": 18.0,
-     "cast_time": 0.25,
+     "cast_time": 0.175,
      "targeting": "",
      "area": "single",
      "duration": 2.0,
@@ -14327,7 +15057,7 @@
      "name": "LuluE",
      "rank": 5,
      "cooldown": 8.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "",
      "area": "single",
      "duration": 2.5,
@@ -14405,6 +15135,8 @@
     "attack_speed_per_level": 0.03,
     "attack_speed_ratio": 0.625,
     "attack_range": 550.0,
+    "attack_windup": 0.1563,
+    "attack_windup_mod": 1.0,
     "move_speed": 330.0
    },
    "mayhem": {
@@ -14519,7 +15251,7 @@
      "name": "LuxR",
      "rank": 3,
      "cooldown": 60.0,
-     "cast_time": 0.25,
+     "cast_time": 1.375,
      "targeting": "Location",
      "area": "aoe",
      "duration": 0.0,
@@ -14577,6 +15309,8 @@
     "attack_speed_per_level": 0.034,
     "attack_speed_ratio": 0.638,
     "attack_range": 125.0,
+    "attack_windup": 0.2497,
+    "attack_windup_mod": 1.0,
     "move_speed": 335.0
    },
    "mayhem": {
@@ -14633,7 +15367,7 @@
      "name": "Obduracy",
      "rank": 5,
      "cooldown": 8.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "Self",
      "area": "aoe",
      "duration": 5.0,
@@ -14680,7 +15414,7 @@
      "name": "Landslide",
      "rank": 5,
      "cooldown": 7.0,
-     "cast_time": 0.242,
+     "cast_time": 0.0,
      "targeting": "SelfAoe",
      "area": "aoe",
      "duration": 3.0,
@@ -14715,7 +15449,7 @@
      "name": "UFSlash",
      "rank": 3,
      "cooldown": 100.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "Area",
      "area": "aoe",
      "duration": 1.5,
@@ -14771,6 +15505,8 @@
     "attack_speed_per_level": 0.015,
     "attack_speed_ratio": 0.625,
     "attack_range": 500.0,
+    "attack_windup": 0.19,
+    "attack_windup_mod": 1.0,
     "move_speed": 335.0
    },
    "mayhem": {
@@ -14896,7 +15632,7 @@
      "name": "MalzaharR",
      "rank": 3,
      "cooldown": 80.0,
-     "cast_time": 0.25,
+     "cast_time": 0.005,
      "targeting": "",
      "area": "single",
      "duration": 2.5,
@@ -14934,7 +15670,10 @@
       }
      ],
      "mode_overrides": [],
-     "notes": []
+     "notes": [
+      "hand override: Nether Grasp channels for 2.5 seconds"
+     ],
+     "lock": 2.5
     }
    ],
    "parse_quality": "good",
@@ -14963,6 +15702,8 @@
     "attack_speed_per_level": 0.02125,
     "attack_speed_ratio": 0.695,
     "attack_range": 125.0,
+    "attack_windup": 0.3,
+    "attack_windup_mod": 1.0,
     "move_speed": 335.0
    },
    "mayhem": {
@@ -14985,7 +15726,7 @@
      "name": "MaokaiQ",
      "rank": 5,
      "cooldown": 6.0,
-     "cast_time": 0.25,
+     "cast_time": 0.375,
      "targeting": "Location",
      "area": "aoe",
      "duration": 0.25,
@@ -15007,6 +15748,16 @@
         "ap": 0.5
        },
        "target": "flat",
+       "per_second": false,
+       "alt": false
+      },
+      {
+       "type": "magic",
+       "calc": "BasePercentHealth",
+       "scaling": {
+        "const": 0.04
+       },
+       "target": "target_max_hp",
        "per_second": false,
        "alt": false
       }
@@ -15106,7 +15857,7 @@
      "name": "MaokaiR",
      "rank": 3,
      "cooldown": 90.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "Location",
      "area": "aoe",
      "duration": 0.75,
@@ -15162,6 +15913,8 @@
     "attack_speed_per_level": 0.025,
     "attack_speed_ratio": 0.679,
     "attack_range": 175.0,
+    "attack_windup": 0.244,
+    "attack_windup_mod": 1.0,
     "move_speed": 355.0
    },
    "mayhem": {
@@ -15241,7 +15994,7 @@
      "name": "Meditate",
      "rank": 5,
      "cooldown": 10.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "Self",
      "area": "aoe",
      "duration": 4.0,
@@ -15265,7 +16018,7 @@
      "name": "WujuStyle",
      "rank": 5,
      "cooldown": 14.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "Self",
      "area": "aoe",
      "duration": 5.0,
@@ -15299,7 +16052,7 @@
      "name": "Highlander",
      "rank": 3,
      "cooldown": 85.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "Self",
      "area": "aoe",
      "duration": 7.0,
@@ -15344,6 +16097,8 @@
     "attack_speed_per_level": 0.025,
     "attack_speed_ratio": 0.625,
     "attack_range": 550.0,
+    "attack_windup": 0.156,
+    "attack_windup_mod": 1.0,
     "move_speed": 330.0
    },
    "mayhem": {
@@ -15421,7 +16176,7 @@
      "name": "MelW",
      "rank": 5,
      "cooldown": 41.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "Self",
      "area": "aoe",
      "duration": 0.75,
@@ -15490,7 +16245,7 @@
      "name": "MelR",
      "rank": 3,
      "cooldown": 80.0,
-     "cast_time": 0.75,
+     "cast_time": 0.0,
      "targeting": "Self",
      "area": "aoe",
      "duration": 0.0,
@@ -15558,6 +16313,8 @@
     "attack_speed_per_level": 0.03,
     "attack_speed_ratio": 0.625,
     "attack_range": 525.0,
+    "attack_windup": 0.1714,
+    "attack_windup_mod": 1.0,
     "move_speed": 330.0
    },
    "mayhem": {
@@ -15638,7 +16395,7 @@
      "name": "MilioE",
      "rank": 5,
      "cooldown": 13.0,
-     "cast_time": 0.01,
+     "cast_time": 0.0,
      "targeting": "",
      "area": "single",
      "duration": 2.5,
@@ -15706,6 +16463,8 @@
     "attack_speed_per_level": 0.03,
     "attack_speed_ratio": 0.656,
     "attack_range": 550.0,
+    "attack_windup": 0.148,
+    "attack_windup_mod": 1.0,
     "move_speed": 325.0
    },
    "mayhem": {
@@ -15729,6 +16488,7 @@
      "rank": 5,
      "cooldown": 3.0,
      "cast_time": 0.25,
+     "cast_from_attack": 1.0,
      "targeting": "",
      "area": "single",
      "duration": 0.0,
@@ -15777,7 +16537,7 @@
      "name": "MissFortuneViciousStrikes",
      "rank": 5,
      "cooldown": 12.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "Self",
      "area": "aoe",
      "duration": 4.0,
@@ -15844,7 +16604,7 @@
      "name": "MissFortuneBulletTime",
      "rank": 3,
      "cooldown": 100.0,
-     "cast_time": 0.001,
+     "cast_time": 0.389,
      "targeting": "Cone",
      "area": "aoe",
      "duration": 3.0,
@@ -15868,7 +16628,7 @@
        },
        "target": "flat",
        "per_second": false,
-       "alt": false
+       "alt": true
       },
       {
        "type": "physical",
@@ -15892,13 +16652,15 @@
        },
        "target": "flat",
        "per_second": false,
-       "alt": false
+       "alt": true
       }
      ],
      "mode_overrides": [],
      "notes": [
-      "unsupported stat 9"
-     ]
+      "unsupported stat 9",
+      "hand override: Bullet Time channels for 3 seconds; the total is the whole channel; per-wave numbers are part of it"
+     ],
+     "lock": 3
     }
    ],
    "parse_quality": "partial",
@@ -15927,6 +16689,8 @@
     "attack_speed_per_level": 0.01,
     "attack_speed_ratio": 0.625,
     "attack_range": 175.0,
+    "attack_windup": 0.2113,
+    "attack_windup_mod": 1.0,
     "move_speed": 335.0
    },
    "mayhem": {
@@ -15996,7 +16760,7 @@
      "name": "MordekaiserW",
      "rank": 5,
      "cooldown": 8.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "Self",
      "area": "aoe",
      "duration": 5.0,
@@ -16097,6 +16861,8 @@
     "attack_speed_per_level": 0.015300000000000001,
     "attack_speed_ratio": 0.625,
     "attack_range": 450.0,
+    "attack_windup": 0.14,
+    "attack_windup_mod": 1.0,
     "move_speed": 335.0
    },
    "mayhem": {
@@ -16200,7 +16966,7 @@
      "name": "MorganaE",
      "rank": 5,
      "cooldown": 16.0,
-     "cast_time": 0.25,
+     "cast_time": 0.515,
      "targeting": "",
      "area": "single",
      "duration": 5.0,
@@ -16222,7 +16988,7 @@
      "name": "MorganaR",
      "rank": 3,
      "cooldown": 100.0,
-     "cast_time": 0.25,
+     "cast_time": 0.35,
      "targeting": "SelfAoe",
      "area": "aoe",
      "duration": 3.0,
@@ -16289,6 +17055,8 @@
     "attack_speed_per_level": 0.021,
     "attack_speed_ratio": 0.625,
     "attack_range": 125.0,
+    "attack_windup": 0.1724,
+    "attack_windup_mod": 1.0,
     "move_speed": 340.0
    },
    "mayhem": {
@@ -16324,7 +17092,52 @@
       "speed": 1700,
       "on_self": false
      },
-     "hits": [],
+     "hits": [
+      {
+       "type": "physical",
+       "calc": "TotalDamageFirstCast",
+       "scaling": {
+        "const": 55.0,
+        "bonus_ad": 0.2
+       },
+       "target": "flat",
+       "per_second": false,
+       "alt": false
+      },
+      {
+       "type": "physical",
+       "calc": "TotalBleedDamage",
+       "scaling": {
+        "const": 135.0,
+        "bonus_ad": 0.8
+       },
+       "target": "flat",
+       "per_second": false,
+       "alt": false
+      },
+      {
+       "type": "physical",
+       "calc": "TotalMinDamageSecondCast",
+       "scaling": {
+        "const": 80.0,
+        "bonus_ad": 0.4
+       },
+       "target": "flat",
+       "per_second": false,
+       "alt": false
+      },
+      {
+       "type": "physical",
+       "calc": "TotalMaxDamageSecondCast",
+       "scaling": {
+        "const": 160.0,
+        "bonus_ad": 1.4
+       },
+       "target": "flat",
+       "per_second": false,
+       "alt": false
+      }
+     ],
      "mode_overrides": [],
      "notes": []
     },
@@ -16333,7 +17146,7 @@
      "name": "NaafiriR",
      "rank": 5,
      "cooldown": 18.0,
-     "cast_time": 0.75,
+     "cast_time": 0.0,
      "targeting": "Self",
      "area": "aoe",
      "duration": 5.0,
@@ -16368,7 +17181,7 @@
      "name": "NaafiriE",
      "rank": 5,
      "cooldown": 7.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "Location",
      "area": "aoe",
      "duration": 0.0,
@@ -16414,7 +17227,8 @@
      "name": "NaafiriW",
      "rank": 3,
      "cooldown": 80.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
+     "lock": 0.75,
      "targeting": "",
      "area": "single",
      "duration": 0.25,
@@ -16482,6 +17296,8 @@
     "attack_speed_per_level": 0.026099999999999998,
     "attack_speed_ratio": 0.644,
     "attack_range": 550.0,
+    "attack_windup": 0.18,
+    "attack_windup_mod": 1.0,
     "move_speed": 335.0
    },
    "mayhem": {
@@ -16664,6 +17480,8 @@
     "attack_speed_per_level": 0.0348,
     "attack_speed_ratio": 0.638,
     "attack_range": 125.0,
+    "attack_windup": 0.2014,
+    "attack_windup_mod": 1.0,
     "move_speed": 350.0
    },
    "mayhem": {
@@ -16686,7 +17504,7 @@
      "name": "NasusQ",
      "rank": 5,
      "cooldown": 3.5,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "Self",
      "area": "aoe",
      "duration": 10.0,
@@ -16717,15 +17535,17 @@
       "ARAM:BigStacks"
      ],
      "notes": [
-      "stack-based scaling ignored"
-     ]
+      "stack-based scaling ignored",
+      "hand override: resets the basic attack timer"
+     ],
+     "attack_reset": true
     },
     {
      "slot": "W",
      "name": "NasusW",
      "rank": 5,
      "cooldown": 11.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "",
      "area": "single",
      "duration": 5.0,
@@ -16792,7 +17612,7 @@
      "name": "NasusR",
      "rank": 3,
      "cooldown": 80.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "Self",
      "area": "aoe",
      "duration": 15.0,
@@ -16848,6 +17668,8 @@
     "attack_speed_per_level": 0.01,
     "attack_speed_ratio": 0.612,
     "attack_range": 175.0,
+    "attack_windup": 0.3064,
+    "attack_windup_mod": 1.0,
     "move_speed": 325.0
    },
    "mayhem": {
@@ -16905,7 +17727,7 @@
      "name": "NautilusPiercingGaze",
      "rank": 5,
      "cooldown": 12.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "Self",
      "area": "aoe",
      "duration": 6.0,
@@ -16932,14 +17754,17 @@
       }
      ],
      "mode_overrides": [],
-     "notes": []
+     "notes": [
+      "hand override: resets the basic attack timer"
+     ],
+     "attack_reset": true
     },
     {
      "slot": "E",
      "name": "NautilusSplashZone",
      "rank": 5,
      "cooldown": 5.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "SelfAoe",
      "area": "aoe",
      "duration": 1.25,
@@ -17040,6 +17865,8 @@
     "attack_speed_per_level": 0.035,
     "attack_speed_ratio": 0.67,
     "attack_range": 550.0,
+    "attack_windup": 0.2,
+    "attack_windup_mod": 1.0,
     "move_speed": 340.0
    },
    "mayhem": {
@@ -17107,7 +17934,7 @@
      "name": "NeekoW",
      "rank": 5,
      "cooldown": 12.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "Direction",
      "area": "line",
      "duration": 3.0,
@@ -17175,7 +18002,7 @@
      "name": "NeekoR",
      "rank": 3,
      "cooldown": 90.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "SelfAoe",
      "area": "aoe",
      "duration": 2.5,
@@ -17231,6 +18058,8 @@
     "attack_speed_per_level": 0.0322,
     "attack_speed_ratio": 0.638,
     "attack_range": 525.0,
+    "attack_windup": 0.15,
+    "attack_windup_mod": 1.0,
     "move_speed": 335.0
    },
    "mayhem": {
@@ -17354,7 +18183,7 @@
      "name": "AspectOfTheCougar",
      "rank": 3,
      "cooldown": 3.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "Self",
      "area": "aoe",
      "duration": 0.0,
@@ -17399,6 +18228,8 @@
     "attack_speed_per_level": 0.0125,
     "attack_speed_ratio": 0.67,
     "attack_range": 225.0,
+    "attack_windup": 0.22,
+    "attack_windup_mod": 1.0,
     "move_speed": 340.0
    },
    "mayhem": {
@@ -17457,7 +18288,7 @@
      "name": "NilahW",
      "rank": 5,
      "cooldown": 22.0,
-     "cast_time": 0.013,
+     "cast_time": 0.0,
      "targeting": "Self",
      "area": "aoe",
      "duration": 2.25,
@@ -17480,7 +18311,7 @@
      "name": "NilahE",
      "rank": 5,
      "cooldown": 12.0,
-     "cast_time": 0.25,
+     "cast_time": 0.15,
      "targeting": "Target",
      "area": "single",
      "duration": 0.0,
@@ -17517,7 +18348,7 @@
      "name": "NilahR",
      "rank": 3,
      "cooldown": 80.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "Self",
      "area": "aoe",
      "duration": 6.0,
@@ -17585,6 +18416,8 @@
     "attack_speed_per_level": 0.027000000000000003,
     "attack_speed_ratio": 0.721,
     "attack_range": 125.0,
+    "attack_windup": 0.2005,
+    "attack_windup_mod": 1.0,
     "move_speed": 345.0
    },
    "mayhem": {
@@ -17651,7 +18484,7 @@
      "name": "NocturneShroudofDarkness",
      "rank": 5,
      "cooldown": 12.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "Self",
      "area": "aoe",
      "duration": 1.5,
@@ -17708,7 +18541,7 @@
      "name": "NocturneParanoia",
      "rank": 3,
      "cooldown": 90.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "SelfAoe",
      "area": "aoe",
      "duration": 6.0,
@@ -17765,6 +18598,8 @@
     "attack_speed_per_level": 0.0225,
     "attack_speed_ratio": 0.625,
     "attack_range": 125.0,
+    "attack_windup": 0.1936,
+    "attack_windup_mod": 1.0,
     "move_speed": 345.0
    },
    "mayhem": {
@@ -17787,7 +18622,7 @@
      "name": "NunuQ",
      "rank": 5,
      "cooldown": 9.0,
-     "cast_time": 0.3,
+     "cast_time": 0.0,
      "targeting": "",
      "area": "single",
      "duration": 0.0,
@@ -17824,7 +18659,8 @@
      "name": "NunuW",
      "rank": 5,
      "cooldown": 14.0,
-     "cast_time": 0.25,
+     "cast_time": 0.125,
+     "lock": 2,
      "targeting": "Location",
      "area": "aoe",
      "duration": 10.0,
@@ -17865,7 +18701,9 @@
      "mode_overrides": [
       "ARAM:MaximumAPRatio"
      ],
-     "notes": []
+     "notes": [
+      "hand override: the snowball rolls about 2 seconds before it hits"
+     ]
     },
     {
      "slot": "E",
@@ -17917,7 +18755,8 @@
      "name": "NunuR",
      "rank": 3,
      "cooldown": 90.0,
-     "cast_time": 0.01,
+     "cast_time": 0.25,
+     "lock": 3.0,
      "targeting": "SelfAoe",
      "area": "aoe",
      "duration": 3.0,
@@ -17973,6 +18812,8 @@
     "attack_speed_per_level": 0.027000000000000003,
     "attack_speed_ratio": 0.694,
     "attack_range": 125.0,
+    "attack_windup": 0.2344,
+    "attack_windup_mod": 1.0,
     "move_speed": 350.0
    },
    "mayhem": {
@@ -18029,7 +18870,7 @@
      "name": "OlafFrenziedStrikes",
      "rank": 5,
      "cooldown": 12.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "Self",
      "area": "aoe",
      "duration": 5.0,
@@ -18086,7 +18927,7 @@
      "name": "OlafRagnarok",
      "rank": 3,
      "cooldown": 80.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "Self",
      "area": "aoe",
      "duration": 3.0,
@@ -18131,6 +18972,8 @@
     "attack_speed_per_level": 0.035,
     "attack_speed_ratio": 0.658,
     "attack_range": 525.0,
+    "attack_windup": 0.1754,
+    "attack_windup_mod": 1.0,
     "move_speed": 325.0
    },
    "mayhem": {
@@ -18187,7 +19030,7 @@
      "name": "OrianaDissonanceCommand",
      "rank": 5,
      "cooldown": 7.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "Self",
      "area": "aoe",
      "duration": 3.0,
@@ -18255,7 +19098,7 @@
      "name": "OrianaDetonateCommand",
      "rank": 3,
      "cooldown": 80.0,
-     "cast_time": 0.5,
+     "cast_time": 0.0,
      "targeting": "Self",
      "area": "aoe",
      "duration": 0.75,
@@ -18310,6 +19153,8 @@
     "attack_speed_per_level": 0.02,
     "attack_speed_ratio": 0.625,
     "attack_range": 175.0,
+    "attack_windup": 0.2187,
+    "attack_windup_mod": 1.0,
     "move_speed": 335.0
    },
    "mayhem": {
@@ -18513,6 +19358,8 @@
     "attack_speed_per_level": 0.029500000000000002,
     "attack_speed_ratio": 0.658,
     "attack_range": 175.0,
+    "attack_windup": 0.1903,
+    "attack_windup_mod": 1.0,
     "move_speed": 345.0
    },
    "mayhem": {
@@ -18535,7 +19382,8 @@
      "name": "PantheonQ",
      "rank": 5,
      "cooldown": 8.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
+     "lock": 0.4,
      "targeting": "Direction",
      "area": "line",
      "duration": 0.0,
@@ -18581,7 +19429,7 @@
        },
        "target": "flat",
        "per_second": false,
-       "alt": false
+       "alt": true
       },
       {
        "type": "physical",
@@ -18603,7 +19451,7 @@
      "name": "PantheonW",
      "rank": 5,
      "cooldown": 9.0,
-     "cast_time": 0.25,
+     "cast_time": 0.125,
      "targeting": "",
      "area": "single",
      "duration": 1.0,
@@ -18618,6 +19466,18 @@
       "move": "dash"
      },
      "hits": [
+      {
+       "type": "physical",
+       "calc": "MaxHealthDamageCalc",
+       "scaling": {
+        "const": 0.08,
+        "bonus_hp": 0.0,
+        "ap": 0.0002
+       },
+       "target": "target_max_hp",
+       "per_second": false,
+       "alt": false
+      },
       {
        "type": "physical",
        "calc": "EmpoweredDamageMultCalcModified",
@@ -18638,7 +19498,8 @@
      "name": "PantheonE",
      "rank": 5,
      "cooldown": 18.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
+     "lock": 1.5,
      "targeting": "Direction",
      "area": "line",
      "duration": 1.5,
@@ -18729,6 +19590,8 @@
     "attack_speed_per_level": 0.025,
     "attack_speed_ratio": 0.625,
     "attack_range": 125.0,
+    "attack_windup": 0.2344,
+    "attack_windup_mod": 1.0,
     "move_speed": 345.0
    },
    "mayhem": {
@@ -18751,7 +19614,7 @@
      "name": "PoppyQ",
      "rank": 5,
      "cooldown": 4.0,
-     "cast_time": 0.25,
+     "cast_time": 0.332,
      "targeting": "Location",
      "area": "aoe",
      "duration": 0.5,
@@ -18778,12 +19641,32 @@
       },
       {
        "type": "physical",
+       "calc": "HealthDamagePercent",
+       "scaling": {
+        "const": 0.09
+       },
+       "target": "target_max_hp",
+       "per_second": false,
+       "alt": false
+      },
+      {
+       "type": "physical",
        "calc": "BaseDamage",
        "scaling": {
         "const": 130.0,
         "bonus_ad": 0.75
        },
        "target": "flat",
+       "per_second": false,
+       "alt": false
+      },
+      {
+       "type": "physical",
+       "calc": "HealthDamagePercent",
+       "scaling": {
+        "const": 0.09
+       },
+       "target": "target_max_hp",
        "per_second": false,
        "alt": false
       }
@@ -18796,7 +19679,7 @@
      "name": "PoppyW",
      "rank": 5,
      "cooldown": 12.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "SelfAoe",
      "area": "aoe",
      "duration": 2.0,
@@ -18831,7 +19714,7 @@
      "name": "PoppyE",
      "rank": 5,
      "cooldown": 10.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "",
      "area": "single",
      "duration": 2.0,
@@ -18877,7 +19760,8 @@
      "name": "PoppyR",
      "rank": 3,
      "cooldown": 100.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
+     "lock": 0.5,
      "targeting": "Direction",
      "area": "line",
      "duration": 4.0,
@@ -18944,6 +19828,8 @@
     "attack_speed_per_level": 0.025,
     "attack_speed_ratio": 0.667,
     "attack_range": 150.0,
+    "attack_windup": 0.2,
+    "attack_windup_mod": 1.0,
     "move_speed": 330.0
    },
    "mayhem": {
@@ -18966,7 +19852,8 @@
      "name": "PykeQ",
      "rank": 5,
      "cooldown": 8.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
+     "lock": 0.5,
      "targeting": "Direction",
      "area": "line",
      "duration": 1.0,
@@ -19011,7 +19898,7 @@
      "name": "PykeW",
      "rank": 5,
      "cooldown": 10.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "Self",
      "area": "aoe",
      "duration": 5.0,
@@ -19068,7 +19955,7 @@
      "name": "PykeR",
      "rank": 3,
      "cooldown": 70.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "Location",
      "area": "aoe",
      "duration": 20.0,
@@ -19124,6 +20011,8 @@
     "attack_speed_per_level": 0.021,
     "attack_speed_ratio": 0.625,
     "attack_range": 150.0,
+    "attack_windup": 0.1533,
+    "attack_windup_mod": 1.0,
     "move_speed": 335.0
    },
    "mayhem": {
@@ -19191,7 +20080,7 @@
      "name": "QiyanaW",
      "rank": 5,
      "cooldown": 7.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "TerrainType",
      "area": "single",
      "duration": 3.0,
@@ -19286,6 +20175,16 @@
        "target": "flat",
        "per_second": false,
        "alt": false
+      },
+      {
+       "type": "physical",
+       "calc": "MissingHealthDamageRock",
+       "scaling": {
+        "const": 0.1
+       },
+       "target": "target_max_hp",
+       "per_second": false,
+       "alt": false
       }
      ],
      "mode_overrides": [],
@@ -19318,6 +20217,8 @@
     "attack_speed_per_level": 0.031,
     "attack_speed_ratio": 0.668,
     "attack_range": 525.0,
+    "attack_windup": 0.1754,
+    "attack_windup_mod": 1.0,
     "move_speed": 330.0
    },
    "mayhem": {
@@ -19432,7 +20333,7 @@
      "name": "QuinnR",
      "rank": 3,
      "cooldown": 3.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "Self",
      "area": "aoe",
      "duration": 3.0,
@@ -19487,6 +20388,8 @@
     "attack_speed_per_level": 0.03,
     "attack_speed_ratio": 0.635,
     "attack_range": 300.0,
+    "attack_windup": 0.1714,
+    "attack_windup_mod": 1.0,
     "move_speed": 335.0
    },
    "mayhem": {
@@ -19543,7 +20446,7 @@
      "name": "RakanW",
      "rank": 5,
      "cooldown": 10.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "Location",
      "area": "aoe",
      "duration": 1.0,
@@ -19603,7 +20506,7 @@
      "name": "RakanR",
      "rank": 3,
      "cooldown": 90.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "Self",
      "area": "aoe",
      "duration": 4.0,
@@ -19658,6 +20561,8 @@
     "attack_speed_per_level": 0.02215,
     "attack_speed_ratio": 0.625,
     "attack_range": 125.0,
+    "attack_windup": 0.2292,
+    "attack_windup_mod": 1.0,
     "move_speed": 335.0
    },
    "mayhem": {
@@ -19680,7 +20585,8 @@
      "name": "PowerBall",
      "rank": 5,
      "cooldown": 6.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
+     "lock": 1.5,
      "targeting": "Self",
      "area": "aoe",
      "duration": 6.0,
@@ -19707,14 +20613,16 @@
       }
      ],
      "mode_overrides": [],
-     "notes": []
+     "notes": [
+      "hand override: Powerball rolls about 1.5 seconds before it hits"
+     ]
     },
     {
      "slot": "W",
      "name": "DefensiveBallCurl",
      "rank": 5,
      "cooldown": 7.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "Self",
      "area": "aoe",
      "duration": 7.0,
@@ -19829,6 +20737,8 @@
     "attack_speed_per_level": 0.02,
     "attack_speed_ratio": 0.667,
     "attack_range": 175.0,
+    "attack_windup": 0.2,
+    "attack_windup_mod": 0.6,
     "move_speed": 340.0
    },
    "mayhem": {
@@ -19879,7 +20789,10 @@
       }
      ],
      "mode_overrides": [],
-     "notes": []
+     "notes": [
+      "hand override: resets the basic attack timer"
+     ],
+     "attack_reset": true
     },
     {
      "slot": "W",
@@ -19922,7 +20835,30 @@
       "speed": 4000,
       "on_self": false
      },
-     "hits": [],
+     "hits": [
+      {
+       "type": "physical",
+       "calc": "BaseDamageCalculation",
+       "scaling": {
+        "const": 170.0,
+        "bonus_ad": 0.6
+       },
+       "target": "flat",
+       "per_second": false,
+       "alt": false
+      },
+      {
+       "type": "true",
+       "calc": "EmpoweredDamageCalculation",
+       "scaling": {
+        "const": 204.0,
+        "bonus_ad": 0.72
+       },
+       "target": "flat",
+       "per_second": false,
+       "alt": true
+      }
+     ],
      "mode_overrides": [],
      "notes": []
     },
@@ -19954,6 +20890,16 @@
         "bonus_ad": 1.0
        },
        "target": "flat",
+       "per_second": false,
+       "alt": false
+      },
+      {
+       "type": "physical",
+       "calc": "PercentHealthDamage",
+       "scaling": {
+        "const": 0.25
+       },
+       "target": "target_max_hp",
        "per_second": false,
        "alt": false
       }
@@ -19988,6 +20934,8 @@
     "attack_speed_per_level": 0.02,
     "attack_speed_ratio": 0.625,
     "attack_range": 175.0,
+    "attack_windup": 0.1875,
+    "attack_windup_mod": 1.0,
     "move_speed": 315.0
    },
    "mayhem": {
@@ -20010,7 +20958,7 @@
      "name": "RellQ",
      "rank": 5,
      "cooldown": 9.0,
-     "cast_time": 0.4,
+     "cast_time": 0.35,
      "targeting": "Direction",
      "area": "line",
      "duration": 0.65,
@@ -20044,7 +20992,7 @@
      "name": "RellW_Dismount",
      "rank": 5,
      "cooldown": 10.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "AreaClamped",
      "area": "aoe",
      "duration": 0.4,
@@ -20058,7 +21006,19 @@
       "on_self": false,
       "move": "dash"
      },
-     "hits": [],
+     "hits": [
+      {
+       "type": "magic",
+       "calc": "DismountDamage",
+       "scaling": {
+        "const": 180.0,
+        "ap": 0.6
+       },
+       "target": "flat",
+       "per_second": false,
+       "alt": false
+      }
+     ],
      "mode_overrides": [],
      "notes": [
       "cooldown from the champion's ability list"
@@ -20082,7 +21042,19 @@
       "speed": 0,
       "on_self": false
      },
-     "hits": [],
+     "hits": [
+      {
+       "type": "magic",
+       "calc": "MaxHealthDamageCalc",
+       "scaling": {
+        "const": 0.07,
+        "ap": 0.0003
+       },
+       "target": "target_max_hp",
+       "per_second": false,
+       "alt": false
+      }
+     ],
      "mode_overrides": [],
      "notes": []
     },
@@ -20091,7 +21063,7 @@
      "name": "RellR",
      "rank": 3,
      "cooldown": 80.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "SelfAoe",
      "area": "aoe",
      "duration": 2.0,
@@ -20147,6 +21119,8 @@
     "attack_speed_per_level": 0.021099999999999997,
     "attack_speed_ratio": 0.625,
     "attack_range": 550.0,
+    "attack_windup": 0.188,
+    "attack_windup_mod": 1.0,
     "move_speed": 330.0
    },
    "mayhem": {
@@ -20314,6 +21288,8 @@
     "attack_speed_per_level": 0.0275,
     "attack_speed_ratio": 0.665,
     "attack_range": 125.0,
+    "attack_windup": 0.1773,
+    "attack_windup_mod": 1.0,
     "move_speed": 345.0
    },
    "mayhem": {
@@ -20381,7 +21357,7 @@
      "name": "RenektonPreExecute",
      "rank": 5,
      "cooldown": 8.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "Self",
      "area": "aoe",
      "duration": 0.75,
@@ -20419,7 +21395,10 @@
       }
      ],
      "mode_overrides": [],
-     "notes": []
+     "notes": [
+      "hand override: resets the basic attack timer"
+     ],
+     "attack_reset": true
     },
     {
      "slot": "E",
@@ -20461,7 +21440,7 @@
        },
        "target": "flat",
        "per_second": false,
-       "alt": false
+       "alt": true
       }
      ],
      "mode_overrides": [],
@@ -20472,7 +21451,7 @@
      "name": "RenektonReignOfTheTyrant",
      "rank": 3,
      "cooldown": 80.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "Self",
      "area": "aoe",
      "duration": 15.0,
@@ -20529,6 +21508,8 @@
     "attack_speed_per_level": 0.03,
     "attack_speed_ratio": 0.667,
     "attack_range": 125.0,
+    "attack_windup": 0.2,
+    "attack_windup_mod": 1.0,
     "move_speed": 345.0
    },
    "mayhem": {
@@ -20551,7 +21532,7 @@
      "name": "RengarQ",
      "rank": 5,
      "cooldown": 4.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "Self",
      "area": "aoe",
      "duration": 5.0,
@@ -20596,15 +21577,17 @@
       "Kiwi:TotalADRatio"
      ],
      "notes": [
-      "cooldown is the ammo recharge time"
-     ]
+      "cooldown is the ammo recharge time",
+      "hand override: resets the basic attack timer"
+     ],
+     "attack_reset": true
     },
     {
      "slot": "W",
      "name": "RengarW",
      "rank": 5,
      "cooldown": 10.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "SelfAoe",
      "area": "aoe",
      "duration": 1.5,
@@ -20700,7 +21683,7 @@
      "name": "RengarR",
      "rank": 3,
      "cooldown": 70.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "SelfAoe",
      "area": "aoe",
      "duration": 20.0,
@@ -20760,6 +21743,8 @@
     "attack_speed_per_level": 0.035,
     "attack_speed_ratio": 0.625,
     "attack_range": 125.0,
+    "attack_windup": 0.1667,
+    "attack_windup_mod": 1.0,
     "move_speed": 340.0
    },
    "mayhem": {
@@ -20821,14 +21806,17 @@
       }
      ],
      "mode_overrides": [],
-     "notes": []
+     "notes": [
+      "hand override: resets the basic attack timer"
+     ],
+     "attack_reset": true
     },
     {
      "slot": "W",
      "name": "RivenMartyr",
      "rank": 5,
      "cooldown": 7.0,
-     "cast_time": 0.267,
+     "cast_time": 0.0,
      "targeting": "SelfAoe",
      "area": "aoe",
      "duration": 0.75,
@@ -20862,7 +21850,7 @@
      "name": "RivenFeint",
      "rank": 5,
      "cooldown": 6.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "TargetOrLocation",
      "area": "aoe",
      "duration": 1.5,
@@ -20885,7 +21873,7 @@
      "name": "RivenFengShuiEngine",
      "rank": 3,
      "cooldown": 60.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "Self",
      "area": "aoe",
      "duration": 15.0,
@@ -20964,6 +21952,8 @@
     "attack_speed_per_level": 0.018500000000000003,
     "attack_speed_ratio": 0.644,
     "attack_range": 125.0,
+    "attack_windup": 0.2,
+    "attack_windup_mod": 1.0,
     "move_speed": 345.0
    },
    "mayhem": {
@@ -21013,12 +22003,32 @@
       },
       {
        "type": "magic",
+       "calc": "HealthDamage",
+       "scaling": {
+        "const": 0.08
+       },
+       "target": "target_max_hp",
+       "per_second": false,
+       "alt": false
+      },
+      {
+       "type": "magic",
        "calc": "EmpoweredDamage",
        "scaling": {
         "const": 225.0,
         "ap": 1.575
        },
        "target": "flat",
+       "per_second": false,
+       "alt": true
+      },
+      {
+       "type": "magic",
+       "calc": "EmpoweredHealth",
+       "scaling": {
+        "const": 0.12
+       },
+       "target": "target_max_hp",
        "per_second": false,
        "alt": true
       }
@@ -21031,7 +22041,7 @@
      "name": "RumbleShield",
      "rank": 5,
      "cooldown": 6.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "Self",
      "area": "aoe",
      "duration": 1.5,
@@ -21088,7 +22098,7 @@
        },
        "target": "flat",
        "per_second": false,
-       "alt": false
+       "alt": true
       }
      ],
      "mode_overrides": [],
@@ -21156,6 +22166,8 @@
     "attack_speed_per_level": 0.021099999999999997,
     "attack_speed_ratio": 0.625,
     "attack_range": 550.0,
+    "attack_windup": 0.2,
+    "attack_windup_mod": 1.0,
     "move_speed": 340.0
    },
    "mayhem": {
@@ -21286,7 +22298,7 @@
      "name": "RyzeR",
      "rank": 3,
      "cooldown": 140.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "LocationClamped",
      "area": "aoe",
      "duration": 0.75,
@@ -21331,6 +22343,8 @@
     "attack_speed_per_level": 0.033,
     "attack_speed_ratio": 0.658,
     "attack_range": 500.0,
+    "attack_windup": 0.15,
+    "attack_windup_mod": 1.0,
     "move_speed": 335.0
    },
    "mayhem": {
@@ -21398,7 +22412,7 @@
      "name": "SamiraW",
      "rank": 5,
      "cooldown": 22.0,
-     "cast_time": 0.01,
+     "cast_time": 0.25,
      "targeting": "SelfAoe",
      "area": "aoe",
      "duration": 0.75,
@@ -21432,7 +22446,7 @@
      "name": "SamiraE",
      "rank": 5,
      "cooldown": 12.0,
-     "cast_time": 0.25,
+     "cast_time": 0.15,
      "targeting": "",
      "area": "single",
      "duration": 5.0,
@@ -21466,8 +22480,8 @@
      "slot": "R",
      "name": "SamiraR",
      "rank": 3,
-     "cooldown": 5.0,
-     "cast_time": 0.25,
+     "cooldown": 15,
+     "cast_time": 0.0,
      "targeting": "Self",
      "area": "aoe",
      "duration": 0.0,
@@ -21485,8 +22499,8 @@
        "type": "physical",
        "calc": "DamageCalc",
        "scaling": {
-        "const": 92.4,
-        "bonus_ad": 0.3
+        "const": 924.0,
+        "bonus_ad": 3.0
        },
        "target": "flat",
        "per_second": false,
@@ -21494,7 +22508,10 @@
       }
      ],
      "mode_overrides": [],
-     "notes": []
+     "notes": [
+      "hand override: Inferno Trigger: 2 seconds of shooting, no attacks; ten waves of shots; needs an S style rank, about once per 15 seconds of fighting"
+     ],
+     "lock": 2
     }
    ],
    "parse_quality": "good",
@@ -21522,6 +22539,8 @@
     "attack_speed_per_level": 0.035,
     "attack_speed_ratio": 0.625,
     "attack_range": 150.0,
+    "attack_windup": 0.1875,
+    "attack_windup_mod": 1.0,
     "move_speed": 340.0
    },
    "mayhem": {
@@ -21626,7 +22645,7 @@
      "name": "SejuaniE",
      "rank": 5,
      "cooldown": 1.5,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "",
      "area": "single",
      "duration": 1.0,
@@ -21727,6 +22746,8 @@
     "attack_speed_per_level": 0.026000000000000002,
     "attack_speed_ratio": 0.4,
     "attack_range": 600.0,
+    "attack_windup": 0.3438,
+    "attack_windup_mod": 0.6,
     "move_speed": 330.0
    },
    "mayhem": {
@@ -21749,7 +22770,9 @@
      "name": "SennaQ",
      "rank": 5,
      "cooldown": 15.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
+     "lock": 0,
+     "cast_from_attack": 0.8,
      "targeting": "Target",
      "area": "single",
      "duration": 2.0,
@@ -21776,7 +22799,9 @@
       }
      ],
      "mode_overrides": [],
-     "notes": []
+     "notes": [
+      "hand override: Piercing Darkness fires off the attack wind-up; no channel"
+     ]
     },
     {
      "slot": "W",
@@ -21817,7 +22842,7 @@
      "name": "SennaE",
      "rank": 5,
      "cooldown": 20.0,
-     "cast_time": 1.0,
+     "cast_time": 0.0,
      "targeting": "Self",
      "area": "aoe",
      "duration": 8.0,
@@ -21839,7 +22864,7 @@
      "name": "SennaR",
      "rank": 3,
      "cooldown": 100.0,
-     "cast_time": 0.25,
+     "cast_time": 1.0,
      "targeting": "Location",
      "area": "aoe",
      "duration": 3.0,
@@ -21897,6 +22922,8 @@
     "attack_speed_per_level": 0.02,
     "attack_speed_ratio": 0.625,
     "attack_range": 525.0,
+    "attack_windup": 0.187,
+    "attack_windup_mod": 1.0,
     "move_speed": 330.0
    },
    "mayhem": {
@@ -21919,7 +22946,7 @@
      "name": "SeraphineQ",
      "rank": 5,
      "cooldown": 6.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "LocationClamped",
      "area": "aoe",
      "duration": 0.0,
@@ -21964,7 +22991,7 @@
      "name": "SeraphineW",
      "rank": 5,
      "cooldown": 22.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "Self",
      "area": "aoe",
      "duration": 2.5,
@@ -21986,7 +23013,7 @@
      "name": "SeraphineE",
      "rank": 5,
      "cooldown": 9.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "Direction",
      "area": "line",
      "duration": 1.5,
@@ -22076,6 +23103,8 @@
     "attack_speed_per_level": 0.0175,
     "attack_speed_ratio": 0.625,
     "attack_range": 125.0,
+    "attack_windup": 0.2143,
+    "attack_windup_mod": 1.0,
     "move_speed": 340.0
    },
    "mayhem": {
@@ -22098,7 +23127,7 @@
      "name": "SettQ",
      "rank": 5,
      "cooldown": 5.0,
-     "cast_time": 0.33,
+     "cast_time": 0.0,
      "targeting": "Self",
      "area": "aoe",
      "duration": 4.0,
@@ -22120,6 +23149,17 @@
         "const": 50.0
        },
        "target": "flat",
+       "per_second": false,
+       "alt": false
+      },
+      {
+       "type": "physical",
+       "calc": "MaxHealthDamageCalc",
+       "scaling": {
+        "const": 0.0484,
+        "bonus_ad": 0.0003
+       },
+       "target": "target_max_hp",
        "per_second": false,
        "alt": false
       }
@@ -22230,10 +23270,22 @@
        "target": "flat",
        "per_second": false,
        "alt": false
+      },
+      {
+       "type": "physical",
+       "calc": "MaxHealthDamage",
+       "scaling": {
+        "const": 0.18
+       },
+       "target": "target_max_hp",
+       "per_second": false,
+       "alt": false
       }
      ],
      "mode_overrides": [],
-     "notes": []
+     "notes": [
+      "target bonus health counted as 30% of max health"
+     ]
     }
    ],
    "parse_quality": "good",
@@ -22261,6 +23313,8 @@
     "attack_speed_per_level": 0.03,
     "attack_speed_ratio": 0.694,
     "attack_range": 125.0,
+    "attack_windup": 0.2215,
+    "attack_windup_mod": 1.0,
     "move_speed": 345.0
    },
    "mayhem": {
@@ -22405,7 +23459,7 @@
        },
        "target": "flat",
        "per_second": false,
-       "alt": false
+       "alt": true
       }
      ],
      "mode_overrides": [
@@ -22495,6 +23549,8 @@
     "attack_speed_per_level": 0.03,
     "attack_speed_ratio": 0.651,
     "attack_range": 125.0,
+    "attack_windup": 0.1736,
+    "attack_windup_mod": 1.0,
     "move_speed": 340.0
    },
    "mayhem": {
@@ -22517,7 +23573,7 @@
      "name": "ShenQ",
      "rank": 5,
      "cooldown": 5.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "Self",
      "area": "aoe",
      "duration": 2.0,
@@ -22543,6 +23599,17 @@
       },
       {
        "type": "magic",
+       "calc": "BasePercentHealth",
+       "scaling": {
+        "const": 0.04,
+        "ap": 0.0001
+       },
+       "target": "target_max_hp",
+       "per_second": false,
+       "alt": false
+      },
+      {
+       "type": "magic",
        "calc": "BaseFlatDamage",
        "scaling": {
         "const": 40.0
@@ -22550,6 +23617,17 @@
        "target": "flat",
        "per_second": false,
        "alt": true
+      },
+      {
+       "type": "magic",
+       "calc": "EmpPercentHealth",
+       "scaling": {
+        "const": 0.07,
+        "ap": 0.0002
+       },
+       "target": "target_max_hp",
+       "per_second": false,
+       "alt": false
       }
      ],
      "mode_overrides": [],
@@ -22560,7 +23638,7 @@
      "name": "ShenW",
      "rank": 5,
      "cooldown": 10.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "Self",
      "area": "aoe",
      "duration": 1.75,
@@ -22582,7 +23660,7 @@
      "name": "ShenE",
      "rank": 5,
      "cooldown": 10.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "Location",
      "area": "aoe",
      "duration": 1.5,
@@ -22617,7 +23695,8 @@
      "name": "ShenR",
      "rank": 3,
      "cooldown": 160.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
+     "lock": 3.0,
      "targeting": "",
      "area": "single",
      "duration": 5.0,
@@ -22663,6 +23742,8 @@
     "attack_speed_per_level": 0.02,
     "attack_speed_ratio": 0.638,
     "attack_range": 150.0,
+    "attack_windup": 0.1562,
+    "attack_windup_mod": 1.0,
     "move_speed": 350.0
    },
    "mayhem": {
@@ -22685,7 +23766,7 @@
      "name": "ShyvanaQ",
      "rank": 5,
      "cooldown": 6.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "Self",
      "area": "aoe",
      "duration": 6.0,
@@ -22699,6 +23780,17 @@
       "on_self": true
      },
      "hits": [
+      {
+       "type": "magic",
+       "calc": "Calc_Max_Health_Damage",
+       "scaling": {
+        "const": 0.01,
+        "bonus_ad": 0.0001
+       },
+       "target": "target_max_hp",
+       "per_second": false,
+       "alt": false
+      },
       {
        "type": "physical",
        "calc": "Calc_Damage",
@@ -22725,14 +23817,17 @@
       }
      ],
      "mode_overrides": [],
-     "notes": []
+     "notes": [
+      "hand override: resets the basic attack timer"
+     ],
+     "attack_reset": true
     },
     {
      "slot": "W",
      "name": "ShyvanaW",
      "rank": 5,
      "cooldown": 10.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "Self",
      "area": "aoe",
      "duration": 2.5,
@@ -22793,12 +23888,32 @@
       },
       {
        "type": "magic",
+       "calc": "Calc_Max_Health_Damage",
+       "scaling": {
+        "const": 0.05
+       },
+       "target": "target_max_hp",
+       "per_second": false,
+       "alt": false
+      },
+      {
+       "type": "magic",
        "calc": "Calc_Dragon_Damage",
        "scaling": {
         "const": 137.5,
         "ap": 1.0
        },
        "target": "flat",
+       "per_second": false,
+       "alt": false
+      },
+      {
+       "type": "magic",
+       "calc": "Calc_Max_Health_Dragon_Damage",
+       "scaling": {
+        "const": 0.0625
+       },
+       "target": "target_max_hp",
        "per_second": false,
        "alt": false
       },
@@ -22883,6 +23998,8 @@
     "attack_speed_per_level": 0.019,
     "attack_speed_ratio": 0.625,
     "attack_range": 125.0,
+    "attack_windup": 0.2,
+    "attack_windup_mod": 1.0,
     "move_speed": 345.0
    },
    "mayhem": {
@@ -22905,7 +24022,7 @@
      "name": "PoisonTrail",
      "rank": 5,
      "cooldown": 0.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "Self",
      "area": "aoe",
      "duration": 3.25,
@@ -23005,7 +24122,7 @@
      "name": "InsanityPotion",
      "rank": 3,
      "cooldown": 100.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "Self",
      "area": "aoe",
      "duration": 25.0,
@@ -23049,6 +24166,8 @@
     "attack_speed_per_level": 0.013000000000000001,
     "attack_speed_ratio": 0.679,
     "attack_range": 175.0,
+    "attack_windup": 0.2491,
+    "attack_windup_mod": 1.0,
     "move_speed": 345.0
    },
    "mayhem": {
@@ -23071,7 +24190,8 @@
      "name": "SionQ",
      "rank": 5,
      "cooldown": 6.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
+     "lock": 1.0,
      "targeting": "Direction",
      "area": "line",
      "duration": 0.0,
@@ -23105,7 +24225,7 @@
      "name": "SionW",
      "rank": 5,
      "cooldown": 11.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "Self",
      "area": "aoe",
      "duration": 6.0,
@@ -23188,7 +24308,8 @@
      "name": "SionR",
      "rank": 3,
      "cooldown": 60.0,
-     "cast_time": 0.25,
+     "cast_time": 0.125,
+     "lock": 3,
      "targeting": "Location",
      "area": "aoe",
      "duration": 0.75,
@@ -23215,11 +24336,16 @@
       }
      ],
      "mode_overrides": [],
-     "notes": []
+     "notes": [
+      "hand override: Unstoppable Onslaught charges about 3 seconds before it hits"
+     ]
     }
    ],
    "parse_quality": "good",
-   "notes": []
+   "notes": [],
+   "death": {
+    "act": 9
+   }
   },
   {
    "id": "Sivir",
@@ -23243,6 +24369,8 @@
     "attack_speed_per_level": 0.016,
     "attack_speed_ratio": 0.625,
     "attack_range": 500.0,
+    "attack_windup": 0.12,
+    "attack_windup_mod": 1.0,
     "move_speed": 335.0
    },
    "mayhem": {
@@ -23303,7 +24431,7 @@
      "name": "SivirW",
      "rank": 5,
      "cooldown": 12.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "Self",
      "area": "aoe",
      "duration": 4.0,
@@ -23331,14 +24459,17 @@
       }
      ],
      "mode_overrides": [],
-     "notes": []
+     "notes": [
+      "hand override: resets the basic attack timer"
+     ],
+     "attack_reset": true
     },
     {
      "slot": "E",
      "name": "SivirE",
      "rank": 5,
      "cooldown": 18.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "Self",
      "area": "aoe",
      "duration": 1.5,
@@ -23405,6 +24536,8 @@
     "attack_speed_per_level": 0.02,
     "attack_speed_ratio": 0.625,
     "attack_range": 150.0,
+    "attack_windup": 0.1875,
+    "attack_windup_mod": 1.0,
     "move_speed": 335.0
    },
    "mayhem": {
@@ -23427,7 +24560,7 @@
      "name": "SkarnerQ",
      "rank": 5,
      "cooldown": 3.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "Self",
      "area": "aoe",
      "duration": 5.0,
@@ -23463,6 +24596,28 @@
        "target": "target_max_hp",
        "per_second": false,
        "alt": false
+      },
+      {
+       "type": "physical",
+       "calc": "AbilityDamage",
+       "scaling": {
+        "const": 50.0,
+        "bonus_ad": 0.9,
+        "bonus_hp": 0.03
+       },
+       "target": "flat",
+       "per_second": false,
+       "alt": false
+      },
+      {
+       "type": "physical",
+       "calc": "MaxHPPercent",
+       "scaling": {
+        "const": 0.11
+       },
+       "target": "target_max_hp",
+       "per_second": false,
+       "alt": false
       }
      ],
      "mode_overrides": [],
@@ -23473,7 +24628,7 @@
      "name": "SkarnerW",
      "rank": 5,
      "cooldown": 6.0,
-     "cast_time": 0.25,
+     "cast_time": 0.3,
      "targeting": "Direction",
      "area": "line",
      "duration": 2.5,
@@ -23507,7 +24662,7 @@
      "name": "SkarnerE",
      "rank": 5,
      "cooldown": 14.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "Direction",
      "area": "line",
      "duration": 2.75,
@@ -23600,6 +24755,8 @@
     "attack_speed_per_level": 0.04,
     "attack_speed_ratio": 0.638,
     "attack_range": 550.0,
+    "attack_windup": 0.1595,
+    "attack_windup_mod": 1.0,
     "move_speed": 330.0
    },
    "mayhem": {
@@ -23623,6 +24780,7 @@
      "rank": 5,
      "cooldown": 3.5,
      "cast_time": 0.25,
+     "cast_from_attack": 1.0,
      "targeting": "",
      "area": "single",
      "duration": 0.0,
@@ -23725,7 +24883,7 @@
      "name": "SmolderE",
      "rank": 5,
      "cooldown": 16.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "Self",
      "area": "aoe",
      "duration": 1.25,
@@ -23795,7 +24953,7 @@
        },
        "target": "flat",
        "per_second": false,
-       "alt": false
+       "alt": true
       }
      ],
      "mode_overrides": [],
@@ -23828,6 +24986,8 @@
     "attack_speed_per_level": 0.023,
     "attack_speed_ratio": 0.644,
     "attack_range": 550.0,
+    "attack_windup": 0.1718,
+    "attack_windup_mod": 1.0,
     "move_speed": 325.0
    },
    "mayhem": {
@@ -23935,7 +25095,7 @@
      "name": "SonaE",
      "rank": 5,
      "cooldown": 14.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "SelfAoe",
      "area": "aoe",
      "duration": 3.0,
@@ -24013,6 +25173,8 @@
     "attack_speed_per_level": 0.021400000000000002,
     "attack_speed_ratio": 0.625,
     "attack_range": 550.0,
+    "attack_windup": 0.187,
+    "attack_windup_mod": 1.0,
     "move_speed": 325.0
    },
    "mayhem": {
@@ -24185,6 +25347,8 @@
     "attack_speed_per_level": 0.021099999999999997,
     "attack_speed_ratio": 0.625,
     "attack_range": 525.0,
+    "attack_windup": 0.14,
+    "attack_windup_mod": 1.0,
     "move_speed": 330.0
    },
    "mayhem": {
@@ -24332,7 +25496,7 @@
      "name": "SwainR",
      "rank": 3,
      "cooldown": 120.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "Self",
      "area": "aoe",
      "duration": 1.5,
@@ -24399,6 +25563,8 @@
     "attack_speed_per_level": 0.035,
     "attack_speed_ratio": 0.645,
     "attack_range": 175.0,
+    "attack_windup": 0.1677,
+    "attack_windup_mod": 1.0,
     "move_speed": 340.0
    },
    "mayhem": {
@@ -24466,7 +25632,7 @@
      "name": "SylasW",
      "rank": 5,
      "cooldown": 6.0,
-     "cast_time": 0.15,
+     "cast_time": 0.0,
      "targeting": "",
      "area": "single",
      "duration": 0.0,
@@ -24580,6 +25746,8 @@
     "attack_speed_per_level": 0.02,
     "attack_speed_ratio": 0.625,
     "attack_range": 550.0,
+    "attack_windup": 0.1875,
+    "attack_windup_mod": 1.0,
     "move_speed": 330.0
    },
    "mayhem": {
@@ -24602,7 +25770,7 @@
      "name": "SyndraQ",
      "rank": 5,
      "cooldown": 7.0,
-     "cast_time": 0.25,
+     "cast_time": 0.375,
      "targeting": "AreaClamped",
      "area": "aoe",
      "duration": 6.0,
@@ -24651,7 +25819,19 @@
       "speed": 1450,
       "on_self": false
      },
-     "hits": [],
+     "hits": [
+      {
+       "type": "magic",
+       "calc": "ThrowDamage",
+       "scaling": {
+        "const": 190.0,
+        "ap": 0.65
+       },
+       "target": "flat",
+       "per_second": false,
+       "alt": false
+      }
+     ],
      "mode_overrides": [],
      "notes": [
       "ARAM cooldown"
@@ -24774,6 +25954,8 @@
     "attack_speed_per_level": 0.025,
     "attack_speed_ratio": 0.658,
     "attack_range": 175.0,
+    "attack_windup": 0.2502,
+    "attack_windup_mod": 1.0,
     "move_speed": 335.0
    },
    "mayhem": {
@@ -24830,7 +26012,8 @@
      "name": "TahmKenchW",
      "rank": 5,
      "cooldown": 17.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
+     "lock": 1.35,
      "targeting": "LocationClamped",
      "area": "aoe",
      "duration": 1.0,
@@ -24865,7 +26048,7 @@
      "name": "TahmKenchE",
      "rank": 5,
      "cooldown": 3.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "Self",
      "area": "aoe",
      "duration": 2.5,
@@ -24887,7 +26070,7 @@
      "name": "TahmKenchRWrapper",
      "rank": 3,
      "cooldown": 80,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "TargetOrLocation",
      "area": "aoe",
      "duration": 3.0,
@@ -24956,6 +26139,8 @@
     "attack_speed_per_level": 0.013600000000000001,
     "attack_speed_ratio": 0.625,
     "attack_range": 525.0,
+    "attack_windup": 0.1615,
+    "attack_windup_mod": 1.0,
     "move_speed": 330.0
    },
    "mayhem": {
@@ -25091,6 +26276,7 @@
      "rank": 3,
      "cooldown": 120.0,
      "cast_time": 0.01,
+     "lock": 1.0,
      "targeting": "LocationClamped",
      "area": "aoe",
      "duration": 4.0,
@@ -25134,6 +26320,8 @@
     "attack_speed_per_level": 0.028999999999999998,
     "attack_speed_ratio": 0.625,
     "attack_range": 125.0,
+    "attack_windup": 0.1237,
+    "attack_windup_mod": 1.0,
     "move_speed": 335.0
    },
    "mayhem": {
@@ -25156,7 +26344,7 @@
      "name": "TalonQ",
      "rank": 5,
      "cooldown": 6.0,
-     "cast_time": 0.25,
+     "cast_time": 0.522,
      "targeting": "",
      "area": "single",
      "duration": 0.0,
@@ -25349,6 +26537,8 @@
     "attack_speed_per_level": 0.02,
     "attack_speed_ratio": 0.625,
     "attack_range": 150.0,
+    "attack_windup": 0.18,
+    "attack_windup_mod": 0.25,
     "move_speed": 340.0
    },
    "mayhem": {
@@ -25471,7 +26661,11 @@
     }
    ],
    "parse_quality": "partial",
-   "notes": []
+   "notes": [],
+   "death": {
+    "act": 2.5,
+    "needs_r": true
+   }
   },
   {
    "id": "Teemo",
@@ -25496,6 +26690,8 @@
     "attack_speed_per_level": 0.0338,
     "attack_speed_ratio": 0.69,
     "attack_range": 500.0,
+    "attack_windup": 0.2,
+    "attack_windup_mod": 1.0,
     "move_speed": 330.0
    },
    "mayhem": {
@@ -25552,7 +26748,7 @@
      "name": "TeemoW",
      "rank": 5,
      "cooldown": 14.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "Self",
      "area": "aoe",
      "duration": 3.0,
@@ -25575,7 +26771,7 @@
      "name": "TeemoE",
      "rank": 5,
      "cooldown": 8.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "Self",
      "area": "aoe",
      "duration": 4.0,
@@ -25690,6 +26886,8 @@
     "attack_speed_per_level": 0.035,
     "attack_speed_ratio": 0.625,
     "attack_range": 450.0,
+    "attack_windup": 0.2396,
+    "attack_windup_mod": 0.25,
     "move_speed": 330.0
    },
    "mayhem": {
@@ -25747,7 +26945,7 @@
      "name": "ThreshW",
      "rank": 5,
      "cooldown": 15.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "Area",
      "area": "aoe",
      "duration": 6.0,
@@ -25771,7 +26969,7 @@
      "name": "ThreshE",
      "rank": 5,
      "cooldown": 10.0,
-     "cast_time": 0.25,
+     "cast_time": 0.389,
      "targeting": "Direction",
      "area": "line",
      "duration": 1.0,
@@ -25882,6 +27080,8 @@
     "attack_speed_per_level": 0.015,
     "attack_speed_ratio": 0.694,
     "attack_range": 550.0,
+    "attack_windup": 0.148,
+    "attack_windup_mod": 1.0,
     "move_speed": 325.0
    },
    "mayhem": {
@@ -25904,7 +27104,7 @@
      "name": "TristanaQ",
      "rank": 5,
      "cooldown": 16.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "Self",
      "area": "aoe",
      "duration": 7.0,
@@ -25962,7 +27162,8 @@
      "name": "TristanaE",
      "rank": 5,
      "cooldown": 14.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
+     "cast_from_attack": 1.0,
      "targeting": "",
      "area": "single",
      "duration": 4.0,
@@ -26079,6 +27280,8 @@
     "attack_speed_per_level": 0.028999999999999998,
     "attack_speed_ratio": 0.67,
     "attack_range": 175.0,
+    "attack_windup": 0.2083,
+    "attack_windup_mod": 1.0,
     "move_speed": 350.0
    },
    "mayhem": {
@@ -26101,7 +27304,7 @@
      "name": "TrundleTrollSmash",
      "rank": 5,
      "cooldown": 3.5,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "Self",
      "area": "aoe",
      "duration": 5.0,
@@ -26148,7 +27351,10 @@
       }
      ],
      "mode_overrides": [],
-     "notes": []
+     "notes": [
+      "hand override: resets the basic attack timer"
+     ],
+     "attack_reset": true
     },
     {
      "slot": "W",
@@ -26255,6 +27461,8 @@
     "attack_speed_per_level": 0.034,
     "attack_speed_ratio": 0.725,
     "attack_range": 175.0,
+    "attack_windup": 0.19,
+    "attack_windup_mod": 1.0,
     "move_speed": 345.0
    },
    "mayhem": {
@@ -26277,7 +27485,7 @@
      "name": "TryndamereQ",
      "rank": 5,
      "cooldown": 12.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "Self",
      "area": "aoe",
      "duration": 0.0,
@@ -26322,7 +27530,7 @@
      "name": "TryndamereE",
      "rank": 5,
      "cooldown": 8.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "Location",
      "area": "aoe",
      "duration": 0.0,
@@ -26358,7 +27566,7 @@
      "name": "UndyingRage",
      "rank": 3,
      "cooldown": 80.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "Self",
      "area": "aoe",
      "duration": 5.0,
@@ -26378,7 +27586,11 @@
     }
    ],
    "parse_quality": "partial",
-   "notes": []
+   "notes": [],
+   "death": {
+    "act": 5,
+    "needs_r": true
+   }
   },
   {
    "id": "TwistedFate",
@@ -26403,6 +27615,8 @@
     "attack_speed_per_level": 0.025,
     "attack_speed_ratio": 0.651,
     "attack_range": 525.0,
+    "attack_windup": 0.2,
+    "attack_windup_mod": 1.0,
     "move_speed": 330.0
    },
    "mayhem": {
@@ -26460,7 +27674,7 @@
      "name": "PickACard",
      "rank": 5,
      "cooldown": 6.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "Self",
      "area": "aoe",
      "duration": 0.0,
@@ -26522,7 +27736,7 @@
      "name": "CardmasterStack",
      "rank": 5,
      "cooldown": 8.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "Self",
      "area": "aoe",
      "duration": 0.0,
@@ -26606,6 +27820,8 @@
     "attack_speed_per_level": 0.03,
     "attack_speed_ratio": 0.679,
     "attack_range": 550.0,
+    "attack_windup": 0.2019,
+    "attack_windup_mod": 1.0,
     "move_speed": 330.0
    },
    "mayhem": {
@@ -26628,7 +27844,7 @@
      "name": "TwitchHideInShadows",
      "rank": 5,
      "cooldown": 16.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "Self",
      "area": "aoe",
      "duration": 6.0,
@@ -26747,7 +27963,7 @@
      "name": "TwitchFullAutomatic",
      "rank": 3,
      "cooldown": 90.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "Self",
      "area": "aoe",
      "duration": 6.0,
@@ -26791,6 +28007,8 @@
     "attack_speed_per_level": 0.03,
     "attack_speed_ratio": 0.65,
     "attack_range": 125.0,
+    "attack_windup": 0.198,
+    "attack_windup_mod": 1.0,
     "move_speed": 350.0
    },
    "mayhem": {
@@ -26813,7 +28031,7 @@
      "name": "UdyrQ",
      "rank": 5,
      "cooldown": 6.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "Self",
      "area": "aoe",
      "duration": 4.0,
@@ -26872,7 +28090,7 @@
      "name": "UdyrW",
      "rank": 5,
      "cooldown": 6.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "Self",
      "area": "aoe",
      "duration": 4.0,
@@ -26895,7 +28113,7 @@
      "name": "UdyrE",
      "rank": 5,
      "cooldown": 6.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "Self",
      "area": "aoe",
      "duration": 4.0,
@@ -26918,7 +28136,7 @@
      "name": "UdyrR",
      "rank": 3,
      "cooldown": 6.0,
-     "cast_time": 0.1,
+     "cast_time": 0.0,
      "targeting": "Self",
      "area": "aoe",
      "duration": 4.0,
@@ -26996,6 +28214,8 @@
     "attack_speed_per_level": 0.0375,
     "attack_speed_ratio": 0.625,
     "attack_range": 350.0,
+    "attack_windup": 0.15,
+    "attack_windup_mod": 1.0,
     "move_speed": 330.0
    },
    "mayhem": {
@@ -27052,7 +28272,7 @@
      "name": "UrgotW",
      "rank": 5,
      "cooldown": 8.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "Self",
      "area": "aoe",
      "duration": 25000.0,
@@ -27180,6 +28400,8 @@
     "attack_speed_per_level": 0.035,
     "attack_speed_ratio": 0.658,
     "attack_range": 575.0,
+    "attack_windup": 0.1754,
+    "attack_windup_mod": 1.0,
     "move_speed": 330.0
    },
    "mayhem": {
@@ -27202,7 +28424,8 @@
      "name": "VarusQ",
      "rank": 5,
      "cooldown": 12.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
+     "lock": 0.625,
      "targeting": "Direction",
      "area": "line",
      "duration": 4.0,
@@ -27240,7 +28463,7 @@
      "name": "VarusW",
      "rank": 5,
      "cooldown": 40.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "Self",
      "area": "aoe",
      "duration": 6.0,
@@ -27407,6 +28630,8 @@
     "attack_speed_per_level": 0.027999999999999997,
     "attack_speed_ratio": 0.67,
     "attack_range": 550.0,
+    "attack_windup": 0.1754,
+    "attack_windup_mod": 1.0,
     "move_speed": 330.0
    },
    "mayhem": {
@@ -27458,14 +28683,17 @@
       }
      ],
      "mode_overrides": [],
-     "notes": []
+     "notes": [
+      "hand override: resets the basic attack timer"
+     ],
+     "attack_reset": true
     },
     {
      "slot": "W",
      "name": "VayneSilveredBolts",
      "rank": 5,
      "cooldown": 8.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "Self",
      "area": "aoe",
      "duration": 3.5,
@@ -27547,7 +28775,7 @@
      "name": "VayneInquisition",
      "rank": 3,
      "cooldown": 70.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "Self",
      "area": "aoe",
      "duration": 12.0,
@@ -27602,6 +28830,8 @@
     "attack_speed_per_level": 0.022400000000000003,
     "attack_speed_ratio": 0.625,
     "attack_range": 550.0,
+    "attack_windup": 0.1909,
+    "attack_windup_mod": 1.0,
     "move_speed": 340.0
    },
    "mayhem": {
@@ -27775,6 +29005,8 @@
     "attack_speed_per_level": 0.0159,
     "attack_speed_ratio": 0.625,
     "attack_range": 525.0,
+    "attack_windup": 0.2,
+    "attack_windup_mod": 1.0,
     "move_speed": 340.0
    },
    "mayhem": {
@@ -27912,7 +29144,8 @@
      "name": "VelkozR",
      "rank": 3,
      "cooldown": 80.0,
-     "cast_time": 0.25,
+     "cast_time": 0.125,
+     "lock": 1.3,
      "targeting": "Direction",
      "area": "line",
      "duration": 0.0,
@@ -27967,6 +29200,8 @@
     "attack_speed_per_level": 0.01,
     "attack_speed_ratio": 0.625,
     "attack_range": 550.0,
+    "attack_windup": 0.1562,
+    "attack_windup_mod": 1.0,
     "move_speed": 335.0
    },
    "mayhem": {
@@ -27989,7 +29224,7 @@
      "name": "VexQ",
      "rank": 5,
      "cooldown": 4.0,
-     "cast_time": 0.25,
+     "cast_time": 0.15,
      "targeting": "LocationClamped",
      "area": "aoe",
      "duration": 0.0,
@@ -28105,7 +29340,30 @@
       "on_self": false,
       "move": "dash"
      },
-     "hits": [],
+     "hits": [
+      {
+       "type": "magic",
+       "calc": "RDamageCalc",
+       "scaling": {
+        "const": 175.0,
+        "ap": 0.2
+       },
+       "target": "flat",
+       "per_second": false,
+       "alt": false
+      },
+      {
+       "type": "magic",
+       "calc": "RecastDamageCalc",
+       "scaling": {
+        "const": 350.0,
+        "ap": 0.5
+       },
+       "target": "flat",
+       "per_second": false,
+       "alt": false
+      }
+     ],
      "mode_overrides": [],
      "notes": []
     }
@@ -28136,6 +29394,8 @@
     "attack_speed_per_level": 0.02,
     "attack_speed_ratio": 0.644,
     "attack_range": 125.0,
+    "attack_windup": 0.225,
+    "attack_windup_mod": 1.0,
     "move_speed": 340.0
    },
    "mayhem": {
@@ -28158,7 +29418,8 @@
      "name": "ViQ",
      "rank": 5,
      "cooldown": 6.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
+     "lock": 0.625,
      "targeting": "Direction",
      "area": "line",
      "duration": 0.75,
@@ -28193,7 +29454,7 @@
      "name": "ViW",
      "rank": 5,
      "cooldown": 8.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "Self",
      "area": "aoe",
      "duration": 4.0,
@@ -28231,7 +29492,7 @@
      "name": "ViE",
      "rank": 5,
      "cooldown": 8.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "Self",
      "area": "aoe",
      "duration": 6.0,
@@ -28260,8 +29521,10 @@
      ],
      "mode_overrides": [],
      "notes": [
-      "cooldown is the ammo recharge time"
-     ]
+      "cooldown is the ammo recharge time",
+      "hand override: resets the basic attack timer"
+     ],
+     "attack_reset": true
     },
     {
      "slot": "R",
@@ -28325,6 +29588,8 @@
     "attack_speed_per_level": 0.0275,
     "attack_speed_ratio": 0.658,
     "attack_range": 200.0,
+    "attack_windup": 0.1645,
+    "attack_windup_mod": 1.0,
     "move_speed": 345.0
    },
    "mayhem": {
@@ -28348,6 +29613,7 @@
      "rank": 5,
      "cooldown": 3.0,
      "cast_time": 0.25,
+     "cast_from_attack": 1.4,
      "targeting": "Direction",
      "area": "line",
      "duration": 4.0,
@@ -28361,6 +29627,16 @@
       "on_self": false
      },
      "hits": [
+      {
+       "type": "physical",
+       "calc": "TotalPercentHealthOnHit",
+       "scaling": {
+        "const": 0.06
+       },
+       "target": "target_current_hp",
+       "per_second": false,
+       "alt": false
+      },
       {
        "type": "physical",
        "calc": "SecondAttackDamage",
@@ -28395,7 +29671,8 @@
      "name": "ViegoW",
      "rank": 5,
      "cooldown": 8.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
+     "lock": 0.5,
      "targeting": "Direction",
      "area": "line",
      "duration": 0.25,
@@ -28430,7 +29707,7 @@
      "name": "ViegoE",
      "rank": 5,
      "cooldown": 6.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "Direction",
      "area": "line",
      "duration": 8.0,
@@ -28452,7 +29729,7 @@
      "name": "ViegoR",
      "rank": 3,
      "cooldown": 80.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "Direction",
      "area": "line",
      "duration": 0.25,
@@ -28475,6 +29752,17 @@
         "bonus_ad": 1.2
        },
        "target": "flat",
+       "per_second": false,
+       "alt": false
+      },
+      {
+       "type": "physical",
+       "calc": "TotalPercentHealth",
+       "scaling": {
+        "const": 0.2,
+        "bonus_ad": 0.0005
+       },
+       "target": "target_missing_hp",
        "per_second": false,
        "alt": false
       },
@@ -28521,6 +29809,8 @@
     "attack_speed_per_level": 0.021099999999999997,
     "attack_speed_ratio": 0.658,
     "attack_range": 525.0,
+    "attack_windup": 0.18,
+    "attack_windup_mod": 1.0,
     "move_speed": 330.0
    },
    "mayhem": {
@@ -28589,7 +29879,7 @@
      "name": "ViktorW",
      "rank": 5,
      "cooldown": 13.0,
-     "cast_time": 0.25,
+     "cast_time": 0.389,
      "targeting": "Area",
      "area": "aoe",
      "duration": 1.5,
@@ -28611,7 +29901,7 @@
      "name": "ViktorE",
      "rank": 5,
      "cooldown": 8.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "DragDirection",
      "area": "line",
      "duration": 0.0,
@@ -28726,6 +30016,8 @@
     "attack_speed_per_level": 0.02,
     "attack_speed_ratio": 0.658,
     "attack_range": 450.0,
+    "attack_windup": 0.1974,
+    "attack_windup_mod": 1.0,
     "move_speed": 330.0
    },
    "mayhem": {
@@ -28782,7 +30074,7 @@
        },
        "target": "flat",
        "per_second": false,
-       "alt": false
+       "alt": true
       }
      ],
      "mode_overrides": [],
@@ -28827,7 +30119,8 @@
      "name": "VladimirE",
      "rank": 5,
      "cooldown": 5.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
+     "lock": 0.5,
      "targeting": "SelfAoe",
      "area": "aoe",
      "duration": 0.0,
@@ -28874,7 +30167,7 @@
      "name": "VladimirHemoplague",
      "rank": 3,
      "cooldown": 120.0,
-     "cast_time": 0.25,
+     "cast_time": 0.389,
      "targeting": "Area",
      "area": "aoe",
      "duration": 4.0,
@@ -28930,6 +30223,8 @@
     "attack_speed_per_level": 0.02,
     "attack_speed_ratio": 0.7,
     "attack_range": 150.0,
+    "attack_windup": 0.3,
+    "attack_windup_mod": 1.0,
     "move_speed": 340.0
    },
    "mayhem": {
@@ -28952,7 +30247,7 @@
      "name": "VolibearQ",
      "rank": 5,
      "cooldown": 10.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "Self",
      "area": "aoe",
      "duration": 4.0,
@@ -29079,7 +30374,7 @@
      "name": "VolibearR",
      "rank": 3,
      "cooldown": 110.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "LocationClamped",
      "area": "aoe",
      "duration": 12.0,
@@ -29136,6 +30431,8 @@
     "attack_speed_per_level": 0.02,
     "attack_speed_ratio": 0.638,
     "attack_range": 125.0,
+    "attack_windup": 0.175,
+    "attack_windup_mod": 1.0,
     "move_speed": 335.0
    },
    "mayhem": {
@@ -29158,7 +30455,8 @@
      "name": "WarwickQ",
      "rank": 5,
      "cooldown": 6.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
+     "lock": 0.25,
      "targeting": "TargetOrLocation",
      "area": "aoe",
      "duration": 0.0,
@@ -29205,7 +30503,7 @@
      "name": "WarwickW",
      "rank": 5,
      "cooldown": 40.0,
-     "cast_time": 0.5,
+     "cast_time": 0.0,
      "targeting": "Self",
      "area": "aoe",
      "duration": 8.0,
@@ -29227,7 +30525,7 @@
      "name": "WarwickE",
      "rank": 5,
      "cooldown": 11.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "Self",
      "area": "aoe",
      "duration": 2.75,
@@ -29307,6 +30605,8 @@
     "attack_speed_per_level": 0.03,
     "attack_speed_ratio": 0.658,
     "attack_range": 175.0,
+    "attack_windup": 0.2083,
+    "attack_windup_mod": 1.0,
     "move_speed": 340.0
    },
    "mayhem": {
@@ -29329,7 +30629,7 @@
      "name": "MonkeyKingDoubleAttack",
      "rank": 5,
      "cooldown": 6.0,
-     "cast_time": 0.5,
+     "cast_time": 0.0,
      "targeting": "Self",
      "area": "aoe",
      "duration": 3.0,
@@ -29356,7 +30656,10 @@
       }
      ],
      "mode_overrides": [],
-     "notes": []
+     "notes": [
+      "hand override: resets the basic attack timer"
+     ],
+     "attack_reset": true
     },
     {
      "slot": "W",
@@ -29388,7 +30691,7 @@
      "name": "MonkeyKingNimbus",
      "rank": 5,
      "cooldown": 7.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "",
      "area": "single",
      "duration": 5.0,
@@ -29423,7 +30726,7 @@
      "name": "MonkeyKingSpinToWin",
      "rank": 3,
      "cooldown": 100.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "SelfAoe",
      "area": "aoe",
      "duration": 0.6,
@@ -29491,6 +30794,8 @@
     "attack_speed_per_level": 0.039,
     "attack_speed_ratio": 0.658,
     "attack_range": 525.0,
+    "attack_windup": 0.1769,
+    "attack_windup_mod": 1.0,
     "move_speed": 330.0
    },
    "mayhem": {
@@ -29580,7 +30885,7 @@
      "name": "XayahE",
      "rank": 5,
      "cooldown": 8.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "Self",
      "area": "aoe",
      "duration": 1.25,
@@ -29616,7 +30921,7 @@
      "name": "XayahR",
      "rank": 3,
      "cooldown": 100.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "Location",
      "area": "aoe",
      "duration": 0.0,
@@ -29672,6 +30977,8 @@
     "attack_speed_per_level": 0.013600000000000001,
     "attack_speed_ratio": 0.625,
     "attack_range": 525.0,
+    "attack_windup": 0.2,
+    "attack_windup_mod": 1.0,
     "move_speed": 340.0
    },
    "mayhem": {
@@ -29694,7 +31001,8 @@
      "name": "XerathArcanopulseChargeUp",
      "rank": 5,
      "cooldown": 5.0,
-     "cast_time": 0.005,
+     "cast_time": 0.125,
+     "lock": 1.5,
      "targeting": "Direction",
      "area": "line",
      "duration": 0.0,
@@ -29762,7 +31070,7 @@
        },
        "target": "flat",
        "per_second": false,
-       "alt": false
+       "alt": true
       }
      ],
      "mode_overrides": [],
@@ -29807,7 +31115,8 @@
      "name": "XerathLocusOfPower2",
      "rank": 3,
      "cooldown": 100.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
+     "lock": 4,
      "targeting": "LocationClamped",
      "area": "aoe",
      "duration": 10.0,
@@ -29826,8 +31135,8 @@
        "type": "magic",
        "calc": "TooltipTotalDamage",
        "scaling": {
-        "const": 270.0,
-        "ap": 0.45
+        "const": 1080.0,
+        "ap": 1.8
        },
        "target": "flat",
        "per_second": false,
@@ -29842,11 +31151,13 @@
        },
        "target": "flat",
        "per_second": false,
-       "alt": false
+       "alt": true
       }
      ],
      "mode_overrides": [],
-     "notes": []
+     "notes": [
+      "hand override: Rite of the Arcane: about 4 seconds of shots in a fight; about four shots in the 4 seconds counted"
+     ]
     }
    ],
    "parse_quality": "good",
@@ -29875,6 +31186,8 @@
     "attack_speed_per_level": 0.035,
     "attack_speed_ratio": 0.645,
     "attack_range": 175.0,
+    "attack_windup": 0.1871,
+    "attack_windup_mod": 1.0,
     "move_speed": 345.0
    },
    "mayhem": {
@@ -29897,7 +31210,7 @@
      "name": "XinZhaoQ",
      "rank": 5,
      "cooldown": 5.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "Self",
      "area": "aoe",
      "duration": 0.75,
@@ -29977,7 +31290,7 @@
      "name": "XinZhaoE",
      "rank": 5,
      "cooldown": 11.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "TargetOrLocation",
      "area": "aoe",
      "duration": 5.0,
@@ -30012,7 +31325,7 @@
      "name": "XinZhaoR",
      "rank": 3,
      "cooldown": 100.0,
-     "cast_time": 0.25,
+     "cast_time": 0.325,
      "targeting": "SelfAoe",
      "area": "aoe",
      "duration": 4.0,
@@ -30035,6 +31348,16 @@
         "ap": 1.1
        },
        "target": "flat",
+       "per_second": false,
+       "alt": false
+      },
+      {
+       "type": "physical",
+       "calc": "PercentCurrentHealthDamage",
+       "scaling": {
+        "const": 0.15
+       },
+       "target": "target_current_hp",
        "per_second": false,
        "alt": false
       }
@@ -30069,6 +31392,8 @@
     "attack_speed_per_level": 0.035,
     "attack_speed_ratio": 0.67,
     "attack_range": 175.0,
+    "attack_windup": 0.22,
+    "attack_windup_mod": 1.0,
     "move_speed": 345.0
    },
    "mayhem": {
@@ -30091,7 +31416,8 @@
      "name": "YasuoQ1Wrapper",
      "rank": 5,
      "cooldown": 4.0,
-     "cast_time": 0.25,
+     "cast_time": 0.125,
+     "cast_from_attack": 1.0,
      "targeting": "Location",
      "area": "aoe",
      "duration": 6.0,
@@ -30257,6 +31583,8 @@
     "attack_speed_per_level": 0.035,
     "attack_speed_ratio": 0.625,
     "attack_range": 175.0,
+    "attack_windup": 0.22,
+    "attack_windup_mod": 1.0,
     "move_speed": 345.0
    },
    "mayhem": {
@@ -30350,12 +31678,32 @@
        "alt": false
       },
       {
+       "type": "physical",
+       "calc": "MaxHealthDamage",
+       "scaling": {
+        "const": 0.06
+       },
+       "target": "target_max_hp",
+       "per_second": false,
+       "alt": false
+      },
+      {
        "type": "magic",
        "calc": "BaseDamage",
        "scaling": {
         "const": 25.0
        },
        "target": "flat",
+       "per_second": false,
+       "alt": false
+      },
+      {
+       "type": "magic",
+       "calc": "MaxHealthDamage",
+       "scaling": {
+        "const": 0.06
+       },
+       "target": "target_max_hp",
        "per_second": false,
        "alt": false
       }
@@ -30368,7 +31716,7 @@
      "name": "YoneE",
      "rank": 5,
      "cooldown": 10.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "Location",
      "area": "aoe",
      "duration": 0.0,
@@ -30390,7 +31738,7 @@
      "name": "YoneR",
      "rank": 3,
      "cooldown": 80.0,
-     "cast_time": 0.75,
+     "cast_time": 0.125,
      "targeting": "LocationClamped",
      "area": "aoe",
      "duration": 0.75,
@@ -30458,6 +31806,8 @@
     "attack_speed_per_level": 0.02,
     "attack_speed_ratio": 0.625,
     "attack_range": 175.0,
+    "attack_windup": 0.2063,
+    "attack_windup_mod": 1.0,
     "move_speed": 340.0
    },
    "mayhem": {
@@ -30480,7 +31830,7 @@
      "name": "YorickQ",
      "rank": 5,
      "cooldown": 4.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "Self",
      "area": "aoe",
      "duration": 5.0,
@@ -30511,7 +31861,10 @@
       "ARAM:BonusDamageAD",
       "ARAM:MissingHealthRatio"
      ],
-     "notes": []
+     "notes": [
+      "hand override: resets the basic attack timer"
+     ],
+     "attack_reset": true
     },
     {
      "slot": "W",
@@ -30553,7 +31906,19 @@
       "speed": 0,
       "on_self": false
      },
-     "hits": [],
+     "hits": [
+      {
+       "type": "magic",
+       "calc": "Calc_HealthDamage",
+       "scaling": {
+        "const": 0.08,
+        "ap": 0.0003
+       },
+       "target": "target_max_hp",
+       "per_second": false,
+       "alt": false
+      }
+     ],
      "mode_overrides": [],
      "notes": []
     },
@@ -30562,7 +31927,7 @@
      "name": "YorickR",
      "rank": 3,
      "cooldown": 100.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "AreaClamped",
      "area": "aoe",
      "duration": 0.0,
@@ -30627,6 +31992,8 @@
     "attack_speed_per_level": 0.02,
     "attack_speed_ratio": 0.65,
     "attack_range": 575.0,
+    "attack_windup": 0.1625,
+    "attack_windup_mod": 1.0,
     "move_speed": 325.0
    },
    "mayhem": {
@@ -30649,7 +32016,8 @@
      "name": "YunaraQ",
      "rank": 5,
      "cooldown": 8.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
+     "cast_from_attack": 1.0,
      "targeting": "Self",
      "area": "aoe",
      "duration": 6.0,
@@ -30709,7 +32077,7 @@
      "name": "YunaraW",
      "rank": 5,
      "cooldown": 10.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "Location",
      "area": "aoe",
      "duration": 1.0,
@@ -30758,7 +32126,7 @@
      "name": "YunaraE",
      "rank": 5,
      "cooldown": 9.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "Self",
      "area": "aoe",
      "duration": 1.5,
@@ -30784,7 +32152,7 @@
      "name": "YunaraR",
      "rank": 3,
      "cooldown": 60.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "Self",
      "area": "aoe",
      "duration": 15.0,
@@ -30830,6 +32198,8 @@
     "attack_speed_per_level": 0.01,
     "attack_speed_ratio": 0.625,
     "attack_range": 425.0,
+    "attack_windup": 0.1562,
+    "attack_windup_mod": 1.0,
     "move_speed": 330.0
    },
    "mayhem": {
@@ -30852,7 +32222,7 @@
      "name": "YuumiQ",
      "rank": 5,
      "cooldown": 6.5,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "Location",
      "area": "aoe",
      "duration": 1.0,
@@ -30908,7 +32278,7 @@
      "name": "YuumiW",
      "rank": 5,
      "cooldown": 8.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "TargetOrLocation",
      "area": "aoe",
      "duration": 0.0,
@@ -30933,7 +32303,7 @@
      "name": "YuumiE",
      "rank": 5,
      "cooldown": 14.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "Self",
      "area": "aoe",
      "duration": 3.0,
@@ -30969,7 +32339,8 @@
      "name": "YuumiR",
      "rank": 3,
      "cooldown": 100.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
+     "lock": 1.75,
      "targeting": "Location",
      "area": "aoe",
      "duration": 1.25,
@@ -31024,6 +32395,8 @@
     "attack_speed_per_level": 0.025,
     "attack_speed_ratio": 0.625,
     "attack_range": 175.0,
+    "attack_windup": 0.1562,
+    "attack_windup_mod": 1.0,
     "move_speed": 345.0
    },
    "mayhem": {
@@ -31046,7 +32419,7 @@
      "name": "ZaahenQ",
      "rank": 5,
      "cooldown": 6.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "Self",
      "area": "aoe",
      "duration": 0.75,
@@ -31137,7 +32510,7 @@
      "name": "ZaahenE",
      "rank": 5,
      "cooldown": 8.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "Location",
      "area": "aoe",
      "duration": 0.0,
@@ -31181,7 +32554,7 @@
        },
        "target": "target_max_hp",
        "per_second": false,
-       "alt": false
+       "alt": true
       }
      ],
      "mode_overrides": [],
@@ -31249,6 +32622,8 @@
     "attack_speed_per_level": 0.016,
     "attack_speed_ratio": 0.638,
     "attack_range": 175.0,
+    "attack_windup": 0.2315,
+    "attack_windup_mod": 1.0,
     "move_speed": 340.0
    },
    "mayhem": {
@@ -31362,7 +32737,8 @@
      "name": "ZacE",
      "rank": 5,
      "cooldown": 10.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
+     "lock": 0.65,
      "targeting": "Area",
      "area": "aoe",
      "duration": 0.0,
@@ -31398,6 +32774,7 @@
      "rank": 3,
      "cooldown": 90.0,
      "cast_time": 0.3,
+     "lock": 0.55,
      "targeting": "Area",
      "area": "aoe",
      "duration": 1.0,
@@ -31439,7 +32816,12 @@
     }
    ],
    "parse_quality": "good",
-   "notes": []
+   "notes": [],
+   "death": {
+    "revive_frac": 0.3,
+    "revive_delay": 8,
+    "chance": 0.5
+   }
   },
   {
    "id": "Zed",
@@ -31463,6 +32845,8 @@
     "attack_speed_per_level": 0.033,
     "attack_speed_ratio": 0.651,
     "attack_range": 125.0,
+    "attack_windup": 0.1976,
+    "attack_windup_mod": 1.0,
     "move_speed": 345.0
    },
    "mayhem": {
@@ -31642,6 +33026,8 @@
     "attack_speed_per_level": 0.02,
     "attack_speed_ratio": 0.625,
     "attack_range": 550.0,
+    "attack_windup": 0.1562,
+    "attack_windup_mod": 1.0,
     "move_speed": 330.0
    },
    "mayhem": {
@@ -31665,6 +33051,7 @@
      "rank": 5,
      "cooldown": 8.0,
      "cast_time": 0.25,
+     "cast_from_attack": 1.0,
      "targeting": "Location",
      "area": "aoe",
      "duration": 0.25,
@@ -31751,7 +33138,7 @@
      "name": "ZeriE",
      "rank": 5,
      "cooldown": 16.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "WallDetection",
      "area": "single",
      "duration": 5.0,
@@ -31789,7 +33176,7 @@
      "name": "ZeriR",
      "rank": 3,
      "cooldown": 70.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "SelfAoe",
      "area": "aoe",
      "duration": 5.0,
@@ -31856,6 +33243,8 @@
     "attack_speed_per_level": 0.02,
     "attack_speed_ratio": 0.656,
     "attack_range": 550.0,
+    "attack_windup": 0.2,
+    "attack_windup_mod": 1.0,
     "move_speed": 325.0
    },
    "mayhem": {
@@ -31878,7 +33267,7 @@
      "name": "ZiggsQ",
      "rank": 5,
      "cooldown": 4.0,
-     "cast_time": 0.25,
+     "cast_time": 0.375,
      "targeting": "Area",
      "area": "aoe",
      "duration": 0.0,
@@ -31950,7 +33339,7 @@
      "name": "ZiggsE",
      "rank": 5,
      "cooldown": 16.0,
-     "cast_time": 0.25,
+     "cast_time": 0.375,
      "targeting": "Area",
      "area": "aoe",
      "duration": 7.0,
@@ -31987,7 +33376,7 @@
      "name": "ZiggsR",
      "rank": 3,
      "cooldown": 70.0,
-     "cast_time": 0.25,
+     "cast_time": 0.375,
      "targeting": "Area",
      "area": "aoe",
      "duration": 0.0,
@@ -32055,6 +33444,8 @@
     "attack_speed_per_level": 0.0213,
     "attack_speed_ratio": 0.625,
     "attack_range": 550.0,
+    "attack_windup": 0.18,
+    "attack_windup_mod": 1.0,
     "move_speed": 335.0
    },
    "mayhem": {
@@ -32111,7 +33502,7 @@
      "name": "ZileanW",
      "rank": 5,
      "cooldown": 5.0,
-     "cast_time": 0.25,
+     "cast_time": 0.0,
      "targeting": "Self",
      "area": "aoe",
      "duration": 0.0,
@@ -32135,7 +33526,7 @@
      "name": "TimeWarp",
      "rank": 5,
      "cooldown": 13.0,
-     "cast_time": 0.25,
+     "cast_time": 0.515,
      "targeting": "",
      "area": "single",
      "duration": 2.5,
@@ -32159,7 +33550,7 @@
      "name": "ChronoShift",
      "rank": 3,
      "cooldown": 60.0,
-     "cast_time": 0.25,
+     "cast_time": 0.518,
      "targeting": "",
      "area": "single",
      "duration": 5.0,
@@ -32180,7 +33571,12 @@
     }
    ],
    "parse_quality": "partial",
-   "notes": []
+   "notes": [],
+   "death": {
+    "revive_frac": 0.35,
+    "revive_delay": 3,
+    "needs_r": true
+   }
   },
   {
    "id": "Zoe",
@@ -32204,6 +33600,8 @@
     "attack_speed_per_level": 0.025,
     "attack_speed_ratio": 0.625,
     "attack_range": 550.0,
+    "attack_windup": 0.1615,
+    "attack_windup_mod": 1.0,
     "move_speed": 340.0
    },
    "mayhem": {
@@ -32260,7 +33658,8 @@
      "name": "ZoeW",
      "rank": 5,
      "cooldown": 8.0,
-     "cast_time": 0.01,
+     "cast_time": 0.0,
+     "lock": 1.0,
      "targeting": "Self",
      "area": "aoe",
      "duration": 3.0,
@@ -32386,6 +33785,8 @@
     "attack_speed_per_level": 0.021099999999999997,
     "attack_speed_ratio": 0.625,
     "attack_range": 575.0,
+    "attack_windup": 0.1458,
+    "attack_windup_mod": 1.0,
     "move_speed": 340.0
    },
    "mayhem": {

@@ -159,6 +159,7 @@ bool writeTrace(const Library& lib, const ChampionKit& c, const Build& b, const 
         if (!e.text.empty()) o << ", \"x\": " << jsonStr(e.text);
         if (e.source >= 0) o << ", \"src\": " << e.source;
         if (e.amount != 0) o << ", \"a\": " << num(e.amount);
+        if (e.lock > 0) o << ", \"l\": " << num(e.lock);
         if (e.kind == "spawn" || e.kind == "damage" || e.kind == "kill" || e.kind == "self" || e.kind == "death")
             o << ", \"hp\": " << num(e.hp) << ", \"max\": " << num(e.maxHp);
         if (e.flag) o << ", \"f\": 1";

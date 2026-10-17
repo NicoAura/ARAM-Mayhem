@@ -389,7 +389,9 @@
   function castWindow(key, cast) {
     const M = window.Models3D && window.Models3D.ok ? window.Models3D : null;
     const len = M ? M.castLength(key, cast.s, cast.n) : 0;
-    return Math.min(Math.max(1.1, len), 3, (cast.next || Infinity) - cast.t);
+    // A channel holds the pose for its whole lock.
+    const hold = (cast.a || 0) + (cast.l || 0);
+    return Math.min(Math.max(1.1, len, hold), Math.max(3, hold), (cast.next || Infinity) - cast.t);
   }
   // How far a dash or blink has carried its caster toward the target, 0 to 1, at age k seconds
   // into the cast: a dash slides out and back, a blink jumps there and back.
@@ -408,8 +410,11 @@
     if (cast && time - cast.t < castWindow("me", cast)) return { role: cast.s, t: time - cast.t, loop: false, n: cast.n };
     if (s.cc) return { role: "stunned", t: time, loop: true };
     let atk = null;
-    for (const a of fight.attacks) { if (a.t - 0.3 > time) break; atk = a; }
-    if (atk && time - (atk.t - 0.3) < 0.75) return { role: atk.f ? "crit" : "attack", t: time - (atk.t - 0.3), loop: false };
+    // An attack's animation starts with its wind-up and fires when the attack lands.
+    const windup = (a) => a.a || 0.3;
+    for (const a of fight.attacks) { if (a.t - windup(a) > time) break; atk = a; }
+    if (atk && time - (atk.t - windup(atk)) < windup(atk) + 0.45)
+      return { role: atk.f ? "crit" : "attack", t: time - (atk.t - windup(atk)), loop: false };
     return { role: "idle", t: time, loop: true };
   }
   function enemyAnim(time, en) {
@@ -523,7 +528,7 @@
     // Ability casts.
     for (const c of fight.casts) {
       const age = time - c.land - (world ? c.fl || 0 : 0);  // since it landed
-      if (time < c.t || age > 0.6) continue;
+      if (time < c.t || (age > 0.6 && !(c.l && time < c.land + c.l))) continue;
       const col = SLOT_COLORS[c.s] || "#fff";
       const to = c.u >= 0 ? posOf(c.u) : st.front;
       const miss = !c.f;
@@ -532,7 +537,14 @@
         const p = (time - c.t) / Math.max(0.05, c.a || 0.05);
         g.strokeStyle = col; g.lineWidth = 4 * u;
         g.beginPath(); g.arc(st.me.x, st.me.y, R + 10 * u, -Math.PI / 2, -Math.PI / 2 + p * Math.PI * 2); g.stroke();
+      } else if (c.l && time < c.land + c.l) {
+        // Channel: the ring empties while it holds you in place.
+        const p = 1 - (time - c.land) / c.l;
+        g.strokeStyle = col; g.lineWidth = 4 * u; g.setLineDash([6 * u, 5 * u]);
+        g.beginPath(); g.arc(st.me.x, st.me.y, R + 10 * u, -Math.PI / 2, -Math.PI / 2 + p * Math.PI * 2); g.stroke();
+        g.setLineDash([]);
       }
+      if (age > 0.6) continue;
       const fly = 0.2;
       if (world && c.from && ["line", "circle", "cone", "self"].includes(c.x)) {
         drawShape(g, c, time, col, scr, view.k, u);

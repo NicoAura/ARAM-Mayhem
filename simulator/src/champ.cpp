@@ -133,6 +133,8 @@ ChampionKit loadChampion(const json::Value& c, const Rules& rules) {
     k.asRatio = s["attack_speed_ratio"].asNumber(k.as);
     k.attackRange = s["attack_range"].asNumber(k.ranged ? 550 : 125);
     k.moveSpeed = s["move_speed"].asNumber(k.moveSpeed);
+    k.windup = std::clamp(s["attack_windup"].asNumber(0.3), 0.05, 0.6);
+    k.windupMod = s["attack_windup_mod"].asNumber(1.0);
     const json::Value& m = c["mayhem"];
     k.damageDealt = m["damage_dealt"].asNumber(1.0);
     k.damageTaken = m["damage_taken"].asNumber(1.0);
@@ -159,6 +161,9 @@ ChampionKit loadChampion(const json::Value& c, const Rules& rules) {
         ab.name = a["name"].asString();
         ab.cooldown = a["cooldown"].asNumber(10);
         ab.castTime = std::clamp(a["cast_time"].asNumber(0.25), rules.castMin, rules.castMax);
+        ab.lock = std::max(0.0, a["lock"].asNumber(0));
+        ab.castFromAttack = a["cast_from_attack"].asNumber(0);
+        ab.attackReset = a["attack_reset"].asBool(false);
         ab.duration = a["duration"].asNumber(0);
         ab.area = areaOf(a["area"].asString());
         ab.geo = geometryOf(a["geometry"], ab.area, k.attackRange);
@@ -1152,7 +1157,7 @@ private:
         s.aim = g.shape == Shape::Circle ? center : me_ + dir * g.range;
         s.flight = flight;
         // Seconds a dodging enemy has to get out of the way: it sees the cast start.
-        const double window = a.castTime + flight - rules_.reactionTime;
+        const double window = castTimeOf(a) + flight - rules_.reactionTime;
         std::vector<std::pair<double, Enemy*>> hit;
         for (auto& e : enemies_) {
             if (!e.alive) continue;
@@ -1167,7 +1172,7 @@ private:
                 // Its sidestep, for the replay: the part during the cast at once, the rest while it flies.
                 e.dodgeVel = away * e.moveSpeed;
                 e.dodgeUntil = t_ + flight;
-                e.pos = e.pos + away * (e.moveSpeed * std::max(0.0, std::min(window, a.castTime - rules_.reactionTime)));
+                e.pos = e.pos + away * (e.moveSpeed * std::max(0.0, std::min(window, castTimeOf(a) - rules_.reactionTime)));
                 clampLane(e.pos);
                 if (inside(g, q, me_, dir, center)) hit.push_back({dot(q - me_, dir), &e});
             } else {
@@ -1238,7 +1243,7 @@ private:
         }
     }
 
-    void castAbility(size_t idx) {
+    void castAbility(size_t idx, double castTime) {
         const Ability& a = ch_.abilities[idx];
         const Source src = a.slot == 'Q' ? SrcQ : a.slot == 'W' ? SrcW : a.slot == 'E' ? SrcE : SrcR;
         dashFor(a.geo);
@@ -1246,7 +1251,8 @@ private:
         const double amp = abilityAmp_ * abilityCritFactor();
         if (trace_) {
             TraceEvent ev;
-            ev.t = t_ - a.castTime; ev.kind = "cast"; ev.slot = a.slot; ev.amount = a.castTime; ev.flag = shot.primaryHit;
+            ev.t = t_ - castTime; ev.kind = "cast"; ev.slot = a.slot; ev.amount = castTime; ev.flag = shot.primaryHit;
+            ev.lock = a.lock;
             ev.target = hasPrimary() ? P().uid : -1;
             const Geometry& g = a.geo;
             ev.text = g.selfBuff ? "buff" : g.shape == Shape::Line ? "line" : g.shape == Shape::Cone ? "cone"
@@ -1361,14 +1367,24 @@ private:
         return true;
     }
 
-    void basicAttack() {
+    // Attack wind-up at the current attack speed: the base wind-up, moved toward its share
+    // of the faster attack by the champion's wind-up modifier.
+    double windupTime() const {
+        const double base = ch_.windup / ch_.as;
+        return base + (ch_.windup / attackSpeed_ - base) * ch_.windupMod;
+    }
+    double castTimeOf(const Ability& a) const {
+        return a.castFromAttack > 0 ? a.castFromAttack * windupTime() : a.castTime;
+    }
+
+    void basicAttack(double windup = 0) {
         Enemy* e = &P();
         ++attacks_;
         const bool crit = rng_.chance(crit_);
         const double critMult = rules_.critMult + critDamage_;
         if (trace_) {
             TraceEvent ev;
-            ev.t = t_; ev.kind = "attack"; ev.target = e->uid; ev.flag = crit;
+            ev.t = t_; ev.kind = "attack"; ev.target = e->uid; ev.flag = crit; ev.amount = windup;
             record(ev);
         }
         deal(e, ad_ * (crit ? critMult : 1.0), DamageType::Physical, SrcAttack, true);
@@ -1513,13 +1529,21 @@ Result Fight::run() {
                 continue;
             }
             if (holding) continue;
-            busyUntil_ = t_ + a.castTime;
-            t_ += a.castTime;
+            // Casting and attacking never overlap: the cast winds up, fires, and a channel
+            // holds the caster for its lock before anything else can start.
+            const double ct = castTimeOf(a);
+            busyUntil_ = t_ + ct;
+            t_ += ct;
             if (t_ >= duration_ || advance(t_)) break;
             if (!hasPrimary()) primary_ = nearestAlive(me_);
-            if (primary_ >= 0) castAbility(i);
+            if (primary_ >= 0) castAbility(i, ct);
             readyAt_[i] = t_ + cooldownOf(a);
-            nextAttack_ = std::max(nextAttack_, t_);
+            if (a.lock > 0) {
+                busyUntil_ = t_ + a.lock;
+                t_ = std::min(t_ + a.lock, duration_);
+                if (advance(t_)) break;
+            }
+            nextAttack_ = a.attackReset ? t_ : std::max(nextAttack_, t_);
             cast = true;
             break;
         }
@@ -1527,7 +1551,7 @@ Result Fight::run() {
         if (cast) continue;
 
         for (auto& p : actives_) {
-            if (t_ >= p.readyAt && distTo(P()) <= 700) {
+            if (t_ >= p.readyAt && hasPrimary() && distTo(P()) <= 700) {
                 p.readyAt = t_ + get(*p.fx, "active_cd");
                 deal(&P(), get(*p.fx, "active_flat") + get(*p.fx, "active_ap") * ap_, DamageType::Magic, SrcItems);
             }
@@ -1547,8 +1571,15 @@ Result Fight::run() {
             t_ = std::max(nt, t_ + 1e-9);
             continue;
         }
-        basicAttack();
-        nextAttack_ = t_ + 1.0 / attackSpeed_;
+        // An attack winds up before it lands and can't be mixed with a cast; once it fires,
+        // the rest of the attack timer is free for casting (or walking).
+        const double start = t_, wu = windupTime();
+        busyUntil_ = t_ + wu;
+        t_ += wu;
+        if (t_ >= duration_ || advance(t_)) break;
+        nextAttack_ = start + 1.0 / attackSpeed_;
+        if (!hasPrimary()) continue;  // the target fell during the wind-up
+        basicAttack(wu);
     }
     if (!dead_) {
         advance(duration_);

@@ -8,8 +8,9 @@
  "model": {
   "extra_hit_weight": 0.5,
   "extra_hit_weight_note": "An ability's first damage number counts fully; other different numbers in the same tooltip (second parts, splash, follow-ups) count at this weight because the parser can't tell when they all land.",
-  "cast_time_min": 0.15,
-  "cast_time_max": 0.6,
+  "cast_time_min": 0.0,
+  "cast_time_max": 1.5,
+  "cast_time_note": "Each ability's cast time comes from its game record (self-targeted buffs are instant), clamped to this range. Attacks wind up for the champion's real wind-up share of the attack timer, and neither an attack nor a cast can start while the other is winding up or a channel is holding the caster.",
   "min_cooldown": 0.75,
   "default_dot_duration": 3.0,
   "spellblade_window": 10.0,

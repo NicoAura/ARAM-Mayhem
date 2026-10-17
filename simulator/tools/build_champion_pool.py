@@ -444,7 +444,7 @@ def parse_spell(slot, spell_obj, strings, base_stats, attack_range=125):
         "name": spell_obj.get("mScriptName", ""),
         "rank": rank,
         "cooldown": round(cd, 3),
-        "cast_time": round(float(spell.get("mCastTime", 0.25) or 0.25), 3),
+        **cast_timing(spell, rank, targeting),
         "targeting": targeting,
         "area": area,
         "duration": round(duration, 3),
@@ -453,6 +453,44 @@ def parse_spell(slot, spell_obj, strings, base_stats, attack_range=125):
         "mode_overrides": ev.mode_overrides,
         "notes": sorted(notes),
     }
+
+
+def attack_windup(record):
+    """Share of an attack's time spent winding up before it fires: the game's 30% base plus the
+    champion's offset, or its own cast/total attack time when the record gives them."""
+    ba = record.get("basicAttack") or {}
+    if ba.get("mAttackCastTime") and ba.get("mAttackTotalTime"):
+        return round(float(ba["mAttackCastTime"]) / float(ba["mAttackTotalTime"]), 4)
+    return round(0.3 + float(ba.get("mAttackDelayCastOffsetPercent") or 0.0), 4)
+
+
+def cast_timing(spell, rank, targeting):
+    """How long the ability holds the caster: its cast time (the wind-up before it fires) and,
+    for channels, how long it keeps the caster busy afterwards (lock). Missing cast times are
+    instant. Self-targeted buffs and toggled auras go off at once in game whatever the record's
+    template says; casts that borrow the attack's wind-up (cast_from_attack) scale with
+    attack speed like an attack."""
+    raw = spell.get("spellCastTime")
+    older = spell.get("mCastTime") or 0
+    # The newer field is often left at its template (0.25, or 0 with no total time); then the
+    # older field holds the real cast time.
+    if raw is None or (older > 0.01 and (raw == 0.25 or (raw == 0 and not spell.get("spellTotalTime")))):
+        raw = older
+    cast = max(0.0, float(raw or 0.0))
+    if targeting == "Self" or (spell.get("bIsToggleSpell") and targeting in ("SelfAoe", "")):
+        cast = 0.0
+    out = {"cast_time": round(min(cast, 1.5), 3)}
+    channel = per_level(spell.get("mChannelDuration"), rank) or 0.0
+    if spell.get("mUseChargeChanneling"):
+        channel *= 0.5  # charged abilities are usually let go halfway
+    if channel > 0:
+        out["lock"] = round(channel, 3)
+    auto = spell.get("mUseAutoattackCastTimeData")
+    if isinstance(auto, dict):
+        parts = ((auto.get("mAutoattackCastTimeCalculation") or {}).get("mFormulaParts") or [])
+        mult = next((float(x["mNumber"]) for x in parts if "mNumber" in x), 1.0)
+        out["cast_from_attack"] = round(mult, 3)
+    return out
 
 
 def per_level(v, rank):
@@ -733,6 +771,9 @@ def main():
                 "attack_speed_ratio": round(float((record.get("attackSpeedRatioModifiable") or {}).get("baseValue")
                                                   or s["attackspeed"]), 4),
                 "attack_range": s["attackrange"],
+                "attack_windup": attack_windup(record),
+                "attack_windup_mod": round(float((record.get("basicAttack") or {}).get(
+                    "mAttackDelayCastOffsetPercentAttackSpeedRatio", 1.0)), 4),
                 "move_speed": s["movespeed"],
             },
             "mayhem": {

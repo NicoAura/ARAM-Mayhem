@@ -1,5 +1,5 @@
 {
- "_note": "Hand fixes applied by tools/build_champion_pool.py on top of the parsed game data, for abilities the generic parser can't read correctly. Per champion id and ability slot: cooldown (seconds, max rank), onhit_every (the ability is a passive that procs on every Nth attack instead of being cast), skip (ability has no damage worth modelling). Add to this file when a champion's results look wrong.",
+ "_note": "Hand fixes applied by tools/build_champion_pool.py on top of the parsed game data, for abilities the generic parser can't read correctly. Per champion id and ability slot: cooldown (seconds, max rank), onhit_every (the ability is a passive that procs on every Nth attack instead of being cast), skip (ability has no damage worth modelling), cast_time (seconds before it fires), lock (seconds a channel keeps the caster busy after that), attack_reset (the next attack can start right away). Add to this file when a champion's results look wrong.",
  "TwistedFate": {
   "E": {
    "onhit_every": 4,
@@ -28,6 +28,10 @@
   "R": {
    "cooldown": 60,
    "why": "Dragon's Descent is gated by Fury, not a cooldown; roughly once a fight"
+  },
+  "Q": {
+   "attack_reset": true,
+   "why": "resets the basic attack timer"
   }
  },
  "Cassiopeia": {
@@ -40,12 +44,20 @@
   "W": {
    "onhit_every": 3,
    "why": "Silver Bolts procs on every 3rd hit"
+  },
+  "Q": {
+   "attack_reset": true,
+   "why": "resets the basic attack timer"
   }
  },
  "Vi": {
   "W": {
    "onhit_every": 3,
    "why": "Denting Blows procs on every 3rd hit"
+  },
+  "E": {
+   "attack_reset": true,
+   "why": "resets the basic attack timer"
   }
  },
  "Yunara": {
@@ -101,18 +113,30 @@
     "MaxDamage"
    ],
    "why": "Devastating Charge deals min to max damage by distance, not both"
+  },
+  "W": {
+   "cast_time": 0,
+   "why": "Spirit of Dread is instant"
   }
  },
  "Karthus": {
   "death": {
    "act": 7,
    "why": "Death Defied: keeps casting for 7 seconds after dying"
+  },
+  "R": {
+   "lock": 3,
+   "why": "Requiem channels for 3 seconds"
   }
  },
  "Sion": {
   "death": {
    "act": 9,
    "why": "Glory in Death: fights on as a decaying zombie for about 9 seconds"
+  },
+  "R": {
+   "lock": 3,
+   "why": "Unstoppable Onslaught charges about 3 seconds before it hits"
   }
  },
  "KogMaw": {
@@ -157,6 +181,10 @@
    "act": 4,
    "needs_r": true,
    "why": "Lamb's Respite: nobody can die for 4 seconds"
+  },
+  "Q": {
+   "attack_reset": true,
+   "why": "resets the basic attack timer"
   }
  },
  "Kayle": {
@@ -171,6 +199,260 @@
    "act": 2.5,
    "needs_r": true,
    "why": "Cosmic Radiance: invulnerable for 2.5 seconds"
+  }
+ },
+ "Blitzcrank": {
+  "E": {
+   "attack_reset": true,
+   "why": "resets the basic attack timer"
+  }
+ },
+ "Camille": {
+  "Q": {
+   "attack_reset": true,
+   "why": "resets the basic attack timer"
+  }
+ },
+ "Darius": {
+  "W": {
+   "attack_reset": true,
+   "why": "resets the basic attack timer"
+  },
+  "Q": {
+   "cast_time": 0.75,
+   "why": "Decimate spins for 0.75 seconds before it hits"
+  }
+ },
+ "Ekko": {
+  "E": {
+   "attack_reset": true,
+   "why": "resets the basic attack timer"
+  }
+ },
+ "Fiora": {
+  "E": {
+   "attack_reset": true,
+   "why": "resets the basic attack timer"
+  }
+ },
+ "Fizz": {
+  "W": {
+   "attack_reset": true,
+   "why": "resets the basic attack timer"
+  }
+ },
+ "Garen": {
+  "Q": {
+   "attack_reset": true,
+   "why": "resets the basic attack timer"
+  }
+ },
+ "Graves": {
+  "E": {
+   "attack_reset": true,
+   "why": "resets the basic attack timer"
+  }
+ },
+ "Illaoi": {
+  "W": {
+   "attack_reset": true,
+   "why": "resets the basic attack timer"
+  }
+ },
+ "Jax": {
+  "W": {
+   "attack_reset": true,
+   "why": "resets the basic attack timer"
+  }
+ },
+ "Jayce": {
+  "W": {
+   "attack_reset": true,
+   "why": "resets the basic attack timer"
+  }
+ },
+ "Kassadin": {
+  "W": {
+   "attack_reset": true,
+   "why": "resets the basic attack timer"
+  }
+ },
+ "Leona": {
+  "Q": {
+   "attack_reset": true,
+   "why": "resets the basic attack timer"
+  }
+ },
+ "Lucian": {
+  "E": {
+   "attack_reset": true,
+   "why": "resets the basic attack timer"
+  },
+  "R": {
+   "lock": 3,
+   "hit_mults": {
+    "DamagePerBullet": 22
+   },
+   "alt_calcs": [
+    "TotalDamage"
+   ],
+   "why": "The Culling fires for 3 seconds, no attacks; 22 bullets per cast; TotalDamage is the bullet count, not damage"
+  }
+ },
+ "Nasus": {
+  "Q": {
+   "attack_reset": true,
+   "why": "resets the basic attack timer"
+  }
+ },
+ "Nautilus": {
+  "W": {
+   "attack_reset": true,
+   "why": "resets the basic attack timer"
+  }
+ },
+ "Renekton": {
+  "W": {
+   "attack_reset": true,
+   "why": "resets the basic attack timer"
+  }
+ },
+ "Rengar": {
+  "Q": {
+   "attack_reset": true,
+   "why": "resets the basic attack timer"
+  }
+ },
+ "Riven": {
+  "Q": {
+   "attack_reset": true,
+   "why": "resets the basic attack timer"
+  }
+ },
+ "Sivir": {
+  "W": {
+   "attack_reset": true,
+   "why": "resets the basic attack timer"
+  }
+ },
+ "Trundle": {
+  "Q": {
+   "attack_reset": true,
+   "why": "resets the basic attack timer"
+  }
+ },
+ "MonkeyKing": {
+  "Q": {
+   "attack_reset": true,
+   "why": "resets the basic attack timer"
+  }
+ },
+ "Yorick": {
+  "Q": {
+   "attack_reset": true,
+   "why": "resets the basic attack timer"
+  }
+ },
+ "RekSai": {
+  "Q": {
+   "attack_reset": true,
+   "why": "resets the basic attack timer"
+  }
+ },
+ "MissFortune": {
+  "R": {
+   "lock": 3,
+   "alt_calcs": [
+    "PhysicalDamagePerWave",
+    "CritDamagePerWave"
+   ],
+   "why": "Bullet Time channels for 3 seconds; the total is the whole channel; per-wave numbers are part of it"
+  }
+ },
+ "Katarina": {
+  "R": {
+   "lock": 2.5,
+   "alt_calcs": [
+    "DamageCalc",
+    "ADDamageCalc"
+   ],
+   "hit_mults": {
+    "TotalADDamageCalc": 2
+   },
+   "why": "Death Lotus channels for 2.5 seconds; the totals are the whole channel; per-dagger numbers are part of them"
+  }
+ },
+ "Malzahar": {
+  "R": {
+   "lock": 2.5,
+   "why": "Nether Grasp channels for 2.5 seconds"
+  }
+ },
+ "Fiddlesticks": {
+  "R": {
+   "lock": 1.5,
+   "why": "Crowstorm channels 1.5 seconds before the blink"
+  }
+ },
+ "Xerath": {
+  "R": {
+   "lock": 4,
+   "hit_mults": {
+    "TooltipTotalDamage": 4
+   },
+   "alt_calcs": [
+    "RampDamageCalc"
+   ],
+   "why": "Rite of the Arcane: about 4 seconds of shots in a fight; about four shots in the 4 seconds counted"
+  }
+ },
+ "Rammus": {
+  "Q": {
+   "lock": 1.5,
+   "why": "Powerball rolls about 1.5 seconds before it hits"
+  }
+ },
+ "Nunu": {
+  "W": {
+   "lock": 2,
+   "why": "the snowball rolls about 2 seconds before it hits"
+  }
+ },
+ "Samira": {
+  "R": {
+   "lock": 2,
+   "hit_mults": {
+    "DamageCalc": 10
+   },
+   "cooldown": 15,
+   "why": "Inferno Trigger: 2 seconds of shooting, no attacks; ten waves of shots; needs an S style rank, about once per 15 seconds of fighting"
+  }
+ },
+ "Jhin": {
+  "R": {
+   "lock": 4,
+   "hit_mults": {
+    "DamageCalc": 4
+   },
+   "alt_calcs": [
+    "MaxIncreaseCalc"
+   ],
+   "why": "Curtain Call: four shots over about 4 seconds; four shots; the maximum is the execute version of one shot"
+  }
+ },
+ "Senna": {
+  "Q": {
+   "lock": 0,
+   "why": "Piercing Darkness fires off the attack wind-up; no channel"
+  }
+ },
+ "Akshan": {
+  "R": {
+   "hit_mults": {
+    "DamagePerBulletWithCrit": 5
+   },
+   "lock": 1.5,
+   "why": "about five bullets after a full charge"
   }
  }
 }

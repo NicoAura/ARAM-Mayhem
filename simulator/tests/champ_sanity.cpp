@@ -187,6 +187,40 @@ int main(int argc, char** argv) {
         (void)focus;
         CHECK(onLane, "everyone stays on the lane");
         CHECK(attacks > 0 && melee, "a melee champion attacks only from melee range");
+
+        // Attacks and casts never overlap: an attack's wind-up ends where it lands, a cast holds
+        // from its start through its cast time and any channel.
+        bool apart = true, windups = true;
+        for (const char* who : {"MissFortune", "Ezreal", "Garen", "Katarina"}) {
+            const ChampionKit& k = *lib.find(who);
+            const FightTrace ft = traceFight(lib, k, cap, lib.scenarioFor(k), 5);
+            std::vector<std::pair<double, double>> busy;
+            for (const auto& e : ft.events) {
+                if (e.kind == "attack") {
+                    busy.push_back({e.t - e.amount, e.t});
+                    windups &= e.amount > 0.05 && e.amount < 1.0;
+                }
+                if (e.kind == "cast") busy.push_back({e.t, e.t + e.amount + e.lock});
+            }
+            std::sort(busy.begin(), busy.end());
+            for (size_t i = 1; i < busy.size(); ++i) apart &= busy[i].first >= busy[i - 1].second - 1e-6;
+        }
+        CHECK(windups, "attacks wind up before they land");
+        CHECK(apart, "a champion never attacks and casts at the same time");
+
+        // Garen's Decisive Strike resets his attack timer: some attack starts sooner after the one
+        // before than his attack speed allows on its own.
+        const Library calm = Library::load(rules, {{"enemy_damage_scale", 0.05}});
+        const ChampionKit& gk = *calm.find("Garen");
+        const FightTrace rt = traceFight(calm, gk, Build{{"trinity"}, {}}, calm.scenarioFor(gk), 2);
+        std::vector<double> starts;
+        for (const auto& e : rt.events)
+            if (e.kind == "attack") starts.push_back(e.t - e.amount);
+        std::vector<double> gaps;
+        for (size_t i = 1; i < starts.size(); ++i) gaps.push_back(starts[i] - starts[i - 1]);
+        std::sort(gaps.begin(), gaps.end());
+        const bool reset = gaps.size() > 4 && gaps.front() < 0.95 * gaps[gaps.size() / 2];
+        CHECK(reset, "an attack-reset ability lets the next attack start right away");
     }
 
     bool threw = false;
