@@ -73,7 +73,9 @@
     const list = index.champions.filter((c) => traces[c.id]).sort((a, b) => a.name.localeCompare(b.name));
     for (const c of list) sel.add(new Option(c.name, c.id));
     const fromHash = decodeURIComponent(location.hash.slice(1)).toLowerCase();
-    const start = byId.get(fromHash) || byId.get("ahri") || list[0];
+    // A champion named in the link, else a random one each visit.
+    const start = (byId.get(fromHash) && traces[byId.get(fromHash).id] && byId.get(fromHash)) ||
+      list[Math.floor(Math.random() * list.length)];
     sel.value = start.id;
     load(start.id);
     loadedAt = performance.now();
@@ -252,11 +254,13 @@
     for (const [u, p] of b.m) if (!m.has(u) && k > 0.5) m.set(u, p);
     return { t: time, me: mix(a.me, b.me), m };
   }
-  // The lane on screen: its width fills the arena's floor; the view follows the fight.
+  // The lane on screen: the view follows the fight.
   const LANE = 550;
   const cam = { x: null };
   function camera(W, H, world, focus, dt) {
-    const k = (H * 0.74) / (2 * LANE);
+    // About as much of the lane as the game's own camera shows (2000 game units across), and
+    // never less than the lane's whole width top to bottom.
+    const k = Math.max((H * 0.74) / (2 * LANE), W / 2000);
     const f = focus >= 0 && world.m.get(focus);
     let want = f ? (world.me.x * 0.55 + f.x * 0.45) : world.me.x + 300;
     const half = W / 2 / k;
@@ -486,7 +490,7 @@
     if (cast) return { role: cast.s, t: time - cast.t, loop: false, n: cast.n };
     if (held && held.x === "root") return { role: "idle", t: time, loop: true };
     if (time < fight.engage) return { role: "idle", t: time + en.uid * 0.7, loop: true };
-    return { role: "attack", t: time + en.uid * 0.37, loop: true };
+    return { role: "attack", t: time + en.uid * 0.37, loop: true, chase: true };
   }
 
   function drawArena(time, dt) {
@@ -688,8 +692,17 @@
     let heads = {};
     if (M) {
       const look = (a, b) => ({ x: b.x - a.x, y: b.y - a.y });
-      const fighters = [{ key: "me", champ: champ.id, x: meX, y: meY, face: 1,
-        dir: world && s.focus >= 0 ? look(st.me, posOf(s.focus)) : null, ...myAnim(time, s) }];
+      // Who is on the move (game units a second), to play their run while they walk.
+      const before = world && worldAt(fight, time - 0.15), after = world && worldAt(fight, time + 0.15);
+      const velocity = (a, b) => (a && b ? { x: (b.x - a.x) / 0.3, y: (b.y - a.y) / 0.3 } : null);
+      const walking = (v) => v && Math.hypot(v.x, v.y) > 60;
+      // Models are drawn at their in-game size: px per game unit, as the floor is drawn.
+      const unit = view ? view.k : null;
+      const mine = myAnim(time, s), myV = world && velocity(before.me, after.me);
+      const myRun = mine.role === "idle" && walking(myV);
+      const fighters = [{ key: "me", champ: champ.id, x: meX, y: meY, face: 1, unit,
+        dir: myRun ? myV : world && s.focus >= 0 ? look(st.me, posOf(s.focus)) : null,
+        ...(myRun ? { role: "run", t: time, loop: true } : mine) }];
       for (const en of alive) {
         let p = posOf(en.uid);
         const ec = en.died === null ? enemyCastAt(en.uid, time) : null;
@@ -700,8 +713,11 @@
           if (em === "blink") blinks.push({ k: time - ec.t, a: p, b: q });
           p = q;
         }
-        fighters.push({ key: "e" + en.uid, champ: en.champ, x: p.x, y: p.y, face: -1, dir: world ? look(p, st.me) : null,
-          scale: en.uid === s.focus ? 1 : 0.85, visible: en.died === null || time - en.died < 1.6, ...enemyAnim(time, en) });
+        const anim = enemyAnim(time, en), v = world && en.died === null && velocity(before.m.get(en.uid), after.m.get(en.uid));
+        const run = (anim.role === "idle" || anim.chase) && walking(v);
+        fighters.push({ key: "e" + en.uid, champ: en.champ, x: p.x, y: p.y, face: -1, unit,
+          dir: run ? v : world ? look(p, st.me) : null,
+          visible: en.died === null || time - en.died < 1.6, ...(run ? { role: "run", t: time + en.uid * 0.3, loop: true } : anim) });
       }
       for (const f of fighters) if (f.lift) f.y -= f.lift * 55 * u;  // knocked up into the air
       heads = M.frame(fighters, W, H, lowQuality() ? 0.75 : 1);

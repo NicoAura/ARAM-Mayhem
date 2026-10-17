@@ -11,7 +11,8 @@
 //   NODE_PATH=/tmp/gltf/node_modules node tools/build_models.mjs --index viewer/replay-data/index.json \
 //       --out viewer/replay-data/models [--only Yunara,Ahri] [--cache ~/.cache/aram-mayhem-sim/models]
 //
-// Writes <out>/<ChampionId>.glb and <out>/models.json ({id: {file, clips, extra, after}}, as pickClips returns).
+// Writes <out>/<ChampionId>.glb and <out>/models.json ({id: {file, scale, clips, extra, after}}: the clips as
+// pickClips returns them, scale the game's size for the champion against the model's units).
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
@@ -68,14 +69,29 @@ async function fetchModel(champ) {
   return file;
 }
 
+// How much bigger or smaller the game draws the champion than its model's own units
+// (skinMeshProperties.skinScale of the base skin; Malphite 1.75, Cho'Gath 0.8), so the replay
+// can show every champion at its in-game size.
+const SKINS = "https://raw.communitydragon.org/latest/game/data/characters";
+function skinScale(champ) {
+  const file = path.join(cache, `${champ.id}.skin0.json`);
+  if (!fs.existsSync(file)) {
+    try {
+      execFileSync("curl", ["-sfL", "-A", "aram-mayhem-sim", "-o", file, `${SKINS}/${champ.id.toLowerCase()}/skins/skin0.bin.json`]);
+    } catch (e) {
+      fs.rmSync(file, { force: true });
+      return 1;
+    }
+  }
+  const m = fs.readFileSync(file, "utf8").match(/"skinScale"\s*:\s*([0-9.]+)/);
+  return m ? Math.round(Number(m[1]) * 1000) / 1000 : 1;
+}
+
 async function build(io, champ) {
   const src = await fetchModel(champ);
   const doc = await io.read(src);
   const root = doc.getRoot();
   const { clips, extra, after } = pickClips(root.listAnimations().map((a) => a.getName()));
-  // The replay never shows running or a second attack, so those clips stay out to keep files small.
-  clips.run = null;
-  delete extra.attack;
   // Where the game's graph lists a move's clips, the name-based extras for it aren't needed.
   const a = anims[champ.id] || {};
   if ((a.idle || []).length) delete extra.idle;
@@ -92,7 +108,7 @@ async function build(io, champ) {
   execFileSync(process.execPath, [CLI, "optimize", trimmed, dst, "--compress", "meshopt", "--texture-compress", "webp",
     "--texture-size", String(args["texture-size"] || 512), "--simplify", "false"], { stdio: "ignore" });
   fs.rmSync(trimmed);
-  return { file: `${champ.id}.glb`, bytes: fs.statSync(dst).size, clips, extra, after };
+  return { file: `${champ.id}.glb`, bytes: fs.statSync(dst).size, scale: skinScale(champ), clips, extra, after };
 }
 
 await MeshoptEncoder.ready;

@@ -39,8 +39,8 @@
   "until_death": 1,
   "until_death_note": "Each fight runs until the champion dies (cheat-death passives and ultimates from champion_overrides.json included), at most fight_cap seconds. fight_mean/sd/min/max only apply with until_death 0.",
   "fight_cap": 90,
-  "until_death_damage_scale": 4.7,
-  "until_death_damage_scale_note": "Multiplies the enemies' damage in fights that last until you die, tuned so a typical champion with its usual build lasted about 20-25 seconds against real games' average enemy (one enemy can't reach a kiting champion as often as a team does). Level-18 enemies with full builds hit about 1.5x harder on top, so about 12 seconds now. Lowered from 6 to 4.7 when enemies started casting their own abilities (their long-range hits reach kiting champions), keeping the median champion alive about 12 seconds with its usual build.",
+  "until_death_damage_scale": 2.6,
+  "until_death_damage_scale_note": "Multiplies the enemies' damage in fights that last until you die, tuned so a typical champion with its usual build lasted about 20-25 seconds against real games' average enemy (one enemy can't reach a kiting champion as often as a team does). Level-18 enemies with full builds hit about 1.5x harder on top, so about 12 seconds now. Lowered from 6 to 4.7 when enemies started casting their own abilities (their long-range hits reach kiting champions), keeping the median champion alive about 12 seconds with its usual build. Lowered to 2.6 when enemies stopped waiting 2-6 s before engaging (they now fight from the first second, as you do), keeping the median champion with its usual build alive about 13.5 seconds as before.",
   "team_size": 1,
   "cc_rate_min": 0.05,
   "cc_rate_max": 0.2,
@@ -57,8 +57,8 @@
   "enemy_dps_mean": 500,
   "enemy_dps_sd": 200,
   "enemy_phys_share": 0.55,
-  "engage_min": 2.0,
-  "engage_max": 6.0,
+  "engage_min": 0.0,
+  "engage_max": 0.0,
   "enemy_pool": "cn_enemy_pool.json"
  },
  "optimizer": {
