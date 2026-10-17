@@ -5261,3 +5261,30 @@ html[data-scrolled] .site-header {
   font-size: 0.8125rem;
   cursor: pointer;
 }
+
+/* Champion pages tinted by their splash (components/SplashAccent.tsx): the hue and saturation come from
+   the art; the lightness is picked per theme so links and buttons stay readable. */
+html[data-champ-accent] main {
+  --accent: hsl(var(--champ-h) var(--champ-s) 34%);
+  --accent-soft: hsl(var(--champ-h) 45% 90%);
+  --accent-ink: #ffffff;
+}
+
+@media (prefers-color-scheme: dark) {
+  html[data-champ-accent]:not([data-theme="light"]) main {
+    --accent: hsl(var(--champ-h) var(--champ-s) 68%);
+    --accent-soft: hsl(var(--champ-h) 40% 14%);
+    --accent-ink: hsl(var(--champ-h) 60% 8%);
+  }
+}
+
+html[data-champ-accent][data-theme="dark"] main {
+  --accent: hsl(var(--champ-h) var(--champ-s) 68%);
+  --accent-soft: hsl(var(--champ-h) 40% 14%);
+  --accent-ink: hsl(var(--champ-h) 60% 8%);
+}
+
+html[data-champ-accent] .champ-hero {
+  border-color: color-mix(in srgb, var(--accent) 35%, var(--line));
+  box-shadow: 0 30px 80px -50px var(--accent);
+}
