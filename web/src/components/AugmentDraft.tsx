@@ -10,7 +10,7 @@ import Skeleton from "@/components/Skeleton";
 import { LoadError } from "@/components/EmptyState";
 import { useNames, useT } from "./I18n";
 
-// Augment Draft practice (/augments?tab=draft&champ=Jinx): four selections of three augments, one reroll per card,
+// Augment Draft practice (/tier-list?tab=draft&champ=Jinx): four selections of three augments, one reroll per card,
 // like a real Mayhem game. After each pick it shows how often players on that champion take it,
 // and which of the three cards they take most. Data: /data/draft.json.
 

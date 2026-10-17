@@ -18,9 +18,6 @@ export default function NotFound() {
         <Link href="/simulator" className="btn ghost">
           Simulator
         </Link>
-        <Link href="/builds?tab=editor" className="btn ghost">
-          Build Editor
-        </Link>
       </p>
     </>
   );

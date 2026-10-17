@@ -186,27 +186,16 @@ export default function ChampionTiers({ rows: initial, patches, partners, tags, 
     if (getParam("sort") === "change.desc" && !getParam("tab")) setSort(MOVERS);
   }, []);
 
-  // Timeline: a slider over the patches, one patch at a time, with a play button that steps forward.
-  const [playing, setPlaying] = useState(false);
-  const at = one ? patches.indexOf(one) : patches.length - 1;
-  const atRef = useRef(at);
-  atRef.current = at;
+  // The patch dropdown closes on a click or tap outside it.
+  const pickRef = useRef<HTMLDetailsElement>(null);
   useEffect(() => {
-    if (!playing) return;
-    const t = setInterval(() => {
-      const next = atRef.current + 1;
-      if (next >= patches.length) return setPlaying(false);
-      choose(new Set([patches[next]]));
-    }, 1400);
-    return () => clearInterval(t);
-    // eslint-disable-next-line react-hooks/exhaustive-deps -- choose only sets state and the URL
-  }, [playing, patches]);
-  const play = () => {
-    if (playing) return setPlaying(false);
-    // From the end, start over from the first patch.
-    if (at >= patches.length - 1 || !one) choose(new Set([patches[0]]));
-    setPlaying(true);
-  };
+    const close = (e: PointerEvent) => {
+      const d = pickRef.current;
+      if (d?.open && !d.contains(e.target as Node)) d.open = false;
+    };
+    document.addEventListener("pointerdown", close);
+    return () => document.removeEventListener("pointerdown", close);
+  }, []);
 
   const presets: [string, string[]][] = [
     [t("Live patch ({patch})", { patch: live }), [live]],
@@ -218,7 +207,7 @@ export default function ChampionTiers({ rows: initial, patches, partners, tags, 
   const moversOn = sort === MOVERS && same([live]);
 
   return (
-    <div className="patch-range" data-playing={playing || undefined}>
+    <div className="patch-range">
       <div className="patch-presets" role="group" aria-label={t("Patch range")}>
         {presets.map(([label, list]) => (
           <button key={label} type="button" aria-pressed={same(list) && !moversOn} onClick={() => preset(list)}>
@@ -231,47 +220,17 @@ export default function ChampionTiers({ rows: initial, patches, partners, tags, 
           </button>
         )}
       </div>
-      {patches.length > 2 && (
-        <div className="patch-timeline">
-          <button
-            type="button"
-            className="timeline-play"
-            aria-label={playing ? t("Pause timeline") : t("Play through every patch")}
-            aria-pressed={playing}
-            onClick={play}
-          >
-            <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor" aria-hidden="true">
-              {playing ? <path d="M7 5h4v14H7zM13 5h4v14h-4z" /> : <path d="M8 5v14l11-7z" />}
-            </svg>
-          </button>
-          <input
-            type="range"
-            min={0}
-            max={patches.length - 1}
-            step={1}
-            value={at}
-            aria-label={t("Patch")}
-            aria-valuetext={t("Patch {patch}", { patch: patches[at] })}
-            onChange={(e) => {
-              setPlaying(false);
-              choose(new Set([patches[Number(e.target.value)]]));
-            }}
-            style={
-              {
-                "--fill": `${(at / (patches.length - 1)) * 100}%`,
-              } as React.CSSProperties
-            }
-          />
-          <output className="timeline-label">{one ? t("Patch {patch}", { patch: one }) : t("{n} patches", { n: picked.size })}</output>
+      <details className="patch-pick" ref={pickRef}>
+        <summary>{one ? t("Patch {patch}", { patch: one }) : t("{n} patches", { n: picked.size })}</summary>
+        <div className="patch-pick-list" role="group" aria-label={t("Patches")}>
+          {[...patches].reverse().map((p) => (
+            <label key={p}>
+              <input type="checkbox" checked={picked.has(p)} onChange={() => toggle(p)} />
+              {p}
+            </label>
+          ))}
         </div>
-      )}
-      <div className="patch-chips" role="group" aria-label={t("Patches")}>
-        {[...patches].reverse().map((p) => (
-          <button key={p} type="button" aria-pressed={picked.has(p)} onClick={() => toggle(p)}>
-            {p}
-          </button>
-        ))}
-      </div>
+      </details>
       {Object.keys(tagInfo).length > 0 && (
         <div className="arch-filter" role="group" aria-label={t("Filter by archetype")}>
           {[...kinds.class, ...kinds.play].map((t) => {
@@ -302,13 +261,9 @@ export default function ChampionTiers({ rows: initial, patches, partners, tags, 
       <p className="patch-note">
         {picked.size === 1
           ? showChange
-            ? t("Patch {patch}, with the change since {before}. Click patches to add or remove them.", { patch: [...picked][0], before: before! })
-            : t("Patch {patch}. Click patches to add or remove them.", {
-                patch: [...picked][0],
-              })
-          : t("{n} patches combined. Click patches to add or remove them.", {
-              n: picked.size,
-            })}
+            ? t("Patch {patch}, with the change since {before}. Pick patches from the list to add or remove them.", { patch: [...picked][0], before: before! })
+            : t("Patch {patch}. Pick patches from the list to add or remove them.", { patch: [...picked][0] })
+          : t("{n} patches combined. Pick patches from the list to add or remove them.", { n: picked.size })}
       </p>
       {missing ? (
         <Skeleton rows={12} label={t("Loading older patches…")} />

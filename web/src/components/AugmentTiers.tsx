@@ -9,7 +9,7 @@ import DeepScore from "@/components/DeepScore";
 import { AUGMENT_DEEPSCORE_HELP } from "@/lib/deepscore";
 import { useNames, useT } from "./I18n";
 
-// Augment tier list (/augments?rarity=gold&style=ap): one row per tier, filtered by rarity and build style.
+// Augment tier list (/tier-list?tab=augments&rarity=gold&style=ap): one row per tier, filtered by rarity and build style.
 // Tiers and styles come from the server (lib/augment-tiers.ts).
 
 export type TierRow = {

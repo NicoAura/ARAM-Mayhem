@@ -5,7 +5,7 @@ import { useNames, useT } from "./I18n";
 import DeepScore from "@/components/DeepScore";
 import type { AugmentGroup } from "@/lib/augment-groups";
 
-// Augments grouped by the symbol on their icon (/augments?tab=groups). Each card shows what the group
+// Augments grouped by the symbol on their icon (/tier-list?tab=groups). Each card shows what the group
 // shares, its win-rate range and its average DeepScore, then every member, best first.
 
 const pct = (v: number) => `${(v * 100).toFixed(1)}%`;

@@ -1,14 +1,11 @@
 import Link from "next/link";
 import { text } from "@/lib/content";
 import { chefsSpecial, statsDate, counts, kitchenBuilds, livePatch, liveTiers, topAugments } from "@/lib/highlights";
-import { whatToBuildData } from "@/lib/what-to-build";
 import { championSplash } from "@/lib/champions";
 import { ChampionJump, KitchenPick, TierSnapshot } from "@/components/HomeWidgets";
-import { BETA } from "@/lib/beta";
 import HeroParticles from "@/components/HeroParticles";
 import { augmentHref } from "@/lib/augments";
-import { movers } from "@/lib/champions";
-import { KITCHEN, navPages } from "@/lib/tabs";
+import { KITCHEN } from "@/lib/tabs";
 import RecentPlayed from "@/components/RecentPlayed";
 import { LocalDate, ModeName, Name, T } from "@/components/I18n";
 
@@ -16,23 +13,6 @@ import { LocalDate, ModeName, Name, T } from "@/components/I18n";
 const Icon = ({ src }: { src: string }) => <img className="icon" src={src} alt="" width={24} height={24} loading="lazy" />;
 
 const pct = (v: number) => `${(v * 100).toFixed(1)}%`;
-const pts = (v: number) => `${v > 0 ? "+" : ""}${(v * 100).toFixed(1)}`;
-
-// The full builds with the best win rate among builds players commonly use (at least 3% of a
-// champion's games), one per champion.
-function winningBuilds(n = 6) {
-  const d = whatToBuildData();
-  return d.champions
-    .filter((c) => c.best && c.best.winRate !== null && c.best.pickRate >= 0.03)
-    .sort((a, b) => (b.best!.winRate ?? 0) - (a.best!.winRate ?? 0))
-    .slice(0, n)
-    .map((c) => ({
-      id: c.id,
-      name: c.name,
-      winRate: c.best!.winRate ?? 0,
-      items: c.best!.items.filter((i) => d.items[i]?.[1]).map((i) => ({ id: i, name: d.items[i][0], icon: d.items[i][1] })),
-    }));
-}
 
 export default function Home() {
   const tiers = liveTiers();
@@ -40,10 +20,8 @@ export default function Home() {
   const patch = livePatch();
   const special = chefsSpecial();
   const builds = special ? [] : kitchenBuilds();
-  const wins = winningBuilds();
   const n = counts();
   const date = statsDate();
-  const moved = movers();
 
   return (
     <>
@@ -121,45 +99,8 @@ export default function Home() {
             </div>
           </section>
         )}
-        {moved.prev && moved.up.length > 0 && (
-          <section className="card span-all" data-accent="tier">
-            <div className="card-head">
-              <h2>
-                <T v={{ patch: moved.prev }}>{"Biggest movers since {patch}"}</T>
-              </h2>
-              <Link href="/tier-list?sort=change.desc">
-                <T>All changes →</T>
-              </Link>
-            </div>
-            <div className="movers">
-              {[
-                ["Rising", moved.up],
-                ["Falling", moved.down],
-              ].map(([label, list]) => (
-                <div key={label as string} className="rank">
-                  <p className="movers-label">
-                    <T>{label as string}</T>
-                  </p>
-                  {(list as typeof moved.up).map((m) => (
-                    <Link key={m.id} href={`/champions/${m.id}`}>
-                      <Icon src={`/icons/champions/${m.id}.webp`} />
-                      <span className="rank-name">
-                        <Name kind="champions" id={m.id}>
-                          {m.name}
-                        </Name>
-                      </span>
-                      <span className={`chip tier-${m.tier.toLowerCase()}`}>{m.tier}</span>
-                      <span className="rank-v">{pct(m.winRate)}</span>
-                      <span className={`rank-v ${m.change > 0 ? "delta-up" : "delta-down"}`}>{pts(m.change)}</span>
-                    </Link>
-                  ))}
-                </div>
-              ))}
-            </div>
-          </section>
-        )}
         {special && (
-          <section className="card span-5 feature chef-special" data-accent="lab">
+          <section className="card span-all feature chef-special" data-accent="lab">
             <div className="card-head">
               <h2>
                 <T>Today&apos;s Chef Special</T>
@@ -171,7 +112,7 @@ export default function Home() {
                 )}
               </h2>
               <Link href={special.href}>
-                <T>The Lab →</T>
+                <T>The Kitchen →</T>
               </Link>
             </div>
             <div className="kitchen-head">
@@ -224,10 +165,10 @@ export default function Home() {
           </section>
         )}
         {builds.length > 0 && (
-          <section className="card span-5 feature" data-accent="lab">
+          <section className="card span-all feature" data-accent="lab">
             <div className="card-head">
               <h2>
-                <T>Cook builds from The Lab</T>
+                <T>Cook builds from The Kitchen</T>
               </h2>
               <Link href={KITCHEN}>
                 <T>More →</T>
@@ -236,59 +177,6 @@ export default function Home() {
             <KitchenPick builds={builds} />
           </section>
         )}
-        {wins.length > 0 && (
-          <section className="card span-7" data-accent="gold">
-            <div className="card-head">
-              <h2>
-                <T>Winning builds this patch</T>
-              </h2>
-            </div>
-            <div className="rank home-builds">
-              {wins.map((c) => (
-                <Link key={c.id} href={`/champions/${c.id}`}>
-                  <Icon src={`/icons/champions/${c.id}.webp`} />
-                  <span className="rank-name">
-                    <Name kind="champions" id={c.id}>
-                      {c.name}
-                    </Name>
-                  </span>
-                  <span className="home-build-items" aria-label={c.items.map((i) => i.name).join(", ")}>
-                    {c.items.map((i) => (
-                      // eslint-disable-next-line @next/next/no-img-element
-                      <img key={i.id} src={i.icon} alt="" title={i.name} width={24} height={24} loading="lazy" />
-                    ))}
-                  </span>
-                  <span className="rank-v wr-good">{pct(c.winRate)}</span>
-                </Link>
-              ))}
-            </div>
-          </section>
-        )}
-        <section className="card span-5" data-accent="info">
-          <div className="card-head">
-            <h2>
-              <T>More to explore</T>
-            </h2>
-          </div>
-          <div className="rank links">
-            {[...navPages().filter((t) => t.href !== "/tier-list"), { href: "/account#my-stats", label: "My Stats", body: "Your own Mayhem games" }].map((l) => (
-              <Link key={l.href} href={l.href}>
-                <span className="rank-name">
-                  <T>{l.label}</T>
-                  {BETA.has(l.href) && (
-                    <span className="beta">
-                      <T>Beta</T>
-                    </span>
-                  )}
-                </span>
-                <span className="rank-body">{l.body && <T>{l.body}</T>}</span>
-                <span className="rank-arrow" aria-hidden="true">
-                  →
-                </span>
-              </Link>
-            ))}
-          </div>
-        </section>
       </div>
     </>
   );
