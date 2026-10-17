@@ -28,6 +28,12 @@ export const sections = [
     pr: 0,
   },
   {
+    href: "/synergy",
+    label: text("tab./synergy.label", "Team Builder"),
+    body: text("tab./synergy.body", "Pick your team to see each pair's win rate together and who fits it best."),
+    pr: 0,
+  },
+  {
     href: "/patches",
     label: text("tab./patches.label", "Patch Recaps"),
     body: text("tab./patches.body", "What every patch changed: augments added, removed and tuned, and the champions that moved most."),
