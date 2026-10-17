@@ -1481,6 +1481,8 @@ private:
         const double dmg = std::min(target->hp, raw * mult);
         double vamp = omnivamp_ + (physicalAttack ? lifesteal_ : 0.0) + (t_ < rVampUntil_ ? get(fx_, "r_omnivamp") : 0.0);
         if (!stacks_.empty()) vamp += fullStackVamp();
+        if (get(fx_, "vamp_missing") > 0)  // Ominous Pact: grows with missing Health, full at 30% Health
+            vamp += get(fx_, "vamp_missing") * std::clamp((1.0 - myHp_ / maxHp_) / 0.7, 0.0, 1.0);
         heal(dmg * vamp);
         target->hp -= dmg;
         res_.bySource[src] += dmg;
