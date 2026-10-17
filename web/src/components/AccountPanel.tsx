@@ -5,6 +5,8 @@ import { useCallback, useEffect, useState } from "react";
 import { browserSupportsWebAuthn, startAuthentication, startRegistration } from "@simplewebauthn/browser";
 import { ACCOUNT_EVENT, forgetAccount, syncAccount } from "@/lib/account-sync";
 import { useBotCheck } from "@/lib/bot-check-client";
+import championNames from "@/data/champion-names.json";
+import { LocalDate, useNames, useT } from "./I18n";
 import PlayerExtras from "./PlayerExtras";
 
 // The account page (/account): sign in or create an account, then manage it. Favorites and settings
@@ -15,9 +17,11 @@ type Account = {
   signedIn: true;
   id: string;
   email: string | null;
+  /** Display name and champion icon, shown on this page. */
+  name: string | null;
+  icon: string | null;
   hasPassword: boolean;
   owner: boolean;
-  canClaimOwner: boolean;
   data: { favorites: string[] };
   passkeys: { id: string; label: string; created: string }[];
   riot: { name: string; platform: string | null; page: string | null } | null;
@@ -46,9 +50,10 @@ const MAIN: Provider[] = ["google", "apple", "discord", "twitch"];
 
 /** Buttons for the sign-in services that are switched on: Riot and the main ones, then a "More" menu. */
 function ProviderButtons({ providers, rso, mode }: { providers: Provider[]; rso: boolean; mode: "signin" | "connect" }) {
+  const t = useT("account");
   const main = providers.filter((p) => MAIN.includes(p));
   const more = providers.filter((p) => !MAIN.includes(p));
-  const label = (name: string) => (mode === "signin" ? `Continue with ${name}` : `Connect ${name}`);
+  const label = (name: string) => (mode === "signin" ? t("Continue with {name}", { name }) : t("Connect {name}", { name }));
   const link = (p: Provider) => (
     <a key={p} className="btn ghost acct-provider" href={`/api/account/oauth/${p}/start?mode=${mode}`}>
       {label(PROVIDER_NAMES[p])}
@@ -64,7 +69,7 @@ function ProviderButtons({ providers, rso, mode }: { providers: Provider[]; rso:
       {main.map(link)}
       {more.length > 0 && (
         <details className="acct-more">
-          <summary>More ways to {mode === "signin" ? "sign in" : "connect"}</summary>
+          <summary>{mode === "signin" ? t("More ways to sign in") : t("More ways to connect")}</summary>
           <div>{more.map(link)}</div>
         </details>
       )}
@@ -89,11 +94,32 @@ const errText = (e: unknown) => (e instanceof Error ? e.message : "Something wen
 // Passkey prompts the visitor closes on purpose aren't errors worth showing.
 const cancelled = (e: unknown) => e instanceof Error && /NotAllowedError|AbortError|cancel/i.test(`${e.name} ${e.message}`);
 
+// Messages, the server's included, are English sentences that double as translation keys.
 function Note({ msg }: { msg: Msg }) {
-  return msg ? <p className={`acct-note ${msg.kind}`} role={msg.kind === "error" ? "alert" : "status"}>{msg.text}</p> : null;
+  const t = useT("account");
+  return msg ? <p className={`acct-note ${msg.kind}`} role={msg.kind === "error" ? "alert" : "status"}>{t(msg.text)}</p> : null;
+}
+
+/** A translated sentence with a link or button where it says {key}. */
+function around(text: string, key: string, node: React.ReactNode) {
+  const [before, after = ""] = text.split(`{${key}}`);
+  return (
+    <>
+      {before}
+      {node}
+      {after}
+    </>
+  );
+}
+
+/** What a new passkey is called in the list, from the device that made it. */
+function deviceLabel() {
+  const ua = navigator.userAgent;
+  return /iPhone|iPad|Mac/.test(ua) ? "Apple device" : /Android/.test(ua) ? "Android phone" : /Windows/.test(ua) ? "Windows PC" : "Passkey";
 }
 
 export default function AccountPanel() {
+  const t = useT("account");
   const [account, setAccount] = useState<Account | null | undefined>(undefined);
   const [rso, setRso] = useState(false);
   const [providers, setProviders] = useState<Provider[]>([]);
@@ -124,7 +150,7 @@ export default function AccountPanel() {
     await refresh();
   };
 
-  if (account === undefined) return <p className="acct-loading">Loading your account…</p>;
+  if (account === undefined) return <p className="acct-loading">{t("Loading your account…")}</p>;
   return (
     <>
       <Note msg={riotMsg} />
@@ -141,6 +167,7 @@ function SignIn({ onDone, rso, providers }: { onDone: () => Promise<void>; rso: 
   const [msg, setMsg] = useState<Msg>(null);
   const [passkeys, setPasskeys] = useState(false);
   const bot = useBotCheck();
+  const t = useT("account");
 
   useEffect(() => setPasskeys(browserSupportsWebAuthn()), []);
 
@@ -174,23 +201,41 @@ function SignIn({ onDone, rso, providers }: { onDone: () => Promise<void>; rso: 
     }
   };
 
+  // Create account with a passkey instead of a password: one step, the passkey is the way in.
+  const createPasskey = async () => {
+    if (!email.trim()) return setMsg({ kind: "error", text: "Enter your email first." });
+    setBusy(true);
+    setMsg(null);
+    try {
+      const options = await call("/api/account/passkey", "POST", { step: "signup-options", email, check: bot.token });
+      const response = await startRegistration({ optionsJSON: options });
+      await call("/api/account/passkey", "POST", { step: "signup", response, label: deviceLabel() });
+      await onDone();
+    } catch (err) {
+      if (!cancelled(err)) setMsg({ kind: "error", text: errText(err) });
+      bot.reset();
+    } finally {
+      setBusy(false);
+    }
+  };
+
   const signup = mode === "signup";
   return (
     <div className="acct-signin card">
-      <div className="acct-tabs" role="tablist" aria-label="Sign in or create an account">
+      <div className="acct-tabs" role="tablist" aria-label={t("Sign in or create an account")}>
         {(["signin", "signup"] as const).map((m) => (
           <button key={m} type="button" role="tab" aria-selected={mode === m} className={mode === m ? "active" : ""} onClick={() => (setMode(m), setMsg(null))}>
-            {m === "signin" ? "Sign in" : "Create account"}
+            {m === "signin" ? t("Sign in") : t("Create account")}
           </button>
         ))}
       </div>
       <form className="acct-form" method="post" action="/account" onSubmit={submit}>
         <label>
-          Email
+          {t("Email")}
           <input type="email" name="email" autoComplete={signup ? "email" : "username webauthn"} required value={email} onChange={(e) => setEmail(e.target.value)} />
         </label>
         <label>
-          Password
+          {t("Password")}
           <input
             type="password"
             name="password"
@@ -201,30 +246,34 @@ function SignIn({ onDone, rso, providers }: { onDone: () => Promise<void>; rso: 
             onChange={(e) => setPassword(e.target.value)}
           />
         </label>
-        {signup && <p className="acct-hint">At least 10 characters. A passphrase of a few words works well.</p>}
+        {signup && <p className="acct-hint">{t("At least 10 characters. A passphrase of a few words works well.")}</p>}
         <div ref={bot.box} className="acct-botcheck" />
         <button type="submit" className="btn" disabled={busy}>
-          {busy ? "One moment…" : signup ? "Create account" : "Sign in"}
+          {busy ? t("One moment…") : signup ? t("Create account") : t("Sign in")}
         </button>
       </form>
-      {(passkeys || rso || providers.length > 0) && <p className="acct-or">or</p>}
+      {(passkeys || rso || providers.length > 0) && <p className="acct-or">{t("or")}</p>}
       {passkeys && (
-        <button type="button" className="btn ghost acct-passkey" onClick={passkey} disabled={busy}>
-          Sign in with a passkey
+        <button type="button" className="btn ghost acct-passkey" onClick={signup ? createPasskey : passkey} disabled={busy}>
+          {signup ? t("Create a passkey") : t("Sign in with a passkey")}
         </button>
       )}
       <ProviderButtons providers={providers} rso={rso} mode="signin" />
       <Note msg={msg} />
       <p className="acct-hint">
         {signup
-          ? "Your starred champions and settings will follow you to every browser you sign in on."
-          : "Forgot your password? Sign in with a passkey, then set a new one here."}
+          ? passkeys
+            ? t("No password needed with a passkey: enter your email and create one. Your starred champions and settings follow you to every browser you sign in on.")
+            : t("Your starred champions and settings will follow you to every browser you sign in on.")
+          : t("Forgot your password? Sign in with a passkey, then set a new one here.")}
       </p>
     </div>
   );
 }
 
 function Manage({ account, refresh }: { account: Account; refresh: () => Promise<void> }) {
+  const t = useT("account");
+  const n = account.data.favorites.length;
   const signOut = async () => {
     await call("/api/account/signout", "POST").catch(() => null);
     forgetAccount();
@@ -234,30 +283,155 @@ function Manage({ account, refresh }: { account: Account; refresh: () => Promise
   return (
     <div className="acct-grid">
       <section className="card acct-card">
-        <h2>Signed in</h2>
-        <p className="acct-who">{account.email ?? account.riot?.name ?? "Your account"}</p>
+        <h2>{t("Signed in")}</h2>
+        <div className="acct-me">
+          {account.icon && (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img src={`/icons/champions/${account.icon}.webp`} alt="" width={48} height={48} />
+          )}
+          <p className="acct-who">
+            {account.name ?? account.email ?? account.riot?.name ?? t("Your account")}
+            {account.name && account.email && <small>{account.email}</small>}
+          </p>
+        </div>
         <p className="acct-hint">
-          Your {account.data.favorites.length ? `${account.data.favorites.length} starred champion${account.data.favorites.length === 1 ? "" : "s"}` : "starred champions"} and
-          settings follow you to every browser you sign in on.
+          {n === 0
+            ? t("Your starred champions and settings follow you to every browser you sign in on.")
+            : n === 1
+              ? t("Your starred champion and settings follow you to every browser you sign in on.")
+              : t("Your {n} starred champions and settings follow you to every browser you sign in on.", { n })}
         </p>
         <button type="button" className="btn ghost" onClick={signOut}>
-          Sign out
+          {t("Sign out")}
         </button>
       </section>
+      <ProfileCard account={account} refresh={refresh} />
       <RiotCard account={account} refresh={refresh} />
       <PasskeyCard account={account} refresh={refresh} />
       {(account.providers.length > 0 || account.logins.length > 0) && <ProvidersCard account={account} refresh={refresh} />}
+      <EmailCard account={account} refresh={refresh} />
       <PasswordCard account={account} />
-      {(account.owner || account.canClaimOwner) && <OwnerCard account={account} refresh={refresh} />}
+      {account.owner && <OwnerCard />}
       <DeleteCard account={account} refresh={refresh} />
       {account.riot && <PlayerExtras />}
     </div>
   );
 }
 
+const CHAMPIONS = Object.entries(championNames as Record<string, string>);
+
+/** Display name and a champion icon for the account. */
+function ProfileCard({ account, refresh }: { account: Account; refresh: () => Promise<void> }) {
+  const t = useT("account");
+  const names = useNames();
+  const [name, setName] = useState(account.name ?? "");
+  const [icon, setIcon] = useState(account.icon);
+  const [search, setSearch] = useState("");
+  const [msg, setMsg] = useState<Msg>(null);
+  const q = search.trim().toLowerCase();
+  const shown = CHAMPIONS.map(([id, en]) => [id, names("champions", id, en)] as const).filter(([id, n]) => !q || n.toLowerCase().includes(q) || id.toLowerCase().includes(q));
+
+  const save = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setMsg(null);
+    try {
+      await call("/api/account/profile", "POST", { name, icon });
+      setMsg({ kind: "ok", text: "Saved." });
+      await refresh();
+    } catch (err) {
+      setMsg({ kind: "error", text: errText(err) });
+    }
+  };
+
+  return (
+    <section className="card acct-card">
+      <h2>{t("Profile")}</h2>
+      <form className="acct-form" method="post" action="/account" onSubmit={save}>
+        <label>
+          {t("Display name")}
+          <input type="text" name="nickname" autoComplete="nickname" maxLength={24} value={name} onChange={(e) => setName(e.target.value)} />
+        </label>
+        <p className="acct-hint">{t("Only you see your name and icon, here on your account page.")}</p>
+        <details className="acct-icons">
+          <summary>
+            {icon ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img src={`/icons/champions/${icon}.webp`} alt="" width={32} height={32} />
+            ) : null}
+            {t("Choose an icon")}
+          </summary>
+          <input type="search" placeholder={t("Search champions")} aria-label={t("Search champions")} value={search} onChange={(e) => setSearch(e.target.value)} />
+          <div className="acct-icon-grid" role="radiogroup" aria-label={t("Icon")}>
+            <button type="button" role="radio" aria-checked={!icon} className={!icon ? "picked" : ""} onClick={() => setIcon(null)}>
+              {t("None")}
+            </button>
+            {shown.map(([id, n]) => (
+              <button key={id} type="button" role="radio" aria-checked={icon === id} aria-label={n} title={n} className={icon === id ? "picked" : ""} onClick={() => setIcon(id)}>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={`/icons/champions/${id}.webp`} alt="" width={40} height={40} loading="lazy" />
+              </button>
+            ))}
+          </div>
+        </details>
+        <button type="submit" className="btn">
+          {t("Save")}
+        </button>
+      </form>
+      <Note msg={msg} />
+    </section>
+  );
+}
+
+/** The email this account signs in with. */
+function EmailCard({ account, refresh }: { account: Account; refresh: () => Promise<void> }) {
+  const t = useT("account");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [msg, setMsg] = useState<Msg>(null);
+  const needPassword = account.hasPassword && !account.passkeySession;
+
+  const submit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setMsg(null);
+    try {
+      await call("/api/account/email", "POST", { email, password });
+      setEmail("");
+      setPassword("");
+      setMsg({ kind: "ok", text: "Email changed. Sign in with the new one from now on." });
+      await refresh();
+    } catch (err) {
+      setMsg({ kind: "error", text: errText(err) });
+    }
+  };
+
+  return (
+    <section className="card acct-card">
+      <h2>{account.email ? t("Change email") : t("Add an email")}</h2>
+      {account.email && <p className="acct-who">{account.email}</p>}
+      <form className="acct-form" method="post" action="/account" onSubmit={submit}>
+        <label>
+          {t("New email")}
+          <input type="email" autoComplete="email" required value={email} onChange={(e) => setEmail(e.target.value)} />
+        </label>
+        {needPassword && (
+          <label>
+            {t("Password")}
+            <input type="password" autoComplete="current-password" required value={password} onChange={(e) => setPassword(e.target.value)} />
+          </label>
+        )}
+        <button type="submit" className="btn">
+          {t("Save email")}
+        </button>
+      </form>
+      <Note msg={msg} />
+    </section>
+  );
+}
+
 function RiotCard({ account, refresh }: { account: Account; refresh: () => Promise<void> }) {
   const [code, setCode] = useState("");
   const [msg, setMsg] = useState<Msg>(null);
+  const t = useT("account");
 
   const getCode = async () => {
     setMsg(null);
@@ -279,58 +453,62 @@ function RiotCard({ account, refresh }: { account: Account; refresh: () => Promi
 
   return (
     <section className="card acct-card">
-      <h2>Riot account</h2>
+      <h2>{t("Riot account")}</h2>
       {account.riot ? (
         <>
           <p className="acct-who">{account.riot.name}</p>
           {account.riot.page ? (
             <p>
               <Link className="inline-link" href={account.riot.page}>
-                Your player page
+                {t("Your player page")}
               </Link>
             </p>
           ) : (
-            <p className="acct-hint">Publish a player page from My Stats and it links here.</p>
+            <p className="acct-hint">{t("Publish a player page from My Stats and it links here.")}</p>
           )}
           <button type="button" className="btn ghost" onClick={disconnect}>
-            Disconnect
+            {t("Disconnect")}
           </button>
         </>
       ) : code ? (
         <>
-          <p className="acct-code" aria-label={`Your code: ${code.split("").join(" ")}`}>
+          <p className="acct-code" aria-label={t("Your code: {code}", { code: code.split("").join(" ") })}>
             {code.slice(0, 4)} {code.slice(4)}
           </p>
           <ol className="acct-steps">
             <li>
-              Open{" "}
-              <Link className="inline-link" href="/stats">
-                My Stats
-              </Link>{" "}
-              on the computer where you play, with the Riot Client signed in.
+              {around(
+                t("Open {link} on the computer where you play, with the Riot Client signed in."),
+                "link",
+                <Link className="inline-link" href="/stats">
+                  {t("My Stats")}
+                </Link>,
+              )}
             </li>
-            <li>Choose Connect account and enter this code. It works for 15 minutes.</li>
+            <li>{t("Choose Connect account and enter this code. It works for 15 minutes.")}</li>
             <li>
-              Come back here and{" "}
-              <button type="button" className="inline-link" onClick={() => void refresh()}>
-                refresh
-              </button>
-              .
+              {around(
+                t("Come back here and {link}."),
+                "link",
+                <button type="button" className="inline-link" onClick={() => void refresh()}>
+                  {t("refresh")}
+                </button>,
+              )}
             </li>
           </ol>
         </>
       ) : (
         <>
-          <p className="acct-hint">Connect the Riot account you play on. My Stats confirms it with the Riot Client on your computer, so only you can connect yours.</p>
+          <p className="acct-hint">{t("Connect the Riot account you play on. My Stats confirms it with the Riot Client on your computer, so only you can connect yours.")}</p>
           <button type="button" className="btn" onClick={getCode}>
-            Connect a Riot account
+            {t("Connect a Riot account")}
           </button>
           {account.rso ? (
             <a className="btn ghost" href="/api/account/rso/start?mode=connect">
-              Connect with Riot sign-in
+              {t("Connect with Riot sign-in")}
             </a>
           ) : (
-            <p className="acct-hint">Coming soon: connect straight from this page with your Riot sign-in.</p>
+            <p className="acct-hint">{t("Coming soon: connect straight from this page with your Riot sign-in.")}</p>
           )}
         </>
       )}
@@ -341,6 +519,7 @@ function RiotCard({ account, refresh }: { account: Account; refresh: () => Promi
 
 function ProvidersCard({ account, refresh }: { account: Account; refresh: () => Promise<void> }) {
   const [msg, setMsg] = useState<Msg>(null);
+  const t = useT("account");
   const remove = async (provider: Provider) => {
     setMsg(null);
     try {
@@ -354,8 +533,8 @@ function ProvidersCard({ account, refresh }: { account: Account; refresh: () => 
 
   return (
     <section className="card acct-card">
-      <h2>Other ways to sign in</h2>
-      <p className="acct-hint">Sign in to this account with another service you use, instead of a password.</p>
+      <h2>{t("Other ways to sign in")}</h2>
+      <p className="acct-hint">{t("Sign in to this account with another service you use, instead of a password.")}</p>
       {account.logins.length > 0 && (
         <ul className="acct-list">
           {account.logins.map((l) => (
@@ -364,8 +543,8 @@ function ProvidersCard({ account, refresh }: { account: Account; refresh: () => 
                 {l.name}
                 {l.email && <small>{l.email}</small>}
               </span>
-              <button type="button" className="inline-link" onClick={() => remove(l.provider)} aria-label={`Stop signing in with ${l.name}`}>
-                Remove
+              <button type="button" className="inline-link" onClick={() => remove(l.provider)} aria-label={t("Stop signing in with {name}", { name: l.name })}>
+                {t("Remove")}
               </button>
             </li>
           ))}
@@ -380,6 +559,7 @@ function ProvidersCard({ account, refresh }: { account: Account; refresh: () => 
 function PasskeyCard({ account, refresh }: { account: Account; refresh: () => Promise<void> }) {
   const [msg, setMsg] = useState<Msg>(null);
   const [supported, setSupported] = useState(true);
+  const t = useT("account");
   useEffect(() => setSupported(browserSupportsWebAuthn()), []);
 
   const add = async () => {
@@ -387,8 +567,7 @@ function PasskeyCard({ account, refresh }: { account: Account; refresh: () => Pr
     try {
       const options = await call("/api/account/passkey", "POST", { step: "add-options" });
       const response = await startRegistration({ optionsJSON: options });
-      const label = /iPhone|iPad|Mac/.test(navigator.userAgent) ? "Apple device" : /Android/.test(navigator.userAgent) ? "Android phone" : /Windows/.test(navigator.userAgent) ? "Windows PC" : "Passkey";
-      await call("/api/account/passkey", "POST", { step: "add", response, label });
+      await call("/api/account/passkey", "POST", { step: "add", response, label: deviceLabel() });
       setMsg({ kind: "ok", text: "Passkey saved. Next time, sign in with it instead of your password." });
       await refresh();
     } catch (err) {
@@ -407,18 +586,18 @@ function PasskeyCard({ account, refresh }: { account: Account; refresh: () => Pr
 
   return (
     <section className="card acct-card">
-      <h2>Passkeys</h2>
-      <p className="acct-hint">Sign in with your fingerprint, face or device PIN instead of a password. A passkey is also how you get back in if you forget your password.</p>
+      <h2>{t("Passkeys")}</h2>
+      <p className="acct-hint">{t("Sign in with your fingerprint, face or device PIN instead of a password. A passkey is also how you get back in if you forget your password.")}</p>
       {account.passkeys.length > 0 && (
         <ul className="acct-list">
           {account.passkeys.map((k) => (
             <li key={k.id}>
               <span>
-                {k.label}
-                <small>Added {k.created.slice(0, 10)}</small>
+                {t(k.label)}
+                <small>{around(t("Added {date}"), "date", <LocalDate iso={k.created.slice(0, 10)} options={{ year: "numeric", month: "short", day: "numeric", timeZone: "UTC" }} />)}</small>
               </span>
-              <button type="button" className="inline-link" onClick={() => remove(k.id)} aria-label={`Remove passkey ${k.label}`}>
-                Remove
+              <button type="button" className="inline-link" onClick={() => remove(k.id)} aria-label={t("Remove passkey {label}", { label: t(k.label) })}>
+                {t("Remove")}
               </button>
             </li>
           ))}
@@ -426,10 +605,10 @@ function PasskeyCard({ account, refresh }: { account: Account; refresh: () => Pr
       )}
       {supported ? (
         <button type="button" className="btn" onClick={add}>
-          Add a passkey
+          {t("Add a passkey")}
         </button>
       ) : (
-        <p className="acct-hint">This browser can&apos;t save passkeys.</p>
+        <p className="acct-hint">{t("This browser can't save passkeys.")}</p>
       )}
       <Note msg={msg} />
     </section>
@@ -441,6 +620,7 @@ function PasswordCard({ account }: { account: Account }) {
   const [next, setNext] = useState("");
   const [msg, setMsg] = useState<Msg>(null);
   const needCurrent = account.hasPassword && !account.passkeySession;
+  const t = useT("account");
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -457,21 +637,21 @@ function PasswordCard({ account }: { account: Account }) {
 
   return (
     <section className="card acct-card">
-      <h2>{account.hasPassword ? "Change password" : "Set a password"}</h2>
+      <h2>{account.hasPassword ? t("Change password") : t("Set a password")}</h2>
       <form className="acct-form" method="post" action="/account" onSubmit={submit}>
         <input type="text" name="username" autoComplete="username" value={account.email ?? ""} readOnly tabIndex={-1} aria-hidden="true" className="visually-hidden" />
         {needCurrent && (
           <label>
-            Current password
+            {t("Current password")}
             <input type="password" autoComplete="current-password" required value={current} onChange={(e) => setCurrent(e.target.value)} />
           </label>
         )}
         <label>
-          New password
+          {t("New password")}
           <input type="password" autoComplete="new-password" required minLength={10} value={next} onChange={(e) => setNext(e.target.value)} />
         </label>
         <button type="submit" className="btn">
-          Save password
+          {t("Save password")}
         </button>
       </form>
       <Note msg={msg} />
@@ -479,53 +659,20 @@ function PasswordCard({ account }: { account: Account }) {
   );
 }
 
-function OwnerCard({ account, refresh }: { account: Account; refresh: () => Promise<void> }) {
-  const [password, setPassword] = useState("");
-  const [msg, setMsg] = useState<Msg>(null);
-
-  const claim = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setMsg(null);
-    try {
-      await call("/api/account/owner", "POST", { password });
-      await refresh();
-    } catch (err) {
-      setMsg({ kind: "error", text: errText(err) });
-    }
-  };
-
-  if (account.owner) {
-    return (
-      <section className="card acct-card">
-        <h2>Site owner</h2>
-        <p className="acct-hint">Only this account opens these.</p>
-        <p className="acct-links">
-          <Link className="btn" href="/account/simulator">
-            3D Simulator
-          </Link>
-          <Link className="btn ghost" href="/account/edit">
-            Edit site text
-          </Link>
-        </p>
-      </section>
-    );
-  }
+function OwnerCard() {
+  const t = useT("account");
   return (
     <section className="card acct-card">
-      <details>
-        <summary>Site owner</summary>
-        <form className="acct-form" method="post" action="/account" onSubmit={claim}>
-          <p className="acct-hint">Run this site? Enter the site password once to make this account its owner.</p>
-          <label>
-            Site password
-            <input type="password" autoComplete="off" required value={password} onChange={(e) => setPassword(e.target.value)} />
-          </label>
-          <button type="submit" className="btn">
-            Make this account the owner
-          </button>
-        </form>
-        <Note msg={msg} />
-      </details>
+      <h2>{t("Site owner")}</h2>
+      <p className="acct-hint">{t("Only this account opens these.")}</p>
+      <p className="acct-links">
+        <Link className="btn" href="/account/simulator">
+          {t("3D Simulator")}
+        </Link>
+        <Link className="btn ghost" href="/account/edit">
+          {t("Edit site text")}
+        </Link>
+      </p>
     </section>
   );
 }
@@ -535,6 +682,7 @@ function DeleteCard({ account, refresh }: { account: Account; refresh: () => Pro
   const [sure, setSure] = useState(false);
   const [msg, setMsg] = useState<Msg>(null);
   const needPassword = account.hasPassword && !account.passkeySession;
+  const t = useT("account");
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -551,23 +699,22 @@ function DeleteCard({ account, refresh }: { account: Account; refresh: () => Pro
   return (
     <section className="card acct-card acct-danger">
       <details>
-        <summary>Delete account</summary>
+        <summary>{t("Delete account")}</summary>
         <form className="acct-form" method="post" action="/account" onSubmit={submit}>
           <p className="acct-hint">
-            This deletes your account, passkeys and synced Favorites and settings. This browser keeps its own copy. A player page you published from My Stats stays until you remove it
-            there.
+            {t("This deletes your account, passkeys and synced Favorites and settings. This browser keeps its own copy. A player page you published from My Stats stays until you remove it there.")}
           </p>
           {needPassword && (
             <label>
-              Password
+              {t("Password")}
               <input type="password" autoComplete="current-password" required value={password} onChange={(e) => setPassword(e.target.value)} />
             </label>
           )}
           <label className="acct-check">
-            <input type="checkbox" checked={sure} onChange={(e) => setSure(e.target.checked)} /> I want to delete my account
+            <input type="checkbox" checked={sure} onChange={(e) => setSure(e.target.checked)} /> {t("I want to delete my account")}
           </label>
           <button type="submit" className="btn danger" disabled={!sure}>
-            Delete account
+            {t("Delete account")}
           </button>
         </form>
         <Note msg={msg} />

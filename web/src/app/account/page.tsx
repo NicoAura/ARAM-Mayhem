@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import AccountPanel from "@/components/AccountPanel";
+import { T } from "@/components/I18n";
 import Intro from "@/components/Intro";
 import { pageMeta } from "@/lib/meta";
 
@@ -11,8 +12,8 @@ export const metadata: Metadata = {
 export default function AccountPage() {
   return (
     <>
-      <Intro eyebrow="Account" title="Your account.">
-        Sign in to keep your starred champions and settings on every device, and connect the Riot account you play on.
+      <Intro eyebrow={<T ns="account">Account</T>} title={<T ns="account">Your account.</T>}>
+        <T ns="account">Sign in to keep your starred champions and settings on every device, and connect the Riot account you play on.</T>
       </Intro>
       <AccountPanel />
     </>
