@@ -25,6 +25,7 @@ import { SETTINGS_SCRIPT } from "@/lib/settings";
 import { THEME_COLORS, THEME_KEY } from "@/lib/theme";
 import { navItems, navPages } from "@/lib/tabs";
 import "./globals.css";
+import OfflineSupport from "@/components/OfflineSupport";
 
 const sans = Geist({ subsets: ["latin"], variable: "--font-sans" });
 const mono = Geist_Mono({ subsets: ["latin"], variable: "--font-mono" });
@@ -127,6 +128,7 @@ export default function RootLayout({
           <nav className="footer-links" aria-label="Legal">
             <Link href="/privacy">Privacy</Link>
             <Link href="/terms">Terms</Link>
+            <Link href="/status">Status</Link>
             <a href="mailto:admin@deeparam.com">Contact</a>
           </nav>
           <p>{text("footer")}</p>
@@ -141,6 +143,7 @@ export default function RootLayout({
         <HeaderScroll />
         <FirstVisitTour />
         <UpdateToast />
+        <OfflineSupport />
         <MobileTabBar tabs={navPages().map(({ href, label }) => ({ href, label }))} />
       </body>
     </html>

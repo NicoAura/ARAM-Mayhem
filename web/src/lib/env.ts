@@ -25,6 +25,7 @@ export function bindingNames(): string[] {
 type D1Statement = {
   run(): Promise<unknown>;
   first<T = Record<string, unknown>>(): Promise<T | null>;
+  all<T = Record<string, unknown>>(): Promise<{ results: T[] }>;
 };
 type D1 = {
   prepare(sql: string): { bind(...v: unknown[]): D1Statement };

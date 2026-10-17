@@ -1,5 +1,22 @@
-# ARAM-Mayhem
-Create a website that displays ARAM Mayhem data, damage simulation, and PBE information
+# DeepARAM
+
+The code behind [deeparam.com](https://deeparam.com): ARAM Mayhem tier lists, a damage simulator, PBE changes, and the apps.
+
+## What's where
+
+| Folder | What it holds |
+| --- | --- |
+| `web/` | The website (see [web/README.md](web/README.md)). Deploys from `main`. |
+| `simulator/` | The damage simulator and its fight replay viewer ([README](simulator/README.md)) |
+| `data/cn/` | Mayhem stats feeding the Tier List ([README](data/cn/README.md)) |
+| `data/pbe/`, `tools/datamine/` | PBE changes and the client-file tools behind them ([README](data/pbe/README.md), [README](tools/datamine/README.md)) |
+| `guide/` | The Info page: Mayhem rules, items, maps and augment history ([README](guide/README.md)) |
+| `champions/` | Per-champion pages ([README](champions/README.md)) |
+| `tools/fun/`, `data/cook-builds/` | The Lab's tools and cook builds ([README](data/cook-builds/README.md)) |
+| `dashboard/`, `importer/` | My Stats: the personal stats page and the League client importer (below) |
+| `apps/` | iPhone/iPad and Mac apps ([iOS](apps/ios/README.md), [iPad](apps/ipados/README.md), [macOS](apps/macos/README.md)) |
+
+A folder with a `site-tab.json` is embedded into the site by `web/scripts/sync-embeds.mjs`.
 
 ## Stats dashboard
 
