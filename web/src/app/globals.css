@@ -4226,3 +4226,27 @@ html[data-motion="reduce"] .btn:hover {
 .builder-items img {
   border-radius: 10px;
 }
+
+/* Home hero particles (components/HeroParticles.tsx) */
+.hero.has-particles {
+  position: relative;
+  isolation: isolate;
+}
+
+.hero-particles {
+  position: absolute;
+  inset: -2.5rem 0 -1.5rem;
+  z-index: -1;
+  width: 100%;
+  height: calc(100% + 4rem);
+  pointer-events: none;
+  -webkit-mask-image: radial-gradient(ellipse 80% 75% at 60% 45%, #000 40%, transparent 100%);
+  mask-image: radial-gradient(ellipse 80% 75% at 60% 45%, #000 40%, transparent 100%);
+  animation: fade-in 1.2s ease both;
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+}
