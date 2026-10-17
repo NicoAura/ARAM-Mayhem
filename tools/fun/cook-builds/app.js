@@ -99,6 +99,37 @@ LabI18n.ready(function () {
     const m = location.hash.match(/^#chefs-special-(\d{4}-\d{2}-\d{2})$/);
     return (m && specials.find((s) => s.chef === m[1])) || chef;
   }
+  // Community builds: sent from the Simulator by signed-in players and approved by the site owner
+  // (/api/kitchen/community). Their own words stay as written; names follow the page's language.
+  function communityCard(c) {
+    const by = c.by ? T("by {name}", { name: c.by }) : T("by a DeepARAM player");
+    return `<article class="card community-card">
+      <div class="card-head">
+        <img src="/icons/champions/${esc(c.champion)}.webp" alt="" width="52" height="52" loading="lazy">
+        <div class="who">
+          <h2 dir="auto">${esc(c.title)}</h2>
+          <div class="sub">${esc(LabI18n.name("champions", c.champion, c.championName))} <span class="muted" dir="auto">· ${esc(by)}</span></div>
+        </div>
+      </div>
+      <p class="why" dir="auto">${esc(c.description)}</p>
+      <div class="cols">
+        ${c.augments.length ? `<div><h3>${T("Augments")}</h3><ul class="items">${c.augments.map((a) => `<li>${esc(LabI18n.name("augments", a.id, a.name))}</li>`).join("")}</ul></div>` : ""}
+        <div><h3>${T("Items")}</h3><ul class="items">${c.items.map((i) => `<li>${esc(LabI18n.name("items", i.id, i.name))}</li>`).join("")}</ul></div>
+      </div>
+    </article>`;
+  }
+  if (/^https?:$/.test(location.protocol)) {
+    fetch("/api/kitchen/community", { credentials: "same-origin" })
+      .then((r) => (r.ok ? r.json() : null))
+      .then((j) => {
+        const list = (j && Array.isArray(j.builds) ? j.builds : []).filter((c) => c && c.title && Array.isArray(c.items) && Array.isArray(c.augments));
+        if (!list.length) return;
+        document.getElementById("community-builds").innerHTML = list.map(communityCard).join("");
+        document.getElementById("community").hidden = false;
+      })
+      .catch(() => {});
+  }
+
   if (chef) showSpecial(fromHash());
   window.addEventListener("hashchange", () => {
     if (!chef || !/^#(chefs-special|chef-archive)/.test(location.hash)) return;

@@ -34,6 +34,12 @@ export default function Privacy() {
           or by signing in with Riot, so nobody can connect yours. Signing in with Riot happens on Riot&apos;s own page: we never see your Riot password, and we
           receive only your Riot ID, server and player identifier. You can disconnect it at any time.
         </p>
+        <p>
+          If you send a build to The Kitchen from the Simulator, we keep it with your account: the champion, items and augments, the name and text you
+          wrote, the Simulator&apos;s numbers you saw, your language and when you sent it. The site owner reviews it, and if it&apos;s approved, The Kitchen shows
+          the build and your text with your account&apos;s display name (never your email). You can delete your builds from the account page at any time, and
+          deleting your account deletes them too.
+        </p>
         <h2>Stored in your browser</h2>
         <p>
           Your theme and settings are saved in your own browser&apos;s local storage. If you&apos;re signed in, your starred champions and settings are also saved to

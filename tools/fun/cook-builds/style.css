@@ -124,3 +124,6 @@ a.chef-chip { text-decoration: none; }
   .card-head { flex-wrap: wrap; }
 }
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+.community { display: grid; gap: 12px; margin-top: 8px; }
+.community h2 { font-size: 21px; }
+.community-builds { display: grid; gap: 16px; }
