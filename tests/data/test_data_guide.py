@@ -377,3 +377,8 @@ def test_official_track_and_story(guide):
         assert sum(r["xp"] for r in t["levels"]) == t["totalXp"] and all(o["xp"] > 0 for o in t["objectives"])
         assert "A title" not in [r["name"] for r in t["levels"]]
     assert guide["story"] and all(e["date"] and e["text"] for e in guide["story"])
+
+def test_game_constants():
+    c = load_json("guide/game_constants.json")
+    assert c["mayhemQueue"] in c["mayhemQueues"] and {m["id"] for m in c["maps"]} >= {12}
+    assert all(q["id"] and q["name"] for q in c["queues"])
