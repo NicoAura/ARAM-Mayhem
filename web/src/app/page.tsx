@@ -8,7 +8,7 @@ import HeroParticles from "@/components/HeroParticles";
 import { augmentHref } from "@/lib/augments";
 import { movers } from "@/lib/champions";
 import { KITCHEN, navPages } from "@/lib/tabs";
-import RecentStrip from "@/components/RecentStrip";
+import RecentPlayed from "@/components/RecentPlayed";
 
 // eslint-disable-next-line @next/next/no-img-element
 const Icon = ({ src }: { src: string }) => <img className="icon" src={src} alt="" width={24} height={24} loading="lazy" />;
@@ -66,7 +66,7 @@ export default function Home() {
       </section>
 
       <div className="bento">
-        <RecentStrip />
+        <RecentPlayed />
         <Favorites champs={tiers} />
         {tiers.length > 0 && (
           <section className="card span-7" data-accent="tier">
@@ -126,7 +126,15 @@ export default function Home() {
         {special && (
           <section className="card span-5 feature chef-special" data-accent="lab">
             <div className="card-head">
-              <h2>Chef&apos;s Special</h2>
+              <h2>
+                Today&apos;s Chef Special
+                {special.date && (
+                  <span className="card-note">
+                    {" "}
+                    · {new Date(`${special.date}T12:00:00Z`).toLocaleDateString("en-US", { month: "short", day: "numeric", timeZone: "UTC" })}
+                  </span>
+                )}
+              </h2>
               <Link href={special.href}>The Lab →</Link>
             </div>
             <div className="kitchen-head">
