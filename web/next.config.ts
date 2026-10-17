@@ -43,6 +43,8 @@ const nextConfig: NextConfig = {
       ["/tools/fun", "/kitchen"],
       ["/tools/cook-builds", "/kitchen"],
       ["/tools/kitchen", "/kitchen"],
+      // The Status page was removed.
+      ["/status", "/"],
       // The owner's tools moved under the account page when accounts replaced the editor password.
       ["/admin", "/account/edit"],
       ["/admin/simulator", "/simulator"],
@@ -70,10 +72,15 @@ const nextConfig: NextConfig = {
           destination: "/tier-list?tab=augments",
           permanent: true,
         })),
-        // The build tools and augment draft share pages now; the old addresses keep their query.
+        // The rest of the Augments page (by icon, draft practice) is on the Tier List too; ?tab= carries over.
+        { source: "/augments", has: [{ type: "query" as const, key: "tab", value: "(?<tab>.+)" }], destination: "/tier-list?tab=:tab", permanent: true },
+        { source: "/augments", destination: "/tier-list?tab=augments", permanent: true },
+        // The build tools share a page now; the old addresses keep their query.
         { source: "/builder", destination: "/builds?tab=editor", permanent: true },
         { source: "/synergy", destination: "/builds?tab=team", permanent: true },
-        { source: "/draft", destination: "/augments?tab=draft", permanent: true },
+        // Infinite Ryze is a tab on the Simulator page now.
+        { source: "/simulator/infinite-ryze", destination: "/simulator?tab=infinite-ryze", permanent: true },
+        { source: "/draft", destination: "/tier-list?tab=draft", permanent: true },
         // Pages that once existed for another mode's stand-ins of a champion.
         { source: "/champions/Jade_:alias", destination: "/champions/:alias", permanent: true },
       ]);

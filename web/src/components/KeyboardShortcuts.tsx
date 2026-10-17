@@ -13,7 +13,7 @@ const GO: [string, string, string][] = [
   ["s", "/simulator", "Simulator"],
   ["p", "/pbe", "PBE"],
   ["b", "/builds?tab=editor", "Build Editor"],
-  ["d", "/augments?tab=draft", "Augment Draft"],
+  ["d", "/tier-list?tab=draft", "Augment Draft"],
   ["m", "/builds?tab=team", "Team Builder"],
   ["r", "/patches", "Patch Recaps"],
   ["i", "/info", "Info"],

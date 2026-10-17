@@ -7,7 +7,6 @@ import { augmentRows } from "./augment-winrate";
 import { itemPages } from "./item-pages";
 import { readRepoCsv, readRepoJson } from "./repo-data";
 import { navPages } from "./tabs";
-import { BETA } from "./beta";
 import { champStats, type PatchRow } from "./tiers";
 
 // Small summaries of each section's data, read from the repo at build time.
@@ -68,7 +67,7 @@ export function counts() {
 
 export const searchPages = (): SearchItem[] => [
   { group: "Pages", name: "Home", hint: "Page", href: "/" },
-  ...[...navPages(), { href: "/account#my-stats", label: "My Stats" }].map((t) => ({ group: "Pages", name: t.label, hint: BETA.has(t.href) ? "Page · Beta" : "Page", href: t.href })),
+  ...[...navPages(), { href: "/account#my-stats", label: "My Stats" }].map((t) => ({ group: "Pages", name: t.label, hint: "Page", href: t.href })),
 ];
 
 export function searchItems(): SearchItem[] {

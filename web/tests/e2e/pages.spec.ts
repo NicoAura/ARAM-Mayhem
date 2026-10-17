@@ -10,14 +10,13 @@ const PAGES = [
   "/pbe",
   "/info",
   "/kitchen",
-  "/simulator/infinite-ryze",
   "/info/region-teams",
   "/champions/Ahri",
   "/champions/Yunara",
   "/builds",
   "/builds?tab=team",
-  "/augments?tab=draft",
-  "/augments?tab=groups",
+  "/tier-list?tab=draft",
+  "/tier-list?tab=groups",
   "/patches",
   "/items",
   "/items?tag=crit,as",
@@ -82,15 +81,19 @@ test("old addresses redirect to the current tabs", async ({ page }) => {
     ["/tools/fun", "/kitchen"],
     ["/lab", "/kitchen"],
     ["/stats", "/account"],
+    ["/status", "/"],
+    ["/simulator/infinite-ryze", "/simulator?tab=infinite-ryze"],
   ]) {
     await page.goto(from);
     expect(new URL(page.url()).pathname + new URL(page.url()).search, from).toBe(to);
   }
-  // Pages merged into Builds and Augments: the tab is picked and the old query kept.
+  // Pages merged into Builds and the Tier List: the tab is picked and the old query kept.
   for (const [from, path, tab, keep] of [
     ["/builder", "/builds", "editor", null],
     ["/synergy", "/builds", "team", null],
-    ["/draft", "/augments", "draft", null],
+    ["/draft", "/tier-list", "draft", null],
+    ["/augments?tab=draft&champ=Jinx", "/tier-list", "draft", "champ"],
+    ["/augments?tab=groups", "/tier-list", "groups", null],
   ]) {
     await page.goto(from!);
     const url = new URL(page.url());
@@ -105,6 +108,7 @@ test("old addresses redirect to the current tabs", async ({ page }) => {
     ["/builds?tab=helper", "/tier-list"],
     ["/augments?tab=tiers", "/tier-list"],
     ["/augments?rarity=gold&style=ap", "/tier-list"],
+    ["/augments", "/tier-list"],
     // Compare was removed.
     ["/compare?a=Jinx", "/tier-list"],
     ["/builds?tab=compare&a=Jinx&b=Ezreal", "/tier-list"],

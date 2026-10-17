@@ -159,6 +159,17 @@ export default function ChampionTiers({ rows: initial, patches, partners, tags, 
     setPlaying(true);
   };
 
+  // The patch dropdown closes on a click or tap outside it.
+  const pickRef = useRef<HTMLDetailsElement>(null);
+  useEffect(() => {
+    const close = (e: PointerEvent) => {
+      const d = pickRef.current;
+      if (d?.open && !d.contains(e.target as Node)) d.open = false;
+    };
+    document.addEventListener("pointerdown", close);
+    return () => document.removeEventListener("pointerdown", close);
+  }, []);
+
   const presets: [string, string[]][] = [
     [`Live patch (${live})`, [live]],
     ["Last 3 patches", patches.slice(-3)],
@@ -206,13 +217,17 @@ export default function ChampionTiers({ rows: initial, patches, partners, tags, 
           <output className="timeline-label">{one ? `Patch ${one}` : `${picked.size} patches`}</output>
         </div>
       )}
-      <div className="patch-chips" role="group" aria-label="Patches">
-        {[...patches].reverse().map((p) => (
-          <button key={p} type="button" aria-pressed={picked.has(p)} onClick={() => toggle(p)}>
-            {p}
-          </button>
-        ))}
-      </div>
+      <details className="patch-pick" ref={pickRef}>
+        <summary>{one ? `Patch ${one}` : `${picked.size} patches`}</summary>
+        <div className="patch-pick-list" role="group" aria-label="Patches">
+          {[...patches].reverse().map((p) => (
+            <label key={p}>
+              <input type="checkbox" checked={picked.has(p)} onChange={() => toggle(p)} />
+              {p}
+            </label>
+          ))}
+        </div>
+      </details>
       {Object.keys(tagInfo).length > 0 && (
         <div className="arch-filter" role="group" aria-label="Filter by archetype">
           {[...kinds.class, ...kinds.play].map((t) => {
@@ -242,7 +257,7 @@ export default function ChampionTiers({ rows: initial, patches, partners, tags, 
       )}
       <p className="patch-note">
         {picked.size === 1 ? `Patch ${[...picked][0]}` : `${picked.size} patches combined`}
-        {showChange ? `, with the change since ${before}` : ""}. Click patches to add or remove them.
+        {showChange ? `, with the change since ${before}` : ""}. Pick patches from the list to add or remove them.
       </p>
       {missing ? (
         <Skeleton rows={12} label="Loading older patches…" />

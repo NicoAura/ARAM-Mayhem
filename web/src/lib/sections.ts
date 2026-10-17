@@ -28,12 +28,6 @@ export const sections = [
     pr: 0,
   },
   {
-    href: "/augments",
-    label: text("tab./augments.label", "Augments"),
-    body: text("tab./augments.body", "Augments grouped by icon, plus draft practice with rerolls."),
-    pr: 0,
-  },
-  {
     href: "/items",
     label: text("tab./items.label", "Items"),
     body: text("tab./items.body", "Every item Mayhem players build, tagged by what it gives, with filters."),
