@@ -85,6 +85,31 @@
       <tbody>${rows.map(([l, a, b, z]) => `<tr><td>${esc(l)}</td><td class="num">${cell(a, 3)}</td><td class="num">${b === "" ? "–" : cell(b, 3)}</td><td class="num"><b>${cell(z, l === "Attack speed" ? 3 : 1)}</b></td></tr>`).join("")}</tbody></table></div></div>`;
   }
 
+  // Mayhem's per-champion adjustments live in modifiers.js, loaded once
+  const MOD_NAMES = { damage_dealt: "Damage dealt", damage_taken: "Damage taken", healing: "Healing done", shielding: "Shielding done",
+    tenacity: "Tenacity", ability_haste: "Ability haste", attack_speed: "Total attack speed", energy_regen: "Energy regen" };
+  function loadMods(c) {
+    const show = () => {
+      const el = $("mods");
+      if (!el) return;
+      const m = (window.CHAMPS_MODIFIERS || {})[c.alias] || {};
+      const keys = Object.keys(m);
+      // taking more damage is bad for the champion; everything else is good when it goes up
+      const good = (k, v) => (k === "damage_taken" ? v < 0 : v > 0);
+      el.innerHTML = keys.length
+        ? `<p class="muted small" style="margin:0.75rem 0 0.5rem">Mode-wide adjustments for ${esc(c.name)}:</p><div class="chips">${keys
+            .map((k) => { const v = m[k], n = k === "ability_haste" ? num(v) : `${num(v * 100)}%`;
+              return `<span class="chip ${good(k, m[k]) ? "mod-up" : "mod-down"}">${MOD_NAMES[k] || k} ${v > 0 ? "+" : ""}${n}</span>`; })
+            .join("")}</div>`
+        : `<p class="note">No mode-wide damage, healing or shielding adjustments for ${esc(c.name)}.</p>`;
+    };
+    if (window.CHAMPS_MODIFIERS) return show();
+    const sc = document.createElement("script");
+    sc.src = "modifiers.js";
+    sc.onload = show;
+    document.head.appendChild(sc);
+  }
+
   // Skins live in skins.js, loaded the first time a champion page's skins section comes into view
   let skinsReady = null;
   function loadSkins(c) {
@@ -198,8 +223,7 @@
       <div class="card">
         <div class="card-head"><h2>Mayhem changes</h2></div>
         ${changes}
-        <p class="note">Mayhem also adjusts some champions' damage dealt, damage taken, healing and ability haste. Those adjustments
-          aren't shown here.</p>
+        <div id="mods"></div>
       </div>
       <div class="card">
         <div class="card-head"><h2>Abilities</h2></div>
@@ -214,6 +238,7 @@
       </div>
       ${c.tier ? '<p class="small"><a href="/tier-list" target="_top">See the full Tier List →</a></p>' : ""}`;
     loadSkins(c);
+    loadMods(c);
     document.title = `${c.name} · Mayhem Champions`;
   }
 
