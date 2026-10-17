@@ -519,3 +519,28 @@ def test_link_sends_only_the_code(mi, monkeypatch):
     monkeypatch.setattr(mi, "site_post", lambda lcu, path, payload: sent.append((path, payload)) or {"linked": True, "riotId": "Me#1"})
     assert mi.site_profile("link", {"games": 5}, code="AB12CD34") == {"linked": True, "riotId": "Me#1"}
     assert sent == [("/api/profile", {"action": "link", "code": "AB12CD34"})]
+
+
+class CollectionLcu(FakeLcu):
+    def get(self, path):
+        if path == "/lol-summoner/v1/current-summoner":
+            self.calls.append(path)
+            return {"puuid": self.puuid, "gameName": "Tester", "tagLine": "NA1", "summonerId": 42}
+        if path == "/lol-champions/v1/inventories/42/champions-minimal":
+            return [{"id": 103, "ownership": {"owned": True}}, {"id": 1, "ownership": {"owned": False, "rental": {"rented": True}}},
+                    {"id": -1, "ownership": {"owned": True}}]
+        if path == "/lol-champions/v1/inventories/42/skins-minimal":
+            return [{"id": 103001, "ownership": {"owned": True}}, {"id": 103002, "ownership": {"owned": False}}]
+        return super().get(path)
+
+
+def test_run_import_saves_owned_champions_and_skins(mi, monkeypatch, tmp_path):
+    old = fixture("lcu_game_old.json")
+    path = tmp_path / "backup.json"
+    path.write_text(json.dumps({"puuid": ME, "games": [dict(old, killMap=[])]}))
+    lcu = CollectionLcu(mi, games=[old])
+    setup_import(mi, monkeypatch, lcu, {mi.SGP_MAYHEM_TAGS: [old["gameId"]]})
+    summary = mi.run_import(str(path), sgp_host="h", progress=lambda m: None)
+    assert summary["added"] == 0
+    out = json.loads(path.read_text())  # saved even with no new games, because the collection changed
+    assert out["owned"] == {"champions": [103], "skins": [103001]}

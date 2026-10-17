@@ -311,7 +311,7 @@ def archive_owner(container, games):
     return counts.most_common(1)[0][0] if counts else None
 
 
-def save_archive(path, container, games, summoner):
+def save_archive(path, container, games, summoner, owned=None):
     games.sort(key=lambda g: g.get("gameCreation") or 0, reverse=True)
     if isinstance(container, list):
         out = games
@@ -323,6 +323,8 @@ def save_archive(path, container, games, summoner):
         out.setdefault("tagLine", summoner.get("tagLine"))
         out["updatedAt"] = datetime.datetime.now(datetime.timezone.utc).isoformat()
         out[key] = games
+        if owned:
+            out["owned"] = owned
     # Write beside the target, then swap, so a failed save never eats the archive
     d = os.path.dirname(os.path.abspath(path))
     fd, tmp = tempfile.mkstemp(dir=d, prefix=".mayhem-", suffix=".json")
@@ -333,6 +335,26 @@ def save_archive(path, container, games, summoner):
     except BaseException:
         os.unlink(tmp)
         raise
+
+
+# ---------- collection ----------
+# Champions and skins the account owns (not rentals or the free rotation), for My Stats' banner picker and
+# the site's "Champions I own" filter. Kept in the archive as {"champions": [ids], "skins": [ids]}.
+
+def fetch_collection(lcu, summoner):
+    sid = summoner.get("summonerId")
+    if not sid:
+        return None
+    try:
+        champs = lcu.get(f"/lol-champions/v1/inventories/{sid}/champions-minimal") or []
+        skins = lcu.get(f"/lol-champions/v1/inventories/{sid}/skins-minimal") or []
+    except (HttpError, ConnectionError, ValueError):
+        return None
+    owned = lambda x: bool((x.get("ownership") or {}).get("owned"))
+    return {
+        "champions": sorted(c["id"] for c in champs if c.get("id", -1) > 0 and owned(c)),
+        "skins": sorted(k["id"] for k in skins if isinstance(k.get("id"), int) and owned(k)),
+    }
 
 
 # ---------- kill positions ----------
@@ -441,8 +463,10 @@ def run_import(out, full=False, lockfile=None, sgp_host=None, progress=log):
         mapped = 1  # some games may have changed; save them
         progress("Stopped. Saving what was fetched so far.")
 
-    if added or mapped or container is None:
-        save_archive(out, container, games, summoner)
+    owned = fetch_collection(lcu, summoner)
+    old_owned = container.get("owned") if isinstance(container, dict) else None
+    if added or mapped or container is None or (owned and owned != old_owned):
+        save_archive(out, container, games, summoner, owned)
     notes = []
     if failed:
         notes.append(f"{failed} games couldn't be fetched. Run again to retry them.")

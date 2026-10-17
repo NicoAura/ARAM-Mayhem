@@ -5,16 +5,30 @@
 <meta name="robots" content="noindex">
 <title>DeepARAM</title>
 <script>
-// My Stats on the player's computer links here with their latest games in the address's #part, which never
-// leaves the browser. They're kept as localStorage "deeparam-played" for Home's Recently played, then Home opens.
+// My Stats on the player's computer links here in the address's #part, which never leaves the browser.
+// Kept in localStorage for the site's own pages, then Home opens:
+//   "deeparam-played": latest games, for Home's Recently played
+//   "deeparam-top":    most-played champions, newest sync
+//   "deeparam-owned":  champions the account owns, for "Champions I own"
+//   "deeparam-banner": {champion, num}, the player's chosen splash art
+// Older links carry just the list of games.
 (function () {
+  var alias = function (c) { return typeof c === "string" && /^[A-Za-z]{2,30}$/.test(c); };
+  var save = function (k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) { /* storage blocked */ } };
   try {
-    var list = JSON.parse(decodeURIComponent(location.hash.slice(1)));
-    var clean = (Array.isArray(list) ? list : []).slice(0, 12).filter(function (g) {
-      return g && /^[A-Za-z]{2,30}$/.test(g.champion) && typeof g.win === "boolean" && typeof g.at === "number" && isFinite(g.at);
+    var data = JSON.parse(decodeURIComponent(location.hash.slice(1)));
+    if (Array.isArray(data)) data = { played: data };
+    var played = (Array.isArray(data.played) ? data.played : []).slice(0, 12).filter(function (g) {
+      return g && alias(g.champion) && typeof g.win === "boolean" && typeof g.at === "number" && isFinite(g.at);
     }).map(function (g) { return { champion: g.champion, win: g.win, at: g.at }; });
-    if (clean.length) localStorage.setItem("deeparam-played", JSON.stringify(clean));
-  } catch (e) { /* bad link or storage blocked */ }
+    if (played.length) save("deeparam-played", played);
+    if (Array.isArray(data.top)) save("deeparam-top", data.top.filter(alias).slice(0, 10));
+    if (Array.isArray(data.owned)) save("deeparam-owned", data.owned.filter(alias).slice(0, 400));
+    var b = data.banner;
+    if (b && alias(b.champion) && typeof b.num === "number" && b.num >= 0 && b.num < 1000 && Math.floor(b.num) === b.num) {
+      save("deeparam-banner", { champion: b.champion, num: b.num });
+    }
+  } catch (e) { /* bad link */ }
   location.replace("/");
 })();
 </script>
