@@ -117,6 +117,11 @@ function normalize(g, owner) {
     // [seconds, x, y, killerId, victimId] per kill; undefined until synced
     killMap: g.killMap,
     pid: p.participantId,
+    penta: s.pentaKills || 0,
+    quadra: s.quadraKills || 0,
+    spree: s.largestKillingSpree || 0,
+    heal: s.totalHeal || 0,
+    taken: s.totalDamageTaken || 0,
   };
 }
 
@@ -199,6 +204,7 @@ const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&l
 function render() {
   const games = filtered();
   renderTiles(games);
+  renderBadges(state.games);
   renderChart(games);
   renderKillMap(games);
   renderChamps(games);
@@ -224,6 +230,59 @@ function renderTiles(games) {
   ];
   $("tiles").innerHTML = tiles.map(([l, v, s, c]) =>
     `<div class="tile ${c || ""}"><div class="label">${l}</div><div class="value">${v}</div><div class="sub">${s}</div></div>`).join("");
+}
+
+// Achievements count every imported game, whatever the filters show.
+const BADGES = [
+  ["Pentakill", "Get a pentakill", (G) => count(G, (g) => g.penta > 0), 1],
+  ["Quadra", "Get a quadra kill", (G) => count(G, (g) => g.quadra + g.penta > 0), 1],
+  ["Legendary", "Kill 8 champions without dying", (G) => max(G, (g) => g.spree), 8],
+  ["Massacre", "Get 25 kills in one game", (G) => max(G, (g) => g.kills), 25],
+  ["Helping hand", "Get 40 assists in one game", (G) => max(G, (g) => g.assists), 40],
+  ["Untouchable", "Win a game without dying", (G) => count(G, (g) => g.win && g.deaths === 0), 1],
+  ["Heavy hitter", "Deal 75,000 damage to champions in one game", (G) => max(G, (g) => g.damage), 75000],
+  ["Frontline", "Take 80,000 damage in one game", (G) => max(G, (g) => g.taken), 80000],
+  ["Speedrun", "Win a game in under 15 minutes", (G) => count(G, (g) => g.win && g.duration > 0 && g.duration < 900), 1],
+  ["Marathon", "Play a game over 30 minutes", (G) => count(G, (g) => g.duration >= 1800), 1],
+  ["Hot streak", "Win 5 games in a row", (G) => streak(G), 5],
+  ["Unstoppable", "Win 10 games in a row", (G) => streak(G), 10],
+  ["Main", "Win 10 games on one champion", (G) => bestChamp(G, true), 10],
+  ["One-trick", "Play 50 games on one champion", (G) => bestChamp(G, false), 50],
+  ["Explorer", "Play 50 different champions", (G) => new Set(G.map((g) => g.champId)).size, 50],
+  ["Collector", "Pick 100 different augments", (G) => new Set(G.flatMap((g) => g.augs)).size, 100],
+  ["Regular", "Play 100 games", (G) => G.length, 100],
+  ["Veteran", "Play 500 games", (G) => G.length, 500],
+  ["Winner", "Win 250 games", (G) => count(G, (g) => g.win), 250],
+];
+
+function count(G, f) { return G.reduce((t, g) => t + (f(g) ? 1 : 0), 0); }
+function max(G, f) { return G.reduce((m, g) => Math.max(m, f(g)), 0); }
+function streak(G) {
+  let best = 0, run = 0;
+  for (const g of [...G].sort((a, b) => a.time - b.time)) { run = g.win ? run + 1 : 0; best = Math.max(best, run); }
+  return best;
+}
+function bestChamp(G, wins) {
+  const m = new Map();
+  for (const g of G) if (!wins || g.win) m.set(g.champId, (m.get(g.champId) || 0) + 1);
+  return Math.max(0, ...m.values());
+}
+
+function renderBadges(G) {
+  const rows = BADGES.map(([name, desc, f, goal]) => ({ name, desc, goal, have: f(G) }));
+  const earned = rows.filter((r) => r.have >= r.goal).length;
+  $("n-badges").textContent = `${earned} of ${rows.length} earned`;
+  rows.sort((a, b) => (b.have >= b.goal) - (a.have >= a.goal) || b.have / b.goal - a.have / a.goal);
+  $("badges").innerHTML = rows.map((r) => {
+    const done = r.have >= r.goal;
+    const prog = Math.min(1, r.have / r.goal);
+    const label = r.goal === 1 ? (done ? `${r.have.toLocaleString()}×` : "Not yet") : `${Math.min(r.have, r.goal).toLocaleString()} / ${r.goal.toLocaleString()}`;
+    return `<div class="badge${done ? " done" : ""}" title="${esc(r.desc)}">
+      <div class="b-name">${done ? "★ " : ""}${esc(r.name)}</div>
+      <div class="b-desc">${esc(r.desc)}</div>
+      <div class="b-bar"><span style="width:${(prog * 100).toFixed(1)}%"></span></div>
+      <div class="b-prog">${label}</div></div>`;
+  }).join("");
 }
 
 function renderChart(games) {
