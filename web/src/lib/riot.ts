@@ -86,3 +86,76 @@ export async function getProfileByRiotId(platform: Platform, gameName: string, t
     ranked: ranked.map(({ queueType, tier, rank, leaguePoints, wins, losses }) => ({ queueType, tier, rank, leaguePoints, wins, losses })),
   };
 }
+
+export type Mastery = { championId: number; championLevel: number; championPoints: number };
+export type ChallengeSummary = {
+  /** percentile is the share of players at or above this player (0.05 = top 5%). */
+  total: { level: string; current: number; percentile: number } | null;
+  aram: { level: string; value: number; percentile: number } | null;
+};
+export type ClashMember = {
+  puuid: string;
+  gameName: string | null;
+  tagLine: string | null;
+  position: string;
+  role: string;
+  /** Their three highest-mastery champions. */
+  top: Mastery[];
+};
+export type ClashTeam = { name: string; abbreviation: string; tier: number; iconId: number; members: ClashMember[] };
+export type PlayerExtras = { mastery: Mastery[]; challenges: ChallengeSummary | null; clash: ClashTeam | null };
+
+/** The challenge that sums every ARAM challenge ("ARAM Authority"). */
+const ARAM_CHALLENGE = 101000;
+
+const topMastery = (platform: Platform, puuid: string, count: number) =>
+  riotFetch<Mastery[]>(platform, `/lol/champion-mastery/v4/champion-masteries/by-puuid/${encodeURIComponent(puuid)}/top?count=${count}`, 3600)
+    .then((rows) => rows.map(({ championId, championLevel, championPoints }) => ({ championId, championLevel, championPoints })))
+    .catch(() => [] as Mastery[]);
+
+async function challengeSummary(platform: Platform, puuid: string): Promise<ChallengeSummary | null> {
+  type Data = { totalPoints?: { level: string; current: number; percentile: number }; challenges?: ChallengeProgress["challenges"] };
+  const d = await riotFetch<Data>(platform, `/lol/challenges/v1/player-data/${encodeURIComponent(puuid)}`, 3600).catch(() => null);
+  if (!d) return null;
+  const aram = d.challenges?.find((c) => c.challengeId === ARAM_CHALLENGE);
+  return {
+    total: d.totalPoints ? { level: d.totalPoints.level, current: d.totalPoints.current, percentile: d.totalPoints.percentile } : null,
+    aram: aram ? { level: aram.level, value: aram.value, percentile: aram.percentile } : null,
+  };
+}
+
+/** The player's team in an ARAM Clash tournament, if they're on one. Summoner's Rift Clash teams are left out. */
+async function aramClashTeam(platform: Platform, puuid: string): Promise<ClashTeam | null> {
+  type Entry = { teamId: string };
+  type Team = { tournamentId: number; name: string; abbreviation: string; tier: number; iconId: number; players: { puuid?: string; position: string; role: string }[] };
+  type Tournament = { nameKey: string; nameKeySecondary: string };
+  const entries = await riotFetch<Entry[]>(platform, `/lol/clash/v1/players/by-puuid/${encodeURIComponent(puuid)}`, 600).catch(() => []);
+  for (const { teamId } of entries) {
+    const team = await riotFetch<Team>(platform, `/lol/clash/v1/teams/${encodeURIComponent(teamId)}`, 600).catch(() => null);
+    if (!team) continue;
+    const t = await riotFetch<Tournament>(platform, `/lol/clash/v1/tournaments/${team.tournamentId}`, 3600).catch(() => null);
+    if (!t || !/aram/i.test(`${t.nameKey} ${t.nameKeySecondary}`)) continue;
+    const region = PLATFORMS[platform] === "sea" ? "asia" : PLATFORMS[platform];
+    const members = await Promise.all(
+      team.players.filter((p) => p.puuid).map(async (p) => {
+        const [account, top] = await Promise.all([
+          riotFetch<Account>(region, `/riot/account/v1/accounts/by-puuid/${encodeURIComponent(p.puuid!)}`, 3600).catch(() => null),
+          topMastery(platform, p.puuid!, 3),
+        ]);
+        return { puuid: p.puuid!, gameName: account?.gameName ?? null, tagLine: account?.tagLine ?? null, position: p.position, role: p.role, top };
+      }),
+    );
+    return { name: team.name, abbreviation: team.abbreviation, tier: team.tier, iconId: team.iconId, members };
+  }
+  return null;
+}
+
+/** Mastery, challenge standing and ARAM Clash team for a player already looked up by Riot ID. */
+export async function getPlayerExtras(platform: Platform, puuid: string): Promise<PlayerExtras> {
+  const [mastery, challenges, clash] = await Promise.all([
+    topMastery(platform, puuid, 20),
+    challengeSummary(platform, puuid),
+    aramClashTeam(platform, puuid).catch(() => null),
+  ]);
+  return { mastery, challenges, clash };
+}

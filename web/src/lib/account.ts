@@ -15,7 +15,7 @@ export const SERVERS: [string, string][] = [
 export const profileIcon = (id: number) => `/assets/profile-icon/${id}.jpg`;
 
 export type Ranked = { queueType: string; tier: string; rank: string; leaguePoints: number; wins: number; losses: number };
-export type Profile = { gameName: string; tagLine: string; platform: string; profileIconId: number; summonerLevel: number; ranked: Ranked[] };
+export type Profile = { puuid?: string; gameName: string; tagLine: string; platform: string; profileIconId: number; summonerLevel: number; ranked: Ranked[] };
 /** `profile` and `at` cache the last lookup so the header doesn't call Riot on every page. */
 export type Saved = { riotId: string; platform: string; profile?: Profile; at?: number };
 
