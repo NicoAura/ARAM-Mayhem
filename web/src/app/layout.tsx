@@ -9,6 +9,8 @@ import CompareTray from "@/components/CompareTray";
 import HoverPreview from "@/components/HoverPreview";
 import CountUp from "@/components/CountUp";
 import KeyboardShortcuts from "@/components/KeyboardShortcuts";
+import HeaderScroll from "@/components/HeaderScroll";
+import FirstVisitTour from "@/components/FirstVisitTour";
 import AccountButton from "@/components/AccountButton";
 import BrandMark from "@/components/BrandMark";
 import MobileTabBar from "@/components/MobileTabBar";
@@ -135,6 +137,8 @@ export default function RootLayout({
         <HoverPreview />
         <CountUp />
         <KeyboardShortcuts />
+        <HeaderScroll />
+        <FirstVisitTour />
         <MobileTabBar tabs={navPages().map(({ href, label }) => ({ href, label }))} />
       </body>
     </html>
