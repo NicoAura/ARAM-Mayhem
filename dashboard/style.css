@@ -56,6 +56,7 @@ h1 { font: 700 clamp(32px, 5vw, 52px)/1.04 var(--display); letter-spacing: -.035
 .sample-note::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--accent); }
 .sync-status { font-size: 13.5px; color: var(--muted); margin-top: -8px; }
 .sync-status.error { color: var(--bad); }
+.client-note { font-size: 13px; color: var(--muted); margin-top: 10px; }
 
 /* Buttons and fields */
 .btn {
@@ -86,7 +87,6 @@ h1 { font: 700 clamp(32px, 5vw, 52px)/1.04 var(--display); letter-spacing: -.035
   display: grid; justify-items: center; text-align: center; gap: 12px; padding: 56px 20px;
   border: 1.5px dashed var(--line); border-radius: var(--r); background: var(--surface);
 }
-.empty.drag { border-color: var(--accent); background: var(--accent-soft); }
 .empty .ico { width: 48px; height: 48px; border-radius: 14px; background: var(--accent-soft); color: var(--accent); display: grid; place-items: center; font-size: 22px; }
 .empty h3 { font: 700 20px var(--display); letter-spacing: -.02em; }
 
