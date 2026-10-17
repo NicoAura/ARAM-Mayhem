@@ -1,0 +1,77 @@
+name: Tests
+
+# Runs on every pull request and on main. Threads merge their own PRs only once these pass.
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: tests-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  website:
+    name: Website
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    defaults:
+      run:
+        working-directory: web
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: web/package-lock.json
+      - run: npm ci --no-audit --no-fund
+      # The build writes generated files (embeds, src/data/status.json) that the type check and tests read.
+      - name: Build
+        run: npm run build
+      - name: Type check
+        run: npm run typecheck
+      - name: Unit tests
+        run: npm test
+      - name: Install the test browser
+        run: npx playwright install --with-deps chromium
+      - name: Page checks at desktop and phone sizes
+        run: npm run test:e2e
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: page-check-traces
+          path: web/test-results/
+          retention-days: 7
+
+  simulator:
+    name: Simulator
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install pytest
+      - name: Engine sanity checks
+        run: make -C simulator test
+      - name: Pinned results and data checks
+        run: python -m pytest tests/simulator -q
+
+  data:
+    name: Data and My Stats
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install pytest
+      - name: Data builders, shipped pages and My Stats import
+        run: python -m pytest tests/data -q
