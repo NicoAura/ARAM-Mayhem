@@ -721,6 +721,11 @@ h1 {
   min-width: 0;
 }
 
+[dir="rtl"] .dir-arrow {
+  display: inline-block;
+  transform: scaleX(-1);
+}
+
 /* PBE change tracker: filter bar, tag buttons and one row per champion, item or augment */
 .tracker-bar {
   display: flex;

@@ -1,0 +1,9 @@
+{
+ "Patch {patch} comes out in {n} days": "A atualização {patch} chega em {n} dias",
+ "Patch {patch} comes out tomorrow": "A atualização {patch} chega amanhã",
+ "Patch {patch} is out today": "A atualização {patch} chega hoje",
+ "Today": "Hoje",
+ "day": "dia",
+ "days": "dias",
+ "{date} (Pacific Time)": "{date} (horário do Pacífico)"
+}

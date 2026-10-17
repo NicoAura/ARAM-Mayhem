@@ -1,0 +1,9 @@
+{
+ "Patch {patch} comes out in {n} days": "{patch} 패치까지 {n}일 남음",
+ "Patch {patch} comes out tomorrow": "{patch} 패치가 내일 적용됩니다",
+ "Patch {patch} is out today": "{patch} 패치가 오늘 적용됩니다",
+ "Today": "오늘",
+ "day": "일",
+ "days": "일",
+ "{date} (Pacific Time)": "{date} (태평양 시간)"
+}
