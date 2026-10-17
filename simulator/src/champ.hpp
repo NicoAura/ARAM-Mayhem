@@ -91,6 +91,7 @@ struct ChampionKit {
     double hp = 600, hpG = 100, armor = 30, armorG = 4.5, mr = 32, mrG = 2;
     double ad = 60, adG = 3.5, as = 0.65, asG = 0.02, asRatio = 0.65;
     double damageDealt = 1, damageTaken = 1, mayhemAh = 0, mayhemAs = 0;
+    double mayhemHealing = 1, mayhemShielding = 1, mayhemTenacity = 0;  // Mayhem balance: heal and shield power, tenacity
     bool hasCn = false;
     double cnDamageShare = 0.2, cnTakenShare = 0.2, cnWeight = 0, cnWinRate = 0.5;
     double attackRange = 125, moveSpeed = 335;
