@@ -6281,3 +6281,15 @@ th > button[data-tip] {
   .quickref-levels { gap: 2px; }
   .quickref-levels [role="cell"] { height: 1.35rem; border-radius: 4px; }
 }
+
+/* Home: winning builds */
+.rank.home-builds a { grid-template-columns: 24px minmax(0, 1fr) auto 3.5rem; }
+.home-build-items { display: flex; gap: 3px; }
+.home-build-items img { border-radius: 5px; }
+@media (max-width: 560px) {
+  .home-build-items img { width: 20px; height: 20px; }
+}
+.chef-special { display: grid; gap: 0.75rem; align-content: start; }
+.chef-special .kitchen-head .icon { width: 40px; height: 40px; border-radius: 10px; }
+.chef-items { display: flex; flex-wrap: wrap; gap: 6px; }
+.chef-items .icon { width: 32px; height: 32px; border-radius: 6px; }

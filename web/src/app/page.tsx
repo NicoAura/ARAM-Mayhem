@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { text } from "@/lib/content";
-import { statsDate, counts, kitchenBuilds, livePatch, liveTiers, topAugments, topDps } from "@/lib/highlights";
+import { chefsSpecial, statsDate, counts, kitchenBuilds, livePatch, liveTiers, topAugments } from "@/lib/highlights";
+import { whatToBuildData } from "@/lib/what-to-build";
 import { ChampionJump, Favorites, KitchenPick, TierSnapshot } from "@/components/HomeWidgets";
 import { BETA } from "@/lib/beta";
 import HeroParticles from "@/components/HeroParticles";
@@ -15,12 +16,29 @@ const Icon = ({ src }: { src: string }) => <img className="icon" src={src} alt="
 const pct = (v: number) => `${(v * 100).toFixed(1)}%`;
 const pts = (v: number) => `${v > 0 ? "+" : ""}${(v * 100).toFixed(1)}`;
 
+// The full builds with the best win rate among builds players commonly use (at least 3% of a
+// champion's games), one per champion.
+function winningBuilds(n = 6) {
+  const d = whatToBuildData();
+  return d.champions
+    .filter((c) => c.best && c.best.winRate !== null && c.best.pickRate >= 0.03)
+    .sort((a, b) => (b.best!.winRate ?? 0) - (a.best!.winRate ?? 0))
+    .slice(0, n)
+    .map((c) => ({
+      id: c.id,
+      name: c.name,
+      winRate: c.best!.winRate ?? 0,
+      items: c.best!.items.filter((i) => d.items[i]?.[1]).map((i) => ({ id: i, name: d.items[i][0], icon: d.items[i][1] })),
+    }));
+}
+
 export default function Home() {
   const tiers = liveTiers();
   const augs = topAugments();
   const patch = livePatch();
-  const builds = kitchenBuilds();
-  const dps = topDps();
+  const special = chefsSpecial();
+  const builds = special ? [] : kitchenBuilds();
+  const wins = winningBuilds();
   const n = counts();
   const date = statsDate();
   const moved = movers();
@@ -30,7 +48,7 @@ export default function Home() {
       <section className="hero has-particles">
         <HeroParticles />
         <p className="eyebrow">
-          ARAM Mayhem{patch ? ` · Patch ${patch}` : ""}{date ? ` · Stats from ${date.toLocaleDateString("en-US", { month: "short", day: "numeric", timeZone: "UTC" })}` : ""}
+          ARAM Mayhem{patch ? ` · Patch ${patch}` : ""}{date ? ` · Last updated ${date.toLocaleDateString("en-US", { month: "short", day: "numeric", timeZone: "UTC" })}` : ""}
         </p>
         <h1>{text("home.title", "Every Mayhem pick, measured.")}</h1>
         <p className="lede">{text("home.lede")}</p>
@@ -63,7 +81,7 @@ export default function Home() {
           <section className="card span-5" data-accent="gold">
             <div className="card-head">
               <h2>Best augments</h2>
-              <Link href="/tier-list?tab=augments">All →</Link>
+              <Link href="/augments">All →</Link>
             </div>
             <div className="rank">
               {augs.map((a, i) => (
@@ -105,6 +123,53 @@ export default function Home() {
             </div>
           </section>
         )}
+        {special && (
+          <section className="card span-5 feature chef-special" data-accent="lab">
+            <div className="card-head">
+              <h2>Chef&apos;s Special</h2>
+              <Link href={special.href}>The Lab →</Link>
+            </div>
+            <div className="kitchen-head">
+              <Icon src={`/icons/champions/${special.champion}.webp`} />
+              <div>
+                <p className="eyebrow">
+                  {special.name}
+                  {special.tier && ` · ${special.tier}`}
+                </p>
+                <h3>{special.title}</h3>
+              </div>
+            </div>
+            <p className="clamp">{special.why}</p>
+            {special.items.length > 0 && (
+              <div className="chef-items">
+                {special.items.map((i) =>
+                  i.href ? (
+                    <Link key={i.name} href={i.href} title={i.name}>
+                      {i.icon ? <Icon src={i.icon} /> : i.name}
+                    </Link>
+                  ) : (
+                    <span key={i.name} className="chip">
+                      {i.name}
+                    </span>
+                  ),
+                )}
+              </div>
+            )}
+            <div className="chips">
+              {special.augments.map((a) => (
+                <span key={a.name} className={`chip ${a.core ? `tier-${a.rarity}` : ""}`}>
+                  {a.name}
+                </span>
+              ))}
+            </div>
+            {special.winRate !== null && (
+              <p className="table-note">
+                Won {pct(special.winRate)} of games with this core{special.champWinRate !== null ? `, against ${pct(special.champWinRate)} for ${special.name} overall` : ""}.
+                {special.play && ` ${special.play}`}
+              </p>
+            )}
+          </section>
+        )}
         {builds.length > 0 && (
           <section className="card span-5 feature" data-accent="lab">
             <div className="card-head">
@@ -114,24 +179,25 @@ export default function Home() {
             <KitchenPick builds={builds} />
           </section>
         )}
-        {dps.length > 0 && (
-          <section className="card span-7" data-accent="sim">
+        {wins.length > 0 && (
+          <section className="card span-7" data-accent="gold">
             <div className="card-head">
-              <h2>
-                Simulator: top damage per second <span className="beta">Beta</span>
-              </h2>
-              <Link href="/simulator">Open →</Link>
+              <h2>Winning builds this patch</h2>
+              <Link href="/what-to-build">Build Helper →</Link>
             </div>
-            <div className="bars">
-              {dps.map((d) => (
-                <div key={d.id}>
-                  <span className="rank-name">
-                    <Icon src={`/icons/champions/${d.id}.webp`} />
-                    {d.name}
+            <div className="rank home-builds">
+              {wins.map((c) => (
+                <Link key={c.id} href={`/champions/${c.id}`}>
+                  <Icon src={`/icons/champions/${c.id}.webp`} />
+                  <span className="rank-name">{c.name}</span>
+                  <span className="home-build-items" aria-label={c.items.map((i) => i.name).join(", ")}>
+                    {c.items.map((i) => (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img key={i.id} src={i.icon} alt="" title={i.name} width={24} height={24} loading="lazy" />
+                    ))}
                   </span>
-                  <span className="bar" style={{ width: `${(d.dps / dps[0].dps) * 100}%` }} />
-                  <span className="rank-v">{Math.round(d.dps).toLocaleString("en-US")}</span>
-                </div>
+                  <span className="rank-v wr-good">{pct(c.winRate)}</span>
+                </Link>
               ))}
             </div>
           </section>

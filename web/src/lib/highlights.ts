@@ -124,3 +124,36 @@ export function liveTiers(): HomeChamp[] {
 }
 
 export const kitchenBuilds = () => readRepoJson<Builds>("data/cook-builds/builds.json")?.builds ?? [];
+
+// The Lab's Chef's Special: one unusual build a day (data/cook-builds/chefs-special.json, null on days without one).
+type RawSpecial = {
+  title: string;
+  champion: string;
+  champion_name: string;
+  tier?: string;
+  core_win_rate?: number;
+  champion_win_rate?: number;
+  why: string;
+  play?: string;
+  items?: string[];
+  augments?: { name: string; rarity: string; core: boolean; win_rate?: number; icon?: string }[];
+  href?: string;
+};
+export function chefsSpecial() {
+  const s = readRepoJson<RawSpecial | null>("data/cook-builds/chefs-special.json");
+  if (!s?.title || !s.champion) return null;
+  const pages = new Map(itemPages().map((i) => [i.name, i]));
+  return {
+    title: s.title,
+    champion: s.champion,
+    name: s.champion_name || champName(s.champion),
+    tier: s.tier ?? "",
+    winRate: s.core_win_rate ?? null,
+    champWinRate: s.champion_win_rate ?? null,
+    why: s.why,
+    play: s.play ?? "",
+    items: (s.items ?? []).map((name) => ({ name, icon: pages.get(name)?.icon, href: pages.has(name) ? `/items/${pages.get(name)!.slug}` : null })),
+    augments: (s.augments ?? []).map((a) => ({ name: a.name, rarity: a.rarity.toLowerCase(), core: a.core, icon: a.icon })),
+    href: s.href || "/lab#chefs-special",
+  };
+}
