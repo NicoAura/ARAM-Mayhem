@@ -311,7 +311,7 @@ def archive_owner(container, games):
     return counts.most_common(1)[0][0] if counts else None
 
 
-def save_archive(path, container, games, summoner):
+def save_archive(path, container, games, summoner, owned=None):
     games.sort(key=lambda g: g.get("gameCreation") or 0, reverse=True)
     if isinstance(container, list):
         out = games
@@ -323,6 +323,8 @@ def save_archive(path, container, games, summoner):
         out.setdefault("tagLine", summoner.get("tagLine"))
         out["updatedAt"] = datetime.datetime.now(datetime.timezone.utc).isoformat()
         out[key] = games
+        if owned:
+            out["owned"] = owned
     # Write beside the target, then swap, so a failed save never eats the archive
     d = os.path.dirname(os.path.abspath(path))
     fd, tmp = tempfile.mkstemp(dir=d, prefix=".mayhem-", suffix=".json")
@@ -333,6 +335,26 @@ def save_archive(path, container, games, summoner):
     except BaseException:
         os.unlink(tmp)
         raise
+
+
+# ---------- collection ----------
+# Champions and skins the account owns (not rentals or the free rotation), for My Stats' banner picker and
+# the site's "Champions I own" filter. Kept in the archive as {"champions": [ids], "skins": [ids]}.
+
+def fetch_collection(lcu, summoner):
+    sid = summoner.get("summonerId")
+    if not sid:
+        return None
+    try:
+        champs = lcu.get(f"/lol-champions/v1/inventories/{sid}/champions-minimal") or []
+        skins = lcu.get(f"/lol-champions/v1/inventories/{sid}/skins-minimal") or []
+    except (HttpError, ConnectionError, ValueError):
+        return None
+    owned = lambda x: bool((x.get("ownership") or {}).get("owned"))
+    return {
+        "champions": sorted(c["id"] for c in champs if c.get("id", -1) > 0 and owned(c)),
+        "skins": sorted(k["id"] for k in skins if isinstance(k.get("id"), int) and owned(k)),
+    }
 
 
 # ---------- kill positions ----------
@@ -441,8 +463,10 @@ def run_import(out, full=False, lockfile=None, sgp_host=None, progress=log):
         mapped = 1  # some games may have changed; save them
         progress("Stopped. Saving what was fetched so far.")
 
-    if added or mapped or container is None:
-        save_archive(out, container, games, summoner)
+    owned = fetch_collection(lcu, summoner)
+    old_owned = container.get("owned") if isinstance(container, dict) else None
+    if added or mapped or container is None or (owned and owned != old_owned):
+        save_archive(out, container, games, summoner, owned)
     notes = []
     if failed:
         notes.append(f"{failed} games couldn't be fetched. Run again to retry them.")
@@ -520,9 +544,13 @@ def site_post(lcu, path, payload):
     return reply
 
 
-def site_profile(action, data=None, lockfile=None):
-    """Publish, remove or check this account's public page on the site."""
-    reply = site_post(find_client(lockfile), "/api/profile", {"action": action, "data": data})
+def site_profile(action, data=None, lockfile=None, code=None):
+    """Publish, remove or check this account's public page on the site, or ("link") connect this Riot
+    account to a deeparam.com account with the code shown on its account page."""
+    payload = {"action": action, "data": data}
+    if action == "link":
+        payload = {"action": action, "code": code}
+    reply = site_post(find_client(lockfile), "/api/profile", payload)
     if reply.get("path"):
         reply["url"] = SITE + reply["path"]
     return reply
@@ -915,9 +943,12 @@ def serve(out, port, lockfile=None, sgp_host=None, open_browser=True, record_liv
                 try:
                     req = json.loads(self.rfile.read(min(int(self.headers.get("Content-Length") or 0), 64000)) or b"{}")
                     action = req.get("action")
-                    if action not in ("publish", "remove", "status"):
+                    if action not in ("publish", "remove", "status", "link"):
                         return self.send_json({"error": "bad request"}, 400)
-                    return self.send_json(site_profile(action, req.get("data"), lockfile))
+                    code = str(req.get("code") or "").strip().upper()
+                    if action == "link" and not re.fullmatch(r"[A-Z0-9]{8}", code):
+                        return self.send_json({"error": "Enter the 8-character code from your account page."}, 400)
+                    return self.send_json(site_profile(action, req.get("data"), lockfile, code))
                 except ImportFailed as e:
                     return self.send_json({"error": str(e)}, 502)
                 except Exception:

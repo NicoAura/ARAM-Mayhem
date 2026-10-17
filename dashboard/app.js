@@ -15,6 +15,7 @@ const state = {
   boots: new Set(), // item ids that count as boots
   champAlias: {},   // championId -> alias as in /champions/<alias>
   live: [],         // game recordings from the helper, newest first
+  owned: null,      // {champions: [ids], skins: [ids]} from the client, when synced
 };
 
 // A page can ship name tables and an example archive ahead of time.
@@ -42,6 +43,7 @@ async function loadText(text, { sample = false } = {}) {
   if (!raw.length) return showError("No Mayhem games yet. Import games from client to add them.");
   const owner = findOwner(data, raw);
   state.owner = owner;
+  state.owned = data && data.owned && Array.isArray(data.owned.champions) ? data.owned : null;
   state.games = raw.map((g) => normalize(g, owner)).filter(Boolean)
     .sort((a, b) => b.time - a.time);
   if (!state.games.length) return showError("Couldn't find the account's own stats in those games.");
@@ -53,7 +55,7 @@ async function loadText(text, { sample = false } = {}) {
   $("sample-note").hidden = !sample;
   setupFilters();
   render();
-  Promise.all([loadNames(), loadItems()]).then(() => { render(); linkRecentlyPlayed(); });
+  Promise.all([loadNames(), loadItems()]).then(() => { render(); setupBanner(); linkRecentlyPlayed(); });
 }
 
 function findGames(data) {
@@ -731,6 +733,7 @@ async function setupSync() {
   setupProfile();
   setupShare();
   setupLive();
+  setupLink();
 })();
 
 // ---------- public page ----------
@@ -802,6 +805,41 @@ async function setupProfile() {
   try { showProfile(await profileCall("status")); } catch (e) { /* stays "Off" until they try */ }
 }
 
+// ---------- connect account ----------
+// Links the Riot account signed in to this computer to a deeparam.com account, using the one-time code the
+// site's account page shows. The helper proves which Riot account it is; nothing else is sent.
+
+const linkStatus = $("link-status");
+
+$("link-form").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const input = $("link-code");
+  const code = input.value.trim().toUpperCase();
+  linkStatus.hidden = false;
+  if (!/^[A-Z0-9]{8}$/.test(code)) { linkStatus.textContent = "Enter the 8-character code from your account page."; return; }
+  const btn = e.submitter || $("link-form").querySelector("button");
+  btn.disabled = true;
+  linkStatus.textContent = "Connecting…";
+  try {
+    const res = await fetch("api/profile", {
+      method: "POST", headers: { "X-Mayhem": "1", "Content-Type": "application/json" },
+      body: JSON.stringify({ action: "link", code }),
+    });
+    const j = await res.json().catch(() => ({}));
+    if (!res.ok || !j.linked) throw new Error(j.error || "Something went wrong. Try again.");
+    linkStatus.textContent = `Connected ${j.riotId || "your Riot account"}. Reload your account page on deeparam.com to see it.`;
+    input.value = "";
+  } catch (err) {
+    linkStatus.textContent = err.message;
+  } finally {
+    btn.disabled = false;
+  }
+});
+
+function setupLink() {
+  if (helperOnline && !state.sample) $("link-card").hidden = false;
+}
+
 // ---------- sharing ----------
 // Off unless the player ticks the box; the helper sends games without names or account ids.
 
@@ -846,15 +884,91 @@ async function setupShare() {
 }
 
 // ---------- recently played ----------
-// Opened from the helper, a link carries the latest games to deeparam.com's Home ("Recently played") in the
-// address's #part, which browsers never send anywhere; the site keeps them in this browser only.
+// Opened from the helper, a link carries the latest games to deeparam.com in the address's #part, which
+// browsers never send anywhere; the site keeps them in this browser only. With them go the most-played
+// champions, the champions this account owns and the chosen banner, for the site's own pages.
+function mostPlayed(n) {
+  const counts = new Map();
+  for (const g of state.games) if (state.champAlias[g.champId]) counts.set(g.champId, (counts.get(g.champId) || 0) + 1);
+  return [...counts.entries()].sort((a, b) => b[1] - a[1]).slice(0, n).map(([id]) => state.champAlias[id]);
+}
+
 function linkRecentlyPlayed() {
   const link = $("to-site");
   if (state.sample || !["127.0.0.1", "localhost"].includes(location.hostname)) return;
-  const recent = state.games.filter((g) => state.champAlias[g.champId]).slice(0, 12)
+  const played = state.games.filter((g) => state.champAlias[g.champId]).slice(0, 12)
     .map((g) => ({ champion: state.champAlias[g.champId], win: g.win, at: g.time + g.duration * 1000 }));
-  link.hidden = !recent.length;
-  link.href = "https://deeparam.com/embed/dashboard/played.html#" + encodeURIComponent(JSON.stringify(recent));
+  const payload = { played, top: mostPlayed(10) };
+  if (state.owned) payload.owned = state.owned.champions.map((id) => state.champAlias[id]).filter(Boolean);
+  const banner = savedBanner();
+  if (banner) payload.banner = banner;
+  link.hidden = !played.length;
+  link.href = "https://deeparam.com/embed/dashboard/played.html#" + encodeURIComponent(JSON.stringify(payload));
+}
+
+// ---------- banner ----------
+// A splash art behind the page header: the player's pick of champion and skin (skins they own, when the
+// client sync has said which), or their most-played champion's default art.
+
+const BANNER_KEY = "mayhem-banner";
+const splashUrl = (b) => (b.num ? `/assets/splash/${b.champion}_${b.num}.jpg` : `/assets/dd/img/champion/splash/${b.champion}_0.jpg`);
+
+function savedBanner() {
+  try {
+    const b = JSON.parse(localStorage.getItem(BANNER_KEY) || "null");
+    if (b && /^[A-Za-z]{2,30}$/.test(b.champion) && Number.isInteger(b.num) && b.num >= 0) return b;
+  } catch (e) { /* storage blocked */ }
+  return null;
+}
+
+function showBanner(b) {
+  const head = document.querySelector(".head");
+  head.classList.toggle("has-banner", !!b);
+  head.style.setProperty("--banner", b ? `url("${splashUrl(b)}")` : "none");
+}
+
+async function skinsFor(champId) {
+  try {
+    const c = await (await fetch(`/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champions/${champId}.json`)).json();
+    const own = state.owned && new Set(state.owned.skins);
+    return (c.skins || []).filter((k) => k.id % 1000 === 0 || !own || own.has(k.id))
+      .map((k) => ({ num: k.id % 1000, name: k.id % 1000 ? k.name : "Default" }));
+  } catch (e) { return [{ num: 0, name: "Default" }]; }
+}
+
+async function setupBanner() {
+  const ids = Object.keys(state.champAlias).map(Number);
+  if (!ids.length) return;
+  const byAlias = Object.fromEntries(ids.map((id) => [state.champAlias[id], id]));
+  const fallback = mostPlayed(1)[0];
+  let banner = savedBanner() || (fallback ? { champion: fallback, num: 0 } : null);
+  showBanner(banner);
+
+  const champSel = $("banner-champ"), skinSel = $("banner-skin");
+  const pool = state.owned ? state.owned.champions.filter((id) => state.champAlias[id]) : ids;
+  champSel.innerHTML = pool.map((id) => [id, state.champNames[id] || state.champAlias[id]]).sort((a, b) => a[1].localeCompare(b[1]))
+    .map(([id, name]) => `<option value="${state.champAlias[id]}">${esc(name)}</option>`).join("");
+  $("banner-note").textContent = state.owned ? "Champions and skins you own" : "Import games to pick from the skins you own";
+
+  async function fillSkins(alias, num) {
+    const skins = await skinsFor(byAlias[alias]);
+    skinSel.innerHTML = skins.map((k) => `<option value="${k.num}">${esc(k.name)}</option>`).join("");
+    skinSel.value = String(skins.some((k) => k.num === num) ? num : 0);
+  }
+  function pick() {
+    banner = { champion: champSel.value, num: +skinSel.value || 0 };
+    try { localStorage.setItem(BANNER_KEY, JSON.stringify(banner)); } catch (e) { /* not remembered */ }
+    showBanner(banner);
+    linkRecentlyPlayed();
+  }
+  if (banner) { champSel.value = banner.champion; await fillSkins(banner.champion, banner.num); }
+  champSel.onchange = async () => { await fillSkins(champSel.value, 0); pick(); };
+  skinSel.onchange = pick;
+  $("banner-btn").onclick = () => {
+    const pickEl = $("banner-pick");
+    pickEl.hidden = !pickEl.hidden;
+    $("banner-btn").setAttribute("aria-expanded", String(!pickEl.hidden));
+  };
 }
 
 // ---------- recorded games ----------
