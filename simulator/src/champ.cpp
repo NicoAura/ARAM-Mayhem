@@ -143,6 +143,15 @@ ChampionKit loadChampion(const json::Value& c, const Rules& rules) {
     k.damageTaken = m["damage_taken"].asNumber(1.0);
     k.mayhemAh = m["ability_haste"].asNumber(0.0);
     k.mayhemAs = m["attack_speed"].asNumber(0.0);
+    const json::Value& res = c["resource"];
+    const std::string kind = res["kind"].asString("none");
+    k.resource = kind == "mana" ? 1 : kind == "energy" ? 2 : 0;
+    k.mana = res["pool"].asNumber(0);
+    k.manaG = res["pool_per_level"].asNumber(0);
+    k.manaRegen = res["regen"].asNumber(0);
+    k.manaRegenG = res["regen_per_level"].asNumber(0);
+    k.kitStats = bagOf(c["kit"]["stats"]);
+    k.kitEffects = bagOf(c["kit"]["effects"]);
     const json::Value& d = c["death"];
     k.deathAct = d["act"].asNumber(0.0);
     k.reviveFrac = d["revive_frac"].asNumber(0.0);
@@ -203,6 +212,8 @@ ChampionKit loadChampion(const json::Value& c, const Rules& rules) {
             ab.ccSlow = cc["amount"].asNumber(0.3);
             if (ab.cc != "slow" && ab.cc != "silence" && ab.cc != "root") k.hardCc.push_back({ab.slot, ab.cc});
         }
+        if (a["heal"].isObject()) ab.heal = bagOf(a["heal"]["scaling"]);
+        ab.cost = a["cost"].asNumber(0);
         if (a["shield"].isObject()) {
             ab.shield = bagOf(a["shield"]["scaling"]);
             ab.shieldDuration = a["shield"]["duration"].asNumber(2.5);
@@ -331,6 +342,11 @@ Library Library::load(const std::string& rulesPath, const Settings& settings, co
     lib.rules.minCooldown = m["min_cooldown"].asNumber(lib.rules.minCooldown);
     lib.rules.dotDuration = m["default_dot_duration"].asNumber(lib.rules.dotDuration);
     lib.rules.spellbladeWindow = m["spellblade_window"].asNumber(lib.rules.spellbladeWindow);
+    lib.rules.enemyAbilities = m["enemy_abilities"].asNumber(lib.rules.enemyAbilities);
+    lib.rules.enemyHitChance = m["enemy_hit_chance"].asNumber(lib.rules.enemyHitChance);
+    lib.rules.enemyAbilityHaste = m["enemy_ability_haste"].asNumber(lib.rules.enemyAbilityHaste);
+    lib.rules.enemyAbilityShare = m["enemy_ability_share"].asNumber(lib.rules.enemyAbilityShare);
+    lib.rules.enemyAbilityShareMarksman = m["enemy_ability_share_marksman"].asNumber(lib.rules.enemyAbilityShareMarksman);
     auto setRule = [&](const char* key, double& field) {
         auto it = settings.find(key);
         if (it != settings.end()) field = std::clamp(it->second, 0.0, 1.0);
@@ -648,6 +664,20 @@ struct Enemy {
     Vec dodgeVel;
     // Your crowd control on it: can't act (stun, knockup...), can't move (root), slowed.
     double ccUntil = -1, rootUntil = -1, slowUntil = -1, slow = 0;
+    std::vector<double> castReady;  // its own abilities: when each is next up
+};
+
+// One of an enemy's abilities as it's used on you.
+struct EnemyCast {
+    char slot = 0;
+    std::string cc;            // hard crowd control it puts on you ("" for none)
+    double ccDuration = 0, ccChance = 0;
+    double range = 0, land = 1, cooldown = 10;
+    double burst = 0;          // its hit, as seconds of the enemy's damage per second
+};
+struct EnemyKit {
+    double abilityShare = 0;   // share of the enemy's damage its abilities deal (the rest is a steady stream)
+    std::vector<EnemyCast> casts;
 };
 
 // An item or augment effect with its own cooldown or counter.
@@ -729,6 +759,16 @@ private:
     double rInvulnReady_ = 0, rBuffReady_ = 0, rRefreshReady_ = 0, rAwakenReady_ = 0, rWindowReady_ = 0, rCcReady_ = 0;
     double rUnstopReady_ = 0, rReductionReady_ = 0, rVampUntil_ = -1, rBasicAhUntil_ = -1, rWindowUntil_ = -1;
     double reductionUntil_ = -1, firstHitAt_ = -1, lowHealReady_ = 0, nextInvuln_ = 1e18, reviveFrac_ = 0;
+    Effect kitFx_;  // the champion's own stat and stacking passives
+    std::map<const EnemyProfile*, EnemyKit> enemyKits_;
+    double ccRate_ = 0;
+    Rng abilityRng_{1, 3};
+    // Mana or energy: what's left at manaT_ (it refills at manaRegen_ per second since).
+    double maxMana_ = 0, mana_ = 0, manaT_ = 0, manaRegen_ = 0, costMult_ = 1;
+    double manaAt(double t) const { return std::min(maxMana_, mana_ + manaRegen_ * std::max(0.0, t - manaT_)); }
+    double costOf(const Ability& a) const { return ch_.resource ? a.cost * (ch_.resource == 1 ? costMult_ : 1.0) : 0.0; }
+    bool affordable(const Ability& a, double t) const { return costOf(a) <= manaAt(t) + 1e-9; }
+    void spend(double cost, double t) { mana_ = manaAt(t) - cost; manaT_ = t; }
     bool converting_ = false, snipeHit_ = false, augReviveUsed_ = false, augRevive_ = false;
     double poroReady_ = 0;
     bool hasMissile_ = false, hasKraken_ = false, hasStorm_ = false, hasEclipse_ = false;
@@ -820,6 +860,11 @@ private:
             if (!a.needsItem.empty() && std::find(b.items.begin(), b.items.end(), a.needsItem) == b.items.end()) continue;
             effects.push_back(&a);
         }
+        if (!ch_.kitStats.empty() || !ch_.kitEffects.empty()) {
+            kitFx_.stats = ch_.kitStats;
+            kitFx_.effects = ch_.kitEffects;
+            effects.push_back(&kitFx_);
+        }
         ranged_ = ch_.ranged;
         attackRange_ = ch_.attackRange;
         for (const auto& a : ch_.abilities) {
@@ -870,6 +915,10 @@ private:
             sword = 1.0 + std::clamp((attackRange_ - floor) / std::max(1.0, ceil - floor), 0.0, 1.0);
             if (attackRange_ > get(fx_, "sword_range")) { attackRange_ = get(fx_, "sword_range"); ranged_ = false; }
         }
+        if (get(fx_, "attack_range_set") > attackRange_ && sc_.level >= get(fx_, "attack_range_level")) {  // Kayle: ranged from level 6
+            attackRange_ = get(fx_, "attack_range_set");
+            ranged_ = true;
+        }
         attackRange_ += ranged_ ? get(fx_, "range_ranged") : get(fx_, "range_melee");
         // Flat Adaptive Force (stat anvils, Slap Around's stacks when the kit can immobilize).
         addAdaptive(get(fx_, "adaptive_flat") + (hasImmobilize_ ? get(fx_, "cc_af") : 0.0));
@@ -879,11 +928,15 @@ private:
         else bonusAd_ *= 1.0 + adaptive;
         ap_ *= 1.0 + get(fx_, "ap_amp");
         crit_ = get(stats, "crit") + get(fx_, "crit_per_ap") * ap_;
+        crit_ *= 1.0 + get(fx_, "crit_chance_mult");  // Yasuo, Yone: double crit chance
         if (crit_ > 1.0) {  // Mayhem: crit chance above 100% becomes AD
             bonusAd_ += (crit_ - 1.0) * 100.0 * rules_.critOverflowAd;
             crit_ = 1.0;
         }
         critDamage_ = get(stats, "crit_damage") + get(fx_, "crit_damage_per_crit") * crit_;
+        // Jhin: bonus AD from level, crit chance and bonus attack speed (before the build's % AD).
+        bonusAd_ += (get(fx_, "whisper_ad_pct") + get(fx_, "whisper_crit") * crit_ * 100.0 +
+                     get(fx_, "whisper_as") * 100.0 * (ch_.asG * g + get(stats, "as"))) * (baseAd_ + bonusAd_);
         ad_ = baseAd_ + bonusAd_;
         bonusAd_ += (get(fx_, "ad_pct") + sword * get(fx_, "sword_ad")) * ad_;  // "% Attack Damage" (Blunt Force)
         ad_ = baseAd_ + bonusAd_;
@@ -895,7 +948,20 @@ private:
         }
         msToAs_ = get(fx_, "ms_to_as");
         asCap_ = std::max(rules_.asCap, get(fx_, "as_cap"));
-        bonusHp_ = get(stats, "hp") + (hasImmobilize_ ? get(fx_, "cc_hp") : 0.0);
+        if (get(fx_, "as_fixed") > 0) asCap_ = get(fx_, "as_fixed");  // Jhin: attack speed never changes
+        // Mana (energy pools don't grow). Mind to Matter turns some of it into Health.
+        if (ch_.resource == 1) {
+            maxMana_ = ch_.mana + ch_.manaG * g + get(stats, "mana");
+            manaRegen_ = (ch_.manaRegen + ch_.manaRegenG * g) * (1.0 + get(stats, "mana_regen"));
+        } else if (ch_.resource == 2) {
+            maxMana_ = ch_.mana;
+            manaRegen_ = ch_.manaRegen;
+        }
+        mana_ = maxMana_;
+        manaT_ = 0;
+        costMult_ = 1.0 + get(fx_, "cost_mult");
+        bonusHp_ = get(stats, "hp") + (hasImmobilize_ ? get(fx_, "cc_hp") : 0.0) +
+                   (ch_.resource == 1 ? get(fx_, "mana_to_hp") * maxMana_ : 0.0);
         const double baseHp = ch_.hp + ch_.hpG * g;
         maxHp_ = (baseHp + bonusHp_) * (1.0 + get(fx_, "hp_pct") + sword * get(fx_, "sword_hp")) * (1.0 + get(fx_, "hp_mult"));
         bonusHp_ = maxHp_ - baseHp;
@@ -913,7 +979,10 @@ private:
         magicPenPct_ = get(stats, "magic_pen_pct");
         lifesteal_ = get(stats, "lifesteal") + sword * get(fx_, "sword_lifesteal");
         omnivamp_ = get(stats, "omnivamp") + get(fx_, "omnivamp_per_ap") * ap_;
-        damageAmp_ = (1.0 + get(fx_, "damage_amp")) * ch_.damageDealt;
+        // Overflow: double mana costs for more effective damage, heals and shields (more with more mana).
+        const double overflow = ch_.resource == 1 && get(fx_, "overflow_amp") > 0
+                                    ? get(fx_, "overflow_amp") + get(fx_, "overflow_amp_per_mana") * maxMana_ : 0.0;
+        damageAmp_ = (1.0 + get(fx_, "damage_amp")) * (1.0 + overflow) * ch_.damageDealt;
         abilityAmp_ = 1.0 + get(fx_, "ability_amp");
         myHp_ = maxHp_;
         moveSpeed_ = ch_.moveSpeed + get(fx_, "ms") + get(fx_, "ms_per_ah") * ah_;
@@ -929,7 +998,7 @@ private:
         trueExtra_ = ranged_ && get(fx_, "true_extra_ranged") > 0 ? get(fx_, "true_extra_ranged") : get(fx_, "true_extra");
         msDiffAmp_ = get(fx_, "ms_diff_amp");
         hsp_ = 1.0 + get(fx_, "heal_shield_power") + get(fx_, "hsp_per_resist") * (bonusArmor_ + bonusMr_) +
-               get(fx_, "heal_shield_crit") * crit_;
+               get(fx_, "heal_shield_crit") * crit_ + overflow;
         cdr_ = get(fx_, "cdr");
         incomingMult_ = 1.0 - get(fx_, "crit_defend") * std::min(crit_, get(fx_, "crit_defend_cap", 1.0));
         shrink_ = get(fx_, "shrink");
@@ -1045,6 +1114,7 @@ private:
             for (const auto* e : team_) points += e->cc;
             ccRate = sc_.ccRatePerPoint * points;
         }
+        ccRate_ = ccRate;
         if (ccRate > 0)
             for (double t = rng_.exponential(ccRate); t < duration_; t += rng_.exponential(ccRate))
                 cc_.push_back({t, t + rng_.uniform(sc_.ccMin, sc_.ccMax)});
@@ -1062,6 +1132,7 @@ private:
         ccLeft_ = std::clamp(1.0 - std::max<size_t>(1, team_.size()) / 5.0, 0.0, 1.0);
         targetRng_ = Rng(targetSeed_, 1);
         moveRng_ = Rng(targetSeed_, 2);
+        abilityRng_ = Rng(targetSeed_, 3);
         double teamDamage = 1.0, share = 0;
         if (sc_.teamDrivenDamage && !team_.empty()) {
             for (const auto* e : team_) share += e->damageShare;
@@ -1086,6 +1157,7 @@ private:
         else
             mitigation = through(nullptr);
         incomingDps_ = incomingRoll_ * sc_.damageTakenFactor * teamDamage * mitigation * rules_.inRangeBoost * incomingMult_;
+        setupEnemyKits();
         magicShare_ = 1.0 - sc_.enemyPhysShare;
         if (!team_.empty()) {
             double phys = 0, w = 0;
@@ -1115,6 +1187,91 @@ private:
     }
     Rng targetRng_{1, 1};
 
+    // Each enemy's abilities as it uses them on you: which hard crowd control, how far they reach,
+    // how often they land and come back, and how much of its damage each hit carries.
+    void setupEnemyKits() {
+        if (rules_.enemyAbilities <= 0) return;
+        double kitCcRate = 0;
+        for (const auto* p : team_) {
+            const ChampionKit* k = lib_.find(p->id);
+            if (!k || enemyKits_.count(p)) continue;
+            EnemyKit kit;
+            kit.abilityShare = k->role == "marksman" ? rules_.enemyAbilityShareMarksman : rules_.enemyAbilityShare;
+            const double haste = k->mayhemAh + rules_.enemyAbilityHaste;
+            double weights = 0;
+            for (const auto& a : k->abilities) {
+                const bool hard = !a.cc.empty() && a.cc != "slow" && a.cc != "silence" && a.cc != "root";
+                if (a.hits.empty() && !hard) continue;
+                EnemyCast c;
+                c.slot = a.slot;
+                c.cooldown = std::max(rules_.minCooldown, a.cooldown * 100.0 / (100.0 + haste));
+                c.range = a.geo.onSelf ? std::max(a.geo.radius, k->attackRange)
+                                       : std::max({a.geo.range, a.geo.radius, k->attackRange});
+                c.land = a.geo.onSelf || a.geo.shape == Shape::Single ? 1.0 : rules_.enemyHitChance;
+                if (hard) { c.cc = a.cc; c.ccDuration = a.ccDuration; kitCcRate += c.land / c.cooldown; }
+                if (!a.hits.empty()) {
+                    c.burst = a.slot == 'R' ? 2.5 : 1.0;  // a weight for now: how big a hit it is
+                    weights += c.burst / c.cooldown;
+                }
+                kit.casts.push_back(c);
+            }
+            // Each hit's size follows its weight; together, cast on cooldown and landing as often as
+            // they should, they deliver the abilities' share of the enemy's damage on average.
+            for (auto& c : kit.casts)
+                if (c.burst > 0) c.burst = kit.abilityShare * c.burst / weights / c.land;
+            if (weights <= 0) kit.abilityShare = 0;
+            enemyKits_[p] = std::move(kit);
+        }
+        // Crowd control keeps real games' rate: each of their own lands with the chance that keeps it,
+        // and teammates' (the random crowd control drawn for the fight) fill whatever is left.
+        if (kitCcRate > 0 && ccRate_ > 0) {
+            const double chance = std::min(1.0, ccRate_ / kitCcRate);
+            for (auto& [p, kit] : enemyKits_)
+                for (auto& c : kit.casts) c.ccChance = c.cc.empty() ? 0.0 : chance;
+            const double keep = std::max(0.0, 1.0 - kitCcRate / ccRate_);
+            cc_.erase(std::remove_if(cc_.begin(), cc_.end(), [&](const auto&) { return !abilityRng_.chance(keep); }),
+                      cc_.end());
+        }
+    }
+
+    // Enemies cast whatever is up and in range; returns the damage their hits deal you this step.
+    double enemyCasts(double now) {
+        if (enemyKits_.empty() || now <= engageAt_) return 0;
+        double total = 0;
+        for (auto& e : enemies_) {
+            if (!e.alive) continue;
+            const auto it = enemyKits_.find(e.profile);
+            if (it == enemyKits_.end()) continue;
+            const auto& casts = it->second.casts;
+            if (e.castReady.size() != casts.size()) {  // first sight of you: abilities come up staggered
+                e.castReady.clear();
+                for (const auto& c : casts) e.castReady.push_back(now + abilityRng_.uniform(0, 0.5 * c.cooldown));
+                continue;
+            }
+            for (size_t j = 0; j < casts.size(); ++j) {
+                const EnemyCast& c = casts[j];
+                if (now < e.castReady[j] || distTo(e) > c.range + 2 * rules_.hitbox) continue;
+                e.castReady[j] = now + c.cooldown;
+                // Your crowd control on it stops only its share of a team's casts.
+                const double acting = now < e.ccUntil ? ccLeft_ : 1.0;
+                if (!abilityRng_.chance(c.land)) continue;
+                double dmg = incomingDps_ * e.damageWeight * c.burst * acting * (now < e.shrinkUntil ? 1.0 - shrink_ : 1.0);
+                if (now < reductionUntil_) dmg *= 1.0 - get(fx_, "r_reduction");
+                total += dmg;
+                if (!c.cc.empty() && abilityRng_.chance(c.ccChance * acting)) {
+                    cc_.push_back({now, now + c.ccDuration});
+                    if (trace_ && e.profile) {
+                        TraceEvent ev;
+                        ev.t = now; ev.kind = "cc"; ev.amount = now + c.ccDuration;
+                        ev.who = e.profile->id; ev.slot = c.slot; ev.text = c.cc;
+                        record(ev);
+                    }
+                }
+            }
+        }
+        return total;
+    }
+
     Enemy spawnEnemy(const EnemyProfile* prof) {
         EnemyProfile p;
         if (prof) p = *prof;
@@ -1139,6 +1296,12 @@ private:
             record(ev);
         }
         return e;
+    }
+
+    // Share of an enemy's damage that comes as a steady stream while you're in its reach.
+    double streamShare(const Enemy& e) const {
+        const auto it = enemyKits_.find(e.profile);
+        return it == enemyKits_.end() ? 1.0 : 1.0 - it->second.abilityShare;
     }
 
     bool inCc(double t) const {
@@ -1218,7 +1381,8 @@ private:
                     if (e.alive && distTo(e) <= e.reach + 2 * rules_.hitbox)
                         // Fewer enemies than a real team each stand in for several champions; your
                         // crowd control stops just one of them (all of it in a five-enemy fight).
-                        share += e.damageWeight * (now < e.ccUntil ? ccLeft_ : 1.0) * (now < e.shrinkUntil ? 1.0 - shrink_ : 1.0);
+                        share += e.damageWeight * (now < e.ccUntil ? ccLeft_ : 1.0) * (now < e.shrinkUntil ? 1.0 - shrink_ : 1.0) *
+                                 streamShare(e);
                 dps = incomingDps_ * share;
                 if (now < reductionUntil_) dps *= 1.0 - get(fx_, "r_reduction");
                 exposureSum_ += share * dt;
@@ -1229,11 +1393,12 @@ private:
                 invulnUntil_ = std::max(invulnUntil_, now + get(fx_, "invuln_duration"));
                 nextInvuln_ += get(fx_, "invuln_every");
             }
-            if (dps > 0 && now < invulnUntil_) dps = 0;
-            if (dps > 0) {
-                const double lost = absorb(dps * dt, now);
+            double burst = enemyCasts(now);
+            if (now < invulnUntil_) dps = burst = 0;
+            if (dps > 0 || burst > 0) {
+                const double lost = absorb(dps * dt + burst, now);
                 if (lost >= myHp_) {
-                    const double at = now - dt + myHp_ / dps;
+                    const double at = burst > 0 ? now : now - dt + myHp_ / dps;
                     res_.damageTaken += myHp_;
                     myHp_ = 0;
                     if (cheatDeath(at)) continue;
@@ -1243,7 +1408,7 @@ private:
                 myHp_ -= lost;
                 res_.damageTaken += lost;
                 lifeline(now);
-                afterDamageTaken(now, dps * dt);
+                afterDamageTaken(now, dps * dt + burst);
                 recordSelf(now);
             }
             recordPositions(now, false);
@@ -1711,6 +1876,7 @@ private:
             record(ev);
         }
         if (!a.shield.empty()) addShield(scaled(a.shield) * hsp_, a.shieldDuration, a.slot);
+        if (!a.heal.empty()) heal(scaled(a.heal) * hsp_);
         // Tripleshot, Spell Split: the ability also hits a few more enemies near the target, for less.
         std::vector<std::pair<Enemy*, double>> targets;
         for (Enemy* e : shot.hits) targets.push_back({e, 1.0});
@@ -1826,7 +1992,9 @@ private:
 
     void applyOnHit(Enemy* e, double scale) {
         if (!e || !e->alive) return;
-        const double magic = get(fx_, "onhit_magic") + get(fx_, "onhit_magic_ap") * ap_;
+        double magic = get(fx_, "onhit_magic") + get(fx_, "onhit_magic_ap") * ap_;
+        if (ch_.resource == 1 && get(fx_, "onhit_mana") > 0)  // Juiced: a share of max mana (less when ranged)
+            magic += get(fx_, "onhit_mana") * maxMana_ * (ranged_ ? get(fx_, "onhit_mana_ranged", 1.0) : 1.0);
         deal(e, scale * magic, DamageType::Magic, SrcItems);
         double phys = get(fx_, "onhit_phys") + get(fx_, "onhit_cur_hp") * e->hp + get(fx_, "onhit_own_hp") * maxHp_ +
                       get(fx_, "onhit_phys_ap") * ap_;
@@ -1891,7 +2059,8 @@ private:
         tickStacks();
         Enemy* e = &P();
         ++attacks_;
-        const bool crit = rng_.chance(crit_);
+        const int every = static_cast<int>(get(fx_, "crit_every"));  // Jhin's fourth shot always crits
+        const bool crit = (every > 0 && attacks_ % every == 0) || rng_.chance(crit_);
         const double critMult = rules_.critMult + critDamage_;
         if (trace_) {
             TraceEvent ev;
@@ -2303,6 +2472,7 @@ Result Fight::run() {
         for (size_t i : order_) {
             if (readyAt_[i] > t_) continue;
             const Ability& a = ch_.abilities[i];
+            if (!affordable(a, t_)) continue;  // out of mana or energy: wait for it to come back
             const double need = needRange(a);
             if (distTo(P()) > need) {
                 wantRange_ = std::min(wantRange_, need);
@@ -2320,6 +2490,7 @@ Result Fight::run() {
             t_ += ct;
             if (t_ >= duration_ || advance(t_)) break;
             if (!hasPrimary()) primary_ = nearestAlive(me_);
+            spend(costOf(a), t_ - ct);
             if (primary_ >= 0) castAbility(i, ct);
             readyAt_[i] = t_ + cooldownOf(a);
             afterCast(i);
@@ -2360,8 +2531,13 @@ Result Fight::run() {
         if (nextAttack_ > t_ || !inRange) {
             double nt = inRange ? nextAttack_ : t_ + kStep;
             if (waiting) nt = std::min(nt, t_ + kStep);
-            for (size_t i : order_)
-                if (readyAt_[i] > t_) nt = std::min(nt, readyAt_[i]);
+            for (size_t i : order_) {
+                const Ability& a = ch_.abilities[i];
+                const double ready = std::max(readyAt_[i], affordable(a, t_) || manaRegen_ <= 0
+                                                               ? readyAt_[i]
+                                                               : t_ + (costOf(a) - manaAt(t_)) / manaRegen_);
+                if (ready > t_) nt = std::min(nt, ready);
+            }
             t_ = std::max(nt, t_ + 1e-9);
             continue;
         }
@@ -2633,6 +2809,175 @@ std::vector<Ranked> optimize(const Library& lib, const ChampionKit& c, const Sce
               [](const Ranked& a, const Ranked& b) { return a.summary.meanDps > b.summary.meanDps; });
     if (static_cast<int>(ranked.size()) > top) ranked.resize(static_cast<size_t>(top));
     return ranked;
+}
+
+Build popularBuild(const Library& lib, const ChampionKit& champ) {
+    Build b;
+    if (!lib.enemyPool.isObject()) return b;
+    for (const auto& e : lib.enemyPool["enemies"].arr) {
+        if (static_cast<int>(e["champion_id"].asNumber(0)) != champ.championId) continue;
+        for (const auto& x : e["build"]["items"].arr) b.items.push_back(x.asString());
+        for (const auto& x : e["build"]["augments"].arr) b.augments.push_back(x.asString());
+        break;
+    }
+    return b;
+}
+
+namespace {
+// "Lulu:items=a+b:augs=c+d": how a champion is named in Library::enemyTeam.
+std::string teamEntry(const TeamPick& m) {
+    std::string s = m.first->id;
+    auto add = [&](const char* key, const std::vector<std::string>& list) {
+        if (list.empty()) return;
+        s += std::string(":") + key + "=";
+        for (size_t i = 0; i < list.size(); ++i) s += (i ? "+" : "") + list[i];
+    };
+    add("items", m.second.items);
+    add("augs", m.second.augments);
+    return s;
+}
+}  // namespace
+
+std::vector<TeamPick> defaultEnemyTeam(const Library& lib, const std::vector<TeamPick>& allies) {
+    std::vector<TeamPick> out;
+    if (allies.empty()) return out;
+    Library open = lib;
+    open.enemyTeam.clear();
+    std::vector<EnemyProfile> pool = open.scenarioFor(*allies.front().first).enemies;
+    std::stable_sort(pool.begin(), pool.end(), [](const EnemyProfile& a, const EnemyProfile& b) { return a.weight > b.weight; });
+    for (const auto& e : pool) {
+        if (out.size() >= 5) break;
+        bool mine = false;
+        for (const auto& [k, b] : allies) mine = mine || k->championId == e.championId;
+        const ChampionKit* k = lib.find(std::to_string(e.championId));
+        if (mine || !k) continue;
+        out.push_back({k, popularBuild(lib, *k)});
+    }
+    return out;
+}
+
+TeamResult runTeam(const Library& lib, const std::vector<TeamPick>& allies, const std::vector<TeamPick>& enemies, int trials) {
+    TeamResult out;
+    if (allies.empty() || enemies.empty() || trials <= 0) return out;
+    for (const auto& [a, ab] : allies)
+        for (const auto& [e, eb] : enemies)
+            if (a->championId == e->championId) throw std::runtime_error(a->name + " can't be on both teams");
+    // Every champion plays its own fight against the other team (the same model as a single
+    // champion's fight, with those five as the enemies). That gives, fight by fight, how much
+    // damage per second it deals to them and how much damage it takes before it goes down.
+    struct Side {
+        const std::vector<TeamPick>* picks;
+        std::vector<TeamMember>* members;
+        std::vector<std::vector<Result>> res;
+    };
+    Side sides[2] = {{&allies, &out.members, {}}, {&enemies, &out.foes, {}}};
+    for (int s = 0; s < 2; ++s) {
+        Library vs = lib;
+        vs.enemyTeam.clear();
+        for (const auto& m : *sides[1 - s].picks) vs.enemyTeam.push_back(teamEntry(m));
+        for (const auto& [k, b] : *sides[s].picks) {
+            TeamMember m;
+            m.kit = k;
+            m.build = b;
+            m.scenario = vs.scenarioFor(*k);
+            sides[s].res.push_back(runTrials(vs, *k, b, m.scenario, 0, trials));
+            m.summary = summarize(sides[s].res.back());
+            sides[s].members->push_back(std::move(m));
+        }
+        double sum = 0;
+        for (const auto& m : *sides[s].members) sum += m.summary.meanDps;
+        for (auto& m : *sides[s].members) m.share = sum > 0 ? m.summary.meanDps / sum : 0.0;
+        (s ? out.enemyDps : out.teamDps) = sum;
+    }
+    // Then the teams trade that damage at once; a champion who's down deals no more, and a
+    // side wins when the other has nobody left standing.
+    // The champions' own fights count every hit on every enemy, so raw damage per second runs
+    // far above what a teamfight's front line actually soaks. Both teams' damage is scaled by
+    // the same factor, so the damage everyone takes per second is what it takes in its own
+    // (real-game calibrated) fight: that sets how long fights last, not who wins them.
+    double taken = 0, dealt = out.teamDps + out.enemyDps;
+    for (const auto* list : {&out.members, &out.foes})
+        for (const auto& m : *list) taken += m.summary.damageTakenPerSec;
+    out.damageScale = dealt > 0 ? std::min(1.0, taken / dealt) : 1.0;
+    // Each side's damage spreads over the other side's champions who are still up, in the
+    // shares each takes of its team's damage in real games (front-liners soak the most).
+    std::vector<double> soak[2];
+    for (int s = 0; s < 2; ++s)
+        for (const auto& m : *sides[s].members) soak[s].push_back(m.kit->hasCn ? std::max(0.02, m.kit->cnTakenShare) : 0.2);
+    const double cap = 120;
+    std::vector<double> lengths;
+    std::vector<std::vector<TeamEvent>> timelines;
+    std::vector<double> alive[2] = {std::vector<double>(out.members.size(), 0), std::vector<double>(out.foes.size(), 0)};
+    std::vector<int> survived[2] = {std::vector<int>(out.members.size(), 0), std::vector<int>(out.foes.size(), 0)};
+    double wins = 0;
+    for (int t = 0; t < trials; ++t) {
+        std::vector<double> hp[2], dps[2];
+        std::vector<bool> up[2];
+        for (int s = 0; s < 2; ++s)
+            for (const auto& r : sides[s].res) {
+                const Result& x = r[static_cast<size_t>(t)];
+                dps[s].push_back(x.timeAlive > 0 ? out.damageScale * x.totalDamage / x.timeAlive : 0.0);
+                hp[s].push_back(std::max(1.0, x.damageTaken + x.shielded));
+                up[s].push_back(true);
+            }
+        std::vector<TeamEvent> events;
+        double now = 0;
+        auto standing = [&](int s) { return std::count(up[s].begin(), up[s].end(), true) > 0; };
+        while (standing(0) && standing(1) && now < cap) {
+            // Damage each champion still up takes per second right now.
+            std::vector<double> in[2];
+            double dt = cap - now;
+            for (int s = 0; s < 2; ++s) {
+                double rate = 0, w = 0;
+                for (size_t i = 0; i < up[1 - s].size(); ++i) if (up[1 - s][i]) rate += dps[1 - s][i];
+                for (size_t i = 0; i < up[s].size(); ++i) if (up[s][i]) w += soak[s][i];
+                in[s].assign(up[s].size(), 0.0);
+                for (size_t i = 0; i < up[s].size(); ++i)
+                    if (up[s][i] && w > 0) {
+                        in[s][i] = rate * soak[s][i] / w;
+                        if (in[s][i] > 0) dt = std::min(dt, hp[s][i] / in[s][i]);
+                    }
+            }
+            now += dt;
+            for (int s = 0; s < 2; ++s)
+                for (size_t i = 0; i < up[s].size(); ++i) {
+                    if (!up[s][i]) continue;
+                    hp[s][i] -= in[s][i] * dt;
+                    if (hp[s][i] <= 1e-6 * std::max(1.0, in[s][i])) {
+                        up[s][i] = false;
+                        alive[s][i] += now;
+                        events.push_back({now, s, i});
+                    }
+                }
+        }
+        for (int s = 0; s < 2; ++s)
+            for (size_t i = 0; i < up[s].size(); ++i)
+                if (up[s][i]) {
+                    alive[s][i] += now;
+                    survived[s][i] += 1;
+                }
+        const bool won = standing(0) && !standing(1), lost = !standing(0) && standing(1);
+        wins += won ? 1.0 : lost ? 0.0 : 0.5;
+        lengths.push_back(now);
+        timelines.push_back(std::move(events));
+    }
+    out.winRate = wins / trials;
+    std::vector<double> sorted = lengths;
+    std::nth_element(sorted.begin(), sorted.begin() + static_cast<long>(sorted.size() / 2), sorted.end());
+    out.fightLength = sorted[sorted.size() / 2];
+    // A typical fight to show: the median-length one.
+    size_t pick = 0;
+    for (size_t t = 0; t < lengths.size(); ++t)
+        if (std::abs(lengths[t] - out.fightLength) < std::abs(lengths[pick] - out.fightLength)) pick = t;
+    out.timeline = timelines[pick];
+    for (int s = 0; s < 2; ++s) {
+        auto& m = s ? out.foes : out.members;
+        for (size_t i = 0; i < m.size(); ++i) {
+            m[i].teamTimeAlive = alive[s][i] / trials;
+            m[i].teamSurvival = static_cast<double>(survived[s][i]) / trials;
+        }
+    }
+    return out;
 }
 
 }  // namespace mayhem

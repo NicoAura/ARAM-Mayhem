@@ -476,7 +476,8 @@
    ],
    "stats": {
     "ad": 35,
-    "ah": 15
+    "ah": 15,
+    "mana": 500
    },
    "effects": {},
    "confidence": "verified"
@@ -994,7 +995,8 @@
    ],
    "stats": {
     "ap": 80,
-    "ah": 20
+    "ah": 20,
+    "mana": 600
    },
    "effects": {
     "burn_flat": 20,
@@ -1013,7 +1015,8 @@
    ],
    "stats": {
     "ap": 100,
-    "ah": 10
+    "ah": 10,
+    "mana": 600
    },
    "effects": {
     "proc_flat": 75,
@@ -1109,7 +1112,8 @@
    ],
    "stats": {
     "ap": 90,
-    "ah": 15
+    "ah": 15,
+    "mana": 600
    },
    "effects": {},
    "confidence": "verified"
@@ -1124,7 +1128,8 @@
    ],
    "stats": {
     "ap": 70,
-    "ah": 25
+    "ah": 25,
+    "mana": 600
    },
    "effects": {},
    "confidence": "verified"
@@ -1258,7 +1263,8 @@
    ],
    "stats": {
     "ap": 90,
-    "ah": 10
+    "ah": 10,
+    "mana": 300
    },
    "effects": {},
    "confidence": "verified"
@@ -1290,7 +1296,8 @@
    ],
    "stats": {
     "ap": 45,
-    "hp": 350
+    "hp": 350,
+    "mana": 500
    },
    "effects": {},
    "confidence": "verified"
@@ -1522,7 +1529,8 @@
    ],
    "stats": {
     "armor": 75,
-    "ah": 20
+    "ah": 20,
+    "mana": 400
    },
    "effects": {},
    "confidence": "verified"

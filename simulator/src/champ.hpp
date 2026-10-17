@@ -63,6 +63,8 @@ struct Ability {
     double ccDuration = 0, ccSlow = 0;
     Bag shield;                // a shield on yourself when cast (its scaling), and how long it lasts
     double shieldDuration = 0;
+    double cost = 0;           // mana or energy per cast
+    Bag heal;                  // Health restored to yourself when cast (its scaling)
     Area area = Area::Single;
     Geometry geo;
     bool aura = false;  // per-second damage on a toggle or very short cooldown: always on
@@ -105,6 +107,11 @@ struct ChampionKit {
     bool deathNeedsR = false;
     std::vector<Ability> abilities;
     std::vector<Passive> passives;
+    // Mana or energy (resource 1 or 2; 0: casts are free): pool and regeneration per second.
+    int resource = 0;
+    double mana = 0, manaG = 0, manaRegen = 0, manaRegenG = 0;
+    // Stat and stacking passives (data/kit_passives.json), in the same keys as augments.
+    Bag kitStats, kitEffects;
     // Its abilities' crowd control that stops a champion acting (slot, kind), damaging or not:
     // what you're hit by when this champion is the enemy.
     std::vector<std::pair<char, std::string>> hardCc;
@@ -134,6 +141,12 @@ struct Rules {
     // up to keep a fight's total about where real games put it.
     double inRangeBoost = 1.0;
     double comboOrder = 1;  // 1: cast in each champion's recommended combo order; 0: by damage
+    // Enemies cast their own abilities: their damage partly arrives as those abilities' hits (on
+    // their cooldowns, in their range), and their crowd control is their own (rate kept to real games).
+    double enemyAbilities = 1;
+    double enemyHitChance = 0.7;   // chance an enemy skillshot lands on you (targeted ones always do)
+    double enemyAbilityHaste = 60; // enemies' ability haste on top of their Mayhem bonus
+    double enemyAbilityShare = 0.65, enemyAbilityShareMarksman = 0.35;  // share of damage from abilities
 };
 
 struct OptimizerSettings {
@@ -256,5 +269,39 @@ struct Ranked {
 // differences are real differences, not noise. threads > 1 splits the work.
 std::vector<Ranked> optimize(const Library& lib, const ChampionKit& champ, const Scenario& sc, int threads,
                              int top = 5);
+
+// A champion's most popular full build in real games (the enemy pool's), or none.
+Build popularBuild(const Library& lib, const ChampionKit& champ);
+
+// 5v5: you and four allies against five enemies. Every champion plays its own fight against
+// the other team, which says how much damage per second it deals to them and how much it can
+// take; then the teams trade that damage, each side hitting the other's front line first.
+using TeamPick = std::pair<const ChampionKit*, Build>;
+struct TeamMember {
+    const ChampionKit* kit = nullptr;
+    Build build;
+    Scenario scenario;  // this champion's own fight against the other team
+    Summary summary;
+    double share = 0;          // share of its team's damage
+    double teamTimeAlive = 0;  // mean seconds standing in the 5v5 (to the end of the fight if it survives)
+    double teamSurvival = 0;   // share of 5v5 fights it's still standing at the end
+};
+struct TeamEvent {
+    double t = 0;
+    int side = 0;    // 0 your team, 1 the enemy team
+    size_t index = 0;  // who went down
+};
+struct TeamResult {
+    std::vector<TeamMember> members, foes;
+    double teamDps = 0, enemyDps = 0;
+    double damageScale = 1;           // both teams' damage per second is scaled by this in the 5v5
+    double fightLength = 0;           // median seconds until one team is down
+    double winRate = 0;               // fights your team wins (a fight still going at 120 s counts half)
+    std::vector<TeamEvent> timeline;  // who goes down when, in a median-length fight
+};
+// The enemy team when none is given: the five most likely enemies that aren't on your team,
+// each with its most popular build.
+std::vector<TeamPick> defaultEnemyTeam(const Library& lib, const std::vector<TeamPick>& allies);
+TeamResult runTeam(const Library& lib, const std::vector<TeamPick>& allies, const std::vector<TeamPick>& enemies, int trials);
 
 }  // namespace mayhem

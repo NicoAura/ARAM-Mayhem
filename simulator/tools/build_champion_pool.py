@@ -448,6 +448,8 @@ def parse_spell(slot, spell_obj, strings, base_stats, attack_range=125):
         **cast_timing(spell, rank, targeting),
         **({"cc": cc} if (cc := parse_cc(text, ev)) else {}),
         **({"shield": sh} if (sh := parse_shield(body, ev)) else {}),
+        **({"heal": hl} if (hl := parse_heal(body, ev)) else {}),
+        **({"cost": c} if (c := spell_cost(spell, rank)) else {}),
         "targeting": targeting,
         "area": area,
         "duration": round(duration, 3),
@@ -516,6 +518,47 @@ def parse_shield(body, ev):
                     dur = dl.const()
                     break
         return {"scaling": round_lin(lin), "duration": round(dur, 3)}
+    return None
+
+
+def spell_cost(spell, rank):
+    """Mana or energy per cast at this rank."""
+    costs = spell.get("mana") or []
+    return round(float(costs[min(rank, len(costs)) - 1]), 2) if costs else 0.0
+
+
+# Resource types in the CharacterRecord (AbilityResourceSlotInfo.arType) and its value hashes.
+RESOURCES = {0: "mana", 1: "energy"}
+AR_BASE, AR_PER_LEVEL, AR_REGEN, AR_REGEN_PER_LEVEL = "{726ee5cd}", "{6216bf7b}", "{c4ab3550}", "{3a509002}"
+
+
+def resource(record):
+    """The champion's ability resource: kind, pool and regeneration per second (base and per level)."""
+    ar = record.get("primaryAbilityResource") or {}
+    kind = RESOURCES.get(ar.get("arType", 0) if ar else 0)
+    num = lambda k: round(float((ar.get(k) or {}).get("baseValue", 0.0)), 4)  # noqa: E731
+    if not kind or num(AR_BASE) <= 0:
+        return {"kind": "none"}
+    return {"kind": kind, "pool": num(AR_BASE), "pool_per_level": num(AR_PER_LEVEL),
+            "regen": num(AR_REGEN), "regen_per_level": num(AR_REGEN_PER_LEVEL)}
+
+
+HEAL_TAG = re.compile(r"<healing>(.*?)</healing>", re.S | re.I)
+
+
+def parse_heal(body, ev):
+    """The Health an ability restores to its caster (its first flat <healing> amount). Heals that
+    are a share of damage dealt or of missing Health are left out."""
+    for m in HEAL_TAG.finditer(body):
+        ref = REF.search(m.group(1))
+        if not ref:
+            continue
+        lin, is_pct = ev.calc(ref.group(1))
+        if lin is None or is_pct or ref.group(2) or "%" in m.group(1):
+            continue
+        if lin.const() <= 0 and not any(k != "const" for k in round_lin(lin)):
+            continue
+        return {"scaling": round_lin(lin)}
     return None
 
 
@@ -774,6 +817,8 @@ def main():
         pool = json.load(f)
     with open(args.overrides, encoding="utf-8") as f:
         overrides = {k: v for k, v in json.load(f).items() if not k.startswith("_")}
+    with open(os.path.join(DATA, "kit_passives.json"), encoding="utf-8") as f:
+        kit_passives = {k: v for k, v in json.load(f).items() if not k.startswith("_")}
     with open(args.passives, encoding="utf-8") as f:
         passive_rules = {k: v for k, v in json.load(f).items() if not k.startswith("_")}
     cn = {int(e["champion_id"]): e for e in pool["enemies"]}
@@ -850,6 +895,10 @@ def main():
                             for h in a["hits"]:
                                 if h["calc"] in v:
                                     h["scaling"] = {s: round(c * v[h["calc"]], 4) for s, c in h["scaling"].items()}
+                        elif k == "hit_adds":  # {calc name: {stat: amount}}: stacks added to a hit (Nasus Q)
+                            for h in a["hits"]:
+                                for stat, amt in v.get(h["calc"], {}).items():
+                                    h["scaling"][stat] = round(h["scaling"].get(stat, 0) + amt, 4)
                         elif k == "alt_calcs":  # damage numbers that replace the main hit rather than add to it
                             for h in a["hits"]:
                                 if h["calc"] in v:
@@ -900,12 +949,16 @@ def main():
                 "ability_haste": (bal or {}).get("ability_haste", 0.0),
                 "attack_speed": (bal or {}).get("attack_speed", 0.0),
             },
+            "resource": resource(record),
             "cn": {k: p[k] for k in ("weight", "damage_share", "damage_taken_share", "win_rate", "cc", "phys_share")} if p else None,
             "abilities": abilities,
             **({"passives": passives} if passives else {}),
             "parse_quality": quality,
             "notes": notes,
         }
+        kit = kit_passives.get(c["id"])
+        if kit:  # stat and stacking passives (data/kit_passives.json)
+            entry["kit"] = {k: v for k, v in kit.items() if k in ("stats", "effects")}
         death = overrides.get(c["id"], {}).get("death")
         if death:  # cheating death once a fight (champion_overrides.json)
             entry["death"] = {k: v for k, v in death.items() if k != "why"}

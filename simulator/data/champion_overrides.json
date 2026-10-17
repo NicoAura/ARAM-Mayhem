@@ -76,7 +76,8 @@
    "hit_mults": {
     "BonusPoisonedDamage": 2
    },
-   "why": "Twin Fang is spammable (0.75s) and the target is always poisoned, so the bonus always applies"
+   "why": "Twin Fang is spammable (0.75s) and the target is always poisoned, so the bonus always applies; no self-heal: E heals only when it kills",
+   "heal": null
   }
  },
  "Vayne": {
@@ -253,6 +254,10 @@
    "revive_delay": 3,
    "needs_r": true,
    "why": "Chronoshift on himself: revives after 3 seconds if his ultimate is ready"
+  },
+  "R": {
+   "heal": null,
+   "why": "no self-heal: R's heal is the revive, modeled as cheating death"
   }
  },
  "Anivia": {
@@ -472,7 +477,12 @@
  "Nasus": {
   "Q": {
    "attack_reset": true,
-   "why": "resets the basic attack timer"
+   "hit_adds": {
+    "TotalDamage": {
+     "const": 350
+    }
+   },
+   "why": "resets the basic attack timer; Siphoning Strike stacks assumed at 350 by level 18"
   },
   "R": {
    "hit_mults": {
@@ -561,6 +571,10 @@
     "TotalDamage": 2
    },
    "why": "Boomerang Blade hits on the way out and back"
+  },
+  "E": {
+   "heal": null,
+   "why": "no self-heal: E heals only when it blocks a spell"
   }
  },
  "Trundle": {
@@ -583,6 +597,14 @@
   "Q": {
    "attack_reset": true,
    "why": "resets the basic attack timer"
+  },
+  "W": {
+   "heal": null,
+   "why": "no self-heal: those numbers are the Maiden's, not a heal"
+  },
+  "R": {
+   "heal": null,
+   "why": "no self-heal: those numbers are the Maiden's, not a heal"
   }
  },
  "RekSai": {
@@ -730,7 +752,8 @@
  "Senna": {
   "Q": {
    "lock": 0,
-   "why": "Piercing Darkness fires off the attack wind-up; no channel"
+   "why": "Piercing Darkness fires off the attack wind-up; no channel; no self-heal: Q heals allies, not Senna",
+   "heal": null
   }
  },
  "Akshan": {
@@ -872,7 +895,8 @@
    "hit_mults": {
     "FinalOnHitDamage": 0
    },
-   "why": "Endless Banquet needs Void Coral from a takedown, not usable every second; the on-hit true damage is a form buff, not a cast hit"
+   "why": "Endless Banquet needs Void Coral from a takedown, not usable every second; the on-hit true damage is a form buff, not a cast hit; no self-heal: R's number is not a heal",
+   "heal": null
   }
  },
  "Briar": {
@@ -904,6 +928,10 @@
     "MaxHealthPercentCalc": 3
    },
    "why": "Vorpal Spikes empowers the next three attacks, not one"
+  },
+  "R": {
+   "heal": null,
+   "why": "no self-heal: Feast heals only on kills"
   }
  },
  "Diana": {
@@ -1097,7 +1125,8 @@
    "hit_mults": {
     "HealthCost": 0
    },
-   "why": "HealthCost is Locke's own health cost, not damage to enemies"
+   "why": "HealthCost is Locke's own health cost, not damage to enemies; no self-heal: W's number is not a heal",
+   "heal": null
   }
  },
  "Lulu": {
@@ -1379,6 +1408,10 @@
     "radius": 500
    },
    "why": "Flap fires ~6 shots at the lowest-health nearby enemy"
+  },
+  "R": {
+   "heal": null,
+   "why": "no self-heal: R heals Smolder only if it lands on himself"
   }
  },
  "Sona": {
@@ -1590,6 +1623,14 @@
     "TotalMissileDamageEmpowered"
    ],
    "why": "Prowling Projectile's empowered value is the long-flight alternative, not an extra hit"
+  },
+  "W": {
+   "heal": null,
+   "why": "no self-heal: Yuumi heals the ally she rides"
+  },
+  "R": {
+   "heal": null,
+   "why": "no self-heal: Yuumi heals the ally she rides"
   }
  },
  "Zed": {
@@ -1614,6 +1655,18 @@
     "TotalDamageTooltip": 2
    },
    "why": "Sleepy Trouble Bubble: the next hit on the sleeping target deals E's damage again (true); combo E->Q always pops it"
+  }
+ },
+ "Lissandra": {
+  "R": {
+   "heal": null,
+   "why": "no self-heal: R is cast on enemies here, not on herself"
+  }
+ },
+ "Soraka": {
+  "W": {
+   "heal": null,
+   "why": "no self-heal: W heals allies only"
   }
  }
 }

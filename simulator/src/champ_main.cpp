@@ -51,6 +51,10 @@ Usage: mayhem_sim [options]
                       Name:hp=5000:armor=250 (hp, armor, mr, damage_share, phys_share,
                       cc, damage_taken); add items and augments with
                       Name:items=warmogs+thornmail:augs=goliath (their HP, armor, MR)
+  --allies a,b,c,d    with --champ: a 5v5 with these four allies (each with its most
+                      popular build, or Name:items=a+b:augs=c+d); --items/--augs set
+                      yours (default: your most popular build); --team names the five
+                      enemies the same way (default: the five most likely enemies)
   --combo EQRW        with --champ: cast order when several abilities are ready
                       (default: the champion's recommended combo, data/combos.json)
   --list --json       champions, items, augments, settings and the enemy pool as JSON
@@ -270,7 +274,7 @@ int main(int argc, char** argv) {
     bool all = false, asJson = false, list = false, customBuild = false, anyItems = false;
     std::string tracePath, traceDir, combo;
     Library::Settings settings;
-    std::vector<std::string> team;
+    std::vector<std::string> team, allies;
     int trials = 0;
     long long seed = -1;
 #ifdef __EMSCRIPTEN__
@@ -298,6 +302,7 @@ int main(int argc, char** argv) {
         else if (a == "--trace") tracePath = next();
         else if (a == "--trace-dir") traceDir = next();
         else if (a == "--team") team = splitList(next());
+        else if (a == "--allies") allies = splitList(next());
         else if (a == "--combo") combo = next();
         else if (a == "--set") {
             for (const auto& kv : splitList(next())) {
@@ -337,8 +342,8 @@ int main(int argc, char** argv) {
             const auto& c = lib.champions[i];
             std::string pool;
             for (const auto& a : lib.augmentsFor(c, false)) pool += (pool.empty() ? "" : ", ") + jsonStr(a);
-            std::printf("%s{\"id\": %s, \"name\": %s, \"role\": %s, \"ranged\": %s, \"combo\": %s, \"augments\": [%s]}",
-                        i ? ", " : "", jsonStr(c.id).c_str(), jsonStr(c.name).c_str(), jsonStr(c.role).c_str(),
+            std::printf("%s{\"id\": %s, \"key\": %d, \"name\": %s, \"role\": %s, \"ranged\": %s, \"combo\": %s, \"augments\": [%s]}",
+                        i ? ", " : "", jsonStr(c.id).c_str(), c.championId, jsonStr(c.name).c_str(), jsonStr(c.role).c_str(),
                         c.ranged ? "true" : "false", jsonStr(c.combo).c_str(), pool.c_str());
         }
         auto effects = [&](const std::map<std::string, Effect>& m) {
@@ -419,6 +424,83 @@ int main(int argc, char** argv) {
         if (!champName.empty()) {
             const ChampionKit* c = lib.find(champName);
             if (!c) { std::cerr << "unknown champion " << champName << "\n"; return 2; }
+            if (!allies.empty()) {
+                // "Lulu" or "Lulu:items=a+b:augs=c+d", each with its most popular build unless given.
+                auto pickOf = [&](const std::string& entry) {
+                    std::vector<std::string> parts;
+                    std::stringstream ss(entry);
+                    for (std::string p; std::getline(ss, p, ':');) parts.push_back(p);
+                    const ChampionKit* k = parts.empty() ? nullptr : lib.find(parts[0]);
+                    if (!k) throw std::runtime_error("unknown champion '" + entry + "'");
+                    Build b = popularBuild(lib, *k);
+                    for (size_t j = 1; j < parts.size(); ++j) {
+                        const auto eq = parts[j].find('=');
+                        const std::string key = parts[j].substr(0, eq), val = eq == std::string::npos ? "" : parts[j].substr(eq + 1);
+                        std::vector<std::string> list;
+                        std::stringstream vs(val);
+                        for (std::string x; std::getline(vs, x, '+');) if (!x.empty()) list.push_back(x);
+                        if (key == "items") b.items = list;
+                        else if (key == "augs") b.augments = list;
+                        else throw std::runtime_error(k->name + ": use items= or augs=");
+                    }
+                    lib.validate(b);
+                    return TeamPick{k, b};
+                };
+                std::vector<TeamPick> mine, theirs;
+                Build own = customBuild ? Build{items, augs} : popularBuild(lib, *c);
+                lib.validate(own);
+                mine.push_back({c, own});
+                for (const auto& entry : allies) mine.push_back(pickOf(entry));
+                for (const auto& entry : team) theirs.push_back(pickOf(entry));
+                lib.enemyTeam.clear();
+                if (theirs.empty()) theirs = defaultEnemyTeam(lib, mine);
+                const int n = trials > 0 ? trials : 300;
+                const TeamResult tr = runTeam(lib, mine, theirs, n);
+                if (!tracePath.empty() &&
+                    !writeTrace(lib, *c, tr.members.front().build, tr.members.front().scenario, tr.members.front().summary, tracePath))
+                    return 1;
+                if (asJson) {
+                    std::printf("{\"mode\": \"team\", \"win_rate\": %.4f, \"fight_length\": %.2f, \"team_dps\": %.1f, \"enemy_dps\": %.1f",
+                                tr.winRate, tr.fightLength, tr.teamDps, tr.enemyDps);
+                    for (int s = 0; s < 2; ++s) {
+                        const auto& list = s ? tr.foes : tr.members;
+                        std::printf(", \"%s\": [", s ? "enemies" : "members");
+                        for (size_t i = 0; i < list.size(); ++i) {
+                            const auto& m = list[i];
+                            std::printf("%s{\"champion\": %s, \"name\": %s, \"role\": %s, \"share\": %.4f, \"time_alive\": %.2f, "
+                                        "\"survival\": %.4f, \"build\": %s, \"summary\": %s}",
+                                        i ? ", " : "", jsonStr(m.kit->id).c_str(), jsonStr(m.kit->name).c_str(),
+                                        jsonStr(m.kit->role).c_str(), m.share, m.teamTimeAlive, m.teamSurvival,
+                                        buildJson(m.build).c_str(), summaryJson(m.summary).c_str());
+                        }
+                        std::printf("]");
+                    }
+                    std::printf(", \"timeline\": [");
+                    for (size_t i = 0; i < tr.timeline.size(); ++i) {
+                        const auto& e = tr.timeline[i];
+                        const auto& who = (e.side ? tr.foes : tr.members)[e.index];
+                        std::printf("%s{\"t\": %.2f, \"side\": \"%s\", \"champion\": %s}", i ? ", " : "", e.t,
+                                    e.side ? "enemy" : "ally", jsonStr(who.kit->id).c_str());
+                    }
+                    std::printf("]}\n");
+                } else {
+                    std::printf("5v5: your team wins %.0f%% of fights; a fight lasts %.1f s (median).\n", tr.winRate * 100,
+                                tr.fightLength);
+                    std::printf("Your team deals %.0f damage per second, the enemy team %.0f.\n", tr.teamDps, tr.enemyDps);
+                    for (int s = 0; s < 2; ++s) {
+                        std::printf("\n%s\n", s ? "Enemy team" : "Your team");
+                        for (const auto& m : s ? tr.foes : tr.members)
+                            std::printf("  %-14s %6.0f DPS %5.1f%% of the team's damage, standing %4.1f s, survives %3.0f%%  %s\n",
+                                        m.kit->id.c_str(), m.summary.meanDps, m.share * 100, m.teamTimeAlive,
+                                        m.teamSurvival * 100, buildNames(lib, m.build).c_str());
+                    }
+                    std::printf("\nA typical fight:");
+                    for (const auto& e : tr.timeline)
+                        std::printf(" %.1fs %s%s;", e.t, e.side ? "enemy " : "", (e.side ? tr.foes : tr.members)[e.index].kit->id.c_str());
+                    std::printf("\n");
+                }
+                return 0;
+            }
             const Scenario sc = lib.scenarioFor(*c);
             std::vector<Ranked> ranked;
             if (customBuild) {

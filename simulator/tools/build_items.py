@@ -60,6 +60,8 @@ BIN_STATS = {
     "magic_pen_pct": "mPercentMagicPenetrationMod",
     "lifesteal": "mPercentLifeStealMod",
     "omnivamp": "PercentOmnivampMod",
+    "mana": "flatMPPoolMod",
+    "mana_regen": "percentBaseMPRegenMod",
 }
 
 

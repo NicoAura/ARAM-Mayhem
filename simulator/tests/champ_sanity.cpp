@@ -313,6 +313,56 @@ int main(int argc, char** argv) {
               "Hellbent's revive keeps you fighting longer");
     }
 
+    {
+        // Stat and stacking passives: Veigar's AP stacks add damage.
+        const ChampionKit* veigar = lib.find("Veigar");
+        CHECK(veigar && !veigar->kitStats.empty(), "Veigar has his Phenomenal Evil stacks");
+        if (veigar) {
+            ChampionKit plain = *veigar;
+            plain.kitStats.clear();
+            const Scenario vsc = lib.scenarioFor(*veigar);
+            CHECK(meanDps(lib, *veigar, cap, vsc, 600) > meanDps(lib, plain, cap, vsc, 600),
+                  "Veigar's AP stacks add damage");
+        }
+    }
+
+    {
+        // Mana and energy: casts cost them, so a free-casting copy does more damage.
+        CHECK(lux->resource == 1 && lux->mana > 0 && lux->abilities[0].cost > 0, "Lux has mana and her abilities cost it");
+        const ChampionKit* zed = lib.find("Zed");
+        CHECK(zed && zed->resource == 2, "Zed uses energy");
+        ChampionKit free = *lux;
+        free.resource = 0;
+        const Scenario lsc = lib.scenarioFor(*lux);
+        CHECK(meanDps(lib, free, cap, lsc, 600) > meanDps(lib, *lux, cap, lsc, 600), "running out of mana costs damage");
+    }
+
+    {
+        // Enemies use their own abilities: Leona's stuns on you are her Q, E or R.
+        Library vs = Library::load(argc > 1 ? argv[1] : "data/mayhem_rules.json");
+        vs.enemyTeam = {"Leona"};
+        const Scenario lsc = vs.scenarioFor(*ahri);
+        bool hers = false, others = false;
+        for (uint64_t trial = 0; trial < 60; ++trial)
+            for (const auto& ev : traceFight(vs, *ahri, cap, lsc, trial).events)
+                if (ev.kind == "cc" && ev.who == "Leona") {
+                    hers |= ev.slot == 'Q' || ev.slot == 'E' || ev.slot == 'R';
+                    others |= ev.slot == 'W';
+                }
+        CHECK(hers && !others, "Leona crowd controls you with her own stuns");
+    }
+
+    {
+        // 5v5: the same two teams give the same odds whichever side you're on.
+        auto pick = [&](const char* n) { const ChampionKit* k = lib.find(n); return TeamPick{k, popularBuild(lib, *k)}; };
+        const std::vector<TeamPick> a = {pick("Jinx"), pick("Lulu"), pick("Leona"), pick("Ahri"), pick("Darius")};
+        const std::vector<TeamPick> b = {pick("Ashe"), pick("MissFortune"), pick("Teemo"), pick("Brand"), pick("Caitlyn")};
+        const TeamResult ab = runTeam(lib, a, b, 120), ba = runTeam(lib, b, a, 120);
+        CHECK(std::abs(ab.winRate + ba.winRate - 1.0) < 1e-9, "5v5 odds are the same from either side");
+        CHECK(ab.members.size() == 5 && ab.foes.size() == 5 && ab.fightLength > 0, "5v5 reports both teams");
+        CHECK(defaultEnemyTeam(lib, a).size() == 5, "5v5 picks five enemies when none are given");
+    }
+
     bool threw = false;
     try { runTrials(lib, *ahri, Build{{"not_an_item"}, {}}, sc, 0, 1); } catch (...) { threw = true; }
     CHECK(threw, "unknown item ids are rejected");
