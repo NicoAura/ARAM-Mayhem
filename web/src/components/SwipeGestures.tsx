@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { switchTab } from "@/lib/subtab-nav";
+import { buzz } from "@/lib/haptics";
 
 // Phone gestures. A sideways swipe switches the page's in-page tabs (SubTabs) or, on a page without
 // them, moves to the neighbouring bottom-bar tab. Pull-to-refresh is added only in the installed app
@@ -50,8 +51,10 @@ export default function SwipeGestures() {
         if (pullRef.current) setPull((pullRef.current = 0));
         return;
       }
-      // Resist the further it goes, like the system's own.
-      setPull((pullRef.current = Math.min(110, dy * 0.5)));
+      // Resist the further it goes, like the system's own; a tick when it is far enough to refresh.
+      const next = Math.min(110, dy * 0.5);
+      if (next >= 70 && pullRef.current < 70) buzz("tap");
+      setPull((pullRef.current = next));
     };
     const up = (e: TouchEvent) => {
       const s = start;

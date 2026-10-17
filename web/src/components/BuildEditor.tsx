@@ -8,6 +8,7 @@ import { getParam, setParams } from "@/lib/url-state";
 import Skeleton from "@/components/Skeleton";
 import ShareCard from "@/components/ShareCard";
 import type { CardSpec } from "@/lib/share-card";
+import { buzz } from "@/lib/haptics";
 
 // Build Editor (/builder?champ=Jinx&items=…&augs=…): drag items into six slots and pick four augments;
 // the summed stats and gold update as you go and the simulator re-runs the build in the browser
@@ -146,6 +147,7 @@ export default function BuildEditor() {
   const boots = (key: string) => itemByKey.get(key)?.slot === "boots";
   // Put an item in a slot (or the first free one). One pair of boots, no duplicates.
   const place = (key: string, at: number | null, from: number | null = null) => {
+    buzz();
     setItems((cur) => {
       const next = [...cur];
       if (from !== null) {

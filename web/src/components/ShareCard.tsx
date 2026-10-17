@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { drawCard, type CardSpec } from "@/lib/share-card";
+import { buzz } from "@/lib/haptics";
 
 // A "Share image" button: draws a card for this page (lib/share-card.ts) and shows it with ways to
 // share it (the phone's share sheet), copy it, or save it.
@@ -75,7 +76,10 @@ export default function ShareCard({ spec, label = "Share image" }: { spec: CardS
                   onClick={() =>
                     navigator.clipboard
                       .write([new ClipboardItem({ "image/png": blob })])
-                      .then(() => setNote("Copied."))
+                      .then(() => {
+                        buzz("done");
+                        setNote("Copied.");
+                      })
                       .catch(() => setNote("This browser can't copy images. Save it instead."))
                   }
                 >
