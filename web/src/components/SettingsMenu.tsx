@@ -8,6 +8,7 @@ import Link from "next/link";
 import { TOUR_EVENT } from "./FirstVisitTour";
 import { canVibrate } from "@/lib/haptics";
 import { chime } from "@/lib/ui-sound";
+import { forgetViews } from "@/lib/url-state";
 
 // Gear button at the top right: theme plus the site's other per-browser settings.
 
@@ -71,6 +72,9 @@ export default function SettingsMenu() {
             <ThemeToggle labels />
           </div>
           <Choice label="Motion" value={s.motion} options={[["system", "Match system"], ["reduce", "Reduce"]]} onChange={(motion) => set({ motion })} />
+          <Choice label="Text size" value={s.text} options={[["standard", "Standard"], ["large", "Large"], ["larger", "Larger"]]} onChange={(text) => set({ text })} />
+          <Choice label="Contrast" value={s.contrast} options={[["standard", "Standard"], ["high", "High"]]} onChange={(contrast) => set({ contrast })} />
+          <Choice label="Win/loss colors" value={s.colors} options={[["standard", "Green / red"], ["colorblind", "Blue / orange"]]} onChange={(colors) => set({ colors })} />
           <Choice label="Sound and voice lines" value={s.sound ? "on" : "off"} options={[["on", "On"], ["off", "Off"]]} onChange={(v) => set({ sound: v === "on" })} />
           {s.sound && (
             <Choice label="Interface sounds" value={s.uiSound ? "on" : "off"} options={[["on", "On"], ["off", "Off"]]} onChange={(v) => {
@@ -82,6 +86,15 @@ export default function SettingsMenu() {
             <Choice label="Vibration" value={s.haptics ? "on" : "off"} options={[["on", "On"], ["off", "Off"]]} onChange={(v) => set({ haptics: v === "on" })} />
           )}
           <Choice label="Simulator graphics" value={s.graphics} options={[["auto", "Auto"], ["low", "Low"], ["high", "High"]]} onChange={(graphics) => set({ graphics })} />
+          <Choice
+            label="Remember my views"
+            value={s.remember ? "on" : "off"}
+            options={[["on", "On"], ["off", "Off"]]}
+            onChange={(v) => {
+              set({ remember: v === "on" });
+              if (v === "off") forgetViews();
+            }}
+          />
           <Choice label="Tier List starts on" value={s.tierRange} options={[["live", "Live patch"], ["last3", "Last 3"], ["all", "All time"]]} onChange={(tierRange) => set({ tierRange })} />
           <p className="account-note">
             Saved in this browser.{" "}

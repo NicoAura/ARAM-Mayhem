@@ -15,7 +15,9 @@ import { champStats, type PatchRow } from "./tiers";
 const CHAMPS = championNames as Record<string, string>;
 const AUGS = augmentNames as Record<string, string>;
 
-export const champName = (id: string) => CHAMPS[id] ?? id.replace(/([a-z])([A-Z])/g, "$1 $2");
+// Aliases differ in case between data files (FiddleSticks / Fiddlesticks), so fall back to a case-blind match.
+const CHAMPS_LOWER = new Map(Object.entries(CHAMPS).map(([k, v]) => [k.toLowerCase(), v]));
+export const champName = (id: string) => CHAMPS[id] ?? CHAMPS_LOWER.get(id.toLowerCase()) ?? id.replace(/([a-z])([A-Z])/g, "$1 $2");
 
 export type Ranked = { id: string; name: string; winRate: number; pickRate: number; tier?: string };
 

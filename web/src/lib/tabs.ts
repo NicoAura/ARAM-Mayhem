@@ -72,7 +72,7 @@ const pick = (href: string): NavItem[] => {
  *  My Stats sits behind the account button; champion pages (/champions/<Alias>) open from the Tier List and search. */
 export function navItems(): NavItem[] {
   const tools = discoverToolTabs().filter((t) => t.href.startsWith("/tools/"));
-  const more = [...pick("/compare"), ...pick("/builder"), ...pick("/draft"), ...pick("/synergy"), ...pick("/patches"), ...pick("/info"), ...pick("/lab"), ...tools.flatMap((t) => pick(t.href))];
+  const more = [...pick("/compare"), ...pick("/augments"), ...pick("/what-to-build"), ...pick("/builder"), ...pick("/draft"), ...pick("/synergy"), ...pick("/patches"), ...pick("/info"), ...pick("/lab"), ...tools.flatMap((t) => pick(t.href))];
   return [
     ...pick("/tier-list"),
     ...pick("/simulator"),

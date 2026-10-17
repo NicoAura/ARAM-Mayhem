@@ -7,6 +7,7 @@ import type { DraftData } from "@/lib/draft";
 import { buzz } from "@/lib/haptics";
 import { getParam, setParams } from "@/lib/url-state";
 import Skeleton from "@/components/Skeleton";
+import { LoadError } from "@/components/EmptyState";
 
 // Augment Draft practice (/draft?champ=Jinx): four selections of three augments, one reroll per card,
 // like a real Mayhem game. After each pick it shows how often players on that champion take it,
@@ -115,7 +116,7 @@ export default function AugmentDraft() {
     return () => removeEventListener("keydown", key);
   });
 
-  if (failed) return <p className="table-note">Couldn&apos;t load the augments. Try reloading the page.</p>;
+  if (failed) return <LoadError what="The augments" />;
   if (!data) return <Skeleton kind="cards" rows={3} label="Shuffling augments…" />;
 
   const matched = picks.filter((p) => p.id === best(p.offers)).length;
@@ -173,7 +174,7 @@ export default function AugmentDraft() {
               </>
             ) : (
               <>
-                {lead} Their favourite of those three: <b>{data.augs[top][0]}</b>
+                {lead} Their favorite of those three: <b>{data.augs[top][0]}</b>
                 {rate(top) ? ` (${pct(rate(top))})` : ""}.
               </>
             );

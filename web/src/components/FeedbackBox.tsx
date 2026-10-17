@@ -13,7 +13,7 @@ export default function FeedbackBox() {
       .then(() => (setCopied(true), setTimeout(() => setCopied(false), 2000)))
       .catch(() => {});
   return (
-    <aside className="feedback-box" aria-label="Feedback">
+    <section className="feedback-box" aria-label="Feedback">
       <div>
         <b>Found a bug? Want a feature added?</b>
         <span>Send it our way. Ideas from players shape what we build next.</span>
@@ -26,6 +26,6 @@ export default function FeedbackBox() {
           {copied ? "Copied!" : EMAIL}
         </button>
       </div>
-    </aside>
+    </section>
   );
 }

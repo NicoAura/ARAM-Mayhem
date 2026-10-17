@@ -150,7 +150,12 @@ int main(int argc, char** argv) {
         else if (a == "--builds") buildIds = splitList(next());
         else if (a == "--items") customItems = splitList(next());
         else if (a == "--augs") customAugs = splitList(next());
-        else if (a == "--threads") threads = std::max(1, std::stoi(next()));
+        else if (a == "--threads") {
+            const std::string v = next();
+            try {
+                threads = std::clamp(std::stoi(v), 1, 1024);
+            } catch (...) { std::cerr << "--threads " << v << ": not a number\n"; return 2; }
+        }
         else if (a == "--json") asJson = true;
         else if (a == "--list") doList = true;
         else if (a == "--trials" || a == "--seed" || a == "--level" || a == "--target" || a == "--fight" ||
@@ -196,7 +201,7 @@ int main(int argc, char** argv) {
     }
 
     Scenario sc = data.scenario;
-    for (const auto& [flag, v] : overrides) {
+    for (const auto& [flag, v] : overrides) try {
         if (flag == "--trials") sc.trials = std::max(1, std::stoi(v));
         else if (flag == "--seed") sc.seed = std::stoull(v);
         else if (flag == "--level") sc.level = std::clamp(std::stoi(v), 1, 18);
@@ -207,6 +212,9 @@ int main(int argc, char** argv) {
         else if (flag == "--clump") { auto x = splitNumbers(v, 2, "--clump"); sc.clumpMax = static_cast<int>(x[0]); sc.clumpChance = x[1]; }
         else if (flag == "--w-hit") sc.wHitChance = std::stod(v);
         else if (flag == "--r-ready") sc.rReadyChance = std::stod(v);
+    } catch (const std::exception&) {
+        std::cerr << flag << " " << v << ": not a number\n";
+        return 2;
     }
 
     std::vector<Build> builds;
@@ -232,6 +240,7 @@ int main(int argc, char** argv) {
     std::vector<std::pair<Build, Summary>> results;
     for (const auto& b : builds) {
         try {
+            data.validate(b);  // here, not only inside the worker threads, where a throw would abort
             results.push_back({b, runParallel(data, b, sc, threads)});
         } catch (const std::exception& e) {
             std::cerr << e.what() << "\n";

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { pageMeta } from "@/lib/meta";
+import Link from "next/link";
 import augmentNames from "@/data/augment-names.json";
 import { AdvancedProvider, AdvancedToggle } from "@/components/Advanced";
 import ChampionTiers from "@/components/ChampionTiers";
@@ -86,7 +87,13 @@ export default function TierListPage() {
       label: "Augments",
       content: (
         <>
-          <p className="patch-note">Augments are for the live patch ({latest.patch}).</p>
+          <p className="patch-note">
+            Augments are for the live patch ({latest.patch}). See them as an{" "}
+            <Link className="inline-link" href="/augments">
+              S to D tier list with style filters
+            </Link>
+            .
+          </p>
           <DataTable
             columns={augCols}
             advancedColumns={[

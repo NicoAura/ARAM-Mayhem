@@ -461,14 +461,21 @@ void Library::equipEnemy(EnemyProfile& p, int level, bool listed) const {
     const ChampionKit* k = find(std::to_string(p.championId));
     if (!k) return;
     std::vector<const Effect*> gear;
-    for (int pass = 0; pass < 2; ++pass)
-        for (const auto& name : pass ? p.augments : p.items) {
-            const auto& table = pass ? augments : items;
+    for (int pass = 0; pass < 2; ++pass) {
+        auto& names = pass ? p.augments : p.items;
+        const auto& table = pass ? augments : items;
+        // A build typed for this enemy must be valid. Pool builds come from live-patch games, so on
+        // another patch (PBE) they can name an item or augment that patch removed: it's left out.
+        if (!listed)
+            names.erase(std::remove_if(names.begin(), names.end(), [&](const std::string& n) { return !table.count(n); }),
+                        names.end());
+        for (const auto& name : names) {
             auto fx = table.find(name);
             if (fx == table.end())
                 throw std::runtime_error("unknown " + std::string(pass ? "augment" : "item") + " '" + name + "' for enemy " + p.name);
             gear.push_back(&fx->second);
         }
+    }
     // Real games' damage is a whole game's average: taken as level 15 with the first four
     // items and three augments. The fight's level and full build scale it from there (at most 3x).
     std::vector<const Effect*> early;

@@ -26,6 +26,11 @@ import { THEME_COLORS, THEME_KEY } from "@/lib/theme";
 import { navItems, navPages } from "@/lib/tabs";
 import "./globals.css";
 import OfflineSupport from "@/components/OfflineSupport";
+import SkipLink from "@/components/SkipLink";
+import ViewMemory from "@/components/ViewMemory";
+import { VIEW_SCRIPT } from "@/lib/url-state";
+import BackToTop from "@/components/BackToTop";
+import RecentTracker from "@/components/RecentTracker";
 
 const sans = Geist({ subsets: ["latin"], variable: "--font-sans" });
 const mono = Geist_Mono({ subsets: ["latin"], variable: "--font-mono" });
@@ -91,11 +96,12 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${sans.variable} ${mono.variable} ${display.variable}`} suppressHydrationWarning>
       <head>
-        <script dangerouslySetInnerHTML={{ __html: DEVICE_SCRIPT + THEME_SCRIPT + SETTINGS_SCRIPT }} />
+        <script dangerouslySetInnerHTML={{ __html: DEVICE_SCRIPT + THEME_SCRIPT + SETTINGS_SCRIPT + VIEW_SCRIPT }} />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: STRUCTURED_DATA }} />
       </head>
       <body>
         <ErrorReporter />
+        <SkipLink />
         <header className="site-header">
           <div className="site-header-inner">
             <Link href="/" className="brand">
@@ -122,7 +128,9 @@ export default function RootLayout({
           </div>
         </header>
         {text("banner") && <p className="site-banner">{text("banner")}</p>}
-        <main>{children}</main>
+        <main id="main" tabIndex={-1}>
+          {children}
+        </main>
         <footer className="site-footer">
           <FeedbackBox />
           <nav className="footer-links" aria-label="Legal">
@@ -144,6 +152,9 @@ export default function RootLayout({
         <FirstVisitTour />
         <UpdateToast />
         <OfflineSupport />
+        <ViewMemory />
+        <BackToTop />
+        <RecentTracker />
         <MobileTabBar tabs={navPages().map(({ href, label }) => ({ href, label }))} />
       </body>
     </html>

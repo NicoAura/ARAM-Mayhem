@@ -9,6 +9,7 @@ import Skeleton from "@/components/Skeleton";
 import ShareCard from "@/components/ShareCard";
 import type { CardSpec } from "@/lib/share-card";
 import { buzz } from "@/lib/haptics";
+import { LoadError } from "@/components/EmptyState";
 
 // Build Editor (/builder?champ=Jinx&items=…&augs=…): drag items into six slots and pick four augments;
 // the summed stats and gold update as you go and the simulator re-runs the build in the browser
@@ -230,7 +231,7 @@ export default function BuildEditor() {
       .sort((a, b) => a.name.localeCompare(b.name));
   }, [list, query, role]);
 
-  if (failed) return <p className="table-note">Couldn&apos;t load the build editor. Try reloading the page.</p>;
+  if (failed) return <LoadError what="The Build Editor" />;
   if (!list || !data || !champion) return <Skeleton kind="slots" rows={6} label="Loading the simulator…" />;
 
   const icon = (k: string) => data.items[itemByKey.get(k)?.name ?? ""]?.icon;
