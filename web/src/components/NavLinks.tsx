@@ -8,7 +8,7 @@ import type { NavItem } from "@/lib/tabs";
 import { T, useT } from "./I18n";
 
 // Each tab has its own accent colour (globals.css, [data-accent]).
-const ACCENT: Record<string, string> = { "/tier-list": "tier", "/simulator": "sim", "/pbe": "pbe", "/info": "info", "/lab": "lab" };
+const ACCENT: Record<string, string> = { "/tier-list": "tier", "/simulator": "sim", "/pbe": "pbe", "/info": "info", "/kitchen": "lab" };
 
 const Beta = ({ href }: { href: string }) => (BETA.has(href) ? (
     <span className="beta">

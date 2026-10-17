@@ -16,17 +16,17 @@ export type ToolTab = Tab & { slug: string; entry: string; order: number; folder
 const SKIP = new Set(["web", "node_modules", ".git", ".github"]);
 
 // Where each embedded folder (by slug) is published. Anything not listed lives at /tools/<slug>.
-// The Kitchen's cook builds are part of The Lab now (KITCHEN), so its folder is no tab of its own.
-export const KITCHEN = "/lab#cook-builds";
+// The Kitchen (tools/fun, formerly The Lab) holds the Chef Specials; cook-builds is its data, no tab of its own.
+export const KITCHEN = "/kitchen";
 const HIDDEN = new Set(["cook-builds"]);
 const ROUTES: Record<string, string> = {
   champions: "/champions",
   guide: "/info",
-  fun: "/lab",
+  fun: "/kitchen",
 };
 export const toolHref = (slug: string) => ROUTES[slug] ?? `/tools/${slug}`;
 // Tab names the site sets regardless of the folder's own label.
-const LABELS: Record<string, string> = { guide: "Info" };
+const LABELS: Record<string, string> = { guide: "Info", fun: "The Kitchen" };
 
 export function discoverToolTabs(): ToolTab[] {
   const root = repoPath("");
@@ -81,7 +81,7 @@ export function navItems(): NavItem[] {
     ...pick("/augments"),
     ...pick("/simulator"),
     ...menu("#patches", "Patches", [...pick("/pbe"), ...pick("/patches")]),
-    ...menu("#more", "More", [...pick("/items"), ...pick("/info"), ...pick("/lab"), ...tools.flatMap((t) => pick(t.href))]),
+    ...menu("#more", "More", [...pick("/items"), ...pick("/info"), ...pick("/kitchen"), ...tools.flatMap((t) => pick(t.href))]),
   ];
 }
 
