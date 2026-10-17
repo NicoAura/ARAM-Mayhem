@@ -56,6 +56,10 @@ for (const { name, from, exclude = [] } of embeds) {
 const LOCAL = [
   [/https:\/\/raw\.communitydragon\.org\//g, "/assets/cd/"],
   [/https:\/\/ddragon\.leagueoflegends\.com\/cdn\//g, "/assets/dd/"],
+  // The mode's internal name stays out of the pages: unfilled tooltip tokens are dropped, and the copies in
+  // public/assets/ store its "kiwi" folders and files as "mayhem" (fetch_assets.py local_path).
+  [/\{\{\s*Kiwi_[^}]*\}\}\s*/g, ""],
+  [/kiwi/gi, (m) => (m === "KIWI" ? "MAYHEM" : m[0] === "K" ? "Mayhem" : "mayhem")],
   // Augment "small" icons are grey for every rarity; the "large" ones carry the silver, gold or prismatic colour.
   // Arena augments have no large icon, so only swap when the large copy is there.
   [

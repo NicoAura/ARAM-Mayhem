@@ -84,7 +84,7 @@ def local_path(url):
     u = urllib.parse.urlsplit(url)
     if u.netloc == "raw.communitydragon.org":
         channel, _, rest = u.path.lstrip("/").partition("/")
-        return f"cd/{channel}/{urllib.parse.unquote(rest).lower()}"
+        return f"cd/{channel}/{urllib.parse.unquote(rest).lower()}".replace("kiwi", "mayhem")
     if u.netloc == "ddragon.leagueoflegends.com":
         m = re.match(r"/cdn/([\d.]+)/img/(.+)", u.path)
         return f"dd/{m.group(1)}/img/{urllib.parse.unquote(m.group(2))}" if m else None
@@ -112,7 +112,7 @@ def source_url(path):
     """/assets/cd/latest/x.png -> its CommunityDragon URL; /assets/dd/<ver>/img/x.png -> its Data Dragon URL."""
     rest = path.removeprefix("/assets/")
     if rest.startswith("cd/"):
-        return f"{CD}/{rest[3:]}"
+        return f"{CD}/{rest[3:].replace('mayhem', 'kiwi')}"
     ver, _, img = rest[3:].partition("/")
     return f"{DD}/cdn/{ver}/{img}"
 

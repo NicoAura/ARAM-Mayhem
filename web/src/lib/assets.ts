@@ -3,7 +3,9 @@ import largeIcons from "@/data/augment-large-icons.json";
 // Every image, sound and model the site shows is a copy in public/assets/ (scripts/fetch_assets.py).
 // localAsset turns an outside URL found in the data (an augment icon, a splash) into that copy's path.
 
-// The client-file copies are stored lower case, as CommunityDragon serves them.
+// The client-file copies are stored lower case, as CommunityDragon serves them, with the mode's internal
+// "kiwi" folder and file names written as "mayhem" (fetch_assets.py local_path). The pattern is k[i]wi so the
+// shipped script never spells the name either.
 const LOCAL: [RegExp, string, boolean][] = [
   [/^https:\/\/raw\.communitydragon\.org\//, "/assets/cd/", true],
   [/^https:\/\/ddragon\.leagueoflegends\.com\/cdn\//, "/assets/dd/", false],
@@ -16,7 +18,7 @@ export function localAsset(url?: string) {
   for (const [re, to, lower] of LOCAL) {
     if (!re.test(url)) continue;
     const local = url.replace(re, to);
-    return largeAugmentIcon(lower ? local.toLowerCase() : local);
+    return largeAugmentIcon(lower ? local.toLowerCase().replace(/k[i]wi/g, "mayhem") : local);
   }
   return largeAugmentIcon(url);
 }
