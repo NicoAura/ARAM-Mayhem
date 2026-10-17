@@ -31,6 +31,14 @@ and Items tabs.
 It also lists `selectionAugments` (live augments that add an augment or rerolls, such as King Me) and the
 `goldenReroll` reward text.
 
+## Mayhem progression track
+
+`build_track()` reads the newest `kMayhem` season pass from `v1/event-hub.json` (name, dates, level count from its
+chapters) and takes that many entries from the end of the Mayhem block in `v1/rewards.json`, which lists every track's
+rewards in level order. Each level becomes an augment (matched by icon to kiwi.bin), emote, icon, title or other
+reward. `data.js` has the track as `track`; `augment_rules.json` has `unlocks` (augment id to track level) for the
+augment pages. If the reward list stops lining up with the track, the track is left out rather than guessed.
+
 ## Mode rules (attack speed cap, crits, runes)
 
 `build_data.py` writes `mode_rules.json` for the Simulator and the site:

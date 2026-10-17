@@ -114,6 +114,20 @@
     $("selection-list").innerHTML = extra
       .map((a) => `<div class="row" style="align-items:flex-start">${img(a.icon)}<div><div class="title">${esc(a.name)} ${tierChip(a.tier)}</div><div class="muted small">${esc(a.text)}</div></div></div>`)
       .join("");
+    const T = D.track;
+    if (T) {
+      const day = (d) => new Date(`${d}T12:00:00Z`).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
+      const augs = T.levels.filter((r) => r.kind === "Augment").length;
+      $("track-card").hidden = false;
+      $("track-title").textContent = T.name;
+      $("track-dates").textContent = `${day(T.start)} to ${day(T.end)}`;
+      $("track-intro").textContent =
+        `Playing Mayhem fills a ${T.size}-level track. ${augs} levels unlock a new augment, which can then show up in your selections; ` +
+        "the rest give emotes, icons, a title and other rewards.";
+      $("track-list").innerHTML = T.levels
+        .map((r) => `<div class="row">${r.icon ? img(r.icon) : ""}<div><div class="eyebrow">Level ${r.level} · ${esc(r.kind)}</div><div class="title">${esc(r.name)} ${tierChip(r.tier)}</div></div></div>`)
+        .join("");
+    }
     const gi = AR.grantedItems.filter((g, i, all) => all.findIndex((x) => x.name === g.name) === i);
     $("granted-intro").textContent =
       "Rewards can't be bought, so build stats on the champion pages leave them out. Free items are handed over at once, but you can also buy them.";

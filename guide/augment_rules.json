@@ -364,5 +364,23 @@
   "name": "Golden Reroll",
   "text": "Reroll into an augment one tier higher.",
   "icon": "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/rewards/kiwi/goldenreroll.png"
+ },
+ "unlocks": {
+  "2031": 24,
+  "2032": 6,
+  "2034": 10,
+  "2043": 14,
+  "2046": 30,
+  "2063": 32,
+  "2080": 26,
+  "2083": 18,
+  "2091": 22,
+  "2104": 12,
+  "2107": 8,
+  "2115": 20,
+  "2118": 28,
+  "2127": 4,
+  "2134": 16,
+  "2137": 2
  }
 }
