@@ -13,12 +13,10 @@
       <p class="label">Your match history</p>
       <h1>My Stats</h1>
       <p id="account" class="sub" hidden></p>
-      <p id="sample-note" class="sample-note" hidden>Showing example games, not real ones. Load your own archive to see your stats.</p>
+      <p id="sample-note" class="sample-note" hidden>Showing example games, not real ones. Import your games to see your stats.</p>
     </div>
     <div id="actions" class="actions" hidden>
-      <button id="sync" type="button" class="btn primary sync-btn" data-full="1">Get all my Mayhem games</button>
-      <button type="button" class="btn sync-btn">Import games from client</button>
-      <label class="btn">Load archive<input type="file" id="file-2" accept=".json,application/json" hidden></label>
+      <button id="sync" type="button" class="btn primary sync-btn" title="Needs the Riot Client open and signed in on this computer">Import games from client</button>
     </div>
   </header>
   <p id="sync-status" class="sync-status" aria-live="polite" hidden></p>
@@ -26,12 +24,11 @@
   <section id="loader" class="empty">
     <div class="ico" aria-hidden="true">↻</div>
     <h3>No games yet</h3>
-    <p class="sub">Get your games, or drop a <code>mayhem-backup.json</code> file here. Your games stay in your browser.</p>
+    <p class="sub">Import your games from the League client. Your games stay on your computer.</p>
     <div class="row">
-      <button type="button" class="btn primary sync-btn" data-full="1">Get all my Mayhem games</button>
-      <button type="button" class="btn sync-btn">Import games from client</button>
-      <label class="btn">Choose a file<input type="file" id="file" accept=".json,application/json" hidden></label>
+      <button type="button" class="btn primary sync-btn">Import games from client</button>
     </div>
+    <p class="client-note">You need to be connected to the Riot Client: open it on this computer and sign in first.</p>
     <p id="load-error" class="error" hidden></p>
   </section>
 

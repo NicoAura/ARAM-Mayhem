@@ -32,9 +32,9 @@ function showError(msg) {
 
 async function loadText(text, { sample = false } = {}) {
   let data;
-  try { data = JSON.parse(text); } catch (e) { return showError("That file isn't valid JSON."); }
+  try { data = JSON.parse(text); } catch (e) { return showError("Your saved games couldn't be read."); }
   const raw = findGames(data);
-  if (!raw.length) return showError("No games found in that file.");
+  if (!raw.length) return showError("No Mayhem games yet. Import games from client to add them.");
   const owner = findOwner(data, raw);
   state.owner = owner;
   state.games = raw.map((g) => normalize(g, owner)).filter(Boolean)
@@ -438,33 +438,15 @@ function renderGames(games) {
 
 // ---------- wiring ----------
 
-for (const id of ["file", "file-2"]) {
-  $(id).addEventListener("change", async (e) => {
-    const f = e.target.files[0];
-    if (f) loadText(await f.text());
-    e.target.value = "";
-  });
-}
-const loader = $("loader");
-loader.addEventListener("dragover", (e) => { e.preventDefault(); loader.classList.add("drag"); });
-loader.addEventListener("dragleave", () => loader.classList.remove("drag"));
-loader.addEventListener("drop", async (e) => {
-  e.preventDefault();
-  loader.classList.remove("drag");
-  const f = e.dataTransfer.files[0];
-  if (f) loadText(await f.text());
-});
 
 // ---------- sync ----------
-// Opened from the local sync helper, "Get all my Mayhem games" checks every
-// match that can still be fetched and fills any gaps; "Import games from
-// client" only adds games newer than the archive. Opened any other way, the
-// buttons explain how to get there.
+// Opened from the local sync helper, "Import games from client" adds games
+// newer than the archive. Opened any other way, the button explains how.
 
 const syncBtns = [...document.querySelectorAll(".sync-btn")];
 const syncStatus = $("sync-status");
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
-const OFFLINE_HINT = "Importing works when League is open on your Mac and this page is opened from Open Mayhem Stats.command.";
+const OFFLINE_HINT = "Connect to the Riot Client first: open it on this computer and sign in, then open this page from Open Mayhem Stats.command.";
 let helperOnline = false;
 
 function setSyncStatus(text, error = false) {
@@ -510,21 +492,21 @@ async function watchSync() {
   }
 }
 
-const startSync = async (full) => {
+const startSync = async () => {
   if (!helperOnline) {
     // the helper may have been started since the page loaded
     try { await syncState(); helperOnline = true; } catch (e) { return setSyncStatus(OFFLINE_HINT); }
   }
   setSyncStatus("Starting…");
   try {
-    const res = await fetch(full ? "api/sync?full=1" : "api/sync", { method: "POST", headers: { "X-Mayhem": "1" } });
+    const res = await fetch("api/sync", { method: "POST", headers: { "X-Mayhem": "1" } });
     if (!res.ok && res.status !== 409) throw new Error(String(res.status));
   } catch (e) {
     return setSyncStatus("Couldn't reach the sync helper.", true);
   }
   watchSync();
 };
-for (const b of syncBtns) b.addEventListener("click", () => startSync(b.dataset.full === "1"));
+for (const b of syncBtns) b.addEventListener("click", startSync);
 
 async function setupSync() {
   // The empty state already explains Sync, so this only picks up a running sync
@@ -536,15 +518,14 @@ async function setupSync() {
   } catch (e) { /* no helper; the button explains when pressed */ }
 }
 
-// When served next to a data file, load it automatically. ?data=path picks a different file.
+// Opened from the sync helper, load the archive it keeps.
 (async () => {
   if (PRESET.sample) return loadText(JSON.stringify(PRESET.sample), { sample: true });
-  const path = new URLSearchParams(location.search).get("data") || "data/mayhem-backup.json";
   if (location.protocol !== "file:") {
     try {
-      const res = await fetch(path);
+      const res = await fetch("data/mayhem-backup.json", { cache: "no-store" });
       if (res.ok) await loadText(await res.text());
-    } catch (e) { /* no bundled data; wait for the file picker */ }
+    } catch (e) { /* no archive yet */ }
   }
   setupSync();
 })();

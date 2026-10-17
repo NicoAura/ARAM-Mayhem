@@ -13,7 +13,7 @@ export default function StatsPage() {
   return (
     <>
       <Intro eyebrow="My Stats" title={text("page./stats.title", "Your Mayhem games, in one place.")}>
-        Load your match archive (mayhem-backup.json) below. The file is read in your browser and never uploaded.
+        Import your games with the button below. You need to be connected to the Riot Client: open it on this computer and sign in first. Your games stay on your computer.
       </Intro>
       <RiotIdSignIn />
       {repoHas("dashboard/index.html") ? (
