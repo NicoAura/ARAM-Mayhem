@@ -1,4 +1,4 @@
-// The visitor's Riot ID "account", shared by the header's account button and the My Stats sign-in.
+// The visitor's Riot ID "account", shared by the header's account button and the My Stats account lookup.
 // It lives in this browser's localStorage; every change fires ACCOUNT_EVENT so both stay in step.
 // Anyone can look up any Riot ID, so this identifies a player; it doesn't prove who's typing.
 

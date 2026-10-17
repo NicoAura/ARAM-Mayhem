@@ -19,12 +19,12 @@ export default function Privacy() {
         </p>
         <h2>Stored in your browser</h2>
         <p>
-          Your theme, settings and, if you sign in, your Riot ID and region are saved in your own browser&apos;s local storage.
-          They never leave your device except as described below. Signing out or clearing site data removes them.
+          Your theme, settings and, if you use account lookup, your Riot ID and region are saved in your own browser&apos;s local storage.
+          They never leave your device except as described below. Clearing the lookup or clearing site data removes them.
         </p>
-        <h2>Riot ID lookups</h2>
+        <h2>Account lookup</h2>
         <p>
-          When you sign in with a Riot ID, the site looks up that public profile (name, icon, level and rank) from Riot Games
+          When you look up a Riot ID, the site looks up that public profile (name, icon, level and rank) from Riot Games
           and shows it to you. Riot IDs are public, so this does not prove who you are. We don&apos;t keep a list of who looked
           up what.
         </p>

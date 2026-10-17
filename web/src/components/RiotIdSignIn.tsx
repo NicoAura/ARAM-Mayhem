@@ -4,8 +4,8 @@ import { useEffect, useState } from "react";
 import RiotIdFields from "./RiotIdFields";
 import { ACCOUNT_EVENT, loadAccount, PROFILE_FRESH_MS, profileIcon as ICON, SERVERS, signIn, signOut as forget, type Profile } from "@/lib/account";
 
-// The My Stats sign-in card. The account itself (stored Riot ID, lookup, sign out) is shared with
-// the header's account button through @/lib/account, so signing in or out in either updates both.
+// The My Stats account lookup card. The account itself (stored Riot ID, lookup, clearing it) is shared
+// with the header's account button through @/lib/account, so a lookup or clear in either updates both.
 
 const QUEUES: Record<string, string> = { RANKED_SOLO_5x5: "Solo/Duo", RANKED_FLEX_SR: "Flex" };
 
@@ -62,7 +62,7 @@ export default function RiotIdSignIn() {
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src={ICON(profile.profileIconId)} alt="" width={56} height={56} />
           <div>
-            <p className="eyebrow">Signed in as</p>
+            <p className="eyebrow">Account</p>
             <h2>
               {profile.gameName}
               <span>#{profile.tagLine}</span>
@@ -72,7 +72,7 @@ export default function RiotIdSignIn() {
             </p>
           </div>
           <button type="button" className="btn ghost" onClick={signOut}>
-            Sign out
+            Clear lookup
           </button>
         </div>
         {(profile.ranked ?? []).length > 0 && (
@@ -108,7 +108,7 @@ export default function RiotIdSignIn() {
       >
         <RiotIdFields riotId={riotId} onRiotId={setRiotId} platform={platform} onPlatform={setPlatform} />
         <button type="submit" className="btn" disabled={busy}>
-          {busy ? "Looking up…" : "Sign in"}
+          {busy ? "Looking up…" : "Look up"}
         </button>
       </form>
       <p className={error ? "riot-id-note error" : "riot-id-note"}>

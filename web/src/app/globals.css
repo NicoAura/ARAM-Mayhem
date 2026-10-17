@@ -1795,7 +1795,7 @@ html[data-device="mobile"] .theme-toggle button {
   filter: grayscale(0.6);
 }
 
-/* Riot ID sign-in (My Stats) */
+/* Riot ID account lookup (My Stats) */
 .riot-id {
   display: grid;
   gap: 0.75rem;
@@ -2585,7 +2585,7 @@ html[data-motion="reduce"] *::after {
   }
 }
 
-/* Riot ID fields (header sign-in and My Stats): Name # Tag, then Region. */
+/* Riot ID fields (header account lookup and My Stats): Name # Tag, then Region. */
 .riot-fields {
   display: flex;
   flex-wrap: wrap;

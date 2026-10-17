@@ -2,7 +2,7 @@
 
 import { SERVERS } from "@/lib/account";
 
-// Riot ID as Name # Tag plus a region, shared by the header sign-in and My Stats.
+// Riot ID as Name # Tag plus a region, shared by the header account lookup and My Stats.
 // `riotId` stays one "Name#TAG" string for the caller; pasting a whole Riot ID into Name splits it.
 // Field names (riot-name, riot-tag, region) and autocomplete="username" on Name let password managers fill it.
 export default function RiotIdFields({
