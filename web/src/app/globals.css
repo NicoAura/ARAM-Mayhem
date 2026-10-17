@@ -5876,3 +5876,57 @@ html[data-text="larger"] {
 html[data-device="mobile"] .settings-menu {
   max-height: calc(100dvh - 100px - var(--tabbar-h) - var(--tabbar-gap));
 }
+
+/* Recently viewed (Home) */
+.recent .team-clear {
+  margin: 0;
+}
+.recent-row {
+  display: flex;
+  gap: 0.6rem;
+  overflow-x: auto;
+  padding-bottom: 0.25rem;
+  scrollbar-width: thin;
+}
+.recent-item {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 0.6rem;
+  max-width: 15rem;
+  padding: 0.5rem 0.85rem 0.5rem 0.5rem;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--raised);
+}
+.recent-item:hover {
+  border-color: var(--accent);
+}
+.recent-item img,
+.recent-dot {
+  flex: none;
+  width: 36px;
+  height: 36px;
+  border-radius: 9px;
+}
+.recent-dot {
+  display: grid;
+  place-items: center;
+  background: var(--accent-soft);
+  color: var(--accent);
+  font-weight: 700;
+}
+.recent-item span {
+  display: grid;
+  min-width: 0;
+}
+.recent-item b {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 0.875rem;
+}
+.recent-item small {
+  color: var(--muted);
+  font-size: 0.75rem;
+}
