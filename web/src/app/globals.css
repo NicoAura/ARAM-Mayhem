@@ -2065,6 +2065,7 @@ html[data-device="mobile"] .theme-toggle button {
 }
 
 .account-btn:hover,
+.account-btn[aria-expanded="true"],
 .account-btn[aria-current="page"] {
   border-color: var(--muted);
   color: var(--fg);
@@ -2223,6 +2224,29 @@ html[data-device="mobile"] .site-header-inner {
   letter-spacing: 0.04em;
   text-transform: uppercase;
   vertical-align: 0.15em;
+}
+
+/* Header pop-up panel (the settings menu uses it). */
+.account-menu {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  z-index: 40;
+  width: min(300px, calc(100vw - 2rem));
+  padding: 0.5rem;
+  border: 1px solid var(--line);
+  border-radius: var(--r);
+  background: var(--surface);
+  box-shadow: 0 12px 32px rgb(0 0 0 / 0.18);
+}
+
+.account-title {
+  font: 700 1rem/1.2 var(--display);
+}
+
+.account-note {
+  color: var(--muted);
+  font-size: 0.78rem;
 }
 
 /* Settings menu (gear, top right). */
