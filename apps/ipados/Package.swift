@@ -2,7 +2,7 @@
 import PackageDescription
 
 // The iPad layout of the DeepARAM app: a sidebar of sections and a champion pane beside the page.
-// The iPad app target (App/) links it; it builds on the shared DeepARAMKit package.
+// The DeepARAM app in apps/ios shows it on iPad; it builds on the shared DeepARAMKit package.
 let package = Package(
     name: "DeepARAMPad",
     platforms: [.iOS(.v17)],
