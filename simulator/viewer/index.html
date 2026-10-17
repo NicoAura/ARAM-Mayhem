@@ -52,7 +52,6 @@ body { margin: 0; font: 14px/1.5 var(--body); }
 header { display: flex; flex-wrap: wrap; align-items: end; gap: 12px 24px; justify-content: space-between; }
 h1 { font: 700 clamp(26px, 3.2vw, 32px)/1.1 var(--display); letter-spacing: -.025em; margin: 0; text-wrap: balance; }
 .eyebrow { font: 500 11.5px/1 var(--mono); letter-spacing: .06em; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; }
-.beta { display: inline-block; margin-left: 6px; padding: 3px 7px; border: 1px solid var(--accent); border-radius: 999px; color: var(--accent-text); background: var(--accent-soft); letter-spacing: .06em; vertical-align: 1px; }
 .picker { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
 label.lbl { font: 500 11px/1 var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
 select, button { font: 500 14px var(--body); color: var(--frost); background: transparent; border: 1px solid var(--line);
@@ -71,6 +70,7 @@ button:hover, select:hover { background: var(--accent-soft); border-color: var(-
 .clip { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; overflow: hidden; display: grid;
   grid-template-rows: auto auto 1fr; min-width: 0; }
 .clip[hidden] { display: none; }
+[hidden] { display: none !important; }
 .clip-video { position: relative; background: #05080c; aspect-ratio: 360 / 246; max-width: 100%; }
 .clip-video video { width: 100%; height: 100%; display: block; object-fit: cover; }
 .clip-video .fallback { position: absolute; inset: 0; display: grid; place-items: center; color: var(--muted); font-size: 13px; text-align: center; padding: 16px; }
@@ -189,7 +189,7 @@ fieldset.wide { grid-column: 1 / -1; }
 <div class="wrap">
   <header>
     <div>
-      <div class="eyebrow">ARAM Mayhem simulator · fight replay <span class="beta" title="Experimental">Beta</span></div>
+      <div class="eyebrow">ARAM Mayhem simulator · fight replay</div>
       <h1 id="title">Loading replays…</h1>
     </div>
     <div class="picker">
