@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Fragment, useEffect, useState } from "react";
+import { useT } from "./I18n";
 
 type Tab = { href: string; label: string; group?: string };
 
@@ -38,6 +39,7 @@ function Icon({ name }: { name: string }) {
 export default function MobileTabBar({ tabs }: { tabs: Tab[] }) {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
+  const tr = useT();
   useEffect(() => setOpen(false), [pathname]);
 
   const isActive = (href: string) => (href === "/" ? pathname === "/" : pathname === href || pathname.startsWith(href + "/"));
@@ -47,23 +49,23 @@ export default function MobileTabBar({ tabs }: { tabs: Tab[] }) {
 
   return (
     <>
-      {open && <button type="button" className="sheet-scrim" aria-label="Close menu" onClick={() => setOpen(false)} />}
+      {open && <button type="button" className="sheet-scrim" aria-label={tr("Close menu")} onClick={() => setOpen(false)} />}
       <div className="sheet" hidden={!open} id="more-sheet">
         {rest.map((t, i) => (
           <Fragment key={t.href}>
-            {t.group && t.group !== rest[i - 1]?.group && <p className="sheet-group">{t.group}</p>}
+            {t.group && t.group !== rest[i - 1]?.group && <p className="sheet-group">{tr(t.group)}</p>}
             <Link href={t.href} aria-current={isActive(t.href) ? "page" : undefined}>
-              {t.label}
+              {tr(t.label)}
               <span aria-hidden="true">→</span>
             </Link>
           </Fragment>
         ))}
       </div>
-      <nav className="tabbar" aria-label="Sections">
+      <nav className="tabbar" aria-label={tr("Sections")}>
         {primary.map((t) => (
           <Link key={t.href} href={t.href} data-accent={ACCENT[t.href]} aria-current={isActive(t.href) ? "page" : undefined}>
             <Icon name={t.href} />
-            <span>{t.href === "/tier-list" ? "Tiers" : t.label}</span>
+            <span>{tr(t.href === "/tier-list" ? "Tiers" : t.label)}</span>
           </Link>
         ))}
         <button
@@ -75,7 +77,7 @@ export default function MobileTabBar({ tabs }: { tabs: Tab[] }) {
           onClick={() => setOpen((o) => !o)}
         >
           <Icon name="more" />
-          <span>More</span>
+          <span>{tr("More")}</span>
         </button>
       </nav>
     </>

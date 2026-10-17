@@ -24,6 +24,9 @@ import SettingsMenu from "@/components/SettingsMenu";
 import { text } from "@/lib/content";
 import { livePatch, searchPages } from "@/lib/highlights";
 import { SETTINGS_SCRIPT } from "@/lib/settings";
+import { LANG_SCRIPT } from "@/lib/i18n";
+import { T } from "@/components/I18n";
+import LanguagePicker from "@/components/LanguagePicker";
 import { THEME_COLORS, THEME_KEY } from "@/lib/theme";
 import { navGroups, navItems } from "@/lib/tabs";
 import "./globals.css";
@@ -97,7 +100,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${sans.variable} ${mono.variable} ${display.variable}`} data-patch={livePatch() ?? undefined} suppressHydrationWarning>
       <head>
-        <script dangerouslySetInnerHTML={{ __html: DEVICE_SCRIPT + THEME_SCRIPT + SETTINGS_SCRIPT + VIEW_SCRIPT }} />
+        <script dangerouslySetInnerHTML={{ __html: DEVICE_SCRIPT + THEME_SCRIPT + SETTINGS_SCRIPT + VIEW_SCRIPT + LANG_SCRIPT }} />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: STRUCTURED_DATA }} />
       </head>
       <body>
@@ -128,19 +131,34 @@ export default function RootLayout({
             <AccountButton />
           </div>
         </header>
-        {text("banner") && <p className="site-banner">{text("banner")}</p>}
+        {text("banner") && (
+          <p className="site-banner">
+            <T>{text("banner")}</T>
+          </p>
+        )}
         <main id="main" tabIndex={-1}>
           {children}
         </main>
         <footer className="site-footer">
           <FeedbackBox />
           <nav className="footer-links" aria-label="Legal">
-            <Link href="/privacy">Privacy</Link>
-            <Link href="/terms">Terms</Link>
-            <Link href="/status">Status</Link>
-            <a href="mailto:admin@deeparam.com">Contact</a>
+            <Link href="/privacy">
+              <T>Privacy</T>
+            </Link>
+            <Link href="/terms">
+              <T>Terms</T>
+            </Link>
+            <Link href="/status">
+              <T>Status</T>
+            </Link>
+            <a href="mailto:admin@deeparam.com">
+              <T>Contact</T>
+            </a>
           </nav>
-          <p>{text("footer")}</p>
+          <LanguagePicker className="lang-picker" />
+          <p>
+            <T>{text("footer")}</T>
+          </p>
         </footer>
         <PageTransitions />
         <TiltEffects />

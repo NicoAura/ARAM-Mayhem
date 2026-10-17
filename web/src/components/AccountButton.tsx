@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { ACCOUNT_EVENT, signedIn, syncAccount } from "@/lib/account-sync";
+import { useT } from "./I18n";
 
 // Top-right account button: opens the account page, where you sign in, create an account, or manage yours.
 // The ring turns the accent colour while you're signed in. It also keeps a signed-in visitor's Favorites
@@ -12,6 +13,7 @@ import { ACCOUNT_EVENT, signedIn, syncAccount } from "@/lib/account-sync";
 export default function AccountButton() {
   const pathname = usePathname();
   const [on, setOn] = useState(false);
+  const t = useT();
 
   useEffect(() => {
     const sync = () => setOn(signedIn());
@@ -27,9 +29,9 @@ export default function AccountButton() {
       <Link
         href="/account"
         className={on ? "account-btn signed-in" : "account-btn"}
-        aria-label={on ? "Your account" : "Sign in or create an account"}
+        aria-label={on ? t("Your account") : t("Sign in or create an account")}
         aria-current={here ? "page" : undefined}
-        title={on ? "Your account" : "Sign in"}
+        title={on ? t("Your account") : t("Sign in")}
       >
         <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
           <circle cx="12" cy="8" r="4" />

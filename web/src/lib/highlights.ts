@@ -86,6 +86,7 @@ export function searchItems(): SearchItem[] {
     hint: pct(Number(r.win_rate)),
     href: `/champions/${r.name}`,
     icon: `/icons/champions/${r.name}.webp`,
+    ref: ["champions", r.name] as SearchItem["ref"],
   }));
   const augs = (readRepoCsv("data/cn/augments.csv") ?? [])
     .filter((r) => AUGS[r.augment_id])
@@ -95,8 +96,9 @@ export function searchItems(): SearchItem[] {
       hint: r.tier || "Augment",
       href: augmentHref(r.augment_id) ?? `/tier-list?tab=augments&q=${encodeURIComponent(AUGS[r.augment_id])}`,
       icon: `/icons/augments/${r.augment_id}.webp`,
+      ref: ["augments", r.augment_id] as SearchItem["ref"],
     }));
-  const builtItems = itemPages().map((i) => ({ group: "Items", name: i.name, hint: i.cost ? `${i.cost} gold` : "Item", href: `/items/${i.slug}`, icon: i.icon }));
+  const builtItems = itemPages().map((i) => ({ group: "Items", name: i.name, hint: i.cost ? `${i.cost} gold` : "Item", href: `/items/${i.slug}`, icon: i.icon, ref: ["items", String(i.id)] as SearchItem["ref"] }));
   return [
     ...pages,
     ...champs.sort((a, b) => a.name.localeCompare(b.name)),
