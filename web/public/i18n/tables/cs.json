@@ -79,5 +79,15 @@
  "Role": "Role",
  "The job this champion usually does in a team.": "Úloha, kterou tento šampion v týmu obvykle plní.",
  "DeepScore rates each pick from 0 to 100, where 50 is average. It starts from win rate, trusts it less when there are fewer games, counts the newest patch most, and compares each pick with the rest of the list. Tiers: S 70+, A 59+, B 44+, C 32+, D below.": "DeepScore hodnotí každou volbu od 0 do 100, kde 50 je průměr. Vychází z procenta výher, věří mu méně, když je her málo, nejvíc váží nejnovější patch a porovnává každou volbu se zbytkem seznamu. Tiery: S 70+, A 59+, B 44+, C 32+, D níž.",
- "DeepScore rates each augment from 0 to 100 against others of its rarity, where 50 is average. It compares the augment's win rate with what the same champions win anyway, so augments that strong champions take don't look better than they are, and trusts rarely picked augments less. Tiers: S 70+, A 59+, B 44+, C 32+, D below.": "DeepScore hodnotí každý augment od 0 do 100 vůči ostatním stejné vzácnosti, kde 50 je průměr. Porovnává procento výher augmentu s tím, co stejní šampioni vyhrávají tak jako tak, aby augmenty, které berou silní šampioni, nevypadaly lépe, než jsou, a málo vybíraným augmentům věří méně. Tiery: S 70+, A 59+, B 44+, C 32+, D níž."
+ "DeepScore rates each augment from 0 to 100 against others of its rarity, where 50 is average. It compares the augment's win rate with what the same champions win anyway, so augments that strong champions take don't look better than they are, and trusts rarely picked augments less. Tiers: S 70+, A 59+, B 44+, C 32+, D below.": "DeepScore hodnotí každý augment od 0 do 100 vůči ostatním stejné vzácnosti, kde 50 je průměr. Porovnává procento výher augmentu s tím, co stejní šampioni vyhrávají tak jako tak, aby augmenty, které berou silní šampioni, nevypadaly lépe, než jsou, a málo vybíraným augmentům věří méně. Tiery: S 70+, A 59+, B 44+, C 32+, D níž.",
+ "Couldn't draw the image in this browser.": "Obrázek se v tomto prohlížeči nepodařilo vykreslit.",
+ "Share image": "Sdílet obrázek",
+ "Share image for {title}": "Sdílet obrázek: {title}",
+ "Drawing…": "Vykresluji…",
+ "Share": "Sdílet",
+ "Copied.": "Zkopírováno.",
+ "This browser can't copy images. Save it instead.": "Tento prohlížeč neumí kopírovat obrázky. Ulož si ho místo toho.",
+ "Copy image": "Kopírovat obrázek",
+ "Save": "Uložit",
+ "Close": "Zavřít"
 }

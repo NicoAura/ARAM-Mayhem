@@ -79,5 +79,15 @@
  "Role": "Vai trò",
  "The job this champion usually does in a team.": "Vai trò tướng này thường đảm nhận trong đội.",
  "DeepScore rates each pick from 0 to 100, where 50 is average. It starts from win rate, trusts it less when there are fewer games, counts the newest patch most, and compares each pick with the rest of the list. Tiers: S 70+, A 59+, B 44+, C 32+, D below.": "DeepScore chấm điểm mỗi lựa chọn từ 0 đến 100, trong đó 50 là trung bình. Điểm bắt đầu từ tỉ lệ thắng, ít tin vào nó hơn khi có ít trận, tính nặng nhất phiên bản mới nhất và so sánh mỗi lựa chọn với phần còn lại của danh sách. Bậc: S 70+, A 59+, B 44+, C 32+, D thấp hơn.",
- "DeepScore rates each augment from 0 to 100 against others of its rarity, where 50 is average. It compares the augment's win rate with what the same champions win anyway, so augments that strong champions take don't look better than they are, and trusts rarely picked augments less. Tiers: S 70+, A 59+, B 44+, C 32+, D below.": "DeepScore chấm điểm mỗi Lõi Nâng Cấp từ 0 đến 100 so với các lõi khác cùng độ hiếm, trong đó 50 là trung bình. Điểm so sánh tỉ lệ thắng của Lõi Nâng Cấp với mức mà chính các tướng đó vốn vẫn thắng, để những lõi được tướng mạnh chọn không trông tốt hơn thực tế, và ít tin hơn vào những lõi hiếm khi được chọn. Bậc: S 70+, A 59+, B 44+, C 32+, D thấp hơn."
+ "DeepScore rates each augment from 0 to 100 against others of its rarity, where 50 is average. It compares the augment's win rate with what the same champions win anyway, so augments that strong champions take don't look better than they are, and trusts rarely picked augments less. Tiers: S 70+, A 59+, B 44+, C 32+, D below.": "DeepScore chấm điểm mỗi Lõi Nâng Cấp từ 0 đến 100 so với các lõi khác cùng độ hiếm, trong đó 50 là trung bình. Điểm so sánh tỉ lệ thắng của Lõi Nâng Cấp với mức mà chính các tướng đó vốn vẫn thắng, để những lõi được tướng mạnh chọn không trông tốt hơn thực tế, và ít tin hơn vào những lõi hiếm khi được chọn. Bậc: S 70+, A 59+, B 44+, C 32+, D thấp hơn.",
+ "Couldn't draw the image in this browser.": "Không thể tạo ảnh trên trình duyệt này.",
+ "Share image": "Chia sẻ ảnh",
+ "Share image for {title}": "Chia sẻ ảnh cho {title}",
+ "Drawing…": "Đang tạo…",
+ "Share": "Chia sẻ",
+ "Copied.": "Đã sao chép.",
+ "This browser can't copy images. Save it instead.": "Trình duyệt này không sao chép được ảnh. Hãy lưu ảnh thay vào đó.",
+ "Copy image": "Sao chép ảnh",
+ "Save": "Lưu",
+ "Close": "Đóng"
 }

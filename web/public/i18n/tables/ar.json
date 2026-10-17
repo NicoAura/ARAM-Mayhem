@@ -79,5 +79,15 @@
  "Role": "الدور",
  "The job this champion usually does in a team.": "المهمة التي يؤديها هذا البطل عادةً في الفريق.",
  "DeepScore rates each pick from 0 to 100, where 50 is average. It starts from win rate, trusts it less when there are fewer games, counts the newest patch most, and compares each pick with the rest of the list. Tiers: S 70+, A 59+, B 44+, C 32+, D below.": "يقيّم DeepScore كل اختيار من 0 إلى 100، حيث 50 هو المتوسط. يبدأ من نسبة الفوز، ويثق بها أقل عندما تقل المباريات، ويمنح التحديث الأحدث الوزن الأكبر، ويقارن كل اختيار ببقية القائمة. المستويات: S 70+، A 59+، B 44+، C 32+، D أقل من ذلك.",
- "DeepScore rates each augment from 0 to 100 against others of its rarity, where 50 is average. It compares the augment's win rate with what the same champions win anyway, so augments that strong champions take don't look better than they are, and trusts rarely picked augments less. Tiers: S 70+, A 59+, B 44+, C 32+, D below.": "يقيّم DeepScore كل تعزيز من 0 إلى 100 مقارنةً بغيره من الندرة نفسها، حيث 50 هو المتوسط. يقارن نسبة فوز التعزيز بما يفوز به الأبطال أنفسهم على أي حال، حتى لا تبدو التعزيزات التي يختارها الأبطال الأقوياء أفضل مما هي عليه، ويثق أقل بالتعزيزات النادرة الاختيار. المستويات: S 70+، A 59+، B 44+، C 32+، D أقل من ذلك."
+ "DeepScore rates each augment from 0 to 100 against others of its rarity, where 50 is average. It compares the augment's win rate with what the same champions win anyway, so augments that strong champions take don't look better than they are, and trusts rarely picked augments less. Tiers: S 70+, A 59+, B 44+, C 32+, D below.": "يقيّم DeepScore كل تعزيز من 0 إلى 100 مقارنةً بغيره من الندرة نفسها، حيث 50 هو المتوسط. يقارن نسبة فوز التعزيز بما يفوز به الأبطال أنفسهم على أي حال، حتى لا تبدو التعزيزات التي يختارها الأبطال الأقوياء أفضل مما هي عليه، ويثق أقل بالتعزيزات النادرة الاختيار. المستويات: S 70+، A 59+، B 44+، C 32+، D أقل من ذلك.",
+ "Couldn't draw the image in this browser.": "تعذّر رسم الصورة في هذا المتصفح.",
+ "Share image": "مشاركة الصورة",
+ "Share image for {title}": "مشاركة صورة {title}",
+ "Drawing…": "جارٍ الرسم…",
+ "Share": "مشاركة",
+ "Copied.": "تم النسخ.",
+ "This browser can't copy images. Save it instead.": "لا يمكن لهذا المتصفح نسخ الصور. احفظها بدلًا من ذلك.",
+ "Copy image": "نسخ الصورة",
+ "Save": "حفظ",
+ "Close": "إغلاق"
 }

@@ -79,5 +79,15 @@
  "Role": "Ruolo",
  "The job this champion usually does in a team.": "Il compito che questo campione svolge di solito in squadra.",
  "DeepScore rates each pick from 0 to 100, where 50 is average. It starts from win rate, trusts it less when there are fewer games, counts the newest patch most, and compares each pick with the rest of the list. Tiers: S 70+, A 59+, B 44+, C 32+, D below.": "Il DeepScore valuta ogni scelta da 0 a 100, dove 50 è la media. Parte dalla percentuale di vittorie, se ne fida meno quando ci sono poche partite, dà più peso alla patch più recente e confronta ogni scelta con il resto della lista. Tier: S 70+, A 59+, B 44+, C 32+, D sotto.",
- "DeepScore rates each augment from 0 to 100 against others of its rarity, where 50 is average. It compares the augment's win rate with what the same champions win anyway, so augments that strong champions take don't look better than they are, and trusts rarely picked augments less. Tiers: S 70+, A 59+, B 44+, C 32+, D below.": "Il DeepScore valuta ogni potenziamento da 0 a 100 rispetto agli altri della stessa rarità, dove 50 è la media. Confronta la percentuale di vittorie del potenziamento con quella che gli stessi campioni ottengono comunque, così i potenziamenti presi da campioni forti non sembrano migliori di quanto siano, e si fida meno di quelli scelti raramente. Tier: S 70+, A 59+, B 44+, C 32+, D sotto."
+ "DeepScore rates each augment from 0 to 100 against others of its rarity, where 50 is average. It compares the augment's win rate with what the same champions win anyway, so augments that strong champions take don't look better than they are, and trusts rarely picked augments less. Tiers: S 70+, A 59+, B 44+, C 32+, D below.": "Il DeepScore valuta ogni potenziamento da 0 a 100 rispetto agli altri della stessa rarità, dove 50 è la media. Confronta la percentuale di vittorie del potenziamento con quella che gli stessi campioni ottengono comunque, così i potenziamenti presi da campioni forti non sembrano migliori di quanto siano, e si fida meno di quelli scelti raramente. Tier: S 70+, A 59+, B 44+, C 32+, D sotto.",
+ "Couldn't draw the image in this browser.": "Impossibile disegnare l'immagine in questo browser.",
+ "Share image": "Condividi immagine",
+ "Share image for {title}": "Immagine da condividere per {title}",
+ "Drawing…": "Disegno in corso…",
+ "Share": "Condividi",
+ "Copied.": "Copiata.",
+ "This browser can't copy images. Save it instead.": "Questo browser non può copiare immagini. Salvala invece.",
+ "Copy image": "Copia immagine",
+ "Save": "Salva",
+ "Close": "Chiudi"
 }

@@ -79,5 +79,15 @@
  "Role": "Szerep",
  "The job this champion usually does in a team.": "A feladat, amelyet ez a hős általában ellát a csapatban.",
  "DeepScore rates each pick from 0 to 100, where 50 is average. It starts from win rate, trusts it less when there are fewer games, counts the newest patch most, and compares each pick with the rest of the list. Tiers: S 70+, A 59+, B 44+, C 32+, D below.": "A DeepScore minden választást 0-tól 100-ig értékel, ahol az 50 az átlag. A győzelmi arányból indul ki, kevésbé bízik benne, ha kevés a meccs, a legújabb frissítést számolja a legerősebben, és minden választást összevet a lista többi részével. Tierek: S 70+, A 59+, B 44+, C 32+, D alatta.",
- "DeepScore rates each augment from 0 to 100 against others of its rarity, where 50 is average. It compares the augment's win rate with what the same champions win anyway, so augments that strong champions take don't look better than they are, and trusts rarely picked augments less. Tiers: S 70+, A 59+, B 44+, C 32+, D below.": "A DeepScore minden bővítést 0-tól 100-ig értékel az azonos ritkaságúakhoz képest, ahol az 50 az átlag. A bővítés győzelmi arányát ahhoz méri, amennyit ugyanazok a hősök amúgy is nyernek, így az erős hősök által választott bővítések nem tűnnek jobbnak, mint amilyenek, és a ritkán választott bővítésekben kevésbé bízik. Tierek: S 70+, A 59+, B 44+, C 32+, D alatta."
+ "DeepScore rates each augment from 0 to 100 against others of its rarity, where 50 is average. It compares the augment's win rate with what the same champions win anyway, so augments that strong champions take don't look better than they are, and trusts rarely picked augments less. Tiers: S 70+, A 59+, B 44+, C 32+, D below.": "A DeepScore minden bővítést 0-tól 100-ig értékel az azonos ritkaságúakhoz képest, ahol az 50 az átlag. A bővítés győzelmi arányát ahhoz méri, amennyit ugyanazok a hősök amúgy is nyernek, így az erős hősök által választott bővítések nem tűnnek jobbnak, mint amilyenek, és a ritkán választott bővítésekben kevésbé bízik. Tierek: S 70+, A 59+, B 44+, C 32+, D alatta.",
+ "Couldn't draw the image in this browser.": "Ebben a böngészőben nem sikerült megrajzolni a képet.",
+ "Share image": "Kép megosztása",
+ "Share image for {title}": "Megosztható kép: {title}",
+ "Drawing…": "Rajzolás…",
+ "Share": "Megosztás",
+ "Copied.": "Másolva.",
+ "This browser can't copy images. Save it instead.": "Ez a böngésző nem tud képet másolni. Mentsd el inkább.",
+ "Copy image": "Kép másolása",
+ "Save": "Mentés",
+ "Close": "Bezárás"
 }

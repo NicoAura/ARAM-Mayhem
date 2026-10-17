@@ -79,5 +79,15 @@
  "Role": "Função",
  "The job this champion usually does in a team.": "A função que este campeão costuma cumprir no time.",
  "DeepScore rates each pick from 0 to 100, where 50 is average. It starts from win rate, trusts it less when there are fewer games, counts the newest patch most, and compares each pick with the rest of the list. Tiers: S 70+, A 59+, B 44+, C 32+, D below.": "O DeepScore dá uma nota de 0 a 100 a cada escolha, em que 50 é a média. Ele parte da taxa de vitórias, confia menos nela quando há poucas partidas, dá mais peso ao patch mais recente e compara cada escolha com o resto da lista. Tiers: S 70+, A 59+, B 44+, C 32+, D abaixo.",
- "DeepScore rates each augment from 0 to 100 against others of its rarity, where 50 is average. It compares the augment's win rate with what the same champions win anyway, so augments that strong champions take don't look better than they are, and trusts rarely picked augments less. Tiers: S 70+, A 59+, B 44+, C 32+, D below.": "O DeepScore dá uma nota de 0 a 100 a cada aprimoramento em relação aos outros da mesma raridade, em que 50 é a média. Ele compara a taxa de vitórias do aprimoramento com o que os mesmos campeões já vencem normalmente, para que aprimoramentos escolhidos por campeões fortes não pareçam melhores do que são, e confia menos nos aprimoramentos pouco escolhidos. Tiers: S 70+, A 59+, B 44+, C 32+, D abaixo."
+ "DeepScore rates each augment from 0 to 100 against others of its rarity, where 50 is average. It compares the augment's win rate with what the same champions win anyway, so augments that strong champions take don't look better than they are, and trusts rarely picked augments less. Tiers: S 70+, A 59+, B 44+, C 32+, D below.": "O DeepScore dá uma nota de 0 a 100 a cada aprimoramento em relação aos outros da mesma raridade, em que 50 é a média. Ele compara a taxa de vitórias do aprimoramento com o que os mesmos campeões já vencem normalmente, para que aprimoramentos escolhidos por campeões fortes não pareçam melhores do que são, e confia menos nos aprimoramentos pouco escolhidos. Tiers: S 70+, A 59+, B 44+, C 32+, D abaixo.",
+ "Couldn't draw the image in this browser.": "Não foi possível desenhar a imagem neste navegador.",
+ "Share image": "Compartilhar imagem",
+ "Share image for {title}": "Imagem para compartilhar de {title}",
+ "Drawing…": "Desenhando…",
+ "Share": "Compartilhar",
+ "Copied.": "Copiada.",
+ "This browser can't copy images. Save it instead.": "Este navegador não consegue copiar imagens. Salve-a em vez disso.",
+ "Copy image": "Copiar imagem",
+ "Save": "Salvar",
+ "Close": "Fechar"
 }

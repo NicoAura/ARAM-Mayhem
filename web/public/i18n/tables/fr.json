@@ -79,5 +79,15 @@
  "Role": "Rôle",
  "The job this champion usually does in a team.": "Le rôle que ce champion remplit généralement dans une équipe.",
  "DeepScore rates each pick from 0 to 100, where 50 is average. It starts from win rate, trusts it less when there are fewer games, counts the newest patch most, and compares each pick with the rest of the list. Tiers: S 70+, A 59+, B 44+, C 32+, D below.": "Le DeepScore note chaque choix de 0 à 100, 50 étant la moyenne. Il part du taux de victoire, lui fait moins confiance quand il y a moins de parties, donne le plus de poids au patch le plus récent et compare chaque choix au reste de la liste. Tiers : S 70+, A 59+, B 44+, C 32+, D en dessous.",
- "DeepScore rates each augment from 0 to 100 against others of its rarity, where 50 is average. It compares the augment's win rate with what the same champions win anyway, so augments that strong champions take don't look better than they are, and trusts rarely picked augments less. Tiers: S 70+, A 59+, B 44+, C 32+, D below.": "Le DeepScore note chaque augment de 0 à 100 face aux autres de sa rareté, 50 étant la moyenne. Il compare le taux de victoire de l'augment à ce que les mêmes champions gagnent de toute façon, pour que les augments pris par des champions forts ne paraissent pas meilleurs qu'ils ne le sont, et fait moins confiance aux augments rarement choisis. Tiers : S 70+, A 59+, B 44+, C 32+, D en dessous."
+ "DeepScore rates each augment from 0 to 100 against others of its rarity, where 50 is average. It compares the augment's win rate with what the same champions win anyway, so augments that strong champions take don't look better than they are, and trusts rarely picked augments less. Tiers: S 70+, A 59+, B 44+, C 32+, D below.": "Le DeepScore note chaque augment de 0 à 100 face aux autres de sa rareté, 50 étant la moyenne. Il compare le taux de victoire de l'augment à ce que les mêmes champions gagnent de toute façon, pour que les augments pris par des champions forts ne paraissent pas meilleurs qu'ils ne le sont, et fait moins confiance aux augments rarement choisis. Tiers : S 70+, A 59+, B 44+, C 32+, D en dessous.",
+ "Couldn't draw the image in this browser.": "Impossible de dessiner l'image dans ce navigateur.",
+ "Share image": "Partager l'image",
+ "Share image for {title}": "Partager l'image de {title}",
+ "Drawing…": "Dessin…",
+ "Share": "Partager",
+ "Copied.": "Copié.",
+ "This browser can't copy images. Save it instead.": "Ce navigateur ne peut pas copier d'images. Enregistrez-la plutôt.",
+ "Copy image": "Copier l'image",
+ "Save": "Enregistrer",
+ "Close": "Fermer"
 }

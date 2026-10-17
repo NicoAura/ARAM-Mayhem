@@ -79,5 +79,15 @@
  "Role": "บทบาท",
  "The job this champion usually does in a team.": "หน้าที่ที่แชมเปี้ยนตัวนี้มักทำในทีม",
  "DeepScore rates each pick from 0 to 100, where 50 is average. It starts from win rate, trusts it less when there are fewer games, counts the newest patch most, and compares each pick with the rest of the list. Tiers: S 70+, A 59+, B 44+, C 32+, D below.": "DeepScore ให้คะแนนแต่ละตัวเลือกตั้งแต่ 0 ถึง 100 โดย 50 คือค่าเฉลี่ย เริ่มจากอัตราชนะ เชื่อถือน้อยลงเมื่อมีเกมน้อย ให้น้ำหนักแพตช์ล่าสุดมากที่สุด และเทียบแต่ละตัวเลือกกับที่เหลือในลิสต์ เทียร์: S 70+, A 59+, B 44+, C 32+, D ต่ำกว่านั้น",
- "DeepScore rates each augment from 0 to 100 against others of its rarity, where 50 is average. It compares the augment's win rate with what the same champions win anyway, so augments that strong champions take don't look better than they are, and trusts rarely picked augments less. Tiers: S 70+, A 59+, B 44+, C 32+, D below.": "DeepScore ให้คะแนนแต่ละ Augment ตั้งแต่ 0 ถึง 100 เทียบกับ Augment อื่นที่มีความหายากเดียวกัน โดย 50 คือค่าเฉลี่ย ระบบเทียบอัตราชนะของ Augment กับอัตราชนะปกติของแชมเปี้ยนกลุ่มเดียวกัน เพื่อไม่ให้ Augment ที่แชมเปี้ยนแกร่งๆ เลือกดูดีเกินจริง และเชื่อถือ Augment ที่ถูกเลือกน้อยน้อยลง เทียร์: S 70+, A 59+, B 44+, C 32+, D ต่ำกว่านั้น"
+ "DeepScore rates each augment from 0 to 100 against others of its rarity, where 50 is average. It compares the augment's win rate with what the same champions win anyway, so augments that strong champions take don't look better than they are, and trusts rarely picked augments less. Tiers: S 70+, A 59+, B 44+, C 32+, D below.": "DeepScore ให้คะแนนแต่ละ Augment ตั้งแต่ 0 ถึง 100 เทียบกับ Augment อื่นที่มีความหายากเดียวกัน โดย 50 คือค่าเฉลี่ย ระบบเทียบอัตราชนะของ Augment กับอัตราชนะปกติของแชมเปี้ยนกลุ่มเดียวกัน เพื่อไม่ให้ Augment ที่แชมเปี้ยนแกร่งๆ เลือกดูดีเกินจริง และเชื่อถือ Augment ที่ถูกเลือกน้อยน้อยลง เทียร์: S 70+, A 59+, B 44+, C 32+, D ต่ำกว่านั้น",
+ "Couldn't draw the image in this browser.": "ไม่สามารถสร้างรูปภาพในเบราว์เซอร์นี้ได้",
+ "Share image": "แชร์รูปภาพ",
+ "Share image for {title}": "แชร์รูปภาพของ {title}",
+ "Drawing…": "กำลังสร้าง…",
+ "Share": "แชร์",
+ "Copied.": "คัดลอกแล้ว",
+ "This browser can't copy images. Save it instead.": "เบราว์เซอร์นี้คัดลอกรูปภาพไม่ได้ ให้บันทึกแทน",
+ "Copy image": "คัดลอกรูปภาพ",
+ "Save": "บันทึก",
+ "Close": "ปิด"
 }

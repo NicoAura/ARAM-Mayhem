@@ -79,5 +79,15 @@
  "Role": "Rol",
  "The job this champion usually does in a team.": "Bu şampiyonun takımda genelde üstlendiği görev.",
  "DeepScore rates each pick from 0 to 100, where 50 is average. It starts from win rate, trusts it less when there are fewer games, counts the newest patch most, and compares each pick with the rest of the list. Tiers: S 70+, A 59+, B 44+, C 32+, D below.": "DeepScore her seçimi 0'dan 100'e puanlar; 50 ortalamadır. Kazanma oranından yola çıkar, maç sayısı azken ona daha az güvenir, en yeni yamayı en çok sayar ve her seçimi listenin geri kalanıyla karşılaştırır. Seviyeler: S 70+, A 59+, B 44+, C 32+, D altı.",
- "DeepScore rates each augment from 0 to 100 against others of its rarity, where 50 is average. It compares the augment's win rate with what the same champions win anyway, so augments that strong champions take don't look better than they are, and trusts rarely picked augments less. Tiers: S 70+, A 59+, B 44+, C 32+, D below.": "DeepScore her güçlendirmeyi aynı nadirlikteki diğerlerine göre 0'dan 100'e puanlar; 50 ortalamadır. Güçlendirmenin kazanma oranını aynı şampiyonların zaten kazandığı oranla karşılaştırır; böylece güçlü şampiyonların aldığı güçlendirmeler olduklarından iyi görünmez. Nadiren seçilen güçlendirmelere de daha az güvenir. Seviyeler: S 70+, A 59+, B 44+, C 32+, D altı."
+ "DeepScore rates each augment from 0 to 100 against others of its rarity, where 50 is average. It compares the augment's win rate with what the same champions win anyway, so augments that strong champions take don't look better than they are, and trusts rarely picked augments less. Tiers: S 70+, A 59+, B 44+, C 32+, D below.": "DeepScore her güçlendirmeyi aynı nadirlikteki diğerlerine göre 0'dan 100'e puanlar; 50 ortalamadır. Güçlendirmenin kazanma oranını aynı şampiyonların zaten kazandığı oranla karşılaştırır; böylece güçlü şampiyonların aldığı güçlendirmeler olduklarından iyi görünmez. Nadiren seçilen güçlendirmelere de daha az güvenir. Seviyeler: S 70+, A 59+, B 44+, C 32+, D altı.",
+ "Couldn't draw the image in this browser.": "Bu tarayıcıda görsel oluşturulamadı.",
+ "Share image": "Görseli paylaş",
+ "Share image for {title}": "Görseli paylaş: {title}",
+ "Drawing…": "Oluşturuluyor…",
+ "Share": "Paylaş",
+ "Copied.": "Kopyalandı.",
+ "This browser can't copy images. Save it instead.": "Bu tarayıcı görsel kopyalayamıyor. Onun yerine kaydet.",
+ "Copy image": "Görseli kopyala",
+ "Save": "Kaydet",
+ "Close": "Kapat"
 }

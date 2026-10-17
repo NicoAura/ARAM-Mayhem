@@ -79,5 +79,15 @@
  "Role": "ロール",
  "The job this champion usually does in a team.": "このチャンピオンがチーム内で普段こなす役割。",
  "DeepScore rates each pick from 0 to 100, where 50 is average. It starts from win rate, trusts it less when there are fewer games, counts the newest patch most, and compares each pick with the rest of the list. Tiers: S 70+, A 59+, B 44+, C 32+, D below.": "DeepScoreは各ピックを0〜100で評価し、50が平均です。勝率をもとに、試合数が少ないほど信頼度を下げ、最新パッチを最も重視し、各ピックをリストの他のピックと比較します。ティア: S 70+、A 59+、B 44+、C 32+、D それ未満。",
- "DeepScore rates each augment from 0 to 100 against others of its rarity, where 50 is average. It compares the augment's win rate with what the same champions win anyway, so augments that strong champions take don't look better than they are, and trusts rarely picked augments less. Tiers: S 70+, A 59+, B 44+, C 32+, D below.": "DeepScoreは各オーグメントを同じレアリティの他のオーグメントと比べて0〜100で評価し、50が平均です。オーグメントの勝率を、同じチャンピオンの元々の勝率と比較するので、強いチャンピオンが取るオーグメントが実際より良く見えることはありません。また、あまり選ばれないオーグメントは信頼度を下げます。ティア: S 70+、A 59+、B 44+、C 32+、D それ未満。"
+ "DeepScore rates each augment from 0 to 100 against others of its rarity, where 50 is average. It compares the augment's win rate with what the same champions win anyway, so augments that strong champions take don't look better than they are, and trusts rarely picked augments less. Tiers: S 70+, A 59+, B 44+, C 32+, D below.": "DeepScoreは各オーグメントを同じレアリティの他のオーグメントと比べて0〜100で評価し、50が平均です。オーグメントの勝率を、同じチャンピオンの元々の勝率と比較するので、強いチャンピオンが取るオーグメントが実際より良く見えることはありません。また、あまり選ばれないオーグメントは信頼度を下げます。ティア: S 70+、A 59+、B 44+、C 32+、D それ未満。",
+ "Couldn't draw the image in this browser.": "このブラウザでは画像を描画できませんでした。",
+ "Share image": "画像を共有",
+ "Share image for {title}": "{title}の共有画像",
+ "Drawing…": "描画中…",
+ "Share": "共有",
+ "Copied.": "コピーしました。",
+ "This browser can't copy images. Save it instead.": "このブラウザは画像をコピーできません。代わりに保存してください。",
+ "Copy image": "画像をコピー",
+ "Save": "保存",
+ "Close": "閉じる"
 }

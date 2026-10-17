@@ -79,5 +79,15 @@
  "Role": "Ρόλος",
  "The job this champion usually does in a team.": "Ο ρόλος που συνήθως αναλαμβάνει αυτός ο ήρωας σε μια ομάδα.",
  "DeepScore rates each pick from 0 to 100, where 50 is average. It starts from win rate, trusts it less when there are fewer games, counts the newest patch most, and compares each pick with the rest of the list. Tiers: S 70+, A 59+, B 44+, C 32+, D below.": "Το DeepScore βαθμολογεί κάθε επιλογή από 0 έως 100, όπου 50 είναι ο μέσος όρος. Ξεκινά από το ποσοστό νικών, το εμπιστεύεται λιγότερο όταν υπάρχουν λιγότερα παιχνίδια, δίνει το μεγαλύτερο βάρος στην πιο πρόσφατη ενημέρωση και συγκρίνει κάθε επιλογή με την υπόλοιπη λίστα. Βαθμίδες: S 70+, A 59+, B 44+, C 32+, D από κάτω.",
- "DeepScore rates each augment from 0 to 100 against others of its rarity, where 50 is average. It compares the augment's win rate with what the same champions win anyway, so augments that strong champions take don't look better than they are, and trusts rarely picked augments less. Tiers: S 70+, A 59+, B 44+, C 32+, D below.": "Το DeepScore βαθμολογεί κάθε βελτίωση από 0 έως 100 έναντι των άλλων της ίδιας σπανιότητας, όπου 50 είναι ο μέσος όρος. Συγκρίνει το ποσοστό νικών της βελτίωσης με όσα κερδίζουν έτσι κι αλλιώς οι ίδιοι ήρωες, ώστε οι βελτιώσεις που παίρνουν δυνατοί ήρωες να μη φαίνονται καλύτερες απ' ό,τι είναι, και εμπιστεύεται λιγότερο τις βελτιώσεις που επιλέγονται σπάνια. Βαθμίδες: S 70+, A 59+, B 44+, C 32+, D από κάτω."
+ "DeepScore rates each augment from 0 to 100 against others of its rarity, where 50 is average. It compares the augment's win rate with what the same champions win anyway, so augments that strong champions take don't look better than they are, and trusts rarely picked augments less. Tiers: S 70+, A 59+, B 44+, C 32+, D below.": "Το DeepScore βαθμολογεί κάθε βελτίωση από 0 έως 100 έναντι των άλλων της ίδιας σπανιότητας, όπου 50 είναι ο μέσος όρος. Συγκρίνει το ποσοστό νικών της βελτίωσης με όσα κερδίζουν έτσι κι αλλιώς οι ίδιοι ήρωες, ώστε οι βελτιώσεις που παίρνουν δυνατοί ήρωες να μη φαίνονται καλύτερες απ' ό,τι είναι, και εμπιστεύεται λιγότερο τις βελτιώσεις που επιλέγονται σπάνια. Βαθμίδες: S 70+, A 59+, B 44+, C 32+, D από κάτω.",
+ "Couldn't draw the image in this browser.": "Δεν ήταν δυνατή η δημιουργία της εικόνας σε αυτό το πρόγραμμα περιήγησης.",
+ "Share image": "Κοινοποίηση εικόνας",
+ "Share image for {title}": "Κοινοποίηση εικόνας για {title}",
+ "Drawing…": "Δημιουργία…",
+ "Share": "Κοινοποίηση",
+ "Copied.": "Αντιγράφηκε.",
+ "This browser can't copy images. Save it instead.": "Αυτό το πρόγραμμα περιήγησης δεν μπορεί να αντιγράψει εικόνες. Αποθήκευσέ την αντί γι' αυτό.",
+ "Copy image": "Αντιγραφή εικόνας",
+ "Save": "Αποθήκευση",
+ "Close": "Κλείσιμο"
 }

@@ -79,5 +79,15 @@
  "Role": "Role",
  "The job this champion usually does in a team.": "Tugas yang biasanya dijalankan champion ini di tim.",
  "DeepScore rates each pick from 0 to 100, where 50 is average. It starts from win rate, trusts it less when there are fewer games, counts the newest patch most, and compares each pick with the rest of the list. Tiers: S 70+, A 59+, B 44+, C 32+, D below.": "DeepScore menilai setiap pick dari 0 sampai 100, dengan 50 sebagai rata-rata. Penilaian dimulai dari win rate, makin kurang dipercaya kalau jumlah game-nya sedikit, patch terbaru diberi bobot paling besar, lalu setiap pick dibandingkan dengan sisa daftar. Tier: S 70+, A 59+, B 44+, C 32+, D di bawahnya.",
- "DeepScore rates each augment from 0 to 100 against others of its rarity, where 50 is average. It compares the augment's win rate with what the same champions win anyway, so augments that strong champions take don't look better than they are, and trusts rarely picked augments less. Tiers: S 70+, A 59+, B 44+, C 32+, D below.": "DeepScore menilai setiap augment dari 0 sampai 100 dibandingkan augment lain dengan kelangkaan yang sama, dengan 50 sebagai rata-rata. Win rate augment dibandingkan dengan win rate yang biasanya sudah didapat champion yang sama, jadi augment yang diambil champion kuat tidak terlihat lebih bagus dari aslinya, dan augment yang jarang dipilih kurang dipercaya. Tier: S 70+, A 59+, B 44+, C 32+, D di bawahnya."
+ "DeepScore rates each augment from 0 to 100 against others of its rarity, where 50 is average. It compares the augment's win rate with what the same champions win anyway, so augments that strong champions take don't look better than they are, and trusts rarely picked augments less. Tiers: S 70+, A 59+, B 44+, C 32+, D below.": "DeepScore menilai setiap augment dari 0 sampai 100 dibandingkan augment lain dengan kelangkaan yang sama, dengan 50 sebagai rata-rata. Win rate augment dibandingkan dengan win rate yang biasanya sudah didapat champion yang sama, jadi augment yang diambil champion kuat tidak terlihat lebih bagus dari aslinya, dan augment yang jarang dipilih kurang dipercaya. Tier: S 70+, A 59+, B 44+, C 32+, D di bawahnya.",
+ "Couldn't draw the image in this browser.": "Gambar tidak dapat dibuat di browser ini.",
+ "Share image": "Bagikan gambar",
+ "Share image for {title}": "Gambar untuk dibagikan: {title}",
+ "Drawing…": "Membuat gambar…",
+ "Share": "Bagikan",
+ "Copied.": "Disalin.",
+ "This browser can't copy images. Save it instead.": "Browser ini tidak bisa menyalin gambar. Simpan saja gambarnya.",
+ "Copy image": "Salin gambar",
+ "Save": "Simpan",
+ "Close": "Tutup"
 }

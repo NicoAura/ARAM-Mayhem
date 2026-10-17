@@ -79,5 +79,15 @@
  "Role": "역할",
  "The job this champion usually does in a team.": "이 챔피언이 팀에서 주로 맡는 역할.",
  "DeepScore rates each pick from 0 to 100, where 50 is average. It starts from win rate, trusts it less when there are fewer games, counts the newest patch most, and compares each pick with the rest of the list. Tiers: S 70+, A 59+, B 44+, C 32+, D below.": "DeepScore는 각 픽을 0~100점으로 평가하며 50이 평균입니다. 승률을 바탕으로, 게임 수가 적을수록 덜 신뢰하고, 최신 패치에 가장 큰 비중을 두며, 각 픽을 목록의 나머지와 비교합니다. 티어: S 70+, A 59+, B 44+, C 32+, D 그 미만.",
- "DeepScore rates each augment from 0 to 100 against others of its rarity, where 50 is average. It compares the augment's win rate with what the same champions win anyway, so augments that strong champions take don't look better than they are, and trusts rarely picked augments less. Tiers: S 70+, A 59+, B 44+, C 32+, D below.": "DeepScore는 각 증강을 같은 등급의 다른 증강과 비교해 0~100점으로 평가하며 50이 평균입니다. 증강의 승률을 같은 챔피언들의 원래 승률과 비교하므로, 강한 챔피언이 고르는 증강이 실제보다 좋아 보이지 않으며, 거의 선택되지 않는 증강은 덜 신뢰합니다. 티어: S 70+, A 59+, B 44+, C 32+, D 그 미만."
+ "DeepScore rates each augment from 0 to 100 against others of its rarity, where 50 is average. It compares the augment's win rate with what the same champions win anyway, so augments that strong champions take don't look better than they are, and trusts rarely picked augments less. Tiers: S 70+, A 59+, B 44+, C 32+, D below.": "DeepScore는 각 증강을 같은 등급의 다른 증강과 비교해 0~100점으로 평가하며 50이 평균입니다. 증강의 승률을 같은 챔피언들의 원래 승률과 비교하므로, 강한 챔피언이 고르는 증강이 실제보다 좋아 보이지 않으며, 거의 선택되지 않는 증강은 덜 신뢰합니다. 티어: S 70+, A 59+, B 44+, C 32+, D 그 미만.",
+ "Couldn't draw the image in this browser.": "이 브라우저에서 이미지를 그릴 수 없습니다.",
+ "Share image": "이미지 공유",
+ "Share image for {title}": "{title} 공유 이미지",
+ "Drawing…": "그리는 중…",
+ "Share": "공유",
+ "Copied.": "복사했습니다.",
+ "This browser can't copy images. Save it instead.": "이 브라우저는 이미지를 복사할 수 없습니다. 대신 저장하세요.",
+ "Copy image": "이미지 복사",
+ "Save": "저장",
+ "Close": "닫기"
 }

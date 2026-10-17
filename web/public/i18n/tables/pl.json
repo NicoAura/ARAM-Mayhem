@@ -79,5 +79,15 @@
  "Role": "Rola",
  "The job this champion usually does in a team.": "Zadanie, które ten bohater zwykle pełni w drużynie.",
  "DeepScore rates each pick from 0 to 100, where 50 is average. It starts from win rate, trusts it less when there are fewer games, counts the newest patch most, and compares each pick with the rest of the list. Tiers: S 70+, A 59+, B 44+, C 32+, D below.": "DeepScore ocenia każdy wybór w skali od 0 do 100, gdzie 50 to średnia. Zaczyna od odsetka zwycięstw, ufa mu mniej, gdy gier jest mało, najmocniej liczy najnowszy patch i porównuje każdy wybór z resztą listy. Tiery: S 70+, A 59+, B 44+, C 32+, D poniżej.",
- "DeepScore rates each augment from 0 to 100 against others of its rarity, where 50 is average. It compares the augment's win rate with what the same champions win anyway, so augments that strong champions take don't look better than they are, and trusts rarely picked augments less. Tiers: S 70+, A 59+, B 44+, C 32+, D below.": "DeepScore ocenia każde wzmocnienie w skali od 0 do 100 na tle innych o tej samej rzadkości, gdzie 50 to średnia. Porównuje odsetek zwycięstw wzmocnienia z tym, co ci sami bohaterowie i tak wygrywają, więc wzmocnienia brane przez silnych bohaterów nie wyglądają lepiej, niż są, a rzadko wybieranym ufa mniej. Tiery: S 70+, A 59+, B 44+, C 32+, D poniżej."
+ "DeepScore rates each augment from 0 to 100 against others of its rarity, where 50 is average. It compares the augment's win rate with what the same champions win anyway, so augments that strong champions take don't look better than they are, and trusts rarely picked augments less. Tiers: S 70+, A 59+, B 44+, C 32+, D below.": "DeepScore ocenia każde wzmocnienie w skali od 0 do 100 na tle innych o tej samej rzadkości, gdzie 50 to średnia. Porównuje odsetek zwycięstw wzmocnienia z tym, co ci sami bohaterowie i tak wygrywają, więc wzmocnienia brane przez silnych bohaterów nie wyglądają lepiej, niż są, a rzadko wybieranym ufa mniej. Tiery: S 70+, A 59+, B 44+, C 32+, D poniżej.",
+ "Couldn't draw the image in this browser.": "Nie udało się narysować obrazu w tej przeglądarce.",
+ "Share image": "Udostępnij obraz",
+ "Share image for {title}": "Obraz do udostępnienia: {title}",
+ "Drawing…": "Rysowanie…",
+ "Share": "Udostępnij",
+ "Copied.": "Skopiowano.",
+ "This browser can't copy images. Save it instead.": "Ta przeglądarka nie potrafi kopiować obrazów. Zapisz go zamiast tego.",
+ "Copy image": "Kopiuj obraz",
+ "Save": "Zapisz",
+ "Close": "Zamknij"
 }

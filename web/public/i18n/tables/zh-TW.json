@@ -79,5 +79,15 @@
  "Role": "定位",
  "The job this champion usually does in a team.": "該英雄在隊伍中通常負責的任務。",
  "DeepScore rates each pick from 0 to 100, where 50 is average. It starts from win rate, trusts it less when there are fewer games, counts the newest patch most, and compares each pick with the rest of the list. Tiers: S 70+, A 59+, B 44+, C 32+, D below.": "DeepScore 為每個選擇打出 0 到 100 的分數，50 為平均水準。它以勝率為基礎，對戰較少時降低可信度，最新版本權重最高，並將每個選擇與列表中的其他選擇比較。梯隊：S 70+，A 59+，B 44+，C 32+，D 以下。",
- "DeepScore rates each augment from 0 to 100 against others of its rarity, where 50 is average. It compares the augment's win rate with what the same champions win anyway, so augments that strong champions take don't look better than they are, and trusts rarely picked augments less. Tiers: S 70+, A 59+, B 44+, C 32+, D below.": "DeepScore 在相同稀有度內為每個強化打出 0 到 100 的分數，50 為平均水準。它將強化的勝率與相同英雄原本的勝率比較，避免強勢英雄常選的強化看起來比實際更好，並降低很少被選用的強化的可信度。梯隊：S 70+，A 59+，B 44+，C 32+，D 以下。"
+ "DeepScore rates each augment from 0 to 100 against others of its rarity, where 50 is average. It compares the augment's win rate with what the same champions win anyway, so augments that strong champions take don't look better than they are, and trusts rarely picked augments less. Tiers: S 70+, A 59+, B 44+, C 32+, D below.": "DeepScore 在相同稀有度內為每個強化打出 0 到 100 的分數，50 為平均水準。它將強化的勝率與相同英雄原本的勝率比較，避免強勢英雄常選的強化看起來比實際更好，並降低很少被選用的強化的可信度。梯隊：S 70+，A 59+，B 44+，C 32+，D 以下。",
+ "Couldn't draw the image in this browser.": "無法在此瀏覽器中產生圖片。",
+ "Share image": "分享圖片",
+ "Share image for {title}": "分享{title}的圖片",
+ "Drawing…": "正在產生…",
+ "Share": "分享",
+ "Copied.": "已複製。",
+ "This browser can't copy images. Save it instead.": "此瀏覽器無法複製圖片，請改為儲存。",
+ "Copy image": "複製圖片",
+ "Save": "儲存",
+ "Close": "關閉"
 }

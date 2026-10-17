@@ -79,5 +79,15 @@
  "Role": "Rolle",
  "The job this champion usually does in a team.": "Die Aufgabe, die dieser Champion meist im Team übernimmt.",
  "DeepScore rates each pick from 0 to 100, where 50 is average. It starts from win rate, trusts it less when there are fewer games, counts the newest patch most, and compares each pick with the rest of the list. Tiers: S 70+, A 59+, B 44+, C 32+, D below.": "DeepScore bewertet jede Wahl von 0 bis 100, wobei 50 der Durchschnitt ist. Er geht von der Siegrate aus, vertraut ihr weniger, wenn es weniger Spiele gibt, gewichtet den neuesten Patch am stärksten und vergleicht jede Wahl mit dem Rest der Liste. Tiers: S 70+, A 59+, B 44+, C 32+, D darunter.",
- "DeepScore rates each augment from 0 to 100 against others of its rarity, where 50 is average. It compares the augment's win rate with what the same champions win anyway, so augments that strong champions take don't look better than they are, and trusts rarely picked augments less. Tiers: S 70+, A 59+, B 44+, C 32+, D below.": "DeepScore bewertet jedes Augment von 0 bis 100 im Vergleich zu anderen seiner Seltenheit, wobei 50 der Durchschnitt ist. Er vergleicht die Siegrate des Augments mit dem, was dieselben Champions sowieso gewinnen, damit Augments, die starke Champions nehmen, nicht besser aussehen, als sie sind, und vertraut selten gewählten Augments weniger. Tiers: S 70+, A 59+, B 44+, C 32+, D darunter."
+ "DeepScore rates each augment from 0 to 100 against others of its rarity, where 50 is average. It compares the augment's win rate with what the same champions win anyway, so augments that strong champions take don't look better than they are, and trusts rarely picked augments less. Tiers: S 70+, A 59+, B 44+, C 32+, D below.": "DeepScore bewertet jedes Augment von 0 bis 100 im Vergleich zu anderen seiner Seltenheit, wobei 50 der Durchschnitt ist. Er vergleicht die Siegrate des Augments mit dem, was dieselben Champions sowieso gewinnen, damit Augments, die starke Champions nehmen, nicht besser aussehen, als sie sind, und vertraut selten gewählten Augments weniger. Tiers: S 70+, A 59+, B 44+, C 32+, D darunter.",
+ "Couldn't draw the image in this browser.": "Das Bild konnte in diesem Browser nicht erstellt werden.",
+ "Share image": "Bild teilen",
+ "Share image for {title}": "Bild für {title} teilen",
+ "Drawing…": "Wird erstellt…",
+ "Share": "Teilen",
+ "Copied.": "Kopiert.",
+ "This browser can't copy images. Save it instead.": "Dieser Browser kann keine Bilder kopieren. Speichere es stattdessen.",
+ "Copy image": "Bild kopieren",
+ "Save": "Speichern",
+ "Close": "Schließen"
 }
