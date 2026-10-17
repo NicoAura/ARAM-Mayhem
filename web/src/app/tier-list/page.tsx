@@ -9,6 +9,7 @@ import DuosTable from "@/components/DuosTable";
 import { hasDuos } from "@/lib/duos";
 import { augmentHref } from "@/lib/augments";
 import { augmentTiers } from "@/lib/augment-tiers";
+import { augmentRows, type RawAugment } from "@/lib/augment-winrate";
 import { AUGMENT_DEEPSCORE_HELP } from "@/lib/deepscore";
 import championIds from "@/data/champion-ids.json";
 import championNames from "@/data/champion-names.json";
@@ -31,7 +32,7 @@ const names = augmentNames as Record<string, string>;
 export default function TierListPage() {
   const byPatch = readRepoCsv("data/cn/history/by_patch.csv");
   const patches = readRepoCsv("data/cn/history/patches.csv");
-  const augments = readRepoJson<{ augments: Record<string, string | number | number[]>[] }>("data/cn/augments.json")?.augments;
+  const augments = augmentRows<RawAugment & Record<string, string | number | number[]>>();
   const duos = hasDuos();
   const champs = readRepoJson<Champs>("data/cn/champions.json");
 
@@ -85,7 +86,7 @@ export default function TierListPage() {
       ),
     },
   ];
-  if (augments) {
+  if (augments.length) {
     const graded = new Map(augmentTiers().map((a) => [a.id, a]));
     const augName = (a: Record<string, unknown>) => names[String(a.augment_id)] ?? String(a.key).replace(/^ARAM_/, "");
     const augCols = [
@@ -114,7 +115,6 @@ export default function TierListPage() {
               ...augCols,
               { key: "lift", label: "Win rate vs its champions", format: "pct" as const, hint: "Win rate minus what the champions who take it win anyway. Above zero means it helps them." },
               { key: "win_rank", label: "Win rank", format: "int" },
-              { key: "win_change", label: "Win rank change", format: "int" },
               { key: "pick_rank", label: "Pick rank", format: "int" },
               { key: "pick_change", label: "Pick rank change", format: "int" },
               { key: "best", label: "Best champions", format: "text", sortable: false },
@@ -132,7 +132,6 @@ export default function TierListPage() {
                 win_rate: Number(a.win_rate),
                 pick_rate: Number(a.pick_rate),
                 win_rank: num(String(a.win_rank ?? "")),
-                win_change: num(String(a.win_rank_change ?? "")),
                 pick_rank: num(String(a.pick_rank ?? "")),
                 pick_change: num(String(a.pick_rank_change ?? "")),
                 best: ((a.best_champions as number[]) ?? [])

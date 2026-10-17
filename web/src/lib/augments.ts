@@ -2,9 +2,10 @@ import "server-only";
 import championIds from "@/data/champion-ids.json";
 import augmentNames from "@/data/augment-names.json";
 import { champName } from "./highlights";
+import { augmentRows } from "./augment-winrate";
 import { readRepoJson } from "./repo-data";
 
-// One page per augment (/augments/<slug>): live win and pick rate, its rank among all augments,
+// One page per augment (/augments/<slug>): live win rate (fair, lib/augment-winrate.ts) and pick rate, its rank among all augments,
 // the champions it does best on, and the champions who pick it most often.
 
 const IDS = championIds as Record<string, number>;
@@ -38,7 +39,7 @@ export type AugmentPage = {
 let cache: AugmentPage[] | null = null;
 export function augmentPages(): AugmentPage[] {
   if (cache) return cache;
-  const raw = (readRepoJson<{ augments: Raw[] }>("data/cn/augments.json")?.augments ?? []).filter((a) => NAMES[a.augment_id] && a.tier);
+  const raw = augmentRows<Raw>().filter((a) => NAMES[a.augment_id] && a.tier);
   // Who takes each augment most: every champion's augment pick rates (data/cn/builds/<id>.json).
   const pickers = new Map<number, { id: string; name: string; pickRate: number }[]>();
   for (const [alias, cid] of Object.entries(IDS)) {

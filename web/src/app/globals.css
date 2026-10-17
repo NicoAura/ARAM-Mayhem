@@ -85,6 +85,7 @@ body {
 
 body {
   min-height: 100vh;
+  min-height: 100dvh;
   display: flex;
   flex-direction: column;
   color: var(--fg);
@@ -1487,6 +1488,15 @@ html[data-device="mobile"] .sheet .sheet-group:first-child {
   text-align: center;
   font-size: 0.875rem;
   font-weight: 500;
+}
+
+/* With JavaScript off: the note on tools that need it */
+.needs-script {
+  margin-bottom: 1rem;
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--line);
+  border-radius: var(--r);
+  background: var(--surface);
 }
 
 /* Buttons, and the site editor (/account/edit) */
@@ -6916,4 +6926,29 @@ html[dir="rtl"] .rank-v,
 html[dir="rtl"] .jump-wr {
   direction: ltr;
   unicode-bidi: isolate;
+}
+
+/* Touch screens only (desktop keeps its look). Boxes at 16px or more so iPhone Safari doesn't zoom in
+   when one gets focus, and the small links and buttons get a finger-sized tap area. */
+@media (pointer: coarse) {
+  input,
+  select,
+  textarea {
+    font-size: max(16px, 1em);
+  }
+  .footer-links a,
+  .champ-steps a,
+  .champ-hero-links a,
+  .champ-hero .eyebrow a,
+  .back-link {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+  }
+  .data-table th button,
+  .snap-tiers button,
+  .seg button,
+  .arch-filter .arch-tag {
+    min-height: 44px;
+  }
 }

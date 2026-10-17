@@ -12,7 +12,7 @@ export default function SimLeaderboard({
   items,
   augments,
 }: {
-  /** The board's name, shown in its text (the Simulator page's "Survival" tab). */
+  /** The board's name, shown in its text (the Simulator page's "Leaderboard" tab). */
   board: string;
   items: Record<string, string>;
   augments: Record<string, string>;
@@ -47,9 +47,9 @@ export default function SimLeaderboard({
         again on our side before it is listed, and the damage shown is from that run.
       </p>
       {failed ? (
-        <p className="table-note">The {board} leaderboard couldn&apos;t be loaded. Try again in a moment.</p>
+        <p className="table-note">The leaderboard couldn&apos;t be loaded. Try again in a moment.</p>
       ) : rows === null ? (
-        <p className="table-note">Loading the {board} leaderboard…</p>
+        <p className="table-note">Loading the leaderboard…</p>
       ) : rows.length === 0 ? (
         <p className="table-note">No builds yet. Be the first: simulate a build and submit it.</p>
       ) : (

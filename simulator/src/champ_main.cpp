@@ -34,6 +34,9 @@ Usage: mayhem_sim [options]
                       real-game damage shares
   --kit NAME          show what the simulator read from a champion's abilities
   --any-items         search every item, not just ones that fit the champion
+  --search MODE       quick (the default) or smart: a wider search of items and
+                      augments together that races the builds and keeps the best,
+                      about 3x slower (optimizer.smart in the rules file)
   --list              list champions, items and augments
   --trials N          fights per build in the final comparison
   --seed N            RNG seed
@@ -280,7 +283,7 @@ double spearman(std::vector<double> a, std::vector<double> b) {
 int main(int argc, char** argv) {
     std::string rulesPath = MAYHEM_DEFAULT_RULES, gameDir, champName, kitName;
     std::vector<std::string> items, augs;
-    bool all = false, asJson = false, list = false, customBuild = false, anyItems = false;
+    bool all = false, asJson = false, list = false, customBuild = false, anyItems = false, smartSearch = false;
     std::string tracePath, traceDir, combo;
     Metric metric = Metric::Damage;
     Library::Settings settings;
@@ -307,6 +310,11 @@ int main(int argc, char** argv) {
         else if (a == "--augs") augs = splitList(next());
         else if (a == "--all") all = true;
         else if (a == "--any-items") anyItems = true;
+        else if (a == "--search") {
+            const std::string m = next();
+            if (m != "quick" && m != "smart") { std::cerr << "--search must be quick or smart, got " << m << "\n"; return 2; }
+            smartSearch = m == "smart";
+        }
         else if (a == "--list") list = true;
         else if (a == "--json") asJson = true;
         else if (a == "--trace") tracePath = next();
@@ -355,8 +363,9 @@ int main(int argc, char** argv) {
         std::cerr << "error: " << e.what() << "\n";
         return 1;
     }
-    if (trials > 0) lib.optimizer.finalTrials = trials;
+    if (trials > 0) lib.optimizer.finalTrials = lib.optimizer.smartFinalTrials = trials;
     if (anyItems) lib.optimizer.fittingItemsOnly = false;
+    lib.optimizer.smart = smartSearch;
     if (seed >= 0) lib.scenario.seed = static_cast<uint64_t>(seed);
 
     if (list && asJson) {

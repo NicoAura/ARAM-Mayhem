@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Embed from "@/components/Embed";
 import Intro from "@/components/Intro";
+import NeedsScript from "./NeedsScript";
 import { pageMeta } from "@/lib/meta";
 import { discoverToolTabs } from "@/lib/tabs";
 
@@ -18,6 +19,7 @@ export default function ToolPage({ href }: { href: string }) {
   return (
     <>
       <Intro eyebrow={tab.label} title={tab.body || tab.label} />
+      <NeedsScript />
       <Embed src={`/embed/${tab.slug}/${tab.entry}`} title={tab.label} />
     </>
   );

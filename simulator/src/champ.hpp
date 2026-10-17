@@ -178,6 +178,13 @@ struct OptimizerSettings {
     int screenTrials = 64, finalTrials = 2000, finalists = 12;
     // Only search items that fit the champion's class and scalings (no AD-crit Lux).
     bool fittingItemsOnly = true;
+    // Smart search (mayhem_sim --search smart): items and augments searched together, then
+    // successive halving: every shortlisted build gets smartStartTrials fights, the best
+    // 1/smartKeep go on with smartKeep times as many, until smartFinalists are left for
+    // smartFinalTrials fights each.
+    bool smart = false;
+    int smartItems = 15, smartAugs = 10, smartItemSets = 24, smartAugSets = 12;
+    int smartStartTrials = 250, smartKeep = 3, smartFinalists = 4, smartFinalTrials = 20000;
 };
 
 struct Build {
@@ -316,6 +323,7 @@ struct Ranked {
 // the highest per-fight value of another metric.
 // Uses the same fights for every build (common random numbers) so small
 // differences are real differences, not noise. threads > 1 splits the work.
+// With lib.optimizer.smart it runs the slower, wider smart search instead.
 std::vector<Ranked> optimize(const Library& lib, const ChampionKit& champ, const Scenario& sc, int threads,
                              int top = 5, Metric metric = Metric::Damage);
 
