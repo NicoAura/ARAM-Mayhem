@@ -19,3 +19,11 @@ The site's **Info** tab (formerly Guide) (`/tools/guide`): how ARAM Mayhem works
 Rebuild after a patch: `python3 -m pip install xxhash && python3 guide/build_data.py && python3 guide/build_history.py`
 (writes `data.js` and `history.js`; both read the live patch). Page text doesn't mention where data comes from (Nico, 2026-10-16).
 Images load from CommunityDragon at view time. `site-tab.json` makes this folder a site tab.
+
+## Augment stages and augment-granted items
+
+`build_data.py` also writes `augment_rules.json` (and `augmentRules` in `data.js`): the four augment levels, cards per
+selection and rerolls per slot, the pool size and offer odds per rarity, every live augment's rarity, and
+`grantedItems`, the items live augments hand out. `how: "reward"` items can't be bought (leave them out of build
+stats); `how: "free"` items are given at once but are also sold. The Info page shows these on the Augment stages
+and Items tabs.

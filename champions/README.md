@@ -22,3 +22,11 @@ Not in the client: per-champion damage dealt/taken, healing, tenacity and abilit
 
 Rebuild: `python3 champions/build_data.py` (live patch, standard library only; writes `data.js`). Build stats change
 daily, so the daily routine should rerun it. Page text doesn't mention where data comes from (Nico, 2026-10-16).
+
+## Base stats and skins
+
+Each champion page has a Base stats table (level 1, growth per level and level 18, from the champion's game data)
+and a Skins grid. Skin tiles are in `skins.js`, which the page loads only when the Skins section scrolls into view.
+
+Build stats leave out items that only augments give (quest rewards such as Wooglet's Witchcap or the Golden
+Spatula). The list comes from `guide/augment_rules.json`, so run `guide/build_data.py` first after a patch.
