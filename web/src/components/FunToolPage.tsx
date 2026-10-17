@@ -25,7 +25,7 @@ export default function FunToolPage({ tool }: { tool: FunTool }) {
         <T ns="tool-pages">{tool.description}</T>
       </Intro>
       <NeedsScript />
-      <Embed src={`/embed/fun/${tool.folder}/index.html`} title={tool.title} />
+      <Embed src={`/embed/fun/${tool.folder}/index.html`} title={tool.title} ownTitle />
     </>
   );
 }

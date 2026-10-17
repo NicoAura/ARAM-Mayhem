@@ -25,9 +25,10 @@ export default function ToolPage({ href }: { href: string }) {
   if (!tab) notFound();
   return (
     <>
-      <Intro eyebrow={<T ns="tool-pages">{tab.label}</T>} title={<T ns="tool-pages">{tab.body || tab.label}</T>} />
+      {/* The tab's name as the headline; its longer description sits under it. */}
+      <Intro title={<T ns="tool-pages">{tab.label}</T>}>{tab.body && <T ns="tool-pages">{tab.body}</T>}</Intro>
       <NeedsScript />
-      <Embed src={`/embed/${tab.slug}/${tab.entry}`} title={tab.label} />
+      <Embed src={`/embed/${tab.slug}/${tab.entry}`} title={tab.label} ownTitle />
     </>
   );
 }

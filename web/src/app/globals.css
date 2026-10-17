@@ -2929,6 +2929,11 @@ html[data-motion="reduce"] .btn:hover {
   font-size: 0.75rem;
 }
 
+/* The Chef Special's date stays on one line beside its title. */
+.chef-special .card-note {
+  white-space: nowrap;
+}
+
 .rank.plain.recap-movers a {
   grid-template-columns: 24px minmax(0, 1fr) 3.5rem 4.25rem;
 }
@@ -5752,6 +5757,28 @@ img.icon,
 .data-table,
 .table-scroll {
   border-radius: var(--r);
+}
+
+/* The smaller labels elsewhere (search groups, menus, PBE headings, item groups) follow suit. */
+.palette-group,
+.doc-section h3,
+html[data-device="mobile"] .sheet .sheet-group,
+.aug-set,
+.hover-card-stats dt,
+.kbd-sheet h3,
+.tour-count,
+.items-group-label {
+  font-family: var(--font-sans), system-ui, sans-serif;
+  font-size: 0.8125rem;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+/* Embedded pages sit straight on the page, like the site's own sections. */
+.embed iframe {
+  border: 0;
+  border-radius: 0;
+  background: transparent;
 }
 
 /* Simple view (Settings > Page detail, the default): fine print and expert controls step aside;
