@@ -11,6 +11,7 @@ const state = {
   owner: null,
   sample: false,
   boots: new Set(), // item ids that count as boots
+  champAlias: {},   // championId -> alias as in /champions/<alias>
 };
 
 // A page can ship name tables and an example archive ahead of time.
@@ -49,7 +50,7 @@ async function loadText(text, { sample = false } = {}) {
   $("sample-note").hidden = !sample;
   setupFilters();
   render();
-  Promise.all([loadNames(), loadItems()]).then(render);
+  Promise.all([loadNames(), loadItems()]).then(() => { render(); linkRecentlyPlayed(); });
 }
 
 function findGames(data) {
@@ -138,7 +139,7 @@ async function loadItems() {
 async function loadNames() {
   try {
     const champs = await (await fetch("/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-summary.json")).json();
-    for (const c of champs) if (c.id > 0) state.champNames[c.id] = c.name;
+    for (const c of champs) if (c.id > 0) { state.champNames[c.id] = c.name; state.champAlias[c.id] = c.alias; }
   } catch (e) { console.warn("champion names unavailable", e); }
   for (const url of [
     "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/cherry-augments.json",
@@ -832,4 +833,16 @@ async function setupShare() {
   if (!helperOnline || state.sample || !(state.games || []).length) return;
   $("share-card").hidden = false;
   try { showShare(await shareCall()); } catch (e) { /* stays off */ }
+}
+
+// ---------- recently played ----------
+// Opened from the helper, a link carries the latest games to deeparam.com's Home ("Recently played") in the
+// address's #part, which browsers never send anywhere; the site keeps them in this browser only.
+function linkRecentlyPlayed() {
+  const link = $("to-site");
+  if (state.sample || !["127.0.0.1", "localhost"].includes(location.hostname)) return;
+  const recent = state.games.filter((g) => state.champAlias[g.champId]).slice(0, 12)
+    .map((g) => ({ champion: state.champAlias[g.champId], win: g.win, at: g.time + g.duration * 1000 }));
+  link.hidden = !recent.length;
+  link.href = "https://deeparam.com/embed/dashboard/played.html#" + encodeURIComponent(JSON.stringify(recent));
 }
