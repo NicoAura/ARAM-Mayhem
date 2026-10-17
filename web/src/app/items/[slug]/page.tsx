@@ -28,8 +28,10 @@ export default async function ItemPage({ params }: { params: Promise<{ slug: str
         <p className="eyebrow">Item · Patch {livePatch()}</p>
         <div className="aug-hero-title">
           {i.icon && (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img className="aug-hero-icon item-hero-icon" src={i.icon} alt="" width={72} height={72} />
+            <span className="tilt-icon" data-tilt data-rarity="gold">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img className="aug-hero-icon item-hero-icon" src={i.icon} alt="" width={72} height={72} />
+            </span>
           )}
           <h1>
             {i.name} <span className="champ-hero-sub">in ARAM Mayhem</span>

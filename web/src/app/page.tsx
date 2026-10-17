@@ -63,7 +63,7 @@ export default function Home() {
             </div>
             <div className="rank">
               {augs.map((a, i) => (
-                <Link key={a.id} href={augmentHref(a.id) ?? `/tier-list?tab=augments&q=${encodeURIComponent(a.name)}`}>
+                <Link key={a.id} href={augmentHref(a.id) ?? `/tier-list?tab=augments&q=${encodeURIComponent(a.name)}`} data-tilt="soft" data-rarity={a.tier?.toLowerCase()}>
                   <span className="rank-i">{i + 1}</span>
                   <Icon src={`/icons/augments/${a.id}.webp`} />
                   <span className="rank-name">{a.name}</span>

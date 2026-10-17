@@ -35,8 +35,10 @@ export default async function AugmentPage({ params }: { params: Promise<{ slug: 
           <Link href="/tier-list?tab=augments">Augments</Link> · Patch {patch}
         </p>
         <div className="aug-hero-title">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img className="aug-hero-icon" data-tier={a.tier} src={`/icons/augments/${a.id}.webp`} alt="" width={72} height={72} />
+          <span className="tilt-icon" data-tilt data-rarity={a.tier}>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img className="aug-hero-icon" data-tier={a.tier} src={`/icons/augments/${a.id}.webp`} alt="" width={72} height={72} />
+          </span>
           <h1>
             {a.name} <span className="champ-hero-sub">ARAM Mayhem augment</span>
           </h1>

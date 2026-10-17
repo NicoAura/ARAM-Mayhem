@@ -33,7 +33,13 @@ function Aug({ a }: { a: AugRef }) {
       {a.tier && <span className={`chip tier-${a.tier}`}>{a.tier[0].toUpperCase() + a.tier.slice(1)}</span>}
     </>
   );
-  return a.href ? <Link href={a.href}>{body}</Link> : <div>{body}</div>;
+  return a.href ? (
+    <Link href={a.href} data-tilt="soft" data-rarity={a.tier}>
+      {body}
+    </Link>
+  ) : (
+    <div>{body}</div>
+  );
 }
 
 export default async function PatchPage({ params }: { params: Promise<{ patch: string }> }) {
