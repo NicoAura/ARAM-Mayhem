@@ -52,9 +52,19 @@ and `unlockLevel` its progression-track level (null if it isn't on the track).
 - `attackSpeedCap`: 1 / `gcd_AttackMinDelay` in the KIWI mode's GameModeConstants (map12.bin); `aramAttackSpeedCap`
   is the same for regular ARAM.
 - `critOverflow`: `"adaptive"` when the Mayhemic Magic buff text (`buff_desc_MayhemicMagic`) says excess crit
-  chance turns into Adaptive Force. The conversion ratio isn't in the client files.
+  chance turns into Adaptive Force. The conversion ratio isn't in the client files (see `critConversion` below).
 - `runes`: false when the KIWI constants set `SuppressRunesMasteriesPerks` (no rune page in Mayhem).
 - `aura`: the Mayhemic Magic buff's lines. `keystoneAugments`: augment id to the keystones it grants.
+
+It also holds the mode's mechanics (`mechanics()` in `build_data.py`), which the Rules tab shows too:
+- From map12.bin: `respawn` (seconds by level from `mDeathTimes`, plus the late-game growth), `longRange.range` and
+  `reductionMin` (`ARAMGamePacingScriptData` poke reduction), `structures` (late bonus damage to structures and the
+  times it ramps between), `minions` (area damage to minions; Blackout's trap reveal range and time from
+  `ARAMMinionTrapDetectionScriptData`), the relic beam (`HowlingAbyssRelicAura_AOE`, with its Mayhem override) and
+  `portalSpeed` (`Bloom_Hexgate_SpeedBuff`).
+- From the official League wiki (`WIKI_MECHANICS`, read 2026-10-17; Nico allowed it): `startLevel`,
+  `longRange.reductionMax` and what it excludes, `critConversion` (AD and AP per 1% crit over 100%), relic pickup heal
+  and spawn times, and each map's fast travel. Update them when the wiki's pages change.
 
 The Rules tab shows these, plus a Champion select card (no rune page, keystone augments, summoner spells regular
 ARAM allows but Mayhem doesn't). Per-champion damage, healing and shielding adjustments are applied server-side and
