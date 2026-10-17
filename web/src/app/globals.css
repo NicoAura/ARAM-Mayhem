@@ -3799,3 +3799,61 @@ html[data-motion="reduce"] .btn:hover {
     max-width: 58%;
   }
 }
+
+/* Tilt and shimmer (components/TiltEffects.tsx) */
+[data-tilt] {
+  --shine: rgb(255 255 255 / 0.22);
+  position: relative;
+  transform: perspective(700px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
+  transition: transform 0.25s ease;
+  will-change: transform;
+}
+
+[data-tilt][data-tilting] {
+  transition: transform 0.06s linear;
+}
+
+[data-tilt]::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(circle at var(--mx, 50%) var(--my, 50%), var(--shine), transparent 60%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+[data-tilt][data-tilting]::after {
+  opacity: 1;
+}
+
+[data-tilt][data-rarity="silver"] {
+  --shine: color-mix(in srgb, var(--silver) 40%, transparent);
+}
+
+[data-tilt][data-rarity="gold"] {
+  --shine: color-mix(in srgb, var(--gold) 40%, transparent);
+}
+
+[data-tilt][data-rarity="prismatic"]::after {
+  background:
+    radial-gradient(circle at var(--mx, 50%) var(--my, 50%), rgb(255 255 255 / 0.25), transparent 45%),
+    linear-gradient(115deg, transparent 20%, rgb(255 120 200 / 0.18) 35%, rgb(120 220 255 / 0.2) 50%, rgb(255 230 120 / 0.18) 65%, transparent 80%);
+  background-size: 100% 100%, 220% 100%;
+  background-position: 0 0, calc(var(--mx, 50%) * -1) 0;
+}
+
+.tilt-icon {
+  display: inline-block;
+  flex: none;
+  border-radius: 18px;
+}
+
+.tilt-icon > img {
+  display: block;
+}
+
+[data-tilt="soft"] {
+  border-radius: 10px;
+}
