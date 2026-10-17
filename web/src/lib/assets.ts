@@ -1,3 +1,5 @@
+import largeIcons from "@/data/augment-large-icons.json";
+
 // Every image, sound and model the site shows is a copy in public/assets/ (scripts/fetch_assets.py).
 // localAsset turns an outside URL found in the data (an augment icon, a splash) into that copy's path.
 
@@ -14,7 +16,12 @@ export function localAsset(url?: string) {
   for (const [re, to, lower] of LOCAL) {
     if (!re.test(url)) continue;
     const local = url.replace(re, to);
-    return lower ? local.toLowerCase() : local;
+    return largeAugmentIcon(lower ? local.toLowerCase() : local);
   }
-  return url;
+  return largeAugmentIcon(url);
 }
+
+// Augment "small" icons are grey for every rarity; the "large" ones carry the silver, gold or prismatic colour.
+// LARGE lists the small icons whose large copy is mirrored (Arena augments have none); fetch_assets.py writes it.
+const LARGE = new Set<string>(largeIcons);
+const largeAugmentIcon = (url: string) => (LARGE.has(url) ? url.replace(/_small\.png$/i, "_large.png") : url);
