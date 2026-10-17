@@ -313,9 +313,18 @@ int main(int argc, char** argv) {
                 } catch (...) { std::cerr << "--set " << kv << ": not a number\n"; return 2; }
             }
         }
-        else if (a == "--trials") trials = std::stoi(next());
-        else if (a == "--seed") seed = std::stoll(next());
-        else if (a == "--threads") threads = std::max(1, std::stoi(next()));
+        else if (a == "--trials" || a == "--seed" || a == "--threads") {
+            const std::string v = next();
+            long long n = 0;
+            try {
+                size_t used = 0;
+                n = std::stoll(v, &used);
+                if (used != v.size() || n < 0 || (a != "--seed" && n > 100000000)) throw std::out_of_range(v);
+            } catch (...) { std::cerr << a << " " << v << ": not a number in range\n"; return 2; }
+            if (a == "--trials") trials = static_cast<int>(n);
+            else if (a == "--seed") seed = n;
+            else threads = std::max(1, static_cast<int>(n));
+        }
         else { std::cerr << "unknown option " << a << "\n"; usage(); return 2; }
     }
 
@@ -452,6 +461,12 @@ int main(int argc, char** argv) {
                 mine.push_back({c, own});
                 for (const auto& entry : allies) mine.push_back(pickOf(entry));
                 for (const auto& entry : team) theirs.push_back(pickOf(entry));
+                // Mayhem has no duplicate champions on a team.
+                for (const auto* side : {&mine, &theirs})
+                    for (size_t x = 0; x < side->size(); ++x)
+                        for (size_t y = x + 1; y < side->size(); ++y)
+                            if ((*side)[x].first == (*side)[y].first)
+                                throw std::runtime_error((*side)[x].first->name + " is on the same team twice");
                 lib.enemyTeam.clear();
                 if (theirs.empty()) theirs = defaultEnemyTeam(lib, mine);
                 const int n = trials > 0 ? trials : 300;

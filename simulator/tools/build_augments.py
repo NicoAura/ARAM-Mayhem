@@ -474,6 +474,8 @@ def main():
         if aid in mapped_ids or entry.get("Enabled") is False:
             continue
         a = other_augment(aid, entry, kiwi, names)
+        if not slug(a["name"]):  # an unnamed placeholder (the PBE has one): no player can see or pick it
+            continue
         extra[slug(a["name"])] = a
     for k in list(doc["augments"]):
         if k not in MAPPING:
