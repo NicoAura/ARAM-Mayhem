@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { THEME_EVENT, themeDocument } from "@/lib/theme";
 import Skeleton from "@/components/Skeleton";
+import { replayPip } from "@/lib/replay-pip";
 
 // The site fills the window, so embedded pages' own width caps are lifted too.
 const FULL_WIDTH = "body,main,.wrap{max-width:none!important}";
@@ -65,6 +66,7 @@ export default function Embed({
       themeDocument(doc, document.documentElement.dataset.theme);
       fullWidth(doc);
       searchKeys(doc);
+      replayPip(doc);
       const fit = () =>
         setHeight(Math.max(minHeight, doc.documentElement.scrollHeight));
       fit();
