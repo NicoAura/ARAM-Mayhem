@@ -7,7 +7,16 @@ type Board = { builds: { champion: string; items: string[]; augments: string[]; 
 
 // The best build visitors have found for each champion, from /api/sim-scores. Only builds the simulator
 // re-ran on our side are listed, with the damage from that run; each links to its fight replay.
-export default function SimLeaderboard({ items, augments }: { items: Record<string, string>; augments: Record<string, string> }) {
+export default function SimLeaderboard({
+  board,
+  items,
+  augments,
+}: {
+  /** The board's name, shown in its text (the Simulator page's "Survival" tab). */
+  board: string;
+  items: Record<string, string>;
+  augments: Record<string, string>;
+}) {
   const [rows, setRows] = useState<Row[] | null>(null);
   const [failed, setFailed] = useState(false);
   useEffect(() => {
@@ -32,14 +41,15 @@ export default function SimLeaderboard({ items, augments }: { items: Record<stri
   return (
     <>
       <p className="table-note">
-        The highest simulated damage per second visitors have found for each champion. Simulate a build in Fight
-        replays with the default settings and press Submit to leaderboard. Every build is simulated again on our side
-        before it is listed, and the damage shown is from that run.
+        {board}: the highest simulated damage per second visitors have found for each champion. Every champion faces
+        the same enemy: Ashe with her most popular build (Ashe herself faces Teemo), with the default settings, until
+        the champion falls. Simulate a build in Fight replays and press Submit to {board}. Every build is simulated
+        again on our side before it is listed, and the damage shown is from that run.
       </p>
       {failed ? (
-        <p className="table-note">The leaderboard couldn&apos;t be loaded. Try again in a moment.</p>
+        <p className="table-note">The {board} leaderboard couldn&apos;t be loaded. Try again in a moment.</p>
       ) : rows === null ? (
-        <p className="table-note">Loading the leaderboard…</p>
+        <p className="table-note">Loading the {board} leaderboard…</p>
       ) : rows.length === 0 ? (
         <p className="table-note">No builds yet. Be the first: simulate a build and submit it.</p>
       ) : (

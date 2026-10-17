@@ -372,6 +372,7 @@ int main(int argc, char** argv) {
         effects(lib.augments);
         const Scenario& sc = lib.scenario;
         const Rules& r = lib.rules;
+        const auto dummy = lib.averageEnemy(sc.enemyLevel);
         const std::map<std::string, double> defaults = {
             {"level", sc.level}, {"enemy_level", sc.enemyLevel}, {"fight_mean", sc.fightMean}, {"fight_sd", sc.fightSd}, {"fight_min", sc.fightMin},
             {"fight_max", sc.fightMax}, {"engage_min", sc.engageMin}, {"engage_max", sc.engageMax},
@@ -379,8 +380,8 @@ int main(int argc, char** argv) {
             {"team_size", sc.teamSizeRule > 0 ? sc.teamSizeRule : 5},
             {"enemy_damage_scale", 1}, {"cc_scale", 1}, {"cc_min", sc.ccMin}, {"cc_max", sc.ccMax},
             {"start_distance", sc.startDistance}, {"enemy_spread", sc.enemySpread}, {"r_ready_chance", sc.rReadyChance},
-            {"retarget_delay", sc.retargetDelay}, {"fixed_target", 0}, {"target_hp", sc.targetHp},
-            {"target_armor", sc.targetArmor}, {"target_mr", sc.targetMr}, {"dodge_chance", r.dodgeChance},
+            {"retarget_delay", sc.retargetDelay}, {"fixed_target", 0}, {"target_hp", dummy[0]},
+            {"target_armor", dummy[1]}, {"target_mr", dummy[2]}, {"dodge_chance", r.dodgeChance},
             {"reaction_time", r.reactionTime}, {"aim_lead", r.aimLead}, {"combo_order", r.comboOrder}};
         std::printf("],\n \"settings\": [");
         bool first = true;

@@ -199,6 +199,8 @@ struct Library {
     // its build (items and augments); enemies without a build keep the pool's estimate.
     // listed: the build was given by hand, so an empty one means no items at all.
     void equipEnemy(EnemyProfile& p, int level, bool listed = false) const;
+    // The pick-weighted average enemy's HP, armor and magic resist at this level: the training dummy's defaults.
+    std::array<double, 3> averageEnemy(int level) const;
     void validate(const Build& b) const;
 
     json::Value enemyPool;

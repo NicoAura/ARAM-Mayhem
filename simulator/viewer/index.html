@@ -119,6 +119,7 @@ button:hover, select:hover { background: var(--accent-soft); border-color: color
 .sim-head .patch { display: inline-flex; gap: 6px; align-items: center; color: var(--muted); font-size: 13px; }
 .sim-status { color: var(--muted); font-size: 13px; min-height: 20px; }
 .sim-status.err { color: var(--hp-low); }
+.linkish { background: none; border: 0; padding: 0; color: var(--accent, #8fd3ff); text-decoration: underline; cursor: pointer; font: inherit; }
 .sim-submit { display: flex; flex-wrap: wrap; gap: 6px 10px; align-items: center; margin-top: 6px; color: var(--muted); font-size: 13px; }
 .sim-status.busy::before { content: ""; display: inline-block; width: 10px; height: 10px; margin-right: 8px; border-radius: 50%;
   border: 2px solid var(--ice); border-right-color: transparent; animation: spin .8s linear infinite; vertical-align: -1px; }
@@ -231,7 +232,7 @@ fieldset.wide { grid-column: 1 / -1; }
     </div>
     <div class="sim-status" id="simStatus">Loading the simulator…</div>
     <div class="sim-submit" id="submitBox" hidden>
-      <button id="submitScore" type="button">Submit to leaderboard</button>
+      <button id="submitScore" type="button">Submit to Survival</button>
       <span id="submitNote"></span>
     </div>
     <div class="sim-grid">
@@ -240,7 +241,7 @@ fieldset.wide { grid-column: 1 / -1; }
         <div class="modes" role="radiogroup" aria-label="Enemy team">
           <label><input type="radio" name="emode" id="emodePool" value="pool" checked> Random each fight</label>
           <label><input type="radio" name="emode" id="emodePick" value="pick"> Chosen</label>
-          <label><input type="radio" name="emode" id="emodeDummy" value="dummy"> Training dummies</label>
+          <label><input type="radio" name="emode" id="emodeDummy" value="dummy"> Training dummy</label>
         </div>
         <div id="enemyDetail"></div>
       </fieldset>
@@ -270,10 +271,10 @@ fieldset.wide { grid-column: 1 / -1; }
 </div>
 <script type="importmap">{"imports": {"three": "/assets/lib/three-0.160.0/build/three.module.js",
   "three/addons/": "/assets/lib/three-0.160.0/examples/jsm/"}}</script>
-<script>window.REPLAY_VERSION = "39";</script>
-<script src="replay.js?v=39"></script>
-<script type="module" src="models3d.js?v=39"></script>
-<script src="sim-panel.js?v=39"></script>
+<script>window.REPLAY_VERSION = "40";</script>
+<script src="replay.js?v=40"></script>
+<script type="module" src="models3d.js?v=40"></script>
+<script src="sim-panel.js?v=40"></script>
 <!-- replay-page-end -->
 </body>
 </html>

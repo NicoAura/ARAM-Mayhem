@@ -298,7 +298,7 @@ const std::vector<std::pair<std::string, std::string>>& Library::settingKeys() {
         {"r_ready_chance", "chance your ultimate is up when the fight starts"},
         {"retarget_delay", "seconds to reach the next target after a kill"},
         {"fixed_target", "1: fight dummies with the HP and resists below instead of real champions"},
-        {"target_hp", "dummy HP"},
+        {"target_hp", "dummy HP (default: the average enemy's)"},
         {"target_armor", "dummy armor"},
         {"target_mr", "dummy magic resist"},
         // model rules
@@ -502,6 +502,18 @@ void Library::equipEnemy(EnemyProfile& p, int level, bool listed) const {
     p.mr = mr;
 }
 
+std::array<double, 3> Library::averageEnemy(int level) const {
+    Scenario pool = scenario;
+    if (enemyPool.isObject()) pool.applyEnemyPool(enemyPool);
+    double w = 0, hp = 0, armor = 0, mr = 0;
+    for (auto& e : pool.enemies) {
+        equipEnemy(e, level);
+        w += e.weight; hp += e.weight * e.hp; armor += e.weight * e.armor; mr += e.weight * e.mr;
+    }
+    if (w <= 0) return {scenario.targetHp, scenario.targetArmor, scenario.targetMr};
+    return {std::round(hp / w / 10) * 10, std::round(armor / w), std::round(mr / w)};
+}
+
 Scenario Library::scenarioFor(const ChampionKit& c) const {
     Scenario sc = scenario;
     if (enemyPool.isObject()) {
@@ -610,6 +622,9 @@ Scenario Library::scenarioFor(const ChampionKit& c) const {
         sc.fixedTarget = true;
         sc.enemies.clear();
         sc.teamDrivenDamage = false;
+        // Unless set, the dummy has the average enemy's HP and resists at the enemies' level.
+        const auto avg = averageEnemy(sc.enemyLevel);
+        sc.targetHp = avg[0]; sc.targetArmor = avg[1]; sc.targetMr = avg[2];
         set("target_hp", sc.targetHp);
         set("target_armor", sc.targetArmor);
         set("target_mr", sc.targetMr);
