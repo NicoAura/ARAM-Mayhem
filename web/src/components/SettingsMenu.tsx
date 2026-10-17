@@ -4,6 +4,8 @@ import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { loadSettings, saveSettings, SETTINGS_EVENT, type Settings } from "@/lib/settings";
 import ThemeToggle from "./ThemeToggle";
+import Link from "next/link";
+import { TOUR_EVENT } from "./FirstVisitTour";
 
 // Gear button at the top right: theme plus the site's other per-browser settings.
 
@@ -70,7 +72,19 @@ export default function SettingsMenu() {
           <Choice label="Sound and voice lines" value={s.sound ? "on" : "off"} options={[["on", "On"], ["off", "Off"]]} onChange={(v) => set({ sound: v === "on" })} />
           <Choice label="Simulator graphics" value={s.graphics} options={[["auto", "Auto"], ["low", "Low"], ["high", "High"]]} onChange={(graphics) => set({ graphics })} />
           <Choice label="Tier List starts on" value={s.tierRange} options={[["live", "Live patch"], ["last3", "Last 3"], ["all", "All time"]]} onChange={(tierRange) => set({ tierRange })} />
-          <p className="account-note">Saved in this browser.</p>
+          <p className="account-note">
+            Saved in this browser.{" "}
+            <Link
+              className="inline-link"
+              href="/"
+              onClick={() => {
+                setOpen(false);
+                dispatchEvent(new Event(TOUR_EVENT));
+              }}
+            >
+              Take the tour
+            </Link>
+          </p>
         </div>
       )}
     </div>

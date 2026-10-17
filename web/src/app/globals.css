@@ -5181,3 +5181,83 @@ html[data-scrolled] .site-header {
   color: var(--muted);
   font-size: 0.8125rem;
 }
+
+/* First-visit tour (components/FirstVisitTour.tsx) */
+.tour {
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+}
+
+.tour-hole {
+  position: fixed;
+  border-radius: 14px;
+  box-shadow:
+    0 0 0 2px var(--accent),
+    0 0 0 9999px rgb(5 7 10 / 0.62);
+  pointer-events: none;
+  transition:
+    left 0.3s cubic-bezier(0.2, 0.8, 0.2, 1),
+    top 0.3s cubic-bezier(0.2, 0.8, 0.2, 1),
+    width 0.3s cubic-bezier(0.2, 0.8, 0.2, 1),
+    height 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.tour-card {
+  position: fixed;
+  display: grid;
+  gap: 0.45rem;
+  width: 320px;
+  max-width: calc(100vw - 32px);
+  padding: 1rem 1.1rem;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: var(--surface);
+  box-shadow: 0 20px 50px -20px rgb(0 0 0 / 0.7);
+  transition:
+    left 0.3s cubic-bezier(0.2, 0.8, 0.2, 1),
+    top 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+[data-motion="reduce"] .tour-hole,
+[data-motion="reduce"] .tour-card {
+  transition: none;
+}
+
+.tour-count {
+  color: var(--accent);
+  font: 500 0.6875rem var(--mono);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.tour-card h2 {
+  font-size: 1.0625rem;
+}
+
+.tour-card p:not(.tour-count) {
+  color: var(--muted);
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+
+.tour-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.4rem;
+}
+
+.tour-actions .btn {
+  height: 34px;
+}
+
+.tour-skip {
+  margin-right: auto;
+  border: 0;
+  background: none;
+  color: var(--muted);
+  font: inherit;
+  font-size: 0.8125rem;
+  cursor: pointer;
+}
