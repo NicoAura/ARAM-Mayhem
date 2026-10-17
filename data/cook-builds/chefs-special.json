@@ -1,53 +1,49 @@
 {
-  "id": "tryndamere-battlemage",
-  "title": "The Battlemage King",
-  "champion": "Tryndamere",
-  "champion_name": "Tryndamere",
+  "id": "malphite-tap-dancer",
+  "title": "Unstoppable Force, Literally",
+  "champion": "Malphite",
+  "champion_name": "Malphite",
   "chef": "2026-10-17",
-  "tier": "Holds up",
-  "core_win_rate": 0.5311,
-  "champion_win_rate": 0.4952,
-  "why": "Tryndamere is the purest crit swordsman in the game, so this one makes him a mage. ADAPt turns all the bonus Attack Damage from Kraken Slayer and Blade of The Ruined King into Ability Power, plus 15% more, and Rabadon's Deathcap multiplies the lot. Marksmage hands it straight back: every attack deals extra physical damage equal to 75% of his Ability Power, and Master of Duality grows that Ability Power with every swing.",
-  "play": "Spin in, press Undying Rage and keep hitting. You are a mage whose only spell is right-click.",
+  "why": "Malphite is a slow rock who presses R and stands still, so this one turns him into a sprinter. Tap Dancer gives him 10 Movement Speed with every attack, stacking forever as long as he keeps swinging, and Don't Blink turns that speed into damage: 1% more for every 10 Movement Speed he has over his target. Every attack makes him faster, and every bit of speed makes everything he does hit harder, Unstoppable Force included. Deft and the attack speed items keep the swings coming.",
+  "play": "Start hitting anything, minions included, before the fight so you arrive already fast. Never stop attacking: the speed lasts 5 seconds.",
   "items": [
     "Berserker's Greaves",
-    "Kraken Slayer",
     "Guinsoo's Rageblade",
-    "Nashor's Tooth",
-    "Blade of The Ruined King",
-    "Rabadon's Deathcap"
+    "Wit's End",
+    "Phantom Dancer",
+    "Trinity Force",
+    "Dead Man's Plate"
   ],
-  "core_usual": 0,
-  "core": 3,
-  "champion_icon": "/embed/fun/cook-builds/icons/champions/23.png",
+  "core": 2,
+  "champion_icon": "/embed/fun/cook-builds/icons/champions/54.png",
   "augments": [
     {
-      "name": "ADAPt",
-      "rarity": "Silver",
-      "core": true,
-      "win_rate": 0.5585,
-      "icon": "/embed/fun/cook-builds/icons/augments/adapt.png"
-    },
-    {
-      "name": "Marksmage",
-      "rarity": "Gold",
-      "core": true,
-      "win_rate": 0.5313,
-      "icon": "/embed/fun/cook-builds/icons/augments/marksmage.png"
-    },
-    {
-      "name": "Master of Duality",
+      "name": "Tap Dancer",
       "rarity": "Prismatic",
       "core": true,
-      "win_rate": 0.5035,
-      "icon": "/embed/fun/cook-builds/icons/augments/master-of-duality.png"
+      "text": "Your Attacks grant you 10 Movement Speed. Gain Attack Speed. The buff stacks and refreshes infinitely but lasts 5 seconds.",
+      "icon": "/embed/fun/cook-builds/icons/augments/tap-dancer.png"
     },
     {
-      "name": "Witchful Thinking",
+      "name": "Don't Blink",
+      "rarity": "Silver",
+      "core": true,
+      "text": "Gain 1% bonus damage per 10 Movement Speed more you have than the target.",
+      "icon": "/embed/fun/cook-builds/icons/augments/don-t-blink.png"
+    },
+    {
+      "name": "Deft",
       "rarity": "Silver",
       "core": false,
-      "win_rate": 0.5256,
-      "icon": "/embed/fun/cook-builds/icons/augments/witchful-thinking.png"
+      "text": "Gain 60% Attack Speed.",
+      "icon": "/embed/fun/cook-builds/icons/augments/deft.png"
+    },
+    {
+      "name": "With Haste",
+      "rarity": "Gold",
+      "core": false,
+      "text": "Gain Move Speed equal to a share of your Ability Haste.",
+      "icon": "/embed/fun/cook-builds/icons/augments/with-haste.png"
     }
   ],
   "href": "/lab#chefs-special",
