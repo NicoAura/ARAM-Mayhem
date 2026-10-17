@@ -648,6 +648,9 @@ const syncStatus = $("sync-status");
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 const OFFLINE_HINT = "Connect to the Riot Client first: open it on this computer and sign in, then open this page from Open Mayhem Stats.command.";
 let helperOnline = false;
+// The helper serves this page at its root; the site's copy (under /embed/) has no helper behind it, so it
+// never asks for the archive or the helper's endpoints.
+const ON_HELPER = location.protocol !== "file:" && !location.pathname.startsWith("/embed/");
 
 function setSyncStatus(text, error = false) {
   syncStatus.hidden = !text;
@@ -696,6 +699,7 @@ async function watchSync() {
 
 const startSync = async () => {
   if (!helperOnline) {
+    if (!ON_HELPER) return setSyncStatus(OFFLINE_HINT);
     // the helper may have been started since the page loaded
     try { await syncState(); helperOnline = true; } catch (e) { return setSyncStatus(OFFLINE_HINT); }
   }
@@ -712,7 +716,7 @@ for (const b of syncBtns) b.addEventListener("click", startSync);
 
 async function setupSync() {
   // The empty state already explains Sync, so this only picks up a running sync
-  if (PRESET.sample || location.protocol === "file:") return;
+  if (PRESET.sample || !ON_HELPER) return;
   try {
     const s = await syncState();
     helperOnline = true;
@@ -723,7 +727,7 @@ async function setupSync() {
 // Opened from the sync helper, load the archive it keeps.
 (async () => {
   if (PRESET.sample) return loadText(JSON.stringify(PRESET.sample), { sample: true });
-  if (location.protocol !== "file:") {
+  if (ON_HELPER) {
     try {
       const res = await fetch("data/mayhem-backup.json", { cache: "no-store" });
       if (res.ok) await loadText(await res.text());
