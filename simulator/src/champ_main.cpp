@@ -163,6 +163,7 @@ bool writeTrace(const Library& lib, const ChampionKit& c, const Build& b, const 
         if (!e.who.empty()) o << ", \"c\": " << jsonStr(e.who);
         if (e.kind == "spawn" || e.kind == "damage" || e.kind == "kill" || e.kind == "self" || e.kind == "death")
             o << ", \"hp\": " << num(e.hp) << ", \"max\": " << num(e.maxHp);
+        if (e.shield > 0) o << ", \"sh\": " << num(e.shield);
         if (e.flag) o << ", \"f\": 1";
         if (e.kind == "cast" || e.kind == "poro") o << ", \"ax\": " << std::lround(e.x) << ", \"ay\": " << std::lround(e.y) << ", \"fl\": " << num(e.flight);
         if (!e.pos.empty()) {
@@ -386,12 +387,12 @@ int main(int argc, char** argv) {
             const auto it = lib.mayhemDamageTaken.find(e.championId);
             std::printf("%s{\"id\": %s, \"name\": %s, \"weight\": %s, \"hp\": %s, \"armor\": %s, \"mr\": %s, "
                         "\"damage_share\": %s, \"phys_share\": %s, \"cc\": %s, \"damage_taken\": %s, \"items\": %s, "
-                        "\"augments\": %s}",
+                        "\"augments\": %s, \"damage_power\": %s}",
                         i ? ", " : "", jsonStr(e.id).c_str(), jsonStr(e.name).c_str(), num(e.weight).c_str(),
                         num(e.hp).c_str(), num(e.armor).c_str(), num(e.mr).c_str(), num(e.damageShare).c_str(),
                         num(e.physShare).c_str(), num(e.cc).c_str(),
                         num(it != lib.mayhemDamageTaken.end() ? it->second : e.damageTaken).c_str(),
-                        names(e.items).c_str(), names(e.augments).c_str());
+                        names(e.items).c_str(), names(e.augments).c_str(), num(e.power).c_str());
         }
         std::printf("]}\n");
         return 0;

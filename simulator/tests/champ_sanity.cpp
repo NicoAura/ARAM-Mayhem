@@ -248,6 +248,38 @@ int main(int argc, char** argv) {
             if (e.kind == "cc") named &= !e.text.empty();
         }
         CHECK(stuns && named, "crowd control is recorded with its kind, on enemies and on you");
+
+        // Shields: Lux's W shields her, and Sterak's Gage shields you when you drop low.
+        const ChampionKit& lux = *calm.find("Lux");
+        const FightTrace xt = traceFight(calm, lux, cap, calm.scenarioFor(lux), 3);
+        bool luxShield = false;
+        for (const auto& e : xt.events) luxShield |= e.kind == "shield" && e.slot == 'W' && e.amount > 0;
+        CHECK(luxShield, "a shielding ability shields you when cast");
+        const ChampionKit& dar = *lib.find("Darius");
+        const Scenario dsc = lib.scenarioFor(dar);
+        double shielded = 0;
+        for (const auto& r : runTrials(lib, dar, Build{{"steraks"}, {}}, dsc, 0, 40)) shielded += r.shielded;
+        CHECK(shielded > 0, "Sterak's Gage shields you when your Health drops low");
+    }
+
+    {
+        // Enemies' builds and level decide how hard they hit: the same fight is over sooner
+        // against level 18 enemies with their full builds than against level 1 enemies.
+        const char* rules = argc > 1 ? argv[1] : "data/mayhem_rules.json";
+        Library strong = Library::load(rules, {{"enemy_level", 18}});
+        Library weak = Library::load(rules, {{"enemy_level", 1}});
+        strong.enemyTeam = weak.enemyTeam = {"Malphite:items=:augs="};
+        const double weakPower = weak.scenarioFor(*ahri).enemies[0].power;
+        weak.enemyTeam = {"Malphite"};
+        strong.enemyTeam = {"Malphite"};
+        CHECK(strong.scenarioFor(*ahri).enemies[0].power > 1.0 && weakPower < strong.scenarioFor(*ahri).enemies[0].power,
+              "enemies with their full build at level 18 hit harder than real games' average");
+        auto alive = [&](const Library& l) {
+            double t = 0;
+            for (const auto& r : runTrials(l, *ahri, cap, l.scenarioFor(*ahri), 0, 200)) t += r.timeAlive;
+            return t;
+        };
+        CHECK(alive(strong) < alive(weak), "you last longer against low-level enemies");
     }
 
     bool threw = false;

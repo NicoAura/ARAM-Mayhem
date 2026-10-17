@@ -61,6 +61,8 @@ struct Ability {
     // Crowd control it puts on enemies it hits: stun, root, knockup, slow... ("" for none).
     std::string cc;
     double ccDuration = 0, ccSlow = 0;
+    Bag shield;                // a shield on yourself when cast (its scaling), and how long it lasts
+    double shieldDuration = 0;
     Area area = Area::Single;
     Geometry geo;
     bool aura = false;  // per-second damage on a toggle or very short cooldown: always on
@@ -173,7 +175,7 @@ enum Source : int { SrcAttack = 0, SrcQ, SrcW, SrcE, SrcR, SrcItems, SrcCount };
 extern const char* const kSourceNames[SrcCount];
 
 struct Result {
-    double duration = 0, totalDamage = 0, primaryDamage = 0, timeAlive = 0, damageTaken = 0;
+    double duration = 0, totalDamage = 0, primaryDamage = 0, timeAlive = 0, damageTaken = 0, shielded = 0;
     double exposure = 0;  // share of the enemies' damage that could reach you, averaged over the fight
     int kills = 0;
     bool died = false;
@@ -193,6 +195,7 @@ struct TraceEvent {
     double lock = 0;          // casts: seconds a channel keeps the caster busy after it fires
     std::string who;          // cc on you: the enemy champion whose ability it is
     double hp = 0, maxHp = 0; // enemy HP after the event, or the champion's own HP for self/death
+    double shield = 0;        // self/death: your shields left
     bool flag = false;        // crit for attacks, the main target was hit for casts
     double x = 0, y = 0;      // casts: where it was aimed
     double flight = 0;        // casts: seconds the missile flies
