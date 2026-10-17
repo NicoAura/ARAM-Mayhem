@@ -16,7 +16,8 @@ const IDS = championIds as Record<string, number>;
 const ALIAS = Object.fromEntries(Object.entries(IDS).map(([alias, id]) => [id, alias]));
 const AUGS = augmentNames as Record<string, string>;
 
-export const championAliases = () => Object.keys(IDS);
+// champion-ids.json also lists another mode's "Jade_<Alias>" stand-ins (ids 60000+); they aren't champions of their own.
+export const championAliases = () => Object.keys(IDS).filter((a) => !a.includes("_"));
 
 const num = (v?: string) => (v === undefined || v === "" ? null : Number(v));
 

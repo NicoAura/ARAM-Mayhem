@@ -12,7 +12,7 @@ import { readRepoJson } from "@/lib/repo-data";
 import championNames from "@/data/champion-names.json";
 import augmentNames from "@/data/augment-names.json";
 
-export const metadata: Metadata = pageMeta("/pbe", "PBE", "What's changing for ARAM Mayhem on the test server: new and changed augments, rules and quests.");
+export const metadata: Metadata = pageMeta("/pbe", "ARAM Mayhem PBE Changes", "What's changing for ARAM Mayhem on the test server: new and changed augments, rules and quests.");
 
 type Change = { stat: string; live: string; pbe: string };
 type Pbe = {

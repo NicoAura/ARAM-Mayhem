@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Breadcrumbs } from "@/components/JsonLd";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { livePatch } from "@/lib/highlights";
@@ -28,6 +29,7 @@ export default async function ItemPage({ params }: { params: Promise<{ slug: str
   const sim = itemSim(i.id);
   return (
     <>
+      <Breadcrumbs trail={[["Items", "/items"], [i.name, `/items/${i.slug}`]]} />
       <section className="champ-hero aug-hero">
         <p className="eyebrow">
           <Link href="/items">Items</Link> · Patch {livePatch()}

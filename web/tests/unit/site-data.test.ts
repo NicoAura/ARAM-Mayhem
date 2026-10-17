@@ -31,7 +31,10 @@ describe("live data", () => {
 describe("page addresses", () => {
   it("gives every champion, augment and item a unique address", () => {
     const champs = championAliases();
-    expect(champs.length).toBe(Object.keys(championIds).length);
+    // Every real champion gets a page; another mode's "Jade_" stand-ins don't.
+    expect(champs.length).toBe(Object.keys(championIds).filter((a) => !a.startsWith("Jade_")).length);
+    expect(champs).toContain("Ahri");
+    expect(champs.some((a) => a.includes("_"))).toBe(false);
     expect(unique(champs.map((a) => a.toLowerCase()))).toBe(true);
     const augs = augmentPages();
     expect(augs.length).toBeGreaterThan(50);

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Breadcrumbs } from "@/components/JsonLd";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { pageMeta } from "@/lib/meta";
@@ -52,6 +53,7 @@ export default async function PatchPage({ params }: { params: Promise<{ patch: s
   const quiet = r.hasAugmentHistory && !r.added.length && !r.removed.length && !r.changed.length;
   return (
     <>
+      <Breadcrumbs trail={[["Patch Recaps", "/patches"], [`Patch ${r.patch}`, `/patches/${r.patch}`]]} />
       <section className="champ-hero">
         <p className="eyebrow">
           <Link href="/patches">Patch Recaps</Link>

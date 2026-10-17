@@ -72,6 +72,8 @@ const nextConfig: NextConfig = {
         { source: "/builder", destination: "/builds?tab=editor", permanent: true },
         { source: "/synergy", destination: "/builds?tab=team", permanent: true },
         { source: "/draft", destination: "/augments?tab=draft", permanent: true },
+        // Pages that once existed for another mode's stand-ins of a champion.
+        { source: "/champions/Jade_:alias", destination: "/champions/:alias", permanent: true },
       ]);
   },
 };
