@@ -58,6 +58,25 @@ function show(v: Row[string], format: Column["format"]) {
   }
 }
 
+// A tier letter. When the row carries the previous patch's tier (<key>_was) and it differs, the chip
+// slides in from the old letter, up or down (globals.css: on a new patch's first visit and during the
+// patch timeline's playback).
+const ORDER = ["S", "A", "B", "C", "D"];
+function TierChip({ tier, was }: { tier: string; was: Row[string] | undefined }) {
+  const old = typeof was === "string" && was !== tier && ORDER.includes(was) ? was : null;
+  return (
+    <span
+      key={`${old}-${tier}`}
+      className={`chip tier-${tier.toLowerCase()}`}
+      data-was={old ?? undefined}
+      data-dir={old ? (ORDER.indexOf(tier) < ORDER.indexOf(old) ? "up" : "down") : undefined}
+      title={old ? `${old} last patch` : undefined}
+    >
+      {tier}
+    </span>
+  );
+}
+
 // Numbers get a colour where it means something: win rates above or below an even 50%, and changes up or down.
 function cellClass(c: Column, v: Row[string]) {
   if (!c.format || ["text", "champion", "augment", "tier"].includes(c.format)) return "";
@@ -239,7 +258,7 @@ export default function DataTable({
                     ) : c.format === "deepscore" && typeof r[c.key] === "number" ? (
                       <DeepScore value={r[c.key] as number} help={c.hint} />
                     ) : c.format === "tier" && r[c.key] ? (
-                      <span className={`chip tier-${String(r[c.key]).toLowerCase()}`}>{r[c.key]}</span>
+                      <TierChip tier={String(r[c.key])} was={r[`${c.key}_was`]} />
                     ) : (
                       show(r[c.key], c.format)
                     )}

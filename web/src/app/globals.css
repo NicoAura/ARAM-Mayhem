@@ -6502,3 +6502,121 @@ html[data-device="mobile"] .patch-chips > * {
 .quick-spot {
   scroll-margin-top: calc(var(--quickbar-top, 64px) + env(safe-area-inset-top, 0px) + 3.75rem);
 }
+
+/* Compare: phones can swipe to step the second champion (components/ChampionCompare.tsx). */
+.compare-hint {
+  display: none;
+  margin: 0 0 0.6rem;
+  color: var(--muted);
+  font-size: 0.8125rem;
+}
+html[data-device="mobile"] .compare-hint {
+  display: block;
+}
+
+/* Champion pages: the previous and next champion by name (swipe sideways on phones). */
+.champ-steps {
+  position: absolute;
+  top: 0.9rem;
+  right: 0.9rem;
+  z-index: 1;
+  display: flex;
+  gap: 0.4rem;
+  font-size: 0.8125rem;
+}
+.champ-steps a {
+  padding: 0.25rem 0.65rem;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--surface) 80%, transparent);
+  color: var(--muted);
+  text-decoration: none;
+}
+.champ-steps a:hover {
+  border-color: var(--accent);
+  color: var(--fg);
+}
+
+/* Splash art that drifts against the cursor, so it reads as sitting behind the card (TiltEffects.tsx). */
+.champ-hero[data-parallax]::before {
+  inset: -16px;
+  translate: calc(var(--px, 0) * -24px) calc(var(--py, 0) * -16px);
+  transition: translate 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.snap-card {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  color: var(--fg);
+  text-decoration: none;
+}
+.snap-card[style*="--splash"]::before {
+  content: "";
+  position: absolute;
+  inset: -12px;
+  z-index: -1;
+  background: var(--splash) 65% 22% / cover no-repeat;
+  opacity: 0.38;
+  mask-image: linear-gradient(90deg, transparent 10%, #000 70%);
+  translate: calc(var(--px, 0) * -18px) calc(var(--py, 0) * -10px);
+  transition: translate 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+/* First visit after a new patch (components/CountUp.tsx): what the patch moved pulses in its colour. */
+html[data-patch-new] :is(td.delta-up, td.delta-down, .stat-row b.delta-up, .stat-row b.delta-down) {
+  border-radius: 6px;
+  animation: patch-pulse 1.2s ease-out 0.5s 2;
+}
+html[data-patch-new] :is(td.delta-up, .stat-row b.delta-up) {
+  --pulse: var(--good);
+}
+html[data-patch-new] :is(td.delta-down, .stat-row b.delta-down) {
+  --pulse: var(--bad);
+}
+@keyframes patch-pulse {
+  0% {
+    box-shadow: 0 0 0 0 color-mix(in srgb, var(--pulse) 55%, transparent);
+    background-color: color-mix(in srgb, var(--pulse) 18%, transparent);
+  }
+  100% {
+    box-shadow: 0 0 0 10px transparent;
+    background-color: transparent;
+  }
+}
+
+/* Tier changes (DataTable TierChip): on a new patch's first visit, or while the patch timeline plays,
+   a chip whose tier moved shows its old letter first, which slides away (down for a rise, up for a fall)
+   to reveal the new one. */
+.chip[data-was] {
+  position: relative;
+  overflow: hidden;
+}
+html[data-patch-new] .chip[data-was]::after,
+.patch-range[data-playing] .chip[data-was]::after {
+  content: attr(data-was);
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  border-radius: inherit;
+  background: var(--raised);
+  color: var(--muted);
+  animation: tier-out-up 0.5s cubic-bezier(0.5, 0, 0.8, 0.4) 0.5s both;
+  pointer-events: none;
+}
+html[data-patch-new] .chip[data-dir="up"]::after,
+.patch-range[data-playing] .chip[data-dir="up"]::after {
+  animation-name: tier-out-down;
+}
+@keyframes tier-out-up {
+  to {
+    translate: 0 -120%;
+    opacity: 0;
+  }
+}
+@keyframes tier-out-down {
+  to {
+    translate: 0 120%;
+    opacity: 0;
+  }
+}

@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import augmentNames from "@/data/augment-names.json";
 import type { CompareChampion } from "@/lib/compare";
 import { getParam, setParams } from "@/lib/url-state";
@@ -96,6 +96,23 @@ export default function ChampionCompare() {
     setParams({ a: b, b: a });
   };
 
+  // On phones, swiping across the comparison steps the second champion through the list, best ranked first.
+  const box = useRef<HTMLDivElement>(null);
+  const order = useMemo(() => (data ? [...data.champions].sort((x, y) => (x.rank ?? 999) - (y.rank ?? 999)).map((c) => c.id) : []), [data]);
+  useEffect(() => {
+    const el = box.current;
+    if (!el) return;
+    const onSwipe = (e: Event) => {
+      const dir = (e as CustomEvent<{ dir: 1 | -1 }>).detail.dir;
+      const rest = order.filter((id) => id !== a);
+      if (!rest.length) return;
+      const i = rest.indexOf(b);
+      pick("b", rest[(i + dir + rest.length) % rest.length]);
+    };
+    el.addEventListener("deeparam-swipe", onSwipe);
+    return () => el.removeEventListener("deeparam-swipe", onSwipe);
+  });
+
   const [ca, cb] = useMemo(() => [data?.champions.find((c) => c.id === a), data?.champions.find((c) => c.id === b)], [data, a, b]);
   if (!data) return failed ? <LoadError what="Compare" /> : <Skeleton kind="cards" rows={2} label="Loading champions…" />;
   if (!ca || !cb) return null;
@@ -108,7 +125,8 @@ export default function ChampionCompare() {
   };
 
   return (
-    <div className="compare">
+    <div className="compare" ref={box} data-swipe-target>
+      <p className="compare-hint">Swipe across to compare the next champion.</p>
       <div className="compare-head">
         <Picker value={a} list={data.champions} onChange={(id) => pick("a", id)} label="First champion" />
         <button type="button" className="btn ghost compare-swap" onClick={swap} aria-label="Swap champions">

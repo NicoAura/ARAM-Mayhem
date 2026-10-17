@@ -77,10 +77,11 @@ export default function ChampionTiers({ rows: initial, patches, partners }: { ro
   const before = one ? patches[patches.indexOf(one) - 1] : undefined;
   const stats = useMemo(() => {
     if (missing) return [];
-    const prev = before && have.has(before) ? new Map(champStats(rows, new Set([before])).map((c) => [c.name, c.win_rate])) : null;
+    const prev = before && have.has(before) ? new Map(champStats(rows, new Set([before])).map((c) => [c.name, c])) : null;
     return champStats(rows, picked).map((c) => {
       const was = prev?.get(c.name);
-      return { ...c, partners: partners[c.name] ?? null, change: was === undefined ? null : c.win_rate - was };
+      // tier_was lets the table slide a changed tier in from the previous patch's (DataTable).
+      return { ...c, partners: partners[c.name] ?? null, change: was === undefined ? null : c.win_rate - was.win_rate, tier_was: was?.tier ?? null };
     });
   }, [rows, picked, partners, before, have, missing]);
 
@@ -145,7 +146,7 @@ export default function ChampionTiers({ rows: initial, patches, partners }: { ro
   const moversOn = sort === MOVERS && same([live]);
 
   return (
-    <div className="patch-range">
+    <div className="patch-range" data-playing={playing || undefined}>
       <div className="patch-presets" role="group" aria-label="Patch range">
         {presets.map(([label, list]) => (
           <button key={label} type="button" aria-pressed={same(list) && !moversOn} onClick={() => preset(list)}>

@@ -80,6 +80,12 @@ function clientChampion(id: number): ClientChampion | null {
 const clientAsset = (p?: string) =>
   p ? localAsset(`https://raw.communitydragon.org/latest/${GAME_DATA}/${p.replace(/^\/lol-game-data\/assets\//i, "")}`) : undefined;
 
+/** A champion's splash art, from the default skin. */
+export function championSplash(alias: string): string | undefined {
+  const skin = IDS[alias] ? clientChampion(IDS[alias])?.skins?.[0] : undefined;
+  return clientAsset(skin?.uncenteredSplashPath || skin?.splashPath);
+}
+
 export type ChampionSummary = {
   alias: string;
   name: string;

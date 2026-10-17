@@ -2,6 +2,7 @@ import Link from "next/link";
 import { text } from "@/lib/content";
 import { chefsSpecial, statsDate, counts, kitchenBuilds, livePatch, liveTiers, topAugments } from "@/lib/highlights";
 import { whatToBuildData } from "@/lib/what-to-build";
+import { championSplash } from "@/lib/champions";
 import { ChampionJump, Favorites, KitchenPick, TierSnapshot } from "@/components/HomeWidgets";
 import { BETA } from "@/lib/beta";
 import HeroParticles from "@/components/HeroParticles";
@@ -74,7 +75,7 @@ export default function Home() {
               <h2>Tier List{patch ? ` · Patch ${patch}` : ""}</h2>
               <Link href="/tier-list">All {n.champions} →</Link>
             </div>
-            <TierSnapshot champs={tiers} />
+            <TierSnapshot champs={tiers.map((c) => ({ ...c, splash: championSplash(c.id) }))} />
           </section>
         )}
         {augs.length > 0 && (

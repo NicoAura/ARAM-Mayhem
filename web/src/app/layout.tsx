@@ -22,7 +22,7 @@ import SearchPalette from "@/components/SearchPalette";
 import ErrorReporter from "@/components/ErrorReporter";
 import SettingsMenu from "@/components/SettingsMenu";
 import { text } from "@/lib/content";
-import { searchPages } from "@/lib/highlights";
+import { livePatch, searchPages } from "@/lib/highlights";
 import { SETTINGS_SCRIPT } from "@/lib/settings";
 import { THEME_COLORS, THEME_KEY } from "@/lib/theme";
 import { navGroups, navItems } from "@/lib/tabs";
@@ -95,7 +95,7 @@ export default function RootLayout({
 }>) {
   const kofi = kofiUrl();
   return (
-    <html lang="en" className={`${sans.variable} ${mono.variable} ${display.variable}`} suppressHydrationWarning>
+    <html lang="en" className={`${sans.variable} ${mono.variable} ${display.variable}`} data-patch={livePatch() ?? undefined} suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: DEVICE_SCRIPT + THEME_SCRIPT + SETTINGS_SCRIPT + VIEW_SCRIPT }} />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: STRUCTURED_DATA }} />
