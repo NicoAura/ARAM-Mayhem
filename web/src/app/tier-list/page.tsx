@@ -11,6 +11,9 @@ import { hasDuos } from "@/lib/duos";
 import { augmentHref } from "@/lib/augments";
 import { augmentTiers, STYLES } from "@/lib/augment-tiers";
 import AugmentTiers from "@/components/AugmentTiers";
+import AugmentDraft from "@/components/AugmentDraft";
+import AugmentGroups from "@/components/AugmentGroups";
+import { augmentGroups } from "@/lib/augment-groups";
 import { augmentRows, type RawAugment } from "@/lib/augment-winrate";
 import { AUGMENT_DEEPSCORE_HELP } from "@/lib/deepscore";
 import championIds from "@/data/champion-ids.json";
@@ -150,6 +153,35 @@ export default function TierListPage() {
     });
   }
   if (duos) tabs.push({ id: "duos", label: "Duos", content: <DuosTable />, lazy: true });
+  // Formerly the Augments page (/augments redirects here).
+  tabs.push(
+    {
+      id: "groups",
+      label: "By icon",
+      lazy: true,
+      content: (
+        <>
+          <p className="patch-note subtab-note">
+            Augments that share an icon usually share a job. Each group shows what most of its members have in common, then every member, best first.
+          </p>
+          <AugmentGroups groups={augmentGroups()} help={AUGMENT_DEEPSCORE_HELP} />
+        </>
+      ),
+    },
+    {
+      id: "draft",
+      label: "Draft practice",
+      lazy: true,
+      content: (
+        <>
+          <p className="patch-note subtab-note">
+            Four selections, three cards each, one reroll per card. After every pick you&apos;ll see how often players on your champion take it.
+          </p>
+          <AugmentDraft />
+        </>
+      ),
+    },
+  );
 
   return (
     <AdvancedProvider>

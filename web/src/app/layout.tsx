@@ -25,7 +25,6 @@ import { livePatch, searchPages } from "@/lib/highlights";
 import { SETTINGS_SCRIPT } from "@/lib/settings";
 import { LANG_SCRIPT } from "@/lib/i18n";
 import { T } from "@/components/I18n";
-import LanguagePicker from "@/components/LanguagePicker";
 import { THEME_COLORS, THEME_KEY } from "@/lib/theme";
 import { navGroups, navItems } from "@/lib/tabs";
 import "./globals.css";
@@ -152,14 +151,7 @@ export default function RootLayout({
             <Link href="/terms">
               <T>Terms</T>
             </Link>
-            <Link href="/status">
-              <T>Status</T>
-            </Link>
-            <a href="mailto:admin@deeparam.com">
-              <T>Contact</T>
-            </a>
           </nav>
-          <LanguagePicker className="lang-picker" />
           <p>
             <T>{text("footer")}</T>
           </p>

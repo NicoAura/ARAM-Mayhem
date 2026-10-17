@@ -107,7 +107,7 @@ export default function QuickReference({ alias }: { alias: string }) {
                   <div key={r}>
                     <span className={`chip tier-${r}`}>{label}</span>
                     {c.augs[r].map((a) => (
-                      <Link key={a} href={augmentHref(a) ?? `/augments?rarity=${r}`} className="quickref-aug">
+                      <Link key={a} href={augmentHref(a) ?? `/tier-list?tab=augments`} className="quickref-aug">
                         <img src={`/icons/augments/${a}.webp`} alt="" width={28} height={28} loading="lazy" />
                         {data.augs[a]}
                       </Link>

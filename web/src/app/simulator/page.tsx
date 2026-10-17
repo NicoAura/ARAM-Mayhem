@@ -26,12 +26,6 @@ type BestBuilds = {
   }[];
 };
 
-type FightLength = {
-  short_seconds: number;
-  long_seconds: number;
-  champions: { champion: string; name: string; role: string; dps_short: number; dps_long: number; edge: number }[];
-};
-
 const VIEWER = "simulator/viewer";
 
 export default function SimulatorPage() {
@@ -78,44 +72,6 @@ export default function SimulatorPage() {
     });
   }
 
-  const fights = readRepoJson<FightLength>(`${VIEWER}/replay-data/fight-length.json`);
-  if (fights) {
-    tabs.push({
-      id: "fight-length",
-      label: "Short vs long fights",
-      content: (
-        <>
-          <p className="table-note">
-            Simulated: each champion&apos;s damage per second over the first {fights.short_seconds} seconds of a fight
-            and over the first {fights.long_seconds}, with its simulated best build. Going down early counts against
-            both. Long-fight edge compares how much of its damage rate a champion keeps in long fights with the
-            typical champion: positive means it does better the longer the fight goes, negative means it wants
-            fights short.
-          </p>
-          <DataTable
-            columns={[
-              { key: "name", label: "Champion", format: "champion" },
-              { key: "role", label: "Role", format: "text" },
-              { key: "short", label: `First ${fights.short_seconds}s DPS`, format: "int" },
-              { key: "long", label: `First ${fights.long_seconds}s DPS`, format: "int" },
-              { key: "edge", label: "Long-fight edge", format: "pct" },
-            ]}
-            rows={fights.champions.map((c) => ({
-              name: c.champion,
-              role: c.role,
-              short: c.dps_short,
-              long: c.dps_long,
-              edge: c.edge,
-            }))}
-            initialSort={{ key: "edge", desc: true }}
-            searchKey="name"
-            searchLabel="Find a champion"
-          />
-        </>
-      ),
-    });
-  }
-
   if (hasReplays) {
     const names = (m: Named) => Object.fromEntries(Object.entries(m).map(([k, v]) => [k, { name: v.name, id: v.id }]));
     // Leaderboards, one tab each; more boards can be added here with their own name.
@@ -127,35 +83,22 @@ export default function SimulatorPage() {
     });
   }
 
-  // Infinite Ryze (The Lab's calculator) lives with the other simulations; its own page is /simulator/infinite-ryze.
+  // Infinite Ryze (The Kitchen's calculator) lives with the other simulations.
   if (repoHas("tools/fun/ryze-calculator/index.html")) {
     tabs.push({
       id: "infinite-ryze",
       label: "Infinite Ryze",
       lazy: true,
-      content: (
-        <>
-          {repoHas("web/src/app/simulator/infinite-ryze/page.tsx") && (
-            <p className="table-note">
-              How far Ryze&apos;s AP to Mana loop goes. <Link href="/simulator/infinite-ryze">Open it on its own page →</Link>
-            </p>
-          )}
-          <Embed src="/embed/fun/ryze-calculator/index.html" title="Infinite Ryze" minHeight={900} />
-        </>
-      ),
+      content: <Embed src="/embed/fun/ryze-calculator/index.html" title="Infinite Ryze" minHeight={900} />,
     });
   }
 
   return (
     <>
       <Intro eyebrow="Simulator" title={text("page./simulator.title", "Teamfight damage, simulated.")}>
-        <span className="tag">Beta</span>{" "}
         An experiment: results can shift as the model changes. Monte Carlo teamfights against enemy teams weighted by
         Mayhem pick rates, with a build search for every champion. Use it to compare builds for one champion, not to
-        rank champions.{" "}
-        <Link className="inline-link" href="/simulator/infinite-ryze">
-          Infinite Ryze →
-        </Link>
+        rank champions.
       </Intro>
       <SimViewSwitch />
       {tabs.length ? (
