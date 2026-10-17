@@ -1,0 +1,105 @@
+import type { Metadata } from "next";
+import Link from "next/link";
+import { notFound } from "next/navigation";
+import { augmentBySlug, augmentPages } from "@/lib/augments";
+import { livePatch } from "@/lib/highlights";
+import { pageMeta } from "@/lib/meta";
+
+// One page per augment, so each can be found in search (lib/augments.ts).
+
+export const dynamicParams = false;
+export const generateStaticParams = () => augmentPages().map((a) => ({ slug: a.slug }));
+
+const pct = (v: number) => `${(v * 100).toFixed(1)}%`;
+const RARITY: Record<string, string> = { silver: "Silver", gold: "Gold", prismatic: "Prismatic" };
+
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+  const a = augmentBySlug((await params).slug);
+  if (!a) return {};
+  const best = a.best.length ? ` Best on ${a.best.slice(0, 3).map((c) => c.name).join(", ")}.` : "";
+  return pageMeta(
+    `/augments/${a.slug}`,
+    `${a.name} ARAM Mayhem Augment`,
+    `${a.name} is a ${RARITY[a.tier] ?? a.tier} ARAM Mayhem augment with a ${pct(a.winRate)} win rate on patch ${livePatch()}.${best}`,
+  );
+}
+
+export default async function AugmentPage({ params }: { params: Promise<{ slug: string }> }) {
+  const a = augmentBySlug((await params).slug);
+  if (!a) notFound();
+  const patch = livePatch();
+  return (
+    <>
+      <section className="champ-hero aug-hero">
+        <p className="eyebrow">
+          <Link href="/tier-list?tab=augments">Augments</Link> · Patch {patch}
+        </p>
+        <div className="aug-hero-title">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img className="aug-hero-icon" data-tier={a.tier} src={`/icons/augments/${a.id}.webp`} alt="" width={72} height={72} />
+          <h1>
+            {a.name} <span className="champ-hero-sub">ARAM Mayhem augment</span>
+          </h1>
+        </div>
+        <div className="stat-row">
+          <div>
+            <b>
+              <span className={`chip tier-${a.tier}`}>{RARITY[a.tier] ?? a.tier}</span>
+            </b>
+            <span>rarity</span>
+          </div>
+          <div>
+            <b className={a.winRate >= 0.52 ? "wr-high" : a.winRate <= 0.48 ? "wr-low" : ""}>{pct(a.winRate)}</b>
+            <span>win rate{a.winRank ? `, #${a.winRank} of ${a.of}` : ""}</span>
+          </div>
+          <div>
+            <b>{pct(a.pickRate)}</b>
+            <span>pick rate{a.pickRank ? `, #${a.pickRank} of ${a.of}` : ""}</span>
+          </div>
+        </div>
+      </section>
+      <div className="bento">
+        {a.best.length > 0 && (
+          <section className="card span-6" data-accent="tier">
+            <div className="card-head">
+              <h2>Best champions for it</h2>
+            </div>
+            <div className="rank plain">
+              {a.best.map((c) => (
+                <Link key={c.id} href={`/champions/${c.id}`}>
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img className="icon" src={`/icons/champions/${c.id}.webp`} alt="" width={24} height={24} loading="lazy" />
+                  <span className="rank-name">{c.name}</span>
+                </Link>
+              ))}
+            </div>
+          </section>
+        )}
+        {a.pickers.length > 0 && (
+          <section className="card span-6" data-accent="gold">
+            <div className="card-head">
+              <h2>Picked most by</h2>
+            </div>
+            <div className="rank plain">
+              {a.pickers.map((c) => (
+                <Link key={c.id} href={`/champions/${c.id}`}>
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img className="icon" src={`/icons/champions/${c.id}.webp`} alt="" width={24} height={24} loading="lazy" />
+                  <span className="rank-name">{c.name}</span>
+                  <span className="rank-v">{pct(c.pickRate)}</span>
+                </Link>
+              ))}
+            </div>
+          </section>
+        )}
+      </div>
+      <p className="patch-note">
+        &ldquo;Picked most by&rdquo; shows the share of each champion&apos;s games where they took {a.name}. See every augment on the{" "}
+        <Link className="inline-link" href="/tier-list?tab=augments">
+          Tier List
+        </Link>
+        .
+      </p>
+    </>
+  );
+}

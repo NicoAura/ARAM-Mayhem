@@ -2,6 +2,8 @@ import "server-only";
 import augmentNames from "@/data/augment-names.json";
 import championNames from "@/data/champion-names.json";
 import type { SearchItem } from "@/components/SearchPalette";
+import { augmentHref } from "./augments";
+import { itemPages } from "./item-pages";
 import { readRepoCsv, readRepoJson } from "./repo-data";
 import { navPages } from "./tabs";
 import { BETA } from "./beta";
@@ -83,10 +85,16 @@ export function searchItems(): SearchItem[] {
       group: "Augments",
       name: AUGS[r.augment_id],
       hint: r.tier || "Augment",
-      href: `/tier-list?tab=augments&q=${encodeURIComponent(AUGS[r.augment_id])}`,
+      href: augmentHref(r.augment_id) ?? `/tier-list?tab=augments&q=${encodeURIComponent(AUGS[r.augment_id])}`,
       icon: `/icons/augments/${r.augment_id}.webp`,
     }));
-  return [...pages, ...champs.sort((a, b) => a.name.localeCompare(b.name)), ...augs.sort((a, b) => a.name.localeCompare(b.name))];
+  const builtItems = itemPages().map((i) => ({ group: "Items", name: i.name, hint: i.cost ? `${i.cost} gold` : "Item", href: `/items/${i.slug}`, icon: i.icon }));
+  return [
+    ...pages,
+    ...champs.sort((a, b) => a.name.localeCompare(b.name)),
+    ...augs.sort((a, b) => a.name.localeCompare(b.name)),
+    ...builtItems,
+  ];
 }
 
 export type HomeChamp = { id: string; name: string; tier: string; winRate: number; pickRate: number };

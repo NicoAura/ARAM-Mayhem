@@ -6,6 +6,7 @@ import ChampionTiers from "@/components/ChampionTiers";
 import DataTable from "@/components/DataTable";
 import DuosTable from "@/components/DuosTable";
 import { hasDuos } from "@/lib/duos";
+import { augmentHref } from "@/lib/augments";
 import championIds from "@/data/champion-ids.json";
 import championNames from "@/data/champion-names.json";
 import type { PatchRow } from "@/lib/tiers";
@@ -75,7 +76,7 @@ export default function TierListPage() {
   if (augments) {
     const augName = (a: Record<string, unknown>) => names[String(a.augment_id)] ?? String(a.key).replace(/^ARAM_/, "");
     const augCols = [
-      { key: "name", label: "Augment", format: "augment" as const, iconKey: "id" },
+      { key: "name", label: "Augment", format: "augment" as const, iconKey: "id", hrefKey: "href" },
       { key: "tier", label: "Rarity", format: "tier" as const },
       { key: "win_rate", label: "Win rate", format: "pct" as const },
       { key: "pick_rate", label: "Pick rate", format: "pct" as const },
@@ -100,6 +101,7 @@ export default function TierListPage() {
               .filter((a) => names[String(a.augment_id)] || a.key)
               .map((a) => ({
                 id: Number(a.augment_id),
+                href: augmentHref(Number(a.augment_id)),
                 name: augName(a),
                 tier: String(a.tier ?? ""),
                 win_rate: Number(a.win_rate),

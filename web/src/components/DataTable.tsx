@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useMemo, useRef, useState } from "react";
 import championNames from "@/data/champion-names.json";
 import { setParams } from "@/lib/url-state";
@@ -13,6 +14,8 @@ export type Column = {
   sortable?: boolean;
   /** For "augment" columns: the row key holding the augment id, for its icon. */
   iconKey?: string;
+  /** The row key holding a page to open from this cell (an augment's own page). */
+  hrefKey?: string;
   /** Sort by this row key instead (a tier letter sorts by its score). */
   sortKey?: string;
   /** Explains the column; shown on hover and to screen readers. */
@@ -198,7 +201,13 @@ export default function DataTable({
                     {c.format === "champion" ? (
                       <Champion id={String(r[c.key])} onOpen={setPanel} />
                     ) : c.format === "augment" ? (
-                      <Named src={`/icons/augments/${r[c.iconKey ?? "id"]}.webp`} name={String(r[c.key] ?? "")} />
+                      c.hrefKey && r[c.hrefKey] ? (
+                        <Link className="cell-link" href={String(r[c.hrefKey])}>
+                          <Named src={`/icons/augments/${r[c.iconKey ?? "id"]}.webp`} name={String(r[c.key] ?? "")} />
+                        </Link>
+                      ) : (
+                        <Named src={`/icons/augments/${r[c.iconKey ?? "id"]}.webp`} name={String(r[c.key] ?? "")} />
+                      )
                     ) : c.format === "tier" && r[c.key] ? (
                       <span className={`chip tier-${String(r[c.key]).toLowerCase()}`}>{r[c.key]}</span>
                     ) : (
