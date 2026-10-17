@@ -2,10 +2,8 @@ import type { Metadata } from "next";
 import { Breadcrumbs } from "@/components/JsonLd";
 import Link from "next/link";
 import ShareButton from "@/components/ShareButton";
-import ShareCard from "@/components/ShareCard";
 import ChampionRadar from "@/components/ChampionRadar";
 import SplashAccent from "@/components/SplashAccent";
-import { TIER_COLORS } from "@/lib/share-card";
 import WinRateChart from "@/components/WinRateChart";
 import ChampionShowcase from "@/components/ChampionShowcase";
 import QuickBar from "@/components/QuickBar";
@@ -57,7 +55,7 @@ export default async function ChampionPage({ params }: { params: Promise<{ alias
   const c = championSummary((await params).alias);
   const tab = discoverToolTabs().find((t) => t.href === "/champions");
   if (!c) notFound();
-  // Neighbours by name, for the arrows (and phone swipes, lib/subtab-nav.ts).
+  // Neighbours by name, for the arrows (and the [ and ] keys, lib/subtab-nav.ts).
   const all = champList();
   const at = all.findIndex((x) => x.id === c.alias);
   const prev = all[(at - 1 + all.length) % all.length];
@@ -89,28 +87,7 @@ export default async function ChampionPage({ params }: { params: Promise<{ alias
         {c.title && <p className="lede">{c.title.charAt(0).toUpperCase() + c.title.slice(1)}</p>}
         <ArchetypeTags names={championTags(c.alias)} info={championTagData().info} link />
         <p className="champ-hero-links">
-          <Link className="inline-link" href={`/builds?tab=editor&champ=${c.alias}`}>
-            Try a build
-          </Link>
           <ShareButton title={c.name} />
-          {c.winRate !== undefined && (
-            <ShareCard
-              spec={{
-                title: c.name,
-                subtitle: `Patch ${c.patch ?? ""} · #${c.rank} of ${c.of}`,
-                art: c.splash,
-                icon: `/icons/champions/${c.alias}.webp`,
-                badge: c.tier && TIER_COLORS[c.tier] ? { text: c.tier, ...TIER_COLORS[c.tier] } : undefined,
-                stats: [
-                  { label: "Win rate", value: pct(c.winRate), tone: c.winRate >= 0.52 ? "good" : c.winRate <= 0.48 ? "bad" : undefined },
-                  { label: "Pick rate", value: pct(c.pickRate ?? 0) },
-                  ...(c.change !== null ? [{ label: `Since ${c.prev}`, value: pts(c.change), tone: c.change > 0 ? ("good" as const) : c.change < 0 ? ("bad" as const) : undefined }] : []),
-                ],
-                row: c.augments.length ? { label: "Most picked augments", icons: c.augments.slice(0, 6).map((a) => `/icons/augments/${a.id}.webp`) } : undefined,
-                url: `https://deeparam.com/champions/${c.alias}`,
-              }}
-            />
-          )}
         </p>
         {c.winRate !== undefined && (
           <div className="stat-row">
@@ -147,7 +124,6 @@ export default async function ChampionPage({ params }: { params: Promise<{ alias
             <section className="card span-all" data-accent="tier">
               <div className="card-head">
                 <h2>Best teammates</h2>
-                <Link href={`/builds?tab=team&team=${c.alias}`}>Team Builder →</Link>
               </div>
               <div className="rank plain">
                 {c.partners.map((p) => (

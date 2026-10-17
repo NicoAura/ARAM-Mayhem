@@ -13,8 +13,6 @@ const PAGES = [
   "/info/region-teams",
   "/champions/Ahri",
   "/champions/Yunara",
-  "/builds",
-  "/builds?tab=team",
   "/tier-list?tab=draft",
   "/tier-list?tab=groups",
   "/patches",
@@ -87,10 +85,8 @@ test("old addresses redirect to the current tabs", async ({ page }) => {
     await page.goto(from);
     expect(new URL(page.url()).pathname + new URL(page.url()).search, from).toBe(to);
   }
-  // Pages merged into Builds and the Tier List: the tab is picked and the old query kept.
+  // Pages merged into the Tier List: the tab is picked and the old query kept.
   for (const [from, path, tab, keep] of [
-    ["/builder", "/builds", "editor", null],
-    ["/synergy", "/builds", "team", null],
     ["/draft", "/tier-list", "draft", null],
     ["/augments?tab=draft&champ=Jinx", "/tier-list", "draft", "champ"],
     ["/augments?tab=groups", "/tier-list", "groups", null],
@@ -112,6 +108,11 @@ test("old addresses redirect to the current tabs", async ({ page }) => {
     // Compare was removed.
     ["/compare?a=Jinx", "/tier-list"],
     ["/builds?tab=compare&a=Jinx&b=Ezreal", "/tier-list"],
+    // The build tools were removed.
+    ["/builds", "/tier-list"],
+    ["/builds?tab=editor&champ=Jinx", "/tier-list"],
+    ["/builder", "/tier-list"],
+    ["/synergy", "/tier-list"],
   ]) {
     await page.goto(from);
     expect(new URL(page.url()).pathname, from).toBe(to);

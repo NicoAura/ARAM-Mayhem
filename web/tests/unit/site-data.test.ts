@@ -65,12 +65,14 @@ describe("page addresses", () => {
 });
 
 describe("header", () => {
-  it("shows Tier List, Simulator, Patches and More (Build tools under More), with every page in one of them", () => {
+  it("shows Tier List, Simulator, Patches and More, with every page in one of them", () => {
     const top = navItems().map((n) => n.label);
     expect(top).toEqual(["Tier List", "Simulator", "Patches", "More"]);
     for (const n of navItems()) if (n.children) expect(n.children.length, n.label).toBeGreaterThan(1);
     const hrefs = navPages().map((n) => n.href);
-    expect(hrefs).toEqual(expect.arrayContaining(["/tier-list", "/simulator", "/pbe", "/patches", "/builds", "/info", "/kitchen", "/items"]));
+    expect(hrefs).toEqual(expect.arrayContaining(["/tier-list", "/simulator", "/pbe", "/patches", "/info", "/kitchen", "/items"]));
+    // The build tools (Build Editor, Team Builder) were removed.
+    expect(hrefs).not.toContain("/builds");
     // Augments (by icon, draft practice) moved into the Tier List.
     expect(hrefs).not.toContain("/augments");
     expect(unique(hrefs)).toBe(true);

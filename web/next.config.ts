@@ -75,9 +75,8 @@ const nextConfig: NextConfig = {
         // The rest of the Augments page (by icon, draft practice) is on the Tier List too; ?tab= carries over.
         { source: "/augments", has: [{ type: "query" as const, key: "tab", value: "(?<tab>.+)" }], destination: "/tier-list?tab=:tab", permanent: true },
         { source: "/augments", destination: "/tier-list?tab=augments", permanent: true },
-        // The build tools share a page now; the old addresses keep their query.
-        { source: "/builder", destination: "/builds?tab=editor", permanent: true },
-        { source: "/synergy", destination: "/builds?tab=team", permanent: true },
+        // The build tools (Build Editor, Team Builder) were removed; their addresses open the Tier List.
+        ...["/builds", "/builder", "/synergy"].map((source) => ({ source, destination: "/tier-list", permanent: true })),
         // Infinite Ryze is a tab on the Simulator page now.
         { source: "/simulator/infinite-ryze", destination: "/simulator?tab=infinite-ryze", permanent: true },
         { source: "/draft", destination: "/tier-list?tab=draft", permanent: true },
