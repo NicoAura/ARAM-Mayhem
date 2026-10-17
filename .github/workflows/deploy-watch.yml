@@ -1,0 +1,49 @@
+name: Deploy watch
+
+# After something lands on main, waits for the Cloudflare deploy of that commit, then checks the
+# live site answers. If either fails this run fails, and GitHub emails whoever pushed (Nico's inbox).
+on:
+  push:
+    branches: [main]
+
+concurrency:
+  group: deploy-watch
+  cancel-in-progress: true
+
+permissions:
+  checks: read
+  contents: read
+
+jobs:
+  watch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Wait for the deploy
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          for i in $(seq 1 50); do
+            run=$(gh api "repos/$GH_REPO/commits/$GITHUB_SHA/check-runs" \
+              --jq '[.check_runs[] | select(.name | startswith("Workers Builds"))][0] | "\(.status) \(.conclusion) \(.details_url)"')
+            set -- $run
+            if [ "${1:-null}" = null ] && [ "$i" -ge 20 ]; then
+              echo "::notice::No deploy check showed up for ${GITHUB_SHA::7}; skipping the deploy wait."; exit 0
+            fi
+            if [ "${1:-}" = completed ]; then
+              echo "Deploy finished: $2 ($3)"
+              [ "$2" = success ] && exit 0
+              echo "::error::The deploy of ${GITHUB_SHA::7} failed. Build log: $3"; exit 1
+            fi
+            sleep 30
+          done
+          echo "::error::The deploy of ${GITHUB_SHA::7} was still running after 25 minutes."; exit 1
+      - name: Check the live site
+        run: |
+          sleep 20
+          for path in / /tier-list /simulator /pbe /data/version.json; do
+            code=$(curl -s -o /dev/null -w '%{http_code}' --retry 3 --retry-delay 10 "https://deeparam.com$path")
+            echo "$path $code"
+            [ "$code" = 200 ] || { echo "::error::https://deeparam.com$path answered $code after the deploy."; exit 1; }
+          done
