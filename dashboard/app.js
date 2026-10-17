@@ -215,7 +215,7 @@ function renderTiles(games) {
   const dmg = n ? sum(games, (g) => g.damage) / n : 0;
   const dur = n ? sum(games, (g) => g.duration) / n : 0;
   const tiles = [
-    ["Games", n, `${wins} W · ${n - wins} L`],
+    ["Total matches", n.toLocaleString(), `${wins} W · ${n - wins} L${n < state.games.length ? ` · of ${state.games.length.toLocaleString()}` : ""}`],
     ["Win rate", n ? pct(wins / n) : "–", "", n ? wrClass(wins / n) : ""],
     ["KDA", n ? kda(K, D, A) : "–", n ? `${(K / n).toFixed(1)} / ${(D / n).toFixed(1)} / ${(A / n).toFixed(1)}` : ""],
     ["Damage to champions", n ? Math.round(dmg).toLocaleString() : "–", "per game"],
@@ -403,9 +403,10 @@ function group(games, keyFn) {
 
 function renderChamps(games) {
   const rows = group(games, (g) => g.champId);
+  $("n-champs").textContent = `${games.length.toLocaleString()} matches`;
   table("t-champs", [
     { label: "Champion", get: (r) => champName(r.sample) },
-    { label: "Games", get: (r) => r.n },
+    { label: "Matches", get: (r) => r.n },
     { label: "Win rate", get: (r) => r.w / r.n, fmt: (r) => pct(r.w / r.n), cls: (r) => wrClass(r.w / r.n) },
     { label: "KDA", get: (r) => (r.k + r.a) / Math.max(1, r.d), fmt: (r) => kda(r.k, r.d, r.a) },
     { label: "Damage", get: (r) => r.dmg / r.n, fmt: (r) => Math.round(r.dmg / r.n).toLocaleString() },
@@ -427,6 +428,7 @@ function renderAugs(games) {
 }
 
 function renderGames(games) {
+  $("n-games").textContent = games.length > 200 ? `Latest 200 of ${games.length.toLocaleString()} matches` : `${games.length.toLocaleString()} matches`;
   table("t-games", [
     { label: "Date", get: (r) => r.time, fmt: (r) => fmtDate(new Date(r.time)) },
     { label: "Champion", get: (r) => champName(r), fmt: (r) => esc(champName(r)) },
