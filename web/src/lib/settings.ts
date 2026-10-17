@@ -21,11 +21,13 @@ export type Settings = {
   contrast: "standard" | "high";
   /** "colorblind" swaps green/red and the tier colours for a blue/orange set. */
   colors: "standard" | "colorblind";
+  /** Reopen the Tier List, Compare, Team Builder and Build Editor the way they were left. */
+  remember: boolean;
   /** The Tier List's starting patch range. */
   tierRange: "live" | "last3" | "all";
 };
 
-export const DEFAULT_SETTINGS: Settings = { motion: "system", sound: true, uiSound: false, haptics: true, graphics: "auto", contrast: "standard", colors: "standard", tierRange: "live" };
+export const DEFAULT_SETTINGS: Settings = { motion: "system", sound: true, uiSound: false, haptics: true, graphics: "auto", contrast: "standard", colors: "standard", remember: true, tierRange: "live" };
 
 export function loadSettings(): Settings {
   try {

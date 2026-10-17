@@ -8,6 +8,7 @@ import Link from "next/link";
 import { TOUR_EVENT } from "./FirstVisitTour";
 import { canVibrate } from "@/lib/haptics";
 import { chime } from "@/lib/ui-sound";
+import { forgetViews } from "@/lib/url-state";
 
 // Gear button at the top right: theme plus the site's other per-browser settings.
 
@@ -84,6 +85,15 @@ export default function SettingsMenu() {
             <Choice label="Vibration" value={s.haptics ? "on" : "off"} options={[["on", "On"], ["off", "Off"]]} onChange={(v) => set({ haptics: v === "on" })} />
           )}
           <Choice label="Simulator graphics" value={s.graphics} options={[["auto", "Auto"], ["low", "Low"], ["high", "High"]]} onChange={(graphics) => set({ graphics })} />
+          <Choice
+            label="Remember my views"
+            value={s.remember ? "on" : "off"}
+            options={[["on", "On"], ["off", "Off"]]}
+            onChange={(v) => {
+              set({ remember: v === "on" });
+              if (v === "off") forgetViews();
+            }}
+          />
           <Choice label="Tier List starts on" value={s.tierRange} options={[["live", "Live patch"], ["last3", "Last 3"], ["all", "All time"]]} onChange={(tierRange) => set({ tierRange })} />
           <p className="account-note">
             Saved in this browser.{" "}
