@@ -6,7 +6,7 @@ import { loadSettings, saveSettings, SETTINGS_EVENT, type Settings } from "@/lib
 import ThemeToggle from "./ThemeToggle";
 import Link from "next/link";
 import { TOUR_EVENT } from "./FirstVisitTour";
-import { canVibrate } from "@/lib/haptics";
+import { hapticsAvailable } from "@/lib/haptics";
 import { chime } from "@/lib/ui-sound";
 import { forgetViews } from "@/lib/url-state";
 
@@ -82,8 +82,8 @@ export default function SettingsMenu() {
                 if (v === "on") chime("done");
               }} />
           )}
-          {canVibrate() && (
-            <Choice label="Vibration" value={s.haptics ? "on" : "off"} options={[["on", "On"], ["off", "Off"]]} onChange={(v) => set({ haptics: v === "on" })} />
+          {hapticsAvailable() && (
+            <Choice label="Haptics" value={s.haptics ? "on" : "off"} options={[["on", "On"], ["off", "Off"]]} onChange={(v) => set({ haptics: v === "on" })} />
           )}
           <Choice label="Simulator graphics" value={s.graphics} options={[["auto", "Auto"], ["low", "Low"], ["high", "High"]]} onChange={(graphics) => set({ graphics })} />
           <Choice

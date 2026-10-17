@@ -14,6 +14,7 @@ import FirstVisitTour from "@/components/FirstVisitTour";
 import UpdateToast from "@/components/UpdateToast";
 import AccountButton from "@/components/AccountButton";
 import BrandMark from "@/components/BrandMark";
+import HapticTaps from "@/components/HapticTaps";
 import MobileTabBar from "@/components/MobileTabBar";
 import NavLinks from "@/components/NavLinks";
 import SearchPalette from "@/components/SearchPalette";
@@ -153,6 +154,7 @@ export default function RootLayout({
         <OfflineSupport />
         <ViewMemory />
         <BackToTop />
+        <HapticTaps />
         <MobileTabBar tabs={navGroups().map(({ href, label, group }) => ({ href, label, group }))} />
       </body>
     </html>
