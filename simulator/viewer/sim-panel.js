@@ -77,8 +77,8 @@
       if (!r.ok) { status(T("The simulator couldn't load its data:") + " " + r.stderr, "err"); return false; }
       meta = JSON.parse(r.stdout);
       // Official names in the page's language.
-      for (const i of meta.items) i.name = NAME("items", i.id, i.name);
-      for (const a of meta.augments) a.name = NAME("augments", a.id, a.name);
+      for (const i of meta.items) { i.en = i.name; i.name = NAME("items", i.id, i.name); }
+      for (const a of meta.augments) { a.en = a.name; a.name = NAME("augments", a.id, a.name); }
       for (const c of meta.champions) c.name = NAME("champions", c.id, c.name);
       for (const e of meta.enemies) e.name = NAME("champions", e.id, e.name);
       enemyById.clear();
@@ -604,7 +604,7 @@
   // A simulated build can be sent to The Kitchen with a title and a few words, by a signed-in visitor.
   // It goes into The Kitchen's review queue (POST /api/kitchen/submissions) and shows there once accepted.
   let kitchen = null;
-  const idOf = (list, key) => { const x = meta && meta[list].find((e) => e.key === key); return x ? x.id : null; };
+  const entry = (list, key) => (meta && meta[list].find((e) => e.key === key)) || null;
   function offerKitchen(build, live) {
     kitchen = build && live ? build : null;
     $("kitchenBtn").hidden = !kitchen;
@@ -653,8 +653,11 @@
       const check = await botCheck();
       const body = {
         ...kitchen, title, description, lang: window.I18N.lang,
-        item_ids: kitchen.items.map((k) => idOf("items", k)).filter((x) => x !== null),
-        augment_ids: kitchen.augments.map((k) => idOf("augments", k)).filter((x) => x !== null),
+        // Ids for the names in other languages, and the English names, both in build order.
+        item_ids: kitchen.items.map((k) => entry("items", k)?.id).filter(Boolean),
+        augment_ids: kitchen.augments.map((k) => entry("augments", k)?.id).filter(Boolean),
+        item_names: kitchen.items.map((k) => entry("items", k)?.en).filter(Boolean),
+        augment_names: kitchen.augments.map((k) => entry("augments", k)?.en).filter(Boolean),
       };
       if (check) body.check = check;
       const r = await fetch("/api/kitchen/submissions", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
