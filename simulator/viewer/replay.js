@@ -1216,8 +1216,8 @@
 
   // ---------- ability and death sounds ----------
   // With the 3D models, each cast plays its ability's sound and each death the champion's death sound.
-  // replay-data/sounds/ holds them all joined into one file. Without it, casts fall back to the first
-  // burst of sound in the ability's preview video, and deaths are silent.
+  // replay-data/sounds/ holds them all joined into one file (tools/build_game_sounds.py); without it, the
+  // website's pack in /assets/sounds/ (tools/pack_clip_sounds.py, ability sounds only, so deaths are silent).
   // Browsers only allow sound after the first click or key.
   // On or off follows the site setting sound (on unless it is false); the Sound button changes it too.
   const readSound = () => siteSettings().sound !== false;
@@ -1230,7 +1230,12 @@
   // Master volume from the slider, 0 to 1, remembered between visits.
   let masterVolume = 0.8;
   try { const v = parseFloat(localStorage.getItem("replayVolume")); if (v >= 0 && v <= 1) masterVolume = v; } catch (e) {}
-  if (FULL) fetch(DATA + "sounds/sounds.json" + BUST).then((r) => (r.ok ? r.json() : {})).then((m) => { soundFiles = m; }).catch(() => {});
+  let soundBase = DATA + "sounds/";
+  const loadSounds = (base) => fetch(base + "sounds.json" + BUST).then((r) => (r.ok ? r.json() : null)).then((m) => {
+    if (m && m.clips) { soundFiles = m; soundBase = base; return true; }
+    return false;
+  }).catch(() => false);
+  if (FULL) loadSounds(DATA + "sounds/").then((ok) => ok || loadSounds("/assets/sounds/"));
   // A few audio players reused round robin. Each is started once inside the first click or
   // key press, which lets it play later from the animation loop (Safari needs this per player).
   const voices = [];
@@ -1277,19 +1282,16 @@
     if (!FULL) { if (soundOn && gestured && c && masterVolume > 0) synth(slot, volume); return; }
     if (!soundOn || !gestured || !voices.length || !c) return;
     const packed = soundFiles.clips && soundFiles.clips[c.id] && soundFiles.clips[c.id][slot];
-    const video = !soundFiles.clips && slot !== "D" && c.sound && c.sound[slot];
-    if (!packed && !video) return;
-    const k = String(c.key).padStart(4, "0");
+    if (!packed) return;
     const a = voices[nextVoice++ % voices.length];
     a.pause();
-    a.src = packed ? `${DATA}sounds/${soundFiles.file}${BUST}#t=${packed[0]},${packed[0] + packed[1]}`
-      : `${index.clip_cdn}/${k}/ability_${k}_${slot}1.webm#t=${video[0]},${video[0] + video[1]}`;
+    a.src = `${soundBase}${soundFiles.file}${BUST}#t=${packed[0]},${packed[0] + packed[1]}`;
     a.volume = Math.min(1, volume * masterVolume);
     const p = a.play();
     if (p && p.catch) p.catch(() => {});
     // Media fragments stop late in some browsers; end the clip on time so it never runs into the next one.
     clearTimeout(a.stopTimer);
-    a.onplaying = packed ? () => { clearTimeout(a.stopTimer); a.stopTimer = setTimeout(() => a.pause(), packed[1] * 1000); } : null;
+    a.onplaying = () => { clearTimeout(a.stopTimer); a.stopTimer = setTimeout(() => a.pause(), packed[1] * 1000); };
   }
   // The champion's pick quote, when you choose a champion.
   let pickVoice = null;
@@ -1330,10 +1332,6 @@
     video.pause();
     if (!modelMode) $("clipNote").textContent = T("Each cast plays the official preview of that ability. Click an ability to watch it again.");
   }
-  function clipUrl(slot) {
-    const k = String(champ.key).padStart(4, "0");
-    return `${index.clip_cdn}/${k}/ability_${k}_${slot}1.webm`;
-  }
   function showCaption(slot) {
     $("clipChip").textContent = slot;
     $("clipChip").style.background = SLOT_COLORS[slot];
@@ -1359,10 +1357,8 @@
       clipState.start = seg[0]; clipState.end = seg[0] + seg[1] - 0.05;
       video.currentTime = seg[0];
     } else {
-      fb.hidden = true;
-      clipState.start = 0; clipState.end = Infinity;
-      video.src = clipUrl(slot);
-      video.onerror = () => showFallback(T("The preview clip couldn't be loaded."));
+      video.pause(); showFallback(T("There's no preview clip for this ability."));
+      return;
     }
     video.playbackRate = 1;
     const p = video.play();

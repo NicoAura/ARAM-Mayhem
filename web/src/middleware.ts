@@ -54,9 +54,9 @@ function memoryAllows(key: string, limit: number) {
 }
 
 // Owner-only files (wrangler.jsonc sends these paths through the Worker first): 3D models, ability
-// videos, and the full Simulator replay with its sounds. The signed-in site owner gets the file from the
+// videos, the 3D replay's ability sounds, and the full Simulator replay with its sounds. The signed-in site owner gets the file from the
 // static assets; everyone else a plain 404.
-const ADMIN_ONLY = /^\/(assets\/(models|clips)\/|embed\/simulator\/(full(\.html)?$|replay-data\/sounds\/))/;
+const ADMIN_ONLY = /^\/(assets\/(models|clips|sounds)\/|embed\/simulator\/(full(\.html)?$|replay-data\/sounds\/))/;
 
 async function adminOnly(req: NextRequest) {
   if (!(await ownerFromCookie(req.cookies.get(SESSION_COOKIE)?.value))) {
@@ -98,4 +98,4 @@ export async function middleware(req: NextRequest) {
   );
 }
 
-export const config = { matcher: ["/assets/models/:path*", "/assets/clips/:path*", "/embed/simulator/full", "/embed/simulator/full.html", "/embed/simulator/replay-data/sounds/:path*", "/api/log", "/api/sim-scores", "/api/profile", "/api/games", "/api/account", "/api/account/:path*"] };
+export const config = { matcher: ["/assets/models/:path*", "/assets/clips/:path*", "/assets/sounds/:path*", "/embed/simulator/full", "/embed/simulator/full.html", "/embed/simulator/replay-data/sounds/:path*", "/api/log", "/api/sim-scores", "/api/profile", "/api/games", "/api/account", "/api/account/:path*"] };

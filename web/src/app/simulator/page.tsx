@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { pageMeta } from "@/lib/meta";
-import DataTable, { type Row } from "@/components/DataTable";
+import DataTable from "@/components/DataTable";
 import Embed from "@/components/Embed";
 import Intro from "@/components/Intro";
 import { text } from "@/lib/content";
 import Pending from "@/components/Pending";
+import SimBuildsTable, { type SimBuild } from "@/components/SimBuildsTable";
 import SimLeaderboard from "@/components/SimLeaderboard";
 import SimReplayEmbed, { SimViewSwitch } from "@/components/SimReplayEmbed";
 import SubTabs from "@/components/SubTabs";
@@ -13,7 +14,7 @@ import { readRepoJson, repoHas } from "@/lib/repo-data";
 
 export const metadata: Metadata = pageMeta("/simulator", "ARAM Mayhem Teamfight Simulator", "Simulated ARAM Mayhem teamfights, simulated builds and fight replays for every champion.");
 
-type Named = Record<string, { name: string }>;
+type Named = Record<string, { name: string; id: number }>;
 type BestBuilds = {
   champions: {
     champion: string;
@@ -65,34 +66,15 @@ export default function SimulatorPage() {
     });
   }
   if (best) {
-    const rows: Row[] = best.champions.map((c) => ({
-      name: c.champion,
-      role: c.role,
-      dps: c.summary.mean_dps,
-      survival: c.summary.survival_rate,
-      alive: c.summary.time_alive,
-      items: c.build.items.map((i) => items[i]?.name ?? i).join(", "),
-      augments: c.build.augments.map((a) => augments[a]?.name ?? a).join(", "),
+    const builds: SimBuild[] = best.champions.map((c) => ({
+      row: { name: c.champion, role: c.role, dps: c.summary.mean_dps, survival: c.summary.survival_rate, alive: c.summary.time_alive },
+      items: c.build.items.map((i) => [items[i]?.id ?? 0, items[i]?.name ?? i]),
+      augments: c.build.augments.map((a) => [augments[a]?.id ?? 0, augments[a]?.name ?? a]),
     }));
     tabs.push({
       id: "builds",
       label: "Simulated builds",
-      content: (
-        <DataTable
-          columns={[
-            { key: "name", label: "Champion", format: "champion" },
-            { key: "role", label: "Role", format: "text" },
-            { key: "dps", label: "Mean DPS", format: "int" },
-            { key: "survival", label: "Survives", format: "pct" },
-            { key: "items", label: "Items", format: "text", sortable: false },
-            { key: "augments", label: "Augments", format: "text", sortable: false },
-          ]}
-          rows={rows}
-          initialSort={{ key: "dps", desc: true }}
-          searchKey="name"
-          searchLabel="Find a champion"
-        />
-      ),
+      content: <SimBuildsTable builds={builds} />,
     });
   }
 
@@ -135,7 +117,7 @@ export default function SimulatorPage() {
   }
 
   if (hasReplays) {
-    const names = (m: Named) => Object.fromEntries(Object.entries(m).map(([k, v]) => [k, v.name]));
+    const names = (m: Named) => Object.fromEntries(Object.entries(m).map(([k, v]) => [k, { name: v.name, id: v.id }]));
     // Leaderboards, one tab each; more boards can be added here with their own name.
     tabs.push({
       id: "leaderboard",

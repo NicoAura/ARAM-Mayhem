@@ -2,7 +2,9 @@
 
 import { useEffect, useState } from "react";
 import DataTable, { type Row } from "@/components/DataTable";
+import { useNames } from "@/components/I18n";
 
+type Named = { name: string; id: number };
 type Board = { builds: { champion: string; items: string[]; augments: string[]; dps: number; survival: number; patch: string }[] };
 
 // The best build visitors have found for each champion, from /api/sim-scores. Only builds the simulator
@@ -14,9 +16,11 @@ export default function SimLeaderboard({
 }: {
   /** The board's name, shown in its text (the Simulator page's "Leaderboard" tab). */
   board: string;
-  items: Record<string, string>;
-  augments: Record<string, string>;
+  /** Simulator key → English name and game id (the id gives the name in the page's language). */
+  items: Record<string, Named>;
+  augments: Record<string, Named>;
 }) {
+  const name = useNames();
   const [rows, setRows] = useState<Row[] | null>(null);
   const [failed, setFailed] = useState(false);
   useEffect(() => {
@@ -28,15 +32,15 @@ export default function SimLeaderboard({
             name: x.champion,
             dps: x.dps,
             survival: x.survival,
-            items: x.items.map((k) => items[k] ?? k).join(", "),
-            augments: x.augments.map((k) => augments[k] ?? k).join(", ") || "–",
+            items: x.items.map((k) => (items[k] ? name("items", items[k].id, items[k].name) : k)).join(", "),
+            augments: x.augments.map((k) => (augments[k] ? name("augments", augments[k].id, augments[k].name) : k)).join(", ") || "–",
             replay: "Watch",
             href: `/simulator?tab=replays#${x.champion}&items=${x.items.join(",")}&augs=${x.augments.join(",")}`,
           })),
         ),
       )
       .catch(() => setFailed(true));
-  }, [items, augments]);
+  }, [items, augments, name]);
 
   return (
     <>
