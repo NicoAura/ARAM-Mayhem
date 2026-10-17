@@ -1,7 +1,6 @@
-/* eslint-disable @next/next/no-img-element -- small static card art and CommunityDragon icons, no resizing needed */
+/* eslint-disable @next/next/no-img-element -- small static card art and icons, no resizing needed */
 /* An augment drawn like the in-game offer card: holo card face, the tier's swirl
-   behind the icon, and the tier's ability frame. Art is from the client
-   (game/assets/ux/kiwi/augments/augmentselection), copied to public/augment-card. */
+   behind the icon, and the tier's ability frame. Art lives in public/augment-card. */
 
 import { localAsset } from "@/lib/assets";
 

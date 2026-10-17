@@ -1,8 +1,6 @@
 {
   "meta": {
     "mode": "ARAM: Mayhem",
-    "codename": "Kiwi",
-    "series": "Kiwi_S3",
     "label": "Season 3",
     "dataAsOf": "2026-10-16",
     "caveat": "PBE content can change before release.",
@@ -16,12 +14,12 @@
     },
     "chinaPoolChanged": false,
     "notes": [
-      "The 40th new augment is a generic Pentakill augment with no name yet. Its tooltip says it Empowers one basic ability, and a second ability (ultimate included) at level 18.",
-      "Some tooltips leave placeholders unfilled (for example exact Attack Speed amounts), so some descriptions leave out numbers.",
-      "Other ARAM changes are keybind settings only, not per-champion ARAM balance. No per-champion ARAM damage or healing modifiers changed.",
-      "Champion arrays are listed for ranks 1-5 (basic abilities) or 1-3 (ultimates). Mode-specific values for Arena, URF and other modes are excluded.",
-      "Build 16.21.8284168 (2026-10-16) reverted the Caitlyn passive crit nerf, extended the Qiyana Q nerf to unenchanted Q, and made Fruitify step up at levels 7, 11 and 15 instead of scaling smoothly.",
-      "Build 16.21.8289811 (2026-10-16) brought back the Caitlyn passive crit nerf (crit damage scaling 100% → 80%). Nothing else in the Mayhem augments, items or mode changed."
+      "Pentakill (choose any ability) doesn't have a name yet.",
+      "Some tooltips still have blanks, so a few descriptions leave out numbers.",
+      "No champion-specific ARAM damage or healing changes so far.",
+      "Ability values are listed for ranks 1-5 (basic abilities) or 1-3 (ultimates).",
+      "Update 2026-10-16 (build 16.21.8284168): Caitlyn's passive crit nerf was reverted, the Qiyana Q nerf now covers unenchanted Q too, and Fruitify now steps up at levels 7, 11 and 15.",
+      "Update 2026-10-16 (build 16.21.8289811): Caitlyn's passive crit nerf is back (crit damage 100% → 80%)."
     ],
     "builds": {
       "pbe": "16.21.8289811",
@@ -29,7 +27,7 @@
     }
   },
   "fame": {
-    "summary": "Earn Fame to unlock bands in order. Each band has its own in-game objectives, member dialogue and six rewards. The final reward is \"Welcome to the band!\".",
+    "summary": "Earn Fame to unlock bands in order. Each band has its own objectives and six rewards, ending with \"Welcome to the band!\".",
     "rewardsPerBand": 6,
     "bands": [
       {
@@ -120,7 +118,6 @@
         ]
       }
     ],
-    "relatedCosmetics": "True Damage \"Know My Name\" skins and per-band Prospect/Member icons look like rewards for this track (inferred, not confirmed).",
     "superstarRank": {
       "summary": "Fame also raises your Superstar Rank (10 milestones on its own track) and unlocks bands plus Audition Missions, which must be completed within a single game.",
       "rankNames": {
@@ -137,233 +134,232 @@
         "tier": "gold",
         "set": "Pentakill",
         "description": "Empowers Q: +20 Ability Haste and +10% damage, healing and shielding.",
-        "icon": "/assets/cd/pbe/game/assets/ux/kiwi/augments/icons/pentakill_small.png"
+        "icon": "/assets/augments/pbe/pentakill_small.png"
       },
       {
         "name": "POWER",
         "tier": "gold",
         "set": "Pentakill",
         "description": "Empowers W: +20 Ability Haste and +10% damage, healing and shielding.",
-        "icon": "/assets/cd/pbe/game/assets/ux/kiwi/augments/icons/pentakill_small.png"
+        "icon": "/assets/augments/pbe/pentakill_small.png"
       },
       {
         "name": "THRASH",
         "tier": "gold",
         "set": "Pentakill",
         "description": "Empowers E: +20 Ability Haste and +10% damage, healing and shielding.",
-        "icon": "/assets/cd/pbe/game/assets/ux/kiwi/augments/icons/pentakill_small.png"
+        "icon": "/assets/augments/pbe/pentakill_small.png"
       },
       {
         "name": "DOOM",
         "tier": "gold",
         "set": "Pentakill",
         "description": "Empowers R: +20 Ability Haste and +10% damage, healing and shielding.",
-        "icon": "/assets/cd/pbe/game/assets/ux/kiwi/augments/icons/pentakill_small.png"
+        "icon": "/assets/augments/pbe/pentakill_small.png"
       },
       {
-        "name": "Pentakill (Generic)",
+        "name": "Pentakill (choose any ability)",
         "tier": "gold",
         "set": "Pentakill",
-        "id": "GoH_PentakillAug_Generic",
-        "description": "Empower one of your basic Abilities (+20 Ability Haste, +10% damage, healing and shielding). At level 18, Empower another Ability, including your ultimate."
+        "description": "Empower one basic ability (+20 Ability Haste, +10% damage, healing and shielding). At level 18, Empower another, ultimate included."
       },
       {
         "name": "Big Shot",
         "tier": "prismatic",
-        "description": "+35% Crit Damage and +25% bonus AD; 75% of your Attack Speed is converted to Crit Damage.",
-        "icon": "/assets/cd/pbe/plugins/rcp-be-lol-game-data/global/default/assets/ux/kiwi/augments/icons/bigshot_small.png"
+        "description": "+35% Crit Damage and +25% bonus AD. 75% of your Attack Speed turns into Crit Damage.",
+        "icon": "/assets/augments/pbe/bigshot_small.png"
       },
       {
         "name": "Totentanz",
         "tier": "prismatic",
-        "description": "Summoner spell that blinks you forward and makes you Unkillable. If you don't get a takedown within 5 seconds, you die.",
-        "icon": "/assets/cd/pbe/plugins/rcp-be-lol-game-data/global/default/assets/ux/kiwi/augments/icons/totentanz_small.png"
+        "description": "Summoner spell: blink forward and become Unkillable. If you don't get a takedown within 5 seconds, you die.",
+        "icon": "/assets/augments/pbe/totentanz_small.png"
       },
       {
         "name": "Group Hug",
         "tier": "prismatic",
         "description": "A heal or shield also recasts on two nearby allies.",
-        "icon": "/assets/cd/pbe/game/assets/ux/kiwi/augments/icons/empyreampromise_large.png"
+        "icon": "/assets/augments/pbe/empyreampromise_large.png"
       },
       {
         "name": "Mosh Monster",
         "tier": "prismatic",
-        "description": "Casting the ability gives +300–750 HP and slows nearby enemies; takedowns make it stronger permanently.",
-        "icon": "/assets/cd/pbe/game/assets/ux/kiwi/augments/icons/genericabilityaugmenticon_prismatic.png"
+        "description": "Casting an ability gives +300–750 HP and slows nearby enemies. Takedowns make it permanently stronger.",
+        "icon": "/assets/augments/pbe/genericabilityaugmenticon_prismatic.png"
       },
       {
         "name": "Third Times the Harm",
         "tier": "prismatic",
         "description": "Every third attack deals true damage that grows permanently.",
-        "icon": "/assets/cd/pbe/plugins/rcp-be-lol-game-data/global/default/assets/ux/kiwi/augments/icons/silverbeats_large.png"
+        "icon": "/assets/augments/pbe/silverbeats_large.png"
       },
       {
         "name": "Bouncing Bees",
         "tier": "prismatic",
-        "description": "After an ability, your next attack bounces. Quest rewards +30 AD and extra bounces.",
-        "icon": "/assets/cd/pbe/game/assets/ux/kiwi/augments/icons/kingme_large.png"
+        "description": "After you cast an ability, your next attack bounces. Completing its quest gives +30 AD and more bounces.",
+        "icon": "/assets/augments/pbe/kingme_large.png"
       },
       {
         "name": "Get Jinxed",
         "tier": "gold",
-        "description": "Summoner spell that lets you ride a Jinx rocket.",
-        "icon": "/assets/cd/pbe/game/assets/ux/kiwi/augments/icons/overextender_large.png"
+        "description": "Summoner spell: ride a Jinx rocket.",
+        "icon": "/assets/augments/pbe/overextender_large.png"
       },
       {
         "name": "Brass Blast",
         "tier": "gold",
-        "description": "Summoner spell that charges a trumpet knockback.",
-        "icon": "/assets/cd/pbe/plugins/rcp-be-lol-game-data/global/default/assets/ux/kiwi/augments/icons/camo_large.png"
+        "description": "Summoner spell: charge up a trumpet blast that knocks enemies back.",
+        "icon": "/assets/augments/pbe/camo_large.png"
       },
       {
         "name": "BEES!!!",
         "tier": "gold",
         "description": "Ability hits periodically launch a beehive.",
-        "icon": "/assets/cd/pbe/plugins/rcp-be-lol-game-data/global/default/assets/ux/kiwi/augments/icons/bees_small.png"
+        "icon": "/assets/augments/pbe/bees_small.png"
       },
       {
         "name": "Salvation",
         "tier": "gold",
         "description": "Near-lethal damage releases a shockwave that heals your team.",
-        "icon": "/assets/cd/pbe/plugins/rcp-be-lol-game-data/global/default/assets/ux/kiwi/augments/icons/salvation_large.png"
+        "icon": "/assets/augments/pbe/salvation_large.png"
       },
       {
         "name": "Heavy Is The Crown",
         "tier": "gold",
-        "description": "AD, AP and AS that grow with takedowns, at the cost of Move Speed; you lose half your stacks on death.",
-        "icon": "/assets/cd/pbe/plugins/rcp-be-lol-game-data/global/default/assets/ux/kiwi/augments/icons/heavyisthecrown_small.png"
+        "description": "AD, AP and Attack Speed that grow with takedowns, at the cost of Move Speed. You lose half your stacks on death.",
+        "icon": "/assets/augments/pbe/heavyisthecrown_small.png"
       },
       {
         "name": "Weapon of Destiny",
         "tier": "gold",
         "description": "Your first Legendary item grows with takedowns.",
-        "icon": "/assets/cd/pbe/plugins/rcp-be-lol-game-data/global/default/assets/ux/kiwi/augments/icons/protagonistssignatureweapon_large.png"
+        "icon": "/assets/augments/pbe/protagonistssignatureweapon_large.png"
       },
       {
         "name": "Upgrade Stormsurge",
         "tier": "gold",
         "description": "Squall always explodes, and you get 500 gold.",
-        "icon": "/assets/cd/pbe/game/assets/ux/kiwi/augments/icons/upgradehubris_large.png"
+        "icon": "/assets/augments/pbe/upgradehubris_large.png"
       },
       {
         "name": "Arcane Axiom",
         "tier": "gold",
         "description": null,
-        "icon": "/assets/cd/pbe/plugins/rcp-be-lol-game-data/global/default/assets/ux/kiwi/augments/icons/arcaneaxiom_large.png"
+        "icon": "/assets/augments/pbe/arcaneaxiom_large.png"
       },
       {
         "name": "Armored Impact",
         "tier": "gold",
         "description": null,
-        "icon": "/assets/cd/pbe/plugins/rcp-be-lol-game-data/global/default/assets/ux/kiwi/augments/icons/armoredimpact_small.png"
+        "icon": "/assets/augments/pbe/armoredimpact_small.png"
       },
       {
         "name": "CRIMSON COBALT",
         "tier": "gold",
         "description": null,
-        "icon": "/assets/cd/pbe/game/assets/ux/kiwi/augments/icons/genericabilityaugmenticon_gold.png"
+        "icon": "/assets/augments/pbe/genericabilityaugmenticon_gold.png"
       },
       {
         "name": "Double Time",
         "tier": "gold",
         "description": null,
-        "icon": "/assets/cd/pbe/game/assets/ux/kiwi/augments/icons/aram_phenomenalevil_large.png"
+        "icon": "/assets/augments/pbe/aram_phenomenalevil_large.png"
       },
       {
         "name": "Enchanting Butterflies",
         "tier": "gold",
         "description": null,
-        "icon": "/assets/cd/pbe/plugins/rcp-be-lol-game-data/global/default/assets/ux/kiwi/augments/icons/enchantedbuttery_small.png"
+        "icon": "/assets/augments/pbe/enchantedbuttery_small.png"
       },
       {
         "name": "Jeweled Bracelet",
         "tier": "gold",
         "description": null,
-        "icon": "/assets/cd/pbe/game/assets/ux/kiwi/augments/icons/genericabilityaugmenticon_gold.png"
+        "icon": "/assets/augments/pbe/genericabilityaugmenticon_gold.png"
       },
       {
         "name": "Recoil",
         "tier": "gold",
         "description": null,
-        "icon": "/assets/cd/pbe/game/assets/ux/kiwi/augments/icons/genericabilityaugmenticon_gold.png"
+        "icon": "/assets/augments/pbe/genericabilityaugmenticon_gold.png"
       },
       {
         "name": "Sap Magic",
         "tier": "gold",
         "description": null,
-        "icon": "/assets/cd/pbe/plugins/rcp-be-lol-game-data/global/default/assets/ux/kiwi/augments/icons/mercysstrike_large.png"
+        "icon": "/assets/augments/pbe/mercysstrike_large.png"
       },
       {
         "name": "Still Here",
         "tier": "gold",
         "description": null,
-        "icon": "/assets/cd/pbe/plugins/rcp-be-lol-game-data/global/default/assets/ux/kiwi/augments/icons/stillhere_small.png"
+        "icon": "/assets/augments/pbe/stillhere_small.png"
       },
       {
         "name": "Take'em Down Down Down",
         "tier": "gold",
         "description": null,
-        "icon": "/assets/cd/pbe/plugins/rcp-be-lol-game-data/global/default/assets/ux/kiwi/augments/icons/takeemdowndowndown_small.png"
+        "icon": "/assets/augments/pbe/takeemdowndowndown_small.png"
       },
       {
         "name": "The Boom and the Bass",
         "tier": "gold",
         "description": null,
-        "icon": "/assets/cd/pbe/plugins/rcp-be-lol-game-data/global/default/assets/ux/kiwi/augments/icons/theboomandthebass_small.png"
+        "icon": "/assets/augments/pbe/theboomandthebass_small.png"
       },
       {
         "name": "Tickle Monster",
         "tier": "gold",
         "description": null,
-        "icon": "/assets/cd/pbe/plugins/rcp-be-lol-game-data/global/default/assets/ux/kiwi/augments/icons/ticklemonster_large.png"
+        "icon": "/assets/augments/pbe/ticklemonster_large.png"
       },
       {
         "name": "Lich Brain",
         "tier": "silver",
         "description": "30 AP + 4% of bonus HP as AP.",
-        "icon": "/assets/cd/pbe/plugins/rcp-be-lol-game-data/global/default/assets/ux/kiwi/augments/icons/lichbrain_large.png"
+        "icon": "/assets/augments/pbe/lichbrain_large.png"
       },
       {
         "name": "Ultimate Recursion",
         "tier": "silver",
         "description": "+50 Ultimate Haste.",
-        "icon": "/assets/cd/pbe/game/assets/ux/kiwi/augments/icons/zealot_large.png"
+        "icon": "/assets/augments/pbe/zealot_large.png"
       },
       {
         "name": "Blue Barrier",
         "tier": "silver",
         "description": null,
-        "icon": "/assets/cd/pbe/plugins/rcp-be-lol-game-data/global/default/assets/ux/kiwi/augments/icons/bluenote_small.png"
+        "icon": "/assets/augments/pbe/bluenote_small.png"
       },
       {
         "name": "Flow of Spirit",
         "tier": "silver",
         "description": null,
-        "icon": "/assets/cd/pbe/game/assets/ux/kiwi/augments/icons/genericabilityaugmenticon_gold.png"
+        "icon": "/assets/augments/pbe/genericabilityaugmenticon_gold.png"
       },
       {
         "name": "Fruitify",
         "tier": "silver",
         "description": "Takedowns burst into Fruit: 3 at level 1, +1 at levels 7, 11 and 15. Each Fruit restores 6% max Health and 6% max Mana (or 10 Energy, Fury, Rage or Courage).",
-        "icon": "/assets/cd/pbe/plugins/rcp-be-lol-game-data/global/default/assets/ux/kiwi/augments/icons/fruitseason_large.png"
+        "icon": "/assets/augments/pbe/fruitseason_large.png"
       },
       {
         "name": "Gift of the Drowned",
         "tier": "silver",
         "description": null,
-        "icon": "/assets/cd/pbe/plugins/rcp-be-lol-game-data/global/default/assets/ux/kiwi/augments/icons/giftofthedrowned_large.png"
+        "icon": "/assets/augments/pbe/giftofthedrowned_large.png"
       },
       {
         "name": "Hands off the Talent",
         "tier": "silver",
         "description": null,
-        "icon": "/assets/cd/pbe/game/assets/ux/kiwi/augments/icons/bonk_large.png"
+        "icon": "/assets/augments/pbe/bonk_large.png"
       },
       {
         "name": "Lonely Warrior",
         "tier": "silver",
         "description": null,
-        "icon": "/assets/cd/pbe/game/assets/ux/kiwi/augments/icons/adamant_large.png"
+        "icon": "/assets/augments/pbe/adamant_large.png"
       },
       {
         "name": "No Mana No Problem",
@@ -374,7 +370,7 @@
         "name": "Sound Barrier",
         "tier": "silver",
         "description": null,
-        "icon": "/assets/cd/pbe/game/assets/ux/kiwi/augments/icons/swiftandsafe_large.png"
+        "icon": "/assets/augments/pbe/swiftandsafe_large.png"
       }
     ],
     "removed": [
@@ -385,37 +381,37 @@
       {
         "name": "Dropkick",
         "tier": "prismatic",
-        "icon": "/assets/cd/latest/game/assets/ux/kiwi/augments/icons/dropkick_large.png"
+        "icon": "/assets/augments/live/dropkick_large.png"
       },
       {
         "name": "Fan the Hammer",
         "tier": "prismatic",
-        "icon": "/assets/cd/latest/game/assets/ux/cherry/augments/icons/fanthehammer_large.png"
+        "icon": "/assets/augments/live/fanthehammer_large.png"
       },
       {
         "name": "High Roller",
         "tier": "prismatic",
-        "icon": "/assets/cd/latest/game/assets/ux/kiwi/augments/icons/highroller_large.png"
+        "icon": "/assets/augments/live/highroller_large.png"
       },
       {
         "name": "Dimension Shift",
         "tier": "prismatic",
-        "icon": "/assets/cd/latest/game/assets/ux/kiwi/augments/icons/whenthedarknesscomes_large.png"
+        "icon": "/assets/augments/live/whenthedarknesscomes_large.png"
       },
       {
         "name": "Poro Stampede",
         "tier": "prismatic",
-        "icon": "/assets/cd/latest/game/assets/ux/kiwi/augments/icons/questporocharge_large.png"
+        "icon": "/assets/augments/live/questporocharge_large.png"
       },
       {
         "name": "Ult Bot",
         "tier": "prismatic",
-        "icon": "/assets/cd/latest/game/assets/ux/kiwi/augments/icons/skipthebasic_large.png"
+        "icon": "/assets/augments/live/skipthebasic_large.png"
       },
       {
         "name": "Spiritual Purification",
         "tier": "gold",
-        "icon": "/assets/cd/latest/game/assets/ux/kiwi/augments/icons/spiritualpurification_large.png"
+        "icon": "/assets/augments/live/spiritualpurification_large.png"
       },
       {
         "name": "Yowch My Coins!",
@@ -424,27 +420,27 @@
       {
         "name": "Combusting Interest",
         "tier": "gold",
-        "icon": "/assets/cd/latest/game/assets/ux/kiwi/augments/icons/bloodmoney2_large.png"
+        "icon": "/assets/augments/live/bloodmoney2_large.png"
       },
       {
         "name": "Hide on Bush",
         "tier": "gold",
-        "icon": "/assets/cd/latest/game/assets/ux/kiwi/augments/icons/brushpower_large.png"
+        "icon": "/assets/augments/live/brushpower_large.png"
       },
       {
         "name": "Critical Missile",
         "tier": "gold",
-        "icon": "/assets/cd/latest/game/assets/ux/kiwi/augments/icons/criticalmissile_large.png"
+        "icon": "/assets/augments/live/criticalmissile_large.png"
       },
       {
         "name": "Our Healing",
         "tier": "gold",
-        "icon": "/assets/cd/latest/game/assets/ux/kiwi/augments/icons/equillibrium_large.png"
+        "icon": "/assets/augments/live/equillibrium_large.png"
       },
       {
         "name": "Crit 'n Cast",
         "tier": "silver",
-        "icon": "/assets/cd/latest/game/assets/ux/kiwi/augments/icons/critncast_large.png"
+        "icon": "/assets/augments/live/critncast_large.png"
       }
     ],
     "changed": [
@@ -458,76 +454,72 @@
           }
         ],
         "direction": "nerf",
-        "icon": "/assets/cd/pbe/game/assets/ux/kiwi/augments/icons/genericabilityaugmenticon_prismatic.png",
+        "icon": "/assets/augments/pbe/genericabilityaugmenticon_prismatic.png",
         "tier": "prismatic"
       },
       {
         "name": "Jeweled Gauntlet",
         "changes": [
           {
-            "stat": "Tooltip crit damage",
+            "stat": "Tooltip wording",
             "live": "145% total damage",
-            "pbe": "45% increased damage"
+            "pbe": "45% bonus damage (same value)"
           }
         ],
         "direction": "none",
-        "note": "Underlying Crit Damage value is unchanged (1.45). Only the tooltip wording changed, and it now tracks damage dealt to champions.",
-        "icon": "/assets/cd/pbe/game/assets/ux/cherry/augments/icons/jeweledgauntlet_large.png",
+        "icon": "/assets/augments/pbe/jeweledgauntlet_large.png",
         "tier": "prismatic"
       },
       {
         "name": "Spirit Bomb",
         "changes": [
           {
-            "stat": "Missile targeting flags",
-            "live": "32767 (all unit types)",
-            "pbe": "1"
+            "stat": "Hits",
+            "live": "All units",
+            "pbe": "Fewer unit types"
           }
         ],
         "direction": "unclear",
-        "note": "The bomb's missile now hits a narrower set of units. The exact unit type isn't labeled.",
-        "icon": "/assets/cd/pbe/game/assets/ux/kiwi/augments/icons/spiritbomb_large.png",
+        "icon": "/assets/augments/pbe/spiritbomb_large.png",
         "tier": "prismatic"
       },
       {
         "name": "Infernal Soul",
         "changes": [
           {
-            "stat": "Tooltip tracker",
-            "live": "Damage Dealt",
-            "pbe": "Damage Dealt to Champions"
+            "stat": "Damage counter",
+            "live": "All damage",
+            "pbe": "Champion damage only"
           }
         ],
         "direction": "none",
-        "icon": "/assets/cd/pbe/game/assets/ux/cherry/augments/icons/infernalsoul_large.png",
+        "icon": "/assets/augments/pbe/infernalsoul_large.png",
         "tier": "silver"
       },
       {
         "name": "Snap Back",
         "changes": [
           {
-            "stat": "Enabled flag",
-            "live": "not set",
-            "pbe": "false"
+            "stat": "Status",
+            "live": "Enabled",
+            "pbe": "Disabled (may be cut)"
           }
         ],
         "direction": "unclear",
-        "note": "Still listed in the Mayhem pool, but marked disabled. May be turned off at release.",
-        "icon": "/assets/cd/pbe/game/assets/ux/kiwi/augments/icons/genericabilityaugmenticon_gold.png",
+        "icon": "/assets/augments/pbe/genericabilityaugmenticon_gold.png",
         "tier": "gold"
       },
       {
         "name": "Sneakerhead",
         "changes": [
           {
-            "stat": "Enabled flag",
-            "live": "not set",
-            "pbe": "false"
+            "stat": "Status",
+            "live": "Enabled",
+            "pbe": "Disabled (may be cut)"
           }
         ],
         "direction": "unclear",
-        "note": "Still listed in the Mayhem pool, but marked disabled. May be turned off at release.",
-        "icon": "/assets/cd/pbe/game/assets/ux/kiwi/augments/icons/sneakerhead_large.png",
+        "icon": "/assets/augments/pbe/sneakerhead_large.png",
         "tier": "prismatic"
       }
     ]
@@ -537,7 +529,7 @@
       "champion": "Varus",
       "ability": "Q",
       "live": "150% bonus AD at max charge",
-      "pbe": "90% bonus AD, scaling up with charge (about 153% bonus AD at max charge)",
+      "pbe": "90% bonus AD, growing with charge (about 153% at full charge)",
       "note": "Follows the base-game Q rework below."
     },
     {
@@ -546,11 +538,11 @@
       "live": "Shield 80/140/200/260/320 (+80% AP)",
       "pbe": "Shield 80 at all ranks (+80% AP)",
       "direction": "nerf",
-      "note": "Mayhem-only override. Could be a mistake; worth re-checking on the next PBE build."
+      "note": "Mayhem-only change. It may be a mistake."
     }
   ],
   "headliners": {
-    "summary": "New per-match \"Headliner\" system. Each Mayhem match features one Headliner that adds game-wide bonuses and effects. Replaces the old \"Quest Augments\" menu section.",
+    "summary": "Each Mayhem match features one Headliner, a band that adds game-wide bonuses. Headliners replace Quest Augments.",
     "list": [
       {
         "id": "Pentakill",
@@ -573,7 +565,7 @@
       {
         "id": "KDA",
         "name": "K/DA",
-        "effect": "K/DA throws Photocards during the match. Collecting the full set grants an extra augment."
+        "effect": "K/DA throws Photocards during the match. Collect the full set for an extra augment."
       },
       {
         "id": "Bees",
@@ -594,30 +586,27 @@
       {
         "id": "CommandLine",
         "name": "Command Line",
-        "effect": "\"Hacked Rerolls\" improve your augments. Voice lines also mention hacked merch stalls.",
-        "note": "Exact effect not spelled out yet."
+        "effect": "Hacked Rerolls upgrade your augments. Exact effect not revealed yet."
       },
       {
         "id": "CafeCuties",
         "name": "Cafe Cuties",
-        "effect": "Hands out treats that grant decaying bonus Move Speed. Health Relics are empowered: +20% missing Health restored and 25% decaying Move Speed for 6s.",
-        "note": "The Health Relic link to Cafe Cuties is inferred."
+        "effect": "Hands out treats that give decaying bonus Move Speed. Health Relics also restore 20% missing Health and give 25% decaying Move Speed for 6s."
       },
       {
         "id": "TrueDamage",
         "name": "True Damage",
-        "effect": null,
-        "note": "Listed as a Headliner, but its in-game effect isn't known yet."
+        "effect": "Effect not revealed yet."
       }
     ]
   },
   "championChanges": {
-    "summary": "Base champion changes on PBE. They apply in Mayhem unless a Mayhem override replaces the value (none of these are overridden except Varus Q and Lee Sin W above).",
+    "summary": "Base-game champion changes on the test server. They also apply in Mayhem unless a Mayhem override above replaces them.",
     "list": [
       {
         "champion": "Azir",
         "changes": [
-          "Unnamed resource stat 40 → 50 (unclear which stat)"
+          "Resource stat 40 → 50"
         ]
       },
       {
@@ -651,7 +640,7 @@
       {
         "champion": "Locke",
         "changes": [
-          "Unnamed resource stat 70 → 60",
+          "Resource stat 70 → 60",
           "Q ammo cooldown reset 20–35% → 10–40%",
           "W mana cost 55–75 → 65–85",
           "W heal cap 150–450 → 100–500 (level 1 → 18)",
@@ -766,7 +755,7 @@
         "champion": "Xin Zhao",
         "changes": [
           "Q bonus AD ratio 40% → 45%",
-          "E permanent Attack Speed conversion value 5 → 4"
+          "E permanent Attack Speed bonus reduced (5 → 4)"
         ]
       },
       {
@@ -790,7 +779,7 @@
     ]
   },
   "itemChanges": {
-    "summary": "Changes to items in the Mayhem shop. Runes and summoner mutators are unchanged.",
+    "summary": "Changes to items in the Mayhem shop. Runes are unchanged.",
     "list": [
       {
         "item": "Dawncore",
@@ -805,33 +794,33 @@
         ]
       },
       {
-        "item": "Hubris (ARAM version)",
+        "item": "Hubris",
         "changes": [
-          "Values restructured into melee vs ranged multipliers. Resulting numbers look the same: 15 AD base and 2 AD per statue melee, about 10 and 1 ranged."
+          "Now has separate melee and ranged values. Numbers look the same: 15 AD plus 2 per statue for melee, about 10 plus 1 for ranged."
         ]
       },
       {
         "item": "Party Favor",
         "changes": [
-          "Removed from the consumables quick-buy and from the item list, along with the Healthbar Splash cosmetics"
+          "Removed, along with the Healthbar Splash cosmetics"
         ]
       },
       {
         "item": "Poro-Snax",
         "changes": [
-          "New Disco Ball variant icon (cosmetic)"
+          "New Disco Ball icon (cosmetic)"
         ]
       }
     ],
     "outsideMayhemShop": [
-      "Bastionbreaker: Lethality 22 → 18, Shaped Charge damage 50 → 40 (not in the Mayhem item list)"
+      "Bastionbreaker: Lethality 22 → 18, Shaped Charge damage 50 → 40"
     ]
   },
   "modeChanges": [
-    "Health Relics are added to the Mayhem map's character list (they tie in with the Cafe Cuties Headliner).",
-    "New champion augment tags: each champion gets excluded and build tags, and Mayhem gets a new set of augment filters. Augment offers likely get tailored to the champion's kit.",
-    "Mayhem gets its own audio feature on the Bloom map skin (BloomKiwi).",
-    "Bot difficulty constants changed (AI level-up health penalty 0.7 → 0.99, max HP penalty 0.65 → 0.99). This only matters in games with bots.",
-    "Menu copy: the mode is pitched as \"THIS IS MAYHEM\" and \"JOURNEY TO STARDOM\"; the old \"Quest Augments\" section is now \"HEADLINERS\"."
+    "Health Relics are added to the Mayhem map (they tie in with the Cafe Cuties Headliner).",
+    "Champions get augment tags, so augment offers may be tailored to each champion's kit.",
+    "Mayhem gets its own sound on the Bloom map skin.",
+    "Bots are tougher: their health penalties are nearly removed. This only matters in games with bots.",
+    "The mode menu now reads \"THIS IS MAYHEM\" and \"JOURNEY TO STARDOM\", and Quest Augments are now Headliners."
   ]
 }
