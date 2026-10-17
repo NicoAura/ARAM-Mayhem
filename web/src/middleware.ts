@@ -20,7 +20,7 @@ const WINDOW = 60_000; // all limits are per minute, matching the bindings' peri
 function ruleFor(req: NextRequest): Rule | null {
   const path = req.nextUrl.pathname;
   if (path === "/api/log") return LOG;
-  if (path === "/api/games") return SHARE;
+  if (path === "/api/games") return req.method === "GET" ? null : SHARE;
   if (path.startsWith("/api/account")) {
     if (req.method === "GET") return null;
     // Saving Favorites and settings happens as you click; the rest is signing in and account changes.

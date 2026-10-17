@@ -39,6 +39,10 @@ describe("rate limits", () => {
     for (let i = 0; i < 20; i++) expect((await middleware(req("5.5.5.5", "/api/games", "POST"))).status).toBe(200);
   });
 
+  it("never limits reading Home's shared-games count", async () => {
+    for (let i = 0; i < 80; i++) expect((await middleware(req("7.7.7.7", "/api/games", "GET"))).status).toBe(200);
+  });
+
   it("guards error reports, sign-in and the write routes", () => {
     expect(config.matcher).toEqual(expect.arrayContaining(["/api/log", "/api/sim-scores", "/api/profile", "/api/games", "/api/account", "/api/account/:path*"]));
   });
