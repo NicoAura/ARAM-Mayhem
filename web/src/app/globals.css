@@ -3087,3 +3087,54 @@ html[data-motion="reduce"] .btn:hover {
 .compare-table tr:last-child > * {
   border-bottom: 0;
 }
+
+/* Augment pages (/augments/<slug>) */
+.aug-hero {
+  background:
+    radial-gradient(circle at 85% 20%, color-mix(in srgb, var(--hue-gold) 14%, transparent), transparent 55%),
+    var(--surface);
+}
+
+.aug-hero-title {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.aug-hero-icon {
+  flex: none;
+  padding: 6px;
+  border: 2px solid var(--silver);
+  border-radius: 18px;
+  background: #11151c;
+}
+
+.aug-hero-icon[data-tier="gold"] {
+  border-color: var(--gold);
+}
+
+.aug-hero-icon[data-tier="prismatic"] {
+  border-color: transparent;
+  background:
+    linear-gradient(#11151c, #11151c) padding-box,
+    var(--prismatic) border-box;
+}
+
+.cell-link:hover .champ {
+  color: var(--accent);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.item-hero-icon {
+  padding: 0;
+  border-color: var(--line);
+}
+
+.rank.builders a {
+  grid-template-columns: 24px minmax(0, 1fr) 6.5rem 6rem;
+}
+
+.rank-v.wr-good {
+  color: var(--good);
+}

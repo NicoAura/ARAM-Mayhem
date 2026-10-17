@@ -3,6 +3,7 @@ import { text } from "@/lib/content";
 import { statsDate, counts, kitchenBuilds, livePatch, liveTiers, topAugments, topDps } from "@/lib/highlights";
 import { ChampionJump, KitchenPick, TierSnapshot } from "@/components/HomeWidgets";
 import { BETA } from "@/lib/beta";
+import { augmentHref } from "@/lib/augments";
 import { movers } from "@/lib/champions";
 import { KITCHEN, navPages } from "@/lib/tabs";
 
@@ -61,7 +62,7 @@ export default function Home() {
             </div>
             <div className="rank">
               {augs.map((a, i) => (
-                <Link key={a.id} href={`/tier-list?tab=augments&q=${encodeURIComponent(a.name)}`}>
+                <Link key={a.id} href={augmentHref(a.id) ?? `/tier-list?tab=augments&q=${encodeURIComponent(a.name)}`}>
                   <span className="rank-i">{i + 1}</span>
                   <Icon src={`/icons/augments/${a.id}.webp`} />
                   <span className="rank-name">{a.name}</span>

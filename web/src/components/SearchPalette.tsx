@@ -5,7 +5,8 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 export type SearchItem = { group: string; name: string; hint: string; href: string; icon?: string };
 
-// Header search: ⌘K, Ctrl+K or / opens a palette that jumps to any page, champion or augment.
+// Header search: ⌘K, Ctrl+K or / opens a palette that jumps to any page, champion, augment or item.
+// Embedded tools pass those keys up too (Embed.tsx), so search opens from anywhere on the site.
 // The page only carries the page links; champions and augments load from /data/search.json the first
 // time search is hovered, focused or opened, which keeps every page's first load small.
 export default function SearchPalette({ pages }: { pages: SearchItem[] }) {
@@ -69,7 +70,7 @@ export default function SearchPalette({ pages }: { pages: SearchItem[] }) {
   let group = "";
   return (
     <>
-      <button type="button" className="search-btn" onClick={show} onPointerEnter={load} onFocus={load} title="Search champions, augments and pages">
+      <button type="button" className="search-btn" onClick={show} onPointerEnter={load} onFocus={load} title="Search champions, augments, items and pages">
         <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
           <circle cx="11" cy="11" r="6.5" />
           <path d="m20 20-4-4" />
@@ -83,7 +84,7 @@ export default function SearchPalette({ pages }: { pages: SearchItem[] }) {
             <input
               ref={input}
               value={query}
-              placeholder="Search a champion, augment or page"
+              placeholder="Search a champion, augment, item or page"
               aria-label="Search"
               onChange={(e) => {
                 setQuery(e.target.value);

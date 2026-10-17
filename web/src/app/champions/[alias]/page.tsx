@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import Embed from "@/components/Embed";
+import { augmentHref } from "@/lib/augments";
 import { championAliases, championSummary } from "@/lib/champions";
 import { pageMeta } from "@/lib/meta";
 import { discoverToolTabs } from "@/lib/tabs";
@@ -84,7 +85,7 @@ export default async function ChampionPage({ params }: { params: Promise<{ alias
               </div>
               <div className="rank">
                 {c.augments.map((a, i) => (
-                  <Link key={a.id} href={`/tier-list?tab=augments&q=${encodeURIComponent(a.name)}`}>
+                  <Link key={a.id} href={augmentHref(a.id) ?? `/tier-list?tab=augments&q=${encodeURIComponent(a.name)}`}>
                     <span className="rank-i">{i + 1}</span>
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img className="icon" src={`/icons/augments/${a.id}.webp`} alt="" width={24} height={24} loading="lazy" />
