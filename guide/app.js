@@ -74,6 +74,35 @@
     .map((x) => `<div class="row" style="align-items:flex-start">${img(x.icon)}<div><div class="title">${esc(x.name)} ${tierChip(x.tier)}</div><div class="muted small" style="white-space:pre-line">${esc(x.text)}</div></div></div>`)
     .join("");
 
+  // ---- Augment stages
+  const AR = D.augmentRules;
+  if (AR) {
+    const n = AR.levels.length, pct1 = (x) => `${fmt(x * 100)}%`;
+    $("stages-intro").textContent =
+      `You get ${n} augments a game, one per stage. Each selection shows ${AR.cards} augments of one rarity, and you can reroll each ` +
+      `of the ${AR.cards} slots ${AR.rerollsPerSlot === 1 ? "once" : `${AR.rerollsPerSlot} times`}. You can still pick while you're dead.`;
+    $("stage-list").innerHTML = AR.levels
+      .map((lv, i) => `<div class="card fact"><span class="eyebrow">Stage ${i + 1}</span><span class="value">Level ${lv}</span></div>`)
+      .join("");
+    $("odds-rows").innerHTML = ["Silver", "Gold", "Prismatic"]
+      .filter((t) => AR.odds[t])
+      .map((t) => {
+        const o = AR.odds[t], game = 1 - (1 - o.offer) ** n;
+        return `<tr><td>${tierChip(t)}</td><td class="num">${o.pool}</td><td class="num"><b>${pct1(o.offer)}</b></td><td class="num">${pct1(o.withRerolls)}</td><td class="num">${pct1(game)}</td></tr>`;
+      })
+      .join("");
+    $("odds-note").textContent =
+      `The chance that one augment you want is among the ${AR.cards} cards when a selection of its rarity comes up, if every augment of that rarity is equally likely. ` +
+      `"Using every reroll" counts each reroll as a fresh card. The last column is the chance it shows up at least once if all ${n} selections were that rarity.`;
+    const gi = AR.grantedItems.filter((g, i, all) => all.findIndex((x) => x.name === g.name) === i);
+    $("granted-intro").textContent =
+      "Rewards can't be bought, so build stats on the champion pages leave them out. Free items are handed over at once, but you can also buy them.";
+    $("granted-list").innerHTML = gi
+      .map((g) => `<div class="row">${img(g.icon)}<div><div class="title">${esc(g.name)} <span class="chip">${g.how === "reward" ? "Reward" : "Free"}</span></div>
+        <div class="muted small">From ${esc(g.augment)} ${tierChip(g.augmentTier)}</div></div></div>`)
+      .join("");
+  }
+
   // ---- Items
   const words = (n) => n.replace(/([a-z])([A-Z])/g, "$1 $2").replace(/([A-Z])([A-Z][a-z])/g, "$1 $2").replace(/_/g, " ");
   const exact = (n) => Number(n).toLocaleString("en-US", { maximumFractionDigits: 4 });

@@ -1,7 +1,7 @@
 """Build data.js for the champion pages (Champions, one page per champion).
 
 Usage: python3 champions/build_data.py [--channel latest|pbe]
-Writes champions/data.js. Python 3 standard library only. Champion files are cached in
+Writes champions/data.js and champions/skins.js. Python 3 standard library only. Champion files are cached in
 ~/.cache/deeparam-champions/<patch>/.
 
 What it reads:
@@ -12,6 +12,7 @@ What it reads:
   data/cn/builds/{id}.json (in this repo)            Mayhem build stats per champion (101.qq.com, refreshed daily
                                                      by the My Stats thread): items, augments, skill orders, teammates
   data/cn/champions.csv (in this repo)               Tier List rank, win and pick rate
+  guide/augment_rules.json (in this repo)            items only augments give, left out of the build stats
 
 Not in the client: the per-champion damage dealt/taken, tenacity, healing and ability haste
 adjustments. Riot applies those on the game server, so this page doesn't show them.
@@ -126,6 +127,35 @@ def mayhem_changes(bin_, record):
 ITEM_ALIASES = {3097: 3095}  # Stormrazor
 
 
+def reward_items():
+    """Items only augments hand out (quest rewards); guide/build_data.py lists them in guide/augment_rules.json."""
+    path = os.path.join(REPO, "guide", "augment_rules.json")
+    if not os.path.exists(path):
+        return set()
+    with open(path) as f:
+        return {g["id"] for g in json.load(f).get("grantedItems", []) if g["how"] == "reward"}
+
+
+REWARD_ITEMS = reward_items()
+
+
+def build_rows(xs, n):
+    """Item rows without the reward items; rows that become the same set are merged (pick added, win weighted)."""
+    out = {}
+    for x in xs or []:
+        ids = tuple(ITEM_ALIASES.get(i, i) for i in x["items"] if ITEM_ALIASES.get(i, i) not in REWARD_ITEMS)
+        if not ids:
+            continue
+        r = out.get(ids)
+        if r:
+            pick = r["pick"] + x["pick_rate"]
+            r["win"] = round((r["win"] * r["pick"] + x["win_rate"] * x["pick_rate"]) / pick, 4) if pick else r["win"]
+            r["pick"] = round(pick, 4)
+        else:
+            out[ids] = {"items": list(ids), "pick": x["pick_rate"], "win": x["win_rate"]}
+    return list(out.values())[:n]
+
+
 def load_build(cid):
     """One champion's Mayhem build stats from data/cn/builds/{id}.json (the My Stats thread refreshes them daily)."""
     path = os.path.join(REPO, "data", "cn", "builds", f"{cid}.json")
@@ -133,8 +163,7 @@ def load_build(cid):
         return None
     with open(path) as f:
         b = json.load(f)
-    rows = lambda xs, n: [{"items": [ITEM_ALIASES.get(i, i) for i in x["items"]], "pick": x["pick_rate"], "win": x["win_rate"]}  # noqa: E731
-                          for x in xs or []][:n]
+    rows = build_rows
     items = b.get("items") or {}
     aug = b.get("augments") or {}
     return {
@@ -155,6 +184,35 @@ def load_build(cid):
                    for s in b.get("skills") or []][:3],
         "mates": [{"id": m["id"], "win": m["win_rate"], "pick": m["pick_rate"]} for m in b.get("partners") or []][:5],
     }
+
+
+def base_stats(record):
+    """Level 1 stats and per-level growth from the champion's CharacterRecord; resource only for Mana and Energy."""
+    def v(*names):
+        for n in names:
+            x = record.get(n)
+            if isinstance(x, dict):
+                x = x.get("baseValue")
+            if x is not None:
+                return round(float(x), 4)
+        return 0.0
+    out = {
+        "hp": [v("baseHPModifiable", "baseHP"), v("hpPerLevelModifiable", "hpPerLevel")],
+        "hp5": [round(v("baseStaticHPRegenModifiable") * 5, 3), round(v("hpRegenPerLevelModifiable") * 5, 3)],
+        "ad": [v("baseDamageModifiable", "baseDamage"), v("damagePerLevelModifiable", "damagePerLevel")],
+        "as": [v("attackSpeedModifiable", "attackSpeed"), v("attackSpeedPerLevelModifiable", "attackSpeedPerLevel")],
+        "armor": [v("baseArmorModifiable", "baseArmor"), v("armorPerLevelModifiable", "armorPerLevel")],
+        "mr": [v("baseMR", "baseSpellBlock"), v("mrPerLevel", "spellBlockPerLevel")],
+        "range": v("attackRangeModifiable", "attackRange"),
+        "ms": v("baseMoveSpeedModifiable", "baseMoveSpeed"),
+    }
+    res = record.get("primaryAbilityResource") or {}
+    kind = {0: "Mana", 1: "Energy"}.get(res.get("arType", 0))
+    num = lambda k: round(float((res.get(k) or {}).get("baseValue") or 0), 4)  # noqa: E731
+    if kind and num("{726ee5cd}"):
+        out["resource"] = {"kind": kind, "base": [num("{726ee5cd}"), num("{6216bf7b}")],
+                           "regen": [round(num("{c4ab3550}") * 5, 3), round(num("{3a509002}") * 5, 3)]}
+    return out
 
 
 def site_paths(text):
@@ -329,12 +387,17 @@ def main():
             "splash": asset(base_skin.get("uncenteredSplashPath") or base_skin.get("splashPath")),
             "tile": asset(base_skin.get("tilePath")),
             "vo": asset(info.get("chooseVoPath")),
+            "stats": base_stats(record) if record else None,
             "abilities": abilities,
             "mayhem": mayhem_changes(bin_, record) if record else [],
             "tier": tier.get(c["id"]),
             "builds": b,
         })
     champions.sort(key=lambda c: c["name"])
+    # every skin's tile, in its own file so a page only loads it when the skins section is opened
+    skins = {c["id"]: [{"name": "Original" if s.get("isBase") else s["name"], "tile": asset(s.get("tilePath"))}
+                       for s in info.get("skins") or [] if s.get("tilePath")]
+             for c, (info, _) in zip(summary, loaded) if info}
 
     out = {
         "patch": version,
@@ -350,6 +413,8 @@ def main():
     with open(os.path.join(HERE, "data.js"), "w") as f:
         # no header comment: the file ships to the site, and pages don't say where data comes from
         f.write("window.CHAMPS_DATA = " + site_paths(json.dumps(out, ensure_ascii=False, separators=(",", ":"))) + ";\n")
+    with open(os.path.join(HERE, "skins.js"), "w") as f:
+        f.write("window.CHAMPS_SKINS = " + site_paths(json.dumps(skins, ensure_ascii=False, separators=(",", ":"))) + ";\n")
 
 
 if __name__ == "__main__":

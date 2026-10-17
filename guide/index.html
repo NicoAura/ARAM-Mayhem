@@ -13,6 +13,7 @@
       <div class="segmented" role="tablist">
         <button type="button" role="tab" data-tab="overview">What is Mayhem</button>
         <button type="button" role="tab" data-tab="rules">Rules</button>
+        <button type="button" role="tab" data-tab="stages">Augment stages</button>
         <button type="button" role="tab" data-tab="quests">Quests</button>
         <button type="button" role="tab" data-tab="challenges">Challenges</button>
         <button type="button" role="tab" data-tab="items">Items</button>
@@ -57,6 +58,23 @@
       </div>
     </section>
 
+    <section class="panel" id="panel-stages" hidden>
+      <div class="card">
+        <p class="eyebrow">Augment stages</p>
+        <h2 class="section">When augments come, and the odds of seeing one</h2>
+        <p class="muted" style="margin-top:0.5rem" id="stages-intro"></p>
+      </div>
+      <div class="facts" id="stage-list"></div>
+      <div class="card">
+        <div class="card-head"><h2>Offer odds by rarity</h2><span class="muted small">For one augment you want</span></div>
+        <div class="table-wrap"><table>
+          <thead><tr><th>Rarity</th><th class="num">In the pool</th><th class="num">Offered in a selection</th><th class="num">Using every reroll</th><th class="num">In one of four selections</th></tr></thead>
+          <tbody id="odds-rows"></tbody>
+        </table></div>
+        <p class="muted small" style="margin-top:0.75rem" id="odds-note"></p>
+      </div>
+    </section>
+
     <section class="panel" id="panel-items" hidden>
       <div class="card">
         <p class="eyebrow">Items</p>
@@ -67,6 +85,11 @@
         <thead><tr><th>Item</th><th>Value</th><th class="num">Rift</th><th class="num">Mayhem</th></tr></thead>
         <tbody id="item-changes"></tbody>
       </table></div>
+      <div class="card">
+        <div class="card-head"><h2>Items you get from augments</h2><span class="muted small">Not bought in the shop</span></div>
+        <p class="muted small" style="margin-bottom:0.85rem" id="granted-intro"></p>
+        <div class="grid tight" id="granted-list"></div>
+      </div>
     </section>
 
     <section class="panel" id="panel-history" hidden>
