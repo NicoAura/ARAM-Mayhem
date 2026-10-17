@@ -11,7 +11,7 @@ import {
 } from "@simplewebauthn/server";
 import { CHALLENGE_COOKIE } from "@/lib/account-cookies";
 import { body, handle, isSecure, json } from "@/lib/account-route";
-import { AccountError, db, requireAccount, startSession } from "@/lib/accounts";
+import { AccountError, db, requireAccount, startSession, waysIn } from "@/lib/accounts";
 
 // POST /api/account/passkey {step, ...}
 //   "add-options" / "add" {response, label}: saves a passkey for the signed-in account
@@ -108,6 +108,7 @@ export const POST = handle(async (req) => {
 
   if (b.step === "remove") {
     const a = await requireAccount();
+    if ((await waysIn(a.id, "passkey", String(b.id ?? ""))) === 0) throw new AccountError("This passkey is the only way into your account. Add another way to sign in first.", 409);
     await d.prepare("DELETE FROM passkeys WHERE id = ? AND account = ?").bind(String(b.id ?? ""), a.id).run();
     return json({ ok: true });
   }

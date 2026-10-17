@@ -22,6 +22,10 @@ const SCHEMA = [
     transports TEXT, label TEXT, created_at TEXT NOT NULL)`,
   `CREATE INDEX IF NOT EXISTS passkeys_account ON passkeys (account)`,
   `CREATE TABLE IF NOT EXISTS link_codes (code TEXT PRIMARY KEY, account TEXT NOT NULL, expires INTEGER NOT NULL)`,
+  // Sign in with Google, Apple, Discord and the rest (lib/oauth.ts): which provider account opens which site account.
+  `CREATE TABLE IF NOT EXISTS logins (provider TEXT NOT NULL, subject TEXT NOT NULL, account TEXT NOT NULL, email TEXT, created_at TEXT NOT NULL,
+    PRIMARY KEY (provider, subject))`,
+  `CREATE INDEX IF NOT EXISTS logins_account ON logins (account)`,
 ];
 
 let ready: Promise<void> | null = null;

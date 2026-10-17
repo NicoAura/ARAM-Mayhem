@@ -6046,6 +6046,16 @@ th > button[data-tip] {
 .acct-form label.acct-check { display: flex; align-items: center; gap: 0.5rem; color: var(--fg); }
 .acct-form .btn, .acct-card > .btn { justify-self: start; }
 .acct-signin .acct-form .btn, .acct-passkey { width: 100%; }
+.acct-provider { display: flex; width: 100%; align-items: center; justify-content: center; text-decoration: none; }
+.acct-more { width: 100%; }
+.acct-more summary {
+  cursor: pointer;
+  color: var(--muted);
+  font-size: 0.875rem;
+  text-align: center;
+  padding: 0.35rem 0;
+}
+.acct-more > div { display: grid; gap: 0.5rem; margin-top: 0.5rem; }
 .acct-botcheck:empty { display: none; }
 .acct-or {
   display: flex;
@@ -6832,6 +6842,25 @@ button.inline-link {
   color: var(--muted);
   font-weight: 500;
 }
+
+.acct-title { margin: 0; }
+.acct-tokens {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.acct-tokens li {
+  display: grid;
+  grid-template-columns: 48px auto;
+  column-gap: 0.6rem;
+  align-items: center;
+}
+.acct-tokens img { grid-row: span 2; object-fit: contain; }
+.acct-tokens .name { font-weight: 600; }
+.acct-tokens .lvl { color: var(--muted); font-size: 0.8125rem; }
 
 .mastery-list,
 .clash-roster {

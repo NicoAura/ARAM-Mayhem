@@ -22,7 +22,55 @@ type Account = {
   passkeys: { id: string; label: string; created: string }[];
   riot: { name: string; platform: string | null; page: string | null } | null;
   passkeySession: boolean;
+  /** Sign in with Riot is switched on (lib/rso.ts). */
+  rso: boolean;
+  /** Sign in with Google or Apple: the ones switched on (lib/oauth.ts), and the ones this account uses. */
+  providers: Provider[];
+  logins: { provider: Provider; name: string; email: string | null }[];
 };
+
+type Provider = "google" | "apple" | "discord" | "twitch" | "microsoft" | "steam" | "facebook" | "x" | "github";
+const PROVIDER_NAMES: Record<Provider, string> = {
+  google: "Google",
+  apple: "Apple",
+  discord: "Discord",
+  twitch: "Twitch",
+  microsoft: "Microsoft",
+  steam: "Steam",
+  facebook: "Facebook",
+  x: "X",
+  github: "GitHub",
+};
+// Shown as buttons; the rest sit under "More".
+const MAIN: Provider[] = ["google", "apple", "discord", "twitch"];
+
+/** Buttons for the sign-in services that are switched on: Riot and the main ones, then a "More" menu. */
+function ProviderButtons({ providers, rso, mode }: { providers: Provider[]; rso: boolean; mode: "signin" | "connect" }) {
+  const main = providers.filter((p) => MAIN.includes(p));
+  const more = providers.filter((p) => !MAIN.includes(p));
+  const label = (name: string) => (mode === "signin" ? `Continue with ${name}` : `Connect ${name}`);
+  const link = (p: Provider) => (
+    <a key={p} className="btn ghost acct-provider" href={`/api/account/oauth/${p}/start?mode=${mode}`}>
+      {label(PROVIDER_NAMES[p])}
+    </a>
+  );
+  return (
+    <>
+      {rso && (
+        <a className="btn ghost acct-provider" href={`/api/account/rso/start?mode=${mode}`}>
+          {label("Riot")}
+        </a>
+      )}
+      {main.map(link)}
+      {more.length > 0 && (
+        <details className="acct-more">
+          <summary>More ways to {mode === "signin" ? "sign in" : "connect"}</summary>
+          <div>{more.map(link)}</div>
+        </details>
+      )}
+    </>
+  );
+}
 
 type Msg = { kind: "ok" | "error"; text: string } | null;
 
@@ -47,14 +95,27 @@ function Note({ msg }: { msg: Msg }) {
 
 export default function AccountPanel() {
   const [account, setAccount] = useState<Account | null | undefined>(undefined);
+  const [rso, setRso] = useState(false);
+  const [providers, setProviders] = useState<Provider[]>([]);
+  // Coming back from Sign in with Riot: /account?riot=connected or ?riot-error=<what went wrong>.
+  const [riotMsg, setRiotMsg] = useState<Msg>(null);
 
   const refresh = useCallback(async () => {
     const a = await fetch("/api/account", { cache: "no-store" }).then((r) => r.json()).catch(() => null);
+    setRso(Boolean(a?.rso));
+    setProviders(Array.isArray(a?.providers) ? a.providers : []);
     setAccount(a?.signedIn ? a : null);
   }, []);
 
   useEffect(() => {
     void refresh();
+    const q = new URLSearchParams(location.search);
+    const error = q.get("riot-error") ?? q.get("signin-error");
+    if (error || q.get("riot") === "connected") {
+      setRiotMsg(error ? { kind: "error", text: error.slice(0, 200) } : { kind: "ok", text: "Your Riot account is connected." });
+      history.replaceState(null, "", location.pathname);
+      if (!error) void syncAccount().then(() => window.dispatchEvent(new Event(ACCOUNT_EVENT)));
+    }
   }, [refresh]);
 
   const signedIn = async () => {
@@ -64,11 +125,15 @@ export default function AccountPanel() {
   };
 
   if (account === undefined) return <p className="acct-loading">Loading your account…</p>;
-  if (!account) return <SignIn onDone={signedIn} />;
-  return <Manage account={account} refresh={refresh} />;
+  return (
+    <>
+      <Note msg={riotMsg} />
+      {account ? <Manage account={account} refresh={refresh} /> : <SignIn onDone={signedIn} rso={rso} providers={providers} />}
+    </>
+  );
 }
 
-function SignIn({ onDone }: { onDone: () => Promise<void> }) {
+function SignIn({ onDone, rso, providers }: { onDone: () => Promise<void>; rso: boolean; providers: Provider[] }) {
   const [mode, setMode] = useState<"signin" | "signup">("signin");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -142,14 +207,13 @@ function SignIn({ onDone }: { onDone: () => Promise<void> }) {
           {busy ? "One moment…" : signup ? "Create account" : "Sign in"}
         </button>
       </form>
+      {(passkeys || rso || providers.length > 0) && <p className="acct-or">or</p>}
       {passkeys && (
-        <>
-          <p className="acct-or">or</p>
-          <button type="button" className="btn ghost acct-passkey" onClick={passkey} disabled={busy}>
-            Sign in with a passkey
-          </button>
-        </>
+        <button type="button" className="btn ghost acct-passkey" onClick={passkey} disabled={busy}>
+          Sign in with a passkey
+        </button>
       )}
+      <ProviderButtons providers={providers} rso={rso} mode="signin" />
       <Note msg={msg} />
       <p className="acct-hint">
         {signup
@@ -171,7 +235,7 @@ function Manage({ account, refresh }: { account: Account; refresh: () => Promise
     <div className="acct-grid">
       <section className="card acct-card">
         <h2>Signed in</h2>
-        <p className="acct-who">{account.email ?? "Your account"}</p>
+        <p className="acct-who">{account.email ?? account.riot?.name ?? "Your account"}</p>
         <p className="acct-hint">
           Your {account.data.favorites.length ? `${account.data.favorites.length} starred champion${account.data.favorites.length === 1 ? "" : "s"}` : "starred champions"} and
           settings follow you to every browser you sign in on.
@@ -182,6 +246,7 @@ function Manage({ account, refresh }: { account: Account; refresh: () => Promise
       </section>
       <RiotCard account={account} refresh={refresh} />
       <PasskeyCard account={account} refresh={refresh} />
+      {(account.providers.length > 0 || account.logins.length > 0) && <ProvidersCard account={account} refresh={refresh} />}
       <PasswordCard account={account} />
       {(account.owner || account.canClaimOwner) && <OwnerCard account={account} refresh={refresh} />}
       <DeleteCard account={account} refresh={refresh} />
@@ -260,9 +325,53 @@ function RiotCard({ account, refresh }: { account: Account; refresh: () => Promi
           <button type="button" className="btn" onClick={getCode}>
             Connect a Riot account
           </button>
-          <p className="acct-hint">Coming soon: connect straight from this page with your Riot sign-in.</p>
+          {account.rso ? (
+            <a className="btn ghost" href="/api/account/rso/start?mode=connect">
+              Connect with Riot sign-in
+            </a>
+          ) : (
+            <p className="acct-hint">Coming soon: connect straight from this page with your Riot sign-in.</p>
+          )}
         </>
       )}
+      <Note msg={msg} />
+    </section>
+  );
+}
+
+function ProvidersCard({ account, refresh }: { account: Account; refresh: () => Promise<void> }) {
+  const [msg, setMsg] = useState<Msg>(null);
+  const remove = async (provider: Provider) => {
+    setMsg(null);
+    try {
+      await call("/api/account/oauth/disconnect", "POST", { provider });
+      await refresh();
+    } catch (err) {
+      setMsg({ kind: "error", text: errText(err) });
+    }
+  };
+  const missing = account.providers.filter((p) => !account.logins.some((l) => l.provider === p));
+
+  return (
+    <section className="card acct-card">
+      <h2>Other ways to sign in</h2>
+      <p className="acct-hint">Sign in to this account with another service you use, instead of a password.</p>
+      {account.logins.length > 0 && (
+        <ul className="acct-list">
+          {account.logins.map((l) => (
+            <li key={l.provider}>
+              <span>
+                {l.name}
+                {l.email && <small>{l.email}</small>}
+              </span>
+              <button type="button" className="inline-link" onClick={() => remove(l.provider)} aria-label={`Stop signing in with ${l.name}`}>
+                Remove
+              </button>
+            </li>
+          ))}
+        </ul>
+      )}
+      <ProviderButtons providers={missing} rso={false} mode="connect" />
       <Note msg={msg} />
     </section>
   );
