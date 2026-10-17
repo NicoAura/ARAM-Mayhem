@@ -7,47 +7,87 @@ import DataTable, { type Column } from "./DataTable";
 import { champStats, TIER_HELP, type PatchRow } from "@/lib/tiers";
 import Skeleton from "@/components/Skeleton";
 import { tagsByKind, tagStyle, type TagInfo } from "@/lib/tag-info";
+import { useT } from "./I18n";
 
 // Champion tier list over a chosen patch range: the live patch (default), any set of patches, or all time.
 // The page carries only the live and previous patch; older patches load from /data/tier-history.json when picked.
 
-const TIER: Column = { key: "tier", label: "Tier", format: "tier", sortKey: "score", hint: TIER_HELP };
-const DEEP: Column = { key: "deepScore", label: "DeepScore", format: "deepscore", sortKey: "score", hint: TIER_HELP };
+const TIER: Column = {
+  key: "tier",
+  label: "Tier",
+  format: "tier",
+  sortKey: "score",
+  hint: TIER_HELP,
+};
+const DEEP: Column = {
+  key: "deepScore",
+  label: "DeepScore",
+  format: "deepscore",
+  sortKey: "score",
+  hint: TIER_HELP,
+};
 const NAME: Column = { key: "name", label: "Champion", format: "champion" };
 const PATCHES: Column = { key: "patches", label: "Patches", format: "int" };
 
-const CHANGE: Column = { key: "change", label: "Change", format: "pct", hint: "Win rate change since the previous patch, in percentage points." };
+const CHANGE: Column = {
+  key: "change",
+  label: "Change",
+  format: "pct",
+  hint: "Win rate change since the previous patch, in percentage points.",
+};
 
-const STANDARD: Column[] = [
-  TIER,
-  NAME,
-  DEEP,
-  { key: "win_rate", label: "Win rate", format: "pct" },
-  { key: "pick_rate", label: "Pick rate", format: "pct" },
-];
+const STANDARD: Column[] = [TIER, NAME, DEEP, { key: "win_rate", label: "Win rate", format: "pct" }, { key: "pick_rate", label: "Pick rate", format: "pct" }];
 
 const ADVANCED: Column[] = [
   TIER,
   NAME,
   DEEP,
-  { key: "score", label: "Confident win rate", format: "pct", hint: "The low end of the win rate's likely range, after allowing for how many games there are. DeepScore ranks on this." },
+  {
+    key: "score",
+    label: "Confident win rate",
+    format: "pct",
+    hint: "The low end of the win rate's likely range, after allowing for how many games there are. DeepScore ranks on this.",
+  },
   { key: "win_rate", label: "Raw win rate", format: "pct" },
   { key: "pick_rate", label: "Pick rate", format: "pct" },
-  { key: "share", label: "Game share", format: "pct", hint: "Estimated share of all games in the chosen patches, from pick rate and days." },
+  {
+    key: "share",
+    label: "Game share",
+    format: "pct",
+    hint: "Estimated share of all games in the chosen patches, from pick rate and days.",
+  },
   { key: "damage", label: "Damage share", format: "pct" },
   { key: "tank", label: "Damage taken", format: "pct" },
   { key: "kp", label: "Kill part.", format: "pct" },
   { key: "dead", label: "Time dead", format: "sec" },
-  { key: "top_augments", label: "Top augments", format: "text", sortable: false },
-  { key: "partners", label: "Best partners (live)", format: "text", sortable: false },
+  {
+    key: "top_augments",
+    label: "Top augments",
+    format: "text",
+    sortable: false,
+  },
+  {
+    key: "partners",
+    label: "Best partners (live)",
+    format: "text",
+    sortable: false,
+  },
 ];
 
 const MOVERS = { key: "change", desc: true };
 const BEST = { key: "score", desc: true };
 
-type Props = { rows: PatchRow[]; patches: string[]; partners: Record<string, string>; tags: Record<string, string[]>; tagInfo: TagInfo };
+type Props = {
+  rows: PatchRow[];
+  patches: string[];
+  partners: Record<string, string>;
+  tags: Record<string, string[]>;
+  tagInfo: TagInfo;
+};
 
 export default function ChampionTiers({ rows: initial, patches, partners, tags, tagInfo }: Props) {
+  const t = useT("tier-list");
+  const tt = useT("tags");
   const live = patches[patches.length - 1];
   const [rows, setRows] = useState(initial);
   const [full, setFull] = useState(false);
@@ -106,12 +146,21 @@ export default function ChampionTiers({ rows: initial, patches, partners, tags, 
   const shownRows = useMemo(() => (want.length ? stats.filter((c) => want.every((t) => tags[c.name]?.includes(t))) : stats), [stats, want, tags]);
   const kinds = useMemo(() => tagsByKind(tagInfo), [tagInfo]);
   const count = (t: string) => stats.filter((c) => tags[c.name]?.includes(t)).length;
-  const tagCol: Column = { key: "archetype", label: "Class", format: "tags", sortable: false, tags: tagInfo, hint: "Riot's class and subclass for the champion. Hover a tag to see what it means." };
+  const tagCol: Column = {
+    key: "archetype",
+    label: "Class",
+    format: "tags",
+    sortable: false,
+    tags: tagInfo,
+    hint: "Riot's class and subclass for the champion. Hover a tag to see what it means.",
+  };
 
   const choose = (next: Set<string>) => {
     setPicked(next);
     const list = [...next];
-    setParams({ patches: list.length === 1 && list[0] === live ? null : list.length === patches.length ? "all" : list.join(",") });
+    setParams({
+      patches: list.length === 1 && list[0] === live ? null : list.length === patches.length ? "all" : list.join(","),
+    });
   };
   const preset = (list: string[]) => {
     choose(new Set(list));
@@ -149,9 +198,9 @@ export default function ChampionTiers({ rows: initial, patches, partners, tags, 
   }, []);
 
   const presets: [string, string[]][] = [
-    [`Live patch (${live})`, [live]],
-    ["Last 3 patches", patches.slice(-3)],
-    ["All time", patches],
+    [t("Live patch ({patch})", { patch: live }), [live]],
+    [t("Last 3 patches"), patches.slice(-3)],
+    [t("All time"), patches],
   ];
   const showMulti = picked.size > 1;
   const showChange = !showMulti && Boolean(before);
@@ -159,7 +208,7 @@ export default function ChampionTiers({ rows: initial, patches, partners, tags, 
 
   return (
     <div className="patch-range">
-      <div className="patch-presets" role="group" aria-label="Patch range">
+      <div className="patch-presets" role="group" aria-label={t("Patch range")}>
         {presets.map(([label, list]) => (
           <button key={label} type="button" aria-pressed={same(list) && !moversOn} onClick={() => preset(list)}>
             {label}
@@ -167,13 +216,13 @@ export default function ChampionTiers({ rows: initial, patches, partners, tags, 
         ))}
         {patches.length > 1 && (
           <button type="button" aria-pressed={moversOn} onClick={movers}>
-            Biggest movers
+            {t("Biggest movers")}
           </button>
         )}
       </div>
       <details className="patch-pick" ref={pickRef}>
-        <summary>{one ? `Patch ${one}` : `${picked.size} patches`}</summary>
-        <div className="patch-pick-list" role="group" aria-label="Patches">
+        <summary>{one ? t("Patch {patch}", { patch: one }) : t("{n} patches", { n: picked.size })}</summary>
+        <div className="patch-pick-list" role="group" aria-label={t("Patches")}>
           {[...patches].reverse().map((p) => (
             <label key={p}>
               <input type="checkbox" checked={picked.has(p)} onChange={() => toggle(p)} />
@@ -183,7 +232,7 @@ export default function ChampionTiers({ rows: initial, patches, partners, tags, 
         </div>
       </details>
       {Object.keys(tagInfo).length > 0 && (
-        <div className="arch-filter" role="group" aria-label="Filter by archetype">
+        <div className="arch-filter" role="group" aria-label={t("Filter by archetype")}>
           {[...kinds.class, ...kinds.play].map((t) => {
             const n = count(t);
             return (
@@ -192,29 +241,32 @@ export default function ChampionTiers({ rows: initial, patches, partners, tags, 
                 type="button"
                 className="arch-tag"
                 data-kind={tagInfo[t].kind}
-                data-tip={tagInfo[t].meaning}
+                data-tip={tt(tagInfo[t].meaning)}
                 aria-pressed={want.includes(t)}
                 disabled={!n && !want.includes(t)}
                 style={tagStyle(tagInfo[t].color)}
                 onClick={() => pickTag(t)}
               >
-                {t} <span className="arch-count">{n}</span>
+                {tt(t)} <span className="arch-count">{n}</span>
               </button>
             );
           })}
           {want.length > 0 && (
             <button type="button" className="btn ghost arch-clear" onClick={() => (setWant([]), setParams({ tag: null }))}>
-              Clear
+              {t("Clear")}
             </button>
           )}
         </div>
       )}
       <p className="patch-note">
-        {picked.size === 1 ? `Patch ${[...picked][0]}` : `${picked.size} patches combined`}
-        {showChange ? `, with the change since ${before}` : ""}. Pick patches from the list to add or remove them.
+        {picked.size === 1
+          ? showChange
+            ? t("Patch {patch}, with the change since {before}. Pick patches from the list to add or remove them.", { patch: [...picked][0], before: before! })
+            : t("Patch {patch}. Pick patches from the list to add or remove them.", { patch: [...picked][0] })
+          : t("{n} patches combined. Pick patches from the list to add or remove them.", { n: picked.size })}
       </p>
       {missing ? (
-        <Skeleton rows={12} label="Loading older patches…" />
+        <Skeleton rows={12} label={t("Loading older patches…")} />
       ) : (
         <DataTable
           key={sort.key}

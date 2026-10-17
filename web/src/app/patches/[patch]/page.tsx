@@ -4,6 +4,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { pageMeta } from "@/lib/meta";
 import { recap, recapPatches, type AugRef } from "@/lib/patches";
+import { LocalDate, Name, T } from "@/components/I18n";
 
 // One recap per patch: augment changes and the champions that rose and fell most (lib/patches.ts).
 
@@ -12,7 +13,6 @@ export const generateStaticParams = () => recapPatches().map((patch) => ({ patch
 
 const pct = (v: number) => `${(v * 100).toFixed(1)}%`;
 const pts = (v: number) => (Math.abs(v) * 100).toFixed(1);
-const date = (d: string | null) => (d ? new Date(`${d}T12:00:00Z`).toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" }) : "");
 
 export async function generateMetadata({ params }: { params: Promise<{ patch: string }> }): Promise<Metadata> {
   const r = recap((await params).patch);
@@ -30,8 +30,16 @@ function Aug({ a }: { a: AugRef }) {
     <>
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img className="icon" src={`/icons/augments/${a.id}.webp`} alt="" width={24} height={24} loading="lazy" />
-      <span className="rank-name">{a.name}</span>
-      {a.tier && <span className={`chip tier-${a.tier}`}>{a.tier[0].toUpperCase() + a.tier.slice(1)}</span>}
+      <span className="rank-name">
+        <Name kind="augments" id={a.id}>
+          {a.name}
+        </Name>
+      </span>
+      {a.tier && (
+        <span className={`chip tier-${a.tier}`}>
+          <T ns="patches">{a.tier[0].toUpperCase() + a.tier.slice(1)}</T>
+        </span>
+      )}
     </>
   );
   return a.href ? (
@@ -53,31 +61,64 @@ export default async function PatchPage({ params }: { params: Promise<{ patch: s
   const quiet = r.hasAugmentHistory && !r.added.length && !r.removed.length && !r.changed.length;
   return (
     <>
-      <Breadcrumbs trail={[["Patch Recaps", "/patches"], [`Patch ${r.patch}`, `/patches/${r.patch}`]]} />
+      <Breadcrumbs
+        trail={[
+          ["Patch Recaps", "/patches"],
+          [`Patch ${r.patch}`, `/patches/${r.patch}`],
+        ]}
+      />
       <section className="champ-hero">
         <p className="eyebrow">
-          <Link href="/patches">Patch Recaps</Link>
-          {r.released ? ` · ${date(r.released)}` : ""}
+          <Link href="/patches">
+            <T ns="patches">Patch Recaps</T>
+          </Link>
+          {r.released && (
+            <>
+              {" · "}
+              <LocalDate
+                iso={`${r.released}T12:00:00Z`}
+                options={{
+                  month: "long",
+                  day: "numeric",
+                  year: "numeric",
+                  timeZone: "UTC",
+                }}
+              />
+            </>
+          )}
         </p>
         <h1>
-          Patch {r.patch} <span className="champ-hero-sub">ARAM Mayhem recap</span>
+          <T ns="patches" v={{ patch: r.patch }}>
+            {"Patch {patch}"}
+          </T>{" "}
+          <span className="champ-hero-sub">
+            <T ns="patches">ARAM Mayhem recap</T>
+          </span>
         </h1>
         <div className="stat-row">
           <div>
             <b>{r.added.length}</b>
-            <span>augments added</span>
+            <span>
+              <T ns="patches">augments added</T>
+            </span>
           </div>
           <div>
             <b>{r.removed.length}</b>
-            <span>removed</span>
+            <span>
+              <T ns="patches">removed</T>
+            </span>
           </div>
           <div>
             <b>{r.changed.length}</b>
-            <span>changed</span>
+            <span>
+              <T ns="patches">changed</T>
+            </span>
           </div>
           <div>
             <b>{r.days}</b>
-            <span>days of games</span>
+            <span>
+              <T ns="patches">days of games</T>
+            </span>
           </div>
         </div>
       </section>
@@ -85,15 +126,25 @@ export default async function PatchPage({ params }: { params: Promise<{ patch: s
         {r.up.length > 0 && (
           <section className="card span-6" data-accent="tier">
             <div className="card-head">
-              <h2>Rose the most</h2>
-              <span className="card-note">win rate vs {r.prev}</span>
+              <h2>
+                <T ns="patches">Rose the most</T>
+              </h2>
+              <span className="card-note">
+                <T ns="patches" v={{ patch: r.prev ?? "" }}>
+                  {"win rate vs {patch}"}
+                </T>
+              </span>
             </div>
             <div className="rank plain recap-movers">
               {r.up.map((c) => (
                 <Link key={c.id} href={`/champions/${c.id}`}>
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img className="icon" src={`/icons/champions/${c.id}.webp`} alt="" width={24} height={24} loading="lazy" />
-                  <span className="rank-name">{c.name}</span>
+                  <span className="rank-name">
+                    <Name kind="champions" id={c.id}>
+                      {c.name}
+                    </Name>
+                  </span>
                   <span className="rank-v">{pct(c.winRate)}</span>
                   <span className="rank-v delta-up">{pts(c.change)}</span>
                 </Link>
@@ -104,15 +155,25 @@ export default async function PatchPage({ params }: { params: Promise<{ patch: s
         {r.down.length > 0 && (
           <section className="card span-6" data-accent="pbe">
             <div className="card-head">
-              <h2>Fell the most</h2>
-              <span className="card-note">win rate vs {r.prev}</span>
+              <h2>
+                <T ns="patches">Fell the most</T>
+              </h2>
+              <span className="card-note">
+                <T ns="patches" v={{ patch: r.prev ?? "" }}>
+                  {"win rate vs {patch}"}
+                </T>
+              </span>
             </div>
             <div className="rank plain recap-movers">
               {r.down.map((c) => (
                 <Link key={c.id} href={`/champions/${c.id}`}>
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img className="icon" src={`/icons/champions/${c.id}.webp`} alt="" width={24} height={24} loading="lazy" />
-                  <span className="rank-name">{c.name}</span>
+                  <span className="rank-name">
+                    <Name kind="champions" id={c.id}>
+                      {c.name}
+                    </Name>
+                  </span>
                   <span className="rank-v">{pct(c.winRate)}</span>
                   <span className="rank-v delta-down">{pts(c.change)}</span>
                 </Link>
@@ -123,7 +184,9 @@ export default async function PatchPage({ params }: { params: Promise<{ patch: s
         {r.changed.length > 0 && (
           <section className="card span-all" data-accent="sim">
             <div className="card-head">
-              <h2>Augments changed</h2>
+              <h2>
+                <T ns="patches">Augments changed</T>
+              </h2>
             </div>
             <ul className="recap-changes">
               {r.changed.map((a) => (
@@ -146,7 +209,9 @@ export default async function PatchPage({ params }: { params: Promise<{ patch: s
         {r.added.length > 0 && (
           <section className="card span-6" data-accent="gold">
             <div className="card-head">
-              <h2>Augments added</h2>
+              <h2>
+                <T ns="patches">Augments added</T>
+              </h2>
             </div>
             <div className="rank plain recap-list">
               {r.added.map((a) => (
@@ -158,7 +223,9 @@ export default async function PatchPage({ params }: { params: Promise<{ patch: s
         {r.removed.length > 0 && (
           <section className="card span-6" data-accent="lab">
             <div className="card-head">
-              <h2>Augments removed</h2>
+              <h2>
+                <T ns="patches">Augments removed</T>
+              </h2>
             </div>
             <div className="rank plain recap-list">
               {r.removed.map((a) => (
@@ -169,21 +236,35 @@ export default async function PatchPage({ params }: { params: Promise<{ patch: s
         )}
       </div>
       <p className="patch-note">
-        {quiet
-          ? "No augment changes this patch. "
-          : !r.hasAugmentHistory
-            ? "Augment changes aren't tracked for this patch, only win rates. "
-            : ""}
-        Win-rate changes compare each champion with patch {r.prev ?? "before"}.{" "}
+        {quiet ? (
+          <>{<T ns="patches">No augment changes this patch.</T>} </>
+        ) : !r.hasAugmentHistory ? (
+          <>{<T ns="patches">{"Augment changes aren't tracked for this patch, only win rates."}</T>} </>
+        ) : (
+          ""
+        )}
+        {r.prev ? (
+          <T ns="patches" v={{ patch: r.prev }}>
+            {"Win-rate changes compare each champion with patch {patch}."}
+          </T>
+        ) : (
+          <T ns="patches">Win-rate changes compare each champion with the patch before.</T>
+        )}{" "}
         {older && (
           <Link className="inline-link" href={`/patches/${older}`}>
-            ← Patch {older}
+            ←{" "}
+            <T ns="patches" v={{ patch: older }}>
+              {"Patch {patch}"}
+            </T>
           </Link>
         )}
         {older && newer && " · "}
         {newer && (
           <Link className="inline-link" href={`/patches/${newer}`}>
-            Patch {newer} →
+            <T ns="patches" v={{ patch: newer }}>
+              {"Patch {patch}"}
+            </T>{" "}
+            →
           </Link>
         )}
       </p>

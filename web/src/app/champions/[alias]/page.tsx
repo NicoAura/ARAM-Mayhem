@@ -237,7 +237,7 @@ export default async function ChampionPage({ params }: { params: Promise<{ alias
               ))}
             </div>
           )}
-          <WinRateChart name={c.name} history={c.history} patches={c.patches} champions={champList()} />
+          <WinRateChart id={c.alias} name={c.name} history={c.history} patches={c.patches} champions={champList()} />
 
           <h2 className="cp-group" id="augments">
             <T ns={NS}>Augments</T>

@@ -80,6 +80,7 @@ export default function SettingsMenu() {
             <span>{t("Theme")}</span>
             <ThemeToggle labels />
           </div>
+          <Choice label="Page detail" value={s.view} options={[["simple", "Simple"], ["detailed", "Detailed"]]} onChange={(view) => set({ view })} />
           <Choice label="Motion" value={s.motion} options={[["system", "Match system"], ["reduce", "Reduce"]]} onChange={(motion) => set({ motion })} />
           <Choice label="Text size" value={s.text} options={[["standard", "Standard"], ["large", "Large"], ["larger", "Larger"]]} onChange={(text) => set({ text })} />
           <Choice label="Contrast" value={s.contrast} options={[["standard", "Standard"], ["high", "High"]]} onChange={(contrast) => set({ contrast })} />

@@ -3,7 +3,6 @@ import { text } from "@/lib/content";
 import { chefsSpecial, statsDate, counts, kitchenBuilds, livePatch, liveTiers, topAugments } from "@/lib/highlights";
 import { championSplash } from "@/lib/champions";
 import { ChampionJump, KitchenPick, TierSnapshot } from "@/components/HomeWidgets";
-import HeroParticles from "@/components/HeroParticles";
 import { augmentHref } from "@/lib/augments";
 import { KITCHEN } from "@/lib/tabs";
 import RecentPlayed from "@/components/RecentPlayed";
@@ -25,8 +24,7 @@ export default function Home() {
 
   return (
     <>
-      <section className="hero has-particles">
-        <HeroParticles />
+      <section className="hero">
         <p className="eyebrow">
           <ModeName />
           {patch && (

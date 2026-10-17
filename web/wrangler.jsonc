@@ -13,7 +13,6 @@
     "run_worker_first": [
       "/assets/models/*",
       "/assets/sounds/*",
-      "/assets/skins/*",
       "/embed/simulator/full",
       "/embed/simulator/full.html",
       "/embed/simulator/replay-data/sounds/*"
