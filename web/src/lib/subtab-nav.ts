@@ -9,7 +9,6 @@ export function switchTab(dir: 1 | -1) {
     const i = tabs.findIndex((t) => t.getAttribute("aria-selected") === "true");
     const next = tabs[i + dir];
     if (next) {
-      buzz("step");
       next.click();
       next.scrollIntoView({ block: "nearest", inline: "nearest" });
     }
