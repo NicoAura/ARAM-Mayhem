@@ -6204,3 +6204,8 @@ th > button[data-tip] {
     grid-template-columns: repeat(auto-fill, minmax(5.25rem, 1fr));
   }
 }
+
+/* Item page: simulated damage */
+.item-sim { margin-top: 1.5rem; }
+.item-sim .stat-row { margin-top: 0.25rem; margin-bottom: 0.75rem; }
+.item-sim .rank-v { white-space: nowrap; }
