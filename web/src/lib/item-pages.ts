@@ -2,7 +2,7 @@ import "server-only";
 import championIds from "@/data/champion-ids.json";
 import { augmentSlug } from "./augments";
 import { champName } from "./highlights";
-import { items } from "./items";
+import { items, rewardItems } from "./items";
 import { readRepoJson } from "./repo-data";
 
 // One page per item that Mayhem players build (/items/<slug>): its stats and cost from the client's
@@ -47,6 +47,7 @@ export function itemPages(): ItemPage[] {
     for (const e of [...(b.other ?? []), ...(b.boots ?? []), ...(b.starting ?? [])]) {
       if (e.items.length !== 1) continue;
       const id = e.items[0];
+      if (rewardItems().has(id)) continue;
       builders.set(id, [...(builders.get(id) ?? []), { id: alias, name: champName(alias), pickRate: e.pick_rate, winRate: e.win_rate ?? null }]);
     }
   }

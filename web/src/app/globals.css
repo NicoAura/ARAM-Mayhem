@@ -3075,6 +3075,16 @@ html[data-motion="reduce"] .btn:hover {
   }
 }
 
+.aug-odds {
+  position: relative;
+  margin-top: 0.75rem;
+  max-width: 62ch;
+  color: var(--muted);
+  font-size: 0.9375rem;
+}
+.aug-odds b {
+  color: var(--fg);
+}
 .champ-hero-links {
   display: flex;
   flex-wrap: wrap;

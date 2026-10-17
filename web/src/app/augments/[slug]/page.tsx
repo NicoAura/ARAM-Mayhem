@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { augmentBySlug, augmentPages } from "@/lib/augments";
 import { livePatch } from "@/lib/highlights";
 import { pageMeta } from "@/lib/meta";
+import { readRepoJson } from "@/lib/repo-data";
 import ShareCard from "@/components/ShareCard";
 
 // One page per augment, so each can be found in search (lib/augments.ts).
@@ -13,6 +14,8 @@ export const generateStaticParams = () => augmentPages().map((a) => ({ slug: a.s
 
 const pct = (v: number) => `${(v * 100).toFixed(1)}%`;
 const RARITY: Record<string, string> = { silver: "Silver", gold: "Gold", prismatic: "Prismatic" };
+type Odds = Record<string, { pool: number; offer: number; withRerolls: number }>;
+const odds = (tier: string) => readRepoJson<{ odds?: Odds }>("guide/augment_rules.json")?.odds?.[RARITY[tier] ?? tier];
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const a = augmentBySlug((await params).slug);
@@ -29,6 +32,7 @@ export default async function AugmentPage({ params }: { params: Promise<{ slug: 
   const a = augmentBySlug((await params).slug);
   if (!a) notFound();
   const patch = livePatch();
+  const offer = odds(a.tier);
   return (
     <>
       <section className="champ-hero aug-hero">
@@ -60,6 +64,15 @@ export default async function AugmentPage({ params }: { params: Promise<{ slug: 
             <span>pick rate{a.pickRank ? `, #${a.pickRank} of ${a.of}` : ""}</span>
           </div>
         </div>
+        {offer && (
+          <p className="aug-odds">
+            Offered in <b>{pct(offer.offer)}</b> of {RARITY[a.tier]} selections ({pct(offer.withRerolls)} using every reroll), one of {offer.pool}{" "}
+            {RARITY[a.tier]} augments.{" "}
+            <Link className="inline-link" href="/info#stages">
+              How augment picks work
+            </Link>
+          </p>
+        )}
         <p className="champ-hero-links">
           <ShareCard
             spec={{
