@@ -2,7 +2,7 @@
 .regions { overflow: visible; border-radius: 0; padding: 0; background: none; border: 0; box-shadow: none; display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 520px), 1fr)); gap: 14px; }
 .regions::before { display: none; }
 .region { position: relative; display: grid; gap: 10px; padding: 16px 18px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); overflow: hidden; }
-.region::before { content: ""; position: absolute; inset: 0 0 auto; height: 3px; background: linear-gradient(90deg, var(--a), color-mix(in srgb, var(--a) 20%, transparent)); }
+.region::before { content: ""; position: absolute; inset: 0 0 auto; height: 3px; background: linear-gradient(90deg, var(--a), var(--a-20)); }
 .region-head { display: flex; align-items: baseline; gap: 10px; }
 .region-head h2 { margin: 0; flex: 1; font: 700 1.3rem var(--display); }
 .rank { color: var(--a-ink); font-size: 13px; }

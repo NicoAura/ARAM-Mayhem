@@ -1,53 +1,42 @@
 {
-  "id": "tryndamere-battlemage",
-  "title": "The Battlemage King",
+  "id": "tryndamere-bloodlust-doctor",
+  "title": "The Bloodlust Doctor",
   "champion": "Tryndamere",
   "champion_name": "Tryndamere",
   "chef": "2026-10-17",
-  "tier": "Holds up",
-  "core_win_rate": 0.5311,
-  "champion_win_rate": 0.4952,
-  "why": "Tryndamere is the purest crit swordsman in the game, so this one makes him a mage. ADAPt turns all the bonus Attack Damage from Kraken Slayer and Blade of The Ruined King into Ability Power, plus 15% more, and Rabadon's Deathcap multiplies the lot. Marksmage hands it straight back: every attack deals extra physical damage equal to 75% of his Ability Power, and Master of Duality grows that Ability Power with every swing.",
-  "play": "Spin in, press Undying Rage and keep hitting. You are a mage whose only spell is right-click.",
+  "why": "Tryndamere already crits for free: his Fury raises his crit chance as he fights, and Bloodlust spends it to heal him. Critical Healing lets heals crit for 40% more off that same crit chance, and Circle of Death turns 70% of all his healing and Health Regen into magic damage on the nearest enemy champion, so every Bloodlust is a crit roll that blasts someone. Rite of Ruin adds crit chance on every spell cast and Spirit Visage makes his heals 25% bigger. Bloodlust's heal grows with Ability Power, so the crit carry becomes an AP healer whose heals do the killing.",
+  "play": "Fill your Fury, then Bloodlust next to the enemy you want hit. Undying Rage keeps you alive long enough to cast it again. Tank It Or Leave It is the flex pick.",
   "items": [
-    "Berserker's Greaves",
-    "Kraken Slayer",
-    "Guinsoo's Rageblade",
-    "Nashor's Tooth",
-    "Blade of The Ruined King",
+    "Rite of Ruin",
+    "Spirit Visage",
+    "Riftmaker",
+    "Warmog's Armor",
+    "Mercury's Treads",
     "Rabadon's Deathcap"
   ],
-  "core_usual": 0,
-  "core": 3,
+  "core": 2,
   "champion_icon": "/embed/fun/cook-builds/icons/champions/23.png",
   "augments": [
     {
-      "name": "ADAPt",
-      "rarity": "Silver",
-      "core": true,
-      "win_rate": 0.5585,
-      "icon": "/embed/fun/cook-builds/icons/augments/adapt.png"
-    },
-    {
-      "name": "Marksmage",
+      "name": "Critical Healing",
       "rarity": "Gold",
       "core": true,
-      "win_rate": 0.5313,
-      "icon": "/embed/fun/cook-builds/icons/augments/marksmage.png"
+      "text": "Your healing and Shields can Critically Strike for 40% bonus amount. Gain 25% Crit Chance.",
+      "icon": "/embed/fun/cook-builds/icons/augments/critical-healing.png"
     },
     {
-      "name": "Master of Duality",
+      "name": "Circle of Death",
       "rarity": "Prismatic",
       "core": true,
-      "win_rate": 0.5035,
-      "icon": "/embed/fun/cook-builds/icons/augments/master-of-duality.png"
+      "text": "Your healing and Health Regen deal 70% of the value magic damage to the nearest enemy champion.",
+      "icon": "/embed/fun/cook-builds/icons/augments/circle-of-death.png"
     },
     {
-      "name": "Witchful Thinking",
+      "name": "Tank It Or Leave It",
       "rarity": "Silver",
       "core": false,
-      "win_rate": 0.5256,
-      "icon": "/embed/fun/cook-builds/icons/augments/witchful-thinking.png"
+      "text": "You can Critically Defend using your Crit Chance (max 50% chance), giving you a chance to reduce damage taken by 20%. Gain 25% Crit Chance. Damage Reduced:",
+      "icon": "/embed/fun/cook-builds/icons/augments/tank-it-or-leave-it.png"
     }
   ],
   "href": "/lab#chefs-special",

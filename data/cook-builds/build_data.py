@@ -230,7 +230,7 @@ def main():
     # archive (every build with a `chef` date) without loading all of data.js.
     specials = [b for b in out if b.get("chef")]
     chef = max(specials, key=lambda b: b["chef"], default=None)
-    pick = dict({k: chef[k] for k in ("id", "title", "champion_name", "chef", "tier")}, count=len(specials)) if chef else None
+    pick = dict({k: chef[k] for k in ("id", "title", "champion_name", "chef")}, count=len(specials)) if chef else None
     with open(os.path.join(PAGE, "chef.js"), "w", encoding="utf-8") as f:
         f.write("window.COOK_CHEF = " + json.dumps(pick, ensure_ascii=False) + ";\n")
     # Home shows today's Chef Special too; this file has everything its card needs, with icon paths as the
@@ -238,11 +238,11 @@ def main():
     site = "/embed/fun/cook-builds/"
     special = None
     if chef:
-        special = {k: chef[k] for k in ("id", "title", "champion", "champion_name", "chef", "tier", "core_win_rate",
-                                         "champion_win_rate", "why", "play", "items", "core_usual", "core")}
+        # No stats: a Chef Special is picked for the idea, not its win rate.
+        special = {k: chef[k] for k in ("id", "title", "champion", "champion_name", "chef", "why", "play", "items", "core")}
         special.update({
             "champion_icon": site + chef["champion_icon"],
-            "augments": [{"name": r["name"], "rarity": r["rarity"], "core": r["core"], "win_rate": r["win_rate"],
+            "augments": [{"name": r["name"], "rarity": r["rarity"], "core": r["core"], "text": r["text"],
                           "icon": site + r["icon"]} for r in chef["augments"]],
             "href": "/lab#chefs-special",
             "archive_href": "/lab#chef-archive",

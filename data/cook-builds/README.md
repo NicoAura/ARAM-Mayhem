@@ -52,9 +52,15 @@ the archive, and `data/cook-builds/chefs-special.json`, which Home reads for its
 champion, augments, items, text, icon paths as the site serves them, and the links `/lab#chefs-special`
 and `/lab#chef-archive`).
 
-A Chef Special ignores win rate and pick rate. It is a rarely used build that completely changes what
-the champion is (abilities applying on-hit with Ethereal Weapon, an Attack Damage champion turned mage
-with ADAPt, a mage turned marksman with escAPADe), built on an augment or item gimmick. A scheduled task
+A Chef Special ignores win rate and pick rate, and its card shows no stats or tier. It is a rarely used
+build that completely changes what the champion is, built on two or more augments whose text works together
+(Tap Dancer's stacking Movement Speed feeding Don't Blink's speed-to-damage, Ethereal Weapon putting on-hit
+effects on abilities that Mystic Punch then turns into cooldown refunds, ADAPt and Marksmage trading Attack
+Damage for Ability Power and back). The build also has to use a piece of the champion's own kit, even a
+minor one, and an item where possible. The model is The Bloodlust Doctor (Nico's pick, 2026-10-17): Tryndamere's
+Fury already gives him crit chance, Critical Healing lets his Bloodlust heal crit off it, Circle of Death turns
+that healing into damage, and Rite of Ruin and Spirit Visage feed the same loop, so a crit carry becomes an AP
+healer whose heals do the killing. A side effect of the kit becomes the champion's main job. A scheduled task
 adds a new one every day at 7:50 PM New York, next to the PBE update: it appends one dated build (never
 removing or redating earlier ones, so the archive grows), reruns `build_data.py` and merges the PR once
 Tests pass.

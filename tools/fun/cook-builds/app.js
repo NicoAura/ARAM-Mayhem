@@ -16,19 +16,20 @@
   const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
   const icon = (path) => (window.COOK_ICONS && window.COOK_ICONS[path]) || path;
 
-  function augRow(a, champ) {
+  // `plain` leaves out every stat (win rates, tier, simulator): Chef Specials are picked for the idea, not the numbers.
+  function augRow(a, champ, plain) {
     const rarity = a.rarity.toLowerCase();
-    const stat = a.win_rate == null
+    const stat = plain ? "" : a.win_rate == null
       ? `<span class="muted">no data</span>`
       : `${wr(a.win_rate)}<small>#${a.win_rank} of ${data.meta.augment_count}</small>`;
-    const best = a.champion_is_best ? `<span class="chip" title="${esc(champ)} is on the best-champion list for this augment">best on ${esc(champ)}</span>` : "";
+    const best = !plain && a.champion_is_best ? `<span class="chip" title="${esc(champ)} is on the best-champion list for this augment">best on ${esc(champ)}</span>` : "";
     return `<li class="${a.core ? "core" : "flex"}">
       <img src="${icon(a.icon)}" alt="" width="32" height="32" loading="lazy">
       <div>
         <div class="name">${esc(a.name)} <span class="chip ${rarity}">${esc(a.rarity)}</span> ${best}</div>
         <div class="desc">${esc(a.text)}</div>
       </div>
-      <div class="wr">${stat}</div>
+      ${plain ? "" : `<div class="wr">${stat}</div>`}
     </li>`;
   }
 
@@ -52,28 +53,28 @@
   const chef = specials[0] || null;
   const rest = data.builds.filter((b) => b !== chef);
 
-  function card(b) {
+  function card(b, plain) {
     const pastSpecial = b.chef && b !== chef ? ` <a class="chip chef-chip" href="#chefs-special-${esc(b.chef)}" title="Chef Special on ${esc(fullDay(b.chef))}">Chef Special · ${esc(day(b.chef))}</a>` : "";
     return `<article class="card" id="${esc(b.id)}">
       <div class="card-head">
         <img src="${icon(b.champion_icon)}" alt="" width="52" height="52" loading="lazy">
         <div class="who">
           <h2>${esc(b.title)}</h2>
-          <div class="sub">${esc(b.champion_name)} <span class="chip tier" title="${esc(TIER_NOTE[b.tier] || "")}">${esc(b.tier)}</span>${b.lab ? ` <span class="chip" title="Invented for this page">Lab original</span>` : ""}${pastSpecial}</div>
+          <div class="sub">${esc(b.champion_name)} ${plain ? "" : `<span class="chip tier" title="${esc(TIER_NOTE[b.tier] || "")}">${esc(b.tier)}</span>`}${b.lab ? ` <span class="chip" title="Invented for this page">Lab original</span>` : ""}${pastSpecial}</div>
         </div>
-        <div class="score"><span class="value">${wr(b.core_win_rate)}</span><span class="label">core augment win rate</span></div>
+        ${plain ? "" : `<div class="score"><span class="value">${wr(b.core_win_rate)}</span><span class="label">core augment win rate</span></div>`}
       </div>
       <p class="why">${esc(b.why)}</p>
       <p class="play muted"><b>How to play:</b> ${esc(b.play)}</p>
       <div class="cols">
-        <div><h3>Augments</h3><ul class="augs">${b.augments.map((a) => augRow(a, b.champion_name)).join("")}</ul></div>
+        <div><h3>Augments</h3><ul class="augs">${b.augments.map((a) => augRow(a, b.champion_name, plain)).join("")}</ul></div>
         <div><h3>Items</h3><ul class="items">${b.items.map((i) => `<li>${esc(i)}</li>`).join("")}</ul></div>
       </div>
-      <dl class="stats">
+      ${plain ? "" : `<dl class="stats">
         <div><dt>Usual on ${esc(b.champion_name)}</dt><dd>${b.core_usual} of ${b.core} <small>core augments · picked ${pct(b.core_pick_rate, 0)} of games</small></dd></div>
         <div><dt>${esc(b.champion_name)} win rate</dt><dd>${wr(b.champion_win_rate)} <small>#${b.champion_win_rank} of ${data.meta.champion_count} by win rate</small></dd></div>
         ${simStat(b)}
-      </dl>
+      </dl>`}
     </article>`;
   }
 
@@ -103,13 +104,13 @@
     const label = today ? `Today's Chef Special · ${esc(day(b.chef))}` : `Chef Special · ${esc(day(b.chef))}`;
     const opts = specials.map((s) => `<option value="${esc(s.chef)}"${s === b ? " selected" : ""}>${esc(day(s.chef))} · ${esc(s.title)} (${esc(s.champion_name)})</option>`).join("");
     box.innerHTML = `<div class="chef-head"><p class="eyebrow" id="chef-label">${label}</p>
-      <p class="muted small">${today ? "A new unconventional build every day, built on an augment or item gimmick." : `Served ${esc(fullDay(b.chef))}. <a href="#chefs-special">Back to today's</a>`}</p></div>
+      <p class="muted small">${today ? "A new unconventional build every day, built on augments that work together." : `Served ${esc(fullDay(b.chef))}. <a href="#chefs-special">Back to today's</a>`}</p></div>
       <div class="chef-archive" id="chef-archive" role="group" aria-label="Chef Special archive">
         <span class="eyebrow">Archive · ${specials.length} ${specials.length === 1 ? "special" : "specials"}</span>
         <button type="button" data-go="${i + 1}"${i + 1 >= specials.length ? " disabled" : ""}>‹ Earlier</button>
         <select aria-label="Pick a day">${opts}</select>
         <button type="button" data-go="${i - 1}"${i <= 0 ? " disabled" : ""}>Later ›</button>
-      </div>${card(b)}`;
+      </div>${card(b, true)}`;
     box.hidden = false;
     box.querySelector("select").addEventListener("change", (e) => go(specials.find((s) => s.chef === e.target.value)));
     for (const btn of box.querySelectorAll("button[data-go]")) btn.addEventListener("click", () => go(specials[+btn.dataset.go]));
