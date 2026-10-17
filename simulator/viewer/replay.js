@@ -72,7 +72,11 @@
     const sel = $("champ");
     const list = index.champions.filter((c) => traces[c.id]).sort((a, b) => a.name.localeCompare(b.name));
     for (const c of list) sel.add(new Option(c.name, c.id));
-    const fromHash = decodeURIComponent(location.hash.slice(1)).toLowerCase();
+    // #Jinx, or #Jinx&items=a,b&augs=c,d for a build from the leaderboard (simulated by sim-panel.js).
+    const hashParts = decodeURIComponent(location.hash.slice(1)).split("&");
+    const fromHash = hashParts[0].toLowerCase();
+    const linked = new URLSearchParams(hashParts.slice(1).join("&"));
+    if (linked.get("items")) window.linkedBuild = { champion: fromHash, items: linked.get("items").split(",").filter(Boolean), augs: (linked.get("augs") || "").split(",").filter(Boolean) };
     // A champion named in the link, else a random one each visit.
     const start = (byId.get(fromHash) && traces[byId.get(fromHash).id] && byId.get(fromHash)) ||
       list[Math.floor(Math.random() * list.length)];

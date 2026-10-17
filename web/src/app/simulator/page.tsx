@@ -5,6 +5,7 @@ import Embed from "@/components/Embed";
 import Intro from "@/components/Intro";
 import { text } from "@/lib/content";
 import Pending from "@/components/Pending";
+import SimLeaderboard from "@/components/SimLeaderboard";
 import SubTabs from "@/components/SubTabs";
 import { readRepoJson, repoHas } from "@/lib/repo-data";
 
@@ -128,6 +129,16 @@ export default function SimulatorPage() {
           />
         </>
       ),
+    });
+  }
+
+  if (hasReplays) {
+    const names = (m: Named) => Object.fromEntries(Object.entries(m).map(([k, v]) => [k, v.name]));
+    tabs.push({
+      id: "leaderboard",
+      label: "Leaderboard",
+      lazy: true,
+      content: <SimLeaderboard items={names(items)} augments={names(augments)} />,
     });
   }
 

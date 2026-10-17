@@ -61,6 +61,7 @@
       buildFightForm();
       for (const b of ["runBuild", "findBest", "resetAll", "patchSel"]) $(b).disabled = false;
       if (champ) fillFromTrace();
+      runLinked();
       return true;
     });
   }
@@ -76,10 +77,21 @@
 
   window.onReplayLoad = (c, tr, isCustom) => {
     const changedChamp = !champ || champ.id !== c.id;
+    if (changedChamp) offerSubmit(null);
     $("buildTitle").textContent = isCustom ? "Your simulated setup" + (tr.patch === "pbe" ? " (PBE patch)" : "") : "Simulated best build";
     champ = c; trace = tr;
     if (meta && (changedChamp || !isCustom)) fillFromTrace();
+    runLinked();
   };
+  // A leaderboard link (#Jinx&items=…&augs=…) loads that build into the slots and simulates it, once.
+  function runLinked() {
+    const l = window.linkedBuild;
+    if (!l || !meta || !champ || champ.id.toLowerCase() !== l.champion) return;
+    window.linkedBuild = null;
+    trace = { build: { items: l.items.map((key) => ({ key })), augments: l.augs.map((key) => ({ key })) }, fight: trace.fight };
+    fillFromTrace();
+    run(true);
+  }
 
   // ---------- build ----------
   function select(options, value, label) {
@@ -398,11 +410,45 @@
       d.textContent = ` ${change > 0 ? "▲" : "▼"} ${Math.abs(change * 100).toFixed(1)}% DPS vs default`;
       $("simStatus").append(d);
     }
+    // Only runs with the default settings on the live patch can go on the leaderboard, so every entry is comparable.
+    const combo = $("comboInput") ? $("comboInput").value : "";
+    const plain = patch === "live" && !Object.keys(fieldValues).length && enemyMode() === "pool" && (!combo || combo === defaultCombo());
+    offerSubmit({ champion: champ.id, items: res.builds[0].build.items, augments: res.builds[0].build.augments, dps: best.mean_dps }, plain);
     showAlternatives(withBuild ? [] : res.builds);
     window.ReplayViewer.showTrace(tr);
     trace = tr;
     fillFromTrace();
   }
+  // ---------- leaderboard ----------
+  let submission = null;
+  function offerSubmit(build, plain) {
+    submission = build && plain ? build : null;
+    $("submitBox").hidden = !build;
+    $("submitScore").hidden = !submission;
+    $("submitScore").disabled = false;
+    $("submitNote").textContent = !build ? "" : submission
+      ? "Put this build on the Simulator leaderboard. It's simulated again on our side before it's listed."
+      : "Only builds simulated with the default settings and enemies on the live patch can go on the leaderboard.";
+  }
+  $("submitScore").addEventListener("click", async () => {
+    if (!submission) return;
+    $("submitScore").disabled = true;
+    $("submitNote").textContent = "Submitting…";
+    try {
+      const r = await fetch("/api/sim-scores", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(submission) });
+      const b = await r.json().catch(() => ({}));
+      if (!r.ok) throw new Error(b.error || "");
+      $("submitNote").textContent = b.status === "verified"
+        ? `This build is already on the leaderboard at ${Math.round(b.verified_dps).toLocaleString()} DPS.`
+        : b.status === "rejected" ? "This build was already checked and can't go on the leaderboard."
+        : "Submitted. It shows on the leaderboard once our simulator has re-run it.";
+      $("submitScore").hidden = true;
+    } catch (e) {
+      $("submitScore").disabled = false;
+      $("submitNote").textContent = e.message || "The leaderboard couldn't be reached. Try again in a moment.";
+    }
+  });
+
   function showAlternatives(builds) {
     const box = $("alts");
     box.textContent = "";
@@ -434,6 +480,7 @@
     $("emodePool").checked = true;
     picks = null;
     $("alts").hidden = true;
+    offerSubmit(null);
     buildFightForm();
     window.ReplayViewer.resetTrace();
     status("Back to the default build, enemies and fight settings.");
