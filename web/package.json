@@ -34,7 +34,7 @@
     "eslint": "^9",
     "eslint-config-next": "15.5.28",
     "jsdom": "^26.1.0",
-    "typescript": "^5",
+    "typescript": "^7",
     "vitest": "^3.2.4",
     "wrangler": "4.144.0"
   },
