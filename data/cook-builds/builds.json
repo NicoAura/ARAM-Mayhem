@@ -1,5 +1,5 @@
 {
-  "_note": "Hand-written cook builds. Every build flips what its champion is known for (Nico, 2026-10-16: keep only builds like Melee Bomb Man Ziggs). build_data.py adds augment text, Mayhem win rates and simulator numbers and writes data.js. The first `core` augments decide the build's tier; the rest are flex picks. `augment_text` replaces the generated text for augments whose tooltip numbers the game data doesn't fill in. A build with a `chef` date was the Chef's Pick that day; the page features the newest one (a new pick is added every day).",
+  "_note": "Hand-written cook builds. Every build flips what its champion is known for (Nico, 2026-10-16: keep only builds like Melee Bomb Man Ziggs). build_data.py adds augment text, Mayhem win rates and simulator numbers and writes data.js. The first `core` augments decide the build's tier; the rest are flex picks. `augment_text` replaces the generated text for augments whose tooltip numbers the game data doesn't fill in. A build with a `chef` date was the Chef's Special that day; the page features the newest one (a new pick is added every day).",
   "augment_text": {
     "With Haste": "Gain Move Speed equal to a share of your Ability Haste.",
     "Overloaded": "Using another Ability resets the cooldown of the chosen ability."

@@ -45,18 +45,18 @@
   }
 
   const day = (iso) => new Date(iso + "T12:00:00").toLocaleDateString("en-US", { month: "short", day: "numeric" });
-  // The Chef's Pick is the build with the newest `chef` date; a new one is added every day.
+  // The Chef's Special is the build with the newest `chef` date; a new one is added every day.
   const chef = data.builds.filter((b) => b.chef).sort((a, b) => b.chef.localeCompare(a.chef))[0] || null;
   const rest = data.builds.filter((b) => b !== chef);
 
   function card(b) {
-    const pastPick = b.chef && b !== chef ? ` <span class="chip" title="Chef's Pick on ${esc(day(b.chef))}">Chef's Pick ${esc(day(b.chef))}</span>` : "";
+    const pastSpecial = b.chef && b !== chef ? ` <span class="chip" title="Chef's Special on ${esc(day(b.chef))}">Chef's Special ${esc(day(b.chef))}</span>` : "";
     return `<article class="card" id="${esc(b.id)}">
       <div class="card-head">
         <img src="${icon(b.champion_icon)}" alt="" width="52" height="52" loading="lazy">
         <div class="who">
           <h2>${esc(b.title)}</h2>
-          <div class="sub">${esc(b.champion_name)} <span class="chip tier" title="${esc(TIER_NOTE[b.tier] || "")}">${esc(b.tier)}</span>${b.lab ? ` <span class="chip" title="Invented for this page">Lab original</span>` : ""}${pastPick}</div>
+          <div class="sub">${esc(b.champion_name)} <span class="chip tier" title="${esc(TIER_NOTE[b.tier] || "")}">${esc(b.tier)}</span>${b.lab ? ` <span class="chip" title="Invented for this page">Lab original</span>` : ""}${pastSpecial}</div>
         </div>
         <div class="score"><span class="value">${wr(b.core_win_rate)}</span><span class="label">core augment win rate</span></div>
       </div>
@@ -93,8 +93,8 @@
   }
 
   if (chef) {
-    const box = document.getElementById("chefs-pick");
-    box.innerHTML = `<div class="chef-head"><p class="eyebrow" id="chef-label">Chef's Pick · ${esc(day(chef.chef))}</p>
+    const box = document.getElementById("chefs-special");
+    box.innerHTML = `<div class="chef-head"><p class="eyebrow" id="chef-label">Chef's Special · ${esc(day(chef.chef))}</p>
       <p class="muted small">A new unconventional build every day, built on an augment or item gimmick.</p></div>${card(chef)}`;
     box.hidden = false;
   }
@@ -126,6 +126,6 @@
     <p>Stats as of ${d(m.cn_augment_date)}. Updated ${esc(m.generated)}.</p>`;
 
   render();
-  // Open at the Chef's Pick when linked to it (#chefs-pick), once the cards exist.
-  if (location.hash === "#chefs-pick" && chef) document.getElementById("chefs-pick").scrollIntoView();
+  // Open at the Chef's Special when linked to it (#chefs-special), once the cards exist.
+  if (location.hash === "#chefs-special" && chef) document.getElementById("chefs-special").scrollIntoView();
 })();
