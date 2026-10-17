@@ -18,8 +18,7 @@ struct RootView: View {
                 .tabItem { Label("More", systemImage: "ellipsis") }
                 .tag("more")
         }
-        .sensoryFeedback(.selection, trigger: selection)
-        .sensoryFeedback(.impact(weight: .light), trigger: reselected)
+        .tabHaptics(selection: selection, reselected: reselected)
         .onOpenURL { url in open(url) }
         .onReceive(NotificationCenter.default.publisher(for: PatchAlerts.openPage)) { note in
             if let url = note.object as? URL { open(url) }
@@ -43,6 +42,19 @@ struct RootView: View {
         let tab = SiteTab.primary.last { $0.path != "/" && (path == $0.path || path.hasPrefix($0.path + "/")) } ?? .home
         selection = tab.id
         pages.page(for: tab).open(Site.url(path + (url.query.map { "?" + $0 } ?? "")))
+    }
+}
+
+private extension View {
+    /// A tick on tab changes and a light tap on re-selecting a tab (Vision Pro has no haptics).
+    @ViewBuilder
+    func tabHaptics(selection: String, reselected: Int) -> some View {
+        #if os(visionOS)
+        self
+        #else
+        sensoryFeedback(.selection, trigger: selection)
+            .sensoryFeedback(.impact(weight: .light), trigger: reselected)
+        #endif
     }
 }
 
