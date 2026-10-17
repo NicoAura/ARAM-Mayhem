@@ -20,6 +20,8 @@ const PAGES = [
   "/builds?tab=team",
   "/augments?tab=draft",
   "/patches",
+  "/items",
+  "/items?tag=crit,as",
   "/privacy",
   "/terms",
 ];

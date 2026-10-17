@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { livePatch } from "@/lib/highlights";
 import { itemBySlug, itemPages } from "@/lib/item-pages";
 import { itemSim } from "@/lib/item-sim";
+import { itemTag } from "@/lib/item-tags";
 import { pageMeta } from "@/lib/meta";
 
 // One page per item Mayhem players build (lib/item-pages.ts).
@@ -28,7 +29,9 @@ export default async function ItemPage({ params }: { params: Promise<{ slug: str
   return (
     <>
       <section className="champ-hero aug-hero">
-        <p className="eyebrow">Item · Patch {livePatch()}</p>
+        <p className="eyebrow">
+          <Link href="/items">Items</Link> · Patch {livePatch()}
+        </p>
         <div className="aug-hero-title">
           {i.icon && (
             <span className="tilt-icon" data-tilt data-rarity="gold">
@@ -40,6 +43,15 @@ export default async function ItemPage({ params }: { params: Promise<{ slug: str
             {i.name} <span className="champ-hero-sub">in ARAM Mayhem</span>
           </h1>
         </div>
+        {i.tags.length > 0 && (
+          <p className="item-tags-row">
+            {i.tags.map((t) => (
+              <Link key={t} href={`/items?tag=${t}`} className="item-tag" data-group={itemTag(t)?.group}>
+                {itemTag(t)?.label}
+              </Link>
+            ))}
+          </p>
+        )}
         <div className="stat-row">
           {i.cost > 0 && (
             <div>

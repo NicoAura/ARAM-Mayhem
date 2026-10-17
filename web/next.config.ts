@@ -45,9 +45,7 @@ const nextConfig: NextConfig = {
       ["/kitchen", "/lab#cook-builds"],
     ]
       .map(([source, destination]) => ({ source, destination, permanent: true }))
-      // Each augment has its own page; the bare address shows them all on the Tier List.
       .concat([
-        { source: "/items", destination: "/", permanent: false },
         // The build tools and augment draft share pages now; the old addresses keep their query.
         { source: "/what-to-build", destination: "/builds", permanent: true },
         { source: "/builder", destination: "/builds?tab=editor", permanent: true },
