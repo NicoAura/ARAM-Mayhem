@@ -2,12 +2,15 @@
 
 import { useEffect, useRef, useState } from "react";
 import { loadSettings, SETTINGS_EVENT } from "@/lib/settings";
+import { adminFlag } from "@/lib/admin-flag";
 
 // A rotatable 3D model of the champion, idling, in the champion page's hero. Drag to turn it.
-// Off on Low graphics or without WebGL; reduced motion keeps it still. The renderer (lib/showcase3d.ts)
+// Admins only (the models are admin-only files). Off on Low graphics or without WebGL; reduced motion keeps it still. The renderer (lib/showcase3d.ts)
 // only loads once the hero is on screen.
 
 const allowed = () => {
+  // The models are admin-only files (src/middleware.ts); everyone else sees the splash art.
+  if (!adminFlag()) return false;
   const s = loadSettings();
   if (s.graphics === "low") return false;
   try {

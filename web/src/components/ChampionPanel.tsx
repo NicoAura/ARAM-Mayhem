@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import championIds from "@/data/champion-ids.json";
+import { adminFlag } from "@/lib/admin-flag";
 import { loadSettings } from "@/lib/settings";
 
 // A champion's splash art, pick quote and abilities, straight from the League client's files
@@ -66,6 +67,9 @@ export default function ChampionPanel({
   const [playing, setPlaying] = useState(false);
   const [sound, setSound] = useState(true);
   const [clip, setClip] = useState<string | null>(null);
+  // Ability videos are admin-only files (src/middleware.ts).
+  const [admin, setAdmin] = useState(false);
+  useEffect(() => setAdmin(adminFlag()), []);
   const [missing, setMissing] = useState<Set<string>>(() => new Set());
   const [hoverPlay, setHoverPlay] = useState(false);
   useEffect(() => {
@@ -196,7 +200,7 @@ export default function ChampionPanel({
           <ul className="champ-abilities">
             {abilities.map((a) => {
               const key = a.spellKey ?? "";
-              const hasClip = key !== "passive" && !missing.has(key);
+              const hasClip = admin && key !== "passive" && !missing.has(key);
               const open = clip === key && hasClip;
               return (
                 <li

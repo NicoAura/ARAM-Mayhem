@@ -91,6 +91,25 @@ export default function AdminEditor({ fields }: { fields: Field[] }) {
 
   return (
     <div className="admin">
+      <p className="admin-session">
+        Signed in as admin on this browser, so admin-only pages and files open here, like the{" "}
+        <a className="inline-link" href="/admin/simulator">
+          full Simulator
+        </a>
+        .{" "}
+        <button
+          type="button"
+          className="inline-link"
+          onClick={async () => {
+            await fetch("/api/admin/content", { method: "DELETE" }).catch(() => null);
+            remember(null);
+            setUnlocked(false);
+            setPassword("");
+          }}
+        >
+          Sign out
+        </button>
+      </p>
       {groups.map((g) => (
         <section key={g} className="card admin-group">
           <h2>{g}</h2>
