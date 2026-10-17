@@ -6,7 +6,6 @@
  "Show on deeparam.com": "Mostra su deeparam.com",
  "Import games from client": "Importa partite dal client",
  "Champion": "Campione",
- "Skin": "Skin",
  "No games yet": "Ancora nessuna partita",
  "Import your games from the League client. Your games stay on your computer.": "Importa le tue partite dal client di League. Le tue partite restano sul tuo computer.",
  "You need to be connected to the Riot Client: open it on this computer and sign in first.": "Devi essere connesso al Client Riot: aprilo su questo computer e accedi prima.",
@@ -195,9 +194,6 @@
  "Removing your shared games…": "Rimozione delle partite condivise…",
  "Sharing is on. New games are shared after each import.": "Condivisione attiva. Le nuove partite vengono condivise dopo ogni importazione.",
  "Sharing is off and your shared games were removed.": "Condivisione disattivata e partite condivise rimosse.",
- "Default": "Predefinita",
- "Champions and skins you own": "Campioni e skin che possiedi",
- "Import games to pick from the skins you own": "Importa le partite per scegliere tra le skin che possiedi",
  "Map {id}": "Mappa {id}",
  "Not synced": "Non sincronizzato",
  "Level": "Livello",
@@ -214,5 +210,7 @@
  "Recording a game ({champion})": "Registrazione partita ({champion})",
  "{n} recorded": "{n} registrate",
  "Your Mayhem games, in one place.": "Le tue partite di ARAM: Pandemonio, in un unico posto.",
- "Import your games with the button below. You need to be connected to the Riot Client: open it on this computer and sign in first. Your games stay on your computer.": "Importa le tue partite con il pulsante qui sotto. Devi essere connesso al Client Riot: aprilo su questo computer e accedi prima. Le tue partite restano sul tuo computer."
+ "Import your games with the button below. You need to be connected to the Riot Client: open it on this computer and sign in first. Your games stay on your computer.": "Importa le tue partite con il pulsante qui sotto. Devi essere connesso al Client Riot: aprilo su questo computer e accedi prima. Le tue partite restano sul tuo computer.",
+ "Sign in above to see your Mayhem games here: win rate, champions, augments and recent matches.": "Accedi qui sopra per vedere le tue partite Pandemonio: percentuale di vittorie, campioni, potenziamenti e partite recenti.",
+ "Champions you own": "Campioni che possiedi"
 }

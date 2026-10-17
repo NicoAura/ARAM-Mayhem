@@ -6,7 +6,6 @@
  "Show on deeparam.com": "Εμφάνιση στο deeparam.com",
  "Import games from client": "Εισαγωγή παιχνιδιών από το πρόγραμμα",
  "Champion": "Ήρωας",
- "Skin": "Εμφάνιση",
  "No games yet": "Δεν υπάρχουν ακόμα παιχνίδια",
  "Import your games from the League client. Your games stay on your computer.": "Εισήγαγε τα παιχνίδια σου από το πρόγραμμα του League. Τα παιχνίδια σου μένουν στον υπολογιστή σου.",
  "You need to be connected to the Riot Client: open it on this computer and sign in first.": "Πρέπει να είσαι συνδεδεμένος στο Riot Client: άνοιξέ το σε αυτόν τον υπολογιστή και συνδέσου πρώτα.",
@@ -195,9 +194,6 @@
  "Removing your shared games…": "Αφαίρεση των κοινοποιημένων παιχνιδιών σου…",
  "Sharing is on. New games are shared after each import.": "Η κοινοποίηση είναι ενεργή. Τα νέα παιχνίδια κοινοποιούνται μετά από κάθε εισαγωγή.",
  "Sharing is off and your shared games were removed.": "Η κοινοποίηση είναι ανενεργή και τα κοινοποιημένα παιχνίδια σου αφαιρέθηκαν.",
- "Default": "Προεπιλογή",
- "Champions and skins you own": "Ήρωες και εμφανίσεις που έχεις",
- "Import games to pick from the skins you own": "Εισήγαγε παιχνίδια για να διαλέξεις από τις εμφανίσεις που έχεις",
  "Map {id}": "Χάρτης {id}",
  "Not synced": "Δεν έχει συγχρονιστεί",
  "Level": "Επίπεδο",
@@ -214,5 +210,7 @@
  "Recording a game ({champion})": "Καταγραφή παιχνιδιού ({champion})",
  "{n} recorded": "{n} καταγεγραμμένα",
  "Your Mayhem games, in one place.": "Τα παιχνίδια σου στο ARAM: Χαμός, σε ένα μέρος.",
- "Import your games with the button below. You need to be connected to the Riot Client: open it on this computer and sign in first. Your games stay on your computer.": "Εισήγαγε τα παιχνίδια σου με το παρακάτω κουμπί. Πρέπει να είσαι συνδεδεμένος στο Riot Client: άνοιξέ το σε αυτόν τον υπολογιστή και συνδέσου πρώτα. Τα παιχνίδια σου μένουν στον υπολογιστή σου."
+ "Import your games with the button below. You need to be connected to the Riot Client: open it on this computer and sign in first. Your games stay on your computer.": "Εισήγαγε τα παιχνίδια σου με το παρακάτω κουμπί. Πρέπει να είσαι συνδεδεμένος στο Riot Client: άνοιξέ το σε αυτόν τον υπολογιστή και συνδέσου πρώτα. Τα παιχνίδια σου μένουν στον υπολογιστή σου.",
+ "Sign in above to see your Mayhem games here: win rate, champions, augments and recent matches.": "Συνδέσου παραπάνω για να δεις εδώ τα παιχνίδια σου στο Χαμό: ποσοστό νικών, πρωταθλητές, ενισχύσεις και πρόσφατους αγώνες.",
+ "Champions you own": "Πρωταθλητές που έχεις"
 }

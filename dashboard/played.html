@@ -10,7 +10,7 @@
 //   "deeparam-played": latest games, for Home's Recently played
 //   "deeparam-top":    most-played champions, newest sync
 //   "deeparam-owned":  champions the account owns, for "Champions I own"
-//   "deeparam-banner": {champion, num}, the player's chosen splash art
+//   "deeparam-banner": {champion, num: 0}, the champion whose splash art the player chose
 // Older links carry just the list of games.
 (function () {
   var alias = function (c) { return typeof c === "string" && /^[A-Za-z]{2,30}$/.test(c); };
@@ -25,8 +25,8 @@
     if (Array.isArray(data.top)) save("deeparam-top", data.top.filter(alias).slice(0, 10));
     if (Array.isArray(data.owned)) save("deeparam-owned", data.owned.filter(alias).slice(0, 400));
     var b = data.banner;
-    if (b && alias(b.champion) && typeof b.num === "number" && b.num >= 0 && b.num < 1000 && Math.floor(b.num) === b.num) {
-      save("deeparam-banner", { champion: b.champion, num: b.num });
+    if (b && alias(b.champion)) {
+      save("deeparam-banner", { champion: b.champion, num: 0 });
     }
   } catch (e) { /* bad link */ }
   location.replace("/");

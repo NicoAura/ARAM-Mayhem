@@ -271,7 +271,7 @@ export default function Home() {
             </h2>
           </div>
           <div className="rank links">
-            {[...navPages().filter((t) => t.href !== "/tier-list"), { href: "/stats", label: "My Stats", body: "Your own Mayhem games" }].map((l) => (
+            {[...navPages().filter((t) => t.href !== "/tier-list"), { href: "/account#my-stats", label: "My Stats", body: "Your own Mayhem games" }].map((l) => (
               <Link key={l.href} href={l.href}>
                 <span className="rank-name">
                   <T>{l.label}</T>

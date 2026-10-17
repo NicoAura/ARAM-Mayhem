@@ -6,7 +6,6 @@
  "Show on deeparam.com": "Afficher sur deeparam.com",
  "Import games from client": "Importer les parties du client",
  "Champion": "Champion",
- "Skin": "Skin",
  "No games yet": "Aucune partie pour l'instant",
  "Import your games from the League client. Your games stay on your computer.": "Importez vos parties depuis le client League. Vos parties restent sur votre ordinateur.",
  "You need to be connected to the Riot Client: open it on this computer and sign in first.": "Vous devez être connecté au Riot Client : ouvrez-le sur cet ordinateur et connectez-vous d'abord.",
@@ -195,9 +194,6 @@
  "Removing your shared games…": "Suppression de vos parties partagées…",
  "Sharing is on. New games are shared after each import.": "Le partage est activé. Les nouvelles parties sont partagées après chaque import.",
  "Sharing is off and your shared games were removed.": "Le partage est désactivé et vos parties partagées ont été supprimées.",
- "Default": "Par défaut",
- "Champions and skins you own": "Champions et skins que vous possédez",
- "Import games to pick from the skins you own": "Importez vos parties pour choisir parmi vos skins",
  "Map {id}": "Carte {id}",
  "Not synced": "Non synchronisé",
  "Level": "Niveau",
@@ -214,5 +210,7 @@
  "Recording a game ({champion})": "Enregistrement d'une partie ({champion})",
  "{n} recorded": "{n} enregistrées",
  "Your Mayhem games, in one place.": "Vos parties d'ARAM du chaos, au même endroit.",
- "Import your games with the button below. You need to be connected to the Riot Client: open it on this computer and sign in first. Your games stay on your computer.": "Importez vos parties avec le bouton ci-dessous. Vous devez être connecté au Riot Client : ouvrez-le sur cet ordinateur et connectez-vous d'abord. Vos parties restent sur votre ordinateur."
+ "Import your games with the button below. You need to be connected to the Riot Client: open it on this computer and sign in first. Your games stay on your computer.": "Importez vos parties avec le bouton ci-dessous. Vous devez être connecté au Riot Client : ouvrez-le sur cet ordinateur et connectez-vous d'abord. Vos parties restent sur votre ordinateur.",
+ "Sign in above to see your Mayhem games here: win rate, champions, augments and recent matches.": "Connectez-vous ci-dessus pour voir ici vos parties d'ARAM du chaos : taux de victoire, champions, augments et parties récentes.",
+ "Champions you own": "Champions que vous possédez"
 }

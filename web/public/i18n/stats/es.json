@@ -6,7 +6,6 @@
  "Show on deeparam.com": "Mostrar en deeparam.com",
  "Import games from client": "Importar partidas del cliente",
  "Champion": "Campeón",
- "Skin": "Aspecto",
  "No games yet": "Aún no hay partidas",
  "Import your games from the League client. Your games stay on your computer.": "Importa tus partidas desde el cliente de League. Tus partidas se quedan en tu ordenador.",
  "You need to be connected to the Riot Client: open it on this computer and sign in first.": "Necesitas estar conectado al cliente de Riot: ábrelo en este ordenador e inicia sesión primero.",
@@ -195,9 +194,6 @@
  "Removing your shared games…": "Eliminando tus partidas compartidas…",
  "Sharing is on. New games are shared after each import.": "Compartir está activado. Las partidas nuevas se comparten después de cada importación.",
  "Sharing is off and your shared games were removed.": "Compartir está desactivado y se han eliminado tus partidas compartidas.",
- "Default": "Predeterminado",
- "Champions and skins you own": "Campeones y aspectos que tienes",
- "Import games to pick from the skins you own": "Importa partidas para elegir entre los aspectos que tienes",
  "Map {id}": "Mapa {id}",
  "Not synced": "Sin sincronizar",
  "Level": "Nivel",
@@ -214,5 +210,7 @@
  "Recording a game ({champion})": "Grabando una partida ({champion})",
  "{n} recorded": "{n} grabadas",
  "Your Mayhem games, in one place.": "Tus partidas de ARAM: Caos, en un solo lugar.",
- "Import your games with the button below. You need to be connected to the Riot Client: open it on this computer and sign in first. Your games stay on your computer.": "Importa tus partidas con el botón de abajo. Necesitas estar conectado al cliente de Riot: ábrelo en este ordenador e inicia sesión primero. Tus partidas se quedan en tu ordenador."
+ "Import your games with the button below. You need to be connected to the Riot Client: open it on this computer and sign in first. Your games stay on your computer.": "Importa tus partidas con el botón de abajo. Necesitas estar conectado al cliente de Riot: ábrelo en este ordenador e inicia sesión primero. Tus partidas se quedan en tu ordenador.",
+ "Sign in above to see your Mayhem games here: win rate, champions, augments and recent matches.": "Inicia sesión arriba para ver aquí tus partidas de Caos: tasa de victorias, campeones, aumentos y partidas recientes.",
+ "Champions you own": "Campeones que tienes"
 }
