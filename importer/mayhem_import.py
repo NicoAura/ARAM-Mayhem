@@ -495,16 +495,21 @@ ASSET_CACHE = os.path.expanduser("~/Library/Caches/Mayhem Stats")
 
 
 def site_asset(path):
-    """Bytes for a /assets/... path, cached on disk; None if the site doesn't have it."""
+    """Bytes for a /assets/... or /i18n/... path, cached on disk; None if the site doesn't have it.
+    Translations change with the site, so they're fetched fresh and the cached copy is only for offline use."""
     rel = path.lstrip("/")
-    if ".." in rel.split("/") or not rel.startswith("assets/"):
+    if ".." in rel.split("/") or not rel.startswith(("assets/", "i18n/")):
         return None
     cached = os.path.join(ASSET_CACHE, rel)
-    if os.path.exists(cached):
+    fresh = rel.startswith("i18n/")
+    if os.path.exists(cached) and not fresh:
         with open(cached, "rb") as f:
             return f.read()
     res = subprocess.run(["curl", "-sSf", "--max-time", "30", f"{SITE}/{rel}"], capture_output=True)
     if res.returncode != 0:
+        if os.path.exists(cached):
+            with open(cached, "rb") as f:
+                return f.read()
         return None
     os.makedirs(os.path.dirname(cached), exist_ok=True)
     with open(cached, "wb") as f:
@@ -902,7 +907,7 @@ def serve(out, port, lockfile=None, sgp_host=None, open_browser=True, record_liv
                     return self.send_json(dict(state))
             if path == "/api/live":
                 return self.send_json({**live, "games": live_recordings()})
-            if path.startswith("/assets/"):
+            if path.startswith(("/assets/", "/i18n/")):
                 body = site_asset(path)
                 if body is None:
                     return self.send_json({"error": "not found"}, 404)

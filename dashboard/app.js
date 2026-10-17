@@ -29,6 +29,67 @@ Object.assign(state.augRarity, PRESET.augRarity || {});
 
 const $ = (id) => document.getElementById(id);
 
+// ---------- language ----------
+// The site's language: the parent page's <html data-lang> when shown on deeparam.com, else the visitor's
+// saved pick, else the browser's. Text is looked up by its English wording in /i18n/stats/<code>.json and
+// official champion and augment names in /i18n/names/<code>.json; anything missing stays in English.
+const LANGS = ["en", "ar", "cs", "de", "el", "es", "es-MX", "fr", "hu", "id", "it", "ja", "ko", "pl", "pt-BR", "ro", "ru", "th", "tr", "vi", "zh-CN", "zh-TW"];
+
+function matchLang(tag) {
+  const tl = String(tag || "").trim().replace("_", "-");
+  const exact = LANGS.find((l) => l.toLowerCase() === tl.toLowerCase());
+  if (exact) return exact;
+  const [base, region = ""] = tl.toLowerCase().split("-");
+  if (base === "zh") return /^(tw|hk|mo|hant)$/.test(region) ? "zh-TW" : "zh-CN";
+  if (base === "pt") return "pt-BR";
+  if (base === "es") return region && region !== "es" ? "es-MX" : "es";
+  return LANGS.includes(base) ? base : null;
+}
+
+function pickLang() {
+  try { const l = window.parent !== window && window.parent.document.documentElement.dataset.lang; if (LANGS.includes(l)) return l; } catch (e) { /* not on the site */ }
+  try { const l = localStorage.getItem("deeparam-lang"); if (LANGS.includes(l)) return l; } catch (e) { /* storage blocked */ }
+  for (const tag of navigator.languages || [navigator.language]) {
+    const m = matchLang(tag);
+    if (m) return m;
+    if (/^en\b/i.test(tag || "")) break;
+  }
+  return "en";
+}
+
+const LANG = pickLang();
+let DICT = {}, NAMES = {};
+/** Text in the page's language: t("English text", { placeholder: value }). */
+const t = (s, v) => {
+  const r = DICT[s] || s;
+  return v ? r.replace(/\{(\w+)\}/g, (m, k) => (k in v ? String(v[k]) : m)) : r;
+};
+
+// Swaps the page's own English text and labels for the chosen language.
+function translateDom(root) {
+  const walk = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
+  for (let n = walk.nextNode(); n; n = walk.nextNode()) {
+    const k = n.nodeValue.trim();
+    if (k && DICT[k]) n.nodeValue = n.nodeValue.replace(k, DICT[k]);
+  }
+  for (const a of ["placeholder", "aria-label", "title"]) {
+    for (const el of root.querySelectorAll(`[${a}]`)) if (DICT[el.getAttribute(a)]) el.setAttribute(a, DICT[el.getAttribute(a)]);
+  }
+}
+
+async function loadLang() {
+  document.documentElement.lang = LANG;
+  if (LANG === "ar") document.documentElement.dir = "rtl";
+  // On deeparam.com, follow the site when the visitor switches language
+  try { if (window.parent !== window) window.parent.addEventListener("deeparam-lang", () => location.reload()); } catch (e) { /* not on the site */ }
+  if (LANG === "en") return;
+  const get = async (path) => {
+    try { const r = await fetch(path); return r.ok ? await r.json() : {}; } catch (e) { return {}; }
+  };
+  [DICT, NAMES] = await Promise.all([get(`/i18n/stats/${LANG}.json`), get(`/i18n/names/${LANG}.json`)]);
+  translateDom(document.body);
+}
+
 function showError(msg) {
   const el = $("load-error");
   el.textContent = msg;
@@ -38,15 +99,15 @@ function showError(msg) {
 
 async function loadText(text, { sample = false } = {}) {
   let data;
-  try { data = JSON.parse(text); } catch (e) { return showError("Your saved games couldn't be read."); }
+  try { data = JSON.parse(text); } catch (e) { return showError(t("Your saved games couldn't be read.")); }
   const raw = findGames(data);
-  if (!raw.length) return showError("No Mayhem games yet. Import games from client to add them.");
+  if (!raw.length) return showError(t("No Mayhem games yet. Import games from client to add them."));
   const owner = findOwner(data, raw);
   state.owner = owner;
   state.owned = data && data.owned && Array.isArray(data.owned.champions) ? data.owned : null;
   state.games = raw.map((g) => normalize(g, owner)).filter(Boolean)
     .sort((a, b) => b.time - a.time);
-  if (!state.games.length) return showError("Couldn't find the account's own stats in those games.");
+  if (!state.games.length) return showError(t("Couldn't find the account's own stats in those games."));
   state.sample = sample;
   $("load-error").hidden = true;
   $("loader").hidden = true;
@@ -169,8 +230,15 @@ async function loadNames() {
   }
 }
 
-const champName = (g) => state.champNames[g.champId] || g.champNameRaw || `Champion ${g.champId}`;
-const augName = (id) => state.augNames[id] || `Augment ${id}`;
+const localName = (id) => (NAMES.champions || {})[state.champAlias[id]];
+const champById = (id) => localName(id) || state.champNames[id] || t("Champion {id}", { id });
+const champName = (g) => localName(g.champId) || state.champNames[g.champId] || g.champNameRaw || t("Champion {id}", { id: g.champId });
+const augName = (id) => (NAMES.augments || {})[id] || state.augNames[id] || t("Augment {id}", { id });
+const queueName = (q) => {
+  const n = QUEUE_NAMES[q];
+  if (!n) return t("Queue {id}", { id: q });
+  return NAMES.mode && n.startsWith("ARAM Mayhem") ? n.replace("ARAM Mayhem", NAMES.mode) : t(n);
+};
 const RARITY = { kSilver: ["Silver", 1], kGold: ["Gold", 2], kPrismatic: ["Prismatic", 3] };
 
 // ---------- filters ----------
@@ -183,18 +251,18 @@ let latestPatch = "";
 function setupFilters() {
   const patches = [...new Set(state.games.map((g) => g.patch).filter(Boolean))].sort((a, b) => patchKey(b).localeCompare(patchKey(a)));
   latestPatch = patches[0] || "";
-  $("f-patch").innerHTML = '<option value="">All patches</option>' +
-    patches.map((p) => `<option value="${p}">Patch ${p}</option>`).join("");
+  $("f-patch").innerHTML = `<option value="">${esc(t("All patches"))}</option>` +
+    patches.map((p) => `<option value="${p}">${esc(t("Patch {patch}", { patch: p }))}</option>`).join("");
   $("f-patch").value = latestPatch;
   const queues = [...new Set(state.games.map((g) => g.queue))].sort();
   const sel = $("f-queue");
-  sel.innerHTML = '<option value="">All</option>' +
-    queues.map((q) => `<option value="${q}">${QUEUE_NAMES[q] || "Queue " + q}</option>`).join("");
+  sel.innerHTML = `<option value="">${esc(t("All"))}</option>` +
+    queues.map((q) => `<option value="${q}">${esc(queueName(q))}</option>`).join("");
   const name = state.games.find((g) => g.name)?.name;
   const first = new Date(state.games[state.games.length - 1].time);
   const last = new Date(state.games[0].time);
   $("account").hidden = false;
-  $("account").textContent = `${name ? name + " · " : ""}${state.games.length} games, ${fmtDate(first)} to ${fmtDate(last)}`;
+  $("account").textContent = (name ? name + " · " : "") + t("{n} games, {from} to {to}", { n: state.games.length.toLocaleString(), from: fmtDate(first), to: fmtDate(last) });
   if (filtersReady) return;
   filtersReady = true;
   for (const id of ["f-patch", "f-queue", "f-from", "f-to", "f-champ", "f-minaug", "f-minpair", "f-minally"]) $(id).addEventListener("input", render);
@@ -219,7 +287,7 @@ function filtered() {
 // ---------- rendering ----------
 
 const pct = (n) => (n * 100).toFixed(1) + "%";
-const fmtDate = (d) => d.toLocaleDateString(undefined, { year: "numeric", month: "short", day: "numeric" });
+const fmtDate = (d) => d.toLocaleDateString(LANG, { year: "numeric", month: "short", day: "numeric" });
 const kda = (k, d, a) => ((k + a) / Math.max(1, d)).toFixed(2);
 const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
 
@@ -250,15 +318,15 @@ function renderTiles(games) {
   const dmg = n ? sum(games, (g) => g.damage) / n : 0;
   const dur = n ? sum(games, (g) => g.duration) / n : 0;
   const tiles = [
-    ["Total matches", n.toLocaleString(), `${wins} W · ${n - wins} L${n < state.games.length ? ` · of ${state.games.length.toLocaleString()}` : ""}`],
+    ["Total matches", n.toLocaleString(), t("{w} W · {l} L", { w: wins, l: n - wins }) + (n < state.games.length ? " · " + t("of {n}", { n: state.games.length.toLocaleString() }) : "")],
     ["Win rate", n ? pct(wins / n) : "–", "", n ? wrClass(wins / n) : ""],
     ["KDA", n ? kda(K, D, A) : "–", n ? `${(K / n).toFixed(1)} / ${(D / n).toFixed(1)} / ${(A / n).toFixed(1)}` : ""],
-    ["Damage to champions", n ? Math.round(dmg).toLocaleString() : "–", "per game"],
-    ["Game length", n ? `${Math.floor(dur / 60)}:${String(Math.round(dur % 60)).padStart(2, "0")}` : "–", "average"],
+    ["Damage to champions", n ? Math.round(dmg).toLocaleString() : "–", t("per game")],
+    ["Game length", n ? `${Math.floor(dur / 60)}:${String(Math.round(dur % 60)).padStart(2, "0")}` : "–", t("average")],
     ["Champions played", new Set(games.map((g) => g.champId)).size, ""],
   ];
   $("tiles").innerHTML = tiles.map(([l, v, s, c]) =>
-    `<div class="tile ${c || ""}"><div class="label">${l}</div><div class="value">${v}</div><div class="sub">${s}</div></div>`).join("");
+    `<div class="tile ${c || ""}"><div class="label">${t(l)}</div><div class="value">${v}</div><div class="sub">${s}</div></div>`).join("");
 }
 
 // Achievements count every imported game, whatever the filters show.
@@ -302,15 +370,15 @@ const badgeRows = (G) => BADGES.map(([name, desc, f, goal]) => ({ name, desc, go
 function renderBadges(G) {
   const rows = badgeRows(G);
   const earned = rows.filter((r) => r.have >= r.goal).length;
-  $("n-badges").textContent = `${earned} of ${rows.length} earned`;
+  $("n-badges").textContent = t("{earned} of {n} earned", { earned, n: rows.length });
   rows.sort((a, b) => (b.have >= b.goal) - (a.have >= a.goal) || b.have / b.goal - a.have / a.goal);
   $("badges").innerHTML = rows.map((r) => {
     const done = r.have >= r.goal;
     const prog = Math.min(1, r.have / r.goal);
-    const label = r.goal === 1 ? (done ? `${r.have.toLocaleString()}×` : "Not yet") : `${Math.min(r.have, r.goal).toLocaleString()} / ${r.goal.toLocaleString()}`;
-    return `<div class="badge${done ? " done" : ""}" title="${esc(r.desc)}">
-      <div class="b-name">${done ? "★ " : ""}${esc(r.name)}</div>
-      <div class="b-desc">${esc(r.desc)}</div>
+    const label = r.goal === 1 ? (done ? `${r.have.toLocaleString()}×` : t("Not yet")) : `${Math.min(r.have, r.goal).toLocaleString()} / ${r.goal.toLocaleString()}`;
+    return `<div class="badge${done ? " done" : ""}" title="${esc(t(r.desc))}">
+      <div class="b-name">${done ? "★ " : ""}${esc(t(r.name))}</div>
+      <div class="b-desc">${esc(t(r.desc))}</div>
       <div class="b-bar"><span style="width:${(prog * 100).toFixed(1)}%"></span></div>
       <div class="b-prog">${label}</div></div>`;
   }).join("");
@@ -327,12 +395,12 @@ function renderChart(games) {
   }
   const rows = [...months.values()];
   const el = $("chart");
-  if (!rows.length) { el.innerHTML = '<p class="muted">No games match.</p>'; return; }
+  if (!rows.length) { el.innerHTML = `<p class="muted">${esc(t("No games match."))}</p>`; return; }
   const W = 960, H = 260, L = 40, R = 8, T = 10, B = 28;
   const pw = (W - L - R) / rows.length;
   const bw = Math.max(2, Math.min(40, pw - 2));
   const y = (v) => T + (1 - v) * (H - T - B);
-  let svg = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Win rate by month">`;
+  let svg = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(t("Win rate by month"))}">`;
   for (const v of [0, 0.25, 0.5, 0.75, 1]) {
     svg += `<line class="${v === 0.5 ? "ref" : "grid"}" x1="${L}" x2="${W - R}" y1="${y(v)}" y2="${y(v)}"/>`;
     svg += `<text class="axis" x="${L - 6}" y="${y(v) + 4}" text-anchor="end">${v * 100}%</text>`;
@@ -355,7 +423,7 @@ function renderChart(games) {
   el.querySelectorAll("[data-i]").forEach((node) => {
     node.addEventListener("mousemove", (e) => {
       const m = rows[node.dataset.i];
-      tip.innerHTML = `<strong>${m.key}</strong><br>${pct(m.w / m.n)} win rate<br>${m.w}W ${m.n - m.w}L`;
+      tip.innerHTML = `<strong>${m.key}</strong><br>${esc(t("{wr} win rate", { wr: pct(m.w / m.n) }))}<br>${esc(t("{w} W · {l} L", { w: m.w, l: m.n - m.w }))}`;
       tip.hidden = false;
       tip.style.left = Math.min(e.clientX + 12, innerWidth - 160) + "px";
       tip.style.top = e.clientY + 12 + "px";
@@ -442,11 +510,11 @@ function renderKillMap(games) {
   }
 
   $("km-legend").innerHTML =
-    `<div class="km-key"><i style="background:var(--good)"></i>Kills<b>${kills.length.toLocaleString()}</b></div>` +
-    `<div class="km-key"><i style="background:var(--bad)"></i>Deaths<b>${deaths.length.toLocaleString()}</b></div>`;
-  let note = `From ${mapped.toLocaleString()} of ${games.length.toLocaleString()} games.`;
-  if (missing) note += " The rest have no positions yet: importing adds them, up to 200 games per import. Very old games may not have one.";
-  note += " The map skin isn't recorded, so pick one above.";
+    `<div class="km-key"><i style="background:var(--good)"></i>${esc(t("Kills"))}<b>${kills.length.toLocaleString()}</b></div>` +
+    `<div class="km-key"><i style="background:var(--bad)"></i>${esc(t("Deaths"))}<b>${deaths.length.toLocaleString()}</b></div>`;
+  let note = t("From {n} of {total} games.", { n: mapped.toLocaleString(), total: games.length.toLocaleString() });
+  if (missing) note += " " + t("The rest have no positions yet: importing adds them, up to 200 games per import. Very old games may not have one.");
+  note += " " + t("The map skin isn't recorded, so pick one above.");
   $("km-note").textContent = note;
 }
 
@@ -462,7 +530,7 @@ const sortState = {};
 const wrClass = (wr) => (wr >= 0.52 ? "wr-high" : wr <= 0.48 ? "wr-low" : "");
 
 function table(id, cols, rows, defaultSort) {
-  const t = $(id);
+  const el = $(id);
   const s = sortState[id] || (sortState[id] = { col: defaultSort, asc: false });
   const col = cols[s.col];
   rows.sort((a, b) => {
@@ -470,11 +538,11 @@ function table(id, cols, rows, defaultSort) {
     const c = typeof va === "string" ? va.localeCompare(vb) : va - vb;
     return s.asc ? c : -c;
   });
-  t.innerHTML = "<thead><tr>" + cols.map((c, i) =>
-    `<th data-c="${i}" class="${i === s.col ? "sorted" + (s.asc ? " asc" : "") : ""}">${c.label}</th>`).join("") +
+  el.innerHTML = "<thead><tr>" + cols.map((c, i) =>
+    `<th data-c="${i}" class="${i === s.col ? "sorted" + (s.asc ? " asc" : "") : ""}">${esc(t(c.label))}</th>`).join("") +
     "</tr></thead><tbody>" + rows.map((r) => "<tr>" + cols.map((c) =>
       `<td${c.cls ? ` class="${c.cls(r)}"` : ""}>${c.fmt ? c.fmt(r) : esc(c.get(r))}</td>`).join("") + "</tr>").join("") + "</tbody>";
-  t.querySelectorAll("th").forEach((th) => th.addEventListener("click", () => {
+  el.querySelectorAll("th").forEach((th) => th.addEventListener("click", () => {
     const c = +th.dataset.c;
     if (s.col === c) s.asc = !s.asc; else { s.col = c; s.asc = false; }
     render();
@@ -493,7 +561,7 @@ function group(games, keyFn) {
 
 function renderChamps(games) {
   const rows = group(games, (g) => g.champId);
-  $("n-champs").textContent = `${games.length.toLocaleString()} matches`;
+  $("n-champs").textContent = t("{n} matches", { n: games.length.toLocaleString() });
   table("t-champs", [
     { label: "Champion", get: (r) => champName(r.sample) },
     { label: "Matches", get: (r) => r.n },
@@ -510,7 +578,7 @@ function renderAugs(games) {
   table("t-augs", [
     { label: "Augment", get: (r) => augName(r.key), fmt: (r) => esc(augName(r.key)) },
     { label: "Tier", get: (r) => (RARITY[state.augRarity[r.key]] || ["", 0])[1],
-      fmt: (r) => { const t = RARITY[state.augRarity[r.key]]; return t ? `<span class="tier ${state.augRarity[r.key]}">${t[0]}</span>` : ""; } },
+      fmt: (r) => { const k = RARITY[state.augRarity[r.key]]; return k ? `<span class="tier ${state.augRarity[r.key]}">${esc(t(k[0]))}</span>` : ""; } },
     { label: "Picks", get: (r) => r.n },
     { label: "Pick rate", get: (r) => r.n / total, fmt: (r) => pct(r.n / total) },
     { label: "Win rate", get: (r) => r.w / r.n, fmt: (r) => pct(r.w / r.n), cls: (r) => wrClass(r.w / r.n) },
@@ -526,17 +594,17 @@ function wrBars(id, rows) {
   const shown = rows.filter((r) => r.n);
   $(id).innerHTML = shown.length ? shown.map((r) => {
     const rate = r.w / r.n;
-    return `<div class="wrbar"><span class="wb-label">${esc(r.label)}</span>
+    return `<div class="wrbar"><span class="wb-label">${esc(t(r.label))}</span>
       <span class="wb-track"><span class="wb-fill ${wrClass(rate)}" style="width:${(rate * 100).toFixed(1)}%"></span></span>
       <span class="wb-v ${wrClass(rate)}">${pct(rate)}</span><span class="wb-n">${r.n.toLocaleString()}</span></div>`;
-  }).join("") : `<p class="foot">No games in this view.</p>`;
+  }).join("") : `<p class="foot">${esc(t("No games in this view."))}</p>`;
 }
 
 const LENGTHS = [[0, 900, "Under 15 min"], [900, 1080, "15–18 min"], [1080, 1260, "18–21 min"], [1260, 1440, "21–24 min"], [1440, 1e9, "24 min or more"]];
 
 function renderLength(games) {
   const timed = games.filter((g) => g.duration > 0);
-  $("n-length").textContent = timed.length ? `Average ${mmss(sum(timed, (g) => g.duration) / timed.length)}` : "";
+  $("n-length").textContent = timed.length ? t("Average {time}", { time: mmss(sum(timed, (g) => g.duration) / timed.length) }) : "";
   wrBars("wr-length", LENGTHS.map(([lo, hi, label]) => {
     const G = timed.filter((g) => g.duration >= lo && g.duration < hi);
     return { label, n: G.length, w: count(G, (g) => g.win) };
@@ -571,7 +639,7 @@ function renderRecords(G) {
     let best = null, bv = -Infinity;
     for (const g of G) { const v = f(g); if (v > bv) { bv = v; best = g; } }
     if (!best || !Number.isFinite(bv) || bv <= 0 && !label.startsWith("Fastest")) return "";
-    return `<div class="record"><div class="r-v">${fmt(bv)}</div><div class="r-label">${label}</div>
+    return `<div class="record"><div class="r-v">${fmt(bv)}</div><div class="r-label">${esc(t(label))}</div>
       <div class="r-sub">${esc(champName(best))} · ${fmtDate(new Date(best.time))}</div></div>`;
   }).join("");
 }
@@ -635,21 +703,20 @@ function renderAllies(games) {
     r.n++; r.w += g.win ? 1 : 0;
     map.set(id, r);
   }
-  const name = (id) => state.champNames[id] || `Champion ${id}`;
   const rows = [...map.values()].filter((r) => r.n >= min).sort((x, y) => y.w / y.n - x.w / x.n || y.n - x.n).slice(0, 100);
   table("t-allies", [
-    { label: "Teammate", get: (r) => name(r.id), fmt: (r) => esc(name(r.id)) },
+    { label: "Teammate", get: (r) => champById(r.id), fmt: (r) => esc(champById(r.id)) },
     { label: "Games", get: (r) => r.n },
     { label: "Win rate", get: (r) => r.w / r.n + r.n / 1e6, fmt: (r) => pct(r.w / r.n), cls: (r) => wrClass(r.w / r.n) },
   ], rows, 2);
 }
 
 function renderGames(games) {
-  $("n-games").textContent = games.length > 200 ? `Latest 200 of ${games.length.toLocaleString()} matches` : `${games.length.toLocaleString()} matches`;
+  $("n-games").textContent = games.length > 200 ? t("Latest 200 of {n} matches", { n: games.length.toLocaleString() }) : t("{n} matches", { n: games.length.toLocaleString() });
   table("t-games", [
     { label: "Date", get: (r) => r.time, fmt: (r) => fmtDate(new Date(r.time)) },
     { label: "Champion", get: (r) => champName(r), fmt: (r) => esc(champName(r)) },
-    { label: "Result", get: (r) => +r.win, fmt: (r) => (r.win ? "Win" : "Loss"), cls: (r) => (r.win ? "win" : "loss") },
+    { label: "Result", get: (r) => +r.win, fmt: (r) => t(r.win ? "Win" : "Loss"), cls: (r) => (r.win ? "win" : "loss") },
     { label: "K / D / A", get: (r) => (r.kills + r.assists) / Math.max(1, r.deaths), fmt: (r) => `${r.kills} / ${r.deaths} / ${r.assists}` },
     { label: "Damage", get: (r) => r.damage, fmt: (r) => r.damage.toLocaleString() },
     { label: "Length", get: (r) => r.duration, fmt: (r) => `${Math.floor(r.duration / 60)}:${String(r.duration % 60).padStart(2, "0")}` },
@@ -667,7 +734,7 @@ function renderGames(games) {
 const syncBtns = [...document.querySelectorAll(".sync-btn")];
 const syncStatus = $("sync-status");
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
-const OFFLINE_HINT = "Connect to the Riot Client first: open it on this computer and sign in, then open this page from Open Mayhem Stats.command.";
+const OFFLINE_HINT = () => t("Connect to the Riot Client first: open it on this computer and sign in, then open this page from Open Mayhem Stats.command.");
 let helperOnline = false;
 // The helper serves this page at its root; the site's copy (under /embed/) has no helper behind it, so it
 // never asks for the archive or the helper's endpoints.
@@ -695,24 +762,24 @@ async function watchSync() {
   try {
     let s = await syncState();
     while (s.running) {
-      setSyncStatus(s.log.at(-1) || "Importing…");
+      setSyncStatus(s.log.length ? t(s.log.at(-1)) : t("Importing…"));
       await sleep(1000);
       s = await syncState();
     }
     if (s.error) {
-      setSyncStatus(s.error, true);
+      setSyncStatus(t(s.error), true);
     } else if (s.result) {
       const { added, total, failed } = s.result;
       await reloadArchive();
       const summary = added
-        ? `Added ${added} new game${added === 1 ? "" : "s"}. ${total} in your archive.`
-        : `Up to date. ${total} games in your archive.`;
-      setSyncStatus(summary + (failed ? ` ${failed} couldn't be fetched; import again to retry them.` : "")
-        + ((s.result.notes || []).filter((n) => n.startsWith("Sharing")).map((n) => " " + n).join("")));
+        ? t(added === 1 ? "Added 1 new game. {total} in your archive." : "Added {n} new games. {total} in your archive.", { n: added, total })
+        : t("Up to date. {total} games in your archive.", { total });
+      setSyncStatus(summary + (failed ? " " + t("{n} couldn't be fetched; import again to retry them.", { n: failed }) : "")
+        + ((s.result.notes || []).filter((n) => n.startsWith("Sharing")).map((n) => " " + t(n)).join("")));
       if (s.result.shared !== undefined) showShare({ enabled: true, shared: s.result.shared });
     }
   } catch (e) {
-    setSyncStatus("Lost contact with the sync helper. Is it still running?", true);
+    setSyncStatus(t("Lost contact with the sync helper. Is it still running?"), true);
   } finally {
     for (const b of syncBtns) b.disabled = false;
   }
@@ -720,16 +787,16 @@ async function watchSync() {
 
 const startSync = async () => {
   if (!helperOnline) {
-    if (!ON_HELPER) return setSyncStatus(OFFLINE_HINT);
+    if (!ON_HELPER) return setSyncStatus(OFFLINE_HINT());
     // the helper may have been started since the page loaded
-    try { await syncState(); helperOnline = true; } catch (e) { return setSyncStatus(OFFLINE_HINT); }
+    try { await syncState(); helperOnline = true; } catch (e) { return setSyncStatus(OFFLINE_HINT()); }
   }
-  setSyncStatus("Starting…");
+  setSyncStatus(t("Starting…"));
   try {
     const res = await fetch("api/sync", { method: "POST", headers: { "X-Mayhem": "1" } });
     if (!res.ok && res.status !== 409) throw new Error(String(res.status));
   } catch (e) {
-    return setSyncStatus("Couldn't reach the sync helper.", true);
+    return setSyncStatus(t("Couldn't reach the sync helper."), true);
   }
   watchSync();
 };
@@ -747,6 +814,7 @@ async function setupSync() {
 
 // Opened from the sync helper, load the archive it keeps.
 (async () => {
+  await loadLang();
   if (PRESET.sample) return loadText(JSON.stringify(PRESET.sample), { sample: true });
   if (ON_HELPER) {
     try {
@@ -789,12 +857,12 @@ function profileSummary(G) {
 
 function showProfile(p) {
   const on = !!(p && p.published);
-  profileText.textContent = on
+  profileText.textContent = t(on
     ? "Your public page is live. Update it after importing new games, or remove it any time."
-    : "Off. Publish a public page with your totals, top champions and achievements. Your individual games stay on this computer.";
+    : "Off. Publish a public page with your totals, top champions and achievements. Your individual games stay on this computer.");
   profileLink.hidden = !on;
   if (on) { profileLink.href = p.url; profileLink.textContent = p.url.replace(/^https?:\/\//, ""); }
-  profileBtns.publish.textContent = on ? "Update my page" : "Publish my page";
+  profileBtns.publish.textContent = t(on ? "Update my page" : "Publish my page");
   profileBtns.remove.hidden = !on;
 }
 
@@ -804,12 +872,12 @@ async function profileCall(action, data) {
     body: JSON.stringify({ action, data }),
   });
   const j = await res.json().catch(() => ({}));
-  if (!res.ok) throw new Error(j.error || "Something went wrong. Try again.");
+  if (!res.ok) throw new Error(t(j.error || "Something went wrong. Try again."));
   return j;
 }
 
 async function profileAction(action) {
-  if (action === "remove" && !confirm("Remove your public page? Anyone with the link will see it's gone.")) return;
+  if (action === "remove" && !confirm(t("Remove your public page? Anyone with the link will see it's gone."))) return;
   for (const b of Object.values(profileBtns)) b.disabled = true;
   try {
     showProfile(await profileCall(action, action === "publish" ? profileSummary(state.games) : undefined));
@@ -841,18 +909,20 @@ $("link-form").addEventListener("submit", async (e) => {
   const input = $("link-code");
   const code = input.value.trim().toUpperCase();
   linkStatus.hidden = false;
-  if (!/^[A-Z0-9]{8}$/.test(code)) { linkStatus.textContent = "Enter the 8-character code from your account page."; return; }
+  if (!/^[A-Z0-9]{8}$/.test(code)) { linkStatus.textContent = t("Enter the 8-character code from your account page."); return; }
   const btn = e.submitter || $("link-form").querySelector("button");
   btn.disabled = true;
-  linkStatus.textContent = "Connecting…";
+  linkStatus.textContent = t("Connecting…");
   try {
     const res = await fetch("api/profile", {
       method: "POST", headers: { "X-Mayhem": "1", "Content-Type": "application/json" },
       body: JSON.stringify({ action: "link", code }),
     });
     const j = await res.json().catch(() => ({}));
-    if (!res.ok || !j.linked) throw new Error(j.error || "Something went wrong. Try again.");
-    linkStatus.textContent = `Connected ${j.riotId || "your Riot account"}. Reload your account page on deeparam.com to see it.`;
+    if (!res.ok || !j.linked) throw new Error(t(j.error || "Something went wrong. Try again."));
+    linkStatus.textContent = j.riotId
+      ? t("Connected {riotId}. Reload your account page on deeparam.com to see it.", { riotId: j.riotId })
+      : t("Connected your Riot account. Reload your account page on deeparam.com to see it.");
     input.value = "";
   } catch (err) {
     linkStatus.textContent = err.message;
@@ -872,7 +942,7 @@ const shareBox = $("share-on");
 
 function showShare(st) {
   shareBox.checked = !!st.enabled;
-  $("share-count").textContent = st.enabled && st.shared ? `${st.shared.toLocaleString()} games shared` : "";
+  $("share-count").textContent = st.enabled && st.shared ? t("{n} games shared", { n: st.shared.toLocaleString() }) : "";
 }
 
 async function shareCall(body) {
@@ -880,20 +950,20 @@ async function shareCall(body) {
     method: "POST", headers: { "X-Mayhem": "1", "Content-Type": "application/json" }, body: JSON.stringify(body || {}),
   });
   const j = await res.json().catch(() => ({}));
-  if (!res.ok) throw new Error(j.error || "Something went wrong. Try again.");
+  if (!res.ok) throw new Error(t(j.error || "Something went wrong. Try again."));
   return j;
 }
 
 shareBox.addEventListener("change", async () => {
   const on = shareBox.checked;
-  if (!on && !confirm("Stop sharing and remove the games you've shared?")) { shareBox.checked = true; return; }
+  if (!on && !confirm(t("Stop sharing and remove the games you've shared?"))) { shareBox.checked = true; return; }
   const note = $("share-status");
   shareBox.disabled = true;
   note.hidden = false;
-  note.textContent = on ? "Sharing your games…" : "Removing your shared games…";
+  note.textContent = t(on ? "Sharing your games…" : "Removing your shared games…");
   try {
     showShare(await shareCall({ enabled: on }));
-    note.textContent = on ? "Sharing is on. New games are shared after each import." : "Sharing is off and your shared games were removed.";
+    note.textContent = t(on ? "Sharing is on. New games are shared after each import." : "Sharing is off and your shared games were removed.");
   } catch (e) {
     shareBox.checked = !on;
     note.textContent = e.message;
@@ -957,8 +1027,8 @@ async function skinsFor(champId) {
     const c = await (await fetch(`/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champions/${champId}.json`)).json();
     const own = state.owned && new Set(state.owned.skins);
     return (c.skins || []).filter((k) => k.id % 1000 === 0 || !own || own.has(k.id))
-      .map((k) => ({ num: k.id % 1000, name: k.id % 1000 ? k.name : "Default" }));
-  } catch (e) { return [{ num: 0, name: "Default" }]; }
+      .map((k) => ({ num: k.id % 1000, name: k.id % 1000 ? k.name : t("Default") }));
+  } catch (e) { return [{ num: 0, name: t("Default") }]; }
 }
 
 async function setupBanner() {
@@ -971,9 +1041,9 @@ async function setupBanner() {
 
   const champSel = $("banner-champ"), skinSel = $("banner-skin");
   const pool = state.owned ? state.owned.champions.filter((id) => state.champAlias[id]) : ids;
-  champSel.innerHTML = pool.map((id) => [id, state.champNames[id] || state.champAlias[id]]).sort((a, b) => a[1].localeCompare(b[1]))
+  champSel.innerHTML = pool.map((id) => [id, localName(id) || state.champNames[id] || state.champAlias[id]]).sort((a, b) => a[1].localeCompare(b[1], LANG))
     .map(([id, name]) => `<option value="${state.champAlias[id]}">${esc(name)}</option>`).join("");
-  $("banner-note").textContent = state.owned ? "Champions and skins you own" : "Import games to pick from the skins you own";
+  $("banner-note").textContent = t(state.owned ? "Champions and skins you own" : "Import games to pick from the skins you own");
 
   async function fillSkins(alias, num) {
     const skins = await skinsFor(byAlias[alias]);
@@ -1001,7 +1071,7 @@ async function setupBanner() {
 // matched to its synced game by champion and start time, which supplies the result and damage.
 
 const MATCH_WINDOW_MS = 5 * 60 * 1000;
-const terrainName = (r) => (r.mapTerrain && r.mapTerrain !== "Default" ? r.mapTerrain.replace(/([a-z])([A-Z])/g, "$1 $2") : MAP_NAMES[r.map] || `Map ${r.map}`);
+const terrainName = (r) => (r.mapTerrain && r.mapTerrain !== "Default" ? r.mapTerrain.replace(/([a-z])([A-Z])/g, "$1 $2") : t(MAP_NAMES[r.map] || "Map {id}", { id: r.map }));
 const lastSnap = (r) => r.snapshots[r.snapshots.length - 1] || { stats: {}, items: [], augments: [] };
 
 function matchGame(r) {
@@ -1009,7 +1079,7 @@ function matchGame(r) {
   let best = null;
   for (const g of state.games) {
     const dt = Math.abs(g.time - r.startedAt);
-    if (dt < MATCH_WINDOW_MS && (champName(g) === champ || g.champNameRaw === champ) && (!best || dt < best.dt)) best = { g, dt };
+    if (dt < MATCH_WINDOW_MS && (champName(g) === champ || state.champNames[g.champId] === champ || g.champNameRaw === champ) && (!best || dt < best.dt)) best = { g, dt };
   }
   return best && best.g;
 }
@@ -1033,7 +1103,7 @@ function renderLive() {
     { label: "Date", get: (x) => x.r.startedAt, fmt: (x) => fmtDate(new Date(x.r.startedAt)) },
     { label: "Champion", get: (x) => x.r.player.champion || "", fmt: (x) => esc(x.r.player.champion || "") },
     { label: "Map", get: (x) => terrainName(x.r), fmt: (x) => esc(terrainName(x.r)) },
-    { label: "Result", get: (x) => (x.g ? +x.g.win : -1), fmt: (x) => (x.g ? (x.g.win ? "Win" : "Loss") : "Not synced"), cls: (x) => (x.g ? (x.g.win ? "win" : "loss") : "") },
+    { label: "Result", get: (x) => (x.g ? +x.g.win : -1), fmt: (x) => t(x.g ? (x.g.win ? "Win" : "Loss") : "Not synced"), cls: (x) => (x.g ? (x.g.win ? "win" : "loss") : "") },
     { label: "Length", get: (x) => x.r.gameTime, fmt: (x) => mmss(x.r.gameTime) },
     { label: "Level", get: (x) => x.last.level || 0 },
     { label: "AD", get: (x) => st(x, "attackDamage") },
@@ -1054,7 +1124,7 @@ function renderLive() {
   });
   table("t-picks", [
     { label: "Augment", get: (r) => augLabel(r.id), fmt: (r) => esc(augLabel(r.id)) },
-    { label: "Pick", get: (r) => r.pick, fmt: (r) => ["1st", "2nd", "3rd"][r.pick - 1] || r.pick + "th" },
+    { label: "Pick", get: (r) => r.pick, fmt: (r) => t(["1st", "2nd", "3rd"][r.pick - 1] || "{n}th", { n: r.pick }) },
     { label: "Games", get: (r) => r.n },
     { label: "Win rate", get: (r) => r.w / r.n + r.n / 1e6, fmt: (r) => pct(r.w / r.n), cls: (r) => wrClass(r.w / r.n) },
   ], [...picks.values()], 3);
@@ -1072,7 +1142,7 @@ async function setupLive() {
     if (!live.enabled) return;
     state.live = (live.games || []).filter((r) => r && r.player && Array.isArray(r.snapshots));
     $("live-card").hidden = false;
-    $("live-status").textContent = live.recording ? `Recording a game (${live.recording})` : `${state.live.length} recorded`;
+    $("live-status").textContent = live.recording ? t("Recording a game ({champion})", { champion: live.recording }) : t("{n} recorded", { n: state.live.length });
     renderLive();
   } catch (e) { /* older helper without recording */ }
 }
