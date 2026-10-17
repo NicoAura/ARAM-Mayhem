@@ -113,8 +113,6 @@
  "Everything ARAM Mayhem.": "كل شيء عن آرام: الفوضى.",
  "Every Mayhem pick, measured.": "كل اختيار في آرام: الفوضى، مقاسًا.",
  "Win rates for every champion and augment on the current patch, and a fight simulator for every champion.": "نسب فوز كل بطل وتعزيز على التحديث الحالي، ومحاكي معارك لكل بطل.",
- "days of games this patch": "يومًا من المباريات في هذا التحديث",
- "days of games, all time": "يومًا من المباريات إجمالًا",
  "All {n} →": "كل الـ {n} ←",
  "Best augments": "أفضل التعزيزات",
  "All →": "الكل ←",
@@ -149,8 +147,6 @@
  "Silver": "فضي",
  "Gold": "ذهبي",
  "Prismatic": "منشوري",
- "patches covered": "تحديثات مشمولة",
- "games shared by players": "مباراة شاركها اللاعبون",
  "Share": "مشاركة",
  "Link copied": "تم نسخ الرابط",
  "Copy this link": "انسخ هذا الرابط"

@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import championNames from "@/data/champion-names.json";
 import Intro from "@/components/Intro";
-import OpenBuild from "./OpenBuild";
+import OpenLink from "@/components/OpenLink";
 
 // A shared build's link (/share/builds?champ=Jinx&items=…&augs=…&tab=editor), made by the Share button on
 // the Builds page. Link previews get the champion's splash and name; a visitor goes straight on to the
@@ -43,7 +43,7 @@ export default async function ShareBuildPage({ searchParams }: Props) {
   const { name, href } = await target(searchParams);
   return (
     <Intro eyebrow="Builds" title={name ? `${name} build` : "Shared build"}>
-      <OpenBuild href={href} />
+      <OpenLink href={href} />
       <Link className="inline-link" href={href}>
         Open the build →
       </Link>

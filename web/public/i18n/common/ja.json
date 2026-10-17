@@ -113,8 +113,6 @@
  "Everything ARAM Mayhem.": "メイヘムのすべてを。",
  "Every Mayhem pick, measured.": "メイヘムのすべての選択を数値で。",
  "Win rates for every champion and augment on the current patch, and a fight simulator for every champion.": "現在のパッチでの全チャンピオンと全オーグメントの勝率、そして全チャンピオンの戦闘シミュレーター。",
- "days of games this patch": "日分の試合（今パッチ）",
- "days of games, all time": "日分の試合（全期間）",
  "All {n} →": "全{n}体 →",
  "Best augments": "おすすめオーグメント",
  "All →": "すべて →",
@@ -149,8 +147,6 @@
  "Silver": "シルバー",
  "Gold": "ゴールド",
  "Prismatic": "プリズム",
- "patches covered": "パッチ分のデータ",
- "games shared by players": "件の試合がプレイヤーから共有",
  "Share": "共有",
  "Link copied": "リンクをコピーしました",
  "Copy this link": "このリンクをコピー"

@@ -113,8 +113,6 @@
  "Everything ARAM Mayhem.": "ทุกอย่างเกี่ยวกับ ARAM: Mayhem",
  "Every Mayhem pick, measured.": "ทุกการเลือกใน ARAM: Mayhem วัดผลด้วยตัวเลข",
  "Win rates for every champion and augment on the current patch, and a fight simulator for every champion.": "อัตราชนะของทุกแชมเปี้ยนและ Augment บนแพตช์ปัจจุบัน และซิมูเลเตอร์การต่อสู้ของทุกแชมเปี้ยน",
- "days of games this patch": "วันของเกมในแพตช์นี้",
- "days of games, all time": "วันของเกมทั้งหมด",
  "All {n} →": "ทั้งหมด {n} →",
  "Best augments": "Augments ที่ดีที่สุด",
  "All →": "ทั้งหมด →",
@@ -149,8 +147,6 @@
  "Silver": "Silver",
  "Gold": "Gold",
  "Prismatic": "Prismatic",
- "patches covered": "แพตช์ที่ครอบคลุม",
- "games shared by players": "เกมที่ผู้เล่นแชร์",
  "Share": "แชร์",
  "Link copied": "คัดลอกลิงก์แล้ว",
  "Copy this link": "คัดลอกลิงก์นี้"

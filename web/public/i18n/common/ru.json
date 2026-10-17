@@ -113,8 +113,6 @@
  "Everything ARAM Mayhem.": "Всё об ARAM: Хаос.",
  "Every Mayhem pick, measured.": "Каждый выбор в ARAM: Хаос в цифрах.",
  "Win rates for every champion and augment on the current patch, and a fight simulator for every champion.": "Процент побед каждого чемпиона и аугментации на текущем патче и симулятор боёв для каждого чемпиона.",
- "days of games this patch": "дней игр в этом патче",
- "days of games, all time": "дней игр за всё время",
  "All {n} →": "Все {n} →",
  "Best augments": "Лучшие аугментации",
  "All →": "Все →",
@@ -149,8 +147,6 @@
  "Silver": "Серебряная",
  "Gold": "Золотая",
  "Prismatic": "Призматическая",
- "patches covered": "патчей охвачено",
- "games shared by players": "игр отправлено игроками",
  "Share": "Поделиться",
  "Link copied": "Ссылка скопирована",
  "Copy this link": "Скопируйте эту ссылку"
