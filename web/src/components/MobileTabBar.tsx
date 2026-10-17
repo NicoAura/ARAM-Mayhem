@@ -65,7 +65,7 @@ export default function MobileTabBar({ tabs }: { tabs: Tab[] }) {
         {primary.map((t) => (
           <Link key={t.href} href={t.href} data-accent={ACCENT[t.href]} aria-current={isActive(t.href) ? "page" : undefined}>
             <Icon name={t.href} />
-            <span>{tr(t.href === "/tier-list" ? "Tiers" : t.label)}</span>
+            <span>{tr(t.label)}</span>
           </Link>
         ))}
         <button

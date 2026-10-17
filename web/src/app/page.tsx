@@ -101,7 +101,7 @@ export default function Home() {
               <h2>
                 <T>Best augments</T>
               </h2>
-              <Link href="/augments">
+              <Link href="/tier-list?tab=augments">
                 <T>All →</T>
               </Link>
             </div>
@@ -243,9 +243,6 @@ export default function Home() {
               <h2>
                 <T>Winning builds this patch</T>
               </h2>
-              <Link href="/builds">
-                <T>Builds →</T>
-              </Link>
             </div>
             <div className="rank home-builds">
               {wins.map((c) => (

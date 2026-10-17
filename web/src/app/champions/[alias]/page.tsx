@@ -94,9 +94,6 @@ export default async function ChampionPage({ params }: { params: Promise<{ alias
           <Link className="inline-link" href={`/builds?tab=compare&a=${c.alias}`}>
             Compare with another champion
           </Link>
-          <Link className="inline-link" href={`/builds?champ=${c.alias}`}>
-            What should I build?
-          </Link>
           <Link className="inline-link" href={`/builds?tab=editor&champ=${c.alias}`}>
             Try a build
           </Link>

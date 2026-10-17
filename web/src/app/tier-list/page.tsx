@@ -8,7 +8,8 @@ import DataTable from "@/components/DataTable";
 import DuosTable from "@/components/DuosTable";
 import { hasDuos } from "@/lib/duos";
 import { augmentHref } from "@/lib/augments";
-import { augmentTiers } from "@/lib/augment-tiers";
+import { augmentTiers, STYLES } from "@/lib/augment-tiers";
+import AugmentTiers from "@/components/AugmentTiers";
 import { augmentRows, type RawAugment } from "@/lib/augment-winrate";
 import { AUGMENT_DEEPSCORE_HELP } from "@/lib/deepscore";
 import championIds from "@/data/champion-ids.json";
@@ -102,12 +103,10 @@ export default function TierListPage() {
       label: "Augments",
       content: (
         <>
+          <AugmentTiers rows={augmentTiers()} styles={STYLES} />
           <p className="patch-note">
-            Augments are for the live patch ({latest.patch}). See them as an{" "}
-            <Link className="inline-link" href="/augments">
-              S to D tier list with style filters
-            </Link>
-            .
+            Live patch {latest.patch}. Each augment gets a DeepScore against the others of its rarity: 50 is average, S is 70 and up, A 59, B 44, C 32 and D below. Every number is in
+            the table below.
           </p>
           <DataTable
             columns={augCols}

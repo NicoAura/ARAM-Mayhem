@@ -6,7 +6,6 @@ const PAGES = [
   "/",
   "/tier-list",
   "/tier-list?tab=augments",
-  "/augments?rarity=gold&style=ap",
   "/simulator",
   "/pbe",
   "/info",
@@ -17,7 +16,6 @@ const PAGES = [
   "/champions/Ahri",
   "/champions/Yunara",
   "/builds",
-  "/builds?tab=editor",
   "/builds?tab=compare&a=Jinx&b=Ezreal",
   "/builds?tab=team",
   "/augments?tab=draft",
@@ -91,7 +89,6 @@ test("old addresses redirect to the current tabs", async ({ page }) => {
   }
   // Pages merged into Builds and Augments: the tab is picked and the old query kept.
   for (const [from, path, tab, keep] of [
-    ["/what-to-build?champ=Jinx", "/builds", null, "champ"],
     ["/builder", "/builds", "editor", null],
     ["/compare?a=Jinx", "/builds", "compare", "a"],
     ["/synergy", "/builds", "team", null],
@@ -102,6 +99,18 @@ test("old addresses redirect to the current tabs", async ({ page }) => {
     expect(url.pathname, from!).toBe(path);
     expect(url.searchParams.get("tab"), from!).toBe(tab);
     if (keep) expect(url.searchParams.get(keep), from!).toBeTruthy();
+  }
+  // What to build moved to champion pages, and the augment tier list to the Tier List.
+  for (const [from, to] of [
+    ["/builds?champ=Jinx", "/champions/Jinx"],
+    ["/what-to-build?champ=Jinx", "/champions/Jinx"],
+    ["/builds?tab=helper", "/tier-list"],
+    ["/augments?tab=tiers", "/tier-list"],
+    ["/augments?rarity=gold&style=ap", "/tier-list"],
+  ]) {
+    await page.goto(from);
+    expect(new URL(page.url()).pathname, from).toBe(to);
+    if (to === "/tier-list" && from.startsWith("/augments")) expect(new URL(page.url()).searchParams.getAll("tab"), from).toEqual(["augments"]);
   }
   // The Lab is The Kitchen now; a deep link keeps its #hash.
   await page.goto("/lab#chefs-special");
