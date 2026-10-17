@@ -43,6 +43,11 @@ export default async function ChampionPage({ params }: { params: Promise<{ alias
           {c.name} <span className="champ-hero-sub">ARAM Mayhem build</span>
         </h1>
         {c.title && <p className="lede">{c.title.charAt(0).toUpperCase() + c.title.slice(1)}</p>}
+        <p className="champ-hero-links">
+          <Link className="inline-link" href={`/compare?a=${c.alias}`}>
+            Compare with another champion
+          </Link>
+        </p>
         {c.winRate !== undefined && (
           <div className="stat-row">
             <div>
