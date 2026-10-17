@@ -259,7 +259,7 @@ fieldset.wide { grid-column: 1 / -1; }
       <button id="kitchenBtn" type="button">Submit to The Kitchen</button>
       <form class="kitchen-form" id="kitchenForm" hidden>
         <label>Title <input id="kitchenTitle" type="text" minlength="3" maxlength="60" required placeholder="Name your build"></label>
-        <label>Why it works <textarea id="kitchenDesc" maxlength="280" rows="3" placeholder="A sentence or two for other players"></textarea></label>
+        <label>Why it works <textarea id="kitchenDesc" minlength="20" maxlength="280" required rows="3" placeholder="A sentence or two for other players"></textarea></label>
         <div><button class="primary" type="submit" id="kitchenSend">Send</button> <button type="button" id="kitchenCancel">Cancel</button></div>
       </form>
       <span id="kitchenNote" aria-live="polite"></span>

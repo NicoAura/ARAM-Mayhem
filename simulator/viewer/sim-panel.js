@@ -646,6 +646,7 @@
     if (!kitchen) return;
     const title = $("kitchenTitle").value.trim(), description = $("kitchenDesc").value.trim();
     if (title.length < 3) { kitchenNote(T("Give your build a title of at least 3 characters.")); $("kitchenTitle").focus(); return; }
+    if (description.length < 20) { kitchenNote(T("Write at least 20 characters on why it works.")); $("kitchenDesc").focus(); return; }
     $("kitchenSend").disabled = true;
     kitchenNote(T("Sending…"));
     try {
@@ -662,12 +663,12 @@
         kitchenNote(T("Sign in to send builds to The Kitchen."), { href: "/account", text: T("Sign in") });
         return;
       }
-      if (r.status === 404) throw new Error(T("The Kitchen isn't taking builds yet. Try again soon."));
+      if (r.status === 404) throw new Error(T("Submissions open soon."));
       if (!r.ok) throw new Error(b.error || "");
       $("kitchenForm").hidden = true;
       $("kitchenTitle").value = ""; $("kitchenDesc").value = "";
       kitchen = null;
-      kitchenNote(T("Sent. Your build shows in The Kitchen once it's been reviewed."));
+      kitchenNote(T("Sent! It shows in The Kitchen once it's approved."));
     } catch (err) {
       kitchenNote(err.message || T("The Kitchen couldn't be reached. Try again in a moment."));
     } finally {
