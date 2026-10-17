@@ -2068,6 +2068,20 @@ window.GUIDE_DATA = {
   ],
   "selectionAugments": [
    {
+    "id": 1237,
+    "name": "Transmute: Gold",
+    "tier": "Silver",
+    "icon": "/assets/cd/latest/game/assets/ux/cherry/augments/icons/transmutegold_small.png",
+    "text": "Gain a random Gold Augment."
+   },
+   {
+    "id": 1238,
+    "name": "Transmute: Prismatic",
+    "tier": "Gold",
+    "icon": "/assets/cd/latest/game/assets/ux/cherry/augments/icons/transmuteprismatic_small.png",
+    "text": "Gain a random Prismatic Augment."
+   },
+   {
     "id": 1337,
     "name": "King Me",
     "tier": "Prismatic",
@@ -2080,6 +2094,13 @@ window.GUIDE_DATA = {
     "tier": "Prismatic",
     "icon": "/assets/cd/latest/game/assets/ux/cherry/augments/icons/statsonstatsonstats_small.png",
     "text": "Gain 4 Stat Anvils, with a higher chance of Gold and Prismatic Anvils! On your next Augment selection, gain one additional reroll per slot."
+   },
+   {
+    "id": 1243,
+    "name": "Transmute: Chaos",
+    "tier": "Prismatic",
+    "icon": "/assets/cd/latest/game/assets/ux/cherry/augments/icons/transmutechaos_small.png",
+    "text": "Gain 2 random Augments."
    }
   ],
   "goldenReroll": {

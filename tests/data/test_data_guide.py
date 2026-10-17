@@ -231,6 +231,20 @@ def test_progression_track(guide, rules):
     assert sum(r["kind"] == "Augment" for r in t["levels"]) >= t["size"] / 3
 
 
+def test_augment_details(guide, rules):
+    d = load_json("guide/augment_details.json")
+    assert d["patch"] == guide["patch"]
+    assert set(d["augments"]) == set(rules["tiers"])
+    unlocks = rules.get("unlocks", {})
+    for aid, a in d["augments"].items():
+        assert a["name"] and a["tier"] == rules["tiers"][aid]
+        for t in (a["text"], a["tooltip"]):
+            assert not re.search(r"@|\{\{|%i:|\?(?=[\s%.,/)]|$)", t), (a["name"], t)
+        assert all(isinstance(v, (int, float, list)) for v in a["values"].values())
+        assert a["unlockLevel"] == unlocks.get(aid)
+    assert any(a["grants"] for a in d["augments"].values())
+
+
 def test_granted_items(rules):
     ids = [g["id"] for g in rules["grantedItems"]]
     assert len(ids) == len(set(ids))

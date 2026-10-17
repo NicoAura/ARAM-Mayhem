@@ -223,6 +223,13 @@ def main():
                                    "tier": TIERS[a.get("rarity", 0)], "icon": asset(a["AugmentSmallIconPath"]),
                                    "text": strip_unknown(s(a.get("DescriptionTra")).split('"')[0])})
 
+    def expand(t):
+        """Pull in strings referenced by key ({{ Some_Key }}) and drop inline icon tokens (%i:name%)."""
+        t = re.sub(r"\{\{\s*spellname\s*\}\}", "{{SpellName}}", t or "", flags=re.I)
+        for _ in range(3):
+            t = re.sub(r"\{\{\s*(?!SpellName\b)([A-Za-z0-9_]+)\s*\}\}", lambda m: s(m.group(1)), t)
+        return re.sub(r"%i:[A-Za-z0-9_]+%\s*", "", t)
+
     # ---- Live augments' text, for the rules below
     live = []
     for path in sorted(in_pool):
@@ -230,18 +237,37 @@ def main():
         if a and a.get("Enabled") is not False:
             sp = (kiwi.get(a.get("RootSpell")) or {}).get("mSpell") or {}
             values = {d["name"].lower(): d["values"][0] for d in sp.get("DataValues") or [] if d.get("values")}
-            text = " ".join(fill(s(a.get("DescriptionTra")), values, None, None).split())
-            text = re.sub(r"\s+([.,%)])", r"\1", re.sub(r"\s*\?(?=[\s%.,]|$)", "", text))
+            text = " ".join(fill(expand(s(a.get("DescriptionTra"))), values, None, None).split())
+            text = " ".join(x for x in re.split(r"(?<=[.!])\s+", text) if not re.search(r"\?(?=[\s%.,/)s]|$)", x))
+            raw_tip = expand(s(a.get("AugmentTooltipTra")) or s(a.get("DescriptionTra")))
+            tip = fill(raw_tip, values, None, None)
+            # a sentence with a number the client doesn't hold (a live counter or a formula) is dropped, not half-shown
+            tip = "\n".join(" ".join(x for x in re.split(r"(?<=[.!])\s+", l) if not re.search(r"\?(?=[\s%.,/)]|$)", x)).strip()
+                            for l in tip.split("\n"))
+            if "{{" in tip:  # a pulled-in string the client doesn't have: use the short description instead
+                tip = text
+            grants = re.findall(r"<spellName>([^<]+)</spellName>", raw_tip)
+            m = re.search(r"Gain the (.+?) Keystone Runes?", text)
+            if m:
+                grants = [r.strip() for r in re.split(r",| and ", m.group(1)) if r.strip()] + grants
+            nums = {}
+            for d in sp.get("DataValues") or []:
+                v = [round(x, 4) for x in d.get("values") or [] if x is not None]
+                if v:
+                    nums[d["name"]] = v[0] if len(set(v)) == 1 else v
             live.append({"id": a.get("AugmentPlatformId"), "name": s(a["NameTra"], a["AugmentNameId"]),
-                         "tier": TIERS[a.get("rarity", 0)], "icon": asset(a["AugmentSmallIconPath"]), "text": text})
+                         "tier": TIERS[a.get("rarity", 0)], "icon": asset(a["AugmentSmallIconPath"]), "text": text,
+                         "tooltip": re.sub(r"\n{3,}", "\n\n", tip).strip(), "grants": list(dict.fromkeys(grants)),
+                         "values": nums})
     live.sort(key=lambda a: (TIERS.index(a["tier"]), a["name"]))
+    brief = lambda a: {k: a[k] for k in ("id", "name", "tier", "icon", "text")}  # noqa: E731
 
     # ---- Champion select: no rune page, so keystones only come from augments; spells regular ARAM has but Mayhem lacks
     keystones = []
     for a in live:
         m = re.search(r"Gain the (.+?) Keystone Runes?", a["text"])
         if m:
-            keystones.append({**a, "runes": [r.strip() for r in re.split(r",| and ", m.group(1)) if r.strip()]})
+            keystones.append({**brief(a), "runes": [r.strip() for r in re.split(r",| and ", m.group(1)) if r.strip()]})
     champ_select = {
         "runes": rules["runes"],
         "keystoneAugments": keystones,
@@ -250,7 +276,7 @@ def main():
     }
 
     # ---- Augments that change your selections: an extra augment, a random one in its place, or more rerolls
-    selection_augments = [a for a in live if re.search(r"random (?:Silver |Gold |Prismatic )?Augment|reroll", a["text"], re.I)]
+    selection_augments = [brief(a) for a in live if re.search(r"random (?:Silver |Gold |Prismatic )?Augment|reroll", a["text"], re.I)]
     golden_reroll = {"name": s("Kiwi_Golden_Reroll_Tooltip_Title"), "text": clean(s("Kiwi_Golden_Reroll_Tooltip_Desc")),
                      "icon": asset("/lol-game-data/assets/ASSETS/Rewards/Kiwi/GoldenReroll.png")}
 
@@ -318,6 +344,12 @@ def main():
     track = build_track(gd, asset, augments, s)
     unlocks = {r["augmentId"]: r["level"] for r in (track["levels"] if track else []) if r.get("augmentId")}
     augment_rules["unlocks"] = {str(k): v for k, v in sorted(unlocks.items())}
+
+    # ---- Every live augment's full text, what it grants, its numbers and its track level, for the augment pages
+    details = {str(a["id"]): {**{k: a[k] for k in ("name", "tier", "text", "tooltip", "grants", "values")},
+                              "unlockLevel": unlocks.get(a["id"])} for a in live}
+    with open(os.path.join(HERE, "augment_details.json"), "w") as f:
+        f.write(site_paths(json.dumps({"patch": version, "augments": details}, indent=1, ensure_ascii=False)) + "\n")
 
     # ---- Archive: Augment Sets
     sets = []
