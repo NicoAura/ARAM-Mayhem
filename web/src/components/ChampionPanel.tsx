@@ -5,18 +5,14 @@ import Link from "next/link";
 import championIds from "@/data/champion-ids.json";
 import { adminFlag } from "@/lib/admin-flag";
 import { loadSettings } from "@/lib/settings";
+import ddVersion from "@/data/dd-version.json";
 
-// A champion's splash art, pick quote and abilities, straight from the League client's files
-// (CommunityDragon's extract of each patch, copied to public/assets/). Opens from a champion name in the tier list.
+// A champion's splash art and abilities, from the official champion data and art (copied to public/assets/
+// by scripts/fetch_assets.py). Opens from a champion name in the tier list.
 
-const GAME_DATA = "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default";
 const IDS = championIds as Record<string, number>;
+const DD = `/assets/dd/${ddVersion.version}`;
 
-// Client paths look like /lol-game-data/assets/ASSETS/Characters/...; CommunityDragon serves them lowercased.
-const asset = (p?: string) =>
-  p
-    ? `${GAME_DATA}/${p.replace(/^\/lol-game-data\/assets\//, "").toLowerCase().replace(/k[i]wi/g, "mayhem")}`
-    : "";
 const plain = (html: string) =>
   html
     .replace(/<br\s*\/?>/gi, " ")
@@ -24,19 +20,10 @@ const plain = (html: string) =>
     .replace(/\s+/g, " ")
     .trim();
 
-type Ability = {
-  spellKey?: string;
-  name: string;
-  abilityIconPath: string;
-  description: string;
-};
-type Champ = {
-  name: string;
-  title: string;
-  skins: { splashPath: string; uncenteredSplashPath?: string }[];
-  passive: Ability;
-  spells: Ability[];
-};
+type Ability = { spellKey: string; name: string; icon: string; description: string };
+type Champ = { name: string; title: string; splash: string; abilities: Ability[] };
+type DdAbility = { name: string; description: string; image: { full: string } };
+type DdChampion = { name: string; title: string; passive: DdAbility; spells: DdAbility[] };
 
 export const hasPanel = (alias: string) => alias in IDS;
 
@@ -61,11 +48,8 @@ export default function ChampionPanel({
 }) {
   const id = IDS[alias];
   const dialog = useRef<HTMLDialogElement>(null);
-  const audio = useRef<HTMLAudioElement>(null);
   const [champ, setChamp] = useState<Champ | null>(null);
   const [error, setError] = useState("");
-  const [playing, setPlaying] = useState(false);
-  const [sound, setSound] = useState(true);
   const [clip, setClip] = useState<string | null>(null);
   // Ability videos are admin-only files (src/middleware.ts).
   const [admin, setAdmin] = useState(false);
@@ -73,37 +57,34 @@ export default function ChampionPanel({
   const [missing, setMissing] = useState<Set<string>>(() => new Set());
   const [hoverPlay, setHoverPlay] = useState(false);
   useEffect(() => {
-    setSound(loadSettings().sound);
     setHoverPlay(autoplayClips());
   }, []);
 
   useEffect(() => {
     dialog.current?.showModal();
     let live = true;
-    fetch(`${GAME_DATA}/v1/champions/${id}.json`)
-      .then((r) =>
-        r.ok ? r.json() : Promise.reject(new Error(String(r.status))),
-      )
-      .then((c: Champ) => live && setChamp(c))
+    // Seasonal versions (Jade_Ahri) share the base champion's data.
+    const key = alias.replace(/^Jade_/, "");
+    fetch(`${DD}/data/en_US/champion/${key}.json`)
+      .then((r) => (r.ok ? r.json() : Promise.reject(new Error(String(r.status)))))
+      .then((d: { data: Record<string, DdChampion> }) => {
+        const c = Object.values(d.data)[0];
+        const ability = (a: DdAbility, spellKey: string, folder: string): Ability => ({ spellKey, name: a.name, description: a.description, icon: `${DD}/img/${folder}/${a.image.full}` });
+        if (live)
+          setChamp({
+            name: c.name,
+            title: c.title,
+            splash: `/assets/dd/img/champion/splash/${key}_0.jpg`,
+            abilities: [ability(c.passive, "passive", "passive"), ...c.spells.map((a, i) => ability(a, "qwer"[i], "spell"))],
+          });
+      })
       .catch(() => live && setError("Couldn't load this champion."));
     return () => {
       live = false;
     };
-  }, [id]);
+  }, [alias]);
 
-  const play = () => {
-    const a = audio.current;
-    if (!a) return;
-    a.currentTime = 0;
-    a.play().catch(() =>
-      setError("This browser can't play the pick quote (Ogg audio)."),
-    );
-  };
-
-  const skin = champ?.skins[0];
-  const abilities = champ
-    ? [{ ...champ.passive, spellKey: "passive" }, ...champ.spells]
-    : [];
+  const abilities = champ?.abilities ?? [];
 
   return (
     <dialog
@@ -115,10 +96,10 @@ export default function ChampionPanel({
     >
       <div className="champ-panel-inner">
         <div className="champ-splash">
-          {skin && (
+          {champ && (
             // eslint-disable-next-line @next/next/no-img-element
             <img
-              src={asset(skin.uncenteredSplashPath || skin.splashPath)}
+              src={champ.splash}
               alt=""
             />
           )}
@@ -162,44 +143,13 @@ export default function ChampionPanel({
           </div>
         </div>
         <div className="champ-body">
-          {sound && (
-            <button
-              type="button"
-              className="btn ghost champ-quote"
-              onClick={play}
-              disabled={!champ}
-            >
-              <svg
-                viewBox="0 0 24 24"
-                width="16"
-                height="16"
-                fill="currentColor"
-                aria-hidden="true"
-              >
-                {playing ? (
-                  <path d="M7 5h4v14H7zM13 5h4v14h-4z" />
-                ) : (
-                  <path d="M8 5v14l11-7z" />
-                )}
-              </svg>
-              Pick quote
-            </button>
-          )}
-          <audio
-            ref={audio}
-            src={`${GAME_DATA}/v1/champion-choose-vo/${id}.ogg`}
-            preload="none"
-            onPlay={() => setPlaying(true)}
-            onPause={() => setPlaying(false)}
-            onEnded={() => setPlaying(false)}
-          />
           {error && <p className="admin-status error">{error}</p>}
           <Link className="inline-link" href={`/champions/${alias}`}>
             Champion page →
           </Link>
           <ul className="champ-abilities">
             {abilities.map((a) => {
-              const key = a.spellKey ?? "";
+              const key = a.spellKey;
               const hasClip = admin && key !== "passive" && !missing.has(key);
               const open = clip === key && hasClip;
               return (
@@ -211,7 +161,7 @@ export default function ChampionPanel({
                   data-playing={open || undefined}
                 >
                   {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={asset(a.abilityIconPath)} alt="" width={40} height={40} loading="lazy" />
+                  <img src={a.icon} alt="" width={40} height={40} loading="lazy" />
                   <div>
                     <b>
                       <span className="champ-key">{key === "passive" ? "Passive" : key.toUpperCase()}</span>

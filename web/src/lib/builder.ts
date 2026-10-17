@@ -4,6 +4,7 @@ import { join } from "node:path";
 import championIds from "@/data/champion-ids.json";
 import augmentNames from "@/data/augment-names.json";
 import { localAsset } from "./assets";
+import { official } from "./dd-swap";
 import { champName } from "./highlights";
 
 // What the Build Editor needs beside the simulator's own lists: each item's icon, gold cost and stats
@@ -40,7 +41,7 @@ export function builderData(): BuilderData {
   for (const i of [...list].sort((a, b) => Number(a.id >= 10000) - Number(b.id >= 10000) || a.id - b.id)) {
     if (items[i.name] || !i.priceTotal) continue;
     items[i.name] = {
-      icon: i.iconPath ? localAsset(`https://raw.communitydragon.org/latest/${GAME_DATA}/${i.iconPath.replace(/^\/lol-game-data\/assets\//i, "")}`) : undefined,
+      icon: i.iconPath ? official(localAsset(`https://raw.communitydragon.org/latest/${GAME_DATA}/${i.iconPath.replace(/^\/lol-game-data\/assets\//i, "")}`)) : undefined,
       price: i.priceTotal,
       stats: stats(i.description),
     };

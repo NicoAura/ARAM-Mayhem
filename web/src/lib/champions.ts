@@ -5,6 +5,7 @@ import championIds from "@/data/champion-ids.json";
 import augmentNames from "@/data/augment-names.json";
 import { champName, livePatch } from "./highlights";
 import { localAsset } from "./assets";
+import { official } from "./dd-swap";
 import { readRepoCsv, readRepoJson } from "./repo-data";
 import { champStats, type ChampStats, type PatchRow } from "./tiers";
 
@@ -78,7 +79,7 @@ function clientChampion(id: number): ClientChampion | null {
 }
 
 const clientAsset = (p?: string) =>
-  p ? localAsset(`https://raw.communitydragon.org/latest/${GAME_DATA}/${p.replace(/^\/lol-game-data\/assets\//i, "")}`) : undefined;
+  p ? official(localAsset(`https://raw.communitydragon.org/latest/${GAME_DATA}/${p.replace(/^\/lol-game-data\/assets\//i, "")}`)) : undefined;
 
 /** A champion's splash art, from the default skin. */
 export function championSplash(alias: string): string | undefined {

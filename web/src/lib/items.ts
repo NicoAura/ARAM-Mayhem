@@ -2,6 +2,7 @@ import "server-only";
 import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { localAsset } from "./assets";
+import { official } from "./dd-swap";
 import { readRepoJson } from "./repo-data";
 
 // Item names and icons from the client's item list, mirrored in public/assets/.
@@ -20,7 +21,7 @@ export function items(): Map<number, Item> {
       {
         id: i.id,
         name: i.name,
-        icon: i.iconPath ? localAsset(`https://raw.communitydragon.org/latest/${GAME_DATA}/${i.iconPath.replace(/^\/lol-game-data\/assets\//i, "")}`) : undefined,
+        icon: i.iconPath ? official(localAsset(`https://raw.communitydragon.org/latest/${GAME_DATA}/${i.iconPath.replace(/^\/lol-game-data\/assets\//i, "")}`)) : undefined,
       },
     ]),
   );
