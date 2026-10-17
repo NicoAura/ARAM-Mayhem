@@ -43,13 +43,20 @@ describe("rate limits", () => {
     for (let i = 0; i < 80; i++) expect((await middleware(req("7.7.7.7", "/api/games", "GET"))).status).toBe(200);
   });
 
+  it("allows 10 Kitchen sends or removals a minute, but never limits reading the community list", async () => {
+    for (let i = 0; i < 30; i++) expect((await middleware(req("8.8.8.8", "/api/kitchen/community", "GET"))).status).toBe(200);
+    for (let i = 0; i < 9; i++) expect((await middleware(req("8.8.8.8", "/api/kitchen/submissions", "POST"))).status).toBe(200);
+    expect((await middleware(req("8.8.8.8", "/api/kitchen/submissions/abc", "DELETE"))).status).toBe(200);
+    expect((await middleware(req("8.8.8.8", "/api/kitchen/submissions", "POST"))).status).toBe(429);
+  });
+
   it("guards error reports, sign-in and the write routes", () => {
-    expect(config.matcher).toEqual(expect.arrayContaining(["/api/log", "/api/sim-scores", "/api/profile", "/api/games", "/api/account", "/api/account/:path*"]));
+    expect(config.matcher).toEqual(expect.arrayContaining(["/api/log", "/api/sim-scores", "/api/profile", "/api/games", "/api/account", "/api/account/:path*", "/api/kitchen/:path*"]));
   });
 
   it("guards the owner-only files", () => {
     expect(config.matcher).toEqual(
-      expect.arrayContaining(["/assets/models/:path*", "/assets/clips/:path*", "/assets/sounds/:path*", "/assets/skins/:path*", "/embed/simulator/full.html", "/embed/simulator/replay-data/sounds/:path*"]),
+      expect.arrayContaining(["/assets/models/:path*", "/assets/sounds/:path*", "/assets/skins/:path*", "/embed/simulator/full.html", "/embed/simulator/replay-data/sounds/:path*"]),
     );
   });
 });

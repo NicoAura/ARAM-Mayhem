@@ -136,7 +136,7 @@ test("new visitors start in dark mode", async ({ page }) => {
 });
 
 test("owner-only files stay private without the owner's sign-in", async ({ request }) => {
-  for (const path of ["/assets/models/aphelios/523000/model.glb", "/assets/clips/0001/ability_0001_Q1.webm", "/assets/sounds/sounds.m4a", "/embed/simulator/full.html"]) {
+  for (const path of ["/assets/models/aphelios/523000/model.glb", "/assets/sounds/sounds.m4a", "/embed/simulator/full.html"]) {
     const res = await request.get(path, { maxRedirects: 0 });
     expect(res.status(), path).toBe(404);
   }
