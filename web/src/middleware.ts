@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 
-// Per-visitor limit on the Riot lookup routes, so nobody can spend the site's Riot API quota.
+// Per-visitor limit on the Riot lookup routes, so nobody can spend the site's Riot API quota,
+// and on browser error reports (/api/log), so they can't flood the logs.
 // Counts live in each server instance's memory, so the limit is approximate; a Cloudflare
 // rate-limiting rule on /api/riot/* would make it exact.
 const LIMIT = 30; // requests
@@ -23,4 +24,4 @@ export function middleware(req: NextRequest) {
   return NextResponse.next();
 }
 
-export const config = { matcher: "/api/riot/:path*" };
+export const config = { matcher: ["/api/riot/:path*", "/api/log"] };

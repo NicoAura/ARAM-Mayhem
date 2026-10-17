@@ -18,21 +18,25 @@ export default function Embed({
   src,
   title,
   minHeight = 0,
+  hash,
 }: {
   src: string;
   title: string;
   minHeight?: number;
+  /** Opens the tool at this #part instead of following the page's (a champion's own page). */
+  hash?: string;
 }) {
   const ref = useRef<HTMLIFrameElement>(null);
   const [height, setHeight] = useState(minHeight);
-  // Pass the page's #hash to the tool, so links like /champions#Yasuo open that champion.
-  const [frameSrc, setFrameSrc] = useState(src);
+  // Pass the page's #hash to the tool, so links to a tool can name what it opens.
+  const [frameSrc, setFrameSrc] = useState(hash ? `${src}#${hash}` : src);
   useEffect(() => {
+    if (hash) return;
     const sync = () => setFrameSrc(src + location.hash);
     sync();
     addEventListener("hashchange", sync);
     return () => removeEventListener("hashchange", sync);
-  }, [src]);
+  }, [src, hash]);
 
   useEffect(() => {
     const frame = ref.current;

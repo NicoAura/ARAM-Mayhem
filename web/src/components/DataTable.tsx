@@ -1,7 +1,8 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import championNames from "@/data/champion-names.json";
+import { setParams } from "@/lib/url-state";
 import { useAdvanced } from "./Advanced";
 import ChampionPanel, { hasPanel } from "./ChampionPanel";
 
@@ -99,7 +100,8 @@ export default function DataTable({
   initialSort: { key: string; desc: boolean };
   searchKey?: string;
   searchLabel?: string;
-  // Fill the search from ?q= when the page's ?tab= names this table's tab ("" = the default tab).
+  // Fill the search and sort from ?q= and ?sort= when the page's ?tab= names this table's tab
+  // ("" = the default tab), and keep them there as they change so the address can be shared.
   urlTab?: string;
 }) {
   const columns = useAdvanced() && advancedColumns ? advancedColumns : standardColumns;
@@ -108,12 +110,18 @@ export default function DataTable({
   const [shown, setShown] = useState(PAGE);
   const [panel, setPanel] = useState<string | null>(null);
 
+  // Read once on load; the columns' keys say which ?sort= values are real.
+  const allColumns = useRef([...standardColumns, ...(advancedColumns ?? [])]);
   useEffect(() => {
     if (urlTab === undefined) return;
     const p = new URLSearchParams(location.search);
+    if ((p.get("tab") ?? "") !== urlTab) return;
     const q = p.get("q");
-    if (q && (p.get("tab") ?? "") === urlTab) setQuery(q);
+    if (q) setQuery(q);
+    const s = p.get("sort")?.match(/^(\w+)\.(asc|desc)$/);
+    if (s && allColumns.current.some((c) => c.sortable !== false && (c.sortKey ?? c.key) === s[1])) setSort({ key: s[1], desc: s[2] === "desc" });
   }, [urlTab]);
+  const share = (values: Record<string, string | null>) => urlTab !== undefined && setParams(values);
 
   const sorted = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -122,13 +130,19 @@ export default function DataTable({
     return [...filtered].sort((a, b) => {
       const x = a[sort.key];
       const y = b[sort.key];
+      // Missing values (a champion new this patch has no change) stay at the bottom either way.
+      if (x === null || x === undefined) return y === null || y === undefined ? 0 : 1;
+      if (y === null || y === undefined) return -1;
       if (typeof x === "number" && typeof y === "number") return (x - y) * dir;
       return String(x ?? "").localeCompare(String(y ?? "")) * dir;
     });
   }, [rows, sort, query, searchKey]);
 
-  const toggle = (key: string) =>
-    setSort((s) => (s.key === key ? { key, desc: !s.desc } : { key, desc: key !== searchKey }));
+  const toggle = (key: string) => {
+    const next = sort.key === key ? { key, desc: !sort.desc } : { key, desc: key !== searchKey };
+    setSort(next);
+    share({ sort: `${next.key}.${next.desc ? "desc" : "asc"}` });
+  };
 
   return (
     <div className="data-table">
@@ -143,6 +157,7 @@ export default function DataTable({
           onChange={(e) => {
             setQuery(e.target.value);
             setShown(PAGE);
+            share({ q: e.target.value.trim() || null });
           }}
         />
       )}

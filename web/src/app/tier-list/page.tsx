@@ -4,6 +4,8 @@ import augmentNames from "@/data/augment-names.json";
 import { AdvancedProvider, AdvancedToggle } from "@/components/Advanced";
 import ChampionTiers from "@/components/ChampionTiers";
 import DataTable from "@/components/DataTable";
+import DuosTable from "@/components/DuosTable";
+import { hasDuos } from "@/lib/duos";
 import championIds from "@/data/champion-ids.json";
 import championNames from "@/data/champion-names.json";
 import type { PatchRow } from "@/lib/tiers";
@@ -15,8 +17,6 @@ import { readRepoCsv, readRepoJson } from "@/lib/repo-data";
 
 export const metadata: Metadata = pageMeta("/tier-list", "Tier List", "ARAM Mayhem champion tier list for the current patch, with augment and duo win rates.");
 
-type Duos = { meta: { champion_stat_date?: string }; duos: { names: string[]; roles?: string[]; win_rate: number; pick_rate: number; rank?: number }[] };
-
 const num = (v: string | undefined) => (v === undefined || v === "" ? null : Number(v));
 const ALIAS = Object.fromEntries(Object.entries(championIds as Record<string, number>).map(([alias, id]) => [id, alias]));
 const NAMES = championNames as Record<string, string>;
@@ -27,7 +27,7 @@ export default function TierListPage() {
   const byPatch = readRepoCsv("data/cn/history/by_patch.csv");
   const patches = readRepoCsv("data/cn/history/patches.csv");
   const augments = readRepoJson<{ augments: Record<string, string | number | number[]>[] }>("data/cn/augments.json")?.augments;
-  const duos = readRepoJson<Duos>("data/cn/duos.json");
+  const duos = hasDuos();
   const champs = readRepoJson<Champs>("data/cn/champions.json");
 
   if (!byPatch || !patches?.length) {
@@ -40,7 +40,9 @@ export default function TierListPage() {
   }
 
   const latest = patches.at(-1)!;
-  const rows: PatchRow[] = byPatch.map((r) => ({
+  // Only the live and previous patch ship with the page; ChampionTiers loads the rest when picked.
+  const recent = new Set(patches.slice(-2).map((p) => p.patch));
+  const rows: PatchRow[] = byPatch.filter((r) => recent.has(r.patch)).map((r) => ({
     patch: r.patch,
     days: Number(r.days),
     name: r.name,
@@ -63,7 +65,7 @@ export default function TierListPage() {
         .join(", "),
     ]),
   );
-  const tabs = [
+  const tabs: { id: string; label: string; content: React.ReactNode; lazy?: boolean }[] = [
     {
       id: "champions",
       label: "Champions",
@@ -121,42 +123,7 @@ export default function TierListPage() {
       ),
     });
   }
-  if (duos) {
-    tabs.push({
-      id: "duos",
-      label: "Duos",
-      content: (
-        <DataTable
-          columns={[
-            { key: "a", label: "Champion", format: "champion" },
-            { key: "b", label: "With", format: "champion" },
-            { key: "win_rate", label: "Win rate", format: "pct" },
-            { key: "pick_rate", label: "Pick rate", format: "pct" },
-          ]}
-          advancedColumns={[
-            { key: "a", label: "Champion", format: "champion" },
-            { key: "b", label: "With", format: "champion" },
-            { key: "win_rate", label: "Win rate", format: "pct" },
-            { key: "pick_rate", label: "Pick rate", format: "pct" },
-            { key: "rank", label: "Rank", format: "int" },
-            { key: "roles", label: "Roles", format: "text", sortable: false },
-          ]}
-          rows={duos.duos.map((d) => ({
-            a: d.names[0],
-            b: d.names[1],
-            pair: d.names.join(" "),
-            win_rate: d.win_rate,
-            pick_rate: d.pick_rate,
-            rank: d.rank ?? null,
-            roles: (d.roles ?? []).map((r) => r.replace(/,/g, "/")).join(" + "),
-          }))}
-          initialSort={{ key: "win_rate", desc: true }}
-          searchKey="pair"
-          searchLabel="Find a champion"
-        />
-      ),
-    });
-  }
+  if (duos) tabs.push({ id: "duos", label: "Duos", content: <DuosTable />, lazy: true });
 
   return (
     <AdvancedProvider>

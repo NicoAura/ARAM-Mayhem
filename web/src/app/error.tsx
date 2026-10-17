@@ -2,12 +2,14 @@
 
 import { useEffect } from "react";
 import { clearReloadFlag, isStaleChunk, reloadOnce } from "@/lib/recover";
+import { reportError } from "@/lib/report";
 
 // Shown instead of a blank "Application error" when a page fails in the browser.
 export default function PageError({ error, reset }: { error: Error & { digest?: string }; reset: () => void }) {
   useEffect(() => {
     console.error(error);
     if (isStaleChunk(error)) reloadOnce();
+    else reportError(error.message, { stack: error.stack });
   }, [error]);
   return (
     <section className="intro">

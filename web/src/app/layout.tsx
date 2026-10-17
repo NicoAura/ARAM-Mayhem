@@ -6,9 +6,10 @@ import BrandMark from "@/components/BrandMark";
 import MobileTabBar from "@/components/MobileTabBar";
 import NavLinks from "@/components/NavLinks";
 import SearchPalette from "@/components/SearchPalette";
+import ErrorReporter from "@/components/ErrorReporter";
 import SettingsMenu from "@/components/SettingsMenu";
 import { text } from "@/lib/content";
-import { searchItems } from "@/lib/highlights";
+import { searchPages } from "@/lib/highlights";
 import { SETTINGS_SCRIPT } from "@/lib/settings";
 import { THEME_COLORS, THEME_KEY } from "@/lib/theme";
 import { navItems, navPages } from "@/lib/tabs";
@@ -82,6 +83,7 @@ export default function RootLayout({
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: STRUCTURED_DATA }} />
       </head>
       <body>
+        <ErrorReporter />
         <header className="site-header">
           <div className="site-header-inner">
             <Link href="/" className="brand">
@@ -92,7 +94,7 @@ export default function RootLayout({
               </span>
             </Link>
             <NavLinks items={[{ href: "/", label: "Home" }, ...navItems()]} />
-            <SearchPalette items={searchItems()} />
+            <SearchPalette pages={searchPages()} />
             {kofi && (
               <a className="kofi-btn" href={kofi} target="_blank" rel="noreferrer" aria-label="Support DeepARAM on Ko-fi">
                 <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">

@@ -6,8 +6,20 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 export type SearchItem = { group: string; name: string; hint: string; href: string; icon?: string };
 
 // Header search: ⌘K, Ctrl+K or / opens a palette that jumps to any page, champion or augment.
-export default function SearchPalette({ items }: { items: SearchItem[] }) {
+// The page only carries the page links; champions and augments load from /data/search.json the first
+// time search is hovered, focused or opened, which keeps every page's first load small.
+export default function SearchPalette({ pages }: { pages: SearchItem[] }) {
   const router = useRouter();
+  const [items, setItems] = useState(pages);
+  const [loaded, setLoaded] = useState<"no" | "loading" | "yes">("no");
+  const load = useCallback(() => {
+    if (loaded !== "no") return;
+    setLoaded("loading");
+    fetch("/data/search.json")
+      .then((r) => (r.ok ? r.json() : Promise.reject(r.status)))
+      .then((all: SearchItem[]) => (setItems(all), setLoaded("yes")))
+      .catch(() => setLoaded("no"));
+  }, [loaded]);
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState("");
   const [sel, setSel] = useState(0);
@@ -49,13 +61,15 @@ export default function SearchPalette({ items }: { items: SearchItem[] }) {
   }, [show]);
 
   useEffect(() => {
-    if (open) input.current?.focus();
-  }, [open]);
+    if (!open) return;
+    input.current?.focus();
+    load();
+  }, [open, load]);
 
   let group = "";
   return (
     <>
-      <button type="button" className="search-btn" onClick={show} title="Search champions, augments and pages">
+      <button type="button" className="search-btn" onClick={show} onPointerEnter={load} onFocus={load} title="Search champions, augments and pages">
         <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
           <circle cx="11" cy="11" r="6.5" />
           <path d="m20 20-4-4" />
@@ -90,7 +104,7 @@ export default function SearchPalette({ items }: { items: SearchItem[] }) {
               }}
             />
             <ul>
-              {shown.length === 0 && <li className="palette-group">No matches</li>}
+              {shown.length === 0 && <li className="palette-group">{loaded === "yes" ? "No matches" : "Loading…"}</li>}
               {shown.map((it, i) => {
                 const head = it.group !== group ? (group = it.group) : null;
                 return (

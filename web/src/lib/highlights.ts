@@ -62,17 +62,19 @@ export function counts() {
   };
 }
 
+export const searchPages = (): SearchItem[] => [
+  { group: "Pages", name: "Home", hint: "Page", href: "/" },
+  ...[...navPages(), { href: "/stats", label: "My Stats" }].map((t) => ({ group: "Pages", name: t.label, hint: BETA.has(t.href) ? "Page · Beta" : "Page", href: t.href })),
+];
+
 export function searchItems(): SearchItem[] {
   const pct = (v: number) => `${(v * 100).toFixed(1)}% win`;
-  const pages: SearchItem[] = [
-    { group: "Pages", name: "Home", hint: "Page", href: "/" },
-    ...[...navPages(), { href: "/stats", label: "My Stats" }].map((t) => ({ group: "Pages", name: t.label, hint: BETA.has(t.href) ? "Page · Beta" : "Page", href: t.href })),
-  ];
+  const pages = searchPages();
   const champs = (readRepoCsv("data/cn/champions.csv") ?? []).map((r) => ({
     group: "Champions",
     name: champName(r.name),
     hint: pct(Number(r.win_rate)),
-    href: `/champions#${r.name}`,
+    href: `/champions/${r.name}`,
     icon: `/icons/champions/${r.name}.webp`,
   }));
   const augs = (readRepoCsv("data/cn/augments.csv") ?? [])

@@ -32,7 +32,7 @@ export function ChampionJump({ champs }: { champs: Champ[] }) {
       .slice(0, 6);
   }, [q, champs]);
   useEffect(() => setSel(0), [q]);
-  const go = (c?: Champ) => c && router.push(`/champions#${c.id}`);
+  const go = (c?: Champ) => c && router.push(`/champions/${c.id}`);
 
   return (
     <div className="jump" onBlur={(e) => !e.currentTarget.contains(e.relatedTarget) && setOpen(false)}>
@@ -64,7 +64,7 @@ export function ChampionJump({ champs }: { champs: Champ[] }) {
         <ul className="jump-list" id="jump-list" role="listbox">
           {matches.map((c, i) => (
             <li key={c.id} role="option" aria-selected={i === sel}>
-              <Link href={`/champions#${c.id}`} onMouseEnter={() => setSel(i)}>
+              <Link href={`/champions/${c.id}`} onMouseEnter={() => setSel(i)}>
                 <img src={champIcon(c.id)} alt="" width={28} height={28} />
                 <span>{c.name}</span>
                 <span className={`chip tier-${c.tier.toLowerCase()}`}>{c.tier}</span>
@@ -97,7 +97,7 @@ export function TierSnapshot({ champs }: { champs: Champ[] }) {
         {list.map((c) => (
           <Link
             key={c.id}
-            href={`/champions#${c.id}`}
+            href={`/champions/${c.id}`}
             className={shown?.id === c.id ? "on" : undefined}
             onMouseEnter={() => setHover(c)}
             onFocus={() => setHover(c)}

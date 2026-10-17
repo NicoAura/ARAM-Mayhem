@@ -1,14 +1,10 @@
-import HashOnly from "@/components/HashOnly";
-import ToolPage, { toolMetadata } from "@/components/ToolPage";
+import type { Metadata } from "next";
+import ChampionRedirect from "@/components/ChampionRedirect";
+import { championAliases } from "@/lib/champions";
 
-export const metadata = toolMetadata("/champions");
+export const metadata: Metadata = { title: "Champions · DeepARAM", robots: { index: false, follow: true } };
 
-// Each champion has a page at /champions#Name (from the Tier List, search and the home page);
-// there's no Champions tab, so the bare address opens the Tier List.
+// Each champion has its own page at /champions/<Alias>; this address only forwards old #links there.
 export default function Page() {
-  return (
-    <HashOnly fallback="/tier-list">
-      <ToolPage href="/champions" />
-    </HashOnly>
-  );
+  return <ChampionRedirect aliases={championAliases()} />;
 }
