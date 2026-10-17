@@ -51,7 +51,6 @@ I18N.ready.then(() => {
     ["ARAM challenges that count", D.challenges.filter((c) => c.mayhem).length],
   ];
   $("facts").innerHTML = facts.map(([l, v]) => `<div class="card fact"><span class="eyebrow">${esc(t(l))}</span><span class="value">${fmt(v)}</span></div>`).join("");
-  $("queues").innerHTML = D.queues.map((q) => `<span class="chip">${q.id} · ${esc(q.name.replace("ARAM: ", ""))}</span>`).join("");
 
   $("story").innerHTML = (D.story || [])
     .map((e) => `<div class="row" style="align-items:flex-start"><span class="chip">${esc(t(e.date))}</span><p class="muted small" style="margin:0">${esc(t(e.text))}</p></div>`)
@@ -141,9 +140,6 @@ I18N.ready.then(() => {
       .map((a) => `<div class="row">${img(a.icon)}<div><div class="title">${esc(a.name)} ${tierChip(a.tier)}</div><div class="muted small">${esc(list(a.runes))}</div></div></div>`)
       .join("");
   }
-  $("spell-list").innerHTML = D.spells
-    .map((x) => `<div class="row" style="align-items:flex-start">${img(x.icon)}<div><div class="title">${esc(x.name)} <span class="muted small">${esc(t("{n}s", { n: fmt(x.cooldown) }))}</span></div><div class="muted small">${esc(x.text)}</div></div></div>`)
-    .join("");
   $("spell-augment-list").innerHTML = D.spellAugments
     .map((x) => `<div class="row" style="align-items:flex-start">${img(x.icon)}<div><div class="title">${esc(x.name)} ${tierChip(x.tier)}</div><div class="muted small" style="white-space:pre-line">${esc(x.text)}</div></div></div>`)
     .join("");
@@ -274,10 +270,7 @@ I18N.ready.then(() => {
         .join("")}</div></div>`)
     .join("");
 
-  // ---- Maps and extras
-  $("map-list").innerHTML = D.maps
-    .map((m) => `<div class="card"><img src="${esc(m.minimap)}" alt="${esc(t("{map} minimap", { map: t(m.name) }))}" loading="lazy"><div class="title">${esc(t(m.name))}</div></div>`)
-    .join("");
+  // ---- Extras
   $("item-list").innerHTML = D.items
     .map((i) => `<div class="row">${img(i.icon)}<div><div class="title">${esc(i.name)}</div>${i.text ? `<div class="muted small">${esc(i.text.split("\n").slice(0, 3).join(" · "))}</div>` : ""}</div></div>`)
     .join("");

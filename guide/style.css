@@ -106,7 +106,6 @@ ol.steps li { display: grid; grid-template-columns: 4.2rem 1fr; gap: 0.6rem; fon
 ol.steps .need { font: 500 13px var(--mono); text-align: right; color: var(--accent); padding-top: 1px; }
 .reward { color: var(--muted); }
 .note { margin-top: 0.75rem; font-size: 13px; color: var(--muted); font-style: italic; }
-.maps img { width: 100%; aspect-ratio: 1; object-fit: cover; border-radius: var(--r-sm); display: block; background: var(--raised); margin-bottom: 0.6rem; }
 .tiers { display: flex; flex-wrap: wrap; gap: 0.3rem; margin-top: 0.6rem; }
 .tiers span { font: 500 11px/1 var(--mono); padding: 0.3rem 0.45rem; border-radius: 999px; background: var(--raised); color: var(--muted); }
 .tiers span.done { background: var(--accent-soft); color: var(--accent); }
