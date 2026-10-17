@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import AccountPanel from "@/components/AccountPanel";
+import KitchenSubmissions from "@/components/KitchenSubmissions";
 import { T } from "@/components/I18n";
 import Intro from "@/components/Intro";
 import { pageMeta } from "@/lib/meta";
@@ -16,6 +17,7 @@ export default function AccountPage() {
         <T ns="account">Sign in to keep your settings on every device, and connect the Riot account you play on.</T>
       </Intro>
       <AccountPanel />
+      <KitchenSubmissions />
     </>
   );
 }

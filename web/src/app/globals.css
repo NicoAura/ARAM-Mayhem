@@ -6534,6 +6534,12 @@ html[dir="rtl"] .jump-wr {
   }
 }
 
+/* The Kitchen's community builds on /account (components/KitchenSubmissions.tsx). */
+.kitchen-subs { margin-top: 1rem; }
+.acct-list li.kitchen-sub { display: grid; justify-content: stretch; gap: 0.3rem; }
+.kitchen-sub p { margin: 0; }
+.kitchen-sub-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; }
+
 /* The site owner's 3D Simulator switch, at the top of the Simulator page. */
 .sim-view-switch {
   display: flex;
