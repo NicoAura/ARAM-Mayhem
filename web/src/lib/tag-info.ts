@@ -9,3 +9,10 @@ export function tagsByKind(info: TagInfo): Record<TagKind, string[]> {
   for (const [name, t] of Object.entries(info)) out[t.kind].push(name);
   return out;
 }
+
+/** A tag chip's colour as CSS variables: the colour, plus "r g b" for browsers without color-mix(). */
+export function tagStyle(color: string): React.CSSProperties {
+  const n = parseInt(color.slice(1), 16);
+  const rgb = /^#[0-9a-f]{6}$/i.test(color) ? `${n >> 16} ${(n >> 8) & 255} ${n & 255}` : undefined;
+  return { "--tag": color, "--tag-rgb": rgb } as React.CSSProperties;
+}

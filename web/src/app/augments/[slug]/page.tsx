@@ -53,7 +53,7 @@ export default async function AugmentPage({ params }: { params: Promise<{ slug: 
         </div>
         <div className="stat-row">
           <div>
-            <b>
+            <b className="has-chip">
               <span className={`chip tier-${a.tier}`}>{RARITY[a.tier] ?? a.tier}</span>
             </b>
             <span>rarity</span>

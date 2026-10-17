@@ -115,7 +115,7 @@ export default async function ChampionPage({ params }: { params: Promise<{ alias
         {c.winRate !== undefined && (
           <div className="stat-row">
             <div>
-              <b>
+              <b className="has-chip">
                 <span className={`chip tier-${c.tier?.toLowerCase()}`}>{c.tier}</span>
               </b>
               <span>
