@@ -55,6 +55,9 @@ struct Ability {
     char slot = 'Q';
     std::string name;
     double cooldown = 10, castTime = 0.25, duration = 0;
+    double lock = 0;            // seconds a channel keeps the caster busy after it fires
+    double castFromAttack = 0;  // > 0: the cast time is this share of the attack wind-up
+    bool attackReset = false;   // the next attack can start as soon as it's cast
     Area area = Area::Single;
     Geometry geo;
     bool aura = false;  // per-second damage on a toggle or very short cooldown: always on
@@ -72,6 +75,9 @@ struct ChampionKit {
     bool hasCn = false;
     double cnDamageShare = 0.2, cnTakenShare = 0.2, cnWeight = 0, cnWinRate = 0.5;
     double attackRange = 125, moveSpeed = 335;
+    // Share of an attack's time spent winding up before it fires, and how much of an
+    // attack speed gain also speeds up the wind-up (1: all of it).
+    double windup = 0.3, windupMod = 1.0;
     double reach = 0;  // how far its damage reaches: attack range, or its abilities' typical range
     double apRatios = 0, adRatios = 0;  // summed ability scalings, to tell AP from AD kits
     std::string combo;  // recommended cast order, e.g. "EQRW" (data/combos.json); empty = by damage
@@ -94,7 +100,7 @@ struct Effect {
 struct Rules {
     double critMult = 2.0, critOverflowAd = 0.45, asCap = 5.0;
     double extraHitWeight = 0.5;
-    double castMin = 0.15, castMax = 0.6, minCooldown = 0.75, dotDuration = 3.0, spellbladeWindow = 10.0;
+    double castMin = 0.0, castMax = 1.5, minCooldown = 0.75, dotDuration = 3.0, spellbladeWindow = 10.0;
     // Positions: whether a skillshot lands comes from where everyone stands and moves.
     double dodgeChance = 0.5;   // chance an enemy sees a skillshot coming and sidesteps
     double reactionTime = 0.25; // seconds before a dodging enemy starts moving
@@ -173,7 +179,8 @@ struct TraceEvent {
     char slot = 0;            // Q/W/E/R for cast and proc
     std::string text;         // enemy champion id (spawn), damage type (damage), area (cast)
     int source = -1;          // Source of a damage event
-    double amount = 0;        // damage dealt; cast time for casts; cc end time for cc
+    double amount = 0;        // damage dealt; cast time for casts; wind-up for attacks; cc end time for cc
+    double lock = 0;          // casts: seconds a channel keeps the caster busy after it fires
     double hp = 0, maxHp = 0; // enemy HP after the event, or the champion's own HP for self/death
     bool flag = false;        // crit for attacks, the main target was hit for casts
     double x = 0, y = 0;      // casts: where it was aimed
