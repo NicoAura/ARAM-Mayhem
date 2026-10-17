@@ -40,6 +40,12 @@ export const sections = [
     pr: 0,
   },
   {
+    href: "/augments",
+    label: text("tab./augments.label", "Augment Tiers"),
+    body: text("tab./augments.body", "Every augment ranked S to D within its rarity, filtered by rarity and build style."),
+    pr: 0,
+  },
+  {
     href: "/draft",
     label: text("tab./draft.label", "Augment Draft"),
     body: text("tab./draft.body", "Practice augment picks with rerolls and see how often players on your champion take each one."),
