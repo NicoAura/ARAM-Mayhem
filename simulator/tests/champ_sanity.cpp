@@ -337,6 +337,21 @@ int main(int argc, char** argv) {
         CHECK(meanDps(lib, free, cap, lsc, 600) > meanDps(lib, *lux, cap, lsc, 600), "running out of mana costs damage");
     }
 
+    {
+        // Enemies use their own abilities: Leona's stuns on you are her Q, E or R.
+        Library vs = Library::load(argc > 1 ? argv[1] : "data/mayhem_rules.json");
+        vs.enemyTeam = {"Leona"};
+        const Scenario lsc = vs.scenarioFor(*ahri);
+        bool hers = false, others = false;
+        for (uint64_t trial = 0; trial < 60; ++trial)
+            for (const auto& ev : traceFight(vs, *ahri, cap, lsc, trial).events)
+                if (ev.kind == "cc" && ev.who == "Leona") {
+                    hers |= ev.slot == 'Q' || ev.slot == 'E' || ev.slot == 'R';
+                    others |= ev.slot == 'W';
+                }
+        CHECK(hers && !others, "Leona crowd controls you with her own stuns");
+    }
+
     bool threw = false;
     try { runTrials(lib, *ahri, Build{{"not_an_item"}, {}}, sc, 0, 1); } catch (...) { threw = true; }
     CHECK(threw, "unknown item ids are rejected");

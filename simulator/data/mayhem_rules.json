@@ -20,7 +20,13 @@
   "hitbox_radius": 65,
   "lane_half_width": 550,
   "in_range_damage_boost": 1.3,
-  "positions_note": "Everyone stands on the lane and moves at their move speed. You walk into range of your target for attacks and abilities; ranged champions step back from short-ranged enemies. Enemies walk to their reach once the fight starts and hurt you only while you're inside it. Skillshots land where the target will be when they arrive; an enemy that sees one coming (dodge_chance) sidesteps after reaction_time. How much damage a champion takes overall follows its real damage-taken share; in_range_damage_boost makes up for enemies you kill hitting you less. Estimates, tuned so average survival and skillshot accuracy match the earlier model."
+  "positions_note": "Everyone stands on the lane and moves at their move speed. You walk into range of your target for attacks and abilities; ranged champions step back from short-ranged enemies. Enemies walk to their reach once the fight starts and hurt you only while you're inside it. Skillshots land where the target will be when they arrive; an enemy that sees one coming (dodge_chance) sidesteps after reaction_time. How much damage a champion takes overall follows its real damage-taken share; in_range_damage_boost makes up for enemies you kill hitting you less. Estimates, tuned so average survival and skillshot accuracy match the earlier model.",
+  "enemy_abilities": 1,
+  "enemy_hit_chance": 0.7,
+  "enemy_ability_haste": 60,
+  "enemy_ability_share": 0.65,
+  "enemy_ability_share_marksman": 0.35,
+  "enemy_abilities_note": "Enemies cast their own abilities on you: each damaging or hard-CC ability goes off on its cooldown (with their Mayhem ability haste plus enemy_ability_haste) once you're within its range, and skillshots land enemy_hit_chance of the time. Their abilities carry enemy_ability_share of their damage (enemy_ability_share_marksman for marksmen), the ultimate hitting 2.5x as hard as a basic ability; the rest is a steady stream while you're in reach, so the average still follows real games. Their stuns, knockups and other hard CC are their own abilities' kinds and durations, landing as often as real games' crowd control rate; teammates' crowd control (random) makes up any rate their kit doesn't reach. enemy_abilities 0 goes back to random crowd control and a steady stream."
  },
  "scenario": {
   "level": 18,
@@ -33,8 +39,8 @@
   "until_death": 1,
   "until_death_note": "Each fight runs until the champion dies (cheat-death passives and ultimates from champion_overrides.json included), at most fight_cap seconds. fight_mean/sd/min/max only apply with until_death 0.",
   "fight_cap": 90,
-  "until_death_damage_scale": 6,
-  "until_death_damage_scale_note": "Multiplies the enemies' damage in fights that last until you die, tuned so a typical champion with its usual build lasted about 20-25 seconds against real games' average enemy (one enemy can't reach a kiting champion as often as a team does). Level-18 enemies with full builds hit about 1.5x harder on top, so about 12 seconds now.",
+  "until_death_damage_scale": 4.7,
+  "until_death_damage_scale_note": "Multiplies the enemies' damage in fights that last until you die, tuned so a typical champion with its usual build lasted about 20-25 seconds against real games' average enemy (one enemy can't reach a kiting champion as often as a team does). Level-18 enemies with full builds hit about 1.5x harder on top, so about 12 seconds now. Lowered from 6 to 4.7 when enemies started casting their own abilities (their long-range hits reach kiting champions), keeping the median champion alive about 12 seconds with its usual build.",
   "team_size": 1,
   "cc_rate_min": 0.05,
   "cc_rate_max": 0.2,

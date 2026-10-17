@@ -141,6 +141,12 @@ struct Rules {
     // up to keep a fight's total about where real games put it.
     double inRangeBoost = 1.0;
     double comboOrder = 1;  // 1: cast in each champion's recommended combo order; 0: by damage
+    // Enemies cast their own abilities: their damage partly arrives as those abilities' hits (on
+    // their cooldowns, in their range), and their crowd control is their own (rate kept to real games).
+    double enemyAbilities = 1;
+    double enemyHitChance = 0.7;   // chance an enemy skillshot lands on you (targeted ones always do)
+    double enemyAbilityHaste = 60; // enemies' ability haste on top of their Mayhem bonus
+    double enemyAbilityShare = 0.65, enemyAbilityShareMarksman = 0.35;  // share of damage from abilities
 };
 
 struct OptimizerSettings {
