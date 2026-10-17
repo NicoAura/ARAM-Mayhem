@@ -123,7 +123,20 @@ Settings: `start_distance`, `enemy_spread` (fight), `dodge_chance` 0.75, `reacti
 | `proc_*`, `active_*` | Luden's-style procs and active items |
 | `aura_flat`, `aura_bonus_hp` | Sunfire-style aura damage per second |
 
-`data/augments.json` has 14 Mayhem augments with Riot's Kiwi ids. Which augments are modeled and their effect keys are hand-written; `tools/build_augments.py` fills each augment's name, rarity and values from the live patch's `kiwi.bin` (the augment spell's DataValues and calculations) through an explicit per-augment mapping, and prints every value it changes. Values with no client equivalent stay hand-written with a note: Erosion assumes 15 stacks on average, Tank Engine 10 takedowns, and Witchful Thinking keeps 60 AP because the client is ambiguous (its tooltip shows 20-80 by level, its DataValue says 70). **Poro Stampede** (a quest augment) is modeled as already completed with 20 Poros fed: its Poro Charge spell fires 3 waves of Poros down the lane once per fight, each a wide, slow skillshot dealing 100-200 (by level) + 20 per Poro fed as physical damage, half to champions already hit (`poros_fed` in the augment changes the waves; the waves' length, width and spacing are estimates).
+`data/augments.json` has every Mayhem augment in the live patch (216), with Riot's Kiwi ids. 138 of them have an effect in the simulator; the rest carry a `not_modeled` reason (they help allies, change summoner spells, give gold or items, need takedowns or movement, cost mana, or are stacking passives still to come) and the optimizer skips them. The original 14 augments keep a hand-written mapping in `tools/build_augments.py`; every other augment's effect keys are written in `tools/augment_effects.py`, with values read from the augment spell's DataValues and calculations (`dv`, `calc`, and `lvl` for values that grow from level 1 to 18). Values with no client equivalent stay hand-written with a note: Erosion assumes 15 stacks on average, Tank Engine 10 takedowns, and Witchful Thinking gives 20-80 AP by level as its tooltip shows (its unused DataValue says 70).
+
+Augment effects come in a few families, handled by the engine in `src/champ.cpp`:
+
+| Keys | Meaning |
+|---|---|
+| plain stats, `*_l1`/`*_l18` | flat stats, or values that scale linearly with level |
+| `trig_on` + `trig_*` | a proc on attack, ability, hit, crit, immobilize, dash, timer, kill, shield, channel or damage taken: damage (`trig_flat`, `trig_ap`, `trig_ad`, `trig_max_hp`...), heal (`trig_heal_*`), shield (`trig_shield_*`), CC, with cooldown, every-Nth, per-target and radius options |
+| `stack_on` + `stack_*` | stacks gained on an event, each giving AP, AD, attack speed or move speed, with a cap and duration |
+| `spell_bind` + `spell_*` | buffs to one ability: the best basic ability by damage per cooldown of the kind named (any, aoe, missile, cc, buff, dash) |
+| conversions | `ap_to_ad`, `ad_to_ap`, `crit_per_ap`, `as_per_ap`, `as_to_ah`, `ms_to_as` and similar |
+| `revive_*`, `invuln_*`, `start_shield_*` | revives (Hellbent), short invulnerability, a shield at the start of the fight |
+
+`data/augment_pools.json` lists the augments each champion can be offered, made by `tools/build_augment_pools.py` from every augment seen on that champion in the per-champion build stats (95 to 162 each). The optimizer only picks from the champion's own pool, and `--list --json` includes it. **Poro Stampede** (a quest augment) is modeled as already completed with 20 Poros fed: its Poro Charge spell fires 3 waves of Poros down the lane once per fight, each a wide, slow skillshot dealing 100-200 (by level) + 20 per Poro fed as physical damage, half to champions already hit (`poros_fed` in the augment changes the waves; the waves' length, width and spacing are estimates).
 
 ## Optimizer
 

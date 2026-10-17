@@ -4,24 +4,50 @@
   "E": {
    "onhit_every": 4,
    "why": "Stacked Deck procs on every 4th attack"
+  },
+  "W": {
+   "alt_calcs": [
+    "BlueDamage",
+    "RedDamage"
+   ],
+   "geometry": {
+    "shape": "single",
+    "range": 600,
+    "on_self": false
+   },
+   "why": "one card per cast (Gold, matching the stun); the card is a single-target empowered attack"
   }
  },
  "Teemo": {
   "E": {
    "onhit_every": 1,
-   "why": "Toxic Shot is on-hit"
+   "hit_mults": {
+    "TotalDotDamage": 0.5
+   },
+   "why": "Toxic Shot is on-hit; the poison refreshes rather than stacks, so each attack adds only part of it"
   }
  },
  "Veigar": {
   "W": {
    "cooldown": 8,
-   "why": "Dark Matter's cooldown is not in the spell record"
+   "geometry": {
+    "speed": 750
+   },
+   "why": "Dark Matter cooldown not in spell record; lands after a 1.2s delay, modelled as flight time so it can be dodged"
   }
  },
  "TahmKench": {
   "R": {
    "cooldown": 80,
    "why": "Devour's cooldown is not in the spell record (120/100/80)"
+  },
+  "Q": {
+   "cc": {
+    "type": "slow",
+    "duration": 2.0,
+    "amount": 0.4
+   },
+   "why": "Tongue Lash only stuns at 3 An Acquired Taste stacks; otherwise slows"
   }
  },
  "Shyvana": {
@@ -31,13 +57,26 @@
   },
   "Q": {
    "attack_reset": true,
-   "why": "resets the basic attack timer"
+   "alt_calcs": [
+    "Calc_Dragon_Form_Damage"
+   ],
+   "why": "resets the basic attack timer; dragon-form damage replaces human-form damage"
+  },
+  "E": {
+   "alt_calcs": [
+    "Calc_Dragon_Damage",
+    "Calc_Max_Health_Dragon_Damage"
+   ],
+   "why": "dragon-form numbers replace the human-form ones"
   }
  },
  "Cassiopeia": {
   "E": {
    "cooldown": 0.75,
-   "why": "Twin Fang really is spammable (0.75s)"
+   "hit_mults": {
+    "BonusPoisonedDamage": 2
+   },
+   "why": "Twin Fang is spammable (0.75s) and the target is always poisoned, so the bonus always applies"
   }
  },
  "Vayne": {
@@ -48,6 +87,12 @@
   "Q": {
    "attack_reset": true,
    "why": "resets the basic attack timer"
+  },
+  "E": {
+   "alt_calcs": [
+    "EmpoweredDamageTT"
+   ],
+   "why": "Condemn wall-collision damage is the alternative (bonus) value, not an extra hit"
   }
  },
  "Vi": {
@@ -58,6 +103,13 @@
   "E": {
    "attack_reset": true,
    "why": "resets the basic attack timer"
+  },
+  "R": {
+   "cc": {
+    "type": "knockup",
+    "duration": 1.25
+   },
+   "why": "Cease and Desist knocks the primary target up for about 1.25s, not a 0.75s stun"
   }
  },
  "Yunara": {
@@ -69,13 +121,22 @@
  "Zeri": {
   "Q": {
    "onhit_every": 1,
-   "why": "Burst Fire replaces her attacks"
+   "hit_mults": {
+    "ActiveDamageThatCanCrit": 0.1
+   },
+   "why": "Burst Fire replaces her attacks: the attack already counts, Q only adds its small extra over an attack"
+  },
+  "W": {
+   "alt_calcs": [
+    "WallDamage"
+   ],
+   "why": "Ultrashock Laser through-wall damage is an alternative path, not an extra hit"
   }
  },
  "Yasuo": {
   "E": {
-   "cooldown": 2,
-   "why": "Sweeping Blade can't hit the same target again for a few seconds"
+   "cooldown": 6,
+   "why": "Sweeping Blade can't dash through the same target for 6s at rank 5; in a duel that is its effective cooldown"
   }
  },
  "Jinx": {
@@ -88,6 +149,15 @@
   "Q": {
    "skip": true,
    "why": "Ranger's Focus is an attack speed steroid, not a separate hit"
+  },
+  "W": {
+   "geometry": {
+    "shape": "cone",
+    "range": 1200,
+    "angle": 45,
+    "speed": 2000
+   },
+   "why": "Volley is a 9-arrow cone, not a 20-wide line; it almost never hit"
   }
  },
  "Aatrox": {
@@ -105,6 +175,13 @@
     "MiniSwipeDamage": 5
    },
    "why": "Snip Snip! snips 5 times at full stacks before the final cut"
+  },
+  "R": {
+   "hit_mults": {
+    "TotalDamage3": 2,
+    "TotalDamage5": 2
+   },
+   "why": "Needlework's three casts (1, 3, 5 needles) all land in one use; offset the 0.5 secondary weight so 9 needles count"
   }
  },
  "Hecarim": {
@@ -127,6 +204,16 @@
   "R": {
    "lock": 3,
    "why": "Requiem channels for 3 seconds"
+  },
+  "E": {
+   "geometry": {
+    "shape": "circle",
+    "range": 0,
+    "radius": 550,
+    "on_self": true,
+    "self_buff": false
+   },
+   "why": "Defile is a 550-radius aura; parsed as a single/self buff so the aura only reached 350"
   }
  },
  "Sion": {
@@ -137,12 +224,27 @@
   "R": {
    "lock": 3,
    "why": "Unstoppable Onslaught charges about 3 seconds before it hits"
+  },
+  "E": {
+   "cc": {
+    "type": "slow",
+    "duration": 2.5,
+    "amount": 0.5
+   },
+   "why": "Roar of the Slayer slows champions; knockup only from a knocked-back minion"
   }
  },
  "KogMaw": {
   "death": {
    "act": 4,
    "why": "Icathian Surprise: keeps going for 4 seconds after dying"
+  },
+  "W": {
+   "onhit_every": 1,
+   "hit_mults": {
+    "TotalHealthDamage": 0.5
+   },
+   "why": "Bio-Arcane Barrage is an on-hit %max HP buff for 8s (~50% uptime), not one hit per cast"
   }
  },
  "Zilean": {
@@ -159,6 +261,25 @@
    "revive_delay": 6,
    "chance": 0.5,
    "why": "Rebirth: back at full Health if the egg survives 6 seconds (about half the time in a fight)"
+  },
+  "Q": {
+   "hit_mults": {
+    "TotalExplosionDamage": 2
+   },
+   "why": "Flash Frost passthrough and detonation both hit a single target"
+  },
+  "E": {
+   "hit_mults": {
+    "TotalDamage": 2
+   },
+   "why": "Frostbite is doubled on chilled targets; Q/R keep the target chilled in her combo"
+  },
+  "R": {
+   "duration": 2.0,
+   "hit_mults": {
+    "TotalDamagePerSecond": 2.5
+   },
+   "why": "Glacial Storm is a sustained toggle that triples damage once fully formed (1.5s); was only up half the time at base damage"
   }
  },
  "Zac": {
@@ -167,6 +288,12 @@
    "revive_delay": 8,
    "chance": 0.5,
    "why": "Cell Division: reforms if a blob survives 8 seconds (about half the time)"
+  },
+  "R": {
+   "hit_mults": {
+    "DamagePerSubsequentBounce": 6
+   },
+   "why": "Let's Bounce: first bounce full, then about 3 more bounces at 50% on the same target"
   }
  },
  "Tryndamere": {
@@ -205,12 +332,22 @@
   "E": {
    "attack_reset": true,
    "why": "resets the basic attack timer"
+  },
+  "R": {
+   "hit_mults": {
+    "PassiveDamage": 0,
+    "ActiveDamage": 2
+   },
+   "why": "The cast deals the active pulse; the passive zap is only on attacks while R is off cooldown"
   }
  },
  "Camille": {
   "Q": {
    "attack_reset": true,
-   "why": "resets the basic attack timer"
+   "hit_mults": {
+    "BonusDamage": 2
+   },
+   "why": "Precision Protocol resets the attack; Q1 and Q2 both land each cooldown (Q2 doubled if delayed)"
   }
  },
  "Darius": {
@@ -220,7 +357,16 @@
   },
   "Q": {
    "cast_time": 0.75,
-   "why": "Decimate spins for 0.75 seconds before it hits"
+   "hit_mults": {
+    "HandleDamage": 0
+   },
+   "why": "Decimate spins 0.75s before it hits; blade and handle damage are alternatives by distance, not both"
+  },
+  "R": {
+   "hit_mults": {
+    "Damage": 2
+   },
+   "why": "Noxian Guillotine deals double at 5 Hemorrhage stacks, the usual state when Darius ults in a duel"
   }
  },
  "Ekko": {
@@ -233,12 +379,20 @@
   "E": {
    "attack_reset": true,
    "why": "resets the basic attack timer"
+  },
+  "W": {
+   "cc": {
+    "type": "slow",
+    "duration": 1.5,
+    "amount": 0.5
+   },
+   "why": "Riposte only stuns if it parries an immobilizing effect; otherwise it slows 50% for 1.5s"
   }
  },
  "Fizz": {
   "W": {
-   "attack_reset": true,
-   "why": "resets the basic attack timer"
+   "cooldown": 5,
+   "why": "Seastone Trident cooldown is 7/6.5/6/5.5/5, not 3"
   }
  },
  "Garen": {
@@ -251,6 +405,18 @@
   "E": {
    "attack_reset": true,
    "why": "resets the basic attack timer"
+  },
+  "Q": {
+   "hit_mults": {
+    "TotalDetonationDamage": 2
+   },
+   "why": "End of the Line's detonation lands in addition to the outbound hit and is the bigger part; offset the 0.5 secondary weight"
+  },
+  "R": {
+   "alt_calcs": [
+    "FalloffDamage"
+   ],
+   "why": "Collateral Damage's cone falloff hits enemies behind the first target, not the primary target again"
   }
  },
  "Illaoi": {
@@ -267,14 +433,18 @@
  },
  "Jayce": {
   "W": {
-   "attack_reset": true,
-   "why": "resets the basic attack timer"
+   "attack_reset": false,
+   "cast_time": 0,
+   "why": "Hammer W (Lightning Field) is an instant damage aura; the attack reset belongs to cannon W (Hyper Charge)"
   }
  },
  "Kassadin": {
   "W": {
    "attack_reset": true,
-   "why": "resets the basic attack timer"
+   "hit_mults": {
+    "ActiveDamage": 2
+   },
+   "why": "resets the basic attack timer; the active hit is the real damage and was only weighted 0.5 behind the small passive on-hit"
   }
  },
  "Leona": {
@@ -303,42 +473,104 @@
   "Q": {
    "attack_reset": true,
    "why": "resets the basic attack timer"
+  },
+  "R": {
+   "hit_mults": {
+    "DamageCalc": 10
+   },
+   "why": "Fury of the Sands burns %max HP per second for 15s; parsed as a single tick, ~10 ticks land in a typical duel"
   }
  },
  "Nautilus": {
   "W": {
    "attack_reset": true,
    "why": "resets the basic attack timer"
+  },
+  "R": {
+   "hit_mults": {
+    "SecondaryTargetDamage": 0
+   },
+   "why": "secondary damage is for other enemies the shockwave passes; 1v1 only the primary target is hit"
   }
  },
  "Renekton": {
   "W": {
    "attack_reset": true,
-   "why": "resets the basic attack timer"
+   "alt_calcs": [
+    "EmpTotalDamage"
+   ],
+   "why": "resets the basic attack timer; empowered (Fury) version replaces the normal one"
+  },
+  "E": {
+   "hit_mults": {
+    "BasicDamage": 2
+   },
+   "why": "Slice and Dice is two dashes, each dealing the damage"
   }
  },
  "Rengar": {
   "Q": {
    "attack_reset": true,
-   "why": "resets the basic attack timer"
+   "alt_calcs": [
+    "EmpoweredQTotalDamage"
+   ],
+   "why": "resets the basic attack timer; empowered (Ferocity) version replaces the normal one"
+  },
+  "W": {
+   "alt_calcs": [
+    "TotalDamageEmpowered"
+   ],
+   "why": "empowered (Ferocity) version replaces the normal one"
+  },
+  "E": {
+   "alt_calcs": [
+    "TotalEmpoweredDamage"
+   ],
+   "why": "empowered (Ferocity) version replaces the normal one"
   }
  },
  "Riven": {
   "Q": {
    "attack_reset": true,
-   "why": "resets the basic attack timer"
+   "hit_mults": {
+    "FirstSlashDamage": 1.5
+   },
+   "geometry": {
+    "radius": 150
+   },
+   "why": "resets the basic attack timer; Broken Wings is three casts per cooldown (listed twice, so x1.5); real AoE radius ~150"
+  },
+  "R": {
+   "hit_mults": {
+    "BonusAD": 0,
+    "MinDamage": 2
+   },
+   "alt_calcs": [
+    "MaxDamage"
+   ],
+   "why": "bonus AD is a buff not a hit; Wind Slash is one hit (min..max by missing health)"
   }
  },
  "Sivir": {
   "W": {
    "attack_reset": true,
    "why": "resets the basic attack timer"
+  },
+  "Q": {
+   "hit_mults": {
+    "TotalDamage": 2
+   },
+   "why": "Boomerang Blade hits on the way out and back"
   }
  },
  "Trundle": {
   "Q": {
    "attack_reset": true,
-   "why": "resets the basic attack timer"
+   "hit_mults": {
+    "BonusAD": 0,
+    "SappedAD": 0
+   },
+   "why": "resets the basic attack timer; BonusAD/SappedAD are AD steal values, not damage"
   }
  },
  "MonkeyKing": {
@@ -357,6 +589,19 @@
   "Q": {
    "attack_reset": true,
    "why": "resets the basic attack timer"
+  },
+  "R": {
+   "hit_mults": {
+    "PercentHealthDamage": 0.5
+   },
+   "why": "Void Rush's percent part is of missing health, not max health; about half at typical cast time"
+  },
+  "W": {
+   "cc": {
+    "type": "knockup",
+    "duration": 1.0
+   },
+   "why": "Unburrow knocks up the target"
   }
  },
  "MissFortune": {
@@ -367,6 +612,18 @@
     "CritDamagePerWave"
    ],
    "why": "Bullet Time channels for 3 seconds; the total is the whole channel; per-wave numbers are part of it"
+  },
+  "Q": {
+   "alt_calcs": [
+    "TotalDamageCrit"
+   ],
+   "why": "the crit number is the bounce to a second target, not extra damage on the first"
+  },
+  "E": {
+   "alt_calcs": [
+    "TotalDamage"
+   ],
+   "why": "TotalDamage is the per-second damage times the 2s duration, counted on top of it"
   }
  },
  "Katarina": {
@@ -404,6 +661,18 @@
     "RampDamageCalc"
    ],
    "why": "Rite of the Arcane: about 4 seconds of shots in a fight; about four shots in the 4 seconds counted"
+  },
+  "Q": {
+   "geometry": {
+    "range": 1450
+   },
+   "why": "Arcanopulse reaches 1450 range at full charge (lock 1.5s), not 700"
+  },
+  "W": {
+   "geometry": {
+    "radius": 250
+   },
+   "why": "Eye of Destruction outer radius is about 250-275, not 100 (that is the sweet spot)"
   }
  },
  "Rammus": {
@@ -415,7 +684,10 @@
  "Nunu": {
   "W": {
    "lock": 2,
-   "why": "the snowball rolls about 2 seconds before it hits"
+   "hit_mults": {
+    "NoImpactSnowballDamage": 0
+   },
+   "why": "the snowball rolls about 2 seconds before it hits; one hit whose size is between min and max (max at half weight ~ mid size)"
   }
  },
  "Samira": {
@@ -426,6 +698,18 @@
    },
    "cooldown": 15,
    "why": "Inferno Trigger: 2 seconds of shooting, no attacks; ten waves of shots; needs an S style rank, about once per 15 seconds of fighting"
+  },
+  "Q": {
+   "hit_mults": {
+    "DamageCalc": 0.5
+   },
+   "why": "Flair is one shot or one slash; the calc is listed twice"
+  },
+  "W": {
+   "hit_mults": {
+    "DamageCalc": 2
+   },
+   "why": "Blade Whirl slashes twice"
   }
  },
  "Jhin": {
@@ -437,7 +721,10 @@
    "alt_calcs": [
     "MaxIncreaseCalc"
    ],
-   "why": "Curtain Call: four shots over about 4 seconds; four shots; the maximum is the execute version of one shot"
+   "geometry": {
+    "speed": 5000
+   },
+   "why": "Curtain Call: four shots over about 4 seconds; the maximum is the execute version of one shot; shots travel at 5000, not 828"
   }
  },
  "Senna": {
@@ -453,6 +740,12 @@
    },
    "lock": 1.5,
    "why": "about five bullets after a full charge"
+  },
+  "Q": {
+   "hit_mults": {
+    "FinalDamage": 2
+   },
+   "why": "Avengerang hits on the way out and on the way back"
   }
  },
  "Hwei": {
@@ -503,6 +796,824 @@
   "R": {
    "cast_time": 0.25,
    "why": "Spiraling Despair's cast time is 0.25 s"
+  }
+ },
+ "Ahri": {
+  "W": {
+   "hit_mults": {
+    "MultiFireDamage": 4
+   },
+   "why": "Fox-Fire: all three fires hit a lone target; the two follow-up fires each deal the reduced amount"
+  },
+  "R": {
+   "hit_mults": {
+    "RCalculatedDamage": 3
+   },
+   "why": "Spirit Rush is three dashes per cooldown, each firing a bolt at the target"
+  }
+ },
+ "Akali": {
+  "E": {
+   "hit_mults": {
+    "E2DamageCalc": 2
+   },
+   "why": "Shuriken Flip recast always follows the marked target; both parts land"
+  },
+  "R": {
+   "hit_mults": {
+    "Cast2DamageMin": 3,
+    "Cast2DamageMax": 0
+   },
+   "why": "Perfect Execution second cast is one hit scaling min-to-max with missing health, not both; count about 1.5x the minimum"
+  }
+ },
+ "Ambessa": {
+  "Q": {
+   "hit_mults": {
+    "Calc_Damage_2_Max": 2
+   },
+   "why": "Sundering Slam follow-up always comes after Cunning Sweep hits; count it fully"
+  },
+  "W": {
+   "alt_calcs": [
+    "Calc_Damage_Low"
+   ],
+   "why": "Repudiation deals the low or the high number (high after blocking champion damage), not both"
+  }
+ },
+ "AurelionSol": {
+  "R": {
+   "hit_mults": {
+    "R2Damage": 0,
+    "ShockwaveDamage": 0
+   },
+   "why": "Falling Star or Great Unraveling (with its shockwave) per cast, not all three"
+  }
+ },
+ "Aurora": {
+  "Q": {
+   "hit_mults": {
+    "damage": 2
+   },
+   "why": "Twofold Hex hits going out and again when it returns"
+  }
+ },
+ "Belveth": {
+  "E": {
+   "hit_mults": {
+    "DamagePerStrike": 8,
+    "MaxDamagePerStrikeTooltip": 0
+   },
+   "lock": 1.5,
+   "why": "Royal Maelstrom is a 1.5s channel of about 8 strikes; the max-per-strike number is the low-health variant"
+  },
+  "R": {
+   "cooldown": 60,
+   "hit_mults": {
+    "FinalOnHitDamage": 0
+   },
+   "why": "Endless Banquet needs Void Coral from a takedown, not usable every second; the on-hit true damage is a form buff, not a cast hit"
+  }
+ },
+ "Briar": {
+  "W": {
+   "hit_mults": {
+    "TotalAttackBonusDamage": 2
+   },
+   "why": "Snack Attack recast always follows the Blood Frenzy leap; count it fully"
+  },
+  "E": {
+   "alt_calcs": [
+    "WallHitDamage"
+   ],
+   "why": "Chilling Scream wall-hit damage is the conditional empowered version; the normal hit is the main one"
+  }
+ },
+ "Caitlyn": {
+  "Q": {
+   "alt_calcs": [
+    "SecondaryDamage"
+   ],
+   "why": "Piercing Shot deals reduced damage only to targets after the first; a single target takes the initial damage only"
+  }
+ },
+ "Chogath": {
+  "E": {
+   "hit_mults": {
+    "FlatDamageCalc": 3,
+    "MaxHealthPercentCalc": 3
+   },
+   "why": "Vorpal Spikes empowers the next three attacks, not one"
+  }
+ },
+ "Diana": {
+  "W": {
+   "hit_mults": {
+    "TotalDamage": 3
+   },
+   "why": "Pale Cascade has three orbs that each hit a nearby target"
+  },
+  "R": {
+   "hit_mults": {
+    "RMultihitAmplification": 0
+   },
+   "cc": {
+    "type": "slow",
+    "duration": 2.0,
+    "amount": 0.5
+   },
+   "why": "Moonfall bonus is per extra champion hit; it pulls and slows rather than a 2s knockup"
+  }
+ },
+ "Draven": {
+  "Q": {
+   "onhit_every": 1,
+   "why": "Spinning Axe is juggled onto every basic attack, not a 210-radius self circle a ranged champion never reaches"
+  },
+  "R": {
+   "hit_mults": {
+    "RCalculatedDamage": 2
+   },
+   "why": "Whirling Death hits on the way out and on the way back"
+  }
+ },
+ "Evelynn": {
+  "E": {
+   "alt_calcs": [
+    "EmpoweredDamage",
+    "PercentHealthEmpoweredTOOLTIP"
+   ],
+   "why": "Whiplash deals the base or the empowered (Demonshade) damage, not both; both %HP hits were counting fully"
+  }
+ },
+ "Galio": {
+  "W": {
+   "alt_calcs": [
+    "MaxTotalDamage"
+   ],
+   "why": "Shield of Durand deals min to max damage by charge time, not both"
+  },
+  "E": {
+   "alt_calcs": [
+    "PVEDamage"
+   ],
+   "why": "PVEDamage is the reduced damage to minions/monsters, not a second hit on champions"
+  }
+ },
+ "Gnar": {
+  "W": {
+   "onhit_every": 3,
+   "why": "Mini Gnar W (Hyper) is a passive proc on every 3rd hit, not an active on a 7s cooldown"
+  }
+ },
+ "Gragas": {
+  "Q": {
+   "alt_calcs": [
+    "MaxDamage"
+   ],
+   "why": "Barrel Roll deals min to max damage by fermentation time, not both"
+  }
+ },
+ "Heimerdinger": {
+  "W": {
+   "alt_calcs": [
+    "Damage"
+   ],
+   "why": "Damage is the first rocket; TotalDamage is the full 5-rocket single-target total"
+  },
+  "R": {
+   "alt_calcs": [
+    "QUltDamage",
+    "QUltDamageBeam",
+    "WUltDamage",
+    "EUltDamage"
+   ],
+   "why": "UPGRADE!!! empowers one ability per cast; model the usual empowered W total, not all five variants"
+  }
+ },
+ "Ivern": {
+  "W": {
+   "alt_calcs": [
+    "TotalAllyDamage"
+   ],
+   "why": "TotalAllyDamage is the empowered-attack bonus granted to allies, not Ivern's own hit"
+  }
+ },
+ "Kaisa": {
+  "Q": {
+   "hit_mults": {
+    "TotalIndividualMissileDamage": 2.25
+   },
+   "why": "Icathian Rain fires 6 missiles at a lone target; missiles after the first deal 25%, so single-target total is 2.25x one missile"
+  }
+ },
+ "Kalista": {
+  "W": {
+   "skip": true,
+   "why": "Soul-Marked %HP damage needs an Oathsworn ally hitting the same target; nothing in a 1v1"
+  },
+  "E": {
+   "hit_mults": {
+    "AdditionalDamage": 6
+   },
+   "why": "Rend adds AdditionalDamage per extra spear (several per cycle at her attack speed); 6 at the 0.5 secondary weight is about 3 extra spears, conservative"
+  }
+ },
+ "Karma": {
+  "W": {
+   "cc": {
+    "type": "root",
+    "duration": 2.0
+   },
+   "why": "Focused Resolve tether roots for 2s at max rank if the tether holds"
+  },
+  "R": {
+   "geometry": {
+    "shape": "line",
+    "range": 950,
+    "width": 90,
+    "radius": 0,
+    "speed": 902,
+    "stops": true,
+    "on_self": false
+   },
+   "cc": {
+    "type": "slow",
+    "duration": 1.5,
+    "amount": 0.5
+   },
+   "shield": null,
+   "why": "Mantra cast modelled as Soulflare (RQ): a Q-style missile plus field; the root (RW) and shield (RE) belong to other mantra casts"
+  }
+ },
+ "Kennen": {
+  "R": {
+   "geometry": {
+    "radius": 550
+   },
+   "why": "Slicing Maelstrom storm radius is 550, not 210"
+  }
+ },
+ "Kled": {
+  "Q": {
+   "cc": {
+    "type": "slow",
+    "duration": 1.5,
+    "amount": 0.4
+   },
+   "why": "Beartrap on a Rope tethers and yanks; it is not a 2.5s knockup"
+  }
+ },
+ "Leblanc": {
+  "R": {
+   "geometry": {
+    "shape": "single",
+    "range": 700,
+    "radius": 0,
+    "speed": 2000,
+    "on_self": false
+   },
+   "hit_mults": {
+    "RQ2Damage": 2,
+    "RWDamage": 0,
+    "RE1Damage": 0,
+    "RE2Damage": 0
+   },
+   "cc": null,
+   "why": "Mimic copies one spell per cast; model it as RQ (hit + mark pop), not all five mimic numbers"
+  }
+ },
+ "LeeSin": {
+  "R": {
+   "hit_mults": {
+    "Damage": 0.5,
+    "PercentHPCarryThrough": 0
+   },
+   "why": "Damage is listed twice (target + collateral) so it counted double; the %HP part only hits enemies the kicked target collides with"
+  }
+ },
+ "Locke": {
+  "W": {
+   "hit_mults": {
+    "HealthCost": 0
+   },
+   "why": "HealthCost is Locke's own health cost, not damage to enemies"
+  }
+ },
+ "Lulu": {
+  "E": {
+   "shield": null,
+   "why": "Help, Pix! either shields an ally or damages an enemy, not both"
+  }
+ },
+ "Maokai": {
+  "E": {
+   "alt_calcs": [
+    "TotalEmpoweredDamage"
+   ],
+   "why": "the brush-empowered sapling replaces the normal damage, it does not add to it"
+  }
+ },
+ "MasterYi": {
+  "Q": {
+   "alt_calcs": [
+    "TotalDamage",
+    "SubesquentDamage"
+   ],
+   "why": "against one target Alpha Strike deals SingleTotalDamage; the per-strike numbers are its parts"
+  },
+  "E": {
+   "onhit_every": 1,
+   "hit_mults": {
+    "TotalDamage": 0.4
+   },
+   "why": "Wuju Style is on-hit true damage for 5s of a 14s cooldown, not a single hit"
+  }
+ },
+ "Morgana": {
+  "R": {
+   "cc": {
+    "type": "stun",
+    "duration": 1.5
+   },
+   "why": "Soul Shackles stuns for 1.5s, not 2"
+  }
+ },
+ "Naafiri": {
+  "W": {
+   "cooldown": 80,
+   "hit_mults": {
+    "BonusAD": 0
+   },
+   "why": "this slot holds the NaafiriR spell (The Call of the Hunt AD buff): ult cooldown, and bonus AD is a buff not a hit"
+  },
+  "R": {
+   "cooldown": 18,
+   "why": "this slot holds the NaafiriW spell (Hounds' Pursuit damage dash): basic-ability cooldown"
+  },
+  "Q": {
+   "hit_mults": {
+    "TotalBleedDamage": 2,
+    "TotalMinDamageSecondCast": 2,
+    "TotalMaxDamageSecondCast": 0
+   },
+   "why": "one cast = first dagger + bleed + one recast; the max second-cast number is the missing-health cap of the same hit"
+  }
+ },
+ "Nami": {
+  "E": {
+   "hit_mults": {
+    "TotalDamage": 3
+   },
+   "why": "Tidecaller's Blessing empowers Nami's next 3 attacks, each dealing the bonus damage"
+  }
+ },
+ "Neeko": {
+  "R": {
+   "cast_time": 1.25,
+   "cc": {
+    "type": "stun",
+    "duration": 1.25
+   },
+   "why": "Pop Blossom has a 1.25s wind-up before the burst and stuns 1.25s"
+  }
+ },
+ "Nocturne": {
+  "Q": {
+   "hit_mults": {
+    "BonusTrailAD": 0
+   },
+   "why": "BonusTrailAD is Nocturne's bonus AD while on the Dusk Trail, not damage"
+  }
+ },
+ "Olaf": {
+  "E": {
+   "cooldown": 4,
+   "why": "each Olaf basic attack reduces Reckless Strike's cooldown by 1s"
+  }
+ },
+ "Pantheon": {
+  "Q": {
+   "alt_calcs": [
+    "HoldDamageCalc",
+    "EmpoweredDamageCalc"
+   ],
+   "why": "tap or hold, one hit; empowered is the Mortal Will variant"
+  },
+  "W": {
+   "alt_calcs": [
+    "EmpoweredDamageMultCalcModified"
+   ],
+   "why": "empowered W is the Mortal Will variant, not an extra hit"
+  }
+ },
+ "Poppy": {
+  "R": {
+   "alt_calcs": [
+    "HalfDamage"
+   ],
+   "why": "Keeper's Verdict deals half damage on a quick tap or full when charged; one hit"
+  }
+ },
+ "Pyke": {
+  "Q": {
+   "hit_mults": {
+    "TotalDamage": 0.5
+   },
+   "why": "Bone Skewer is either a stab or a hook, one hit, but the calc is listed twice"
+  }
+ },
+ "Qiyana": {
+  "Q": {
+   "hit_mults": {
+    "TremorDamage": 0
+   },
+   "why": "rock (tremor bonus) and water (root) are different elements; one Q has one element, keeping water's root"
+  }
+ },
+ "Quinn": {
+  "R": {
+   "skip": true,
+   "why": "Behind Enemy Lines is a 2s out-of-combat transform, not a 3s-cooldown damage spell"
+  },
+  "E": {
+   "cc": {
+    "type": "knockup",
+    "duration": 0.3
+   },
+   "why": "Vault is a short knockback (plus a decaying slow), not a 1.5s airborne"
+  }
+ },
+ "Rakan": {
+  "E": {
+   "skip": true,
+   "why": "Battle Dance can only target an allied champion; no self shield or dash in a 1v1"
+  }
+ },
+ "Rell": {
+  "E": {
+   "skip": true,
+   "why": "Attract and Repel must bind an allied champion; no damage or stun in a 1v1"
+  }
+ },
+ "Renata": {
+  "Q": {
+   "hit_mults": {
+    "TotalDamage": 0.5
+   },
+   "why": "Handshake damages the hooked target once; the throw only damages other enemies it lands on"
+  }
+ },
+ "Ryze": {
+  "Q": {
+   "cooldown": 2.5,
+   "why": "Ryze's passive refunds Overload's cooldown whenever he casts W or E"
+  }
+ },
+ "Sejuani": {
+  "W": {
+   "cc": {
+    "type": "slow",
+    "duration": 1.0,
+    "amount": 0.5
+   },
+   "why": "Winter's Wrath slows champions; only minions/monsters are knocked back"
+  },
+  "E": {
+   "cooldown": 6,
+   "why": "Permafrost is gated by 4 Frost stacks, not its 1.5s cooldown; about every 6s in a duel"
+  }
+ },
+ "Seraphine": {
+  "E": {
+   "cc": {
+    "type": "slow",
+    "duration": 1.5,
+    "amount": 0.6
+   },
+   "why": "Beat Drop only slows a fresh target; root/stun need an existing slow/immobilize"
+  }
+ },
+ "Sett": {
+  "Q": {
+   "hit_mults": {
+    "BaseDamage": 2,
+    "MaxHealthDamageCalc": 2
+   },
+   "why": "Knuckle Down empowers the next two attacks"
+  },
+  "W": {
+   "hit_mults": {
+    "DamageCalc": 1.5
+   },
+   "shield": {
+    "scaling": {
+     "const": 300
+    },
+    "duration": 3.0
+   },
+   "why": "Haymaker adds 25-50% of spent Grit as damage and shields for the Grit spent (approximate)"
+  },
+  "E": {
+   "cc": {
+    "type": "slow",
+    "duration": 0.5,
+    "amount": 0.5
+   },
+   "why": "Facebreaker only stuns with enemies on both sides; one target is just slowed"
+  }
+ },
+ "Shaco": {
+  "W": {
+   "alt_calcs": [
+    "AoEDamage"
+   ],
+   "hit_mults": {
+    "STDamage": 3
+   },
+   "why": "Box fires repeatedly at a lone target with the single-target number; AoE number is the multi-target variant"
+  }
+ },
+ "Shen": {
+  "Q": {
+   "alt_calcs": [
+    "EmpPercentHealth"
+   ],
+   "hit_mults": {
+    "BaseFlatDamage": 3,
+    "BasePercentHealth": 3
+   },
+   "why": "Base and empowered %HP are alternatives; Twilight Assault empowers 3 attacks"
+  },
+  "R": {
+   "skip": true,
+   "why": "Stand United only shields an allied champion; does nothing in a 1v1"
+  }
+ },
+ "Singed": {
+  "E": {
+   "geometry": {
+    "shape": "single",
+    "range": 125,
+    "width": 0
+   },
+   "cc": {
+    "type": "knockup",
+    "duration": 0.5
+   },
+   "why": "Fling is a melee targeted toss; root only when landing in Mega Adhesive"
+  }
+ },
+ "Smolder": {
+  "Q": {
+   "hit_mults": {
+    "Tier3_ExecuteThreshold": 0
+   },
+   "why": "the execute threshold is a %HP threshold, not damage"
+  },
+  "E": {
+   "hit_mults": {
+    "DamagePerHit": 6
+   },
+   "geometry": {
+    "radius": 500
+   },
+   "why": "Flap fires ~6 shots at the lowest-health nearby enemy"
+  }
+ },
+ "Sona": {
+  "Q": {
+   "hit_mults": {
+    "TotalStaccatoDamage": 0
+   },
+   "why": "Staccato is a Power Chord variant already covered by the passive"
+  }
+ },
+ "Swain": {
+  "Q": {
+   "alt_calcs": [
+    "MaxDamage"
+   ],
+   "why": "MaxDamage is the all-bolts total, not an extra hit"
+  },
+  "R": {
+   "hit_mults": {
+    "DamageCalc": 6
+   },
+   "why": "Demonic Ascension drains every second; parsed as one tick (~6s in a duel)"
+  }
+ },
+ "Sylas": {
+  "Q": {
+   "hit_mults": {
+    "ExplosionDamage": 2
+   },
+   "why": "chains and explosion both hit the same target; explosion was half-weighted"
+  }
+ },
+ "Syndra": {
+  "E": {
+   "hit_mults": {
+    "TotalDamage": 0.5
+   },
+   "why": "Scatter the Weak damages a target once; the calc is listed twice"
+  },
+  "R": {
+   "alt_calcs": [
+    "MaxDamageCalc"
+   ],
+   "hit_mults": {
+    "DamageCalc": 4
+   },
+   "why": "per-sphere damage times ~4 spheres; MaxDamageCalc is the 7-sphere total"
+  }
+ },
+ "Taliyah": {
+  "Q": {
+   "cc": null,
+   "why": "Threaded Volley has no stun"
+  }
+ },
+ "Talon": {
+  "Q": {
+   "alt_calcs": [
+    "CriticalDamage"
+   ],
+   "why": "melee crit version replaces the leap damage"
+  }
+ },
+ "Thresh": {
+  "E": {
+   "alt_calcs": [
+    "PAttackDamageMin",
+    "PAttackDamageMax"
+   ],
+   "why": "passive charged-attack numbers are not Flay damage; TotalDamage was half-weighted"
+  }
+ },
+ "Tristana": {
+  "E": {
+   "alt_calcs": [
+    "PassiveDamage",
+    "ActiveDamage"
+   ],
+   "why": "passive is the on-kill explosion; charge usually detonates at full 4 stacks"
+  }
+ },
+ "Twitch": {
+  "E": {
+   "alt_calcs": [
+    "BaseDamage",
+    "PhysicalDamagePerStack",
+    "MagicDamagePerStack"
+   ],
+   "hit_mults": {
+    "MaxMagicDamage": 2
+   },
+   "why": "Max numbers are base + 6 stacks; count them once at full weight"
+  }
+ },
+ "Udyr": {
+  "Q": {
+   "hit_mults": {
+    "OnHitDamage": 2,
+    "MaxHPOnHit1": 2,
+    "EmpoweredLightningBonusMax": 0.5
+   },
+   "why": "Wilding Claw empowers 2 attacks; awakened bonus only every other cast"
+  },
+  "R": {
+   "hit_mults": {
+    "PercentHPBlast": 0.5
+   },
+   "why": "awakened %HP blast only every other cast"
+  }
+ },
+ "Varus": {
+  "Q": {
+   "alt_calcs": [
+    "TotalDamageMax"
+   ],
+   "why": "Piercing Arrow: min and max charge are alternatives; max was being added at half weight"
+  },
+  "W": {
+   "hit_mults": {
+    "PercentHPPerStack": 0
+   },
+   "why": "Blight detonation listed as both 1-stack and 3-stack values; keep the 3-stack detonation only"
+  }
+ },
+ "Velkoz": {
+  "W": {
+   "hit_mults": {
+    "SecondaryDamage": 2
+   },
+   "why": "Void Rift always deals both the initial tear and the detonation; second hit was at half weight"
+  }
+ },
+ "Vex": {
+  "R": {
+   "hit_mults": {
+    "RecastDamageCalc": 2
+   },
+   "why": "Shadow Surge recast dash damage always follows the marked missile; was at half weight"
+  }
+ },
+ "Viego": {
+  "R": {
+   "hit_mults": {
+    "TotalDamage": 0.5
+   },
+   "why": "Heartbreaker's AD-ratio hit is listed twice and counted twice; it lands once"
+  }
+ },
+ "Viktor": {
+  "Q": {
+   "hit_mults": {
+    "AttackTotalDMG": 2
+   },
+   "why": "Siphon Power's empowered follow-up attack is part of every Q trade; was at half weight"
+  }
+ },
+ "Vladimir": {
+  "E": {
+   "alt_calcs": [
+    "MinDamageTooltip"
+   ],
+   "lock": 1.0,
+   "why": "Tides of Blood: min and max charge are alternatives; model the standard full 1s charge"
+  }
+ },
+ "Xayah": {
+  "Q": {
+   "hit_mults": {
+    "TotalDamage": 2,
+    "MultiHitDamage": 0
+   },
+   "geometry": {
+    "speed": 2400
+   },
+   "why": "Double Daggers: two daggers each deal full damage to a champion; reduced value is for later targets; daggers are fast"
+  },
+  "E": {
+   "hit_mults": {
+    "FeatherDamage": 3
+   },
+   "why": "Bladecaller recalls several feathers (2 from Q plus W/attack feathers); about 3 per cast"
+  }
+ },
+ "XinZhao": {
+  "Q": {
+   "hit_mults": {
+    "BonusDamage": 3
+   },
+   "why": "Three Talon Strike empowers the next three attacks"
+  },
+  "W": {
+   "hit_mults": {
+    "ThrustDamage": 2
+   },
+   "why": "Wind Becomes Lightning: slash and thrust both hit a target in front; thrust was at half weight"
+  }
+ },
+ "Yone": {
+  "Q": {
+   "hit_mults": {
+    "QDamage": 0.5
+   },
+   "why": "Mortal Steel's single strike is listed twice and counted twice"
+  }
+ },
+ "Yuumi": {
+  "Q": {
+   "alt_calcs": [
+    "TotalMissileDamageEmpowered"
+   ],
+   "why": "Prowling Projectile's empowered value is the long-flight alternative, not an extra hit"
+  }
+ },
+ "Zed": {
+  "Q": {
+   "geometry": {
+    "speed": 1700
+   },
+   "why": "Razor Shuriken missile speed is 1700, not 902"
+  }
+ },
+ "Ziggs": {
+  "R": {
+   "alt_calcs": [
+    "BlastDamage"
+   ],
+   "why": "Mega Inferno Bomb: center and outer-ring damage are alternatives"
+  }
+ },
+ "Zoe": {
+  "E": {
+   "hit_mults": {
+    "TotalDamageTooltip": 2
+   },
+   "why": "Sleepy Trouble Bubble: the next hit on the sleeping target deals E's damage again (true); combo E->Q always pops it"
   }
  }
 }

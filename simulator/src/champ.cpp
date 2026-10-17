@@ -3,6 +3,7 @@
 #include <algorithm>
 #include <cmath>
 #include <cctype>
+#include <deque>
 #include <fstream>
 #include <numeric>
 #include <set>
@@ -79,6 +80,8 @@ std::map<std::string, Effect> loadEffects(const json::Value& obj, const char* de
         for (const auto& r : v["roles"].arr) e.roles.push_back(r.asString());
         e.stats = bagOf(v["stats"]);
         e.effects = bagOf(v["effects"]);
+        e.needsItem = v["requires_item"].asString();
+        e.bind = v["spell_bind"].asString();
         out[key] = e;
     }
     return out;
@@ -365,7 +368,29 @@ Library Library::load(const std::string& rulesPath, const Settings& settings, co
     lib.augments = loadEffects(json::parse(readFile(game + "/augments.json"))["augments"], "augment");
     const std::string pool = root["scenario"]["enemy_pool"].asString();
     if (!pool.empty()) lib.enemyPool = json::parse(readFile(dir + "/" + pool));
+    std::ifstream poolFile(dir + "/augment_pools.json");
+    if (poolFile) {
+        const json::Value pools = json::parse(readFile(dir + "/augment_pools.json"));
+        for (const auto& [id, list] : pools["pools"].obj) {
+            auto& out = lib.augmentPools[std::stoi(id)];
+            for (const auto& a : list.arr)
+                if (lib.augments.count(a.asString())) out.push_back(a.asString());
+        }
+    }
     return lib;
+}
+
+std::vector<std::string> Library::augmentsFor(const ChampionKit& c, bool modeledOnly) const {
+    std::vector<std::string> out;
+    auto it = augmentPools.find(c.championId);
+    for (const auto& [key, a] : augments) {
+        if (modeledOnly && a.stats.empty() && a.effects.empty()) continue;
+        if (it != augmentPools.end() && !it->second.empty() &&
+            std::find(it->second.begin(), it->second.end(), key) == it->second.end())
+            continue;
+        out.push_back(key);
+    }
+    return out;
 }
 
 void Library::setCombo(ChampionKit& c, const std::string& combo) {
@@ -618,6 +643,7 @@ struct Enemy {
     const EnemyProfile* profile = nullptr;
     Vec pos, vel, home;
     double moveSpeed = 340, reach = 550, damageWeight = 0.2;
+    double shrinkUntil = -1;  // Shrink Ray: its damage to you is reduced until then
     double strafe = 0, strafeUntil = 0, dodgeUntil = -1;
     Vec dodgeVel;
     // Your crowd control on it: can't act (stun, knockup...), can't move (root), slowed.
@@ -684,6 +710,26 @@ private:
     std::vector<Proc> abilityProcs_, attackProcs_, actives_;
     Proc missile_, kraken_, storm_, eclipse_;
     const Bag* poro_ = nullptr;  // Poro Stampede: the Poro Charge summoner spell
+    // Augment mechanics (effect keys in README.md). Each item and augment's effects at the fight's
+    // level ("x_l1"/"x_l18" pairs become "x"); a deque so pointers into it stay valid.
+    std::deque<Bag> bags_;
+    // Damage, heals, shields and crowd control set off by an event (trig_on, see TrigOn).
+    struct Trig { const Bag* fx = nullptr; double readyAt = 0, taken = 0; int counter = 0; std::map<int, double> perTarget; };
+    std::vector<Trig> trigs_;
+    // Stacking buffs ("stack_" and "stack2_" keys): stats per stack, all lost when the stacks expire.
+    struct Stack { const Bag* fx = nullptr; std::string p; int n = 0; double expire = -1, readyAt = 0, ap = 0, ad = 0, as = 0, ms = 0; };
+    std::vector<Stack> stacks_;
+    // Augments on one of your abilities (spell_bind): which ability it picked.
+    struct Bound { const Bag* fx = nullptr; size_t idx = static_cast<size_t>(-1); std::string kind; };
+    std::vector<Bound> bound_;
+    double attackRange_ = 125;
+    bool ranged_ = false, noUlt_ = false, ultOnlyHaste_ = false, hasDash_ = false, hasImmobilize_ = false;
+    double tempAs_ = 0, msToAs_ = 0, asCap_ = 5, execute_ = 0, itemAmp_ = 1, itemCrit_ = 0, trueExtra_ = 0;
+    double msDiffAmp_ = 0, hsp_ = 1, cdr_ = 0, incomingMult_ = 1, shrink_ = 0, rWindowAmp_ = 0, openAmp_ = 0, openFor_ = 0;
+    double rInvulnReady_ = 0, rBuffReady_ = 0, rRefreshReady_ = 0, rAwakenReady_ = 0, rWindowReady_ = 0, rCcReady_ = 0;
+    double rUnstopReady_ = 0, rReductionReady_ = 0, rVampUntil_ = -1, rBasicAhUntil_ = -1, rWindowUntil_ = -1;
+    double reductionUntil_ = -1, firstHitAt_ = -1, lowHealReady_ = 0, nextInvuln_ = 1e18, reviveFrac_ = 0;
+    bool converting_ = false, snipeHit_ = false, augReviveUsed_ = false, augRevive_ = false;
     double poroReady_ = 0;
     bool hasMissile_ = false, hasKraken_ = false, hasStorm_ = false, hasEclipse_ = false;
     // Shields on you: what's left of each and when it ends. Lifeline items (Sterak's Gage, Maw)
@@ -733,16 +779,59 @@ private:
         }
     }
 
+    // Effect values at this fight's level: an "x_l1"/"x_l18" pair becomes "x" (straight line between).
+    Bag atLevel(const Bag& b) const {
+        Bag out;
+        const double lv = (sc_.level - 1) / 17.0;
+        for (const auto& [k, v] : b) {
+            const size_t n = k.size();
+            if (n > 3 && k.compare(n - 3, 3, "_l1") == 0) continue;
+            if (n > 4 && k.compare(n - 4, 4, "_l18") == 0) {
+                const std::string base = k.substr(0, n - 4);
+                const double v1 = get(b, base + "_l1");
+                out[base] += v1 + (v - v1) * lv;
+            } else {
+                out[k] += v;
+            }
+        }
+        return out;
+    }
+
+    static bool immobilizes(const Ability& a) { return !a.cc.empty() && a.cc != "slow" && a.cc != "silence"; }
+
+    // Adaptive Force: Ability Power, or 0.6 bonus AD each when the build has more AD than AP.
+    void addAdaptive(double af, double* gotAp = nullptr, double* gotAd = nullptr) {
+        if (ap_ >= bonusAd_) { ap_ += af; if (gotAp) *gotAp += af; }
+        else { bonusAd_ += 0.6 * af; ad_ += 0.6 * af; if (gotAd) *gotAd += 0.6 * af; }
+    }
+
+    void updateAs() {
+        attackSpeed_ = std::min(asCap_, (ch_.as + ch_.asRatio * (bonusAs_ + tempAs_ + msToAs_ * moveSpeed_)) *
+                                            (1.0 + get(fx_, "total_as_mult") + ch_.mayhemAs));
+    }
+
     void setupBuild(const Build& b) {
         Bag stats;
         std::vector<const Effect*> effects;
         for (const auto& id : b.items) effects.push_back(&lib_.items.at(id));
-        for (const auto& id : b.augments) effects.push_back(&lib_.augments.at(id));
+        for (const auto& id : b.augments) {
+            const Effect& a = lib_.augments.at(id);
+            // Item upgrades do nothing without their item.
+            if (!a.needsItem.empty() && std::find(b.items.begin(), b.items.end(), a.needsItem) == b.items.end()) continue;
+            effects.push_back(&a);
+        }
+        ranged_ = ch_.ranged;
+        attackRange_ = ch_.attackRange;
+        for (const auto& a : ch_.abilities) {
+            hasDash_ |= a.geo.move != Move::None;
+            hasImmobilize_ |= immobilizes(a);
+        }
         double bestBlade = -1;
         for (const Effect* e : effects) {
-            addBag(e->stats, stats);
-            addBag(e->effects, fx_);
-            const Bag& f = e->effects;
+            addBag(atLevel(e->stats), stats);
+            bags_.push_back(atLevel(e->effects));
+            const Bag& f = bags_.back();
+            addBag(f, fx_);
             if (get(f, "spellblade_cd") > 0) {  // spellblades don't stack: keep the strongest
                 const double power = get(f, "spellblade_base_ad") * 3 + get(f, "spellblade_ap") * 3;
                 if (power > bestBlade) { bestBlade = power; spellblade_ = &f; }
@@ -755,6 +844,15 @@ private:
             if (get(f, "maxhp_proc_cd") > 0) { hasEclipse_ = true; eclipse_.fx = &f; }
             if (get(f, "lifeline_duration") > 0) lifelines_.push_back(&f);
             if (get(f, "poro_cd") > 0) poro_ = &f;
+            if (get(f, "trig_on") > 0) {
+                Trig tr;
+                tr.fx = &f;
+                tr.readyAt = get(f, "trig_first");
+                trigs_.push_back(std::move(tr));
+            }
+            for (const char* p : {"stack_", "stack2_"})
+                if (get(f, std::string(p) + "max") > 0) stacks_.push_back({&f, p});
+            if (!e->bind.empty()) bound_.push_back({&f, static_cast<size_t>(-1), e->bind});
         }
         const double g = levelScale(sc_.level);
         baseAd_ = ch_.ad + ch_.adG * g;
@@ -762,45 +860,85 @@ private:
         ap_ = get(stats, "ap");
         // AP that grows with level (Witchful Thinking: ap_min at level 1 up to ap_max at 18).
         if (get(fx_, "ap_max") > 0) ap_ += get(fx_, "ap_min") + (get(fx_, "ap_max") - get(fx_, "ap_min")) * (sc_.level - 1) / 17.0;
+        // Converting one damage stat into the other (escAPADe, ADAPt).
+        if (get(fx_, "ap_to_ad") > 0) { bonusAd_ += ap_ * get(fx_, "ap_to_ad"); ap_ = 0; }
+        if (get(fx_, "ad_to_ap") > 0) { ap_ += bonusAd_ * get(fx_, "ad_to_ap"); bonusAd_ = 0; }
+        // Draw Your Sword: melee, with stats that grow with the range given up (most from 500 range up).
+        double sword = 0;
+        if (get(fx_, "sword_ad") > 0) {
+            const double floor = get(fx_, "sword_floor", 500), ceil = get(fx_, "sword_ceiling", 650);
+            sword = 1.0 + std::clamp((attackRange_ - floor) / std::max(1.0, ceil - floor), 0.0, 1.0);
+            if (attackRange_ > get(fx_, "sword_range")) { attackRange_ = get(fx_, "sword_range"); ranged_ = false; }
+        }
+        attackRange_ += ranged_ ? get(fx_, "range_ranged") : get(fx_, "range_melee");
+        // Flat Adaptive Force (stat anvils, Slap Around's stacks when the kit can immobilize).
+        addAdaptive(get(fx_, "adaptive_flat") + (hasImmobilize_ ? get(fx_, "cc_af") : 0.0));
         // Adaptive amplifiers boost whichever of AP or bonus AD the build has more of.
         const double adaptive = get(fx_, "adaptive_amp");
         if (ap_ >= bonusAd_) ap_ *= 1.0 + adaptive;
         else bonusAd_ *= 1.0 + adaptive;
         ap_ *= 1.0 + get(fx_, "ap_amp");
-        crit_ = get(stats, "crit");
+        crit_ = get(stats, "crit") + get(fx_, "crit_per_ap") * ap_;
         if (crit_ > 1.0) {  // Mayhem: crit chance above 100% becomes AD
             bonusAd_ += (crit_ - 1.0) * 100.0 * rules_.critOverflowAd;
             crit_ = 1.0;
         }
-        critDamage_ = get(stats, "crit_damage");
+        critDamage_ = get(stats, "crit_damage") + get(fx_, "crit_damage_per_crit") * crit_;
         ad_ = baseAd_ + bonusAd_;
-        bonusAs_ = ch_.asG * g + get(stats, "as");
-        attackSpeed_ = std::min(rules_.asCap, (ch_.as + ch_.asRatio * bonusAs_) *
-                                                  (1.0 + get(fx_, "total_as_mult") + ch_.mayhemAs));
-        bonusHp_ = get(stats, "hp");
+        bonusAd_ += (get(fx_, "ad_pct") + sword * get(fx_, "sword_ad")) * ad_;  // "% Attack Damage" (Blunt Force)
+        ad_ = baseAd_ + bonusAd_;
+        bonusAs_ = ch_.asG * g + get(stats, "as") + get(fx_, "as_per_ap") * ap_ + sword * get(fx_, "sword_as");
+        double ahFromAs = 0;
+        if (get(fx_, "as_to_ah") > 0) {  // Purist - Caster: all bonus attack speed becomes ability haste
+            ahFromAs = get(fx_, "as_to_ah") * 100.0 * bonusAs_;
+            bonusAs_ = 0;
+        }
+        msToAs_ = get(fx_, "ms_to_as");
+        asCap_ = std::max(rules_.asCap, get(fx_, "as_cap"));
+        bonusHp_ = get(stats, "hp") + (hasImmobilize_ ? get(fx_, "cc_hp") : 0.0);
         const double baseHp = ch_.hp + ch_.hpG * g;
-        maxHp_ = (baseHp + bonusHp_) * (1.0 + get(fx_, "hp_pct"));
+        maxHp_ = (baseHp + bonusHp_) * (1.0 + get(fx_, "hp_pct") + sword * get(fx_, "sword_hp")) * (1.0 + get(fx_, "hp_mult"));
         bonusHp_ = maxHp_ - baseHp;
         // Health-to-AD items (Overlord's Bloodmail) and base-AD bonuses (Sterak's Gage).
         bonusAd_ += get(fx_, "ad_per_bonus_hp") * bonusHp_ + get(fx_, "base_ad_pct") * baseAd_;
         ad_ = baseAd_ + bonusAd_;
-        bonusArmor_ = get(stats, "armor");
+        bonusArmor_ = get(stats, "armor") + (hasDash_ ? get(fx_, "dash_armor") : 0.0);
         armor_ = ch_.armor + ch_.armorG * g + bonusArmor_;
-        bonusMr_ = get(stats, "mr");
+        bonusMr_ = get(stats, "mr") + (hasDash_ ? get(fx_, "dash_mr") : 0.0);
         mr_ = ch_.mr + ch_.mrG * g + bonusMr_;
-        ah_ = get(stats, "ah") + ch_.mayhemAh + get(fx_, "ah_per_ap") * ap_;
+        ah_ = get(stats, "ah") + ch_.mayhemAh + get(fx_, "ah_per_ap") * ap_ + get(fx_, "ah_per_crit") * crit_ + ahFromAs;
         lethality_ = get(stats, "lethality");
         armorPen_ = get(stats, "armor_pen");
         magicPen_ = get(stats, "magic_pen");
         magicPenPct_ = get(stats, "magic_pen_pct");
-        lifesteal_ = get(stats, "lifesteal");
-        omnivamp_ = get(stats, "omnivamp");
+        lifesteal_ = get(stats, "lifesteal") + sword * get(fx_, "sword_lifesteal");
+        omnivamp_ = get(stats, "omnivamp") + get(fx_, "omnivamp_per_ap") * ap_;
         damageAmp_ = (1.0 + get(fx_, "damage_amp")) * ch_.damageDealt;
         abilityAmp_ = 1.0 + get(fx_, "ability_amp");
         myHp_ = maxHp_;
-        moveSpeed_ = ch_.moveSpeed;
+        moveSpeed_ = ch_.moveSpeed + get(fx_, "ms") + get(fx_, "ms_per_ah") * ah_;
         for (const auto& id : b.items)
             if (lib_.items.at(id).slot == "boots") moveSpeed_ += 45;  // every tier-2 boot gives +45 move speed
+        moveSpeed_ *= 1.0 + get(fx_, "ms_pct") + sword * get(fx_, "sword_ms");
+        updateAs();
+        execute_ = get(fx_, "execute");
+        if (get(fx_, "exec_flat") > 0)  // Dropkick: a threshold that grows with bonus Health and base AD
+            execute_ = std::max(execute_, get(fx_, "exec_flat") + get(fx_, "exec_bonus_hp") * bonusHp_ + get(fx_, "exec_base_ad") * baseAd_);
+        itemAmp_ = 1.0 + get(fx_, "item_damage_amp");
+        itemCrit_ = get(fx_, "item_crit_damage");
+        trueExtra_ = ranged_ && get(fx_, "true_extra_ranged") > 0 ? get(fx_, "true_extra_ranged") : get(fx_, "true_extra");
+        msDiffAmp_ = get(fx_, "ms_diff_amp");
+        hsp_ = 1.0 + get(fx_, "heal_shield_power") + get(fx_, "hsp_per_resist") * (bonusArmor_ + bonusMr_) +
+               get(fx_, "heal_shield_crit") * crit_;
+        cdr_ = get(fx_, "cdr");
+        incomingMult_ = 1.0 - get(fx_, "crit_defend") * std::min(crit_, get(fx_, "crit_defend_cap", 1.0));
+        shrink_ = get(fx_, "shrink");
+        rWindowAmp_ = get(fx_, "r_window_amp");
+        openAmp_ = get(fx_, "open_amp");
+        openFor_ = get(fx_, "open_duration");
+        noUlt_ = get(fx_, "no_ult") > 0;
+        ultOnlyHaste_ = get(fx_, "ult_only_haste") > 0;
+        if (get(fx_, "invuln_every") > 0) nextInvuln_ = get(fx_, "invuln_first");
 
         // Ability order: the champion's recommended combo when it has one (and the
         // combo_order setting is on), otherwise R when it's up, then the rest by damage per cast.
@@ -820,8 +958,9 @@ private:
             double raw = 0;
             for (const auto& h : a.hits) raw += h.weight * scaled(h.scaling) * (h.target == HitTarget::Flat ? 1 : 3000);
             byDamage.push_back({(a.slot == 'R' ? 1e12 : 0) + raw, i});
-            if (a.slot == 'R' && !rUp_) readyAt_[i] = 1e18;
+            if (a.slot == 'R' && (!rUp_ || noUlt_)) readyAt_[i] = 1e18;
         }
+        for (auto& bd : bound_) bd.idx = bindAbility(bd.kind);
         if (rules_.comboOrder > 0.5 && !ch_.combo.empty())
             for (auto& [d, i] : byDamage) {
                 const auto pos = ch_.combo.find(ch_.abilities[i].slot);
@@ -829,6 +968,31 @@ private:
             }
         std::sort(byDamage.rbegin(), byDamage.rend());
         for (const auto& [d, i] : byDamage) order_.push_back(i);
+    }
+
+    // The ability an augment on "one of your abilities" goes on: the strongest basic ability of the
+    // kind it needs (any damaging one, an area, a missile, crowd control, a self-buff). None: no effect.
+    size_t bindAbility(const std::string& kind) const {
+        size_t best = static_cast<size_t>(-1);
+        double bestV = -1;
+        for (size_t i = 0; i < ch_.abilities.size(); ++i) {
+            const Ability& a = ch_.abilities[i];
+            if (a.slot == 'R' || a.aura || a.onhitEvery > 0) continue;
+            const Geometry& g = a.geo;
+            const bool ok = kind == "any"       ? !a.hits.empty()
+                            : kind == "aoe"     ? !a.hits.empty() && (g.shape == Shape::Circle || g.shape == Shape::Cone)
+                            : kind == "missile" ? !a.hits.empty() && !g.selfBuff && (g.shape == Shape::Line || g.speed > 0)
+                            : kind == "cc"      ? immobilizes(a)
+                            : kind == "buff"    ? g.selfBuff
+                            : kind == "dash"    ? g.move != Move::None
+                                                : false;
+            if (!ok) continue;
+            double raw = 0;
+            for (const auto& h : a.hits) raw += h.weight * scaled(h.scaling) * (h.target == HitTarget::Flat ? 1 : 3000);
+            const double v = 1.0 + raw / std::max(1.0, a.cooldown);
+            if (v > bestV) { bestV = v; best = i; }
+        }
+        return best;
     }
 
     double scaled(const Bag& s) const {
@@ -921,7 +1085,7 @@ private:
             for (const auto* e : team_) mitigation += through(e) / static_cast<double>(team_.size());
         else
             mitigation = through(nullptr);
-        incomingDps_ = incomingRoll_ * sc_.damageTakenFactor * teamDamage * mitigation * rules_.inRangeBoost;
+        incomingDps_ = incomingRoll_ * sc_.damageTakenFactor * teamDamage * mitigation * rules_.inRangeBoost * incomingMult_;
         magicShare_ = 1.0 - sc_.enemyPhysShare;
         if (!team_.empty()) {
             double phys = 0, w = 0;
@@ -1005,13 +1169,13 @@ private:
     }
 
     // Centre-to-centre distance at which two champions touch or an attack connects.
-    double attackReach() const { return ch_.attackRange + 2 * rules_.hitbox; }
+    double attackReach() const { return attackRange_ + 2 * rules_.hitbox; }
     double distTo(const Enemy& e) const { return len(e.pos - me_); }
 
     // How close you need to be to the target to use ability a on it.
     double needRange(const Ability& a) const {
         const Geometry& g = a.geo;
-        if (g.selfBuff || g.shape == Shape::Single) return (g.selfBuff ? ch_.attackRange : g.range) + 2 * rules_.hitbox;
+        if (g.selfBuff || g.shape == Shape::Single) return (g.selfBuff ? attackRange_ : g.range) + 2 * rules_.hitbox;
         if (g.shape == Shape::Circle) return (g.onSelf ? g.radius : g.range + 0.6 * g.radius) + rules_.hitbox;
         if (g.move != Move::None) return g.range + rules_.hitbox;
         return g.range * 0.8 + rules_.hitbox;  // skillshots: thrown from a bit inside their range
@@ -1035,8 +1199,13 @@ private:
             }
             if (reviveAt_ >= 0 && now >= reviveAt_) {
                 reviveAt_ = -1;
-                myHp_ = ch_.reviveFrac * maxHp_;
+                myHp_ = reviveFrac_ * maxHp_;
                 recordSelf(now, "revive");
+                if (augRevive_) {  // Hellbent: back with Adaptive Force and Omnivamp
+                    augRevive_ = false;
+                    addAdaptive(get(fx_, "revive_af"));
+                    omnivamp_ += get(fx_, "revive_vamp");
+                }
             }
             moveEnemies(now, dt);
             if (!inCc(posClock_) && posClock_ >= busyUntil_) moveMe(dt);
@@ -1049,12 +1218,17 @@ private:
                     if (e.alive && distTo(e) <= e.reach + 2 * rules_.hitbox)
                         // Fewer enemies than a real team each stand in for several champions; your
                         // crowd control stops just one of them (all of it in a five-enemy fight).
-                        share += e.damageWeight * (now < e.ccUntil ? ccLeft_ : 1.0);
+                        share += e.damageWeight * (now < e.ccUntil ? ccLeft_ : 1.0) * (now < e.shrinkUntil ? 1.0 - shrink_ : 1.0);
                 dps = incomingDps_ * share;
+                if (now < reductionUntil_) dps *= 1.0 - get(fx_, "r_reduction");
                 exposureSum_ += share * dt;
                 exposureTime_ += dt;
             }
             posClock_ = now;
+            if (now >= nextInvuln_) {  // Divine Intervention: a star lands every so often
+                invulnUntil_ = std::max(invulnUntil_, now + get(fx_, "invuln_duration"));
+                nextInvuln_ += get(fx_, "invuln_every");
+            }
             if (dps > 0 && now < invulnUntil_) dps = 0;
             if (dps > 0) {
                 const double lost = absorb(dps * dt, now);
@@ -1069,6 +1243,7 @@ private:
                 myHp_ -= lost;
                 res_.damageTaken += lost;
                 lifeline(now);
+                afterDamageTaken(now, dps * dt);
                 recordSelf(now);
             }
             recordPositions(now, false);
@@ -1134,10 +1309,10 @@ private:
         Vec v{0, 0};
         if (d > want) {
             v = unit(toT) * moveSpeed_;
-        } else if (ch_.attackRange >= 300) {
+        } else if (attackRange_ >= 300) {
             // Ranged: step back from anyone short-ranged who is getting close, if the target stays in range.
             for (const auto& e : enemies_) {
-                if (!e.alive || e.reach >= ch_.attackRange) continue;
+                if (!e.alive || e.reach >= attackRange_) continue;
                 const Vec away = me_ - e.pos;
                 if (len(away) < e.reach + 2 * rules_.hitbox + 80 && d < attackReach() - 60) {
                     v = unit(away) * (0.8 * moveSpeed_);
@@ -1188,6 +1363,7 @@ private:
     void addShield(double amount, double duration, char slot) {
         if (dead_ || amount <= 0 || duration <= 0) return;
         shields_.push_back({amount, t_ + duration});
+        stackEvent(OnShield);
         if (trace_) {
             TraceEvent ev;
             ev.t = t_; ev.kind = "shield"; ev.amount = amount; ev.slot = slot; ev.lock = duration;
@@ -1201,8 +1377,9 @@ private:
         double best = 0, dur = 0;
         for (const Bag* f : lifelines_) {
             if (myHp_ >= get(*f, "lifeline_threshold") * maxHp_) continue;
-            double amt = get(*f, "lifeline_flat") + get(*f, "lifeline_bonus_hp") * bonusHp_ + get(*f, "lifeline_bonus_ad") * bonusAd_;
-            if (ch_.ranged && get(*f, "shield_ranged") > 0) amt *= get(*f, "shield_ranged");
+            double amt = get(*f, "lifeline_flat") + get(*f, "lifeline_bonus_hp") * bonusHp_ + get(*f, "lifeline_bonus_ad") * bonusAd_ +
+                         get(*f, "lifeline_max_hp") * maxHp_;
+            if (ranged_ && get(*f, "shield_ranged") > 0) amt *= get(*f, "shield_ranged");
             if (get(*f, "lifeline_magic") > 0) amt *= magicShare_;  // stops magic damage only
             if (amt > best) { best = amt; dur = get(*f, "lifeline_duration"); }
         }
@@ -1218,6 +1395,14 @@ private:
         if (dead_ || amount <= 0) return;
         const double got = std::min(maxHp_, myHp_ + amount) - myHp_;
         myHp_ += got;
+        // Circle of Death: healing also hurts the nearest enemy (not the healing that damage brings back).
+        if (get(fx_, "heal_to_damage") > 0 && !converting_) {
+            converting_ = true;
+            const int n = nearestAlive(me_);
+            if (n >= 0 && distTo(enemies_[static_cast<size_t>(n)]) <= 1000)
+                deal(&enemies_[static_cast<size_t>(n)], amount * get(fx_, "heal_to_damage"), DamageType::Magic, SrcItems);
+            converting_ = false;
+        }
         if (trace_ && got > 0) {
             TraceEvent ev;
             ev.t = t_; ev.kind = "heal"; ev.amount = got;
@@ -1238,6 +1423,16 @@ private:
             record(ev);
         }
     }
+    // Crowd control from an item or augment: the enemy can't act for a while.
+    void ccEnemy(Enemy& e, double duration, const char* kind) {
+        if (!e.alive || duration <= 0) return;
+        e.ccUntil = std::max(e.ccUntil, t_ + duration);
+        if (trace_) {
+            TraceEvent ev;
+            ev.t = t_; ev.kind = "ecc"; ev.target = e.uid; ev.text = kind; ev.amount = t_ + duration;
+            record(ev);
+        }
+    }
     bool executeHit_ = false;
     double ccLeft_ = 0;  // share of a stopped enemy's damage that still lands (the champions it stands in for)
 
@@ -1245,6 +1440,11 @@ private:
         ++res_.kills;
         target->alive = false;
         target->respawnAt = t_ + sc_.retargetDelay;
+        stackEvent(OnKill);
+        // Spiritual Purification: a takedown blasts nearby enemies for a share of their current Health.
+        if (get(fx_, "kill_blast_cur_hp") > 0)
+            for (Enemy* o : near(target->pos, get(fx_, "kill_blast_radius", 500)))
+                deal(o, get(fx_, "kill_blast_cur_hp") * o->hp, DamageType::Magic, SrcItems);
         if (hasPrimary()) return;
         primary_ = nearestAlive(me_);
         recordFocus();
@@ -1266,17 +1466,30 @@ private:
 
     double deal(Enemy* target, double raw, DamageType type, Source src, bool physicalAttack = false) {
         if (!target || !target->alive || raw <= 0) return 0.0;
+        if (firstHitAt_ < 0) firstHitAt_ = t_;
+        if (src == SrcItems) {
+            raw *= itemAmp_;  // Forged By The Master
+            if (itemCrit_ > 0) raw *= 1.0 + crit_ * (itemCrit_ - 1.0);  // Vulnerability: expected crits
+        }
+        if (msDiffAmp_ > 0)  // Don't Blink: more damage the faster you are than the target
+            raw *= 1.0 + std::min(0.5, msDiffAmp_ * std::max(0.0, moveSpeed_ - (target->moveSpeed > 0 ? target->moveSpeed : 345.0)));
+        if (t_ < rWindowUntil_) raw *= 1.0 + rWindowAmp_;
+        if (openAmp_ > 0 && t_ < firstHitAt_ + openFor_) raw *= 1.0 + openAmp_;  // First Strike
         const double mult = type == DamageType::Physical ? target->physMult
                             : type == DamageType::Magic  ? target->magicMult
                                                          : target->trueMult;
         const double dmg = std::min(target->hp, raw * mult);
-        heal(dmg * (omnivamp_ + (physicalAttack ? lifesteal_ : 0.0)));
+        double vamp = omnivamp_ + (physicalAttack ? lifesteal_ : 0.0) + (t_ < rVampUntil_ ? get(fx_, "r_omnivamp") : 0.0);
+        if (!stacks_.empty()) vamp += fullStackVamp();
+        if (get(fx_, "vamp_missing") > 0)  // Ominous Pact: grows with missing Health, full at 30% Health
+            vamp += get(fx_, "vamp_missing") * std::clamp((1.0 - myHp_ / maxHp_) / 0.7, 0.0, 1.0);
+        heal(dmg * vamp);
         target->hp -= dmg;
         res_.bySource[src] += dmg;
         res_.totalDamage += dmg;
         const bool isPrimary = hasPrimary() && target == &P();
         if (isPrimary) res_.primaryDamage += dmg;
-        const double execute = get(fx_, "execute");
+        const double execute = execute_;
         double executed = 0;
         if (execute > 0 && target->hp > 0 && target->hp < execute * target->maxHp) {
             executed = target->hp;
@@ -1297,7 +1510,16 @@ private:
                 record(ev);
             }
         }
+        const Vec at = target->pos;
         if (target->hp <= 0) onKill(target);
+        // Dropkick: the executed champion explodes on the enemies around it.
+        if (executed > 0 && get(fx_, "exec_blast_flat") > 0) {
+            const double blast = amountOf(fx_, "exec_blast_", nullptr);
+            for (Enemy* o : near(at, 300)) deal(o, blast, DamageType::Magic, SrcItems);
+            heal(amountOf(fx_, "exec_heal_", nullptr) * hsp_);
+        }
+        // Glass Cannon: extra true damage on top.
+        if (trueExtra_ > 0 && type != DamageType::True && target->alive) deal(target, raw * trueExtra_, DamageType::True, src);
         return dmg;
     }
 
@@ -1307,7 +1529,7 @@ private:
         if (g.move == Move::None || !hasPrimary()) return;
         const Vec toT = P().pos - me_;
         const double d = len(toT);
-        const double stopAt = ch_.attackRange >= 300 ? 0.8 * ch_.attackRange : 2 * rules_.hitbox;
+        const double stopAt = attackRange_ >= 300 ? 0.8 * attackRange_ : 2 * rules_.hitbox;
         const double step = std::clamp(d - stopAt, 0.0, g.range > 0 ? g.range : 350.0);
         me_ = me_ + unit(toT) * step;
         clampLane(me_);
@@ -1460,9 +1682,23 @@ private:
     void castAbility(size_t idx, double castTime) {
         const Ability& a = ch_.abilities[idx];
         const Source src = a.slot == 'Q' ? SrcQ : a.slot == 'W' ? SrcW : a.slot == 'E' ? SrcE : SrcR;
+        tickStacks();
         dashFor(a.geo);
         const Shot shot = shoot(a);
-        const double amp = abilityAmp_ * abilityCritFactor();
+        // Augments on this ability (spell_bind): more damage, more targets, a second cast, healing, fear.
+        double spellAmp = 1, extraTargets = 0, extraAmp = 0, recast = 0, spellVamp = 0, fear = 0, fearRadius = 0;
+        for (const auto& bd : bound_) {
+            if (bd.idx != idx) continue;
+            const Bag& f = *bd.fx;
+            spellAmp += get(f, "spell_amp");
+            extraTargets += get(f, "spell_extra_targets");
+            extraAmp = std::max(extraAmp, get(f, "spell_extra_amp"));
+            recast += get(f, "spell_recast");
+            spellVamp += get(f, "spell_vamp");
+            fear = std::max(fear, std::min(get(f, "spell_fear"), a.cooldown / 20.0));
+            fearRadius = std::max(fearRadius, get(f, "spell_fear_radius"));
+        }
+        const double amp = abilityAmp_ * abilityCritFactor() * spellAmp;
         if (trace_) {
             TraceEvent ev;
             ev.t = t_ - castTime; ev.kind = "cast"; ev.slot = a.slot; ev.amount = castTime; ev.flag = shot.primaryHit;
@@ -1474,26 +1710,67 @@ private:
             ev.x = shot.aim.x; ev.y = shot.aim.y; ev.flight = shot.flight;
             record(ev);
         }
-        if (!a.shield.empty()) addShield(scaled(a.shield), a.shieldDuration, a.slot);
-        const auto& targets = shot.hits;
+        if (!a.shield.empty()) addShield(scaled(a.shield) * hsp_, a.shieldDuration, a.slot);
+        // Tripleshot, Spell Split: the ability also hits a few more enemies near the target, for less.
+        std::vector<std::pair<Enemy*, double>> targets;
+        for (Enemy* e : shot.hits) targets.push_back({e, 1.0});
+        if (extraTargets > 0 && shot.primaryHit) {
+            int left = static_cast<int>(extraTargets + 0.5);
+            for (Enemy* o : near(shot.hits.front()->pos, 500, shot.hits.front())) {
+                if (left <= 0) break;
+                if (std::find(shot.hits.begin(), shot.hits.end(), o) != shot.hits.end()) continue;
+                targets.push_back({o, extraAmp});
+                --left;
+            }
+        }
+        double dealt = 0;
+        snipeHit_ = false;
         bool first = true;
-        for (Enemy* e : targets) {
+        for (auto& [e, w] : targets) {
+            const double from = distTo(*e);
             for (const auto& h : a.hits) {
-                double raw = hitRaw(h, *e) * amp;
+                double raw = hitRaw(h, *e) * amp * w;
                 if (h.perSecond) {
                     // Damage over time lasts its duration, but no longer than the ability's
                     // cooldown: a recast replaces it (and channels stop other actions anyway).
                     raw *= std::min(a.duration > 0 ? a.duration : rules_.dotDuration, cooldownOf(a));
                 }
                 executeHit_ = h.target == HitTarget::MissingHp;
-                deal(e, raw, h.type, src);
+                dealt += deal(e, raw, h.type, src);
                 executeHit_ = false;
             }
-            if (!a.cc.empty() && e->alive) applyCc(*e, a);
+            if (!a.hits.empty()) {
+                snipeHit_ |= from > get(fx_, "snipe_range", 600);
+                if (e->alive) trigger(OnAbility, e);
+            }
+            if (!a.cc.empty() && e->alive) {
+                applyCc(*e, a);
+                if (immobilizes(a)) trigger(OnImmobilize, e);
+            }
             onAbilityDamage(e, first);
             if (first && !a.hits.empty() && e->alive) passivesOn(e, false);
             first = false;
         }
+        if (!targets.empty() && !a.hits.empty()) stackEvent(OnAbility);
+        if (!targets.empty() && immobilizes(a)) stackEvent(OnImmobilize);
+        // Echo Cast: a copy of the ability goes off again.
+        if (recast > 0)
+            for (auto& [e, w] : targets)
+                for (const auto& h : a.hits)
+                    if (e->alive && !h.perSecond) dealt += deal(e, hitRaw(h, *e) * amp * w * recast, h.type, src);
+        if (spellVamp > 0) heal(dealt * spellVamp * hsp_);  // Siphon
+        if (fear > 0)  // Terror
+            for (Enemy* e : near(me_, fearRadius)) ccEnemy(*e, fear, "fear");
+        Enemy* hitOne = shot.primaryHit && hasPrimary() ? &P() : nullptr;
+        if (a.geo.move != Move::None) trigger(OnDash, hitOne);
+        for (const auto& bd : bound_)
+            if (bd.idx == idx)
+                for (auto& tr : trigs_)
+                    if (tr.fx == bd.fx && static_cast<int>(get(*tr.fx, "trig_on")) == OnBound) fireTrig(tr, hitOne, 1.0);
+        if (a.lock > 0)  // Don't Change the Channel: a shield for every second of channeling
+            for (auto& tr : trigs_)
+                if (static_cast<int>(get(*tr.fx, "trig_on")) == OnChannel) fireTrig(tr, nullptr, a.lock, a.lock + 0.5);
+        if (a.slot == 'R') onUltimate(shot.hits);
         passivesCast();
         if (spellblade_ && t_ >= spellbladeReady_) {
             spellbladeArmed_ = true;
@@ -1551,7 +1828,8 @@ private:
         if (!e || !e->alive) return;
         const double magic = get(fx_, "onhit_magic") + get(fx_, "onhit_magic_ap") * ap_;
         deal(e, scale * magic, DamageType::Magic, SrcItems);
-        double phys = get(fx_, "onhit_phys") + get(fx_, "onhit_cur_hp") * e->hp + get(fx_, "onhit_own_hp") * maxHp_;
+        double phys = get(fx_, "onhit_phys") + get(fx_, "onhit_cur_hp") * e->hp + get(fx_, "onhit_own_hp") * maxHp_ +
+                      get(fx_, "onhit_phys_ap") * ap_;
         deal(e, scale * phys, DamageType::Physical, SrcItems, true);
     }
 
@@ -1566,6 +1844,17 @@ private:
 
     // Lethal damage at time `at`: true if a passive or the ultimate keeps the champion going.
     bool cheatDeath(double at) {
+        if (kitCheatDeath(at)) return true;
+        // Hellbent: revive once, a few seconds later, with a share of max Health.
+        if (augReviveUsed_ || get(fx_, "revive_frac") <= 0) return false;
+        augReviveUsed_ = augRevive_ = true;
+        reviveFrac_ = get(fx_, "revive_frac");
+        invulnUntil_ = reviveAt_ = at + get(fx_, "revive_delay");
+        cc_.push_back({at, reviveAt_});
+        recordSelf(at, "defy");
+        return true;
+    }
+    bool kitCheatDeath(double at) {
         if (deathUsed_ || (ch_.deathAct <= 0 && ch_.reviveFrac <= 0)) return false;
         deathUsed_ = true;
         if (ch_.deathNeedsR) {
@@ -1580,6 +1869,7 @@ private:
             invulnUntil_ = dieAt_ = at + ch_.deathAct;
             myHp_ = 1;
         } else {  // down (can't act or be hurt), then back with some Health
+            reviveFrac_ = ch_.reviveFrac;
             invulnUntil_ = reviveAt_ = at + ch_.reviveDelay;
             cc_.push_back({at, at + ch_.reviveDelay});
         }
@@ -1598,6 +1888,7 @@ private:
     }
 
     void basicAttack(double windup = 0) {
+        tickStacks();
         Enemy* e = &P();
         ++attacks_;
         const bool crit = rng_.chance(crit_);
@@ -1607,8 +1898,22 @@ private:
             ev.t = t_; ev.kind = "attack"; ev.target = e->uid; ev.flag = crit; ev.amount = windup;
             record(ev);
         }
-        deal(e, ad_ * (crit ? critMult : 1.0), DamageType::Physical, SrcAttack, true);
+        const double hit = deal(e, ad_ * (crit ? critMult : 1.0), DamageType::Physical, SrcAttack, true);
+        if (crit) heal(hit * get(fx_, "crit_lifesteal"));  // Soul Siphon
         applyOnHit(e, 1.0);
+        if (crit && get(fx_, "crit_onhit_extra") > 0) applyOnHit(e, get(fx_, "crit_onhit_extra"));  // Double Tap
+        if (shrink_ > 0) e->shrinkUntil = t_ + get(fx_, "shrink_duration");
+        // Typhoon: a missile at a second enemy, for part of the attack plus on-hit.
+        if (get(fx_, "typhoon_ad") > 0)
+            for (Enemy* o : near(me_, attackReach() + 300, e)) {
+                deal(o, get(fx_, "typhoon_ad") * ad_ * (crit ? critMult : 1.0), DamageType::Physical, SrcItems, true);
+                applyOnHit(o, 1.0);
+                break;
+            }
+        trigger(OnAttack, e);
+        if (crit) trigger(OnCrit, e);
+        stackEvent(OnAttack);
+        if (crit) stackEvent(OnCrit);
         if (get(fx_, "phantom_every") > 0 && attacks_ % static_cast<int>(get(fx_, "phantom_every")) == 0)
             applyOnHit(e, 1.0);
         if (hasKraken_ && ++kraken_.counter >= static_cast<int>(get(*kraken_.fx, "kraken_every")) && e->alive) {
@@ -1631,7 +1936,7 @@ private:
             deal(e, get(*eclipse_.fx, "maxhp_proc") * e->maxHp, DamageType::Physical, SrcItems);
             const Bag& f = *eclipse_.fx;
             addShield((get(f, "proc_shield_flat") + get(f, "proc_shield_bonus_ad") * bonusAd_) *
-                          (ch_.ranged && get(f, "shield_ranged") > 0 ? get(f, "shield_ranged") : 1.0),
+                          (ranged_ && get(f, "shield_ranged") > 0 ? get(f, "shield_ranged") : 1.0),
                       get(f, "proc_shield_duration"), 'I');
         }
         if (spellbladeArmed_ && t_ - spellbladeArmedAt_ <= rules_.spellbladeWindow && e->alive) {
@@ -1647,11 +1952,11 @@ private:
             deal(e, get(fx_, "second_bolt") * ad_ * (crit ? critMult : 1.0), DamageType::Physical, SrcItems, true);
             applyOnHit(e, get(fx_, "second_bolt_onhit"));
         }
-        if (!ch_.ranged && get(fx_, "cleave_ad") > 0)
+        if (!ranged_ && get(fx_, "cleave_ad") > 0)
             for (Enemy* s : near(e->pos, 350, e)) deal(s, get(fx_, "cleave_ad") * ad_, DamageType::Physical, SrcItems);
-        if (ch_.ranged && get(fx_, "bolts") > 0) {
+        if (ranged_ && get(fx_, "bolts") > 0) {
             int bolts = static_cast<int>(get(fx_, "bolts"));
-            for (Enemy* s : near(me_, ch_.attackRange + rules_.hitbox, e)) {
+            for (Enemy* s : near(me_, attackRange_ + rules_.hitbox, e)) {
                 if (bolts-- <= 0) break;
                 deal(s, get(fx_, "bolts_ad") * ad_ * (rng_.chance(crit_) ? critMult : 1.0), DamageType::Physical,
                      SrcItems, true);
@@ -1734,7 +2039,205 @@ private:
         }
     }
 
-    double cooldownOf(const Ability& a) const { return a.cooldown * 100.0 / (100.0 + ah_); }
+    // Ability haste on one ability: the build's, plus haste for that slot, dashes or the
+    // augment on it; Ult Bot puts all of it (half again) on the ultimate.
+    double hasteFor(const Ability& a) const {
+        double h = ah_;
+        h += a.slot == 'Q' ? get(fx_, "ah_q") : a.slot == 'W' ? get(fx_, "ah_w") : a.slot == 'E' ? get(fx_, "ah_e") : get(fx_, "ah_r");
+        if (a.geo.move != Move::None) h += get(fx_, "ah_dash");
+        for (const auto& bd : bound_)
+            if (bd.idx < ch_.abilities.size() && &ch_.abilities[bd.idx] == &a) h += get(*bd.fx, "spell_ah");
+        if (a.slot != 'R' && t_ < rBasicAhUntil_) h += get(fx_, "r_basic_ah");
+        if (ultOnlyHaste_) h = a.slot == 'R' ? 1.5 * h : 0.0;
+        return h;
+    }
+    double cooldownOf(const Ability& a) const { return a.cooldown * (1.0 - cdr_) * 100.0 / (100.0 + hasteFor(a)); }
+
+    // ---- Augment mechanics -------------------------------------------------------------
+    enum TrigOn { OnAttack = 1, OnAbility, OnHit, OnCrit, OnImmobilize, OnDash, OnTimer, OnKill, OnShield, OnBound, OnChannel, OnTaken };
+
+    // An amount from "<p>flat", "<p>ap", "<p>bonus_ad"... keys (target-based ones need a target).
+    double amountOf(const Bag& f, const std::string& p, const Enemy* e) const {
+        double v = get(f, p + "flat") + get(f, p + "ap") * ap_ + get(f, p + "ad") * ad_ + get(f, p + "bonus_ad") * bonusAd_ +
+                   get(f, p + "own_hp") * maxHp_ + get(f, p + "bonus_hp") * bonusHp_ +
+                   get(f, p + "bonus_armor") * bonusArmor_ + get(f, p + "bonus_mr") * bonusMr_;
+        if (e) v += get(f, p + "max_hp") * e->maxHp + get(f, p + "cur_hp") * e->hp + get(f, p + "missing_hp") * (e->maxHp - e->hp);
+        return v;
+    }
+    DamageType typeOf(double code) const {
+        const int c = static_cast<int>(code);
+        if (c == 3) return bonusAd_ > ap_ ? DamageType::Physical : DamageType::Magic;  // adaptive
+        return c == 0 ? DamageType::Physical : c == 1 ? DamageType::Magic : DamageType::True;
+    }
+
+    void trigger(int kind, Enemy* e) {
+        for (auto& tr : trigs_) {
+            const int on = static_cast<int>(get(*tr.fx, "trig_on"));
+            if (on == kind || (on == OnHit && (kind == OnAttack || kind == OnAbility))) fireTrig(tr, e, 1.0);
+        }
+    }
+    // One triggered effect: damage to the target (and enemies around it, or around you), on-hit
+    // effects, crowd control, a heal and a shield, on its cooldown (per target when per_target).
+    bool fireTrig(Trig& tr, Enemy* e, double scale, double shieldFor = 0) {
+        const Bag& f = *tr.fx;
+        if (e && !e->alive) return false;
+        const bool perTarget = e && get(f, "trig_per_target") > 0;
+        double& ready = perTarget ? tr.perTarget[e->uid] : tr.readyAt;
+        if (t_ < ready) return false;
+        if (get(f, "trig_below") > 0 && (!e || e->hp > get(f, "trig_below") * e->maxHp)) return false;
+        if (get(f, "trig_min_range") > 0 && (!e || distTo(*e) < get(f, "trig_min_range"))) return false;
+        if (++tr.counter < static_cast<int>(get(f, "trig_every", 1))) return false;
+        tr.counter = 0;
+        ready = t_ + get(f, "trig_cd");
+        scale *= get(f, "trig_scale", 1.0) * get(f, "trig_chance", 1.0);
+        std::vector<Enemy*> hit;
+        if (get(f, "trig_around_me") > 0) {
+            hit = near(me_, get(f, "trig_around_me"));
+        } else if (e) {
+            hit.push_back(e);
+            if (get(f, "trig_radius") > 0)
+                for (Enemy* o : near(e->pos, get(f, "trig_radius"), e)) hit.push_back(o);
+        }
+        const double count = get(f, "trig_count", 1) + get(f, "trig_count_per_crit") * crit_;
+        const double critF = get(f, "trig_can_crit") > 0 ? 1.0 + crit_ * (rules_.critMult + critDamage_ - 1.0) : 1.0;
+        const DamageType type = typeOf(get(f, "trig_type", 1));
+        const double onhit = get(f, "trig_onhit"), cc = get(f, "trig_cc");
+        for (Enemy* h : hit) {
+            if (!h->alive) continue;
+            const double dmg = amountOf(f, "trig_", h) * scale * count * critF;
+            if (dmg > 0) deal(h, dmg, type, SrcItems);
+            if (onhit > 0) applyOnHit(h, onhit * count);
+            if (cc > 0) ccEnemy(*h, cc, "stun");
+        }
+        const double shield = amountOf(f, "trig_shield_", nullptr) * scale * hsp_;
+        if (shield > 0) addShield(shield, std::max(shieldFor, get(f, "trig_shield_duration")), 'I');
+        const double heal_ = (amountOf(f, "trig_heal_", nullptr) + get(f, "trig_heal_missing") * (maxHp_ - myHp_)) * scale * hsp_;
+        if (heal_ > 0) heal(heal_);
+        return true;
+    }
+
+    void stackEvent(int kind) {
+        for (auto& s : stacks_) {
+            const Bag& f = *s.fx;
+            const int on = static_cast<int>(get(f, s.p + "on"));
+            if (on != kind && !(on == OnHit && (kind == OnAttack || kind == OnAbility))) continue;
+            expireStack(s);
+            if (t_ < s.readyAt) continue;
+            s.readyAt = t_ + get(f, s.p + "cd");
+            const double dur = get(f, s.p + "duration");
+            s.expire = dur > 0 ? t_ + dur : -1;  // every stack refreshes; none: they last the fight
+            if (s.n >= get(f, s.p + "max")) continue;
+            ++s.n;
+            double ap = get(f, s.p + "ap"), ad = get(f, s.p + "ad");
+            const double as = get(f, s.p + "as"), ms = get(f, s.p + "ms"), af = get(f, s.p + "af");
+            ap_ += ap; bonusAd_ += ad; ad_ += ad;
+            if (af > 0) addAdaptive(af, &ap, &ad);
+            s.ap += ap; s.ad += ad; s.as += as; s.ms += ms;
+            tempAs_ += as;
+            moveSpeed_ += ms;
+            if (as != 0 || (ms != 0 && msToAs_ > 0)) updateAs();
+        }
+    }
+    void expireStack(Stack& s) {
+        if (s.n == 0 || s.expire < 0 || t_ < s.expire) return;
+        ap_ -= s.ap; bonusAd_ -= s.ad; ad_ -= s.ad; tempAs_ -= s.as; moveSpeed_ -= s.ms;
+        const double ready = s.readyAt;
+        s = Stack{s.fx, s.p};
+        s.readyAt = ready;
+        updateAs();
+    }
+    void tickStacks() { for (auto& s : stacks_) expireStack(s); }
+    double fullStackVamp() const {  // Conqueror: heals at full stacks
+        double v = 0;
+        for (const auto& s : stacks_)
+            if (s.n > 0 && s.n >= get(*s.fx, s.p + "max")) v += get(*s.fx, s.p + "full_vamp");
+        return v;
+    }
+
+    // Damage reached you at `now`: low-Health heals (Dawnbringer's Resolve) and damage-taken triggers.
+    void afterDamageTaken(double now, double taken) {
+        const double keep = t_;
+        t_ = now;
+        if (get(fx_, "low_heal_max_hp") > 0 && myHp_ < get(fx_, "low_heal_threshold") * maxHp_ && now >= lowHealReady_) {
+            lowHealReady_ = now + get(fx_, "low_heal_cd");
+            heal(get(fx_, "low_heal_max_hp") * maxHp_);
+        }
+        for (auto& tr : trigs_) {
+            if (static_cast<int>(get(*tr.fx, "trig_on")) != OnTaken) continue;
+            tr.taken += taken;
+            if (tr.taken < get(*tr.fx, "trig_taken")) continue;
+            tr.taken = 0;
+            fireTrig(tr, nullptr, 1.0);
+        }
+        t_ = keep;
+    }
+
+    // Your crowd control immunity from now until `until`: crowd control on you in that window is dropped.
+    void clearCc(double from, double until) {
+        for (auto& [a, b] : cc_)
+            if (a >= from && a < until) a = std::min(b, until);
+        cc_.erase(std::remove_if(cc_.begin(), cc_.end(), [](const auto& c) { return c.first >= c.second; }), cc_.end());
+    }
+
+    // Augments that act when you cast your ultimate.
+    void onUltimate(const std::vector<Enemy*>& hits) {
+        const Bag& f = fx_;
+        if (get(f, "r_invuln") > 0 && t_ >= rInvulnReady_) {  // Can't Touch This
+            rInvulnReady_ = t_ + get(f, "r_invuln_cd");
+            invulnUntil_ = std::max(invulnUntil_, t_ + get(f, "r_invuln"));
+        }
+        if (get(f, "r_shield_max_hp") > 0 && t_ >= rBuffReady_) {  // Final Form
+            rBuffReady_ = t_ + get(f, "r_buff_cd");
+            addShield(get(f, "r_shield_max_hp") * maxHp_, get(f, "r_buff_duration"), 'R');
+            rVampUntil_ = t_ + get(f, "r_buff_duration");
+        }
+        if (get(f, "r_reduction") > 0 && t_ >= rReductionReady_) {  // Stuck In Here With Me
+            rReductionReady_ = t_ + get(f, "r_reduction_cd");
+            reductionUntil_ = t_ + get(f, "r_reduction_duration");
+        }
+        if (get(f, "r_reset_basics") > 0 && t_ >= rAwakenReady_) {  // Ultimate Awakening
+            rAwakenReady_ = t_ + get(f, "r_awaken_cd");
+            rBasicAhUntil_ = t_ + get(f, "r_basic_ah_duration");
+            for (size_t i = 0; i < readyAt_.size(); ++i)
+                if (ch_.abilities[i].slot != 'R' && readyAt_[i] < 1e17) readyAt_[i] = std::min(readyAt_[i], t_);
+        }
+        if (get(f, "r_window") > 0 && t_ >= rWindowReady_) {  // It's Killing Time, Surge Field
+            rWindowReady_ = t_ + get(f, "r_window_cd");
+            rWindowUntil_ = t_ + get(f, "r_window");
+        }
+        if (get(f, "r_cc") > 0 && t_ >= rCcReady_ && !hits.empty()) {  // Fey Magic
+            rCcReady_ = t_ + get(f, "r_cc_cd");
+            for (Enemy* e : hits) ccEnemy(*e, get(f, "r_cc"), "polymorph");
+        }
+        if (get(f, "r_unstoppable") > 0 && t_ >= rUnstopReady_) {  // Ultimate Unstoppable
+            rUnstopReady_ = t_ + get(f, "r_unstoppable_cd");
+            clearCc(t_, t_ + get(f, "r_unstoppable"));
+        }
+    }
+
+    // After a cast's cooldown starts: refunds and costs.
+    void afterCast(size_t i) {
+        const Ability& a = ch_.abilities[i];
+        if (a.slot == 'R' && get(fx_, "r_refresh_cd") > 0 && t_ >= rRefreshReady_) {  // Ultimate Revolution
+            rRefreshReady_ = t_ + get(fx_, "r_refresh_cd");
+            readyAt_[i] = t_ + 1.0;
+        }
+        if (snipeHit_ && a.slot != 'R' && get(fx_, "snipe_refund") > 0)  // Skilled Sniper
+            readyAt_[i] = t_ + (readyAt_[i] - t_) * (1.0 - get(fx_, "snipe_refund"));
+        if (get(fx_, "archmage") > 0) {  // Archmage: another ability's cooldown comes down
+            size_t pick = readyAt_.size();
+            for (size_t j = 0; j < readyAt_.size(); ++j)
+                if (j != i && ch_.abilities[j].slot != 'R' && readyAt_[j] > t_ && readyAt_[j] < 1e17 &&
+                    (pick == readyAt_.size() || readyAt_[j] > readyAt_[pick]))
+                    pick = j;
+            if (pick < readyAt_.size())
+                readyAt_[pick] = std::max(t_, readyAt_[pick] - get(fx_, "archmage") * cooldownOf(a));
+        }
+        if (get(fx_, "cast_hp_cost") > 0) {  // Ominous Pact: casts cost current Health
+            myHp_ -= get(fx_, "cast_hp_cost") * myHp_;
+            recordSelf(t_);
+        }
+    }
 
 };
 
@@ -1763,7 +2266,10 @@ Result Fight::run() {
         recordSelf(0);
     }
     for (size_t i = 0; i < ch_.abilities.size(); ++i)
-        if (ch_.abilities[i].slot == 'R' && !rUp_) readyAt_[i] = 1e18;
+        if (ch_.abilities[i].slot == 'R' && (!rUp_ || noUlt_)) readyAt_[i] = 1e18;
+    // Shields you start the fight with (Big Brain, Mountain Soul).
+    const double startShield = amountOf(fx_, "start_shield_", nullptr);
+    if (startShield > 0) addShield(startShield, duration_ + 1, 'I');
     while (true) {
         // Crowd control: you can't act or move, but everyone else keeps going.
         const double free = std::min(freeTime(t_), duration_);
@@ -1816,6 +2322,7 @@ Result Fight::run() {
             if (!hasPrimary()) primary_ = nearestAlive(me_);
             if (primary_ >= 0) castAbility(i, ct);
             readyAt_[i] = t_ + cooldownOf(a);
+            afterCast(i);
             if (a.lock > 0) {
                 busyUntil_ = t_ + a.lock;
                 t_ = std::min(t_ + a.lock, duration_);
@@ -1830,10 +2337,19 @@ Result Fight::run() {
 
         for (auto& p : actives_) {
             if (t_ >= p.readyAt && hasPrimary() && distTo(P()) <= 700) {
-                p.readyAt = t_ + get(*p.fx, "active_cd");
+                p.readyAt = t_ + get(*p.fx, "active_cd") * 100.0 / (100.0 + get(fx_, "item_haste"));
                 deal(&P(), get(*p.fx, "active_flat") + get(*p.fx, "active_ap") * ap_, DamageType::Magic, SrcItems);
             }
         }
+        // Augments that go off on their own every so often (Ok Boomerang, FireFox...).
+        for (auto& tr : trigs_) {
+            if (static_cast<int>(get(*tr.fx, "trig_on")) != OnTimer || t_ < tr.readyAt || !hasPrimary()) continue;
+            const double around = get(*tr.fx, "trig_around_me");
+            if (around > 0 ? near(me_, around).empty() : distTo(P()) > get(*tr.fx, "trig_range", 700)) continue;
+            tickStacks();
+            fireTrig(tr, &P(), 1.0);
+        }
+        if (!hasPrimary()) continue;
         if (poro_ && t_ >= poroReady_ && hasPrimary() && distTo(P()) <= 0.8 * get(*poro_, "poro_range")) {
             poroReady_ = t_ + get(*poro_, "poro_cd");
             poroCharge();
@@ -2077,8 +2593,7 @@ std::vector<Ranked> optimize(const Library& lib, const ChampionKit& c, const Sce
     // 3. Augments, greedily, on the best item build.
     Build best{{bestBoots}, {}};
     for (int j : combos[results[0].second]) best.items.push_back(pool[j]);
-    std::vector<std::string> augs;
-    for (const auto& [key, a] : lib.augments) augs.push_back(key);
+    std::vector<std::string> augs = lib.augmentsFor(c);
     std::vector<std::string> chosenAugs;
     for (int slot = 0; slot < os.augmentSlots && slot < static_cast<int>(augs.size()); ++slot) {
         std::vector<std::pair<double, std::string>> scored(augs.size());
