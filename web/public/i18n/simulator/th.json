@@ -216,7 +216,6 @@
  "The bot check didn't pass. Try again.": "ไม่ผ่านการตรวจสอบบอท ลองใหม่อีกครั้ง",
  "The default setup averaged {v}.": "การตั้งค่าเริ่มต้นได้ค่าเฉลี่ย {v}",
  "The enemies' level (1-18); their Health, resists and damage come from it plus their build": "เลเวลของศัตรู (1-18) HP ค่าต้านทาน และดาเมจของศัตรูคำนวณจากเลเวลนี้รวมกับบิลด์",
- "The preview clip couldn't be loaded.": "โหลดคลิปพรีวิวไม่สำเร็จ",
  "The replay above now shows a typical fight with these settings.": "รีเพลย์ด้านบนตอนนี้แสดงการต่อสู้ทั่วไปด้วยการตั้งค่าเหล่านี้",
  "The simulation failed.": "การจำลองล้มเหลว",
  "The simulation failed:": "การจำลองล้มเหลว:",

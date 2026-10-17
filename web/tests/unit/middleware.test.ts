@@ -49,7 +49,7 @@ describe("rate limits", () => {
 
   it("guards the owner-only files", () => {
     expect(config.matcher).toEqual(
-      expect.arrayContaining(["/assets/models/:path*", "/assets/clips/:path*", "/embed/simulator/full.html", "/embed/simulator/replay-data/sounds/:path*"]),
+      expect.arrayContaining(["/assets/models/:path*", "/assets/clips/:path*", "/assets/sounds/:path*", "/embed/simulator/full.html", "/embed/simulator/replay-data/sounds/:path*"]),
     );
   });
 });

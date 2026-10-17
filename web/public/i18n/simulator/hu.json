@@ -216,7 +216,6 @@
  "The bot check didn't pass. Try again.": "A robotellenőrzés sikertelen. Próbáld újra.",
  "The default setup averaged {v}.": "Az alapbeállítás átlaga {v} volt.",
  "The enemies' level (1-18); their Health, resists and damage come from it plus their build": "Az ellenfelek szintje (1-18); életerejük, ellenállásaik és sebzésük ebből és a buildjükből adódik",
- "The preview clip couldn't be loaded.": "Az előnézeti klipet nem sikerült betölteni.",
  "The replay above now shows a typical fight with these settings.": "A fenti visszajátszás most egy tipikus harcot mutat ezekkel a beállításokkal.",
  "The simulation failed.": "A szimuláció sikertelen.",
  "The simulation failed:": "A szimuláció sikertelen:",

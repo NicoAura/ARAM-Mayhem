@@ -216,7 +216,6 @@
  "The bot check didn't pass. Try again.": "Il controllo anti-bot non è stato superato. Riprova.",
  "The default setup averaged {v}.": "La configurazione predefinita ha avuto una media di {v}.",
  "The enemies' level (1-18); their Health, resists and damage come from it plus their build": "Il livello dei nemici (1-18); salute, resistenze e danni derivano da questo e dalla loro build",
- "The preview clip couldn't be loaded.": "Impossibile caricare la clip di anteprima.",
  "The replay above now shows a typical fight with these settings.": "Il replay qui sopra ora mostra uno scontro tipico con queste impostazioni.",
  "The simulation failed.": "La simulazione non è riuscita.",
  "The simulation failed:": "La simulazione non è riuscita:",

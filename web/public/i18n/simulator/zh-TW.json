@@ -216,7 +216,6 @@
  "The bot check didn't pass. Try again.": "機器人驗證未通過。請再試一次。",
  "The default setup averaged {v}.": "預設設定的平均值為 {v}。",
  "The enemies' level (1-18); their Health, resists and damage come from it plus their build": "敵人等級 (1-18)；其生命、抗性和傷害由等級和出裝決定",
- "The preview clip couldn't be loaded.": "無法載入預覽片段。",
  "The replay above now shows a typical fight with these settings.": "上方重播現在顯示的是使用這些設定的一場典型戰鬥。",
  "The simulation failed.": "模擬失敗。",
  "The simulation failed:": "模擬失敗：",

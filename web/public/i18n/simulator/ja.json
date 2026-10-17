@@ -216,7 +216,6 @@
  "The bot check didn't pass. Try again.": "ボット確認に失敗しました。もう一度お試しください。",
  "The default setup averaged {v}.": "デフォルト設定の平均は{v}でした。",
  "The enemies' level (1-18); their Health, resists and damage come from it plus their build": "敵のレベル (1-18)。体力、防御、ダメージはレベルとビルドから決まります",
- "The preview clip couldn't be loaded.": "プレビュー動画を読み込めませんでした。",
  "The replay above now shows a typical fight with these settings.": "上のリプレイは、この設定での典型的な戦闘を表示しています。",
  "The simulation failed.": "シミュレーションに失敗しました。",
  "The simulation failed:": "シミュレーションに失敗しました:",

@@ -216,7 +216,6 @@
  "The bot check didn't pass. Try again.": "Bot kontrolü geçilemedi. Yeniden dene.",
  "The default setup averaged {v}.": "Varsayılan kurulumun ortalaması {v} idi.",
  "The enemies' level (1-18); their Health, resists and damage come from it plus their build": "Rakiplerin seviyesi (1-18); canları, dirençleri ve hasarları buna ve dizilimlerine göre belirlenir",
- "The preview clip couldn't be loaded.": "Önizleme klibi yüklenemedi.",
  "The replay above now shows a typical fight with these settings.": "Yukarıdaki tekrar artık bu ayarlarla tipik bir savaşı gösteriyor.",
  "The simulation failed.": "Simülasyon başarısız oldu.",
  "The simulation failed:": "Simülasyon başarısız oldu:",

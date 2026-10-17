@@ -216,7 +216,6 @@
  "The bot check didn't pass. Try again.": "人机验证未通过。请重试。",
  "The default setup averaged {v}.": "默认设置的平均值为 {v}。",
  "The enemies' level (1-18); their Health, resists and damage come from it plus their build": "敌人等级 (1-18)；其生命值、抗性和伤害由等级和出装决定",
- "The preview clip couldn't be loaded.": "无法加载预览片段。",
  "The replay above now shows a typical fight with these settings.": "上方回放现在显示的是使用这些设置的一场典型战斗。",
  "The simulation failed.": "模拟失败。",
  "The simulation failed:": "模拟失败：",
