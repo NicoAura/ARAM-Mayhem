@@ -54,7 +54,9 @@ export default function QuickReference({ alias }: { alias: string }) {
               {c.skills.map((s, i) => (
                 <span key={s}>
                   {i > 0 && <span aria-hidden="true">›</span>}
-                  <b className="chip">{s}</b>
+                  <b className="chip skill-key" data-key={s}>
+                    {s}
+                  </b>
                 </span>
               ))}
             </p>
