@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useNames, useT } from "./I18n";
 
-// On the account page, for the connected Riot account: ranked standing, challenge standing, mastery
+// On the account page, for the connected Riot account: challenge standing, mastery
 // against this patch's Mayhem tiers, the title and challenge tokens they show in the client, and the
 // player's ARAM Clash team (/api/account/riot).
 
@@ -17,10 +17,8 @@ type Member = {
   page: string | null;
   mayhem: { championId: number; games: number; wins: number }[];
 };
-type Ranked = { queueType: string; tier: string; rank: string; leaguePoints: number; wins: number; losses: number };
 type Extras = {
   connected: boolean;
-  ranked: Ranked[];
   mastery: Mastery[];
   challenges: {
     total: { level: string; percentile: number } | null;
@@ -33,8 +31,7 @@ type Extras = {
 type Tiers = Record<number, { id: string; name: string; tier: string | null; winRate: number | null }>;
 
 const STRONG = new Set(["S", "A"]);
-const QUEUES: Record<string, string> = { RANKED_SOLO_5x5: "Solo/Duo", RANKED_FLEX_SR: "Flex" };
-// Ranked tiers and challenge levels, as words ("GOLD" → "Gold"); they are also translation keys.
+// Challenge levels, as words ("GOLD" → "Gold"); they are also translation keys.
 const title = (s: string) => s.charAt(0) + s.slice(1).toLowerCase();
 const pct = (p: number) => (p * 100 < 1 ? (p * 100).toFixed(1) : String(Math.max(1, Math.round(p * 100))));
 const icon = (alias: string) => `/icons/champions/${alias}.webp`;
@@ -68,25 +65,9 @@ export default function PlayerExtras() {
   const level = (s: string) => t(title(s));
   const top = (p: number) => t("Top {pct}%", { pct: pct(p) });
   const { challenges, mastery, clash } = extras;
-  const ranked = (extras.ranked ?? []).filter((r) => QUEUES[r.queueType]);
 
   return (
     <section className="card acct-riot">
-      {ranked.length > 0 && (
-        <dl className="acct-ranks">
-          {ranked.map((r) => (
-            <div key={r.queueType} className="rank-badge">
-              <dt>{t(QUEUES[r.queueType])}</dt>
-              <dd>
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={`/assets/ranked/${r.tier.toLowerCase()}.png`} alt="" width={40} height={40} />
-                {level(r.tier)} {["MASTER", "GRANDMASTER", "CHALLENGER"].includes(r.tier) ? "" : r.rank} · {t("{n} LP", { n: r.leaguePoints })}
-                <span>{t("{wins}W {losses}L", { wins: r.wins, losses: r.losses })}</span>
-              </dd>
-            </div>
-          ))}
-        </dl>
-      )}
       {challenges && (challenges.total || challenges.aram) && (
         <dl className="acct-ranks">
           {challenges.total && (
