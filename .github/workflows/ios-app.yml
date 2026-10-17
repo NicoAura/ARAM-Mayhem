@@ -1,0 +1,32 @@
+name: iPhone app
+
+# Builds the iPhone app and tests the shared Swift package whenever either changes.
+on:
+  pull_request:
+    paths: ["apps/ios/**", "apps/shared/**", ".github/workflows/ios-app.yml"]
+  push:
+    branches: [main]
+    paths: ["apps/ios/**", "apps/shared/**", ".github/workflows/ios-app.yml"]
+
+concurrency:
+  group: ios-app-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: macos-15
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - name: Use the newest Xcode
+        run: sudo xcode-select -s "$(ls -d /Applications/Xcode_16*.app | sort -V | tail -1)" && xcodebuild -version
+      - name: Test the shared package
+        working-directory: apps/shared/DeepARAMKit
+        run: swift test
+      - name: Build the app for the simulator
+        working-directory: apps/ios
+        run: |
+          xcodebuild build -project DeepARAM.xcodeproj -scheme DeepARAM \
+            -destination 'generic/platform=iOS Simulator' \
+            CODE_SIGNING_ALLOWED=NO | tail -40
+          exit ${PIPESTATUS[0]}
