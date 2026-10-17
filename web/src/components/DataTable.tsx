@@ -12,11 +12,13 @@ import ChampionPanel, { hasPanel } from "./ChampionPanel";
 import { hintFor } from "@/lib/glossary";
 import { EmptyState } from "@/components/EmptyState";
 import DeepScore from "./DeepScore";
+import ArchetypeTags from "./ArchetypeTags";
+import type { TagInfo } from "@/lib/tag-info";
 
 export type Column = {
   key: string;
   label: string;
-  format?: "pct" | "num" | "int" | "sec" | "text" | "champion" | "augment" | "tier" | "deepscore";
+  format?: "pct" | "num" | "int" | "sec" | "text" | "champion" | "augment" | "tier" | "deepscore" | "tags";
   sortable?: boolean;
   /** For "augment" columns: the row key holding the augment id, for its icon. */
   iconKey?: string;
@@ -26,6 +28,8 @@ export type Column = {
   sortKey?: string;
   /** Explains the column; shown on hover and to screen readers. */
   hint?: string;
+  /** For "tags" columns: the colour and meaning of each tag (the cell holds them comma-separated). */
+  tags?: TagInfo;
 };
 
 export type Row = Record<string, string | number | null>;
@@ -79,7 +83,7 @@ function TierChip({ tier, was }: { tier: string; was: Row[string] | undefined })
 
 // Numbers get a colour where it means something: win rates above or below an even 50%, and changes up or down.
 function cellClass(c: Column, v: Row[string]) {
-  if (!c.format || ["text", "champion", "augment", "tier"].includes(c.format)) return "";
+  if (!c.format || ["text", "champion", "augment", "tier", "tags"].includes(c.format)) return "";
   const n = Number(v);
   if (v === null || v === "" || Number.isNaN(n)) return "num";
   if (c.format === "pct" && /win/.test(c.key)) return n >= 0.52 ? "num wr-high" : n <= 0.48 ? "num wr-low" : "num";
@@ -214,7 +218,7 @@ export default function DataTable({
               {columns.map((c) => (
                 <th
                   key={c.key}
-                  className={c.format && !["text", "champion", "augment", "tier"].includes(c.format) ? "num" : ""}
+                  className={c.format && !["text", "champion", "augment", "tier", "tags"].includes(c.format) ? "num" : ""}
                   aria-sort={c.sortable !== false && sort.key === (c.sortKey ?? c.key) ? (sort.desc ? "descending" : "ascending") : undefined}
                 >
                   {c.sortable === false ? (
@@ -257,6 +261,8 @@ export default function DataTable({
                       </a>
                     ) : c.format === "deepscore" && typeof r[c.key] === "number" ? (
                       <DeepScore value={r[c.key] as number} help={c.hint} />
+                    ) : c.format === "tags" && c.tags ? (
+                      <ArchetypeTags names={String(r[c.key] ?? "").split(",")} info={c.tags} compact />
                     ) : c.format === "tier" && r[c.key] ? (
                       <TierChip tier={String(r[c.key])} was={r[`${c.key}_was`]} />
                     ) : (

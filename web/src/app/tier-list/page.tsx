@@ -18,6 +18,7 @@ import { text } from "@/lib/content";
 import Pending from "@/components/Pending";
 import SubTabs from "@/components/SubTabs";
 import { readRepoCsv, readRepoJson } from "@/lib/repo-data";
+import { allChampionTags, championTagData } from "@/lib/champion-tags";
 
 export const metadata: Metadata = pageMeta("/tier-list", "Tier List", "ARAM Mayhem champion tier list for the current patch, with augment and duo win rates.");
 
@@ -73,7 +74,15 @@ export default function TierListPage() {
     {
       id: "champions",
       label: "Champions",
-      content: <ChampionTiers rows={rows} patches={patches.map((p) => p.patch)} partners={partners} />,
+      content: (
+        <ChampionTiers
+          rows={rows}
+          patches={patches.map((p) => p.patch)}
+          partners={partners}
+          tags={allChampionTags([...new Set(rows.map((r) => r.name))])}
+          tagInfo={championTagData().info}
+        />
+      ),
     },
   ];
   if (augments) {

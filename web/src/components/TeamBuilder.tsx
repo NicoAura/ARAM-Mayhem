@@ -7,6 +7,7 @@ import type { SynergyData } from "@/lib/synergy";
 import { getParam, setParams } from "@/lib/url-state";
 import Skeleton from "@/components/Skeleton";
 import { EmptyState, LoadError } from "@/components/EmptyState";
+import ArchetypeTags from "@/components/ArchetypeTags";
 
 // Team Builder (/builds?tab=team&team=Jinx,Lulu): pick up to five champions to see how each pair does together
 // and which champions fit the team best (handy for picking from the ARAM bench). Data: /data/synergy.json.
@@ -60,6 +61,15 @@ export default function TeamBuilder() {
       .slice(0, 10);
   }, [team, data]);
 
+  // The team's archetypes: how many of each class, and whether anyone can take hits up front.
+  const mix = useMemo(() => {
+    const info = data?.tagInfo ?? {};
+    const n = new Map<string, number>();
+    for (const id of team) for (const t of byId.get(id)?.tags ?? []) if (info[t]?.kind === "class") n.set(t, (n.get(t) ?? 0) + 1);
+    const frontline = n.has("Tank") || n.has("Fighter");
+    return { counts: [...n].sort((a, b) => b[1] - a[1]), frontline };
+  }, [team, byId, data]);
+
   if (failed) return <LoadError what="Pair data" />;
   if (!data) return <Skeleton kind="slots" rows={5} label="Loading pair data…" />;
 
@@ -109,6 +119,18 @@ export default function TeamBuilder() {
         <p className="patch-note">Add the champions on your team, or the one you&apos;re playing, to see who pairs best with them.</p>
       ) : (
         <div className="bento">
+          {data.tagInfo && mix.counts.length > 0 && (
+            <div className="team-mix span-all">
+              <span className="team-mix-label">Team mix</span>
+              {mix.counts.map(([t, k]) => (
+                <span key={t} className="team-mix-item">
+                  <ArchetypeTags names={[t]} info={data.tagInfo} compact />
+                  {k > 1 && <b>×{k}</b>}
+                </span>
+              ))}
+              {team.length >= 3 && !mix.frontline && <span className="team-mix-warn">No Tank or Fighter to take hits up front yet.</span>}
+            </div>
+          )}
           {team.length > 1 && (
             <section className="card span-6" data-accent="tier">
               <div className="card-head">

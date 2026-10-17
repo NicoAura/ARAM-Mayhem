@@ -22,6 +22,7 @@ const PAGES = [
   "/patches",
   "/items",
   "/items?tag=crit,as",
+  "/tier-list?tag=Mage,Poke",
   "/privacy",
   "/terms",
 ];

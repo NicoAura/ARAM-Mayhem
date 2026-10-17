@@ -13,6 +13,8 @@ import QuickReference from "@/components/QuickReference";
 import { notFound } from "next/navigation";
 import Embed from "@/components/Embed";
 import { championAliases, championSummary, champList } from "@/lib/champions";
+import ArchetypeTags from "@/components/ArchetypeTags";
+import { championTagData, championTags } from "@/lib/champion-tags";
 import { pageMeta } from "@/lib/meta";
 import { discoverToolTabs } from "@/lib/tabs";
 
@@ -84,6 +86,7 @@ export default async function ChampionPage({ params }: { params: Promise<{ alias
           </h1>
         </div>
         {c.title && <p className="lede">{c.title.charAt(0).toUpperCase() + c.title.slice(1)}</p>}
+        <ArchetypeTags names={championTags(c.alias)} info={championTagData().info} link />
         <p className="champ-hero-links">
           <FavoriteStar id={c.alias} name={c.name} label />
           <CompareToggle id={c.alias} name={c.name} label />
