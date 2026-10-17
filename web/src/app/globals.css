@@ -6069,6 +6069,7 @@ html[data-patch-new] .chip[data-dir="up"]::after,
 .items-group-label {
   width: 4.5rem;
   color: var(--tag);
+  color: color-mix(in oklch, var(--tag) 70%, var(--fg));
   font-size: 0.75rem;
   font-weight: 700;
   letter-spacing: 0.06em;

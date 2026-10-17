@@ -27,7 +27,7 @@ export default function Freshness({ at }: { at: string | null }) {
   const state = age === null ? "unknown" : age < 36 * 3600e3 ? "fresh" : age < 7 * 86400e3 ? "ageing" : "stale";
   return (
     <span className="fresh" data-state={state}>
-      <time dateTime={when.toISOString()} title={when.toLocaleString()}>
+      <time dateTime={when.toISOString()} title={now === null ? undefined : when.toLocaleString()}>
         {age === null ? when.toISOString().slice(0, 10) : ago(age)}
       </time>
     </span>
