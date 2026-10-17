@@ -2,94 +2,9 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Heartsteel Quest</title>
-  <meta name="description" content="How much Health a tank reaches in ARAM Mayhem with Heartsteel and Steel Your Heart.">
-  <link rel="stylesheet" href="../style.css">
+  <title>The Lab</title>
+  <meta http-equiv="refresh" content="0; url=../index.html">
+  <script>location.replace("../index.html");</script>
 </head>
-<body>
-  <main>
-    <header class="intro">
-      <img id="champ-icon" alt="" width="56" height="56">
-      <div>
-        <p class="eyebrow"><a href="../index.html">The Lab</a> · ARAM Mayhem</p>
-        <h1>Heartsteel Quest</h1>
-        <p class="muted">Every Heartsteel proc adds Health based on your max Health, so the stacks snowball. Steel Your Heart triples them once you pass the quest. <span id="patch"></span></p>
-      </div>
-    </header>
-
-    <section class="result" aria-live="polite">
-      <div class="big">
-        <span class="label">Max Health after <span id="procs-label">60</span> procs</span>
-        <span id="hp" class="value">0</span>
-      </div>
-      <div class="loop">
-        <div class="loop-head">
-          <span class="label">Growth per proc</span>
-          <span id="growth">0%</span>
-        </div>
-        <p id="growth-note" class="muted small"></p>
-      </div>
-      <svg id="chart" viewBox="0 0 300 80" preserveAspectRatio="none" role="img" aria-label="Max Health after each proc"></svg>
-      <dl id="stats" class="stats"></dl>
-    </section>
-
-    <section>
-      <div class="row-head"><h2>Champion</h2></div>
-      <div id="champ-picker" class="picker"></div>
-    </section>
-
-    <section>
-      <div class="row-head">
-        <h2>Level</h2>
-        <output id="level-out">18</output>
-      </div>
-      <input id="level" type="range" min="1" max="18" value="18" aria-label="Champion level">
-    </section>
-
-    <section>
-      <div class="row-head">
-        <h2>Items</h2>
-        <span class="muted small">Heartsteel stays in slot one</span>
-      </div>
-      <div id="item-slots" class="slots"></div>
-      <div id="item-picker" class="picker"></div>
-    </section>
-
-    <section>
-      <div class="row-head">
-        <h2>Augments</h2>
-        <span class="muted small">Up to 4</span>
-      </div>
-      <div id="aug-slots" class="slots augs"></div>
-      <div id="aug-picker" class="picker augs"></div>
-    </section>
-
-    <section>
-      <h2>Stacks and extras</h2>
-      <div id="options" class="options"></div>
-    </section>
-
-    <section>
-      <h2>Where the Health comes from</h2>
-      <table id="breakdown" class="table"></table>
-    </section>
-
-    <section class="actions">
-      <button id="preset" type="button">Load the biggest build</button>
-      <button id="reset" type="button" class="ghost">Clear</button>
-      <button id="share" type="button" class="ghost">Copy link</button>
-    </section>
-
-    <footer class="muted small">
-      Uses Mayhem's Heartsteel value (5% of proc damage becomes Health).
-      Health % bonuses (Goliath, Warmog's, Tank Engine and so on) are added together and multiply all max Health, Heartsteel stacks included.
-      A proc needs 3 seconds near an enemy champion and each champion can be procced once every 30 seconds.
-    </footer>
-  </main>
-
-  <script src="data.js"></script>
-  <script src="calc.js"></script>
-  <script src="app.js"></script>
-</body>
+<body><a href="../index.html">The Lab</a></body>
 </html>

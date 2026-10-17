@@ -9,14 +9,6 @@ from concurrent.futures import ThreadPoolExecutor
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 TOOLS = [("ryze-calculator", "Infinite Ryze", "How far Ryze's AP to Mana loop goes with your items and augments."),
-         ("heartsteel", "Heartsteel Quest", "How much Health a tank snowballs to with Heartsteel and Steel Your Heart."),
-         ("zero-cooldowns", "Zero Cooldowns", "How close any champion gets to casting nonstop with Ability Haste items and augments."),
-         ("stacking-timer", "Stacking Timer", "How fast Veigar, Nasus, Senna and Smolder stack, and when they hit each goal."),
-         ("one-shot", "One-Shot Checker", "Whether your burst kills a target from full Health after armor and magic resist."),
-         ("move-speed", "Speed Cap Breaker", "How fast any champion goes with speed items and augments, after the soft caps."),
-         ("gold-rush", "Gold Rush", "When you finish a full build, and how much sooner gold augments get you there."),
-         ("biggest-champion", "Biggest Champion", "How big a champion grows with size augments and items, next to Baron."),
-         ("augment-odds", "Augment Odds", "Your chance of being offered a specific augment, and how many games it takes."),
          ("cook-builds", "Cook Builds", "Troll builds built on strange augment interactions, checked against Mayhem win rates and the simulator.")]
 SWAP_ICONS = ("<script>(function(){var M=parent.FUN_ICONS||{};function w(o){for(var k in o){var v=o[k];"
               "if(typeof v==='string'){if(M[v])o[k]=M[v];}else if(v&&typeof v==='object')w(v);}}"
