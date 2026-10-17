@@ -6770,3 +6770,139 @@ html[data-device="mobile"] .items-group > * {
 html[data-device="mobile"] .items-group-label {
   width: auto;
 }
+
+/* Champion archetype tags (components/ArchetypeTags.tsx): Riot class filled, subclass outlined, playstyle with a dot. */
+.arch-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin-block: 0.5rem;
+}
+.arch-tags.compact {
+  flex-wrap: nowrap;
+  gap: 0.25rem;
+  margin: 0;
+}
+.arch-tag {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.22rem 0.6rem;
+  border: 1px solid color-mix(in srgb, var(--tag) 55%, var(--line));
+  border-radius: 999px;
+  background: transparent;
+  color: color-mix(in oklch, var(--tag) 70%, var(--fg));
+  font: 600 0.78rem/1.2 var(--font-sans), system-ui, sans-serif;
+  white-space: nowrap;
+  text-decoration: none;
+  cursor: help;
+}
+.arch-tags.compact .arch-tag {
+  padding: 0.12rem 0.45rem;
+  font-size: 0.72rem;
+}
+.arch-tag[data-kind="class"] {
+  background: color-mix(in srgb, var(--tag) 18%, transparent);
+}
+.arch-tag[data-kind="play"]::before {
+  content: "";
+  width: 0.45rem;
+  height: 0.45rem;
+  border-radius: 50%;
+  background: var(--tag);
+}
+a.arch-tag,
+button.arch-tag {
+  cursor: pointer;
+}
+a.arch-tag:hover,
+button.arch-tag:hover {
+  border-color: var(--tag);
+}
+.arch-tag:hover::after,
+.arch-tag:focus-visible::after {
+  content: attr(data-tip);
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  z-index: 6;
+  width: max-content;
+  max-width: min(17rem, 80vw);
+  padding: 0.5rem 0.65rem;
+  border: 1px solid color-mix(in srgb, var(--tag) 45%, var(--line));
+  border-radius: 8px;
+  background: var(--raised);
+  color: var(--fg);
+  box-shadow: 0 10px 24px -14px rgb(0 0 0 / 0.6);
+  font: 400 0.8125rem/1.45 var(--font-sans), system-ui, sans-serif;
+  white-space: normal;
+  pointer-events: none;
+}
+.arch-filter {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem;
+  margin-block: 0.75rem;
+}
+.arch-filter .arch-tag {
+  padding: 0.3rem 0.7rem;
+  font-size: 0.8125rem;
+}
+.arch-filter .arch-tag[aria-pressed="true"] {
+  border-color: var(--tag);
+  background: var(--tag);
+  color: #0b0d12;
+}
+.arch-filter .arch-tag[aria-pressed="true"]::before {
+  background: #0b0d12;
+}
+.arch-filter .arch-tag:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+.arch-count {
+  color: var(--muted);
+  font-weight: 500;
+}
+.arch-filter .arch-tag[aria-pressed="true"] .arch-count {
+  color: inherit;
+  opacity: 0.7;
+}
+html[data-device="mobile"] .arch-filter {
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  scroll-snap-type: x proximity;
+  scrollbar-width: none;
+  padding-bottom: 0.25rem;
+}
+html[data-device="mobile"] .arch-filter > * {
+  flex: none;
+  scroll-snap-align: start;
+}
+/* Tooltips would be clipped by the strip's scroll box on phones; the tag names stand on their own there. */
+html[data-device="mobile"] .arch-filter .arch-tag::after {
+  display: none;
+}
+.team-mix {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+}
+.team-mix-label {
+  color: var(--muted);
+  font-size: 0.8125rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+.team-mix-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+.team-mix-warn {
+  color: var(--muted);
+  font-size: 0.8125rem;
+}

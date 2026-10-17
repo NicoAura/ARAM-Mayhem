@@ -3,6 +3,8 @@ import championIds from "@/data/champion-ids.json";
 import { champName } from "./highlights";
 import { liveWithChange } from "./champions";
 import { readRepoJson } from "./repo-data";
+import { championTagData, championTags } from "./champion-tags";
+import type { TagInfo } from "./tag-info";
 
 // Pair win rates for the Team Builder (/synergy), built once per deploy into /data/synergy.json:
 // each champion's 50 best partners (data/cn/champions.json) plus the top duos (data/cn/duos.json).
@@ -15,7 +17,8 @@ type Champs = { champions: { name: string; best_partners?: { champion_id: number
 type Duos = { duos: { names: string[]; win_rate: number }[] };
 
 export type SynergyData = {
-  champions: { id: string; name: string; tier: string; winRate: number }[];
+  champions: { id: string; name: string; tier: string; winRate: number; tags: string[] }[];
+  tagInfo: TagInfo;
   /** pairs[a][b] = win rate together in basis points, both directions. */
   pairs: Record<string, Record<string, number>>;
 };
@@ -37,7 +40,7 @@ export function synergyData(): SynergyData {
   for (const c of readRepoJson<Champs>("data/cn/champions.json")?.champions ?? [])
     for (const p of c.best_partners ?? []) put(c.name, ALIAS[p.champion_id], p.win_rate);
   const champions = liveWithChange()
-    .live.map((c) => ({ id: c.name, name: champName(c.name), tier: c.tier, winRate: c.win_rate }))
+    .live.map((c) => ({ id: c.name, name: champName(c.name), tier: c.tier, winRate: c.win_rate, tags: championTags(c.name) }))
     .sort((a, b) => a.name.localeCompare(b.name));
-  return { champions, pairs };
+  return { champions, pairs, tagInfo: championTagData().info };
 }

@@ -6,6 +6,7 @@ import { getParam, setParams } from "@/lib/url-state";
 import DataTable, { type Column } from "./DataTable";
 import { champStats, TIER_HELP, type PatchRow } from "@/lib/tiers";
 import Skeleton from "@/components/Skeleton";
+import { tagsByKind, type TagInfo } from "@/lib/tag-info";
 
 // Champion tier list over a chosen patch range: the live patch (default), any set of patches, or all time.
 // The page carries only the live and previous patch; older patches load from /data/tier-history.json when picked.
@@ -44,7 +45,9 @@ const ADVANCED: Column[] = [
 const MOVERS = { key: "change", desc: true };
 const BEST = { key: "score", desc: true };
 
-export default function ChampionTiers({ rows: initial, patches, partners }: { rows: PatchRow[]; patches: string[]; partners: Record<string, string> }) {
+type Props = { rows: PatchRow[]; patches: string[]; partners: Record<string, string>; tags: Record<string, string[]>; tagInfo: TagInfo };
+
+export default function ChampionTiers({ rows: initial, patches, partners, tags, tagInfo }: Props) {
   const live = patches[patches.length - 1];
   const [rows, setRows] = useState(initial);
   const [full, setFull] = useState(false);
@@ -81,9 +84,29 @@ export default function ChampionTiers({ rows: initial, patches, partners }: { ro
     return champStats(rows, picked).map((c) => {
       const was = prev?.get(c.name);
       // tier_was lets the table slide a changed tier in from the previous patch's (DataTable).
-      return { ...c, partners: partners[c.name] ?? null, change: was === undefined ? null : c.win_rate - was.win_rate, tier_was: was?.tier ?? null };
+      return {
+        ...c,
+        partners: partners[c.name] ?? null,
+        change: was === undefined ? null : c.win_rate - was.win_rate,
+        tier_was: was?.tier ?? null,
+        archetype: (tags[c.name] ?? []).filter((t) => tagInfo[t]?.kind !== "play").join(","),
+      };
     });
-  }, [rows, picked, partners, before, have, missing]);
+  }, [rows, picked, partners, before, have, missing, tags, tagInfo]);
+
+  // Archetype filter (?tag=Mage,Poke): a champion shows when it has every picked tag. Tiers and
+  // DeepScores stay graded against the whole list, so a filtered view shows where each stands overall.
+  const [want, setWant] = useState<string[]>([]);
+  useEffect(() => setWant((getParam("tag") ?? "").split(",").filter((t) => tagInfo[t])), [tagInfo]);
+  const pickTag = (t: string) => {
+    const next = want.includes(t) ? want.filter((x) => x !== t) : [...want, t];
+    setWant(next);
+    setParams({ tag: next.length ? next.join(",") : null });
+  };
+  const shownRows = useMemo(() => (want.length ? stats.filter((c) => want.every((t) => tags[c.name]?.includes(t))) : stats), [stats, want, tags]);
+  const kinds = useMemo(() => tagsByKind(tagInfo), [tagInfo]);
+  const count = (t: string) => stats.filter((c) => tags[c.name]?.includes(t)).length;
+  const tagCol: Column = { key: "archetype", label: "Class", format: "tags", sortable: false, tags: tagInfo, hint: "Riot's class and subclass for the champion. Hover a tag to see what it means." };
 
   const choose = (next: Set<string>) => {
     setPicked(next);
@@ -190,6 +213,33 @@ export default function ChampionTiers({ rows: initial, patches, partners }: { ro
           </button>
         ))}
       </div>
+      {Object.keys(tagInfo).length > 0 && (
+        <div className="arch-filter" role="group" aria-label="Filter by archetype">
+          {[...kinds.class, ...kinds.play].map((t) => {
+            const n = count(t);
+            return (
+              <button
+                key={t}
+                type="button"
+                className="arch-tag"
+                data-kind={tagInfo[t].kind}
+                data-tip={tagInfo[t].meaning}
+                aria-pressed={want.includes(t)}
+                disabled={!n && !want.includes(t)}
+                style={{ "--tag": tagInfo[t].color } as React.CSSProperties}
+                onClick={() => pickTag(t)}
+              >
+                {t} <span className="arch-count">{n}</span>
+              </button>
+            );
+          })}
+          {want.length > 0 && (
+            <button type="button" className="btn ghost arch-clear" onClick={() => (setWant([]), setParams({ tag: null }))}>
+              Clear
+            </button>
+          )}
+        </div>
+      )}
       <p className="patch-note">
         {picked.size === 1 ? `Patch ${[...picked][0]}` : `${picked.size} patches combined`}
         {showChange ? `, with the change since ${before}` : ""}. Click patches to add or remove them.
@@ -199,9 +249,9 @@ export default function ChampionTiers({ rows: initial, patches, partners }: { ro
       ) : (
         <DataTable
           key={sort.key}
-          columns={showMulti ? [...STANDARD, PATCHES] : showChange ? [...STANDARD, CHANGE] : STANDARD}
-          advancedColumns={showMulti ? [...ADVANCED, PATCHES] : showChange ? [...ADVANCED, CHANGE] : ADVANCED}
-          rows={stats}
+          columns={[...STANDARD.slice(0, 3), tagCol, ...STANDARD.slice(3), ...(showMulti ? [PATCHES] : showChange ? [CHANGE] : [])]}
+          advancedColumns={[...ADVANCED.slice(0, 3), tagCol, ...ADVANCED.slice(3), ...(showMulti ? [PATCHES] : showChange ? [CHANGE] : [])]}
+          rows={shownRows}
           initialSort={sort}
           searchKey="name"
           searchLabel="Find a champion"

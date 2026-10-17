@@ -5,6 +5,7 @@ import { liveWithChange } from "./champions";
 import { champName } from "./highlights";
 import { item, rewardItems } from "./items";
 import { readRepoJson } from "./repo-data";
+import { championTagData, championTags } from "./champion-tags";
 
 // Everything the champion compare page (/compare) lines up side by side, built once per deploy into
 // /data/compare.json: live-patch stats, most picked augments and core items, skill order, and the
@@ -46,6 +47,7 @@ export type CompareChampion = {
   skills: string[];
   partners: string[];
   sim: { dps: number; survival: number; kpm: number; items: number[]; augments: number[] } | null;
+  tags: string[];
 };
 
 export function compareData() {
@@ -87,8 +89,9 @@ export function compareData() {
             augments: sim.build.augments.map((k) => simAugs[k]?.id).filter((v): v is number => Boolean(v)),
           }
         : null,
+      tags: championTags(alias),
     };
   });
   const itemInfo = Object.fromEntries([...usedItems].map((id) => [id, item(id) ?? { id, name: `Item ${id}` }]));
-  return { patch, champions: champions.sort((a, b) => a.name.localeCompare(b.name)), items: itemInfo };
+  return { patch, champions: champions.sort((a, b) => a.name.localeCompare(b.name)), items: itemInfo, tagInfo: championTagData().info };
 }

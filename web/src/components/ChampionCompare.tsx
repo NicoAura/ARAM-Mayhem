@@ -7,10 +7,12 @@ import type { CompareChampion } from "@/lib/compare";
 import { getParam, setParams } from "@/lib/url-state";
 import Skeleton from "@/components/Skeleton";
 import { LoadError } from "@/components/EmptyState";
+import ArchetypeTags from "@/components/ArchetypeTags";
+import type { TagInfo } from "@/lib/tag-info";
 
 // Two champions side by side (/builds?tab=compare&a=Jinx&b=Ezreal). Data comes from /data/compare.json.
 
-type Data = { patch: string | null; champions: CompareChampion[]; items: Record<string, { id: number; name: string; icon?: string }> };
+type Data = { patch: string | null; champions: CompareChampion[]; items: Record<string, { id: number; name: string; icon?: string }>; tagInfo?: TagInfo };
 const AUGS = augmentNames as Record<string, string>;
 
 const pct = (v: number) => `${(v * 100).toFixed(1)}%`;
@@ -169,6 +171,16 @@ export default function ChampionCompare() {
                 })}
               </tr>
             ))}
+            {data.tagInfo && (
+              <tr>
+                <th scope="row">Archetype</th>
+                {[ca, cb].map((c) => (
+                  <td key={c.id}>
+                    {c.tags?.length ? <ArchetypeTags names={c.tags} info={data.tagInfo!} compact /> : "–"}
+                  </td>
+                ))}
+              </tr>
+            )}
             <tr>
               <th scope="row">Most picked augments</th>
               {[ca, cb].map((c) => (
