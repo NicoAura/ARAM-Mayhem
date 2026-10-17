@@ -1,4 +1,5 @@
 import "server-only";
+import challengeNames from "@/data/challenges.json";
 import { serverEnv } from "./env";
 
 // Regional routing values used by the account-v1 and match-v5 APIs.
@@ -58,6 +59,10 @@ export type ChallengeSummary = {
   /** percentile is the share of players at or above this player (0.05 = top 5%). */
   total: { level: string; current: number; percentile: number } | null;
   aram: { level: string; value: number; percentile: number } | null;
+  /** The challenge tokens the player shows on their profile in the client (up to three), at their current level. */
+  tokens: { id: number; name: string; description: string; level: string }[];
+  /** The title the player has picked, if any. */
+  title: string | null;
 };
 export type ClashMember = {
   puuid: string;
@@ -80,14 +85,32 @@ const topMastery = (platform: Platform, puuid: string, count: number) =>
     .catch(() => [] as Mastery[]);
 
 async function challengeSummary(platform: Platform, puuid: string): Promise<ChallengeSummary | null> {
-  type Data = { totalPoints?: { level: string; current: number; percentile: number }; challenges?: ChallengeProgress["challenges"] };
+  type Data = {
+    totalPoints?: { level: string; current: number; percentile: number };
+    challenges?: ChallengeProgress["challenges"];
+    preferences?: { challengeIds?: number[]; title?: string };
+  };
   const d = await riotFetch<Data>(platform, `/lol/challenges/v1/player-data/${encodeURIComponent(puuid)}`, 3600).catch(() => null);
   if (!d) return null;
   const aram = d.challenges?.find((c) => c.challengeId === ARAM_CHALLENGE);
   return {
     total: d.totalPoints ? { level: d.totalPoints.level, current: d.totalPoints.current, percentile: d.totalPoints.percentile } : null,
     aram: aram ? { level: aram.level, value: aram.value, percentile: aram.percentile } : null,
+    ...shownOff(d.preferences, d.challenges ?? []),
   };
+}
+
+const NAMES: { challenges: Record<string, string[]>; titles: Record<string, string> } = challengeNames;
+
+/** Names the tokens and title a player picked to show (ids in the API, names in data/challenges.json). */
+export function shownOff(prefs: { challengeIds?: number[]; title?: string } | undefined, progress: ChallengeProgress["challenges"]) {
+  const tokens = (prefs?.challengeIds ?? []).slice(0, 3).flatMap((id) => {
+    const named = NAMES.challenges[String(id)];
+    const level = progress.find((c) => c.challengeId === id)?.level;
+    return named && level && level !== "NONE" ? [{ id, name: named[0], description: named[1] ?? "", level }] : [];
+  });
+  const title = prefs?.title ? (NAMES.titles[prefs.title] ?? null) : null;
+  return { tokens, title };
 }
 
 /** The player's team in an ARAM Clash tournament, if they're on one. Summoner's Rift Clash teams are left out. */

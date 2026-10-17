@@ -3,7 +3,8 @@
 import { useEffect, useState } from "react";
 
 // On the account page, for the connected Riot account: ranked standing, challenge standing, mastery
-// against this patch's Mayhem tiers, and the player's ARAM Clash team (/api/account/riot).
+// against this patch's Mayhem tiers, the title and challenge tokens they show in the client, and the
+// player's ARAM Clash team (/api/account/riot).
 
 type Mastery = { championId: number; championLevel: number; championPoints: number };
 type Member = {
@@ -20,7 +21,12 @@ type Extras = {
   connected: boolean;
   ranked: Ranked[];
   mastery: Mastery[];
-  challenges: { total: { level: string; percentile: number } | null; aram: { level: string; percentile: number } | null } | null;
+  challenges: {
+    total: { level: string; percentile: number } | null;
+    aram: { level: string; percentile: number } | null;
+    tokens?: { id: number; name: string; description: string; level: string }[];
+    title?: string | null;
+  } | null;
   clash: { name: string; abbreviation: string; tier: number; members: Member[] } | null;
 };
 type Tiers = Record<number, { id: string; name: string; tier: string | null; winRate: number | null }>;
@@ -96,6 +102,29 @@ export default function PlayerExtras() {
           )}
         </dl>
       )}
+
+      {challenges && (challenges.title || challenges.tokens?.length) ? (
+        <div className="player-extra">
+          <h3>Your profile in the client</h3>
+          {challenges.title && (
+            <p className="acct-title">
+              Title: <strong>{challenges.title}</strong>
+            </p>
+          )}
+          {challenges.tokens?.length ? (
+            <ul className="acct-tokens">
+              {challenges.tokens.map((t) => (
+                <li key={t.id} title={t.description}>
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={`/assets/challenge/${t.id}-${t.level}.png`} alt="" width={48} height={48} loading="lazy" />
+                  <span className="name">{t.name}</span>
+                  <span className="lvl">{title(t.level)}</span>
+                </li>
+              ))}
+            </ul>
+          ) : null}
+        </div>
+      ) : null}
 
       {mastery.length > 0 && (
         <div className="player-extra">

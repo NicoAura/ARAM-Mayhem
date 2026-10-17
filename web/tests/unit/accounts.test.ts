@@ -40,3 +40,17 @@ describe("owner-only files", () => {
     expect(await ownerFromCookie("x".repeat(43))).toBe(false); // no accounts database outside Cloudflare
   });
 });
+
+describe("challenge tokens and title on the account page", async () => {
+  const { shownOff } = await import("@/lib/riot");
+  it("names the shown tokens at their level and the picked title", () => {
+    const got = shownOff({ challengeIds: [101000, 999999999], title: "10100006" }, [
+      { challengeId: 101000, level: "MASTER", value: 1, percentile: 0.1 },
+    ]);
+    expect(got.title).toBe("ARAM God");
+    expect(got.tokens).toEqual([{ id: 101000, name: "ARAM Authority", description: expect.any(String), level: "MASTER" }]);
+  });
+  it("shows nothing when the player picked nothing", () => {
+    expect(shownOff(undefined, [])).toEqual({ tokens: [], title: null });
+  });
+});

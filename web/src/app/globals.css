@@ -6823,6 +6823,25 @@ button.inline-link {
   font-weight: 500;
 }
 
+.acct-title { margin: 0; }
+.acct-tokens {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.acct-tokens li {
+  display: grid;
+  grid-template-columns: 48px auto;
+  column-gap: 0.6rem;
+  align-items: center;
+}
+.acct-tokens img { grid-row: span 2; object-fit: contain; }
+.acct-tokens .name { font-weight: 600; }
+.acct-tokens .lvl { color: var(--muted); font-size: 0.8125rem; }
+
 .mastery-list,
 .clash-roster {
   display: grid;

@@ -22,6 +22,8 @@ type Account = {
   passkeys: { id: string; label: string; created: string }[];
   riot: { name: string; platform: string | null; page: string | null } | null;
   passkeySession: boolean;
+  /** Sign in with Riot is switched on (lib/rso.ts). */
+  rso: boolean;
 };
 
 type Msg = { kind: "ok" | "error"; text: string } | null;
@@ -47,14 +49,25 @@ function Note({ msg }: { msg: Msg }) {
 
 export default function AccountPanel() {
   const [account, setAccount] = useState<Account | null | undefined>(undefined);
+  const [rso, setRso] = useState(false);
+  // Coming back from Sign in with Riot: /account?riot=connected or ?riot-error=<what went wrong>.
+  const [riotMsg, setRiotMsg] = useState<Msg>(null);
 
   const refresh = useCallback(async () => {
     const a = await fetch("/api/account", { cache: "no-store" }).then((r) => r.json()).catch(() => null);
+    setRso(Boolean(a?.rso));
     setAccount(a?.signedIn ? a : null);
   }, []);
 
   useEffect(() => {
     void refresh();
+    const q = new URLSearchParams(location.search);
+    const error = q.get("riot-error");
+    if (error || q.get("riot") === "connected") {
+      setRiotMsg(error ? { kind: "error", text: error.slice(0, 200) } : { kind: "ok", text: "Your Riot account is connected." });
+      history.replaceState(null, "", location.pathname);
+      if (!error) void syncAccount().then(() => window.dispatchEvent(new Event(ACCOUNT_EVENT)));
+    }
   }, [refresh]);
 
   const signedIn = async () => {
@@ -64,11 +77,15 @@ export default function AccountPanel() {
   };
 
   if (account === undefined) return <p className="acct-loading">Loading your account…</p>;
-  if (!account) return <SignIn onDone={signedIn} />;
-  return <Manage account={account} refresh={refresh} />;
+  return (
+    <>
+      <Note msg={riotMsg} />
+      {account ? <Manage account={account} refresh={refresh} /> : <SignIn onDone={signedIn} rso={rso} />}
+    </>
+  );
 }
 
-function SignIn({ onDone }: { onDone: () => Promise<void> }) {
+function SignIn({ onDone, rso }: { onDone: () => Promise<void>; rso: boolean }) {
   const [mode, setMode] = useState<"signin" | "signup">("signin");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -142,13 +159,16 @@ function SignIn({ onDone }: { onDone: () => Promise<void> }) {
           {busy ? "One moment…" : signup ? "Create account" : "Sign in"}
         </button>
       </form>
+      {(passkeys || rso) && <p className="acct-or">or</p>}
       {passkeys && (
-        <>
-          <p className="acct-or">or</p>
-          <button type="button" className="btn ghost acct-passkey" onClick={passkey} disabled={busy}>
-            Sign in with a passkey
-          </button>
-        </>
+        <button type="button" className="btn ghost acct-passkey" onClick={passkey} disabled={busy}>
+          Sign in with a passkey
+        </button>
+      )}
+      {rso && (
+        <a className="btn ghost acct-passkey" href="/api/account/rso/start?mode=signin">
+          Sign in with Riot
+        </a>
       )}
       <Note msg={msg} />
       <p className="acct-hint">
@@ -171,7 +191,7 @@ function Manage({ account, refresh }: { account: Account; refresh: () => Promise
     <div className="acct-grid">
       <section className="card acct-card">
         <h2>Signed in</h2>
-        <p className="acct-who">{account.email ?? "Your account"}</p>
+        <p className="acct-who">{account.email ?? account.riot?.name ?? "Your account"}</p>
         <p className="acct-hint">
           Your {account.data.favorites.length ? `${account.data.favorites.length} starred champion${account.data.favorites.length === 1 ? "" : "s"}` : "starred champions"} and
           settings follow you to every browser you sign in on.
@@ -260,7 +280,13 @@ function RiotCard({ account, refresh }: { account: Account; refresh: () => Promi
           <button type="button" className="btn" onClick={getCode}>
             Connect a Riot account
           </button>
-          <p className="acct-hint">Coming soon: connect straight from this page with your Riot sign-in.</p>
+          {account.rso ? (
+            <a className="btn ghost" href="/api/account/rso/start?mode=connect">
+              Connect with Riot sign-in
+            </a>
+          ) : (
+            <p className="acct-hint">Coming soon: connect straight from this page with your Riot sign-in.</p>
+          )}
         </>
       )}
       <Note msg={msg} />
