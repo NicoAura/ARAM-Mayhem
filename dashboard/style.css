@@ -170,3 +170,14 @@ td.augs { text-align: left; white-space: normal; color: var(--muted); font-size:
 .km-key i { width: 10px; height: 10px; border-radius: 50%; }
 .km-key b { font: 500 13.5px var(--mono); margin-left: auto; }
 @media (max-width: 720px) { .killmap { grid-template-columns: 1fr; } }
+
+.badges { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 10px; }
+.badge { border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; display: grid; gap: 4px; opacity: .72; transition: border-color .15s, background .15s, opacity .15s; }
+.badge:hover { opacity: 1; border-color: color-mix(in srgb, var(--accent) 45%, var(--line)); }
+.badge.done { opacity: 1; background: var(--accent-soft); border-color: color-mix(in srgb, var(--accent) 55%, transparent); }
+.badge .b-name { font-weight: 600; font-size: 13.5px; }
+.badge.done .b-name { color: color-mix(in srgb, var(--accent) 72%, var(--fg)); }
+.badge .b-desc { font-size: 12px; color: var(--muted); }
+.badge .b-bar { height: 4px; border-radius: 2px; background: var(--raised); overflow: hidden; margin-top: 2px; }
+.badge .b-bar span { display: block; height: 100%; background: var(--accent); }
+.badge .b-prog { font: 400 11.5px var(--mono); color: var(--muted); }
