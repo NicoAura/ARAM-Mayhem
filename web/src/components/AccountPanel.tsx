@@ -24,7 +24,13 @@ type Account = {
   passkeySession: boolean;
   /** Sign in with Riot is switched on (lib/rso.ts). */
   rso: boolean;
+  /** Sign in with Google or Apple: the ones switched on (lib/oauth.ts), and the ones this account uses. */
+  providers: Provider[];
+  logins: { provider: Provider; name: string; email: string | null }[];
 };
+
+type Provider = "google" | "apple";
+const PROVIDER_NAMES: Record<Provider, string> = { google: "Google", apple: "Apple" };
 
 type Msg = { kind: "ok" | "error"; text: string } | null;
 
@@ -50,19 +56,21 @@ function Note({ msg }: { msg: Msg }) {
 export default function AccountPanel() {
   const [account, setAccount] = useState<Account | null | undefined>(undefined);
   const [rso, setRso] = useState(false);
+  const [providers, setProviders] = useState<Provider[]>([]);
   // Coming back from Sign in with Riot: /account?riot=connected or ?riot-error=<what went wrong>.
   const [riotMsg, setRiotMsg] = useState<Msg>(null);
 
   const refresh = useCallback(async () => {
     const a = await fetch("/api/account", { cache: "no-store" }).then((r) => r.json()).catch(() => null);
     setRso(Boolean(a?.rso));
+    setProviders(Array.isArray(a?.providers) ? a.providers : []);
     setAccount(a?.signedIn ? a : null);
   }, []);
 
   useEffect(() => {
     void refresh();
     const q = new URLSearchParams(location.search);
-    const error = q.get("riot-error");
+    const error = q.get("riot-error") ?? q.get("signin-error");
     if (error || q.get("riot") === "connected") {
       setRiotMsg(error ? { kind: "error", text: error.slice(0, 200) } : { kind: "ok", text: "Your Riot account is connected." });
       history.replaceState(null, "", location.pathname);
@@ -80,12 +88,12 @@ export default function AccountPanel() {
   return (
     <>
       <Note msg={riotMsg} />
-      {account ? <Manage account={account} refresh={refresh} /> : <SignIn onDone={signedIn} rso={rso} />}
+      {account ? <Manage account={account} refresh={refresh} /> : <SignIn onDone={signedIn} rso={rso} providers={providers} />}
     </>
   );
 }
 
-function SignIn({ onDone, rso }: { onDone: () => Promise<void>; rso: boolean }) {
+function SignIn({ onDone, rso, providers }: { onDone: () => Promise<void>; rso: boolean; providers: Provider[] }) {
   const [mode, setMode] = useState<"signin" | "signup">("signin");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -159,12 +167,17 @@ function SignIn({ onDone, rso }: { onDone: () => Promise<void>; rso: boolean }) 
           {busy ? "One moment…" : signup ? "Create account" : "Sign in"}
         </button>
       </form>
-      {(passkeys || rso) && <p className="acct-or">or</p>}
+      {(passkeys || rso || providers.length > 0) && <p className="acct-or">or</p>}
       {passkeys && (
         <button type="button" className="btn ghost acct-passkey" onClick={passkey} disabled={busy}>
           Sign in with a passkey
         </button>
       )}
+      {providers.map((p) => (
+        <a key={p} className="btn ghost acct-passkey" href={`/api/account/oauth/${p}/start?mode=signin`}>
+          Continue with {PROVIDER_NAMES[p]}
+        </a>
+      ))}
       {rso && (
         <a className="btn ghost acct-passkey" href="/api/account/rso/start?mode=signin">
           Sign in with Riot
@@ -202,6 +215,7 @@ function Manage({ account, refresh }: { account: Account; refresh: () => Promise
       </section>
       <RiotCard account={account} refresh={refresh} />
       <PasskeyCard account={account} refresh={refresh} />
+      {(account.providers.length > 0 || account.logins.length > 0) && <ProvidersCard account={account} refresh={refresh} />}
       <PasswordCard account={account} />
       {(account.owner || account.canClaimOwner) && <OwnerCard account={account} refresh={refresh} />}
       <DeleteCard account={account} refresh={refresh} />
@@ -289,6 +303,48 @@ function RiotCard({ account, refresh }: { account: Account; refresh: () => Promi
           )}
         </>
       )}
+      <Note msg={msg} />
+    </section>
+  );
+}
+
+function ProvidersCard({ account, refresh }: { account: Account; refresh: () => Promise<void> }) {
+  const [msg, setMsg] = useState<Msg>(null);
+  const remove = async (provider: Provider) => {
+    setMsg(null);
+    try {
+      await call("/api/account/oauth/disconnect", "POST", { provider });
+      await refresh();
+    } catch (err) {
+      setMsg({ kind: "error", text: errText(err) });
+    }
+  };
+  const missing = account.providers.filter((p) => !account.logins.some((l) => l.provider === p));
+
+  return (
+    <section className="card acct-card">
+      <h2>Google and Apple</h2>
+      <p className="acct-hint">Sign in to this account with your Google or Apple account instead of a password.</p>
+      {account.logins.length > 0 && (
+        <ul className="acct-list">
+          {account.logins.map((l) => (
+            <li key={l.provider}>
+              <span>
+                {l.name}
+                {l.email && <small>{l.email}</small>}
+              </span>
+              <button type="button" className="inline-link" onClick={() => remove(l.provider)} aria-label={`Stop signing in with ${l.name}`}>
+                Remove
+              </button>
+            </li>
+          ))}
+        </ul>
+      )}
+      {missing.map((p) => (
+        <a key={p} className="btn ghost" href={`/api/account/oauth/${p}/start?mode=connect`}>
+          Connect {PROVIDER_NAMES[p]}
+        </a>
+      ))}
       <Note msg={msg} />
     </section>
   );
