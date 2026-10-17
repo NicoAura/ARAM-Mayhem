@@ -588,7 +588,7 @@
       const check = await botCheck();
       const r = await fetch("/api/sim-scores", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(check ? { ...submission, check } : submission) });
       const b = await r.json().catch(() => ({}));
-      if (!r.ok) throw new Error(b.error || "");
+      if (!r.ok) throw new Error(b.error ? await kitchenText(b.error) : "");
       $("submitNote").textContent = b.status === "verified"
         ? T("This build is already on the Leaderboard at {dps} DPS.", { dps: Math.round(b.verified_dps).toLocaleString() })
         : b.status === "rejected" ? T("This build was already checked and can't go on the Leaderboard.")
@@ -611,6 +611,13 @@
     $("kitchenBtn").disabled = false;
     $("kitchenForm").hidden = true;
     $("kitchenNote").textContent = build && !live ? T("Only live-patch builds can go to The Kitchen.") : "";
+  }
+  // The Kitchen's own messages come in English and are translated from its dictionary (/i18n/kitchen/).
+  let kitchenDict = null;
+  async function kitchenText(s) {
+    if (window.I18N.lang === "en") return s;
+    if (!kitchenDict) kitchenDict = fetch(`/i18n/kitchen/${window.I18N.lang}.json`).then((r) => (r.ok ? r.json() : {})).catch(() => ({}));
+    return (await kitchenDict)[s] || s;
   }
   function kitchenNote(text, link) {
     const n = $("kitchenNote");
