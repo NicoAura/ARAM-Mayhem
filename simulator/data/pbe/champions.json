@@ -10692,7 +10692,8 @@
       "width": 0.0,
       "angle": 0.0,
       "speed": 0,
-      "on_self": true
+      "on_self": true,
+      "move": "dash"
      },
      "hits": [
       {
@@ -11647,7 +11648,8 @@
       "width": 0.0,
       "angle": 0.0,
       "speed": 0,
-      "on_self": false
+      "on_self": false,
+      "move": "dash"
      },
      "hits": [
       {
@@ -14529,10 +14531,6 @@
      "rank": 5,
      "cooldown": 13.0,
      "cast_time": 0.0,
-     "cc": {
-      "type": "root",
-      "duration": 1.25
-     },
      "heal": {
       "scaling": {
        "const": 130.0,
@@ -14994,11 +14992,6 @@
      "rank": 3,
      "cooldown": 70.0,
      "cast_time": 0.0,
-     "cc": {
-      "type": "slow",
-      "duration": 1.5,
-      "amount": 0.3
-     },
      "cost": 100.0,
      "targeting": "Self",
      "area": "aoe",
@@ -19819,10 +19812,6 @@
      "rank": 5,
      "cooldown": 16.0,
      "cast_time": 0.515,
-     "cc": {
-      "type": "root",
-      "duration": 1.25
-     },
      "shield": {
       "scaling": {
        "const": 320.0,
@@ -30797,7 +30786,8 @@
       "width": 0.0,
       "angle": 0.0,
       "speed": 2000,
-      "on_self": false
+      "on_self": false,
+      "move": "dash"
      },
      "hits": [
       {
@@ -35465,7 +35455,8 @@
       "width": 0.0,
       "angle": 0.0,
       "speed": 0,
-      "on_self": false
+      "on_self": false,
+      "move": "dash"
      },
      "hits": [
       {
@@ -35581,7 +35572,8 @@
       "width": 1.0,
       "angle": 0.0,
       "speed": 1500,
-      "on_self": false
+      "on_self": false,
+      "move": "dash"
      },
      "hits": [
       {
@@ -37034,7 +37026,8 @@
       "width": 50.0,
       "angle": 0.0,
       "speed": 0,
-      "on_self": false
+      "on_self": false,
+      "move": "dash"
      },
      "hits": [],
      "mode_overrides": [],
@@ -38367,7 +38360,8 @@
       "width": 40.0,
       "angle": 0.0,
       "speed": 1600,
-      "on_self": false
+      "on_self": false,
+      "move": "blink"
      },
      "hits": [],
      "mode_overrides": [],
