@@ -326,7 +326,7 @@ function renderTiles(games) {
     ["Champions played", new Set(games.map((g) => g.champId)).size, ""],
   ];
   $("tiles").innerHTML = tiles.map(([l, v, s, c]) =>
-    `<div class="tile ${c || ""}"><div class="label">${t(l)}</div><div class="value">${v}</div><div class="sub">${s}</div></div>`).join("");
+    `<div class="tile ${c || ""}"><div class="label">${esc(t(l))}</div><div class="value">${v}</div><div class="sub">${esc(s)}</div></div>`).join("");
 }
 
 // Achievements count every imported game, whatever the filters show.
@@ -380,7 +380,7 @@ function renderBadges(G) {
       <div class="b-name">${done ? "★ " : ""}${esc(t(r.name))}</div>
       <div class="b-desc">${esc(t(r.desc))}</div>
       <div class="b-bar"><span style="width:${(prog * 100).toFixed(1)}%"></span></div>
-      <div class="b-prog">${label}</div></div>`;
+      <div class="b-prog">${esc(label)}</div></div>`;
   }).join("");
 }
 
@@ -716,7 +716,7 @@ function renderGames(games) {
   table("t-games", [
     { label: "Date", get: (r) => r.time, fmt: (r) => fmtDate(new Date(r.time)) },
     { label: "Champion", get: (r) => champName(r), fmt: (r) => esc(champName(r)) },
-    { label: "Result", get: (r) => +r.win, fmt: (r) => t(r.win ? "Win" : "Loss"), cls: (r) => (r.win ? "win" : "loss") },
+    { label: "Result", get: (r) => +r.win, fmt: (r) => esc(t(r.win ? "Win" : "Loss")), cls: (r) => (r.win ? "win" : "loss") },
     { label: "K / D / A", get: (r) => (r.kills + r.assists) / Math.max(1, r.deaths), fmt: (r) => `${r.kills} / ${r.deaths} / ${r.assists}` },
     { label: "Damage", get: (r) => r.damage, fmt: (r) => r.damage.toLocaleString() },
     { label: "Length", get: (r) => r.duration, fmt: (r) => `${Math.floor(r.duration / 60)}:${String(r.duration % 60).padStart(2, "0")}` },
@@ -1103,7 +1103,7 @@ function renderLive() {
     { label: "Date", get: (x) => x.r.startedAt, fmt: (x) => fmtDate(new Date(x.r.startedAt)) },
     { label: "Champion", get: (x) => x.r.player.champion || "", fmt: (x) => esc(x.r.player.champion || "") },
     { label: "Map", get: (x) => terrainName(x.r), fmt: (x) => esc(terrainName(x.r)) },
-    { label: "Result", get: (x) => (x.g ? +x.g.win : -1), fmt: (x) => t(x.g ? (x.g.win ? "Win" : "Loss") : "Not synced"), cls: (x) => (x.g ? (x.g.win ? "win" : "loss") : "") },
+    { label: "Result", get: (x) => (x.g ? +x.g.win : -1), fmt: (x) => esc(t(x.g ? (x.g.win ? "Win" : "Loss") : "Not synced")), cls: (x) => (x.g ? (x.g.win ? "win" : "loss") : "") },
     { label: "Length", get: (x) => x.r.gameTime, fmt: (x) => mmss(x.r.gameTime) },
     { label: "Level", get: (x) => x.last.level || 0 },
     { label: "AD", get: (x) => st(x, "attackDamage") },
@@ -1124,7 +1124,7 @@ function renderLive() {
   });
   table("t-picks", [
     { label: "Augment", get: (r) => augLabel(r.id), fmt: (r) => esc(augLabel(r.id)) },
-    { label: "Pick", get: (r) => r.pick, fmt: (r) => t(["1st", "2nd", "3rd"][r.pick - 1] || "{n}th", { n: r.pick }) },
+    { label: "Pick", get: (r) => r.pick, fmt: (r) => esc(t(["1st", "2nd", "3rd"][r.pick - 1] || "{n}th", { n: r.pick })) },
     { label: "Games", get: (r) => r.n },
     { label: "Win rate", get: (r) => r.w / r.n + r.n / 1e6, fmt: (r) => pct(r.w / r.n), cls: (r) => wrClass(r.w / r.n) },
   ], [...picks.values()], 3);
