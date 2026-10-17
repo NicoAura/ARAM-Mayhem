@@ -430,12 +430,37 @@
       ? "Put this build on the Simulator leaderboard. It's simulated again on our side before it's listed."
       : "Only builds simulated with the default settings and enemies on the live patch can go on the leaderboard.";
   }
+  // The site's bot check, when it's switched on: usually invisible, sometimes a box to tick under the button.
+  let checkWidget = null;
+  async function botCheck() {
+    const cfg = await fetch("/api/bot-check").then((r) => (r.ok ? r.json() : {})).catch(() => ({}));
+    if (!cfg.siteKey) return "";
+    if (!window.turnstile) {
+      await new Promise((ok, fail) => {
+        const s = document.createElement("script");
+        s.src = cfg.script; s.async = true; s.onload = ok;
+        s.onerror = () => fail(new Error("The bot check couldn't load. Try again in a moment."));
+        document.head.append(s);
+      });
+    }
+    let box = $("submitCheck");
+    if (!box) { box = document.createElement("div"); box.id = "submitCheck"; $("submitBox").append(box); }
+    if (checkWidget !== null) window.turnstile.remove(checkWidget);
+    return new Promise((ok, fail) => {
+      checkWidget = window.turnstile.render(box, {
+        sitekey: cfg.siteKey, appearance: "interaction-only",
+        callback: ok,
+        "error-callback": () => fail(new Error("The bot check didn't pass. Try again.")),
+      });
+    });
+  }
   $("submitScore").addEventListener("click", async () => {
     if (!submission) return;
     $("submitScore").disabled = true;
     $("submitNote").textContent = "Submitting…";
     try {
-      const r = await fetch("/api/sim-scores", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(submission) });
+      const check = await botCheck();
+      const r = await fetch("/api/sim-scores", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(check ? { ...submission, check } : submission) });
       const b = await r.json().catch(() => ({}));
       if (!r.ok) throw new Error(b.error || "");
       $("submitNote").textContent = b.status === "verified"

@@ -1,0 +1,29 @@
+# Weekly update pull requests for the site's packages and the CI actions. Security fixes come as
+# soon as GitHub knows about them (Settings > Code security > Dependabot security updates).
+# Small updates merge themselves once Tests pass (workflows/dependabot-auto-merge.yml).
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /web
+    schedule:
+      interval: weekly
+      day: monday
+      time: "06:00"
+      timezone: America/New_York
+    open-pull-requests-limit: 5
+    groups:
+      # One pull request for all small updates, so the site isn't rebuilt five times a week.
+      minor-and-patch:
+        update-types: [minor, patch]
+    ignore:
+      # The 3D model viewer is pinned to the copy served from public/assets/lib/three-0.160.0.
+      - dependency-name: three
+      - dependency-name: "@types/three"
+
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: monthly
+    groups:
+      actions:
+        patterns: ["*"]

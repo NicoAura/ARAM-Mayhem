@@ -9,6 +9,14 @@
     "binding": "ASSETS"
   },
   "observability": { "enabled": true },
+  // Per-visitor limits used by src/middleware.ts (per minute, per Cloudflare location). The ids only
+  // need to be unique in the account.
+  "ratelimits": [
+    { "name": "RL_LOOKUP", "namespace_id": "4101", "simple": { "limit": 30, "period": 60 } },
+    { "name": "RL_LOG", "namespace_id": "4102", "simple": { "limit": 30, "period": 60 } },
+    { "name": "RL_WRITE", "namespace_id": "4103", "simple": { "limit": 10, "period": 60 } },
+    { "name": "RL_SHARE", "namespace_id": "4104", "simple": { "limit": 60, "period": 60 } }
+  ],
   // ERRORS: browser errors from /api/log, read by the morning error check.
   // PROFILES: public player pages people publish from My Stats (table profiles).
   // GAMES: games players chose to share, without names or account ids (tables games, sharers, meta).

@@ -1,0 +1,8 @@
+# Leave out copied libraries and generated game data: they aren't our code and only slow the scan.
+paths-ignore:
+  - web/public/assets
+  - web/public/embed
+  - "**/node_modules"
+  - data
+  - simulator/viewer/replay-data
+  - "**/*.min.js"

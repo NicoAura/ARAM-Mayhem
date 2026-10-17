@@ -1,0 +1,42 @@
+name: Bug report
+description: Something on DeepARAM looks wrong or doesn't work.
+title: "Bug: "
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: Thanks for helping fix DeepARAM. A link and a few words on what you saw is plenty.
+  - type: input
+    id: page
+    attributes:
+      label: Page
+      description: The address of the page, or which tab it was on.
+      placeholder: https://deeparam.com/tier-list
+    validations:
+      required: true
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened
+      description: What you saw, and what you expected instead.
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to see it
+      placeholder: |
+        1. Open the Simulator
+        2. Pick Jinx
+        3. Click Find best build
+  - type: dropdown
+    id: device
+    attributes:
+      label: Where
+      multiple: true
+      options: [Computer browser, Phone browser, Mac app, Windows app, iPhone or iPad app]
+  - type: textarea
+    id: screenshot
+    attributes:
+      label: Screenshot
+      description: Optional. Drag an image here.
