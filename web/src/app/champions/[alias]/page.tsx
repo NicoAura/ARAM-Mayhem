@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import FavoriteStar from "@/components/FavoriteStar";
 import { notFound } from "next/navigation";
 import Embed from "@/components/Embed";
 import { augmentHref } from "@/lib/augments";
@@ -45,6 +46,7 @@ export default async function ChampionPage({ params }: { params: Promise<{ alias
         </h1>
         {c.title && <p className="lede">{c.title.charAt(0).toUpperCase() + c.title.slice(1)}</p>}
         <p className="champ-hero-links">
+          <FavoriteStar id={c.alias} name={c.name} label />
           <Link className="inline-link" href={`/compare?a=${c.alias}`}>
             Compare with another champion
           </Link>

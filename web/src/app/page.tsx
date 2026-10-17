@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { text } from "@/lib/content";
 import { statsDate, counts, kitchenBuilds, livePatch, liveTiers, topAugments, topDps } from "@/lib/highlights";
-import { ChampionJump, KitchenPick, TierSnapshot } from "@/components/HomeWidgets";
+import { ChampionJump, Favorites, KitchenPick, TierSnapshot } from "@/components/HomeWidgets";
 import { BETA } from "@/lib/beta";
 import { augmentHref } from "@/lib/augments";
 import { movers } from "@/lib/champions";
@@ -45,6 +45,7 @@ export default function Home() {
       </section>
 
       <div className="bento">
+        <Favorites champs={tiers} />
         {tiers.length > 0 && (
           <section className="card span-7" data-accent="tier">
             <div className="card-head">

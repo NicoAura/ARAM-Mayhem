@@ -4,6 +4,8 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
+import { useFavorites } from "@/lib/favorites";
+import FavoriteStar from "./FavoriteStar";
 
 // The home page's interactive pieces: jump to a champion, the live tier snapshot,
 // an augment offer to roll, and a Kitchen build to reroll.
@@ -73,6 +75,38 @@ export function ChampionJump({ champs }: { champs: Champ[] }) {
         </ul>
       )}
     </div>
+  );
+}
+
+/** Starred champions with their live numbers; hidden until a champion is starred. */
+export function Favorites({ champs }: { champs: Champ[] }) {
+  const ids = useFavorites();
+  const list = ids.map((id) => champs.find((c) => c.id === id)).filter((c): c is Champ => Boolean(c));
+  if (!list.length) return null;
+  return (
+    <section className="card span-all" data-accent="gold">
+      <div className="card-head">
+        <h2>Your favorites</h2>
+        <Link href="/tier-list">On the Tier List →</Link>
+      </div>
+      <div className="fav-grid">
+        {list.map((c) => (
+          <div key={c.id} className="fav-card">
+            <Link href={`/champions/${c.id}`}>
+              <img src={champIcon(c.id)} alt="" width={40} height={40} loading="lazy" />
+              <span className="fav-name">
+                <b>{c.name}</b>
+                <span>
+                  {pct(c.winRate)} win · {pct(c.pickRate)} pick
+                </span>
+              </span>
+              <span className={`chip tier-${c.tier.toLowerCase()}`}>{c.tier}</span>
+            </Link>
+            <FavoriteStar id={c.id} name={c.name} />
+          </div>
+        ))}
+      </div>
+    </section>
   );
 }
 
