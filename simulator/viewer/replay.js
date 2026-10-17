@@ -52,6 +52,7 @@
   let poroImg = null;
   loadImage([CDRAGON + "game/assets/spells/icons2d/porocharge_quest2.png", DATA + "art/poro.png"], (im) => { poroImg = im; });
   const PORO_SPEED = 900, PORO_WIDTH = 420; // match poro_speed and poro_width in data/augments.json
+  const ATTACK_MISSILE = 2000;  // basic attack missile speed (u/s); the simulator applies the hit at once
   // Which abilities move their caster (dash or blink), from each spell's tags.
   let anims = {};
   fetch(DATA + "anims.json" + BUST).then((r) => (r.ok ? r.json() : {})).then((a) => {
@@ -179,6 +180,30 @@
         }
       }
     }
+    // A dash is recorded as two snapshots at the same moment; spread it over the time a
+    // 1500 u/s dash takes (but before the next snapshot), so the model travels instead of teleporting.
+    // Your blinks (Flash, Ezreal's E) stay instant.
+    const me = String(tr.champion || (champ && champ.id) || "");
+    const blinkAt = (t) => f.casts.some((c) => Math.abs(c.t + (c.a || 0) - t) < 0.15 && moveOf(me, c.s) === "blink");
+    for (let i = 1; i < f.pos.length; i++) {
+      const a = f.pos[i - 1], b = f.pos[i], next = f.pos[i + 1];
+      const dMe = Math.hypot(b.me.x - a.me.x, b.me.y - a.me.y);
+      let d = 0;
+      for (const [u, p] of b.m) { const q = a.m.get(u); if (q) d = Math.max(d, Math.hypot(p.x - q.x, p.y - q.y)); }
+      const gap = b.t - a.t;
+      if (dMe > d && blinkAt(b.t)) continue;
+      d = Math.max(d, dMe);
+      if (gap >= 0.02 && d / gap <= 2000) continue;
+      const want = Math.min(a.t + d / 1500, next ? next.t - 0.01 : Infinity);
+      if (want > b.t) b.t = want;
+    }
+    // Numbers landing on one target close together stack upward instead of on top of each other.
+    const recent = new Map();
+    for (const n of f.numbers) {
+      const prev = recent.get(n.u);
+      n.fan = prev && n.t - prev.t < 0.25 ? (prev.fan + 1) % 4 : 0;
+      recent.set(n.u, n);
+    }
     // When each slot is next cast, for the cooldown sweep.
     const bySlot = {};
     for (const c of f.casts) (bySlot[c.s] = bySlot[c.s] || []).push(c);
@@ -187,8 +212,26 @@
     f.enemyCasts = enemyCasts(f);
     // Traces from the positional simulator say where everyone stands; older ones don't.
     f.positional = f.pos.length > 1;
-    if (f.positional) for (const c of f.casts) c.from = worldAt(f, c.land).me;
+    if (f.positional) for (const c of f.casts) {
+      c.from = worldAt(f, c.land).me;
+      // A line's missile at its own speed (newer traces carry it) stays on screen until it reaches its range.
+      const geo = f.geo[c.s] || {};
+      if (c.x === "line" && geo.speed > 0 && c.ax !== undefined)
+        c.life = Math.max(0.6, (geo.range || Math.hypot(c.ax - c.from.x, c.ay - c.from.y)) / geo.speed + 0.3 - (c.fl || 0));
+    }
     if (f.positional) for (const w of f.poros) w.from = worldAt(f, w.t).me;
+    // A ranged attack's missile flies distance / speed and lands when the simulator applies the
+    // hit (e.t); it leaves after the wind-up, so the animation starts wind-up + flight earlier.
+    for (const a of f.attacks) {
+      let fly = 0;
+      if (tr.ranged) {
+        const w = f.positional && worldAt(f, a.t), q = w && w.m.get(a.u);
+        fly = q ? Math.min(0.6, Math.max(0.05, Math.hypot(q.x - w.me.x, q.y - w.me.y) / ATTACK_MISSILE)) : 0.18;
+      }
+      a.fly = fly;
+      a.start = a.t - fly - (a.a || 0.3);
+    }
+    f.attacks.forEach((a, i) => { a.n = i; a.span = i + 1 < f.attacks.length ? f.attacks[i + 1].start - a.start : Infinity; });
     // Crits on attacks: tag the matching damage number.
     for (const a of f.attacks) if (a.f) {
       const n = f.numbers.find((n) => n.u === a.u && Math.abs(n.t - a.t) < 1e-6 && n.src === 0);
@@ -255,8 +298,9 @@
     return cast && time - cast.t < castWindow("e" + uid, cast) ? cast : null;
   }
 
-  // Where everyone stands at time t (game units), between the recorded snapshots.
-  function worldAt(f, time) {
+  // Where everyone stands at time t (game units), between the recorded snapshots. out, when
+  // given, is reused (its Map cleared) so the per-frame lookups don't allocate a Map each.
+  function worldAt(f, time, out) {
     const P = f.pos;
     let lo = 0, hi = P.length - 1;
     if (time <= P[0].t) return P[0];
@@ -264,15 +308,21 @@
     while (hi - lo > 1) { const mid = (lo + hi) >> 1; if (P[mid].t <= time) lo = mid; else hi = mid; }
     const a = P[lo], b = P[hi], k = (time - a.t) / Math.max(1e-6, b.t - a.t);
     const mix = (p, q) => (q ? { x: p.x + (q.x - p.x) * k, y: p.y + (q.y - p.y) * k } : p);
-    const m = new Map();
+    const m = out ? out.m : new Map();
+    m.clear();
     for (const [u, p] of a.m) m.set(u, mix(p, b.m.get(u)));
-    for (const [u, p] of b.m) if (!m.has(u) && k > 0.5) m.set(u, p);
-    return { t: time, me: mix(a.me, b.me), m };
+    // A unit that appears in the next snapshot stands where it will be (not at your feet).
+    for (const [u, p] of b.m) if (!m.has(u)) m.set(u, p);
+    const w = out || {};
+    w.t = time; w.me = mix(a.me, b.me); w.m = m;
+    return w;
   }
+  const scratch = [0, 1, 2].map(() => ({ m: new Map() }));
   // The lane on screen: the view follows the fight.
   const LANE = 550;
   const cam = { x: null };
-  function camera(W, H, world, focus, dt) {
+  // rate: playback speed, so the view keeps up with the fight at 2x and doesn't race it at 0.25x.
+  function camera(W, H, world, focus, dt, rate) {
     // About as much of the lane as the game's own camera shows (2000 game units across), and
     // never less than the lane's whole width top to bottom.
     const k = Math.max((H * 0.74) / (2 * LANE), W / 2000);
@@ -280,35 +330,49 @@
     let want = f ? (world.me.x * 0.55 + f.x * 0.45) : world.me.x + 300;
     const half = W / 2 / k;
     // Keep you on screen with a margin.
-    want = Math.min(Math.max(want, world.me.x - half + 160), world.me.x + half - 160);
+    const lo = world.me.x - half + 160, hi = world.me.x + half - 160;
+    want = Math.min(Math.max(want, lo), hi);
     if (cam.x === null || dt <= 0 || dt > 0.5) cam.x = want;
-    else cam.x += (want - cam.x) * (1 - Math.exp(-dt * 3));
+    else cam.x += (want - cam.x) * (1 - Math.exp(-dt * (rate || 1) * 3));
+    cam.x = Math.min(Math.max(cam.x, lo), hi);  // a dash never carries you off screen while the view catches up
     return { k, cx: cam.x, sx: (p) => W / 2 + (p.x - cam.x) * k, sy: (p) => H * 0.55 + p.y * k };
   }
 
   // ---------- state at time t ----------
+  // The running totals are kept between frames: playing forward only reads the events since the
+  // last frame; a seek backwards, a restart or another fight starts over from the first event.
+  let acc = null;
   function stateAt(time) {
-    const s = { enemies: new Map(), focus: -1, kills: 0, damage: 0, bySource: (trace.sources || []).map(() => 0), selfHp: fight.maxHp,
-      cc: false, dead: false, taken: 0, mitigated: 0, healing: 0, ccDealt: 0 };
-    for (const e of fight.events) {
-      if (e.t > time) break;
-      if (e.k === "spawn") s.enemies.set(e.u, { uid: e.u, champ: e.x, hp: e.hp, max: e.max, born: e.t, died: null });
-      else if (e.k === "focus") s.focus = e.u;
-      else if (e.k === "damage") {
-        const en = s.enemies.get(e.u);
-        if (en) en.hp = e.hp;
-        s.damage += e.a || 0;
-        if (e.src >= 0) s.bySource[e.src] += e.a || 0;
-      } else if (e.k === "kill") {
-        const en = s.enemies.get(e.u);
-        if (en) { en.hp = 0; en.died = e.t; }
-        s.kills++;
-      } else if (e.k === "heal" && e.tot) s.healing = e.tot;
-      else if (e.k === "ecc" && e.tot) s.ccDealt = e.tot;
+    if (!acc || acc.fight !== fight || time < acc.time) {
+      acc = { fight, time: 0, i: 0, enemies: new Map(), focus: -1, kills: 0, damage: 0,
+        bySource: (trace.sources || []).map(() => 0), healing: 0, ccDealt: 0 };
     }
+    const ev = fight.events;
+    for (; acc.i < ev.length; acc.i++) {
+      const e = ev[acc.i];
+      if (e.t > time) break;
+      if (e.k === "spawn") acc.enemies.set(e.u, { uid: e.u, champ: e.x, hp: e.hp, max: e.max, born: e.t, died: null });
+      else if (e.k === "focus") acc.focus = e.u;
+      else if (e.k === "damage") {
+        const en = acc.enemies.get(e.u);
+        if (en) en.hp = e.hp;
+        acc.damage += e.a || 0;
+        if (e.src >= 0) acc.bySource[e.src] += e.a || 0;
+      } else if (e.k === "kill") {
+        const en = acc.enemies.get(e.u);
+        if (en) { en.hp = 0; en.died = e.t; }
+        acc.kills++;
+      } else if (e.k === "heal" && e.tot) acc.healing = e.tot;
+      else if (e.k === "ecc" && e.tot) acc.ccDealt = e.tot;
+    }
+    acc.time = time;
+    const s = { enemies: acc.enemies, focus: acc.focus, kills: acc.kills, damage: acc.damage, bySource: acc.bySource, selfHp: fight.maxHp,
+      cc: false, dead: false, taken: 0, mitigated: 0, healing: acc.healing, ccDealt: acc.ccDealt };
     // Own HP falls steadily between samples.
-    let prev = null, next = null;
-    for (const e of fight.self) { if (e.t <= time) prev = e; else { next = e; break; } }
+    const S = fight.self;
+    let lo = 0, hi = S.length;  // first sample after time
+    while (lo < hi) { const mid = (lo + hi) >> 1; if (S[mid].t <= time) lo = mid + 1; else hi = mid; }
+    const prev = lo > 0 ? S[lo - 1] : null, next = lo < S.length ? S[lo] : null;
     if (prev) {
       s.selfHp = prev.hp;
       s.shield = prev.sh || 0;
@@ -482,24 +546,36 @@
   }
   // Which animation each model plays at time t, worked out from the timeline so
   // scrubbing shows the same pose as playing.
+  // free: past the part of the cast or attack that roots its caster (wind-up and channel), so a
+  // champion who walks off plays its run instead of sliding in the rest of the clip.
   function myAnim(time, s) {
     if (s.dead) return { role: "death", t: time - fight.death.t, loop: false };
     let cast = null;
     for (const c of fight.casts) { if (c.t > time) break; cast = c; }
-    if (cast && time - cast.t < castWindow("me", cast)) return { role: cast.s, t: time - cast.t, loop: false, n: cast.n };
+    if (cast && time - cast.t < castWindow("me", cast))
+      return { role: cast.s, t: time - cast.t, loop: false, n: cast.n, free: time - cast.t > (cast.a || 0.25) + (cast.l || 0) + 0.1 };
     if (s.cc) {
       const c = s.ccOn;
       return (c && ccPose(c.x, time - c.t, c.a - c.t)) || { role: "stunned", t: time, loop: true };
     }
+    // An attack's animation starts with its wind-up (and, for a ranged attack, the missile's flight)
+    // before the hit lands. Attacks alternate between the model's attack clips, and when they come
+    // faster than a clip lasts the clip plays faster to fit, as the game scales attack animations.
     let atk = null;
-    // An attack's animation starts with its wind-up and fires when the attack lands.
-    const windup = (a) => a.a || 0.3;
-    for (const a of fight.attacks) { if (a.t - windup(a) > time) break; atk = a; }
-    if (atk && time - (atk.t - windup(atk)) < windup(atk) + 0.45)
-      return { role: atk.f ? "crit" : "attack", t: time - (atk.t - windup(atk)), loop: false };
+    for (const a of fight.attacks) { if (a.start > time) break; atk = a; }
+    if (atk) {
+      const role = atk.f ? "crit" : "attack", age = time - atk.start;
+      const M = window.Models3D && window.Models3D.ok ? window.Models3D : null;
+      const len = (M && M.castLength("me", role, atk.n)) || (atk.a || 0.3) + 0.45;
+      const fit = Math.min(len, atk.span);
+      if (age < fit) return { role, t: age * (len / fit), loop: false, n: atk.n, free: age > (atk.a || 0.3) + atk.fly + 0.1 };
+    }
     return { role: "idle", t: time, loop: true };
   }
-  function enemyAnim(time, en) {
+  // Enemies attack while you're within their reach (the same test as the red line to you) and
+  // alive, about once every ENEMY_ATTACK seconds; otherwise they stand (or run after you).
+  const ENEMY_ATTACK = 1.25, DEAD_FOR = 2;
+  function enemyAnim(time, en, world) {
     if (en.died !== null) return { role: "death", t: time - en.died, loop: false };
     // Your champion is down: the enemies who are still standing dance.
     if (fight.death && time >= fight.death.t + 0.4) return { role: "dance", t: time - fight.death.t - 0.4, loop: true };
@@ -507,10 +583,18 @@
     const pose = held && ccPose(held.x, time - held.t, held.a - held.t);
     if (pose) return pose;
     const cast = enemyCastAt(en.uid, time);
-    if (cast) return { role: cast.s, t: time - cast.t, loop: false, n: cast.n };
+    if (cast) return { role: cast.s, t: time - cast.t, loop: false, n: cast.n, free: time - cast.t > (cast.a || 0.25) + 0.1 };
     if (held && held.x === "root") return { role: "idle", t: time, loop: true };
-    if (time < fight.engage) return { role: "idle", t: time + en.uid * 0.7, loop: true };
-    return { role: "attack", t: time + en.uid * 0.37, loop: true, chase: true };
+    if (time < fight.engage || (fight.death && time >= fight.death.t)) return { role: "idle", t: time + en.uid * 0.7, loop: true, chase: true };
+    if (world) {
+      const w = world.m.get(en.uid), sp = fight.spawns.get(en.uid);
+      if (!w || Math.hypot(w.x - world.me.x, w.y - world.me.y) > ((sp && sp.a) || 550) + 130) return { role: "idle", t: time, loop: true, chase: true };
+    }
+    const since = time - fight.engage + ((en.uid * 0.37) % ENEMY_ATTACK), k = Math.floor(since / ENEMY_ATTACK), age = since - k * ENEMY_ATTACK;
+    const M = window.Models3D && window.Models3D.ok ? window.Models3D : null;
+    const len = (M && M.castLength("e" + en.uid, "attack", k)) || ENEMY_ATTACK, rate = Math.max(1, len / ENEMY_ATTACK);
+    if (age * rate >= len) return { role: "idle", t: time, loop: true, chase: true };
+    return { role: "attack", t: age * rate, loop: false, n: k, chase: true, free: age > 0.4 };
   }
 
   // A soft pool of light in the team's colour under a model, so it stands out from the floor.
@@ -528,8 +612,8 @@
     // Scale: bigger shapes on narrow screens so portraits stay readable on a phone.
     const W = arena.width, H = arena.height, u = W / dpr < 600 ? W / 760 : W / 1280;
     const s = stateAt(time);
-    const world = fight.positional ? worldAt(fight, time) : null;
-    const view = world ? camera(W, H, world, s.focus, dt) : null;
+    const world = fight.positional ? worldAt(fight, time, scratch[0]) : null;
+    const view = world ? camera(W, H, world, s.focus, dt, playing ? speed : 1) : null;
     const scr = (p) => ({ x: view.sx(p), y: view.sy(p) });
     // Ground: a plain, dark lane, kept quiet so champions and ability effects stand out.
     const g = ctx;
@@ -548,7 +632,8 @@
     g.strokeStyle = "rgba(143,211,255,.16)"; g.lineWidth = 2 * u;
     g.beginPath(); g.moveTo(0, top); g.lineTo(W, top); g.moveTo(0, bottom); g.lineTo(W, bottom); g.stroke();
 
-    const alive = [...s.enemies.values()].filter((e) => e.died === null || time - e.died < 0.8);
+    // The fallen stay ~2 s so a 3D model can play its death and fade (a portrait goes after 0.8 s).
+    let alive = [...s.enemies.values()].filter((e) => e.died === null || time - e.died < DEAD_FOR);
     const others = alive.filter((e) => e.uid !== s.focus).sort((a, b) => a.uid - b.uid);
     const st = world ? { me: scr(world.me), front: scr(world.me), back: [] } : seats(W, H, Math.max(1, others.length));
     const target = (en) => (en.uid === s.focus ? st.front : st.back[others.indexOf(en)] || st.back[0]);
@@ -559,32 +644,27 @@
         const w = world.m.get(en.uid);
         if (w) { const p = scr(w); if (!d) { d = {}; shown.set(en.uid, d); } d.x = p.x; d.y = p.y; d.wx = w.x; d.wy = w.y; }
         else if (d && d.wx !== undefined) { d.x = view.sx({ x: d.wx }); d.y = view.sy({ y: d.wy }); }
-        else if (!d) { d = { x: st.me.x, y: st.me.y }; shown.set(en.uid, d); }
-        continue;
+        continue;  // not drawn until it has a place on the map
       }
       const want = target(en);
       if (!d || dt <= 0 || dt > 0.5) { d = { x: want.x, y: want.y }; shown.set(en.uid, d); }
       else { const k = 1 - Math.exp(-dt * 8); d.x += (want.x - d.x) * k; d.y += (want.y - d.y) * k; }
     }
+    if (world) alive = alive.filter((en) => shown.has(en.uid));
     const posOf = (uid) => shown.get(uid) || st.front;
     const R = 46 * u;          // your portrait radius
     const r = 34 * u;          // enemy portrait radius
 
-    // Your attacks: melee lunges, ranged projectiles.
+    // Melee attacks lunge a portrait forward (a 3D model plays its attack clip instead).
+    const M = window.Models3D && window.Models3D.ok ? window.Models3D : null;
+    const myModel = !!(M && M.actors.has("me"));
     let lunge = 0;
-    for (const a of fight.attacks) {
-      const age = time - a.t;
-      if (age < -0.18 || age > 0.25) continue;
-      const to = posOf(a.u);
-      if (trace.ranged) {
-        if (age < 0) {
-          const p = 1 + age / 0.18;
-          const x = st.me.x + (to.x - st.me.x) * p, y = st.me.y + (to.y - st.me.y) * p;
-          g.fillStyle = a.f ? "#ffd36b" : "#e9f3ff";
-          g.beginPath(); g.arc(x, y, (a.f ? 7 : 4.5) * u, 0, Math.PI * 2); g.fill();
-        }
-      } else if (Math.abs(age) < 0.15) lunge = Math.max(lunge, 1 - Math.abs(age) / 0.15);
-    }
+    if (!trace.ranged && !myModel)
+      for (const a of fight.attacks) {
+        const age = time - a.t;
+        if (age < -0.15) break;
+        if (age < 0.15) lunge = Math.max(lunge, 1 - Math.abs(age) / 0.15);
+      }
 
     // Poro Charge (Poro Stampede): each wave is a row of Poros running down the lane.
     for (const w of fight.poros) {
@@ -613,7 +693,8 @@
     // Ability casts.
     for (const c of fight.casts) {
       const age = time - c.land - (world ? c.fl || 0 : 0);  // since it landed
-      if (time < c.t || (age > 0.6 && !(c.l && time < c.land + c.l))) continue;
+      const life = c.life || 0.6;
+      if (time < c.t || (age > life && !(c.l && time < c.land + c.l))) continue;
       const col = SLOT_COLORS[c.s] || "#fff";
       const to = c.u >= 0 ? posOf(c.u) : st.front;
       const miss = !c.f;
@@ -629,7 +710,7 @@
         g.beginPath(); g.arc(st.me.x, st.me.y, R + 10 * u, -Math.PI / 2, -Math.PI / 2 + p * Math.PI * 2); g.stroke();
         g.setLineDash([]);
       }
-      if (age > 0.6) continue;
+      if (age > life) continue;
       const fly = 0.2;
       if (world && c.from && ["line", "circle", "cone", "self"].includes(c.x)) {
         drawShape(g, c, time, col, scr, view.k, u);
@@ -707,21 +788,27 @@
         if (time - c.land > 0.3 || moveOf(champ.id, c.s) !== "blink") continue;
         blinks.push({ k: time - c.land, a: scr(worldAt(fight, c.t).me), b: scr(c.from), once: true });
       }
-    const M = window.Models3D && window.Models3D.ok ? window.Models3D : null;
     let heads = {};
     if (M) {
       const look = (a, b) => ({ x: b.x - a.x, y: b.y - a.y });
       // Who is on the move (game units a second), to play their run while they walk.
-      const before = world && worldAt(fight, time - 0.15), after = world && worldAt(fight, time + 0.15);
+      const before = world && worldAt(fight, time - 0.15, scratch[1]), after = world && worldAt(fight, time + 0.15, scratch[2]);
       const velocity = (a, b) => (a && b ? { x: (b.x - a.x) / 0.3, y: (b.y - a.y) / 0.3 } : null);
-      const walking = (v) => v && Math.hypot(v.x, v.y) > 60;
+      // Walking plays the run, sped up or slowed to the pace (the clips are made for about 345 u/s).
+      // A cast or attack holds its pose through its wind-up, then gives way to the run; a dash
+      // (much faster than any walk) keeps the cast's pose.
+      const pace = (v) => (v ? Math.hypot(v.x, v.y) : 0);
+      const runs = (anim, v) => { const k = pace(v); return k > 60 && (anim.role === "idle" || (anim.free && k < 1000)); };
+      const runPose = (v) => ({ role: "run", t: time, loop: true, rate: Math.min(2, Math.max(0.5, pace(v) / 345)) });
+      // After the engage, idle is the plain loop (no idle variations in the middle of a fight).
+      const calm = (a) => (a.role === "idle" ? { ...a, rate: 1, base: time >= fight.engage } : a);
       // Models are drawn at their in-game size: px per game unit, as the floor is drawn.
       const unit = view ? view.k : null;
       const mine = myAnim(time, s), myV = world && velocity(before.me, after.me);
-      const myRun = mine.role === "idle" && walking(myV);
+      const myRun = !s.dead && runs(mine, myV);
       const fighters = [{ key: "me", champ: champ.id, x: meX, y: meY, face: 1, unit,
         dir: myRun ? myV : world && s.focus >= 0 ? look(st.me, posOf(s.focus)) : null,
-        ...(myRun ? { role: "run", t: time, loop: true } : mine) }];
+        ...(myRun ? runPose(myV) : calm(mine)) }];
       for (const en of alive) {
         let p = posOf(en.uid);
         const ec = en.died === null ? enemyCastAt(en.uid, time) : null;
@@ -732,14 +819,18 @@
           if (em === "blink") blinks.push({ k: time - ec.t, a: p, b: q });
           p = q;
         }
-        const anim = enemyAnim(time, en), v = world && en.died === null && velocity(before.m.get(en.uid), after.m.get(en.uid));
-        const run = (anim.role === "idle" || anim.chase) && walking(v);
+        const anim = enemyAnim(time, en, world), v = world && en.died === null && velocity(before.m.get(en.uid), after.m.get(en.uid));
+        const run = en.died === null && runs(anim, v);
+        // The fallen fade out over the last part of their stay.
+        const gone = en.died === null ? 0 : time - en.died;
         fighters.push({ key: "e" + en.uid, champ: en.champ, x: p.x, y: p.y, face: -1, unit,
-          dir: run ? v : world ? look(p, st.me) : null,
-          visible: en.died === null || time - en.died < 1.6, ...(run ? { role: "run", t: time + en.uid * 0.3, loop: true } : anim) });
+          dir: run ? v : world ? look(p, st.me) : null, alpha: Math.max(0, Math.min(1, (DEAD_FOR - gone) / 0.6)),
+          ...(run ? runPose(v) : calm(anim)) });
       }
       for (const f of fighters) if (f.lift) f.y -= f.lift * 55 * u;  // knocked up into the air
       heads = M.frame(fighters, W, H, lowQuality() ? 0.75 : 1);
+      // Keep the bars and badges above heads clear of the HUD along the top.
+      for (const k in heads) heads[k].y = Math.max(heads[k].y, 56 * dpr);
     }
     const og = overlay;
     og.setTransform(1, 0, 0, 1, 0, 0);
@@ -754,7 +845,24 @@
     }
     og.globalAlpha = 1;
 
-    // Enemies.
+    // Your ranged attacks: the missile leaves after the wind-up and lands as the hit does, at
+    // about half the models' height (chest to chest).
+    if (trace.ranged && !s.dead) {
+      const mid = (x, y, head) => (head ? y + (head.y - y) * 0.45 : y);
+      for (const a of fight.attacks) {
+        const age = time - a.t;
+        if (age < -0.6) break;  // the longest flight
+        if (age >= 0 || age < -a.fly) continue;
+        const to = posOf(a.u), p = 1 + age / a.fly;
+        const y0 = mid(meX, meY, heads.me), y1 = mid(to.x, to.y, heads["e" + a.u]);
+        const x = meX + (to.x - meX) * p, y = y0 + (y1 - y0) * p;
+        og.fillStyle = a.f ? "#ffd36b" : "#e9f3ff";
+        og.beginPath(); og.arc(x, y, (a.f ? 7 : 4.5) * u, 0, Math.PI * 2); og.fill();
+      }
+    }
+
+    // Enemies. numTop: where damage numbers start over each enemy, above its badge and cast icon.
+    const numTop = new Map();
     for (const en of alive) {
       const p = posOf(en.uid);
       const born = ease((time - en.born) / 0.3);
@@ -763,7 +871,11 @@
       const d = shown.get(en.uid);
       d.hp = d.hp === undefined || dt <= 0 || dt > 0.5 ? en.hp : d.hp + (en.hp - d.hp) * (1 - Math.exp(-dt * 12));
       const head = heads["e" + en.uid];
+      if (!head && en.died !== null && time - en.died >= 0.8) continue;
+      const held = en.died === null ? enemyCc(en.uid, time) : null;
       const cast = en.died === null ? enemyCastAt(en.uid, time) : null;
+      const above = head ? head.y - 10 * u : p.y - rr - 20 * u;  // the badge's bottom edge
+      numTop.set(en.uid, above - (cast && time - cast.t < 1.1 ? 58 : held ? 23 : 10) * u);
       if (cast) {
         const age = time - cast.t, ic = 44 * u;
         const top = head ? head.y - 14 * u : p.y - rr - 18 * u;
@@ -794,7 +906,6 @@
           const bw = rr * 2;
           drawIcon(og, iconRow(en.champ), 0, head.x - bw / 2 - 22 * u, head.y - 10 * u, 18 * u, true);
           hpBar(og, head.x - bw / 2, head.y - 4 * u, bw, d.hp / en.max, "#f0605a");
-          const held = enemyCc(en.uid, time);
           if (held) ccBadge(og, head.x, head.y - 10 * u, held.x, held.a - time, held.a - held.t, u);
         }
         continue;
@@ -808,7 +919,6 @@
       g.strokeStyle = en.uid === s.focus ? "#f0605a" : "rgba(240,96,90,.6)"; g.lineWidth = 3 * u;
       g.beginPath(); g.arc(p.x, p.y, rr, 0, Math.PI * 2); g.stroke();
       hpBar(og, p.x - rr, p.y - rr - 14 * u, rr * 2, d.hp / en.max, "#f0605a");
-      const held = en.died === null ? enemyCc(en.uid, time) : null;
       if (held) ccBadge(og, p.x, p.y - rr - 20 * u, held.x, held.a - time, held.a - held.t, u);
       if (en.died !== null) {
         g.strokeStyle = "#f4f4f4"; g.lineWidth = 5 * u;
@@ -868,7 +978,7 @@
       if (age < 0 || age > 0.9 || n.a < 1) continue;
       const p = posOf(n.u);
       const head = heads["e" + n.u];
-      const baseY = head ? head.y - 20 * u : p.y - r - 26 * u;
+      const baseY = (numTop.get(n.u) ?? (head ? head.y - 20 * u : p.y - r - 26 * u)) - (n.fan || 0) * 16 * u;
       const jitter = ((n.t * 997) % 1 - 0.5) * 50 * u;
       const size = (n.crit ? 26 : n.a > 400 ? 22 : 16) * u;
       floatText(overlay, Math.round(n.a).toString() + (n.crit ? "!" : ""), (head ? head.x : p.x) + jitter, baseY - age * 70 * u, 1 - age / 0.9,
@@ -961,11 +1071,15 @@
     g.save();
     g.strokeStyle = col; g.fillStyle = col;
     if (c.x === "line") {
-      const span = fl > 0 ? fl * 1.25 : 0.15, p = Math.min(1, since / span), fade = since > span ? 1 - (since - span) / 0.3 : 1;
+      // With its missile speed (newer traces), the head flies at that speed out to the ability's
+      // range; older traces only know the flight to the target.
+      const wl = Math.hypot(c.ax - c.from.x, c.ay - c.from.y) || 1, reach = geo.speed > 0 ? (geo.range || wl) / wl : 1;
+      const span = geo.speed > 0 ? (geo.range || wl) / geo.speed : fl > 0 ? fl * 1.25 : 0.15;
+      const p = reach * Math.min(1, since / span), fade = since > span ? 1 - (since - span) / 0.3 : 1;
       if (fade > 0) {
         const w = Math.max(3 * u, (geo.width || 80) * k);
         g.globalAlpha = 0.16 * fade; g.lineWidth = w;
-        g.beginPath(); g.moveTo(from.x, from.y); g.lineTo(aim.x, aim.y); g.stroke();
+        g.beginPath(); g.moveTo(from.x, from.y); g.lineTo(from.x + dx * reach, from.y + dy * reach); g.stroke();
         const hx = from.x + dx * p, hy = from.y + dy * p;
         g.globalAlpha = fade; g.lineWidth = Math.max(5 * u, w * 0.7); g.lineCap = "round";
         g.beginPath(); g.moveTo(hx - (dx / dl) * 50 * u * Math.min(1, p * 4), hy - (dy / dl) * 50 * u * Math.min(1, p * 4)); g.lineTo(hx, hy); g.stroke();
@@ -1237,8 +1351,9 @@
     if (!busy || (slot === "R" && clipState.slot !== "R")) playClip(slot);
   }
 
+  let abButtons = [];  // the ability buttons' cooldown canvases, so a frame doesn't query the page
   function renderAbilities() {
-    const box = $("abilities"); box.textContent = "";
+    const box = $("abilities"); box.textContent = ""; abButtons = [];
     for (const slot of "QWER") {
       const b = document.createElement("button");
       b.type = "button"; b.className = "ab"; b.dataset.slot = slot;
@@ -1248,16 +1363,15 @@
       const cd = document.createElement("canvas"); cd.width = cd.height = 128; cd.className = "cd";
       const k = document.createElement("span"); k.className = "key"; k.textContent = slot; k.style.color = SLOT_COLORS[slot];
       b.append(c, cd, k);
+      abButtons.push({ slot, cd, g: cd.getContext("2d") });
       b.addEventListener("click", () => showAbility(slot));
       box.append(b);
     }
   }
   function drawCooldowns(time) {
-    for (const b of document.querySelectorAll(".ab")) {
-      const cd = b.querySelector(".cd"), g = cd.getContext("2d");
-      let last = null;
-      for (const c of fight.casts) if (c.s === b.dataset.slot && c.t <= time) last = c;
-      const never = !fight.casts.some((c) => c.s === b.dataset.slot);
+    for (const { slot, cd, g } of abButtons) {
+      let last = null, never = true;
+      for (const c of fight.casts) { if (c.s !== slot) continue; never = false; if (c.t > time) break; last = c; }
       const p = never ? -1 : !last || time >= last.next ? 2 : (time - last.t) / Math.max(0.01, last.next - last.t);
       const key = fight === cd.fight ? Math.round(p * 200) : NaN;  // skip a redraw that wouldn't change it
       if (key === cd.drawn) continue;
