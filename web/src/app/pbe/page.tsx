@@ -3,8 +3,10 @@ import { pageMeta } from "@/lib/meta";
 import AugmentCard from "@/components/AugmentCard";
 import ChangeTracker, { type TrackerEntry } from "@/components/ChangeTracker";
 import Intro from "@/components/Intro";
+import PatchCountdown from "@/components/PatchCountdown";
 import Pending from "@/components/Pending";
 import { items } from "@/lib/items";
+import type { PatchSchedule } from "@/lib/patch-schedule";
 import { readRepoJson } from "@/lib/repo-data";
 import championNames from "@/data/champion-names.json";
 
@@ -81,6 +83,7 @@ export default function PbePage() {
 
   const { meta, augments } = d;
   const tracker = trackerEntries();
+  const schedule = readRepoJson<PatchSchedule>("data/patch-schedule.json");
   const toc = [
     ["tracker", "Change tracker"],
     ["headliners", "Headliners"],
@@ -98,6 +101,8 @@ export default function PbePage() {
         What&apos;s changing from live patch {meta.builds.live} to test server build {meta.builds.pbe} (updated {meta.dataAsOf}). The
         augment pool goes from {meta.augmentPool.live} to {meta.augmentPool.pbe}. {meta.caveat}
       </Intro>
+
+      {schedule && <PatchCountdown schedule={schedule} note="Test server changes usually reach live with a patch." />}
 
       <nav className="toc" aria-label="On this page">
         {toc.map(([id, label]) => (
