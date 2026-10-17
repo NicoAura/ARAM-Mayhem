@@ -1,3 +1,4 @@
+import Link from "next/link";
 import type { Metadata } from "next";
 import { pageMeta } from "@/lib/meta";
 import DataTable, { type Row } from "@/components/DataTable";
@@ -149,7 +150,10 @@ export default function SimulatorPage() {
         <span className="tag">Beta</span>{" "}
         An experiment: results can shift as the model changes. Monte Carlo teamfights against enemy teams weighted by
         Mayhem pick rates, with a build search for every champion. Use it to compare builds for one champion, not to
-        rank champions.
+        rank champions.{" "}
+        <Link className="inline-link" href="/simulator/infinite-ryze">
+          Infinite Ryze →
+        </Link>
       </Intro>
       {tabs.length ? (
         <SubTabs tabs={tabs} />
