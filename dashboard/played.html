@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex">
+<title>DeepARAM</title>
+<script>
+// My Stats on the player's computer links here with their latest games in the address's #part, which never
+// leaves the browser. They're kept as localStorage "deeparam-played" for Home's Recently played, then Home opens.
+(function () {
+  try {
+    var list = JSON.parse(decodeURIComponent(location.hash.slice(1)));
+    var clean = (Array.isArray(list) ? list : []).slice(0, 12).filter(function (g) {
+      return g && /^[A-Za-z]{2,30}$/.test(g.champion) && typeof g.win === "boolean" && typeof g.at === "number" && isFinite(g.at);
+    }).map(function (g) { return { champion: g.champion, win: g.win, at: g.at }; });
+    if (clean.length) localStorage.setItem("deeparam-played", JSON.stringify(clean));
+  } catch (e) { /* bad link or storage blocked */ }
+  location.replace("/");
+})();
+</script>
+</head>
+<body></body>
+</html>
