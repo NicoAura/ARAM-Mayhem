@@ -4762,3 +4762,107 @@ html[data-device="mobile"] .cmp-tray {
   background: var(--accent);
   color: var(--bg);
 }
+
+/* Keyboard shortcut sheet (components/KeyboardShortcuts.tsx) */
+.kbd-sheet {
+  width: min(560px, calc(100vw - 32px));
+  margin: auto;
+  max-height: calc(100dvh - 48px);
+  padding: 0;
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  background: var(--surface);
+  color: var(--fg);
+  overflow: auto;
+}
+
+.kbd-sheet::backdrop {
+  background: rgb(9 11 15 / 0.55);
+  backdrop-filter: blur(4px);
+}
+
+.kbd-inner {
+  display: grid;
+  gap: 1.1rem;
+  padding: 1.25rem 1.4rem 1.5rem;
+}
+
+.kbd-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.kbd-head h2 {
+  font-size: 1.125rem;
+}
+
+.kbd-close {
+  width: 2rem;
+  height: 2rem;
+  border: 0;
+  border-radius: 50%;
+  background: none;
+  color: var(--muted);
+  font-size: 1.4rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.kbd-close:hover {
+  color: var(--fg);
+}
+
+.kbd-sheet h3 {
+  margin-bottom: 0.5rem;
+  color: var(--muted);
+  font: 500 0.6875rem var(--mono);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.kbd-sheet dl {
+  display: grid;
+  gap: 0.4rem;
+  margin: 0;
+}
+
+.kbd-sheet dl div {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  font-size: 0.875rem;
+}
+
+.kbd-sheet dt {
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.kbd-sheet dd {
+  margin: 0;
+  color: var(--muted);
+  text-align: right;
+}
+
+.kbd-sheet kbd {
+  display: inline-grid;
+  min-width: 1.6rem;
+  height: 1.6rem;
+  padding: 0 0.4rem;
+  place-items: center;
+  border: 1px solid var(--line);
+  border-bottom-width: 2px;
+  border-radius: 6px;
+  background: var(--raised);
+  font: 600 0.75rem var(--mono);
+}
+
+.kbd-then {
+  margin: 0 0.3rem;
+  color: var(--muted);
+  font-size: 0.75rem;
+}
