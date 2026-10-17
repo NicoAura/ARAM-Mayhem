@@ -12,7 +12,6 @@ const GO: [string, string, string][] = [
   ["t", "/tier-list", "Tier List"],
   ["s", "/simulator", "Simulator"],
   ["p", "/pbe", "PBE"],
-  ["c", "/builds?tab=compare", "Compare"],
   ["b", "/builds?tab=editor", "Build Editor"],
   ["d", "/augments?tab=draft", "Augment Draft"],
   ["m", "/builds?tab=team", "Team Builder"],
@@ -33,13 +32,6 @@ const SHEET: { group: string; keys: [string[], string][] }[] = [
     ],
   },
   { group: "Go to", keys: GO.map(([k, , label]) => [["g", k], label]) },
-  {
-    group: "On a champion page",
-    keys: [
-      [["f"], "Add to or remove from favorites"],
-      [["x"], "Add to or remove from compare"],
-    ],
-  },
 ];
 
 const typing = (t: EventTarget | null) => {
@@ -80,12 +72,6 @@ export default function KeyboardShortcuts() {
       } else if (k === "[" || k === "]") {
         e.preventDefault();
         switchTab(k === "]" ? 1 : -1);
-      } else if (k === "f" || k === "x") {
-        const btn = document.querySelector<HTMLButtonElement>(`.champ-hero-links ${k === "f" ? ".fav-star" : ".cmp-toggle"}`);
-        if (btn) {
-          e.preventDefault();
-          btn.click();
-        }
       }
     };
     addEventListener("keydown", onKey);

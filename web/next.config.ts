@@ -56,6 +56,9 @@ const nextConfig: NextConfig = {
         ]),
         { source: "/builds", has: [{ type: "query" as const, key: "tab", value: "helper" }], destination: "/tier-list", permanent: true },
         { source: "/what-to-build", destination: "/tier-list", permanent: true },
+        // Compare was removed; its addresses open the Tier List.
+        { source: "/compare", destination: "/tier-list", permanent: true },
+        { source: "/builds", has: [{ type: "query" as const, key: "tab", value: "compare" }], destination: "/tier-list", permanent: true },
         // The augment tier list is a Tier List tab now.
         ...["tab", "rarity", "style"].map((key) => ({
           source: "/augments",
@@ -65,7 +68,6 @@ const nextConfig: NextConfig = {
         })),
         // The build tools and augment draft share pages now; the old addresses keep their query.
         { source: "/builder", destination: "/builds?tab=editor", permanent: true },
-        { source: "/compare", destination: "/builds?tab=compare", permanent: true },
         { source: "/synergy", destination: "/builds?tab=team", permanent: true },
         { source: "/draft", destination: "/augments?tab=draft", permanent: true },
       ]);

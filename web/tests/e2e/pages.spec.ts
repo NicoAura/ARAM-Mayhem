@@ -16,7 +16,6 @@ const PAGES = [
   "/champions/Ahri",
   "/champions/Yunara",
   "/builds",
-  "/builds?tab=compare&a=Jinx&b=Ezreal",
   "/builds?tab=team",
   "/augments?tab=draft",
   "/augments?tab=groups",
@@ -90,7 +89,6 @@ test("old addresses redirect to the current tabs", async ({ page }) => {
   // Pages merged into Builds and Augments: the tab is picked and the old query kept.
   for (const [from, path, tab, keep] of [
     ["/builder", "/builds", "editor", null],
-    ["/compare?a=Jinx", "/builds", "compare", "a"],
     ["/synergy", "/builds", "team", null],
     ["/draft", "/augments", "draft", null],
   ]) {
@@ -107,6 +105,9 @@ test("old addresses redirect to the current tabs", async ({ page }) => {
     ["/builds?tab=helper", "/tier-list"],
     ["/augments?tab=tiers", "/tier-list"],
     ["/augments?rarity=gold&style=ap", "/tier-list"],
+    // Compare was removed.
+    ["/compare?a=Jinx", "/tier-list"],
+    ["/builds?tab=compare&a=Jinx&b=Ezreal", "/tier-list"],
   ]) {
     await page.goto(from);
     expect(new URL(page.url()).pathname, from).toBe(to);
@@ -115,6 +116,18 @@ test("old addresses redirect to the current tabs", async ({ page }) => {
   // The Lab is The Kitchen now; a deep link keeps its #hash.
   await page.goto("/lab#chefs-special");
   expect(new URL(page.url()).pathname + new URL(page.url()).hash).toBe("/kitchen#chefs-special");
+});
+
+test("clicking a champion on the Tier List opens its page, with no favorites or compare buttons", async ({ page }) => {
+  await page.goto("/tier-list");
+  const row = page.locator(".data-table tbody tr").first();
+  await expect(row.locator(".fav-star, .cmp-toggle, .champ-open")).toHaveCount(0);
+  const link = row.locator('a[href^="/champions/"]').first();
+  const href = await link.getAttribute("href");
+  await link.click();
+  await expect(page).toHaveURL(new RegExp(`${href}$`));
+  await expect(page.locator("h1").first()).toBeVisible();
+  await expect(page.locator(".fav-star, .cmp-toggle")).toHaveCount(0);
 });
 
 test("new visitors start in dark mode", async ({ page }) => {

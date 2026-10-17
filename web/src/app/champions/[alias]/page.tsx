@@ -1,7 +1,5 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import FavoriteStar from "@/components/FavoriteStar";
-import CompareToggle from "@/components/CompareToggle";
 import ShareButton from "@/components/ShareButton";
 import ShareCard from "@/components/ShareCard";
 import ChampionRadar from "@/components/ChampionRadar";
@@ -89,11 +87,6 @@ export default async function ChampionPage({ params }: { params: Promise<{ alias
         {c.title && <p className="lede">{c.title.charAt(0).toUpperCase() + c.title.slice(1)}</p>}
         <ArchetypeTags names={championTags(c.alias)} info={championTagData().info} link />
         <p className="champ-hero-links">
-          <FavoriteStar id={c.alias} name={c.name} label />
-          <CompareToggle id={c.alias} name={c.name} label />
-          <Link className="inline-link" href={`/builds?tab=compare&a=${c.alias}`}>
-            Compare with another champion
-          </Link>
           <Link className="inline-link" href={`/builds?tab=editor&champ=${c.alias}`}>
             Try a build
           </Link>

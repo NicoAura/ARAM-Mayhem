@@ -3,7 +3,7 @@ import { text } from "@/lib/content";
 import { chefsSpecial, statsDate, counts, kitchenBuilds, livePatch, liveTiers, topAugments } from "@/lib/highlights";
 import { whatToBuildData } from "@/lib/what-to-build";
 import { championSplash } from "@/lib/champions";
-import { ChampionJump, Favorites, KitchenPick, TierSnapshot } from "@/components/HomeWidgets";
+import { ChampionJump, KitchenPick, TierSnapshot } from "@/components/HomeWidgets";
 import { BETA } from "@/lib/beta";
 import HeroParticles from "@/components/HeroParticles";
 import { augmentHref } from "@/lib/augments";
@@ -75,7 +75,6 @@ export default function Home() {
 
       <div className="bento">
         <RecentPlayed />
-        <Favorites champs={tiers} />
         {tiers.length > 0 && (
           <section className="card span-7" data-accent="tier">
             <div className="card-head">
