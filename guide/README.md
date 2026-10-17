@@ -82,3 +82,9 @@ stat or effect words, and the win-rate range. It writes `augment_groups.json`. R
 reward names the client leaves blank, notes on the reward-only levels, how Mayhem XP is earned and the guaranteed-offer
 rule. It's applied only while the track has 32 levels; update it with each new set. `STORY` is a short history of the
 mode written from Riot's /dev posts and dev updates (What is Mayhem tab). Neither names its source on the page.
+
+## Official game constants
+
+`build_constants.py` writes `game_constants.json` from Riot's developer constants: the public Mayhem queue id
+(`mayhemQueue`), the live ARAM-map queues, the ARAM map ids and the ARAM game modes. `build_data.py` takes the Mayhem
+queue id from it. Rerun when Riot adds a queue.
