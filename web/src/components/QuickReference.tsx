@@ -44,7 +44,7 @@ export default function QuickReference({ alias }: { alias: string }) {
       </div>
       <div className="quickref-grid">
         {c.skills.length > 0 && (
-          <div className="quickref-block">
+          <div className="quickref-block quick-spot" id="skills">
             <h3>Skill order</h3>
             <p className="quickref-skills">
               {c.skills.map((s, i) => (
@@ -79,7 +79,7 @@ export default function QuickReference({ alias }: { alias: string }) {
           </div>
         )}
         {items.length > 0 && (
-          <div className="quickref-block quickref-wide">
+          <div className="quickref-block quickref-wide quick-spot" id="build">
             <h3>
               Build
               {build?.winRate != null && <span className="quickref-note"> · {pct(build.winRate)} win</span>}
@@ -100,7 +100,7 @@ export default function QuickReference({ alias }: { alias: string }) {
           </div>
         )}
         {hasAugs && (
-          <div className="quickref-block quickref-full">
+          <div className="quickref-block quickref-full quick-spot" id="augments">
             <h3>Augments to take</h3>
             <div className="quickref-augs">
               {RARITIES.map(([r, label]) =>

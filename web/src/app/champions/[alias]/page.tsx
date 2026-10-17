@@ -8,6 +8,7 @@ import SplashAccent from "@/components/SplashAccent";
 import { TIER_COLORS } from "@/lib/share-card";
 import WinRateChart from "@/components/WinRateChart";
 import ChampionShowcase from "@/components/ChampionShowcase";
+import QuickBar from "@/components/QuickBar";
 import QuickReference from "@/components/QuickReference";
 import { notFound } from "next/navigation";
 import Embed from "@/components/Embed";
@@ -38,6 +39,17 @@ export async function generateMetadata({ params }: { params: Promise<{ alias: st
   }
   return meta;
 }
+
+// The sticky jump bar's stops, in page order.
+const SPOTS = [
+  { id: "skills", label: "Skills" },
+  { id: "build", label: "Build" },
+  { id: "augments", label: "Augments" },
+  { id: "teammates", label: "Teammates" },
+  { id: "playstyle", label: "Playstyle" },
+  { id: "history", label: "History" },
+  { id: "details", label: "Abilities" },
+];
 
 export default async function ChampionPage({ params }: { params: Promise<{ alias: string }> }) {
   const c = championSummary((await params).alias);
@@ -117,9 +129,10 @@ export default async function ChampionPage({ params }: { params: Promise<{ alias
           </div>
         )}
       </section>
+      <QuickBar spots={SPOTS} />
       <QuickReference alias={c.alias} />
       {c.partners.length > 0 && (
-        <div className="bento">
+        <div className="bento quick-spot" id="teammates">
           {c.partners.length > 0 && (
             <section className="card span-all" data-accent="tier">
               <div className="card-head">
@@ -141,14 +154,18 @@ export default async function ChampionPage({ params }: { params: Promise<{ alias
         </div>
       )}
       {c.radar.length >= 3 && (
-        <div className="bento">
+        <div className="bento quick-spot" id="playstyle">
           <ChampionRadar name={c.name} axes={c.radar} />
         </div>
       )}
-      <div className="bento">
+      <div className="bento quick-spot" id="history">
         <WinRateChart name={c.name} history={c.history} patches={c.patches} champions={champList()} />
       </div>
-      {tab && <Embed src={`/embed/${tab.slug}/${tab.entry}`} title={`${c.name} builds and abilities`} hash={c.alias} />}
+      {tab && (
+        <div className="quick-spot" id="details">
+          <Embed src={`/embed/${tab.slug}/${tab.entry}`} title={`${c.name} builds and abilities`} hash={c.alias} />
+        </div>
+      )}
     </>
   );
 }

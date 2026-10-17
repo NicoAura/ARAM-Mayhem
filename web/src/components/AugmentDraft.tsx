@@ -92,7 +92,8 @@ export default function AugmentDraft() {
     if (done) return;
     const next = [...picks, { id, offers: cards.map((c) => c.id), rarity: rarities[stage] }];
     setPicks(next);
-    buzz(next.length >= STAGES.length ? "done" : "tap");
+    // Taking a Prismatic lands heavier.
+    buzz(next.length >= STAGES.length ? "done" : rarities[stage] === "prismatic" ? "thud" : "tap");
     if (next.length < STAGES.length) {
       const taken = new Set(next.map((p) => p.id));
       setCards(draw(rarities[next.length], taken, 3).map((c) => ({ id: c, rerolled: false })));
@@ -105,6 +106,15 @@ export default function AugmentDraft() {
     buzz();
     setCards(cards.map((c, j) => (j === i ? { id: fresh, rerolled: true } : c)));
   };
+
+  // Each new set of cards flips over (globals.css); feel it as they turn, heavier for Prismatic.
+  const shownCards = cards.map((c) => c.id).join();
+  useEffect(() => {
+    if (!shownCards || !root.current?.offsetParent) return;
+    const t = setTimeout(() => buzz(rarities[stage] === "prismatic" ? "thud" : "tick"), 300);
+    return () => clearTimeout(t);
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- once per new set of cards
+  }, [shownCards]);
 
   // 1, 2 and 3 pick a card, while the draft is on screen (it shares /augments with the tier list).
   useEffect(() => {
