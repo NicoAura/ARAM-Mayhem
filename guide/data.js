@@ -2086,6 +2086,24 @@ window.GUIDE_DATA = {
    "name": "Golden Reroll",
    "text": "Reroll into an augment one tier higher.",
    "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/rewards/kiwi/goldenreroll.png"
+  },
+  "unlocks": {
+   "2031": 24,
+   "2032": 6,
+   "2034": 10,
+   "2043": 14,
+   "2046": 30,
+   "2063": 32,
+   "2080": 26,
+   "2083": 18,
+   "2091": 22,
+   "2104": 12,
+   "2107": 8,
+   "2115": 20,
+   "2118": 28,
+   "2127": 4,
+   "2134": 16,
+   "2137": 2
   }
  },
  "champSelect": {
@@ -2127,6 +2145,238 @@ window.GUIDE_DATA = {
   ],
   "notInMayhem": [
    "Exhaust"
+  ]
+ },
+ "track": {
+  "name": "Mayhem Set 2",
+  "start": "2026-06-10",
+  "end": "2026-10-20",
+  "size": 32,
+  "levels": [
+   {
+    "level": 1,
+    "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/rewards/kiwi/goldenreroll.png",
+    "kind": "Reward",
+    "name": "Golden Reroll"
+   },
+   {
+    "level": 2,
+    "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/rewards/kiwi/1612/augment_patontheback.png",
+    "kind": "Augment",
+    "name": "Pat On The Back",
+    "augmentId": 2137,
+    "tier": "Gold"
+   },
+   {
+    "level": 3,
+    "icon": null,
+    "kind": "Emote",
+    "name": "Impeccable"
+   },
+   {
+    "level": 4,
+    "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/rewards/kiwi/1612/augment_forgedbythemaster.png",
+    "kind": "Augment",
+    "name": "Forged By The Master",
+    "augmentId": 2127,
+    "tier": "Silver"
+   },
+   {
+    "level": 5,
+    "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/rewards/kiwi/blessedcard.png",
+    "kind": "Reward",
+    "name": "Blessed Card"
+   },
+   {
+    "level": 6,
+    "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/rewards/kiwi/1612/augment_fishbait.png",
+    "kind": "Augment",
+    "name": "Shark Bait",
+    "augmentId": 2032,
+    "tier": "Gold"
+   },
+   {
+    "level": 7,
+    "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/summonericons/7142.jpg",
+    "kind": "Icon",
+    "name": "Poro Blaster Icon"
+   },
+   {
+    "level": 8,
+    "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/rewards/kiwi/1612/augment_hellbent.png",
+    "kind": "Augment",
+    "name": "Hellbent",
+    "augmentId": 2107,
+    "tier": "Prismatic"
+   },
+   {
+    "level": 9,
+    "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/rewards/kiwi/abilityaugments.png",
+    "kind": "Reward",
+    "name": "Ability Augments"
+   },
+   {
+    "level": 10,
+    "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/rewards/kiwi/1612/augment_sharktempest.png",
+    "kind": "Augment",
+    "name": "Shark Tempest",
+    "augmentId": 2034,
+    "tier": "Gold"
+   },
+   {
+    "level": 11,
+    "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/summonericons/7143.jpg",
+    "kind": "Icon",
+    "name": "Dead By Ping Icon"
+   },
+   {
+    "level": 12,
+    "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/rewards/kiwi/1612/augment_spiritbomb.png",
+    "kind": "Augment",
+    "name": "Spirit Bomb",
+    "augmentId": 2104,
+    "tier": "Prismatic"
+   },
+   {
+    "level": 13,
+    "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/rewards/kiwi/rainbowcrystalcandy.png",
+    "kind": "Reward",
+    "name": "Rainbow Crystal Candy"
+   },
+   {
+    "level": 14,
+    "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/rewards/kiwi/1612/augment_natureishealing.png",
+    "kind": "Augment",
+    "name": "Nature is Healing",
+    "augmentId": 2043,
+    "tier": "Gold"
+   },
+   {
+    "level": 15,
+    "icon": null,
+    "kind": "Emote",
+    "name": "Shark Snack"
+   },
+   {
+    "level": 16,
+    "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/rewards/kiwi/1612/augment_surgefield.png",
+    "kind": "Augment",
+    "name": "Surge Field",
+    "augmentId": 2134,
+    "tier": "Prismatic"
+   },
+   {
+    "level": 17,
+    "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/summonericons/7145.jpg",
+    "kind": "Icon",
+    "name": "On Fire Icon"
+   },
+   {
+    "level": 18,
+    "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/rewards/kiwi/1612/augment_questburstingteeth.png",
+    "kind": "Augment",
+    "name": "Tooth Fairy",
+    "augmentId": 2083,
+    "tier": "Gold"
+   },
+   {
+    "level": 19,
+    "icon": null,
+    "kind": "Emote",
+    "name": "Queen Of The Dead"
+   },
+   {
+    "level": 20,
+    "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/rewards/kiwi/1612/augment_squishyslappygrab.png",
+    "kind": "Augment",
+    "name": "Squishy Slappy Grab",
+    "augmentId": 2115,
+    "tier": "Prismatic"
+   },
+   {
+    "level": 21,
+    "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/rewards/kiwi/demaciacrown.png",
+    "kind": "Reward",
+    "name": "Demacia Crown"
+   },
+   {
+    "level": 22,
+    "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/rewards/kiwi/1612/augment_endlessdecimation.png",
+    "kind": "Augment",
+    "name": "Endless Decimation",
+    "augmentId": 2091,
+    "tier": "Gold"
+   },
+   {
+    "level": 23,
+    "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/summonericons/7146.jpg",
+    "kind": "Icon",
+    "name": "Incoming Icon"
+   },
+   {
+    "level": 24,
+    "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/rewards/kiwi/1612/augment_dropbear.png",
+    "kind": "Augment",
+    "name": "DropBear",
+    "augmentId": 2031,
+    "tier": "Prismatic"
+   },
+   {
+    "level": 25,
+    "icon": null,
+    "kind": "Emote",
+    "name": "Loading..."
+   },
+   {
+    "level": 26,
+    "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/rewards/kiwi/1612/augment_snowbomb.png",
+    "kind": "Augment",
+    "name": "Snowblast",
+    "augmentId": 2080,
+    "tier": "Gold"
+   },
+   {
+    "level": 27,
+    "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/ux/summonericons/7144.jpg",
+    "kind": "Icon",
+    "name": "Droppybara Icon"
+   },
+   {
+    "level": 28,
+    "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/rewards/kiwi/1612/augment_skipthebasics.png",
+    "kind": "Augment",
+    "name": "Ult Bot",
+    "augmentId": 2118,
+    "tier": "Prismatic"
+   },
+   {
+    "level": 29,
+    "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/seasons/images/generic/achievement_title_212x212.png",
+    "kind": "Title",
+    "name": "A title"
+   },
+   {
+    "level": 30,
+    "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/rewards/kiwi/1612/augment_questporocharge.png",
+    "kind": "Augment",
+    "name": "Poro Stampede",
+    "augmentId": 2046,
+    "tier": "Prismatic"
+   },
+   {
+    "level": 31,
+    "icon": null,
+    "kind": "Emote",
+    "name": "It's Okay, I'm Okay"
+   },
+   {
+    "level": 32,
+    "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/rewards/kiwi/1612/augment_whenthedarknesscomes.png",
+    "kind": "Augment",
+    "name": "Dimension Shift",
+    "augmentId": 2063,
+    "tier": "Prismatic"
+   }
   ]
  }
 };

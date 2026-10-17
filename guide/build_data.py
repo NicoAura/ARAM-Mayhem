@@ -313,6 +313,12 @@ def main():
                      "odds": odds, "tiers": {str(k): v for k, v in sorted(tier_of.items())}, "grantedItems": granted,
                      "selectionAugments": selection_augments, "goldenReroll": golden_reroll}
 
+    # ---- Mayhem progression track. The event hub has each track's dates and level count; the client's reward list
+    # holds every track's rewards in order, one per level, so the current track is the last block of Mayhem rewards.
+    track = build_track(gd, asset, augments, s)
+    unlocks = {r["augmentId"]: r["level"] for r in (track["levels"] if track else []) if r.get("augmentId")}
+    augment_rules["unlocks"] = {str(k): v for k, v in sorted(unlocks.items())}
+
     # ---- Archive: Augment Sets
     sets = []
     for stem, fallback, fallback_bonus in AUGMENT_SETS:
@@ -332,6 +338,7 @@ def main():
         "spellAugments": spell_augments, "itemChanges": item_changes, "augmentSets": sets,
         "augmentRules": {k: v for k, v in augment_rules.items() if k != "tiers"},
         "champSelect": champ_select,
+        "track": track,
     }
     # mode-wide numbers the simulator and site pages use
     mode_rules = {"patch": version, "attackSpeedCap": rules["attackSpeedCap"], "aramAttackSpeedCap": rules["aramAttackSpeedCap"],
@@ -349,6 +356,57 @@ def main():
         f.write("window.GUIDE_DATA = " + site_paths(json.dumps(out, indent=1, ensure_ascii=False)) + ";\n")
     print(f"{version}: {len(quests)} quests, {len(challenges)} challenges "
           f"({sum(c['mayhem'] for c in challenges)} count Mayhem), {len(items)} items, pool {tier_counts}")
+
+
+def build_track(gd, asset, augments, s):
+    """The current Mayhem progression track: name, dates and what each level gives (augment, emote, icon or other)."""
+    events = [e["event"] for e in get(f"{gd}/v1/event-hub.json")
+              if e.get("event", {}).get("seasonPassSubType") == "kMayhem"]
+    if not events:
+        return None
+    ev = max(events, key=lambda e: e["startDate"])
+    size = max((c.get("chapterEnd", 0) for c in ev.get("chapters", [])), default=0)
+    def image(r):
+        first = ((r or {}).get("rewards") or [None])[0] or {}
+        return (first.get("media") or {}).get("image") or ""
+    rewards = get(f"{gd}/v1/rewards.json")
+    mayhem = [i for i, r in enumerate(rewards) if re.search(r"/Kiwi/|/AramMayhem/", image(r))]
+    if not size or not mayhem or mayhem[-1] + 1 < size:
+        return None
+    block = rewards[mayhem[-1] + 1 - size: mayhem[-1] + 1]
+    if sum(1 for r in block if re.search(r"/Kiwi/|/AramMayhem/", image(r))) < size / 2:
+        return None  # the list's layout changed; don't guess
+    by_icon = {}
+    for a in augments.values():
+        stem = a["AugmentLargeIconPath"].split("/")[-1].lower().split(".")[0].removesuffix("_large")
+        by_icon.setdefault(stem, a)
+        by_icon.setdefault(a["AugmentNameId"].lower().removeprefix("aram_").removesuffix("_active"), a)
+    emotes = {e["inventoryIcon"].split("/")[-1].lower(): e for e in get(f"{gd}/v1/summoner-emotes.json") if e.get("inventoryIcon")}
+    icons = {str(i["id"]): i for i in get(f"{gd}/v1/summoner-icons.json")}
+    words = lambda n: re.sub(r"(?<=[a-z])(?=[A-Z])", " ", n)  # noqa: E731
+    levels = []
+    for n, r in enumerate(block, 1):
+        img = image(r)
+        f = img.split("/")[-1]
+        stem = f.lower().split(".")[0].removesuffix("_large").removeprefix("augment_").removeprefix("quest")
+        # the site's asset paths swap "kiwi" for "mayhem", so a file whose real path says "mayhem" can't be mirrored
+        row = {"level": n, "icon": asset(img) if img and "mayhem" not in img.lower() else None}
+        if "/Augments/" in img or "/Augment_" in img:
+            a = by_icon.get(stem)
+            row.update(kind="Augment", name=s(a["NameTra"], a["AugmentNameId"]) if a else words(f.split(".")[0]),
+                       augmentId=a.get("AugmentPlatformId") if a else None, tier=TIERS[a.get("rarity", 0)] if a else None)
+        elif "SummonerEmotes" in img:
+            row.update(kind="Emote", name=(emotes.get(f.lower()) or {}).get("name") or words(f.split(".")[0]))
+        elif "SummonerIcons" in img:
+            row.update(kind="Icon", name=(icons.get(f.split(".")[0]) or {}).get("title") or "Profile icon")
+        elif "Achievement_Title" in img:
+            row.update(kind="Title", name="A title")
+        else:
+            name = s("Kiwi_Golden_Reroll_Tooltip_Title") if stem == "goldenreroll" else words(f.split(".")[0])
+            row.update(kind="Reward", name=name)
+        levels.append(row)
+    return {"name": ev.get("localizedName"), "start": ev["startDate"][:10], "end": ev.get("progressEndDate", ev["endDate"])[:10],
+            "size": size, "levels": levels}
 
 
 def fill(text, values, need, tier):

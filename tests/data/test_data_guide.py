@@ -219,6 +219,18 @@ def test_selection_augments(rules):
     assert rules["goldenReroll"]["name"] and rules["goldenReroll"]["text"]
 
 
+def test_progression_track(guide, rules):
+    t = guide["track"]
+    if t is None:
+        pytest.skip("no Mayhem track on this patch")
+    assert t["name"] and t["start"] <= t["end"]
+    assert [r["level"] for r in t["levels"]] == list(range(1, t["size"] + 1))
+    assert all(r["kind"] in ("Augment", "Emote", "Icon", "Title", "Reward") and r["name"] for r in t["levels"])
+    unlocks = {int(k): v for k, v in rules["unlocks"].items()}
+    assert unlocks == {r["augmentId"]: r["level"] for r in t["levels"] if r.get("augmentId")}
+    assert sum(r["kind"] == "Augment" for r in t["levels"]) >= t["size"] / 3
+
+
 def test_granted_items(rules):
     ids = [g["id"] for g in rules["grantedItems"]]
     assert len(ids) == len(set(ids))
