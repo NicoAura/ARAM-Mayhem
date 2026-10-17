@@ -25,7 +25,7 @@ export default function Privacy() {
           page at any time.
         </p>
         <p>
-          If you sign in with Google, Apple, Discord, Twitch, Microsoft, Steam, Facebook, X or GitHub, that happens on their own page: we never see your
+          If you sign in with another service, such as Google, Apple or Discord, that happens on that service&apos;s own page: we never see your
           password there, and we receive only an account identifier and, if they have confirmed it, your email address. You can stop signing in that way from the account page.
         </p>
         <p>
