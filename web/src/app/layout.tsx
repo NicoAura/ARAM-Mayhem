@@ -6,7 +6,6 @@ import PageTransitions from "@/components/PageTransitions";
 import TiltEffects from "@/components/TiltEffects";
 import SwipeGestures from "@/components/SwipeGestures";
 import PressDown from "@/components/PressDown";
-import CompareTray from "@/components/CompareTray";
 import HoverPreview from "@/components/HoverPreview";
 import CountUp from "@/components/CountUp";
 import KeyboardShortcuts from "@/components/KeyboardShortcuts";
@@ -163,7 +162,6 @@ export default function RootLayout({
         <PageTransitions />
         <TiltEffects />
         <SwipeGestures />
-        <CompareTray />
         <HoverPreview />
         <CountUp />
         <KeyboardShortcuts />

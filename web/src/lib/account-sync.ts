@@ -1,18 +1,17 @@
 "use client";
 
-import { FAVORITES_EVENT, readFavorites, setFavorites } from "./favorites";
 import { loadSettings, saveSettings, SETTINGS_EVENT, type Settings } from "./settings";
 
-// Keeps a signed-in visitor's Favorites and settings the same on every browser. On each visit the saved
-// copy replaces this browser's; the first time an account is used here the two are merged (stars from
-// both, the account's settings over this browser's). Changes are sent back a moment after they're made.
+// Keeps a signed-in visitor's settings the same on every browser. On each visit the saved copy replaces
+// this browser's; the first time an account is used here the two are merged (the account's settings over
+// this browser's). Changes are sent back a moment after they're made.
 
 export const ACCOUNT_EVENT = "deeparam-account";
 const MERGED_KEY = "deeparam-account-merged"; // which account this browser has already merged with
 
 export const signedIn = () => typeof document !== "undefined" && /(?:^|;\s*)deeparam-signed-in=1/.test(document.cookie);
 
-type Saved = { favorites: string[]; settings: Partial<Settings> };
+type Saved = { settings: Partial<Settings> };
 
 let applying = false;
 let timer: ReturnType<typeof setTimeout> | undefined;
@@ -25,7 +24,7 @@ function push() {
     void fetch("/api/account", {
       method: "PUT",
       headers: { "content-type": "application/json" },
-      body: JSON.stringify({ favorites: readFavorites(), settings: loadSettings() }),
+      body: JSON.stringify({ settings: loadSettings() }),
       keepalive: true,
     }).catch(() => {});
   }, 1500);
@@ -34,8 +33,6 @@ function push() {
 function apply(data: Saved) {
   applying = true;
   try {
-    const local = readFavorites();
-    if (JSON.stringify(local) !== JSON.stringify(data.favorites)) setFavorites(data.favorites);
     const s = loadSettings();
     if (Object.entries(data.settings).some(([k, v]) => s[k as keyof Settings] !== v)) saveSettings(data.settings);
   } finally {
@@ -57,7 +54,7 @@ export async function syncAccount(): Promise<void> {
     merged = localStorage.getItem(MERGED_KEY);
   } catch {}
   if (merged !== a.id) {
-    apply({ favorites: [...new Set([...a.data.favorites, ...readFavorites()])], settings: { ...loadSettings(), ...a.data.settings } });
+    apply({ settings: { ...loadSettings(), ...a.data.settings } });
     try {
       localStorage.setItem(MERGED_KEY, a.id);
     } catch {}
@@ -67,7 +64,6 @@ export async function syncAccount(): Promise<void> {
   }
   if (!listening) {
     listening = true;
-    addEventListener(FAVORITES_EVENT, push);
     addEventListener(SETTINGS_EVENT, push);
   }
 }

@@ -20,11 +20,7 @@ export function nextPatch(s: PatchSchedule, now = new Date()): NextPatch | null 
   return { ...next, days: Math.round((Date.parse(next.date) - Date.parse(today)) / DAY) };
 }
 
-export function inDays(days: number) {
-  return days === 0 ? "today" : days === 1 ? "tomorrow" : `in ${days} days`;
-}
-
-/** "Wednesday, October 21" for a schedule date. */
-export function longDate(date: string) {
-  return new Date(`${date}T12:00:00Z`).toLocaleDateString("en-US", { timeZone: "UTC", weekday: "long", month: "long", day: "numeric" });
+/** "Wednesday, October 21" for a schedule date, written the way `lang` writes dates. */
+export function longDate(date: string, lang = "en") {
+  return new Date(`${date}T12:00:00Z`).toLocaleDateString(lang === "en" ? "en-US" : lang, { timeZone: "UTC", weekday: "long", month: "long", day: "numeric" });
 }

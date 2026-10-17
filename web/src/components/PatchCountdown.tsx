@@ -1,12 +1,15 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { inDays, longDate, nextPatch, type NextPatch, type PatchSchedule } from "@/lib/patch-schedule";
+import { longDate, nextPatch, type NextPatch, type PatchSchedule } from "@/lib/patch-schedule";
+import { useLang, useT } from "./I18n";
 
 // Countdown to the next patch on Riot's schedule. The server renders it as of the build; the browser
-// recomputes it on load and every hour so a cached page stays right.
-export default function PatchCountdown({ schedule, note }: { schedule: PatchSchedule; note?: string }) {
+// recomputes it on load and every hour so a cached page stays right. Its wording is in /i18n/patch-countdown/.
+export default function PatchCountdown({ schedule, note }: { schedule: PatchSchedule; note?: React.ReactNode }) {
   const [next, setNext] = useState<NextPatch | null>(() => nextPatch(schedule));
+  const t = useT("patch-countdown");
+  const lang = useLang();
   useEffect(() => {
     const tick = () => setNext(nextPatch(schedule));
     tick();
@@ -15,24 +18,24 @@ export default function PatchCountdown({ schedule, note }: { schedule: PatchSche
   }, [schedule]);
   if (!next) return null;
 
+  const v = { patch: next.patch, n: next.days };
   return (
     <div className="patch-countdown" role="status">
       <span className="patch-countdown-days">
         {next.days === 0 ? (
-          <b>Today</b>
+          <b>{t("Today")}</b>
         ) : (
           <>
-            <b>{next.days}</b> {next.days === 1 ? "day" : "days"}
+            <b>{next.days}</b> {t(next.days === 1 ? "day" : "days")}
           </>
         )}
       </span>
       <span className="patch-countdown-text">
         <b>
-          Patch {next.patch} {next.days === 0 ? "is out today" : `comes out ${inDays(next.days)}`}
+          {t(next.days === 0 ? "Patch {patch} is out today" : next.days === 1 ? "Patch {patch} comes out tomorrow" : "Patch {patch} comes out in {n} days", v)}
         </b>
-        <span className="sub">
-          {longDate(next.date)} (Pacific Time){note ? `. ${note}` : ""}
-        </span>
+        <span className="sub">{t("{date} (Pacific Time)", { date: longDate(next.date, lang) })}</span>
+        {note && <span className="sub">{note}</span>}
       </span>
     </div>
   );

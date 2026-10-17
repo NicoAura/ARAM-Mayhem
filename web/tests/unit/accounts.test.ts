@@ -22,14 +22,15 @@ describe("account passwords", () => {
 });
 
 describe("synced account data", () => {
-  it("keeps only champion ids and known settings of the right type", () => {
+  it("keeps only known settings of the right type", () => {
     const d = cleanData({
-      favorites: ["Ahri", "Ahri", "<script>", 5, "Kai'Sa"],
+      favorites: ["Ahri"],
       settings: { sound: false, motion: "reduce", graphics: 3, evil: "x" },
       extra: "dropped",
     });
-    expect(d).toEqual({ favorites: ["Ahri", "Kai'Sa"], settings: { sound: false, motion: "reduce" } });
-    expect(cleanData(null)).toEqual({ favorites: [], settings: {} });
+    // Favorites are no longer synced, so they're dropped.
+    expect(d).toEqual({ settings: { sound: false, motion: "reduce" } });
+    expect(cleanData(null)).toEqual({ settings: {} });
   });
 });
 

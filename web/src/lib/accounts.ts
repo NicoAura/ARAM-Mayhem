@@ -9,7 +9,7 @@ import { DEFAULT_SETTINGS } from "./settings";
 import { serverEnv } from "./env";
 import CHAMPIONS from "@/data/champion-names.json";
 
-// Site accounts: sign in with an email and password or a passkey, and Favorites and settings follow
+// Site accounts: sign in with an email and password or a passkey, and settings follow
 // you to every browser you sign in on. Passwords are stored as salted PBKDF2 hashes, sessions as the
 // SHA-256 of a random token. One account can be the site owner (the 3D Simulator and the site editor).
 // A Riot account is connected through My Stats (a one-time code the helper confirms with the Riot Client).
@@ -147,23 +147,24 @@ export async function passwordSignIn(email: string, password: string): Promise<{
   return { id: row.id, owner: row.owner === 1 };
 }
 
-export type AccountData = { favorites: string[]; settings: Record<string, unknown> };
+export type AccountData = { settings: Record<string, unknown> };
 
-/** Keeps only what the site saves: champion ids, and known settings with the right types. */
+/** Keeps only what the site saves: known settings with the right types. */
 export function cleanData(raw: unknown): AccountData {
   const r = (raw && typeof raw === "object" ? raw : {}) as Record<string, unknown>;
-  const favorites = Array.isArray(r.favorites) ? r.favorites.filter((f): f is string => typeof f === "string" && /^[\w.' -]{1,40}$/.test(f)).slice(0, 300) : [];
   const settings: Record<string, unknown> = {};
   const s = (r.settings && typeof r.settings === "object" ? r.settings : {}) as Record<string, unknown>;
   for (const [k, def] of Object.entries(DEFAULT_SETTINGS)) {
     const v = s[k];
     if (typeof v === typeof def && (typeof v !== "string" || v.length <= 20)) settings[k] = v;
   }
-  return { favorites: [...new Set(favorites)], settings };
+  return { settings };
 }
 
+/** Saves the synced settings. Anything else already stored with the account (old Favorites) is left as it is. */
 export async function saveData(id: string, data: unknown) {
-  await (await db()).prepare("UPDATE accounts SET data = ? WHERE id = ?").bind(JSON.stringify(cleanData(data)), id).run();
+  // json_set keeps the rest of the stored object; json() makes the value an object, not a string.
+  await (await db()).prepare("UPDATE accounts SET data = json_set(data, '$.settings', json(?)) WHERE id = ?").bind(JSON.stringify(cleanData(data).settings), id).run();
 }
 
 /** Everything the account page shows. */
@@ -172,7 +173,7 @@ export async function accountView(a: SessionAccount) {
   const row = await d.prepare("SELECT * FROM accounts WHERE id = ?").bind(a.id).first<Row>();
   if (!row) throw new AccountError("Sign in first.", 401);
   const keys = await d.prepare("SELECT id, label, created_at FROM passkeys WHERE account = ? ORDER BY created_at").bind(a.id).all<{ id: string; label: string | null; created_at: string }>();
-  let data: AccountData = { favorites: [], settings: {} };
+  let data: AccountData = { settings: {} };
   try {
     data = cleanData(JSON.parse(row.data));
   } catch {}

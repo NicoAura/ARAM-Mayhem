@@ -3,7 +3,7 @@ import { text } from "@/lib/content";
 import { chefsSpecial, statsDate, counts, kitchenBuilds, livePatch, liveTiers, topAugments } from "@/lib/highlights";
 import { whatToBuildData } from "@/lib/what-to-build";
 import { championSplash } from "@/lib/champions";
-import { ChampionJump, Favorites, KitchenPick, TierSnapshot } from "@/components/HomeWidgets";
+import { ChampionJump, KitchenPick, TierSnapshot } from "@/components/HomeWidgets";
 import { BETA } from "@/lib/beta";
 import HeroParticles from "@/components/HeroParticles";
 import { augmentHref } from "@/lib/augments";
@@ -75,7 +75,6 @@ export default function Home() {
 
       <div className="bento">
         <RecentPlayed />
-        <Favorites champs={tiers} />
         {tiers.length > 0 && (
           <section className="card span-7" data-accent="tier">
             <div className="card-head">
@@ -101,7 +100,7 @@ export default function Home() {
               <h2>
                 <T>Best augments</T>
               </h2>
-              <Link href="/augments">
+              <Link href="/tier-list?tab=augments">
                 <T>All →</T>
               </Link>
             </div>
@@ -243,9 +242,6 @@ export default function Home() {
               <h2>
                 <T>Winning builds this patch</T>
               </h2>
-              <Link href="/builds">
-                <T>Builds →</T>
-              </Link>
             </div>
             <div className="rank home-builds">
               {wins.map((c) => (

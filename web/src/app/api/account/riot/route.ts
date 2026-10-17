@@ -1,14 +1,12 @@
 import { handle, json } from "@/lib/account-route";
 import { db, requireAccount } from "@/lib/accounts";
 import { profileByPuuid, profilePath } from "@/lib/profiles";
-import { getPlayerExtras, PLATFORMS, riotFetch, type Platform } from "@/lib/riot";
+import { getPlayerExtras, PLATFORMS, type Platform } from "@/lib/riot";
 
-// GET /api/account/riot → for the signed-in account's connected Riot account: ranked standing, mastery,
+// GET /api/account/riot → for the signed-in account's connected Riot account: mastery,
 // challenge standing and ARAM Clash team. Teammates who published a player page get a link to it and
 // their most-played Mayhem champions. Nothing here looks up a player by name.
 export const dynamic = "force-dynamic";
-
-type Ranked = { queueType: string; tier: string; rank: string; leaguePoints: number; wins: number; losses: number };
 
 export const GET = handle(async () => {
   const a = await requireAccount();
@@ -16,10 +14,8 @@ export const GET = handle(async () => {
   if (!row?.riot_puuid || !row.riot_platform || !(row.riot_platform in PLATFORMS)) return json({ connected: false });
   const platform = row.riot_platform as Platform;
   const puuid = row.riot_puuid;
-  const [extras, ranked] = await Promise.all([
-    getPlayerExtras(platform, puuid),
-    riotFetch<Ranked[]>(platform, `/lol/league/v4/entries/by-puuid/${encodeURIComponent(puuid)}`, 600).catch(() => [] as Ranked[]),
-  ]);
+  // No ranked standing: ranked queues don't apply to ARAM.
+  const extras = await getPlayerExtras(platform, puuid);
   const clash = extras.clash && {
     ...extras.clash,
     members: await Promise.all(
@@ -35,7 +31,6 @@ export const GET = handle(async () => {
   };
   return json({
     connected: true,
-    ranked: ranked.map(({ queueType, tier, rank, leaguePoints, wins, losses }) => ({ queueType, tier, rank, leaguePoints, wins, losses })),
     ...extras,
     clash,
   });

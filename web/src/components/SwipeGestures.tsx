@@ -7,8 +7,8 @@ import { buzz, inApp } from "@/lib/haptics";
 
 // Phone gestures. A sideways swipe switches the page's in-page tabs (SubTabs) or, on a page without
 // them, follows the page's next/previous link (lib/subtab-nav.ts). A swipe that starts inside an element
-// marked data-swipe-target goes to that element instead, as a "deeparam-swipe" event ({detail: {dir}}),
-// like Compare stepping to the next champion. Pulling down at the top of a page refreshes it in
+// marked data-swipe-target goes to that element instead, as a "deeparam-swipe" event ({detail: {dir}}).
+// Pulling down at the top of a page refreshes it in
 // place, with a tick when it's far enough and a buzz when the fresh page is in. It replaces the
 // browser's own pull (turned off while this is on); the DeepARAM app has its native one, so not there.
 // Touch screens only.

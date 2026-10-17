@@ -6,7 +6,6 @@ const PAGES = [
   "/",
   "/tier-list",
   "/tier-list?tab=augments",
-  "/augments?rarity=gold&style=ap",
   "/simulator",
   "/pbe",
   "/info",
@@ -16,8 +15,6 @@ const PAGES = [
   "/champions/Ahri",
   "/champions/Yunara",
   "/builds",
-  "/builds?tab=editor",
-  "/builds?tab=compare&a=Jinx&b=Ezreal",
   "/builds?tab=team",
   "/augments?tab=draft",
   "/augments?tab=groups",
@@ -91,9 +88,7 @@ test("old addresses redirect to the current tabs", async ({ page }) => {
   }
   // Pages merged into Builds and Augments: the tab is picked and the old query kept.
   for (const [from, path, tab, keep] of [
-    ["/what-to-build?champ=Jinx", "/builds", null, "champ"],
     ["/builder", "/builds", "editor", null],
-    ["/compare?a=Jinx", "/builds", "compare", "a"],
     ["/synergy", "/builds", "team", null],
     ["/draft", "/augments", "draft", null],
   ]) {
@@ -103,9 +98,36 @@ test("old addresses redirect to the current tabs", async ({ page }) => {
     expect(url.searchParams.get("tab"), from!).toBe(tab);
     if (keep) expect(url.searchParams.get(keep), from!).toBeTruthy();
   }
+  // What to build moved to champion pages, and the augment tier list to the Tier List.
+  for (const [from, to] of [
+    ["/builds?champ=Jinx", "/champions/Jinx"],
+    ["/what-to-build?champ=Jinx", "/champions/Jinx"],
+    ["/builds?tab=helper", "/tier-list"],
+    ["/augments?tab=tiers", "/tier-list"],
+    ["/augments?rarity=gold&style=ap", "/tier-list"],
+    // Compare was removed.
+    ["/compare?a=Jinx", "/tier-list"],
+    ["/builds?tab=compare&a=Jinx&b=Ezreal", "/tier-list"],
+  ]) {
+    await page.goto(from);
+    expect(new URL(page.url()).pathname, from).toBe(to);
+    if (to === "/tier-list" && from.startsWith("/augments")) expect(new URL(page.url()).searchParams.getAll("tab"), from).toEqual(["augments"]);
+  }
   // The Lab is The Kitchen now; a deep link keeps its #hash.
   await page.goto("/lab#chefs-special");
   expect(new URL(page.url()).pathname + new URL(page.url()).hash).toBe("/kitchen#chefs-special");
+});
+
+test("clicking a champion on the Tier List opens its page, with no favorites or compare buttons", async ({ page }) => {
+  await page.goto("/tier-list");
+  const row = page.locator(".data-table tbody tr").first();
+  await expect(row.locator(".fav-star, .cmp-toggle, .champ-open")).toHaveCount(0);
+  const link = row.locator('a[href^="/champions/"]').first();
+  const href = await link.getAttribute("href");
+  await link.click();
+  await expect(page).toHaveURL(new RegExp(`${href}$`));
+  await expect(page.locator("h1").first()).toBeVisible();
+  await expect(page.locator(".fav-star, .cmp-toggle")).toHaveCount(0);
 });
 
 test("new visitors start in dark mode", async ({ page }) => {
@@ -118,6 +140,8 @@ test("owner-only files stay private without the owner's sign-in", async ({ reque
     const res = await request.get(path, { maxRedirects: 0 });
     expect(res.status(), path).toBe(404);
   }
-  const res = await request.get("/account/simulator");
-  expect(await res.text()).toContain("Sign in first");
+  // The old owner page now sends everyone to /simulator, where only the owner gets the 3D switch.
+  const res = await request.get("/account/simulator", { maxRedirects: 0 });
+  expect([307, 308]).toContain(res.status());
+  expect(res.headers().location).toMatch(/\/simulator$/);
 });

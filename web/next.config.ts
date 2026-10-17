@@ -45,16 +45,33 @@ const nextConfig: NextConfig = {
       ["/tools/kitchen", "/kitchen"],
       // The owner's tools moved under the account page when accounts replaced the editor password.
       ["/admin", "/account/edit"],
-      ["/admin/simulator", "/account/simulator"],
+      ["/admin/simulator", "/simulator"],
+      // The 3D Simulator opens from the owner-only switch on /simulator now.
+      ["/account/simulator", "/simulator"],
       // My Stats moved onto the account page.
       ["/stats", "/account#my-stats"],
     ]
       .map(([source, destination]) => ({ source, destination, permanent: true }))
       .concat([
+        // What to build for a champion is on its page now; with no champion, the tier list.
+        ...["/what-to-build", "/builds"].flatMap((source) => [
+          { source, has: [{ type: "query" as const, key: "champ", value: "(?<champ>[A-Za-z]+)" }], missing: [{ type: "query" as const, key: "tab" }], destination: "/champions/:champ", permanent: true },
+          { source, has: [{ type: "query" as const, key: "tab", value: "helper" }, { type: "query" as const, key: "champ", value: "(?<champ>[A-Za-z]+)" }], destination: "/champions/:champ", permanent: true },
+        ]),
+        { source: "/builds", has: [{ type: "query" as const, key: "tab", value: "helper" }], destination: "/tier-list", permanent: true },
+        { source: "/what-to-build", destination: "/tier-list", permanent: true },
+        // Compare was removed; its addresses open the Tier List.
+        { source: "/compare", destination: "/tier-list", permanent: true },
+        { source: "/builds", has: [{ type: "query" as const, key: "tab", value: "compare" }], destination: "/tier-list", permanent: true },
+        // The augment tier list is a Tier List tab now.
+        ...["tab", "rarity", "style"].map((key) => ({
+          source: "/augments",
+          has: [{ type: "query" as const, key, value: key === "tab" ? "tiers" : undefined }],
+          destination: "/tier-list?tab=augments",
+          permanent: true,
+        })),
         // The build tools and augment draft share pages now; the old addresses keep their query.
-        { source: "/what-to-build", destination: "/builds", permanent: true },
         { source: "/builder", destination: "/builds?tab=editor", permanent: true },
-        { source: "/compare", destination: "/builds?tab=compare", permanent: true },
         { source: "/synergy", destination: "/builds?tab=team", permanent: true },
         { source: "/draft", destination: "/augments?tab=draft", permanent: true },
       ]);

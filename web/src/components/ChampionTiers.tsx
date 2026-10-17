@@ -256,7 +256,6 @@ export default function ChampionTiers({ rows: initial, patches, partners, tags, 
           searchKey="name"
           searchLabel="Find a champion"
           urlTab=""
-          favorites
         />
       )}
     </div>
