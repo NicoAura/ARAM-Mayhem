@@ -9,6 +9,8 @@ type Tab = { href: string; label: string };
 // Bottom tab bar for phones and tablets. It is only shown when the inline script in the
 // layout marks the page as running on iOS or Android (html[data-device="mobile"]).
 const PRIMARY = ["/tier-list", "/simulator", "/pbe"];
+// Each tab tints in its section's colour when active, like iOS tab bars.
+const ACCENT: Record<string, string> = { "/tier-list": "tier", "/simulator": "sim", "/pbe": "pbe", more: "info" };
 
 const ICONS: Record<string, React.ReactNode> = {
   "/": <path d="M4 11.5 12 5l8 6.5V19a1 1 0 0 1-1 1h-4.5v-5h-5v5H5a1 1 0 0 1-1-1z" />,
@@ -27,7 +29,7 @@ const ICONS: Record<string, React.ReactNode> = {
 
 function Icon({ name }: { name: string }) {
   return (
-    <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
       {ICONS[name] ?? ICONS.more}
     </svg>
   );
@@ -56,7 +58,7 @@ export default function MobileTabBar({ tabs }: { tabs: Tab[] }) {
       </div>
       <nav className="tabbar" aria-label="Sections">
         {primary.map((t) => (
-          <Link key={t.href} href={t.href} aria-current={isActive(t.href) ? "page" : undefined}>
+          <Link key={t.href} href={t.href} data-accent={ACCENT[t.href]} aria-current={isActive(t.href) ? "page" : undefined}>
             <Icon name={t.href} />
             <span>{t.href === "/tier-list" ? "Tiers" : t.label}</span>
           </Link>
@@ -65,7 +67,8 @@ export default function MobileTabBar({ tabs }: { tabs: Tab[] }) {
           type="button"
           aria-expanded={open}
           aria-controls="more-sheet"
-          aria-current={moreActive ? "page" : undefined}
+          data-accent={ACCENT.more}
+          aria-current={moreActive || open ? "page" : undefined}
           onClick={() => setOpen((o) => !o)}
         >
           <Icon name="more" />

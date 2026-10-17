@@ -113,12 +113,4 @@ export function liveTiers(): HomeChamp[] {
   return champStats(rows, new Set([patch])).map((c) => ({ id: c.name, name: champName(c.name), tier: c.tier, winRate: c.win_rate, pickRate: c.pick_rate }));
 }
 
-export type HomeAugment = { id: string; name: string; tier: string; winRate: number; pickRate: number };
-
-/** Every rated live augment, for the home page's augment offer. */
-export const augmentPool = (): HomeAugment[] =>
-  (readRepoCsv("data/cn/augments.csv") ?? [])
-    .filter((r) => r.tier && AUGS[r.augment_id])
-    .map((r) => ({ id: r.augment_id, name: AUGS[r.augment_id], tier: r.tier.toLowerCase(), winRate: Number(r.win_rate), pickRate: Number(r.pick_rate) }));
-
 export const kitchenBuilds = () => readRepoJson<Builds>("data/cook-builds/builds.json")?.builds ?? [];

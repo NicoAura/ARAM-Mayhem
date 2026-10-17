@@ -1115,12 +1115,14 @@ h1 {
 }
 
 html[data-device="mobile"] {
-  --tabbar-h: 58px;
+  --tabbar-h: 62px;
+  /* The bar floats just above the home indicator (or 10px off the edge on phones without one). */
+  --tabbar-gap: max(10px, calc(env(safe-area-inset-bottom, 0px) - 8px));
   -webkit-tap-highlight-color: transparent;
 }
 
 html[data-device="mobile"] body {
-  padding-bottom: calc(var(--tabbar-h) + env(safe-area-inset-bottom, 0px));
+  padding-bottom: calc(var(--tabbar-h) + var(--tabbar-gap) + 12px);
 }
 
 html[data-device="mobile"] main,
@@ -1216,22 +1218,28 @@ html[data-device="mobile"] .site-footer {
   padding-bottom: 1.5rem;
 }
 
-/* Bottom tab bar */
+/* Bottom tab bar, in the style of iPhone's floating glass tab bar: a capsule above the home indicator,
+   blurred translucent material, and the active tab lit in its section's colour on a soft pill. */
 html[data-device="mobile"] .tabbar {
   position: fixed;
-  right: 0;
-  bottom: 0;
-  left: 0;
+  right: max(14px, env(safe-area-inset-right, 0px));
+  bottom: var(--tabbar-gap);
+  left: max(14px, env(safe-area-inset-left, 0px));
   z-index: 40;
   display: grid;
   grid-auto-columns: 1fr;
   grid-auto-flow: column;
-  height: calc(var(--tabbar-h) + env(safe-area-inset-bottom, 0px));
-  padding: 0 env(safe-area-inset-right, 0px) env(safe-area-inset-bottom, 0px) env(safe-area-inset-left, 0px);
-  border-top: 1px solid var(--line);
-  background: color-mix(in srgb, var(--bg) 88%, transparent);
-  -webkit-backdrop-filter: saturate(1.4) blur(16px);
-  backdrop-filter: saturate(1.4) blur(16px);
+  gap: 2px;
+  height: var(--tabbar-h);
+  padding: 4px;
+  border: 0.5px solid color-mix(in srgb, var(--fg) 14%, transparent);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--surface) 68%, transparent);
+  box-shadow:
+    0 10px 30px rgb(0 0 0 / 0.22),
+    inset 0 1px 0 color-mix(in srgb, #fff 14%, transparent);
+  -webkit-backdrop-filter: saturate(1.8) blur(22px);
+  backdrop-filter: saturate(1.8) blur(22px);
 }
 
 html[data-device="mobile"] .tabbar a,
@@ -1240,21 +1248,41 @@ html[data-device="mobile"] .tabbar button {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 3px;
+  gap: 1px;
+  min-width: 0;
   border: 0;
+  border-radius: 999px;
   background: none;
-  color: var(--muted);
-  font-size: 0.6875rem;
-  font-weight: 500;
+  color: var(--fg);
+  font-size: 0.625rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
   cursor: pointer;
+  transition:
+    background-color 0.2s,
+    color 0.2s,
+    transform 0.15s;
+}
+
+html[data-device="mobile"] .tabbar a:active,
+html[data-device="mobile"] .tabbar button:active {
+  transform: scale(0.92);
 }
 
 html[data-device="mobile"] .tabbar [aria-current="page"] {
-  color: var(--fg);
+  background: color-mix(in srgb, var(--a, var(--accent)) 16%, transparent);
+  color: var(--a, var(--accent));
 }
 
+/* Active icons fill in, like SF Symbols' filled variants. */
 html[data-device="mobile"] .tabbar [aria-current="page"] svg {
-  color: var(--accent);
+  fill: color-mix(in srgb, currentColor 22%, transparent);
+  stroke-width: 2;
+}
+
+html[data-motion="reduce"] .tabbar a:active,
+html[data-motion="reduce"] .tabbar button:active {
+  transform: none;
 }
 
 html[data-device="mobile"] .sheet-scrim {
@@ -1269,15 +1297,17 @@ html[data-device="mobile"] .sheet-scrim {
 html[data-device="mobile"] .sheet:not([hidden]) {
   position: fixed;
   right: max(0.75rem, env(safe-area-inset-right, 0px));
-  bottom: calc(var(--tabbar-h) + env(safe-area-inset-bottom, 0px) + 0.5rem);
+  bottom: calc(var(--tabbar-h) + var(--tabbar-gap) + 0.5rem);
   left: max(0.75rem, env(safe-area-inset-left, 0px));
   z-index: 36;
   display: grid;
   padding: 0.4rem;
-  border: 1px solid var(--line);
-  border-radius: 16px;
-  background: var(--surface);
+  border: 0.5px solid color-mix(in srgb, var(--fg) 14%, transparent);
+  border-radius: 26px;
+  background: color-mix(in srgb, var(--surface) 82%, transparent);
   box-shadow: 0 16px 40px rgb(0 0 0 / 0.25);
+  -webkit-backdrop-filter: saturate(1.8) blur(22px);
+  backdrop-filter: saturate(1.8) blur(22px);
   animation: rise 0.25s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
@@ -1285,7 +1315,7 @@ html[data-device="mobile"] .sheet a {
   display: flex;
   justify-content: space-between;
   padding: 0.9rem 1rem;
-  border-radius: 10px;
+  border-radius: 20px;
   font-weight: 500;
 }
 
@@ -1440,7 +1470,7 @@ html[data-device="mobile"] .sheet a span {
 }
 
 html[data-device="mobile"] .admin-bar {
-  bottom: calc(76px + env(safe-area-inset-bottom, 0px));
+  bottom: calc(var(--tabbar-h) + var(--tabbar-gap) + 0.75rem);
 }
 
 /* Champion panel (tier list): splash, pick quote and abilities from the client files */
@@ -2499,76 +2529,6 @@ html[data-motion="reduce"] *::after {
   font-size: 0.8125rem;
 }
 
-/* Home: augment offer roll. */
-.roll-cards {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 0.6rem;
-}
-
-.roll-card {
-  padding: 0;
-  border: 0;
-  background: none;
-  color: inherit;
-  font: inherit;
-  text-align: left;
-  cursor: pointer;
-  animation: deal 0.45s cubic-bezier(0.16, 1, 0.3, 1) both;
-  transition: transform 0.2s, opacity 0.2s;
-}
-
-.roll-card:not(:disabled):hover {
-  transform: translateY(-3px);
-}
-
-.roll-card:disabled {
-  cursor: default;
-}
-
-.roll-card .aug-card {
-  height: 100%;
-}
-
-.roll-card.dim {
-  opacity: 0.55;
-}
-
-.roll-card.best .aug-card {
-  box-shadow: 0 0 0 2px var(--accent);
-}
-
-.roll-card.picked .aug-card {
-  box-shadow: 0 0 0 2px var(--line);
-}
-
-.roll-foot {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 0.75rem;
-  margin-top: 0.85rem;
-  color: var(--muted);
-  font-size: 0.875rem;
-}
-
-.roll-foot p {
-  margin: 0;
-}
-
-@keyframes deal {
-  from {
-    opacity: 0;
-    transform: translateY(10px) rotateY(60deg);
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .roll-card {
-    animation: none;
-  }
-}
-
 /* Home: Kitchen build with reroll. */
 .kitchen-pick {
   display: flex;
@@ -2590,16 +2550,6 @@ html[data-motion="reduce"] *::after {
 .kitchen-pick .btn {
   align-self: flex-start;
   margin-top: 0.25rem;
-}
-
-@media (max-width: 640px) {
-  .roll-cards {
-    grid-template-columns: 1fr;
-  }
-  .roll-foot {
-    flex-direction: column;
-    align-items: stretch;
-  }
 }
 
 /* Riot ID fields (header account lookup and My Stats): Name # Tag, then Region. */

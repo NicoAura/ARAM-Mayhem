@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { text } from "@/lib/content";
-import { statsDate, counts, augmentPool, kitchenBuilds, livePatch, liveTiers, topAugments, topDps } from "@/lib/highlights";
-import { AugmentRoll, ChampionJump, KitchenPick, TierSnapshot } from "@/components/HomeWidgets";
+import { statsDate, counts, kitchenBuilds, livePatch, liveTiers, topAugments, topDps } from "@/lib/highlights";
+import { ChampionJump, KitchenPick, TierSnapshot } from "@/components/HomeWidgets";
 import { BETA } from "@/lib/beta";
 import { movers } from "@/lib/champions";
 import { KITCHEN, navPages } from "@/lib/tabs";
@@ -14,7 +14,6 @@ const pts = (v: number) => `${v > 0 ? "+" : ""}${(v * 100).toFixed(1)}`;
 
 export default function Home() {
   const tiers = liveTiers();
-  const pool = augmentPool();
   const augs = topAugments();
   const patch = livePatch();
   const builds = kitchenBuilds();
@@ -98,15 +97,6 @@ export default function Home() {
                 </div>
               ))}
             </div>
-          </section>
-        )}
-        {pool.length >= 3 && (
-          <section className="card span-7" data-accent="gold">
-            <div className="card-head">
-              <h2>Roll an augment offer</h2>
-              <Link href="/tier-list?tab=augments">All augments →</Link>
-            </div>
-            <AugmentRoll pool={pool} />
           </section>
         )}
         {builds.length > 0 && (
