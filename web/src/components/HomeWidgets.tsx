@@ -10,7 +10,7 @@ import FavoriteStar from "./FavoriteStar";
 // The home page's interactive pieces: jump to a champion, the live tier snapshot,
 // an augment offer to roll, and a Kitchen build to reroll.
 
-type Champ = { id: string; name: string; tier: string; winRate: number; pickRate: number };
+type Champ = { id: string; name: string; tier: string; winRate: number; pickRate: number; splash?: string };
 type Build = { champion: string; title: string; augments: string[]; why: string };
 
 const pct = (v: number) => `${(v * 100).toFixed(1)}%`;
@@ -140,7 +140,14 @@ export function TierSnapshot({ champs }: { champs: Champ[] }) {
         ))}
       </div>
       {shown && (
-        <div className="snap-card" aria-live="polite">
+        <Link
+          href={`/champions/${shown.id}`}
+          className="snap-card"
+          aria-live="polite"
+          data-tilt="soft"
+          data-parallax
+          style={shown.splash ? ({ "--splash": `url("${shown.splash}")` } as React.CSSProperties) : undefined}
+        >
           <img src={champIcon(shown.id)} alt="" width={44} height={44} />
           <div>
             <b>{shown.name}</b>
@@ -149,7 +156,7 @@ export function TierSnapshot({ champs }: { champs: Champ[] }) {
             </span>
           </div>
           <span className={`chip tier-${shown.tier.toLowerCase()}`}>{shown.tier}</span>
-        </div>
+        </Link>
       )}
     </div>
   );

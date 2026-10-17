@@ -55,14 +55,27 @@ export default async function ChampionPage({ params }: { params: Promise<{ alias
   const c = championSummary((await params).alias);
   const tab = discoverToolTabs().find((t) => t.href === "/champions");
   if (!c) notFound();
+  // Neighbours by name, for the arrows (and phone swipes, lib/subtab-nav.ts).
+  const all = champList();
+  const at = all.findIndex((x) => x.id === c.alias);
+  const prev = all[(at - 1 + all.length) % all.length];
+  const next = all[(at + 1) % all.length];
   return (
     <>
       <SplashAccent src={c.splash} />
-      <section className="champ-hero" style={c.splash ? ({ "--splash": `url("${c.splash}")` } as React.CSSProperties) : undefined}>
+      <section className="champ-hero" data-parallax style={c.splash ? ({ "--splash": `url("${c.splash}")` } as React.CSSProperties) : undefined}>
         <ChampionShowcase alias={c.alias} name={c.name} />
         <p className="eyebrow">
           <Link href="/tier-list">Tier List</Link> · Patch {c.patch}
         </p>
+        <nav className="champ-steps" aria-label="Other champions">
+          <Link href={`/champions/${prev.id}`} data-swipe="prev" rel="prev">
+            ‹ {prev.name}
+          </Link>
+          <Link href={`/champions/${next.id}`} data-swipe="next" rel="next">
+            {next.name} ›
+          </Link>
+        </nav>
         <div className="champ-hero-title">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img className="champ-hero-icon" src={`/icons/champions/${c.alias}.webp`} alt="" width={72} height={72} />
