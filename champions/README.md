@@ -42,3 +42,10 @@ Spatula). The list comes from `guide/augment_rules.json`, so run `guide/build_da
   subclass.
 
 `colors` gives one colour per tag, and `meanings` gives a one-line description of each.
+
+## Champion regions
+
+`build_regions.py` writes `regions.json` (`{"regions": [{key, name}], "champions": {alias: [region keys]}}`) from the
+League of Legends Universe site's champion index, using the aliases in `tags.json`. Universe gives each champion one
+home region; champions without one are under `unaffiliated` ("Runeterra"). The Lab and the Team Builder's region
+filter read it.

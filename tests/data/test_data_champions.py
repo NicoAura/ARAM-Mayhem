@@ -284,3 +284,13 @@ def test_build_style(builder):
     assert builder.build_style([1, 2, 3, 4], items) == "ap"
     assert builder.build_style([1, 2], items) == "crit"  # ties go to the earlier style
     assert builder.build_style([4], items) is None
+
+
+def test_regions():
+    r = load_json("champions/regions.json")
+    keys = [x["key"] for x in r["regions"]]
+    assert len(keys) == len(set(keys)) and all(x["name"] for x in r["regions"])
+    tags = load_json("champions/tags.json")["champions"]
+    assert set(r["champions"]) == set(tags)
+    for alias, regions in r["champions"].items():
+        assert regions and set(regions) <= set(keys), alias
