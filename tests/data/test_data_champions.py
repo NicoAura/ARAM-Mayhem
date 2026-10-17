@@ -311,3 +311,13 @@ def test_mayhem_modifiers():
         for side in ("aram", "mayhem"):
             assert set(c[side]) <= MOD_STATS, alias
             assert all(isinstance(v, (int, float)) and abs(v) <= 100 for v in c[side].values()), alias
+
+
+def test_official_patch_notes():
+    notes = load_json("data/official/patch_notes.json")["patches"]
+    patches = [p["patch"] for p in notes]
+    assert len(patches) == len(set(patches)) >= 20
+    for p in notes:
+        assert p["url"].startswith("https://www.leagueoflegends.com/"), p["patch"]
+        for c in p["champions"] + p["augments"]:
+            assert c["name"] and all(isinstance(x, str) and x for x in c["changes"]), (p["patch"], c["name"])
