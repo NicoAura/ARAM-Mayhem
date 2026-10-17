@@ -43,8 +43,8 @@
   --depth-hover: inset 0 1px 0 rgb(255 255 255 / 0.85), 0 2px 4px rgb(31 41 55 / 0.08), 0 10px 20px rgb(31 41 55 / 0.1),
     0 22px 44px rgb(31 41 55 / 0.1);
   --depth-tile: inset 0 1px 0 rgb(255 255 255 / 0.85), 0 1px 2px rgb(31 41 55 / 0.07), 0 2px 6px rgb(31 41 55 / 0.05);
-  /* Headlines and numbers share the text face; numbers line up through tabular figures on body. */
-  --display: var(--font-sans), system-ui, sans-serif;
+  /* Headlines use the display face; numbers share the text face and line up through tabular figures on body. */
+  --display: var(--font-display), var(--font-sans), system-ui, sans-serif;
   --mono: var(--font-sans), system-ui, sans-serif;
 }
 
@@ -6169,8 +6169,15 @@ main {
 h1 {
   max-width: 24em;
   font-size: clamp(1.9rem, 4vw, 2.6rem);
-  font-weight: 750;
-  letter-spacing: -0.035em;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+/* Section and card titles and the big stat numbers share the headline face. */
+h2,
+.card-head h2,
+.stat-row b {
+  font-family: var(--display);
 }
 
 /* Labels read as normal text instead of small spaced capitals. */
