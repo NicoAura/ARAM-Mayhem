@@ -2668,18 +2668,15 @@ html[data-motion="reduce"] *::after {
 }
 
 /* Buttons and switches use the accent instead of plain black or white. */
+/* Solid accent fill, no gradient or lift (Soft look). */
 .btn:not(.ghost) {
-  background: linear-gradient(135deg, var(--accent), rgb(var(--accent-rgb) / 60%));
-  background: linear-gradient(135deg, var(--accent), color-mix(in srgb, var(--accent) 60%, var(--hue-sim)));
+  background: var(--accent);
   color: var(--accent-ink);
-  transition:
-    filter 0.15s,
-    transform 0.15s;
+  transition: filter 0.15s;
 }
 
 .btn:not(.ghost):hover:not(:disabled) {
-  filter: brightness(1.08) saturate(1.1);
-  transform: translateY(-1px);
+  filter: brightness(1.08);
 }
 
 .btn.ghost:hover:not(:disabled) {
