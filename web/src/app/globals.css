@@ -5288,3 +5288,50 @@ html[data-champ-accent] .champ-hero {
   border-color: color-mix(in srgb, var(--accent) 35%, var(--line));
   box-shadow: 0 30px 80px -50px var(--accent);
 }
+
+/* New-version toast (components/UpdateToast.tsx) */
+.update-toast {
+  position: fixed;
+  top: calc(env(safe-area-inset-top, 0px) + 72px);
+  left: 50%;
+  z-index: 45;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  max-width: calc(100% - 2rem);
+  padding: 0.5rem 0.5rem 0.5rem 1rem;
+  border: 1px solid color-mix(in srgb, var(--accent) 45%, var(--line));
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--surface) 92%, transparent);
+  box-shadow: 0 14px 34px -18px rgb(0 0 0 / 0.6);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  font-size: 0.875rem;
+  translate: -50% 0;
+  animation: toast-in 0.35s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+[data-motion="reduce"] .update-toast {
+  animation: none;
+}
+
+@keyframes toast-in {
+  from {
+    opacity: 0;
+    translate: -50% -0.75rem;
+  }
+}
+
+.update-toast .btn {
+  height: 32px;
+  padding: 0 0.9rem;
+}
+
+.update-close {
+  border: 0;
+  background: none;
+  color: var(--muted);
+  font-size: 1.2rem;
+  line-height: 1;
+  cursor: pointer;
+}

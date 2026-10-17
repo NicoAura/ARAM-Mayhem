@@ -11,6 +11,7 @@ import CountUp from "@/components/CountUp";
 import KeyboardShortcuts from "@/components/KeyboardShortcuts";
 import HeaderScroll from "@/components/HeaderScroll";
 import FirstVisitTour from "@/components/FirstVisitTour";
+import UpdateToast from "@/components/UpdateToast";
 import AccountButton from "@/components/AccountButton";
 import BrandMark from "@/components/BrandMark";
 import MobileTabBar from "@/components/MobileTabBar";
@@ -139,6 +140,7 @@ export default function RootLayout({
         <KeyboardShortcuts />
         <HeaderScroll />
         <FirstVisitTour />
+        <UpdateToast />
         <MobileTabBar tabs={navPages().map(({ href, label }) => ({ href, label }))} />
       </body>
     </html>
