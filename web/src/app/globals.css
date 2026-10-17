@@ -1436,6 +1436,9 @@ html[data-device="mobile"] .sheet:not([hidden]) {
   left: max(0.75rem, env(safe-area-inset-left, 0px));
   z-index: 36;
   display: grid;
+  max-height: calc(100dvh - var(--tabbar-h) - var(--tabbar-gap) - 4rem);
+  overflow-y: auto;
+  overscroll-behavior: contain;
   padding: 0.4rem;
   border: 0.5px solid color-mix(in srgb, var(--fg) 14%, transparent);
   border-radius: 26px;
@@ -1460,6 +1463,19 @@ html[data-device="mobile"] .sheet a[aria-current="page"] {
 
 html[data-device="mobile"] .sheet a span {
   color: var(--muted);
+}
+
+html[data-device="mobile"] .sheet .sheet-group {
+  margin: 0.75rem 1rem 0.25rem;
+  color: var(--muted);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+html[data-device="mobile"] .sheet .sheet-group:first-child {
+  margin-top: 0.25rem;
 }
 
 /* Announcement bar (text set at /admin) */

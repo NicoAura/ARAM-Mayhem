@@ -23,7 +23,7 @@ import { text } from "@/lib/content";
 import { searchPages } from "@/lib/highlights";
 import { SETTINGS_SCRIPT } from "@/lib/settings";
 import { THEME_COLORS, THEME_KEY } from "@/lib/theme";
-import { navItems, navPages } from "@/lib/tabs";
+import { navGroups, navItems } from "@/lib/tabs";
 import "./globals.css";
 import OfflineSupport from "@/components/OfflineSupport";
 import SkipLink from "@/components/SkipLink";
@@ -155,7 +155,7 @@ export default function RootLayout({
         <ViewMemory />
         <BackToTop />
         <RecentTracker />
-        <MobileTabBar tabs={navPages().map(({ href, label }) => ({ href, label }))} />
+        <MobileTabBar tabs={navGroups().map(({ href, label, group }) => ({ href, label, group }))} />
       </body>
     </html>
   );

@@ -68,18 +68,24 @@ const pick = (href: string): NavItem[] => {
   return t ? [{ href: t.href, label: t.label, body: t.body }] : [];
 };
 
-/** The header's tabs: Tier List, Simulator, PBE, and a More menu (Compare, Build Editor, Team Builder, Patch Recaps, Info, The Lab, any newer tool folder).
- *  My Stats sits behind the account button; champion pages (/champions/<Alias>) open from the Tier List and search. */
+/** The header's tabs, grouped by what a player is trying to do:
+ *  Tier List · Builds (what to build and which augments) · Simulator · Patches (live recaps and the PBE) · More (Info, The Lab, newer tool folders).
+ *  My Stats sits behind the account button; champion, augment and item pages open from the tier lists and search. */
 export function navItems(): NavItem[] {
   const tools = discoverToolTabs().filter((t) => t.href.startsWith("/tools/"));
-  const more = [...pick("/compare"), ...pick("/augments"), ...pick("/what-to-build"), ...pick("/builder"), ...pick("/draft"), ...pick("/synergy"), ...pick("/patches"), ...pick("/info"), ...pick("/lab"), ...tools.flatMap((t) => pick(t.href))];
+  const menu = (href: string, label: string, children: NavItem[]): NavItem[] => (children.length ? [{ href, label, children }] : []);
   return [
     ...pick("/tier-list"),
+    ...menu("#builds", "Builds", [...pick("/what-to-build"), ...pick("/augments"), ...pick("/builder"), ...pick("/compare"), ...pick("/synergy"), ...pick("/draft")]),
     ...pick("/simulator"),
-    ...pick("/pbe"),
-    ...(more.length ? [{ href: "#more", label: "More", children: more }] : []),
+    ...menu("#patches", "Patches", [...pick("/pbe"), ...pick("/patches")]),
+    ...menu("#more", "More", [...pick("/info"), ...pick("/lab"), ...tools.flatMap((t) => pick(t.href))]),
   ];
 }
 
 /** Every page in header order, menus flattened (search, home page). */
 export const navPages = (): NavItem[] => navItems().flatMap((t) => t.children ?? [t]);
+
+/** Every page with the header menu it sits in (phone tab bar sheet). */
+export const navGroups = (): (NavItem & { group?: string })[] =>
+  navItems().flatMap((t) => (t.children ? t.children.map((c) => ({ ...c, group: t.label })) : [t]));
