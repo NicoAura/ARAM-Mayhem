@@ -81,6 +81,7 @@ std::map<std::string, Effect> loadEffects(const json::Value& obj, const char* de
         e.stats = bagOf(v["stats"]);
         e.effects = bagOf(v["effects"]);
         e.needsItem = v["requires_item"].asString();
+        e.group = v["group"].asString();
         e.bind = v["spell_bind"].asString();
         out[key] = e;
     }
@@ -327,6 +328,7 @@ Library Library::load(const std::string& rulesPath, const Settings& settings, co
     const json::Value root = json::parse(readFile(rulesPath));
     const json::Value& r = root["rules"];
     lib.rules.critMult = ruleValue(r, "base_crit_multiplier", 2.0);
+    lib.rules.grievous = ruleValue(r, "grievous_wounds", 0.4);
     lib.rules.critOverflowAd = ruleValue(r, "crit_overflow_ad_per_percent", 0.45);
     lib.rules.asCap = ruleValue(r, "attack_speed_cap", 5.0);
     const json::Value& m = root["model"];
@@ -452,7 +454,8 @@ static double offense(const ChampionKit& k, int level, const std::vector<const E
     if (ap >= ad) ap *= 1.0 + adaptive; else ad *= 1.0 + adaptive;
     ap *= 1.0 + apAmp;
     crit = std::min(1.0, crit);
-    const double phys = (k.ad + k.adG * g + ad) * (1.0 + crit * (0.75 + critDamage)) * (1.0 + 0.35 * (k.asG * g + as));
+    // Mayhem crits deal 200% (base_crit_multiplier).
+    const double phys = (k.ad + k.adG * g + ad) * (1.0 + crit * (1.0 + critDamage)) * (1.0 + 0.35 * (k.asG * g + as));
     const double magic = 40.0 + 8.0 * (level - 1) + 0.7 * ap;
     return (physShare * phys / (k.ad + k.adG * 12) + (1.0 - physShare) * magic / 170.0) * (1.0 + amp);
 }
@@ -645,6 +648,11 @@ Scenario Library::scenarioFor(const ChampionKit& c) const {
 void Library::validate(const Build& b) const {
     for (const auto& i : b.items)
         if (!items.count(i)) throw std::runtime_error("unknown item '" + i + "'");
+    for (size_t i = 0; i < b.items.size(); ++i)
+        for (size_t j = i + 1; j < b.items.size(); ++j)
+            if (!items.at(b.items[i]).group.empty() && items.at(b.items[i]).group == items.at(b.items[j]).group)
+                throw std::runtime_error(items.at(b.items[i]).name + " and " + items.at(b.items[j]).name +
+                                         " can't be bought together");
     for (const auto& a : b.augments)
         if (!augments.count(a)) throw std::runtime_error("unknown augment '" + a + "'");
 }
@@ -686,6 +694,9 @@ struct Enemy {
     Vec dodgeVel;
     // Your crowd control on it: can't act (stun, knockup...), can't move (root), slowed.
     double ccUntil = -1, rootUntil = -1, slowUntil = -1, slow = 0, silenceUntil = -1;
+    bool antiHeal = false;  // its build applies Grievous Wounds (Morellonomicon, Thornmail...)
+    double armor = 0, amp = 1;  // its own Armor and damage-taken factor, for armor shred that builds up
+    int cleaver = 0;            // Black Cleaver stacks on it (up to 5)
     std::vector<double> castReady;  // its own abilities: when each is next up
 };
 
@@ -819,6 +830,13 @@ private:
     Enemy& P() { return enemies_[static_cast<size_t>(primary_)]; }
     bool hasPrimary() const { return primary_ >= 0 && enemies_[static_cast<size_t>(primary_)].alive; }
     Vec me_;
+    // Move speed after the game's soft caps: past 415 only 80% of the rest counts, past 490 only 50%.
+    double effMs() const {
+        double ms = moveSpeed_;
+        if (ms > 490) ms = 415 + 0.8 * 75 + 0.5 * (ms - 490);
+        else if (ms > 415) ms = 415 + 0.8 * (ms - 415);
+        return ms;
+    }
     double moveSpeed_ = 335, posClock_ = 0, nextPosAt_ = 0, busyUntil_ = 0, wantRange_ = 0;
     Rng moveRng_{1, 2};
     double exposureSum_ = 0, exposureTime_ = 0;
@@ -870,7 +888,7 @@ private:
     }
 
     void updateAs() {
-        attackSpeed_ = std::min(asCap_, (ch_.as + ch_.asRatio * (bonusAs_ + tempAs_ + msToAs_ * moveSpeed_)) *
+        attackSpeed_ = std::min(asCap_, (ch_.as + ch_.asRatio * (bonusAs_ + tempAs_ + msToAs_ * effMs())) *
                                             (1.0 + get(fx_, "total_as_mult") + ch_.mayhemAs));
     }
 
@@ -1151,6 +1169,9 @@ private:
     uint64_t targetSeed_ = 0;
 
     void setupDefences() {
+        // Tenacity (Mercury's Treads) shortens the crowd control drawn for the fight.
+        if (const double ten = std::clamp(get(fx_, "tenacity"), 0.0, 1.0); ten > 0)
+            for (auto& [a, b] : cc_) b = a + (b - a) * (1.0 - ten);
         // Enemy spawns and movement use their own streams so builds that kill faster
         // don't shift the rest of the fight's random draws.
         ccLeft_ = std::clamp(1.0 - std::max<size_t>(1, team_.size()) / 5.0, 0.0, 1.0);
@@ -1294,10 +1315,12 @@ private:
                 if (now < reductionUntil_) dmg *= 1.0 - get(fx_, "r_reduction");
                 total += dmg;
                 if (!c.cc.empty() && abilityRng_.chance(c.ccChance * acting)) {
-                    cc_.push_back({now, now + c.ccDuration});
+                    // Tenacity shortens it, except knock-ups.
+                    const double ten = c.cc == "knockup" ? 0.0 : std::clamp(get(fx_, "tenacity"), 0.0, 1.0);
+                    cc_.push_back({now, now + c.ccDuration * (1.0 - ten)});
                     if (trace_ && e.profile) {
                         TraceEvent ev;
-                        ev.t = now; ev.kind = "cc"; ev.amount = now + c.ccDuration;
+                        ev.t = now; ev.kind = "cc"; ev.amount = cc_.back().second;
                         ev.who = e.profile->id; ev.slot = c.slot; ev.text = c.cc;
                         record(ev);
                     }
@@ -1305,6 +1328,14 @@ private:
             }
         }
         return total;
+    }
+
+    // Physical damage taken per point: its Armor after shred and your penetration. Black Cleaver's
+    // shred builds up with each physical hit (5 stacks).
+    double physMultOf(const Enemy& e) const {
+        const double cleaver = get(fx_, "cleaver_shred") * std::min(e.cleaver, 5) / 5.0;
+        const double armor = std::max(0.0, e.armor * (1.0 - get(fx_, "armor_shred")) * (1.0 - cleaver) * (1.0 - armorPen_) - lethality_);
+        return 100.0 / (100.0 + armor) * e.amp;
     }
 
     Enemy spawnEnemy(const EnemyProfile* prof) {
@@ -1316,14 +1347,16 @@ private:
         e.uid = nextUid_++;
         e.maxHp = p.hpSd > 0 ? std::max(0.5 * p.hp, targetRng_.normal(p.hp, p.hp * p.hpSd)) : p.hp;
         e.hp = e.maxHp;
-        const double armor = std::max(0.0, p.armor * (1.0 - get(fx_, "armor_shred")) * (1.0 - armorPen_) - lethality_);
         const double mr = std::max(0.0, p.mr * (1.0 - get(fx_, "mr_shred")) * (1.0 - magicPenPct_) - magicPen_);
         const double amp = damageAmp_ * p.damageTaken;
-        e.physMult = 100.0 / (100.0 + armor) * amp;
+        e.armor = p.armor; e.amp = amp;
+        e.physMult = physMultOf(e);
         e.magicMult = 100.0 / (100.0 + mr) * amp;
         e.trueMult = amp;
         e.moveSpeed = p.moveSpeed;
         e.reach = p.reach;
+        for (const auto& it : p.items)
+            if (const auto f = lib_.items.find(it); f != lib_.items.end() && get(f->second.effects, "grievous") > 0) e.antiHeal = true;
         if (trace_) {
             TraceEvent ev;
             ev.t = t_; ev.kind = "spawn"; ev.target = e.uid; ev.text = p.id; ev.hp = e.hp; ev.maxHp = e.maxHp;
@@ -1514,14 +1547,14 @@ private:
         const double want = std::max(wantRange_ - 15, 2 * rules_.hitbox);
         Vec v{0, 0};
         if (d > want) {
-            v = unit(toT) * moveSpeed_;
+            v = unit(toT) * effMs();
         } else if (attackRange_ >= 300) {
             // Ranged: step back from anyone short-ranged who is getting close, if the target stays in range.
             for (const auto& e : enemies_) {
                 if (!e.alive || e.reach >= attackRange_) continue;
                 const Vec away = me_ - e.pos;
                 if (len(away) < e.reach + 2 * rules_.hitbox + 80 && d < attackReach() - 60) {
-                    v = unit(away) * (0.8 * moveSpeed_);
+                    v = unit(away) * (0.8 * effMs());
                     break;
                 }
             }
@@ -1599,6 +1632,10 @@ private:
 
     void heal(double amount) {
         if (dead_ || amount <= 0) return;
+        amount *= 1.0 + get(fx_, "healing_received");  // Spirit Visage
+        // Grievous Wounds: an enemy whose build applies it and who can reach you cuts your healing by 40%.
+        for (const auto& e : enemies_)
+            if (e.alive && e.antiHeal && distTo(e) <= e.reach + 2 * rules_.hitbox) { amount *= 1.0 - rules_.grievous; break; }
         const double got = std::min(maxHp_, myHp_ + amount) - myHp_;
         myHp_ += got;
         res_.healed += got;
@@ -1623,8 +1660,9 @@ private:
         const double until = t_ + a.ccDuration;
         double& held = a.cc == "slow" ? e.slowUntil : a.cc == "root" ? e.rootUntil : a.cc == "silence" ? e.silenceUntil : e.ccUntil;
         res_.ccDealt += std::max(0.0, until - std::max(t_, held));
+        // Only the strongest slow counts while several overlap.
+        if (a.cc == "slow") e.slow = t_ < held ? std::max(e.slow, a.ccSlow) : a.ccSlow;
         held = std::max(held, until);
-        if (a.cc == "slow") e.slow = a.ccSlow;
         if (trace_) {
             TraceEvent ev;
             ev.t = t_; ev.kind = "ecc"; ev.target = e.uid; ev.text = a.cc; ev.amount = until; ev.total = res_.ccDealt;
@@ -1681,7 +1719,7 @@ private:
             if (itemCrit_ > 0) raw *= 1.0 + crit_ * (itemCrit_ - 1.0);  // Vulnerability: expected crits
         }
         if (msDiffAmp_ > 0)  // Don't Blink: more damage the faster you are than the target
-            raw *= 1.0 + std::min(0.5, msDiffAmp_ * std::max(0.0, moveSpeed_ - (target->moveSpeed > 0 ? target->moveSpeed : 345.0)));
+            raw *= 1.0 + std::min(0.5, msDiffAmp_ * std::max(0.0, effMs() - (target->moveSpeed > 0 ? target->moveSpeed : 345.0)));
         if (t_ < rWindowUntil_) raw *= 1.0 + rWindowAmp_;
         if (openAmp_ > 0 && t_ < firstHitAt_ + openFor_) raw *= 1.0 + openAmp_;  // First Strike
         const double mult = type == DamageType::Physical ? target->physMult
@@ -1694,6 +1732,10 @@ private:
             vamp += get(fx_, "vamp_missing") * std::clamp((1.0 - myHp_ / maxHp_) / 0.7, 0.0, 1.0);
         heal(dmg * vamp);
         target->hp -= dmg;
+        if (type == DamageType::Physical && target->cleaver < 5 && get(fx_, "cleaver_shred") > 0) {
+            ++target->cleaver;
+            target->physMult = physMultOf(*target);
+        }
         res_.bySource[src] += dmg;
         res_.totalDamage += dmg;
         if (res_.firstHit < 0) res_.firstHit = t_;
@@ -2783,6 +2825,15 @@ void parallelFor(int n, int threads, F fn) {
 #endif
 }
 
+// Whether an item shares a unique group (Last Whisper, Hydra...) with one already in the build.
+bool clashes(const Library& lib, const std::vector<std::string>& items, const std::string& item) {
+    const std::string& g = lib.items.at(item).group;
+    if (g.empty()) return false;
+    for (const auto& i : items)
+        if (lib.items.at(i).group == g) return true;
+    return false;
+}
+
 void combinations(int n, int k, int start, std::vector<int>& cur, std::vector<std::vector<int>>& out) {
     if (static_cast<int>(cur.size()) == k) { out.push_back(cur); return; }
     for (int i = start; i <= n - (k - static_cast<int>(cur.size())); ++i) {
@@ -2821,7 +2872,8 @@ std::vector<Ranked> optimize(const Library& lib, const ChampionKit& c, const Sce
             std::vector<std::pair<double, std::string>> scored(legendaries.size());
             parallelFor(static_cast<int>(legendaries.size()), threads, [&](int i) {
                 Build b = g;
-                if (std::find(b.items.begin(), b.items.end(), legendaries[i]) != b.items.end()) {
+                if (std::find(b.items.begin(), b.items.end(), legendaries[i]) != b.items.end() ||
+                    clashes(lib, b.items, legendaries[i])) {
                     scored[i] = {-1, legendaries[i]};
                     return;
                 }
@@ -2860,7 +2912,10 @@ std::vector<Ranked> optimize(const Library& lib, const ChampionKit& c, const Sce
     std::vector<std::pair<double, int>> results(combos.size());
     parallelFor(static_cast<int>(combos.size()), threads, [&](int i) {
         Build b{{bestBoots}, {}};
-        for (int j : combos[i]) b.items.push_back(pool[j]);
+        for (int j : combos[i]) {
+            if (clashes(lib, b.items, pool[j])) { results[i] = {-1, i}; return; }
+            b.items.push_back(pool[j]);
+        }
         results[i] = {score(lib, c, b, sc, os.screenTrials, metric), i};
     });
     std::sort(results.rbegin(), results.rend());

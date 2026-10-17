@@ -119,6 +119,7 @@ struct ChampionKit {
 
 struct Effect {
     std::string key, name, slot, rarity, confidence;
+    std::string group;      // items of one group (Last Whisper, Blight, Hydra, Lifeline) can't be bought together
     std::string needsItem;  // augments that only work with an item (Upgrade Infinity Edge): its key
     std::string bind;      // augments on one of your abilities: which kind it picks (any, aoe, missile, cc, buff)
     int id = 0;
@@ -129,6 +130,7 @@ struct Effect {
 
 struct Rules {
     double critMult = 2.0, critOverflowAd = 0.45, asCap = 5.0;
+    double grievous = 0.4;  // healing cut by Grievous Wounds
     double extraHitWeight = 0.5;
     double castMin = 0.0, castMax = 1.5, minCooldown = 0.75, dotDuration = 3.0, spellbladeWindow = 10.0;
     // Positions: whether a skillshot lands comes from where everyone stands and moves.

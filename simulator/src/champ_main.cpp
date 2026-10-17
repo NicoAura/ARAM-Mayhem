@@ -146,7 +146,8 @@ bool writeTrace(const Library& lib, const ChampionKit& c, const Build& b, const 
         o << (i ? ", " : "") << "{\"slot\": \"" << a.slot << "\", \"name\": " << jsonStr(a.name)
           << ", \"cooldown\": " << num(a.cooldown) << ", \"passive\": " << (a.aura || a.onhitEvery > 0 ? "true" : "false")
           << ", \"range\": " << num(a.geo.range) << ", \"radius\": " << num(a.geo.radius)
-          << ", \"width\": " << num(a.geo.width) << ", \"angle\": " << num(a.geo.angle) << "}";
+          << ", \"width\": " << num(a.geo.width) << ", \"angle\": " << num(a.geo.angle)
+          << ", \"speed\": " << num(a.geo.speed) << "}";
     }
     o << "],\n \"summary\": " << summaryJson(summary);
     o << ",\n \"fight\": {\"trial\": " << trial << ", \"seed\": " << sc.seed << ", \"duration\": " << num(tr.result.duration)
@@ -373,9 +374,10 @@ int main(int argc, char** argv) {
             for (const auto& [k, e] : m) {
                 std::string roles;
                 for (size_t i = 0; i < e.roles.size(); ++i) roles += (i ? ", " : "") + jsonStr(e.roles[i]);
-                std::printf("%s{\"key\": %s, \"name\": %s, \"slot\": %s, \"rarity\": %s, \"roles\": [%s], \"modeled\": %s}",
+                std::printf("%s{\"key\": %s, \"name\": %s, \"slot\": %s, \"rarity\": %s, \"roles\": [%s], \"modeled\": %s%s}",
                             first ? "" : ", ", jsonStr(k).c_str(), jsonStr(e.name).c_str(), jsonStr(e.slot).c_str(),
-                            jsonStr(e.rarity).c_str(), roles.c_str(), e.stats.empty() && e.effects.empty() ? "false" : "true");
+                            jsonStr(e.rarity).c_str(), roles.c_str(), e.stats.empty() && e.effects.empty() ? "false" : "true",
+                            e.group.empty() ? "" : (", \"group\": " + jsonStr(e.group)).c_str());
                 first = false;
             }
         };

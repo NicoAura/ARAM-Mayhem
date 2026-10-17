@@ -181,10 +181,6 @@
      "rank": 3,
      "cooldown": 80.0,
      "cast_time": 0.25,
-     "cc": {
-      "type": "fear",
-      "duration": 3.0
-     },
      "targeting": "SelfAoe",
      "area": "aoe",
      "duration": 10.0,
@@ -227,7 +223,12 @@
     }
    ],
    "parse_quality": "good",
-   "notes": []
+   "notes": [],
+   "kit": {
+    "stats": {
+     "omnivamp": 0.2
+    }
+   }
   },
   {
    "id": "Ahri",
@@ -6484,7 +6485,7 @@
      "cast_time": 0.25,
      "cc": {
       "type": "knockup",
-      "duration": 2.0
+      "duration": 0.75
      },
      "cost": 70.0,
      "targeting": "Location",
@@ -11442,7 +11443,7 @@
      "cast_time": 0.25,
      "cc": {
       "type": "knockup",
-      "duration": 3.0
+      "duration": 0.5
      },
      "heal": {
       "scaling": {
@@ -19140,10 +19141,6 @@
      "rank": 3,
      "cooldown": 130.0,
      "cast_time": 0.713,
-     "cc": {
-      "type": "root",
-      "duration": 3.0
-     },
      "heal": {
       "scaling": {
        "const": 350.0,
@@ -22128,10 +22125,6 @@
      "rank": 3,
      "cooldown": 80.0,
      "cast_time": 0.0,
-     "cc": {
-      "type": "root",
-      "duration": 3.0
-     },
      "cost": 100.0,
      "targeting": "Self",
      "area": "aoe",
@@ -31919,8 +31912,8 @@
      "cast_time": 0.0,
      "cc": {
       "type": "slow",
-      "duration": 5.0,
-      "amount": 0.3
+      "duration": 0.1,
+      "amount": 0.75
      },
      "cost": 20.0,
      "targeting": "Self",

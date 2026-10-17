@@ -87,7 +87,7 @@ int main(int argc, char** argv) {
     quick.optimizer.candidates = 8;
     quick.optimizer.finalists = 4;
     const auto ranked = optimize(quick, *ahri, sc, 2, 3);
-    const Build manual{{"sorcerers", "rabadons", "void_staff", "shadowflame", "cryptbloom", "horizon_focus"}, {}};
+    const Build manual{{"sorcerers", "rabadons", "void_staff", "shadowflame", "stormsurge", "horizon_focus"}, {}};
     const double manualDps = meanDps(quick, *ahri, manual, sc, 400);
     CHECK(!ranked.empty() && ranked.front().build.items.size() == 6 && ranked.front().build.augments.size() == 4,
           "optimizer returns boots, five legendaries and four augments");

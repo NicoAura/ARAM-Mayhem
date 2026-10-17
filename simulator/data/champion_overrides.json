@@ -168,6 +168,10 @@
     "QEdgeDamage": 3.75
    },
    "why": "The Darkin Blade is three casts per cooldown, dealing 100/125/150%"
+  },
+  "R": {
+   "cc": null,
+   "why": "World Ender fears only minions; no crowd control on champions"
   }
  },
  "Gwen": {
@@ -584,7 +588,12 @@
     "BonusAD": 0,
     "SappedAD": 0
    },
-   "why": "resets the basic attack timer; BonusAD/SappedAD are AD steal values, not damage"
+   "why": "resets the basic attack timer; BonusAD/SappedAD are AD steal values, not damage; Chomp's slow is a brief 75%; the 5 s is its attack damage drain",
+   "cc": {
+    "type": "slow",
+    "duration": 0.1,
+    "amount": 0.75
+   }
   }
  },
  "MonkeyKing": {
@@ -963,6 +972,13 @@
     "RCalculatedDamage": 2
    },
    "why": "Whirling Death hits on the way out and on the way back"
+  },
+  "E": {
+   "cc": {
+    "type": "knockup",
+    "duration": 0.75
+   },
+   "why": "Stand Aside knocks aside briefly; the 2 s was its slow"
   }
  },
  "Evelynn": {
@@ -1219,6 +1235,10 @@
   "E": {
    "cooldown": 4,
    "why": "each Olaf basic attack reduces Reckless Strike's cooldown by 1s"
+  },
+  "R": {
+   "cc": null,
+   "why": "Ragnarok makes Olaf immune to crowd control; it puts none on enemies"
   }
  },
  "Pantheon": {
@@ -1667,6 +1687,21 @@
   "W": {
    "heal": null,
    "why": "no self-heal: W heals allies only"
+  }
+ },
+ "Milio": {
+  "R": {
+   "cc": null,
+   "why": "Breath of Life cleanses allies; no crowd control on enemies"
+  }
+ },
+ "Janna": {
+  "R": {
+   "cc": {
+    "type": "knockup",
+    "duration": 0.5
+   },
+   "why": "Monsoon knocks enemies back briefly; the 3 s is its channel"
   }
  }
 }

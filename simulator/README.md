@@ -117,11 +117,17 @@ Settings: `start_distance`, `enemy_spread` (fight), `dodge_chance` 0.75, `reacti
 | `onhit_cur_hp`, `onhit_own_hp`, `onhit_magic(_ap)` | on-hit damage |
 | `kraken_*`, `phantom_every` | every-Nth-attack procs |
 | `armor_shred`, `cleave_ad` | armor reduction, splash damage |
+| `cleaver_shred` | Black Cleaver: armor reduction that builds up over 5 physical hits on each enemy |
+| `grievous` | the item applies Grievous Wounds: an enemy carrying it cuts your healing by 40% while it can reach you |
+| `tenacity` | shortens crowd control on you (not knock-ups) |
+| `healing_received` | more healing from every source (Spirit Visage) |
 | `ability_amp`, `ap_amp`, `damage_amp` | damage or AP multipliers |
 | `maxhp_proc(_cd)` | max-HP damage proc with a cooldown |
 | `burn_*` | damage over time after an ability hits |
 | `proc_*`, `active_*` | Luden's-style procs and active items |
 | `aura_flat`, `aura_bonus_hp` | Sunfire-style aura damage per second |
+
+Items that share a group in `item_effects.json` (`group`: Last Whisper, Blight, Hydra, Lifeline) can't be in one build, as in the game: `--items` with two of them is an error and the build search skips such pairs. Move speed goes through the game's soft caps (above 415 only 80% counts, above 490 only 50%).
 
 `data/augments.json` has every Mayhem augment in the live patch (216), with Riot's Kiwi ids. 141 of them have an effect in the simulator; the rest carry a `not_modeled` reason (they help allies, change summoner spells, give gold or items, need takedowns or movement, or double champion stacks) and the optimizer skips them. The original 14 augments keep a hand-written mapping in `tools/build_augments.py`; every other augment's effect keys are written in `tools/augment_effects.py`, with values read from the augment spell's DataValues and calculations (`dv`, `calc`, and `lvl` for values that grow from level 1 to 18). Values with no client equivalent stay hand-written with a note: Erosion assumes 15 stacks on average, Tank Engine 10 takedowns, and Witchful Thinking gives 20-80 AP by level as its tooltip shows (its unused DataValue says 70).
 

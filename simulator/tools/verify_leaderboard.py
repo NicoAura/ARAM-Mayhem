@@ -51,6 +51,9 @@ def check(row, meta):
         return None, "unknown item"
     if sum(meta["items"][k]["slot"] == "boots" for k in items) > 1:
         return None, "two boots"
+    groups = [meta["items"][k]["group"] for k in items if meta["items"][k].get("group")]
+    if len(set(groups)) != len(groups):
+        return None, "two items of one group"
     if len(augs) > 4 or len(set(augs)) != len(augs) or any(a not in champ["augments"] for a in augs):
         return None, "augments"
     return champ["id"], None
