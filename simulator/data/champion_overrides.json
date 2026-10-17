@@ -431,7 +431,10 @@
  "Illaoi": {
   "W": {
    "attack_reset": true,
-   "why": "resets the basic attack timer"
+   "why": "resets the basic attack timer; Harsh Lesson makes Illaoi lunge at the target",
+   "geometry": {
+    "move": "dash"
+   }
   }
  },
  "Jax": {
@@ -1182,6 +1185,10 @@
     "duration": 1.5
    },
    "why": "Soul Shackles stuns for 1.5s, not 2"
+  },
+  "E": {
+   "cc": null,
+   "why": "Black Shield is a spell shield on an ally; it roots no one"
   }
  },
  "Naafiri": {
@@ -1492,7 +1499,10 @@
    "alt_calcs": [
     "CriticalDamage"
    ],
-   "why": "melee crit version replaces the leap damage"
+   "why": "melee crit version replaces the leap damage; Noxian Diplomacy leaps Talon to his target when out of melee range",
+   "geometry": {
+    "move": "dash"
+   }
   }
  },
  "Thresh": {
@@ -1635,6 +1645,12 @@
     "QDamage": 0.5
    },
    "why": "Mortal Steel's single strike is listed twice and counted twice"
+  },
+  "E": {
+   "geometry": {
+    "move": "dash"
+   },
+   "why": "Soul Unbound dashes Yone's spirit forward"
   }
  },
  "Yuumi": {
@@ -1659,6 +1675,12 @@
     "speed": 1700
    },
    "why": "Razor Shuriken missile speed is 1700, not 902"
+  },
+  "W": {
+   "geometry": {
+    "move": "blink"
+   },
+   "why": "Living Shadow's recast swaps Zed to his shadow"
   }
  },
  "Ziggs": {
@@ -1702,6 +1724,42 @@
     "duration": 0.5
    },
    "why": "Monsoon knocks enemies back briefly; the 3 s is its channel"
+  }
+ },
+ "Khazix": {
+  "R": {
+   "cc": null,
+   "why": "Void Assault turns Kha'Zix invisible; it slows no one"
+  }
+ },
+ "Kayn": {
+  "E": {
+   "cc": null,
+   "why": "Shadow Step lets Kayn walk through walls; it roots no one"
+  }
+ },
+ "JarvanIV": {
+  "R": {
+   "geometry": {
+    "move": "dash"
+   },
+   "why": "Cataclysm leaps Jarvan onto the target"
+  }
+ },
+ "Volibear": {
+  "R": {
+   "geometry": {
+    "move": "dash"
+   },
+   "why": "Stormbringer leaps Volibear to the target area"
+  }
+ },
+ "Warwick": {
+  "Q": {
+   "geometry": {
+    "move": "dash"
+   },
+   "why": "Jaws of the Beast held down makes Warwick leap with his target"
   }
  }
 }
