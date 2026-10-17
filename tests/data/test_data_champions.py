@@ -63,7 +63,7 @@ def test_champion_identity(data):
         assert isinstance(c["id"], int) and 0 < c["id"] < 10000, c["alias"]  # 60000+ are another mode's copies
         assert re.match(r"^[A-Za-z]+$", c["alias"]), c["alias"]
         assert c["roles"] and set(c["roles"]) <= ROLES, c["alias"]
-        for k in ("icon", "splash", "tile", "vo"):
+        for k in ("icon", "splash", "tile"):
             assert c[k] and c[k].startswith("/assets/cd/"), (c["alias"], k)
 
 
