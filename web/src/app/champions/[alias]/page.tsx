@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import FavoriteStar from "@/components/FavoriteStar";
+import WinRateChart from "@/components/WinRateChart";
 import { notFound } from "next/navigation";
 import Embed from "@/components/Embed";
 import { augmentHref } from "@/lib/augments";
-import { championAliases, championSummary } from "@/lib/champions";
+import { championAliases, championSummary, champList } from "@/lib/champions";
 import { pageMeta } from "@/lib/meta";
 import { discoverToolTabs } from "@/lib/tabs";
 
@@ -121,6 +122,9 @@ export default async function ChampionPage({ params }: { params: Promise<{ alias
           )}
         </div>
       )}
+      <div className="bento">
+        <WinRateChart name={c.name} history={c.history} patches={c.patches} champions={champList()} />
+      </div>
       {tab && <Embed src={`/embed/${tab.slug}/${tab.entry}`} title={`${c.name} builds and abilities`} hash={c.alias} />}
     </>
   );

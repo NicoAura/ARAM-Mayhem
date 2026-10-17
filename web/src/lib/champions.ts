@@ -96,7 +96,12 @@ export type ChampionSummary = {
   change: number | null;
   augments: { id: string; name: string }[];
   partners: { id: string; name: string; winRate: number }[];
+  patches: string[];
+  history: { patch: string; winRate: number; pickRate: number }[];
 };
+
+/** Every champion's id and name, by name, for pickers. */
+export const champList = () => championAliases().map((id) => ({ id, name: champName(id) })).sort((a, b) => a.name.localeCompare(b.name));
 
 type Champs = { champions: { name: string; best_partners?: { champion_id: number; win_rate: number }[] }[] };
 
@@ -132,5 +137,9 @@ export function championSummary(alias: string): ChampionSummary | null {
       .filter((a) => AUGS[a])
       .map((a) => ({ id: a, name: AUGS[a] })),
     partners,
+    patches: patchList(),
+    history: patchRows()
+      .filter((r) => r.name === alias)
+      .map((r) => ({ patch: r.patch, winRate: r.win_rate, pickRate: r.pick_rate })),
   };
 }
