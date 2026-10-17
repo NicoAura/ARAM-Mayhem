@@ -146,5 +146,11 @@
    "as_fixed": 0.625
   },
   "why": "Whisper: fixed 0.625 attack speed, every fourth shot crits, crits deal 14% less; 4-44% bonus AD by level plus 0.3% per 1% crit and 0.25% per 1% bonus attack speed"
+ },
+ "Aatrox": {
+  "stats": {
+   "omnivamp": 0.2
+  },
+  "why": "Umbral Dash: Aatrox heals for about 20% of the damage he deals to champions"
  }
 }

@@ -79,8 +79,10 @@
    "stats": {
     "mr": 20
    },
-   "effects": {},
-   "confidence": "verified"
+   "effects": {
+    "tenacity": 0.3
+   },
+   "confidence": "likely"
   },
   "infinity_edge": {
    "id": 3031,
@@ -112,7 +114,8 @@
     "armor_pen": 0.35
    },
    "effects": {},
-   "confidence": "likely"
+   "confidence": "likely",
+   "group": "last_whisper"
   },
   "mortal_reminder": {
    "id": 3033,
@@ -127,8 +130,11 @@
     "crit": 0.25,
     "armor_pen": 0.3
    },
-   "effects": {},
-   "confidence": "likely"
+   "effects": {
+    "grievous": 1
+   },
+   "confidence": "likely",
+   "group": "last_whisper"
   },
   "phantom_dancer": {
    "id": 3046,
@@ -497,7 +503,7 @@
     "ah": 20
    },
    "effects": {
-    "armor_shred": 0.3
+    "cleaver_shred": 0.3
    },
    "confidence": "approx"
   },
@@ -555,7 +561,8 @@
    "effects": {
     "cleave_ad": 0.4
    },
-   "confidence": "approx"
+   "confidence": "approx",
+   "group": "hydra"
   },
   "titanic": {
    "id": 3748,
@@ -573,7 +580,8 @@
    "effects": {
     "onhit_own_hp": 0.015
    },
-   "confidence": "approx"
+   "confidence": "approx",
+   "group": "hydra"
   },
   "profane_hydra": {
    "id": 6698,
@@ -591,7 +599,8 @@
    "effects": {
     "cleave_ad": 0.4
    },
-   "confidence": "approx"
+   "confidence": "approx",
+   "group": "hydra"
   },
   "stridebreaker": {
    "id": 6631,
@@ -607,7 +616,8 @@
     "hp": 450
    },
    "effects": {},
-   "confidence": "verified"
+   "confidence": "verified",
+   "group": "hydra"
   },
   "deaths_dance": {
    "id": 6333,
@@ -645,7 +655,8 @@
     "lifeline_threshold": 0.3,
     "shield_ranged": 0.6
    },
-   "confidence": "approx"
+   "confidence": "approx",
+   "group": "lifeline"
   },
   "shojin": {
    "id": 3161,
@@ -701,8 +712,10 @@
     "hp": 450,
     "ah": 15
    },
-   "effects": {},
-   "confidence": "verified"
+   "effects": {
+    "grievous": 1
+   },
+   "confidence": "approx"
   },
   "hullbreaker": {
    "id": 3181,
@@ -774,7 +787,8 @@
     "lifeline_threshold": 0.3,
     "shield_ranged": 0.75
    },
-   "confidence": "approx"
+   "confidence": "approx",
+   "group": "lifeline"
   },
   "youmuus": {
    "id": 3142,
@@ -931,7 +945,8 @@
     "magic_pen_pct": 0.4
    },
    "effects": {},
-   "confidence": "likely"
+   "confidence": "likely",
+   "group": "blight"
   },
   "cryptbloom": {
    "id": 3137,
@@ -947,7 +962,8 @@
     "magic_pen_pct": 0.3
    },
    "effects": {},
-   "confidence": "verified"
+   "confidence": "verified",
+   "group": "blight"
   },
   "shadowflame": {
    "id": 4645,
@@ -1193,8 +1209,10 @@
     "hp": 350,
     "ah": 15
    },
-   "effects": {},
-   "confidence": "verified"
+   "effects": {
+    "grievous": 1
+   },
+   "confidence": "approx"
   },
   "rylais": {
    "id": 3116,
@@ -1385,8 +1403,10 @@
     "hp": 150,
     "armor": 75
    },
-   "effects": {},
-   "confidence": "verified"
+   "effects": {
+    "grievous": 1
+   },
+   "confidence": "approx"
   },
   "randuins": {
    "id": 3143,
@@ -1462,8 +1482,10 @@
     "mr": 50,
     "ah": 10
    },
-   "effects": {},
-   "confidence": "verified"
+   "effects": {
+    "healing_received": 0.25
+   },
+   "confidence": "likely"
   },
   "force_of_nature": {
    "id": 4401,

@@ -3,7 +3,8 @@
  "rules": {
   "base_crit_multiplier": {"value": 2.0, "confidence": "likely", "note": "Mayhem raised base crit damage 175% -> 200% in 26.1"},
   "crit_overflow_ad_per_percent": {"value": 0.45, "confidence": "approx"},
-  "attack_speed_cap": {"value": 5.0, "confidence": "verified"}
+  "attack_speed_cap": {"value": 5.0, "confidence": "verified"},
+  "grievous_wounds": {"value": 0.4, "confidence": "verified", "note": "healing cut while an enemy's Grievous Wounds item (Morellonomicon, Thornmail, Mortal Reminder, Chempunk Chainsword) reaches you"}
  },
  "model": {
   "extra_hit_weight": 0.5,

@@ -100,7 +100,7 @@ BIN_EFFECTS = {
     "nashors": {"onhit_magic": dv("NashorsBaseValue"), "onhit_magic_ap": dv("NashorsAPValue")},
     "wits_end": {"onhit_magic": calc_number("OnHitDamage")},
     "statikk": {"storm_magic": dv("ChainDamage")},
-    "black_cleaver": {"armor_shred": dv_product("ShredPerStack", "MaxStacks")},
+    "black_cleaver": {"cleaver_shred": dv_product("ShredPerStack", "MaxStacks")},
     "trinity": {"spellblade_base_ad": dv("SpellbladeMultiplier"), "spellblade_cd": dv("SpellbladeCooldown")},
     "eclipse": {"maxhp_proc_cd": dv("Cooldown"), "proc_shield_flat": dv("MeleeBaseShield"),
                 "proc_shield_bonus_ad": dv("MeleeShieldADRatio"), "proc_shield_duration": dv("ShieldDuration"),
@@ -217,6 +217,8 @@ def main():
                 "stats": stats,
                 "effects": effects,
                 "confidence": h.get("confidence", "approx" if h.get("effects") else "verified"),
+                # Items of one group (Last Whisper, Blight, Hydra, Lifeline) can't be bought together.
+                **({"group": h["group"]} if h.get("group") else {}),
                 **({"note": h["note"]} if h.get("note") else {}),
             }
     doc = {"meta": {"game_version": version,
