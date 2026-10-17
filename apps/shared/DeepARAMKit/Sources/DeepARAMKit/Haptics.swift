@@ -24,6 +24,7 @@ public final class Haptics: ObservableObject {
     }
 
     @Published public private(set) var enabled: Bool
+    private var lastPlayed = Date.distantPast
 
     private init() {
         enabled = UserDefaults.standard.object(forKey: Self.enabledKey) as? Bool ?? true
@@ -31,6 +32,10 @@ public final class Haptics: ObservableObject {
 
     public func play(_ kind: Kind) {
         guard enabled else { return }
+        // The site may report one tap through both routes (navigator.vibrate and deeparamHaptic); feel it once.
+        let now = Date()
+        guard now.timeIntervalSince(lastPlayed) > 0.06 else { return }
+        lastPlayed = now
         #if os(iOS)
         switch kind {
         case .tap: UIImpactFeedbackGenerator(style: .light).impactOccurred()
@@ -82,9 +87,13 @@ enum HapticsBridge {
         "(function(){try{var k='deeparam-settings',s=JSON.parse(localStorage.getItem(k)||'{}');s.haptics=\(on);localStorage.setItem(k,JSON.stringify(s));window.dispatchEvent(new Event(k))}catch(e){}})();"
     }
 
+    /// The name the site's own app hook posts {kind: "tap" | "step" | "done"} to (web/src/lib/haptics.ts).
+    static let siteName = "deeparamHaptic"
+
     static func install(in content: WKUserContentController) {
         content.addUserScript(WKUserScript(source: script, injectionTime: .atDocumentStart, forMainFrameOnly: false))
         content.add(handler, name: name)
+        content.add(handler, name: siteName)
     }
 
     /// One shared, stateless handler, so no page is kept alive by it.
@@ -95,7 +104,7 @@ enum HapticsBridge {
             guard let body = message.body as? [String: Any] else { return }
             MainActor.assumeIsolated {
                 if let on = body["haptics"] as? Bool { Haptics.shared.siteSettingChanged(on) }
-                if let kind = (body["buzz"] as? String).flatMap(Haptics.Kind.init(rawValue:)) { Haptics.shared.play(kind) }
+                if let kind = ((body["buzz"] ?? body["kind"]) as? String).flatMap(Haptics.Kind.init(rawValue:)) { Haptics.shared.play(kind) }
             }
         }
     }
