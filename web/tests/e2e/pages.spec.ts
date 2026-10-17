@@ -118,6 +118,8 @@ test("owner-only files stay private without the owner's sign-in", async ({ reque
     const res = await request.get(path, { maxRedirects: 0 });
     expect(res.status(), path).toBe(404);
   }
-  const res = await request.get("/account/simulator");
-  expect(await res.text()).toContain("Sign in first");
+  // The old owner page now sends everyone to /simulator, where only the owner gets the 3D switch.
+  const res = await request.get("/account/simulator", { maxRedirects: 0 });
+  expect([307, 308]).toContain(res.status());
+  expect(res.headers().location).toMatch(/\/simulator$/);
 });
