@@ -54,6 +54,8 @@ struct EnemyProfile {
     double damageShare = 0.2;  // average share of their team's damage (0.2 = 1 of 5)
     double moveSpeed = 340;    // all-champion sim: how fast they move
     double reach = 550;        // all-champion sim: how far their damage reaches
+    // all-champion sim: the enemy's build (its most popular items and augments)
+    std::vector<std::string> items, augments;
 };
 
 struct Scenario {
@@ -90,6 +92,7 @@ struct Scenario {
     bool untilDeath = false;
     double fightCap = 90, deathDamageScale = 1;
     int teamSizeRule = 0;
+    int enemyLevel = 18;  // all-champion sim: the enemies' level
 
     static Scenario fromJson(const json::Value& s);
     // Replaces the enemy team with a champion pool built by tools/build_enemy_pool.py

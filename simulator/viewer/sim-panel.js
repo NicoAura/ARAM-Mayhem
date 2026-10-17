@@ -5,8 +5,8 @@
   const $ = (id) => document.getElementById(id);
   const DUMMY_KEYS = ["fixed_target", "target_hp", "target_armor", "target_mr"];
   // The Fight box shows the few settings most people change; the rest sit under "Advanced settings".
-  const BASIC_KEYS = ["level", "enemy_damage_scale", "cc_scale", "dodge_chance"];
-  const WHOLE_KEYS = ["level", "until_death", "team_size", "fixed_target", "combo_order"];  // integer steps
+  const BASIC_KEYS = ["level", "enemy_level", "enemy_damage_scale", "cc_scale", "dodge_chance"];
+  const WHOLE_KEYS = ["level", "enemy_level", "until_death", "team_size", "fixed_target", "combo_order"];  // integer steps
   const ADVANCED = [
     ["Fight timing", ["until_death", "fight_cap", "fight_mean", "fight_sd", "fight_min", "fight_max", "engage_min", "engage_max",
       "retarget_delay", "r_ready_chance"]],
@@ -113,12 +113,12 @@
     renderCombo();
 
     if (!picks) {
-      picks = trace.fight.team.slice(0, 5).map((id) => ({ id, stats: {}, items: [], augs: [] }));
+      picks = trace.fight.team.slice(0, 5).map((id) => withBuild({ id, stats: {} }));
       const byWeight = meta.enemies.slice().sort((a, b) => b.weight - a.weight);
       for (const e of byWeight) {
         if (picks.length >= 5) break;
         if (!picks.some((p) => p.id === e.id) && e.id.toLowerCase() !== champ.id.toLowerCase())
-          picks.push({ id: e.id, stats: {}, items: [], augs: [] });
+          picks.push(withBuild({ id: e.id, stats: {} }));
       }
     }
     // A champion never fights itself in Mayhem.
@@ -174,7 +174,21 @@
     box.append(p);
     renderEnemyCards();
   }
-  function changedPick(pick) { return Object.keys(pick.stats).length > 0 || pick.items.length > 0 || pick.augs.length > 0; }
+  // Each enemy starts with its own most popular items and augments.
+  function defaultBuild(id) {
+    const e = enemyById.get(String(id).toLowerCase()) || {};
+    return { items: (e.items || []).slice(), augs: (e.augments || []).slice() };
+  }
+  function withBuild(pick) { return Object.assign(pick, defaultBuild(pick.id)); }
+  const sameList = (a, b) => a.length === b.length && a.every((x, i) => x === b[i]);
+  function changedBuild(pick) {
+    const d = defaultBuild(pick.id);
+    return { items: !sameList(pick.items, d.items), augs: !sameList(pick.augs, d.augs) };
+  }
+  function changedPick(pick) {
+    const c = changedBuild(pick);
+    return Object.keys(pick.stats).length > 0 || c.items || c.augs;
+  }
   // Editing a chosen enemy means you want to fight it.
   function useChosen() {
     if (enemyMode() === "pick") return;
@@ -192,7 +206,7 @@
     const lg = document.createElement("legend"); lg.textContent = "Chosen enemies"; fs.append(lg);
     if (!meta || !champ || !picks) return;
     const intro = document.createElement("p"); intro.className = "note";
-    intro.textContent = "Used when Enemies is set to Chosen; changing one switches to it. Items and augments add their Health, Armor and Magic Resist. Dmg share sets how hard the enemy hits.";
+    intro.textContent = "Used when Enemies is set to Chosen; changing one switches to it. Each enemy starts with its most popular items and augments; its Health, Armor and Magic Resist come from its level and build. Dmg share sets how hard the enemy hits.";
     fs.append(intro);
     const pool = meta.enemies.filter((e) => e.id.toLowerCase() !== champ.id.toLowerCase())
       .sort((a, b) => a.name.localeCompare(b.name));
@@ -205,7 +219,7 @@
       const s = document.createElement("select"); s.setAttribute("aria-label", "Enemy " + (idx + 1));
       for (const e of pool) s.add(new Option(e.name, e.id));
       s.value = pick.id;
-      s.addEventListener("change", () => { pick.id = s.value; pick.stats = {}; useChosen(); renderEnemyCards(); });
+      s.addEventListener("change", () => { pick.id = s.value; pick.stats = {}; withBuild(pick); useChosen(); renderEnemyCards(); });
       const stats = document.createElement("div"); stats.className = "enemy-stats";
       const base = enemyById.get(pick.id.toLowerCase()) || {};
       for (const [key, label, step] of ENEMY_STATS) {
@@ -326,8 +340,11 @@
     if (enemyMode() === "dummy") set.push(["fixed_target", 1]);
     if (set.length) a.push("--set", set.map(([k, v]) => `${k}=${v}`).join(","));
     if (enemyMode() === "pick")
-      a.push("--team", picks.slice(0, teamSize()).map((p) => [p.id, ...Object.entries(p.stats).map(([k, v]) => `${k}=${v}`),
-        ...(p.items.length ? ["items=" + p.items.join("+")] : []), ...(p.augs.length ? ["augs=" + p.augs.join("+")] : [])].join(":")).join(","));
+      a.push("--team", picks.slice(0, teamSize()).map((p) => {
+        const c = changedBuild(p);  // a changed build replaces the enemy's own
+        return [p.id, ...Object.entries(p.stats).map(([k, v]) => `${k}=${v}`),
+          ...(c.items ? ["items=" + p.items.join("+")] : []), ...(c.augs ? ["augs=" + p.augs.join("+")] : [])].join(":");
+      }).join(","));
     const combo = $("comboInput") ? $("comboInput").value : "";
     if (combo && combo !== defaultCombo()) {
       if (new Set(combo).size !== combo.length) throw new Error("Use each of Q, W, E and R at most once in the combo.");
