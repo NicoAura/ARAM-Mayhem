@@ -27,3 +27,9 @@ selection and rerolls per slot, the pool size and offer odds per rarity, every l
 `grantedItems`, the items live augments hand out. `how: "reward"` items can't be bought (leave them out of build
 stats); `how: "free"` items are given at once but are also sold. The Info page shows these on the Augment stages
 and Items tabs.
+
+## Augment groups by icon
+
+`augment_groups.py` (needs Pillow and numpy) clusters the live augments by how their icon glyph looks. It names each
+group after its glyph, from the hand-kept `GLYPHS` map. It then lists what most members share: rarity, build style,
+stat or effect words, and the win-rate range. It writes `augment_groups.json`. Run it after `build_data.py`.

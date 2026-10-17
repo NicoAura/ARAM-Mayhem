@@ -1,7 +1,7 @@
 """Build data.js for the champion pages (Champions, one page per champion).
 
 Usage: python3 champions/build_data.py [--channel latest|pbe]
-Writes champions/data.js and champions/skins.js. Python 3 standard library only. Champion files are cached in
+Writes champions/data.js, champions/skins.js and champions/tags.json (roles, subclasses, playstyles). Python 3 standard library only. Champion files are cached in
 ~/.cache/deeparam-champions/<patch>/.
 
 What it reads:
@@ -215,6 +215,62 @@ def base_stats(record):
     return out
 
 
+# Playstyle tags read from ability text (and range); each needs this many abilities that match
+CC = r"\bstun|\broot|knock(s|ing)? (up|back|aside|away)|airborne|\bcharm|\btaunt|\bfear|\bflee|suppress|\bsleep|polymorph|\bpull|ground(s|ed)\b"
+MOVE = r"\bdash|\bleap|\bcharge|\blunge|\bjump|\bblink|\bteleport|\bslam|\bvault|\bpounce"
+DAMAGE = r"damage"
+HEAL = r"\bheal(s|ed|ing)?\b|restor\w* health|regenerat\w* .{0,40}health|life steal|omnivamp"
+ALLY = r"(?<!by an )\ball(y|ies)\b"
+SHIELD = r"\bshield"
+ROLE_NAMES = {"assassin": "Assassin", "fighter": "Fighter", "mage": "Mage", "marksman": "Marksman", "support": "Support", "tank": "Tank"}
+PLAYSTYLES = {
+    "Poke": "Damages from long range (1,000 or more) before a fight starts.",
+    "Engage": "Starts fights by jumping in with crowd control.",
+    "Sustain": "Heals themselves during fights.",
+    "Shields/Heals": "Heals or shields allies.",
+    "Crowd control": "Has two or more abilities that stun, root, knock up, charm, taunt, pull or the like.",
+}
+# One colour per tag: classes share a hue family, playstyles have their own
+TAG_COLORS = {
+    "Controller": "#3fb6a8", "Enchanter": "#57c7b2", "Catcher": "#2f9e8f",
+    "Fighter": "#e07b39", "Juggernaut": "#c9622a", "Diver": "#f0965a",
+    "Mage": "#7b6cf6", "Burst": "#9a7cff", "Battlemage": "#6a5ae0", "Artillery": "#b49bff",
+    "Marksman": "#e0a83c",
+    "Slayer": "#e0475b", "Assassin": "#d63c56", "Skirmisher": "#f06b7c",
+    "Tank": "#4f8fd6", "Vanguard": "#3f7fc8", "Warden": "#6aa6e6",
+    "Specialist": "#9bb53b",
+    "Support": "#57c7b2",
+    "Poke": "#3fa7f5", "Engage": "#f05a3c", "Sustain": "#4cbf6b", "Shields/Heals": "#f2c14e", "Crowd control": "#a77bd9",
+}
+
+
+def champion_tags(alias, info):
+    """Official roles (game files), Riot's subclasses (classes.py) and playstyle tags from the ability text."""
+    from classes import CLASS_OF, SUBCLASS
+    subs = SUBCLASS.get(alias)
+    subs = [subs] if isinstance(subs, str) else list(subs or [])
+    classes = list(dict.fromkeys(CLASS_OF[s] for s in subs))
+    spells = [s for s in info.get("spells") or []]
+    texts = [clean(s.get("description")) for s in spells] + [clean((info.get("passive") or {}).get("description"))]
+    has = lambda pat, txt: re.search(pat, txt, re.I) is not None  # noqa: E731
+    play = []
+    ranged_dmg = any(has(DAMAGE, clean(s.get("description"))) and 1000 <= max(s.get("range") or [0]) < 5000 for s in spells)
+    if "Artillery" in subs or (ranged_dmg and set(info.get("roles") or []) & {"mage", "marksman"}):
+        play.append("Poke")
+    if set(subs) & {"Vanguard", "Diver", "Catcher"} or any(has(MOVE, t) and has(CC, t) for t in texts[:4]):
+        play.append("Engage")
+    if any(has(HEAL, t) and not has(ALLY, t) and not has(r"reduc\w* (their )?heal(ing)?\b|grievous", t) for t in texts):
+        play.append("Sustain")
+    if "Enchanter" in subs or any((has(HEAL, t) or has(SHIELD, t)) and has(ALLY, t) for t in texts):
+        play.append("Shields/Heals")
+    if sum(has(CC, t) for t in texts) >= 2:
+        play.append("Crowd control")
+    return {
+        "roles": [ROLE_NAMES.get(r, r.title()) for r in info.get("roles") or []],
+        "classes": classes, "subclasses": subs, "playstyles": play,
+    }
+
+
 def site_paths(text):
     """Point asset URLs at the site's own copies (/assets/cd/<channel>/<path, lower case>)."""
     return re.sub(re.escape(BASE) + r"/([^\s\"']+)", lambda m: "/assets/cd/" + m.group(1).lower(), text)
@@ -413,6 +469,15 @@ def main():
     with open(os.path.join(HERE, "data.js"), "w") as f:
         # no header comment: the file ships to the site, and pages don't say where data comes from
         f.write("window.CHAMPS_DATA = " + site_paths(json.dumps(out, ensure_ascii=False, separators=(",", ":"))) + ";\n")
+    tags = {c["alias"]: {"id": c["id"], "name": info["name"], **champion_tags(c["alias"], info)}
+            for c, (info, _) in zip(summary, loaded) if info}
+    from classes import CLASSES
+    with open(os.path.join(HERE, "tags.json"), "w") as f:
+        json.dump({"patch": version, "colors": TAG_COLORS,
+                   "classes": {k: list(v) for k, v in CLASSES.items()},
+                   "meanings": {**{s: m for subs in CLASSES.values() for s, m in subs.items()}, **PLAYSTYLES},
+                   "champions": dict(sorted(tags.items()))}, f, indent=1, ensure_ascii=False)
+        f.write("\n")
     with open(os.path.join(HERE, "skins.js"), "w") as f:
         f.write("window.CHAMPS_SKINS = " + site_paths(json.dumps(skins, ensure_ascii=False, separators=(",", ":"))) + ";\n")
 

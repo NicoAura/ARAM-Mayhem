@@ -1,0 +1,3000 @@
+{
+ "patch": "16.20.8248524",
+ "colors": {
+  "Controller": "#3fb6a8",
+  "Enchanter": "#57c7b2",
+  "Catcher": "#2f9e8f",
+  "Fighter": "#e07b39",
+  "Juggernaut": "#c9622a",
+  "Diver": "#f0965a",
+  "Mage": "#7b6cf6",
+  "Burst": "#9a7cff",
+  "Battlemage": "#6a5ae0",
+  "Artillery": "#b49bff",
+  "Marksman": "#e0a83c",
+  "Slayer": "#e0475b",
+  "Assassin": "#d63c56",
+  "Skirmisher": "#f06b7c",
+  "Tank": "#4f8fd6",
+  "Vanguard": "#3f7fc8",
+  "Warden": "#6aa6e6",
+  "Specialist": "#9bb53b",
+  "Support": "#57c7b2",
+  "Poke": "#3fa7f5",
+  "Engage": "#f05a3c",
+  "Sustain": "#4cbf6b",
+  "Shields/Heals": "#f2c14e",
+  "Crowd control": "#a77bd9"
+ },
+ "classes": {
+  "Controller": [
+   "Enchanter",
+   "Catcher"
+  ],
+  "Fighter": [
+   "Juggernaut",
+   "Diver"
+  ],
+  "Mage": [
+   "Burst",
+   "Battlemage",
+   "Artillery"
+  ],
+  "Marksman": [
+   "Marksman"
+  ],
+  "Slayer": [
+   "Assassin",
+   "Skirmisher"
+  ],
+  "Tank": [
+   "Vanguard",
+   "Warden"
+  ],
+  "Specialist": [
+   "Specialist"
+  ]
+ },
+ "meanings": {
+  "Enchanter": "Strengthens allies with heals, shields and buffs.",
+  "Catcher": "Locks down enemies who walk into their traps and hooks.",
+  "Juggernaut": "Slow, hard to kill and hits hard up close.",
+  "Diver": "Jumps onto a target and stays on them.",
+  "Burst": "Deletes one target with a quick combo.",
+  "Battlemage": "Stays in the fight and deals damage over time.",
+  "Artillery": "Hits from very long range.",
+  "Marksman": "Steady damage from range with basic attacks.",
+  "Assassin": "Gets in, kills a squishy target, gets out.",
+  "Skirmisher": "Wins long close-range fights with strong duelling.",
+  "Vanguard": "Starts fights by diving in with crowd control.",
+  "Warden": "Protects allies and peels for them.",
+  "Specialist": "Plays unlike any other class.",
+  "Poke": "Damages from long range (1,000 or more) before a fight starts.",
+  "Engage": "Starts fights by jumping in with crowd control.",
+  "Sustain": "Heals themselves during fights.",
+  "Shields/Heals": "Heals or shields allies.",
+  "Crowd control": "Has two or more abilities that stun, root, knock up, charm, taunt, pull or the like."
+ },
+ "champions": {
+  "Aatrox": {
+   "id": 266,
+   "name": "Aatrox",
+   "roles": [
+    "Fighter"
+   ],
+   "classes": [
+    "Fighter"
+   ],
+   "subclasses": [
+    "Juggernaut"
+   ],
+   "playstyles": [
+    "Sustain"
+   ]
+  },
+  "Ahri": {
+   "id": 103,
+   "name": "Ahri",
+   "roles": [
+    "Mage",
+    "Assassin"
+   ],
+   "classes": [
+    "Mage"
+   ],
+   "subclasses": [
+    "Burst"
+   ],
+   "playstyles": [
+    "Sustain",
+    "Crowd control"
+   ]
+  },
+  "Akali": {
+   "id": 84,
+   "name": "Akali",
+   "roles": [
+    "Assassin"
+   ],
+   "classes": [
+    "Slayer"
+   ],
+   "subclasses": [
+    "Assassin"
+   ],
+   "playstyles": []
+  },
+  "Akshan": {
+   "id": 166,
+   "name": "Akshan",
+   "roles": [
+    "Marksman",
+    "Assassin"
+   ],
+   "classes": [
+    "Marksman",
+    "Slayer"
+   ],
+   "subclasses": [
+    "Marksman",
+    "Assassin"
+   ],
+   "playstyles": [
+    "Poke"
+   ]
+  },
+  "Alistar": {
+   "id": 12,
+   "name": "Alistar",
+   "roles": [
+    "Tank",
+    "Support"
+   ],
+   "classes": [
+    "Tank"
+   ],
+   "subclasses": [
+    "Vanguard"
+   ],
+   "playstyles": [
+    "Engage",
+    "Sustain",
+    "Crowd control"
+   ]
+  },
+  "Ambessa": {
+   "id": 799,
+   "name": "Ambessa",
+   "roles": [
+    "Fighter",
+    "Assassin"
+   ],
+   "classes": [
+    "Fighter"
+   ],
+   "subclasses": [
+    "Diver"
+   ],
+   "playstyles": [
+    "Engage"
+   ]
+  },
+  "Amumu": {
+   "id": 32,
+   "name": "Amumu",
+   "roles": [
+    "Tank",
+    "Support"
+   ],
+   "classes": [
+    "Tank"
+   ],
+   "subclasses": [
+    "Vanguard"
+   ],
+   "playstyles": [
+    "Engage",
+    "Crowd control"
+   ]
+  },
+  "Anivia": {
+   "id": 34,
+   "name": "Anivia",
+   "roles": [
+    "Mage"
+   ],
+   "classes": [
+    "Mage"
+   ],
+   "subclasses": [
+    "Battlemage"
+   ],
+   "playstyles": [
+    "Poke"
+   ]
+  },
+  "Annie": {
+   "id": 1,
+   "name": "Annie",
+   "roles": [
+    "Mage",
+    "Support"
+   ],
+   "classes": [
+    "Mage"
+   ],
+   "subclasses": [
+    "Burst"
+   ],
+   "playstyles": [
+    "Shields/Heals"
+   ]
+  },
+  "Aphelios": {
+   "id": 523,
+   "name": "Aphelios",
+   "roles": [
+    "Marksman"
+   ],
+   "classes": [
+    "Marksman"
+   ],
+   "subclasses": [
+    "Marksman"
+   ],
+   "playstyles": []
+  },
+  "Ashe": {
+   "id": 22,
+   "name": "Ashe",
+   "roles": [
+    "Marksman",
+    "Support"
+   ],
+   "classes": [
+    "Marksman",
+    "Controller"
+   ],
+   "subclasses": [
+    "Marksman",
+    "Catcher"
+   ],
+   "playstyles": [
+    "Poke",
+    "Engage"
+   ]
+  },
+  "AurelionSol": {
+   "id": 136,
+   "name": "Aurelion Sol",
+   "roles": [
+    "Mage"
+   ],
+   "classes": [
+    "Mage"
+   ],
+   "subclasses": [
+    "Battlemage"
+   ],
+   "playstyles": [
+    "Poke",
+    "Crowd control"
+   ]
+  },
+  "Aurora": {
+   "id": 893,
+   "name": "Aurora",
+   "roles": [
+    "Mage",
+    "Assassin"
+   ],
+   "classes": [
+    "Mage"
+   ],
+   "subclasses": [
+    "Burst"
+   ],
+   "playstyles": [
+    "Sustain"
+   ]
+  },
+  "Azir": {
+   "id": 268,
+   "name": "Azir",
+   "roles": [
+    "Mage",
+    "Marksman"
+   ],
+   "classes": [
+    "Specialist"
+   ],
+   "subclasses": [
+    "Specialist"
+   ],
+   "playstyles": [
+    "Engage"
+   ]
+  },
+  "Bard": {
+   "id": 432,
+   "name": "Bard",
+   "roles": [
+    "Support",
+    "Mage"
+   ],
+   "classes": [
+    "Controller"
+   ],
+   "subclasses": [
+    "Catcher"
+   ],
+   "playstyles": [
+    "Engage",
+    "Shields/Heals"
+   ]
+  },
+  "Belveth": {
+   "id": 200,
+   "name": "Bel'Veth",
+   "roles": [
+    "Fighter"
+   ],
+   "classes": [
+    "Slayer"
+   ],
+   "subclasses": [
+    "Skirmisher"
+   ],
+   "playstyles": [
+    "Engage",
+    "Crowd control"
+   ]
+  },
+  "Blitzcrank": {
+   "id": 53,
+   "name": "Blitzcrank",
+   "roles": [
+    "Tank",
+    "Support"
+   ],
+   "classes": [
+    "Controller"
+   ],
+   "subclasses": [
+    "Catcher"
+   ],
+   "playstyles": [
+    "Engage"
+   ]
+  },
+  "Brand": {
+   "id": 63,
+   "name": "Brand",
+   "roles": [
+    "Mage",
+    "Support"
+   ],
+   "classes": [
+    "Mage"
+   ],
+   "subclasses": [
+    "Burst"
+   ],
+   "playstyles": [
+    "Poke"
+   ]
+  },
+  "Braum": {
+   "id": 201,
+   "name": "Braum",
+   "roles": [
+    "Tank",
+    "Support"
+   ],
+   "classes": [
+    "Tank"
+   ],
+   "subclasses": [
+    "Warden"
+   ],
+   "playstyles": [
+    "Engage",
+    "Crowd control"
+   ]
+  },
+  "Briar": {
+   "id": 233,
+   "name": "Briar",
+   "roles": [
+    "Fighter",
+    "Assassin"
+   ],
+   "classes": [
+    "Fighter"
+   ],
+   "subclasses": [
+    "Diver"
+   ],
+   "playstyles": [
+    "Engage",
+    "Sustain",
+    "Crowd control"
+   ]
+  },
+  "Caitlyn": {
+   "id": 51,
+   "name": "Caitlyn",
+   "roles": [
+    "Marksman"
+   ],
+   "classes": [
+    "Marksman"
+   ],
+   "subclasses": [
+    "Marksman"
+   ],
+   "playstyles": [
+    "Poke"
+   ]
+  },
+  "Camille": {
+   "id": 164,
+   "name": "Camille",
+   "roles": [
+    "Fighter",
+    "Assassin"
+   ],
+   "classes": [
+    "Fighter"
+   ],
+   "subclasses": [
+    "Diver"
+   ],
+   "playstyles": [
+    "Engage",
+    "Sustain"
+   ]
+  },
+  "Cassiopeia": {
+   "id": 69,
+   "name": "Cassiopeia",
+   "roles": [
+    "Mage"
+   ],
+   "classes": [
+    "Mage"
+   ],
+   "subclasses": [
+    "Battlemage"
+   ],
+   "playstyles": [
+    "Sustain",
+    "Crowd control"
+   ]
+  },
+  "Chogath": {
+   "id": 31,
+   "name": "Cho'Gath",
+   "roles": [
+    "Tank",
+    "Mage"
+   ],
+   "classes": [
+    "Specialist"
+   ],
+   "subclasses": [
+    "Specialist"
+   ],
+   "playstyles": []
+  },
+  "Corki": {
+   "id": 42,
+   "name": "Corki",
+   "roles": [
+    "Marksman",
+    "Mage"
+   ],
+   "classes": [
+    "Marksman",
+    "Mage"
+   ],
+   "subclasses": [
+    "Marksman",
+    "Artillery"
+   ],
+   "playstyles": [
+    "Poke"
+   ]
+  },
+  "Darius": {
+   "id": 122,
+   "name": "Darius",
+   "roles": [
+    "Fighter",
+    "Tank"
+   ],
+   "classes": [
+    "Fighter"
+   ],
+   "subclasses": [
+    "Juggernaut"
+   ],
+   "playstyles": [
+    "Sustain"
+   ]
+  },
+  "Diana": {
+   "id": 131,
+   "name": "Diana",
+   "roles": [
+    "Fighter",
+    "Assassin"
+   ],
+   "classes": [
+    "Fighter",
+    "Mage"
+   ],
+   "subclasses": [
+    "Diver",
+    "Burst"
+   ],
+   "playstyles": [
+    "Engage"
+   ]
+  },
+  "DrMundo": {
+   "id": 36,
+   "name": "Dr. Mundo",
+   "roles": [
+    "Tank",
+    "Fighter"
+   ],
+   "classes": [
+    "Fighter"
+   ],
+   "subclasses": [
+    "Juggernaut"
+   ],
+   "playstyles": [
+    "Sustain"
+   ]
+  },
+  "Draven": {
+   "id": 119,
+   "name": "Draven",
+   "roles": [
+    "Marksman"
+   ],
+   "classes": [
+    "Marksman"
+   ],
+   "subclasses": [
+    "Marksman"
+   ],
+   "playstyles": [
+    "Poke"
+   ]
+  },
+  "Ekko": {
+   "id": 245,
+   "name": "Ekko",
+   "roles": [
+    "Assassin",
+    "Mage"
+   ],
+   "classes": [
+    "Slayer"
+   ],
+   "subclasses": [
+    "Assassin"
+   ],
+   "playstyles": [
+    "Poke",
+    "Sustain"
+   ]
+  },
+  "Elise": {
+   "id": 60,
+   "name": "Elise",
+   "roles": [
+    "Assassin",
+    "Mage"
+   ],
+   "classes": [
+    "Mage"
+   ],
+   "subclasses": [
+    "Burst"
+   ],
+   "playstyles": [
+    "Poke",
+    "Sustain"
+   ]
+  },
+  "Evelynn": {
+   "id": 28,
+   "name": "Evelynn",
+   "roles": [
+    "Assassin",
+    "Mage"
+   ],
+   "classes": [
+    "Slayer"
+   ],
+   "subclasses": [
+    "Assassin"
+   ],
+   "playstyles": [
+    "Sustain"
+   ]
+  },
+  "Ezreal": {
+   "id": 81,
+   "name": "Ezreal",
+   "roles": [
+    "Marksman",
+    "Mage"
+   ],
+   "classes": [
+    "Marksman",
+    "Mage"
+   ],
+   "subclasses": [
+    "Marksman",
+    "Artillery"
+   ],
+   "playstyles": [
+    "Poke"
+   ]
+  },
+  "FiddleSticks": {
+   "id": 9,
+   "name": "Fiddlesticks",
+   "roles": [
+    "Mage",
+    "Support"
+   ],
+   "classes": [
+    "Specialist"
+   ],
+   "subclasses": [
+    "Specialist"
+   ],
+   "playstyles": []
+  },
+  "Fiora": {
+   "id": 114,
+   "name": "Fiora",
+   "roles": [
+    "Fighter",
+    "Assassin"
+   ],
+   "classes": [
+    "Slayer"
+   ],
+   "subclasses": [
+    "Skirmisher"
+   ],
+   "playstyles": [
+    "Sustain",
+    "Shields/Heals"
+   ]
+  },
+  "Fizz": {
+   "id": 105,
+   "name": "Fizz",
+   "roles": [
+    "Assassin",
+    "Fighter"
+   ],
+   "classes": [
+    "Slayer"
+   ],
+   "subclasses": [
+    "Assassin"
+   ],
+   "playstyles": []
+  },
+  "Galio": {
+   "id": 3,
+   "name": "Galio",
+   "roles": [
+    "Tank",
+    "Mage"
+   ],
+   "classes": [
+    "Tank"
+   ],
+   "subclasses": [
+    "Warden"
+   ],
+   "playstyles": [
+    "Engage",
+    "Shields/Heals",
+    "Crowd control"
+   ]
+  },
+  "Gangplank": {
+   "id": 41,
+   "name": "Gangplank",
+   "roles": [
+    "Fighter"
+   ],
+   "classes": [
+    "Specialist"
+   ],
+   "subclasses": [
+    "Specialist"
+   ],
+   "playstyles": [
+    "Sustain"
+   ]
+  },
+  "Garen": {
+   "id": 86,
+   "name": "Garen",
+   "roles": [
+    "Fighter",
+    "Tank"
+   ],
+   "classes": [
+    "Fighter"
+   ],
+   "subclasses": [
+    "Juggernaut"
+   ],
+   "playstyles": [
+    "Sustain"
+   ]
+  },
+  "Gnar": {
+   "id": 150,
+   "name": "Gnar",
+   "roles": [
+    "Fighter",
+    "Tank"
+   ],
+   "classes": [
+    "Specialist"
+   ],
+   "subclasses": [
+    "Specialist"
+   ],
+   "playstyles": [
+    "Crowd control"
+   ]
+  },
+  "Gragas": {
+   "id": 79,
+   "name": "Gragas",
+   "roles": [
+    "Fighter",
+    "Mage"
+   ],
+   "classes": [
+    "Tank"
+   ],
+   "subclasses": [
+    "Vanguard"
+   ],
+   "playstyles": [
+    "Poke",
+    "Engage",
+    "Sustain",
+    "Crowd control"
+   ]
+  },
+  "Graves": {
+   "id": 104,
+   "name": "Graves",
+   "roles": [
+    "Marksman"
+   ],
+   "classes": [
+    "Specialist"
+   ],
+   "subclasses": [
+    "Specialist"
+   ],
+   "playstyles": [
+    "Poke"
+   ]
+  },
+  "Gwen": {
+   "id": 887,
+   "name": "Gwen",
+   "roles": [
+    "Fighter"
+   ],
+   "classes": [
+    "Slayer"
+   ],
+   "subclasses": [
+    "Skirmisher"
+   ],
+   "playstyles": [
+    "Sustain"
+   ]
+  },
+  "Hecarim": {
+   "id": 120,
+   "name": "Hecarim",
+   "roles": [
+    "Fighter",
+    "Tank"
+   ],
+   "classes": [
+    "Fighter"
+   ],
+   "subclasses": [
+    "Diver"
+   ],
+   "playstyles": [
+    "Engage"
+   ]
+  },
+  "Heimerdinger": {
+   "id": 74,
+   "name": "Heimerdinger",
+   "roles": [
+    "Mage",
+    "Support"
+   ],
+   "classes": [
+    "Specialist"
+   ],
+   "subclasses": [
+    "Specialist"
+   ],
+   "playstyles": []
+  },
+  "Hwei": {
+   "id": 910,
+   "name": "Hwei",
+   "roles": [
+    "Mage",
+    "Support"
+   ],
+   "classes": [
+    "Mage"
+   ],
+   "subclasses": [
+    "Artillery",
+    "Burst"
+   ],
+   "playstyles": [
+    "Poke"
+   ]
+  },
+  "Illaoi": {
+   "id": 420,
+   "name": "Illaoi",
+   "roles": [
+    "Fighter",
+    "Tank"
+   ],
+   "classes": [
+    "Fighter"
+   ],
+   "subclasses": [
+    "Juggernaut"
+   ],
+   "playstyles": [
+    "Sustain"
+   ]
+  },
+  "Irelia": {
+   "id": 39,
+   "name": "Irelia",
+   "roles": [
+    "Fighter",
+    "Assassin"
+   ],
+   "classes": [
+    "Fighter"
+   ],
+   "subclasses": [
+    "Diver"
+   ],
+   "playstyles": [
+    "Engage",
+    "Sustain"
+   ]
+  },
+  "Ivern": {
+   "id": 427,
+   "name": "Ivern",
+   "roles": [
+    "Support",
+    "Mage"
+   ],
+   "classes": [
+    "Controller"
+   ],
+   "subclasses": [
+    "Enchanter"
+   ],
+   "playstyles": [
+    "Poke",
+    "Engage",
+    "Shields/Heals"
+   ]
+  },
+  "Janna": {
+   "id": 40,
+   "name": "Janna",
+   "roles": [
+    "Support",
+    "Mage"
+   ],
+   "classes": [
+    "Controller"
+   ],
+   "subclasses": [
+    "Enchanter"
+   ],
+   "playstyles": [
+    "Poke",
+    "Shields/Heals"
+   ]
+  },
+  "JarvanIV": {
+   "id": 59,
+   "name": "Jarvan IV",
+   "roles": [
+    "Fighter",
+    "Tank"
+   ],
+   "classes": [
+    "Fighter"
+   ],
+   "subclasses": [
+    "Diver"
+   ],
+   "playstyles": [
+    "Engage"
+   ]
+  },
+  "Jax": {
+   "id": 24,
+   "name": "Jax",
+   "roles": [
+    "Fighter"
+   ],
+   "classes": [
+    "Slayer"
+   ],
+   "subclasses": [
+    "Skirmisher"
+   ],
+   "playstyles": []
+  },
+  "Jayce": {
+   "id": 126,
+   "name": "Jayce",
+   "roles": [
+    "Fighter",
+    "Marksman"
+   ],
+   "classes": [
+    "Mage"
+   ],
+   "subclasses": [
+    "Artillery"
+   ],
+   "playstyles": [
+    "Poke"
+   ]
+  },
+  "Jhin": {
+   "id": 202,
+   "name": "Jhin",
+   "roles": [
+    "Marksman",
+    "Mage"
+   ],
+   "classes": [
+    "Marksman",
+    "Controller"
+   ],
+   "subclasses": [
+    "Marksman",
+    "Catcher"
+   ],
+   "playstyles": [
+    "Poke",
+    "Engage"
+   ]
+  },
+  "Jinx": {
+   "id": 222,
+   "name": "Jinx",
+   "roles": [
+    "Marksman"
+   ],
+   "classes": [
+    "Marksman"
+   ],
+   "subclasses": [
+    "Marksman"
+   ],
+   "playstyles": [
+    "Poke"
+   ]
+  },
+  "KSante": {
+   "id": 897,
+   "name": "K'Sante",
+   "roles": [
+    "Tank",
+    "Fighter"
+   ],
+   "classes": [
+    "Tank"
+   ],
+   "subclasses": [
+    "Warden"
+   ],
+   "playstyles": [
+    "Engage",
+    "Sustain",
+    "Shields/Heals",
+    "Crowd control"
+   ]
+  },
+  "Kaisa": {
+   "id": 145,
+   "name": "Kai'Sa",
+   "roles": [
+    "Marksman",
+    "Mage"
+   ],
+   "classes": [
+    "Marksman"
+   ],
+   "subclasses": [
+    "Marksman"
+   ],
+   "playstyles": []
+  },
+  "Kalista": {
+   "id": 429,
+   "name": "Kalista",
+   "roles": [
+    "Marksman"
+   ],
+   "classes": [
+    "Marksman"
+   ],
+   "subclasses": [
+    "Marksman"
+   ],
+   "playstyles": [
+    "Poke"
+   ]
+  },
+  "Karma": {
+   "id": 43,
+   "name": "Karma",
+   "roles": [
+    "Mage",
+    "Support"
+   ],
+   "classes": [
+    "Controller"
+   ],
+   "subclasses": [
+    "Enchanter"
+   ],
+   "playstyles": [
+    "Sustain",
+    "Shields/Heals"
+   ]
+  },
+  "Karthus": {
+   "id": 30,
+   "name": "Karthus",
+   "roles": [
+    "Mage"
+   ],
+   "classes": [
+    "Mage"
+   ],
+   "subclasses": [
+    "Battlemage"
+   ],
+   "playstyles": []
+  },
+  "Kassadin": {
+   "id": 38,
+   "name": "Kassadin",
+   "roles": [
+    "Assassin",
+    "Mage"
+   ],
+   "classes": [
+    "Slayer"
+   ],
+   "subclasses": [
+    "Assassin"
+   ],
+   "playstyles": []
+  },
+  "Katarina": {
+   "id": 55,
+   "name": "Katarina",
+   "roles": [
+    "Assassin",
+    "Mage"
+   ],
+   "classes": [
+    "Slayer"
+   ],
+   "subclasses": [
+    "Assassin"
+   ],
+   "playstyles": []
+  },
+  "Kayle": {
+   "id": 10,
+   "name": "Kayle",
+   "roles": [
+    "Marksman",
+    "Mage"
+   ],
+   "classes": [
+    "Specialist"
+   ],
+   "subclasses": [
+    "Specialist"
+   ],
+   "playstyles": [
+    "Shields/Heals"
+   ]
+  },
+  "Kayn": {
+   "id": 141,
+   "name": "Kayn",
+   "roles": [
+    "Fighter",
+    "Assassin"
+   ],
+   "classes": [
+    "Slayer"
+   ],
+   "subclasses": [
+    "Skirmisher",
+    "Assassin"
+   ],
+   "playstyles": [
+    "Sustain"
+   ]
+  },
+  "Kennen": {
+   "id": 85,
+   "name": "Kennen",
+   "roles": [
+    "Mage"
+   ],
+   "classes": [
+    "Specialist"
+   ],
+   "subclasses": [
+    "Specialist"
+   ],
+   "playstyles": []
+  },
+  "Khazix": {
+   "id": 121,
+   "name": "Kha'Zix",
+   "roles": [
+    "Assassin"
+   ],
+   "classes": [
+    "Slayer"
+   ],
+   "subclasses": [
+    "Assassin"
+   ],
+   "playstyles": [
+    "Sustain"
+   ]
+  },
+  "Kindred": {
+   "id": 203,
+   "name": "Kindred",
+   "roles": [
+    "Marksman"
+   ],
+   "classes": [
+    "Marksman"
+   ],
+   "subclasses": [
+    "Marksman"
+   ],
+   "playstyles": [
+    "Sustain"
+   ]
+  },
+  "Kled": {
+   "id": 240,
+   "name": "Kled",
+   "roles": [
+    "Fighter"
+   ],
+   "classes": [
+    "Fighter"
+   ],
+   "subclasses": [
+    "Diver"
+   ],
+   "playstyles": [
+    "Engage"
+   ]
+  },
+  "KogMaw": {
+   "id": 96,
+   "name": "Kog'Maw",
+   "roles": [
+    "Marksman",
+    "Mage"
+   ],
+   "classes": [
+    "Marksman"
+   ],
+   "subclasses": [
+    "Marksman"
+   ],
+   "playstyles": [
+    "Poke"
+   ]
+  },
+  "Leblanc": {
+   "id": 7,
+   "name": "LeBlanc",
+   "roles": [
+    "Assassin",
+    "Mage"
+   ],
+   "classes": [
+    "Mage"
+   ],
+   "subclasses": [
+    "Burst"
+   ],
+   "playstyles": []
+  },
+  "LeeSin": {
+   "id": 64,
+   "name": "Lee Sin",
+   "roles": [
+    "Fighter",
+    "Assassin"
+   ],
+   "classes": [
+    "Fighter"
+   ],
+   "subclasses": [
+    "Diver"
+   ],
+   "playstyles": [
+    "Engage",
+    "Shields/Heals"
+   ]
+  },
+  "Leona": {
+   "id": 89,
+   "name": "Leona",
+   "roles": [
+    "Tank",
+    "Support"
+   ],
+   "classes": [
+    "Tank"
+   ],
+   "subclasses": [
+    "Vanguard"
+   ],
+   "playstyles": [
+    "Engage",
+    "Crowd control"
+   ]
+  },
+  "Lillia": {
+   "id": 876,
+   "name": "Lillia",
+   "roles": [
+    "Fighter",
+    "Mage"
+   ],
+   "classes": [
+    "Specialist"
+   ],
+   "subclasses": [
+    "Specialist"
+   ],
+   "playstyles": [
+    "Poke"
+   ]
+  },
+  "Lissandra": {
+   "id": 127,
+   "name": "Lissandra",
+   "roles": [
+    "Mage"
+   ],
+   "classes": [
+    "Mage"
+   ],
+   "subclasses": [
+    "Burst"
+   ],
+   "playstyles": [
+    "Poke",
+    "Sustain",
+    "Crowd control"
+   ]
+  },
+  "Locke": {
+   "id": 805,
+   "name": "Locke",
+   "roles": [
+    "Assassin",
+    "Mage"
+   ],
+   "classes": [],
+   "subclasses": [],
+   "playstyles": [
+    "Poke",
+    "Sustain"
+   ]
+  },
+  "Lucian": {
+   "id": 236,
+   "name": "Lucian",
+   "roles": [
+    "Marksman",
+    "Assassin"
+   ],
+   "classes": [
+    "Marksman"
+   ],
+   "subclasses": [
+    "Marksman"
+   ],
+   "playstyles": [
+    "Sustain"
+   ]
+  },
+  "Lulu": {
+   "id": 117,
+   "name": "Lulu",
+   "roles": [
+    "Support",
+    "Mage"
+   ],
+   "classes": [
+    "Controller"
+   ],
+   "subclasses": [
+    "Enchanter"
+   ],
+   "playstyles": [
+    "Shields/Heals"
+   ]
+  },
+  "Lux": {
+   "id": 99,
+   "name": "Lux",
+   "roles": [
+    "Mage",
+    "Support"
+   ],
+   "classes": [
+    "Mage"
+   ],
+   "subclasses": [
+    "Burst"
+   ],
+   "playstyles": [
+    "Poke"
+   ]
+  },
+  "Malphite": {
+   "id": 54,
+   "name": "Malphite",
+   "roles": [
+    "Tank",
+    "Mage"
+   ],
+   "classes": [
+    "Tank"
+   ],
+   "subclasses": [
+    "Vanguard"
+   ],
+   "playstyles": [
+    "Engage"
+   ]
+  },
+  "Malzahar": {
+   "id": 90,
+   "name": "Malzahar",
+   "roles": [
+    "Mage"
+   ],
+   "classes": [
+    "Mage"
+   ],
+   "subclasses": [
+    "Battlemage"
+   ],
+   "playstyles": []
+  },
+  "Maokai": {
+   "id": 57,
+   "name": "Maokai",
+   "roles": [
+    "Tank",
+    "Support"
+   ],
+   "classes": [
+    "Tank"
+   ],
+   "subclasses": [
+    "Vanguard"
+   ],
+   "playstyles": [
+    "Engage",
+    "Sustain",
+    "Crowd control"
+   ]
+  },
+  "MasterYi": {
+   "id": 11,
+   "name": "Master Yi",
+   "roles": [
+    "Fighter",
+    "Assassin"
+   ],
+   "classes": [
+    "Slayer"
+   ],
+   "subclasses": [
+    "Skirmisher"
+   ],
+   "playstyles": [
+    "Sustain"
+   ]
+  },
+  "Mel": {
+   "id": 800,
+   "name": "Mel",
+   "roles": [
+    "Mage",
+    "Support"
+   ],
+   "classes": [],
+   "subclasses": [],
+   "playstyles": [
+    "Poke"
+   ]
+  },
+  "Milio": {
+   "id": 902,
+   "name": "Milio",
+   "roles": [
+    "Support",
+    "Mage"
+   ],
+   "classes": [
+    "Controller"
+   ],
+   "subclasses": [
+    "Enchanter"
+   ],
+   "playstyles": [
+    "Shields/Heals"
+   ]
+  },
+  "MissFortune": {
+   "id": 21,
+   "name": "Miss Fortune",
+   "roles": [
+    "Marksman",
+    "Mage"
+   ],
+   "classes": [
+    "Marksman"
+   ],
+   "subclasses": [
+    "Marksman"
+   ],
+   "playstyles": [
+    "Poke"
+   ]
+  },
+  "MonkeyKing": {
+   "id": 62,
+   "name": "Wukong",
+   "roles": [
+    "Fighter",
+    "Tank"
+   ],
+   "classes": [
+    "Fighter"
+   ],
+   "subclasses": [
+    "Diver"
+   ],
+   "playstyles": [
+    "Engage"
+   ]
+  },
+  "Mordekaiser": {
+   "id": 82,
+   "name": "Mordekaiser",
+   "roles": [
+    "Fighter",
+    "Mage"
+   ],
+   "classes": [
+    "Fighter"
+   ],
+   "subclasses": [
+    "Juggernaut"
+   ],
+   "playstyles": [
+    "Sustain"
+   ]
+  },
+  "Morgana": {
+   "id": 25,
+   "name": "Morgana",
+   "roles": [
+    "Support",
+    "Mage"
+   ],
+   "classes": [
+    "Controller"
+   ],
+   "subclasses": [
+    "Catcher"
+   ],
+   "playstyles": [
+    "Poke",
+    "Engage",
+    "Sustain"
+   ]
+  },
+  "Naafiri": {
+   "id": 950,
+   "name": "Naafiri",
+   "roles": [
+    "Assassin",
+    "Fighter"
+   ],
+   "classes": [
+    "Slayer"
+   ],
+   "subclasses": [
+    "Assassin"
+   ],
+   "playstyles": [
+    "Sustain"
+   ]
+  },
+  "Nami": {
+   "id": 267,
+   "name": "Nami",
+   "roles": [
+    "Support",
+    "Mage"
+   ],
+   "classes": [
+    "Controller"
+   ],
+   "subclasses": [
+    "Enchanter"
+   ],
+   "playstyles": [
+    "Poke",
+    "Shields/Heals",
+    "Crowd control"
+   ]
+  },
+  "Nasus": {
+   "id": 75,
+   "name": "Nasus",
+   "roles": [
+    "Fighter",
+    "Tank"
+   ],
+   "classes": [
+    "Fighter"
+   ],
+   "subclasses": [
+    "Juggernaut"
+   ],
+   "playstyles": [
+    "Sustain"
+   ]
+  },
+  "Nautilus": {
+   "id": 111,
+   "name": "Nautilus",
+   "roles": [
+    "Tank",
+    "Support"
+   ],
+   "classes": [
+    "Tank"
+   ],
+   "subclasses": [
+    "Vanguard"
+   ],
+   "playstyles": [
+    "Engage",
+    "Crowd control"
+   ]
+  },
+  "Neeko": {
+   "id": 518,
+   "name": "Neeko",
+   "roles": [
+    "Mage",
+    "Support"
+   ],
+   "classes": [
+    "Mage"
+   ],
+   "subclasses": [
+    "Burst"
+   ],
+   "playstyles": [
+    "Poke",
+    "Engage",
+    "Crowd control"
+   ]
+  },
+  "Nidalee": {
+   "id": 76,
+   "name": "Nidalee",
+   "roles": [
+    "Assassin",
+    "Mage"
+   ],
+   "classes": [
+    "Specialist"
+   ],
+   "subclasses": [
+    "Specialist"
+   ],
+   "playstyles": [
+    "Poke",
+    "Shields/Heals"
+   ]
+  },
+  "Nilah": {
+   "id": 895,
+   "name": "Nilah",
+   "roles": [
+    "Fighter",
+    "Assassin"
+   ],
+   "classes": [
+    "Slayer"
+   ],
+   "subclasses": [
+    "Skirmisher"
+   ],
+   "playstyles": [
+    "Shields/Heals"
+   ]
+  },
+  "Nocturne": {
+   "id": 56,
+   "name": "Nocturne",
+   "roles": [
+    "Fighter",
+    "Assassin"
+   ],
+   "classes": [
+    "Slayer"
+   ],
+   "subclasses": [
+    "Assassin"
+   ],
+   "playstyles": [
+    "Sustain"
+   ]
+  },
+  "Nunu": {
+   "id": 20,
+   "name": "Nunu & Willump",
+   "roles": [
+    "Tank",
+    "Mage"
+   ],
+   "classes": [
+    "Tank"
+   ],
+   "subclasses": [
+    "Vanguard"
+   ],
+   "playstyles": [
+    "Engage",
+    "Sustain",
+    "Crowd control"
+   ]
+  },
+  "Olaf": {
+   "id": 2,
+   "name": "Olaf",
+   "roles": [
+    "Fighter",
+    "Tank"
+   ],
+   "classes": [
+    "Fighter"
+   ],
+   "subclasses": [
+    "Diver"
+   ],
+   "playstyles": [
+    "Engage",
+    "Sustain"
+   ]
+  },
+  "Orianna": {
+   "id": 61,
+   "name": "Orianna",
+   "roles": [
+    "Mage",
+    "Support"
+   ],
+   "classes": [
+    "Mage"
+   ],
+   "subclasses": [
+    "Burst"
+   ],
+   "playstyles": [
+    "Poke"
+   ]
+  },
+  "Ornn": {
+   "id": 516,
+   "name": "Ornn",
+   "roles": [
+    "Tank"
+   ],
+   "classes": [
+    "Tank"
+   ],
+   "subclasses": [
+    "Vanguard"
+   ],
+   "playstyles": [
+    "Engage"
+   ]
+  },
+  "Pantheon": {
+   "id": 80,
+   "name": "Pantheon",
+   "roles": [
+    "Fighter",
+    "Assassin"
+   ],
+   "classes": [
+    "Fighter"
+   ],
+   "subclasses": [
+    "Diver"
+   ],
+   "playstyles": [
+    "Engage"
+   ]
+  },
+  "Poppy": {
+   "id": 78,
+   "name": "Poppy",
+   "roles": [
+    "Tank",
+    "Fighter"
+   ],
+   "classes": [
+    "Tank"
+   ],
+   "subclasses": [
+    "Warden"
+   ],
+   "playstyles": [
+    "Engage",
+    "Crowd control"
+   ]
+  },
+  "Pyke": {
+   "id": 555,
+   "name": "Pyke",
+   "roles": [
+    "Support",
+    "Assassin"
+   ],
+   "classes": [
+    "Controller",
+    "Slayer"
+   ],
+   "subclasses": [
+    "Catcher",
+    "Assassin"
+   ],
+   "playstyles": [
+    "Engage",
+    "Crowd control"
+   ]
+  },
+  "Qiyana": {
+   "id": 246,
+   "name": "Qiyana",
+   "roles": [
+    "Assassin"
+   ],
+   "classes": [
+    "Slayer"
+   ],
+   "subclasses": [
+    "Assassin"
+   ],
+   "playstyles": []
+  },
+  "Quinn": {
+   "id": 133,
+   "name": "Quinn",
+   "roles": [
+    "Marksman",
+    "Assassin"
+   ],
+   "classes": [
+    "Specialist"
+   ],
+   "subclasses": [
+    "Specialist"
+   ],
+   "playstyles": []
+  },
+  "Rakan": {
+   "id": 497,
+   "name": "Rakan",
+   "roles": [
+    "Support"
+   ],
+   "classes": [
+    "Controller"
+   ],
+   "subclasses": [
+    "Catcher"
+   ],
+   "playstyles": [
+    "Engage",
+    "Shields/Heals",
+    "Crowd control"
+   ]
+  },
+  "Rammus": {
+   "id": 33,
+   "name": "Rammus",
+   "roles": [
+    "Tank"
+   ],
+   "classes": [
+    "Tank"
+   ],
+   "subclasses": [
+    "Vanguard"
+   ],
+   "playstyles": [
+    "Engage",
+    "Crowd control"
+   ]
+  },
+  "RekSai": {
+   "id": 421,
+   "name": "Rek'Sai",
+   "roles": [
+    "Fighter",
+    "Tank"
+   ],
+   "classes": [
+    "Fighter"
+   ],
+   "subclasses": [
+    "Diver"
+   ],
+   "playstyles": [
+    "Engage",
+    "Sustain"
+   ]
+  },
+  "Rell": {
+   "id": 526,
+   "name": "Rell",
+   "roles": [
+    "Tank",
+    "Support"
+   ],
+   "classes": [
+    "Tank"
+   ],
+   "subclasses": [
+    "Vanguard"
+   ],
+   "playstyles": [
+    "Engage",
+    "Crowd control"
+   ]
+  },
+  "Renata": {
+   "id": 888,
+   "name": "Renata Glasc",
+   "roles": [
+    "Support",
+    "Mage"
+   ],
+   "classes": [
+    "Controller"
+   ],
+   "subclasses": [
+    "Enchanter"
+   ],
+   "playstyles": [
+    "Shields/Heals"
+   ]
+  },
+  "Renekton": {
+   "id": 58,
+   "name": "Renekton",
+   "roles": [
+    "Fighter",
+    "Tank"
+   ],
+   "classes": [
+    "Fighter"
+   ],
+   "subclasses": [
+    "Diver"
+   ],
+   "playstyles": [
+    "Engage",
+    "Sustain"
+   ]
+  },
+  "Rengar": {
+   "id": 107,
+   "name": "Rengar",
+   "roles": [
+    "Assassin",
+    "Fighter"
+   ],
+   "classes": [
+    "Slayer"
+   ],
+   "subclasses": [
+    "Assassin"
+   ],
+   "playstyles": [
+    "Sustain"
+   ]
+  },
+  "Riven": {
+   "id": 92,
+   "name": "Riven",
+   "roles": [
+    "Fighter",
+    "Assassin"
+   ],
+   "classes": [
+    "Slayer"
+   ],
+   "subclasses": [
+    "Skirmisher"
+   ],
+   "playstyles": [
+    "Crowd control"
+   ]
+  },
+  "Rumble": {
+   "id": 68,
+   "name": "Rumble",
+   "roles": [
+    "Fighter",
+    "Mage"
+   ],
+   "classes": [
+    "Mage"
+   ],
+   "subclasses": [
+    "Battlemage"
+   ],
+   "playstyles": [
+    "Poke"
+   ]
+  },
+  "Ryze": {
+   "id": 13,
+   "name": "Ryze",
+   "roles": [
+    "Mage"
+   ],
+   "classes": [
+    "Mage"
+   ],
+   "subclasses": [
+    "Battlemage"
+   ],
+   "playstyles": [
+    "Poke"
+   ]
+  },
+  "Samira": {
+   "id": 360,
+   "name": "Samira",
+   "roles": [
+    "Marksman",
+    "Assassin"
+   ],
+   "classes": [
+    "Marksman"
+   ],
+   "subclasses": [
+    "Marksman"
+   ],
+   "playstyles": []
+  },
+  "Sejuani": {
+   "id": 113,
+   "name": "Sejuani",
+   "roles": [
+    "Tank"
+   ],
+   "classes": [
+    "Tank"
+   ],
+   "subclasses": [
+    "Vanguard"
+   ],
+   "playstyles": [
+    "Engage",
+    "Crowd control"
+   ]
+  },
+  "Senna": {
+   "id": 235,
+   "name": "Senna",
+   "roles": [
+    "Support",
+    "Marksman"
+   ],
+   "classes": [
+    "Marksman",
+    "Controller"
+   ],
+   "subclasses": [
+    "Marksman",
+    "Enchanter"
+   ],
+   "playstyles": [
+    "Shields/Heals"
+   ]
+  },
+  "Seraphine": {
+   "id": 147,
+   "name": "Seraphine",
+   "roles": [
+    "Support",
+    "Mage"
+   ],
+   "classes": [
+    "Controller"
+   ],
+   "subclasses": [
+    "Enchanter"
+   ],
+   "playstyles": [
+    "Poke",
+    "Shields/Heals"
+   ]
+  },
+  "Sett": {
+   "id": 875,
+   "name": "Sett",
+   "roles": [
+    "Fighter",
+    "Tank"
+   ],
+   "classes": [
+    "Fighter"
+   ],
+   "subclasses": [
+    "Juggernaut"
+   ],
+   "playstyles": [
+    "Sustain"
+   ]
+  },
+  "Shaco": {
+   "id": 35,
+   "name": "Shaco",
+   "roles": [
+    "Assassin"
+   ],
+   "classes": [
+    "Slayer"
+   ],
+   "subclasses": [
+    "Assassin"
+   ],
+   "playstyles": []
+  },
+  "Shen": {
+   "id": 98,
+   "name": "Shen",
+   "roles": [
+    "Tank"
+   ],
+   "classes": [
+    "Tank"
+   ],
+   "subclasses": [
+    "Warden"
+   ],
+   "playstyles": [
+    "Engage"
+   ]
+  },
+  "Shyvana": {
+   "id": 102,
+   "name": "Shyvana",
+   "roles": [
+    "Fighter",
+    "Tank"
+   ],
+   "classes": [
+    "Fighter"
+   ],
+   "subclasses": [
+    "Juggernaut"
+   ],
+   "playstyles": [
+    "Engage",
+    "Sustain"
+   ]
+  },
+  "Singed": {
+   "id": 27,
+   "name": "Singed",
+   "roles": [
+    "Tank",
+    "Mage"
+   ],
+   "classes": [
+    "Specialist"
+   ],
+   "subclasses": [
+    "Specialist"
+   ],
+   "playstyles": []
+  },
+  "Sion": {
+   "id": 14,
+   "name": "Sion",
+   "roles": [
+    "Tank",
+    "Fighter"
+   ],
+   "classes": [
+    "Tank"
+   ],
+   "subclasses": [
+    "Vanguard"
+   ],
+   "playstyles": [
+    "Engage",
+    "Sustain"
+   ]
+  },
+  "Sivir": {
+   "id": 15,
+   "name": "Sivir",
+   "roles": [
+    "Marksman"
+   ],
+   "classes": [
+    "Marksman"
+   ],
+   "subclasses": [
+    "Marksman"
+   ],
+   "playstyles": [
+    "Poke"
+   ]
+  },
+  "Skarner": {
+   "id": 72,
+   "name": "Skarner",
+   "roles": [
+    "Tank",
+    "Fighter"
+   ],
+   "classes": [
+    "Tank"
+   ],
+   "subclasses": [
+    "Vanguard"
+   ],
+   "playstyles": [
+    "Engage",
+    "Crowd control"
+   ]
+  },
+  "Smolder": {
+   "id": 901,
+   "name": "Smolder",
+   "roles": [
+    "Marksman",
+    "Mage"
+   ],
+   "classes": [
+    "Marksman"
+   ],
+   "subclasses": [
+    "Marksman"
+   ],
+   "playstyles": [
+    "Poke"
+   ]
+  },
+  "Sona": {
+   "id": 37,
+   "name": "Sona",
+   "roles": [
+    "Support",
+    "Mage"
+   ],
+   "classes": [
+    "Controller"
+   ],
+   "subclasses": [
+    "Enchanter"
+   ],
+   "playstyles": [
+    "Shields/Heals"
+   ]
+  },
+  "Soraka": {
+   "id": 16,
+   "name": "Soraka",
+   "roles": [
+    "Support",
+    "Mage"
+   ],
+   "classes": [
+    "Controller"
+   ],
+   "subclasses": [
+    "Enchanter"
+   ],
+   "playstyles": [
+    "Sustain",
+    "Shields/Heals"
+   ]
+  },
+  "Swain": {
+   "id": 50,
+   "name": "Swain",
+   "roles": [
+    "Mage",
+    "Support"
+   ],
+   "classes": [
+    "Mage"
+   ],
+   "subclasses": [
+    "Battlemage"
+   ],
+   "playstyles": [
+    "Sustain"
+   ]
+  },
+  "Sylas": {
+   "id": 517,
+   "name": "Sylas",
+   "roles": [
+    "Mage",
+    "Assassin"
+   ],
+   "classes": [
+    "Slayer"
+   ],
+   "subclasses": [
+    "Skirmisher"
+   ],
+   "playstyles": [
+    "Engage",
+    "Sustain"
+   ]
+  },
+  "Syndra": {
+   "id": 134,
+   "name": "Syndra",
+   "roles": [
+    "Mage"
+   ],
+   "classes": [
+    "Mage"
+   ],
+   "subclasses": [
+    "Burst"
+   ],
+   "playstyles": []
+  },
+  "TahmKench": {
+   "id": 223,
+   "name": "Tahm Kench",
+   "roles": [
+    "Tank",
+    "Support"
+   ],
+   "classes": [
+    "Tank"
+   ],
+   "subclasses": [
+    "Warden"
+   ],
+   "playstyles": [
+    "Sustain",
+    "Shields/Heals",
+    "Crowd control"
+   ]
+  },
+  "Taliyah": {
+   "id": 163,
+   "name": "Taliyah",
+   "roles": [
+    "Mage",
+    "Support"
+   ],
+   "classes": [
+    "Mage"
+   ],
+   "subclasses": [
+    "Battlemage"
+   ],
+   "playstyles": [
+    "Engage"
+   ]
+  },
+  "Talon": {
+   "id": 91,
+   "name": "Talon",
+   "roles": [
+    "Assassin"
+   ],
+   "classes": [
+    "Slayer"
+   ],
+   "subclasses": [
+    "Assassin"
+   ],
+   "playstyles": []
+  },
+  "Taric": {
+   "id": 44,
+   "name": "Taric",
+   "roles": [
+    "Support",
+    "Tank"
+   ],
+   "classes": [
+    "Tank"
+   ],
+   "subclasses": [
+    "Warden"
+   ],
+   "playstyles": [
+    "Sustain",
+    "Shields/Heals"
+   ]
+  },
+  "Teemo": {
+   "id": 17,
+   "name": "Teemo",
+   "roles": [
+    "Marksman",
+    "Mage"
+   ],
+   "classes": [
+    "Specialist"
+   ],
+   "subclasses": [
+    "Specialist"
+   ],
+   "playstyles": []
+  },
+  "Thresh": {
+   "id": 412,
+   "name": "Thresh",
+   "roles": [
+    "Support",
+    "Tank"
+   ],
+   "classes": [
+    "Controller"
+   ],
+   "subclasses": [
+    "Catcher"
+   ],
+   "playstyles": [
+    "Engage",
+    "Shields/Heals"
+   ]
+  },
+  "Tristana": {
+   "id": 18,
+   "name": "Tristana",
+   "roles": [
+    "Marksman",
+    "Assassin"
+   ],
+   "classes": [
+    "Marksman"
+   ],
+   "subclasses": [
+    "Marksman"
+   ],
+   "playstyles": []
+  },
+  "Trundle": {
+   "id": 48,
+   "name": "Trundle",
+   "roles": [
+    "Fighter",
+    "Tank"
+   ],
+   "classes": [
+    "Fighter"
+   ],
+   "subclasses": [
+    "Juggernaut"
+   ],
+   "playstyles": [
+    "Sustain"
+   ]
+  },
+  "Tryndamere": {
+   "id": 23,
+   "name": "Tryndamere",
+   "roles": [
+    "Fighter",
+    "Assassin"
+   ],
+   "classes": [
+    "Slayer"
+   ],
+   "subclasses": [
+    "Skirmisher"
+   ],
+   "playstyles": [
+    "Sustain"
+   ]
+  },
+  "TwistedFate": {
+   "id": 4,
+   "name": "Twisted Fate",
+   "roles": [
+    "Mage",
+    "Marksman"
+   ],
+   "classes": [
+    "Mage"
+   ],
+   "subclasses": [
+    "Burst"
+   ],
+   "playstyles": []
+  },
+  "Twitch": {
+   "id": 29,
+   "name": "Twitch",
+   "roles": [
+    "Marksman",
+    "Assassin"
+   ],
+   "classes": [
+    "Marksman"
+   ],
+   "subclasses": [
+    "Marksman"
+   ],
+   "playstyles": []
+  },
+  "Udyr": {
+   "id": 77,
+   "name": "Udyr",
+   "roles": [
+    "Fighter",
+    "Tank"
+   ],
+   "classes": [
+    "Fighter"
+   ],
+   "subclasses": [
+    "Juggernaut"
+   ],
+   "playstyles": [
+    "Sustain"
+   ]
+  },
+  "Urgot": {
+   "id": 6,
+   "name": "Urgot",
+   "roles": [
+    "Fighter",
+    "Tank"
+   ],
+   "classes": [
+    "Fighter"
+   ],
+   "subclasses": [
+    "Juggernaut"
+   ],
+   "playstyles": []
+  },
+  "Varus": {
+   "id": 110,
+   "name": "Varus",
+   "roles": [
+    "Marksman",
+    "Mage"
+   ],
+   "classes": [
+    "Marksman",
+    "Mage"
+   ],
+   "subclasses": [
+    "Marksman",
+    "Artillery"
+   ],
+   "playstyles": [
+    "Poke",
+    "Sustain"
+   ]
+  },
+  "Vayne": {
+   "id": 67,
+   "name": "Vayne",
+   "roles": [
+    "Marksman",
+    "Assassin"
+   ],
+   "classes": [
+    "Marksman"
+   ],
+   "subclasses": [
+    "Marksman"
+   ],
+   "playstyles": []
+  },
+  "Veigar": {
+   "id": 45,
+   "name": "Veigar",
+   "roles": [
+    "Mage"
+   ],
+   "classes": [
+    "Mage"
+   ],
+   "subclasses": [
+    "Burst"
+   ],
+   "playstyles": [
+    "Poke"
+   ]
+  },
+  "Velkoz": {
+   "id": 161,
+   "name": "Vel'Koz",
+   "roles": [
+    "Mage",
+    "Support"
+   ],
+   "classes": [
+    "Mage"
+   ],
+   "subclasses": [
+    "Artillery"
+   ],
+   "playstyles": [
+    "Poke"
+   ]
+  },
+  "Vex": {
+   "id": 711,
+   "name": "Vex",
+   "roles": [
+    "Mage"
+   ],
+   "classes": [
+    "Mage"
+   ],
+   "subclasses": [
+    "Burst"
+   ],
+   "playstyles": [
+    "Poke"
+   ]
+  },
+  "Vi": {
+   "id": 254,
+   "name": "Vi",
+   "roles": [
+    "Fighter",
+    "Assassin"
+   ],
+   "classes": [
+    "Fighter"
+   ],
+   "subclasses": [
+    "Diver"
+   ],
+   "playstyles": [
+    "Engage"
+   ]
+  },
+  "Viego": {
+   "id": 234,
+   "name": "Viego",
+   "roles": [
+    "Fighter",
+    "Assassin"
+   ],
+   "classes": [
+    "Slayer"
+   ],
+   "subclasses": [
+    "Skirmisher"
+   ],
+   "playstyles": [
+    "Engage",
+    "Sustain",
+    "Crowd control"
+   ]
+  },
+  "Viktor": {
+   "id": 112,
+   "name": "Viktor",
+   "roles": [
+    "Mage"
+   ],
+   "classes": [
+    "Mage"
+   ],
+   "subclasses": [
+    "Battlemage"
+   ],
+   "playstyles": []
+  },
+  "Vladimir": {
+   "id": 8,
+   "name": "Vladimir",
+   "roles": [
+    "Mage",
+    "Fighter"
+   ],
+   "classes": [
+    "Mage"
+   ],
+   "subclasses": [
+    "Battlemage"
+   ],
+   "playstyles": [
+    "Sustain"
+   ]
+  },
+  "Volibear": {
+   "id": 106,
+   "name": "Volibear",
+   "roles": [
+    "Fighter",
+    "Tank"
+   ],
+   "classes": [
+    "Fighter"
+   ],
+   "subclasses": [
+    "Juggernaut"
+   ],
+   "playstyles": [
+    "Sustain"
+   ]
+  },
+  "Warwick": {
+   "id": 19,
+   "name": "Warwick",
+   "roles": [
+    "Fighter",
+    "Tank"
+   ],
+   "classes": [
+    "Fighter"
+   ],
+   "subclasses": [
+    "Diver"
+   ],
+   "playstyles": [
+    "Engage",
+    "Sustain",
+    "Crowd control"
+   ]
+  },
+  "Xayah": {
+   "id": 498,
+   "name": "Xayah",
+   "roles": [
+    "Marksman"
+   ],
+   "classes": [
+    "Marksman"
+   ],
+   "subclasses": [
+    "Marksman"
+   ],
+   "playstyles": [
+    "Poke"
+   ]
+  },
+  "Xerath": {
+   "id": 101,
+   "name": "Xerath",
+   "roles": [
+    "Mage",
+    "Support"
+   ],
+   "classes": [
+    "Mage"
+   ],
+   "subclasses": [
+    "Artillery"
+   ],
+   "playstyles": [
+    "Poke"
+   ]
+  },
+  "XinZhao": {
+   "id": 5,
+   "name": "Xin Zhao",
+   "roles": [
+    "Fighter",
+    "Tank"
+   ],
+   "classes": [
+    "Fighter"
+   ],
+   "subclasses": [
+    "Diver"
+   ],
+   "playstyles": [
+    "Engage",
+    "Sustain"
+   ]
+  },
+  "Yasuo": {
+   "id": 157,
+   "name": "Yasuo",
+   "roles": [
+    "Fighter",
+    "Assassin"
+   ],
+   "classes": [
+    "Slayer"
+   ],
+   "subclasses": [
+    "Skirmisher"
+   ],
+   "playstyles": [
+    "Engage",
+    "Crowd control"
+   ]
+  },
+  "Yone": {
+   "id": 777,
+   "name": "Yone",
+   "roles": [
+    "Fighter",
+    "Assassin"
+   ],
+   "classes": [
+    "Slayer"
+   ],
+   "subclasses": [
+    "Skirmisher"
+   ],
+   "playstyles": [
+    "Engage",
+    "Crowd control"
+   ]
+  },
+  "Yorick": {
+   "id": 83,
+   "name": "Yorick",
+   "roles": [
+    "Fighter",
+    "Tank"
+   ],
+   "classes": [
+    "Fighter"
+   ],
+   "subclasses": [
+    "Juggernaut"
+   ],
+   "playstyles": [
+    "Sustain"
+   ]
+  },
+  "Yunara": {
+   "id": 804,
+   "name": "Yunara",
+   "roles": [
+    "Marksman"
+   ],
+   "classes": [],
+   "subclasses": [],
+   "playstyles": [
+    "Poke"
+   ]
+  },
+  "Yuumi": {
+   "id": 350,
+   "name": "Yuumi",
+   "roles": [
+    "Support",
+    "Mage"
+   ],
+   "classes": [
+    "Controller"
+   ],
+   "subclasses": [
+    "Enchanter"
+   ],
+   "playstyles": [
+    "Poke",
+    "Shields/Heals"
+   ]
+  },
+  "Zaahen": {
+   "id": 904,
+   "name": "Zaahen",
+   "roles": [
+    "Fighter"
+   ],
+   "classes": [],
+   "subclasses": [],
+   "playstyles": [
+    "Sustain",
+    "Crowd control"
+   ]
+  },
+  "Zac": {
+   "id": 154,
+   "name": "Zac",
+   "roles": [
+    "Tank",
+    "Fighter"
+   ],
+   "classes": [
+    "Tank"
+   ],
+   "subclasses": [
+    "Vanguard"
+   ],
+   "playstyles": [
+    "Engage",
+    "Sustain"
+   ]
+  },
+  "Zed": {
+   "id": 238,
+   "name": "Zed",
+   "roles": [
+    "Assassin"
+   ],
+   "classes": [
+    "Slayer"
+   ],
+   "subclasses": [
+    "Assassin"
+   ],
+   "playstyles": []
+  },
+  "Zeri": {
+   "id": 221,
+   "name": "Zeri",
+   "roles": [
+    "Marksman"
+   ],
+   "classes": [
+    "Marksman"
+   ],
+   "subclasses": [
+    "Marksman"
+   ],
+   "playstyles": [
+    "Poke"
+   ]
+  },
+  "Ziggs": {
+   "id": 115,
+   "name": "Ziggs",
+   "roles": [
+    "Mage"
+   ],
+   "classes": [
+    "Mage"
+   ],
+   "subclasses": [
+    "Artillery"
+   ],
+   "playstyles": [
+    "Poke"
+   ]
+  },
+  "Zilean": {
+   "id": 26,
+   "name": "Zilean",
+   "roles": [
+    "Support",
+    "Mage"
+   ],
+   "classes": [
+    "Specialist"
+   ],
+   "subclasses": [
+    "Specialist"
+   ],
+   "playstyles": []
+  },
+  "Zoe": {
+   "id": 142,
+   "name": "Zoe",
+   "roles": [
+    "Mage"
+   ],
+   "classes": [
+    "Mage"
+   ],
+   "subclasses": [
+    "Burst"
+   ],
+   "playstyles": []
+  },
+  "Zyra": {
+   "id": 143,
+   "name": "Zyra",
+   "roles": [
+    "Mage",
+    "Support"
+   ],
+   "classes": [
+    "Controller"
+   ],
+   "subclasses": [
+    "Catcher"
+   ],
+   "playstyles": [
+    "Poke",
+    "Engage",
+    "Crowd control"
+   ]
+  }
+ }
+}

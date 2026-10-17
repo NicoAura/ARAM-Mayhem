@@ -30,3 +30,15 @@ and a Skins grid. Skin tiles are in `skins.js`, which the page loads only when t
 
 Build stats leave out items that only augments give (quest rewards such as Wooglet's Witchcap or the Golden
 Spatula). The list comes from `guide/augment_rules.json`, so run `guide/build_data.py` first after a patch.
+
+## Champion tags
+
+`build_data.py` also writes `tags.json`, for colour-coded tags on the site. For each champion it lists:
+- **roles:** the official roles from the game files.
+- **classes / subclasses:** Riot's classes and subclasses (Enchanter, Catcher, Juggernaut, Diver, Burst,
+  Battlemage, Artillery, Marksman, Assassin, Skirmisher, Vanguard, Warden, Specialist). These are hand-kept in
+  `classes.py` because no game file has them. New champions start without one until they're added there.
+- **playstyles:** Poke, Engage, Sustain, Shields/Heals and Crowd control, read from ability text and range plus the
+  subclass.
+
+`colors` gives one colour per tag, and `meanings` gives a one-line description of each.
