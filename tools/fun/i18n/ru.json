@@ -116,7 +116,6 @@
  "Gold": "Золотой",
  "Your healing and Health Regen deal 70% of the value magic damage to the nearest enemy champion.": "Ваше лечение и регенерация здоровья наносят ближайшему вражескому чемпиону магический урон, равный 70% восстановленного.",
  "Prismatic": "Призматический",
- "You can Critically Defend using your Crit Chance (max 50% chance), giving you a chance to reduce damage taken by 20%. Gain 25% Crit Chance. Damage Reduced:": "Вы можете критически защищаться, используя свой шанс критического удара (не больше 50%): с этим шансом получаемый урон снижается на 20%. Вы получаете 25% шанса критического удара. Поглощено урона:",
  "Silver": "Серебряный",
  "Ionia": "Иония",
  "Slayer": "Убийца",
@@ -183,5 +182,6 @@
  "Dealing and receiving champion damage grants you @StacksPerHit@ stack of Juggernauting for @Stack_Duration@ seconds. For every @Stacks_Max@ stacks of Juggernauting you gain @Calc_AF@ Adaptive Force, @Calc_Defenses@ Armor, @Calc_Defenses@ Magic Resist, @Calc_Size@ Size, and @Calc_Tenacity@ Tenacity. Stacks fall off faster the more you have. Maximum Juggernauting Level: @f1.0@": "Нанесение и получение урона от чемпионов даёт @StacksPerHit@ заряд Непреклонности на @Stack_Duration@ сек. За каждые @Stacks_Max@ зарядов Непреклонности вы получаете @Calc_AF@ адаптивной силы, @Calc_Defenses@ брони, @Calc_Defenses@ сопротивления магии, @Calc_Size@ размера и @Calc_Tenacity@ стойкости. Чем больше зарядов, тем быстрее они спадают. Максимальный уровень Непреклонности: @f1.0@",
  "Gain @ManaToHealthCalc@ Health.": "Вы получаете @ManaToHealthCalc@ здоровья.",
  "Your Mana costs double. Your Ability Heals, Shields, and damage are @ManaCalc@ more effective.": "Ваши умения стоят вдвое больше маны. Лечение, щиты и урон ваших умений на @ManaCalc@ эффективнее.",
- "Immediately gain a Needlessly Large Rod. QUEST: Possess Rabadon's Deathcap and Zhonya's Hourglass. REWARD: Gain Wooglet's Witchcap.": "Вы сразу получаете Слишком Большой Жезл. ЗАДАНИЕ: имейте Смертельную шляпу Рабадона и Песочные часы Жони. НАГРАДА: вы получаете Шляпу ведьмы."
+ "Immediately gain a Needlessly Large Rod. QUEST: Possess Rabadon's Deathcap and Zhonya's Hourglass. REWARD: Gain Wooglet's Witchcap.": "Вы сразу получаете Слишком Большой Жезл. ЗАДАНИЕ: имейте Смертельную шляпу Рабадона и Песочные часы Жони. НАГРАДА: вы получаете Шляпу ведьмы.",
+ "You can Critically Defend using your Crit Chance (max 50% chance), giving you a chance to reduce damage taken by 20%. Gain 25% Crit Chance.": "Вы можете критически защищаться, используя свой шанс критического удара (не больше 50%): с этим шансом получаемый урон снижается на 20%. Вы получаете 25% шанса критического удара."
 }

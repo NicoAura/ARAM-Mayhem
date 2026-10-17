@@ -42,10 +42,10 @@ LabI18n.ready(function () {
 
   function augRow(a) {
     // A flex augment is optional: the build works without it.
-    return `<li class="${a.core ? "core" : "flex"}"${a.core ? "" : ` data-flex="${esc(T("flex"))}"`}>
+    return `<li class="${a.core ? "core" : "flex"}">
       <img src="${icon(a.icon)}" alt="" width="32" height="32" loading="lazy">
       <div>
-        <div class="name">${esc(augName(a))} <span class="chip ${a.rarity.toLowerCase()}">${esc(T(a.rarity))}</span></div>
+        <div class="name"${a.core ? "" : ` data-flex="${esc(T("flex"))}"`}>${esc(augName(a))} <span class="chip ${a.rarity.toLowerCase()}">${esc(T(a.rarity))}</span></div>
         <div class="desc">${esc(T(a.text))}</div>
       </div>
     </li>`;

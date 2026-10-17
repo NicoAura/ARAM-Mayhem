@@ -116,7 +116,6 @@
  "Gold": "ذهبي",
  "Your healing and Health Regen deal 70% of the value magic damage to the nearest enemy champion.": "علاجك وتجدد صحتك يُلحقان ضررًا سحريًا بنسبة 70% من القيمة بأقرب بطل عدو.",
  "Prismatic": "منشوري",
- "You can Critically Defend using your Crit Chance (max 50% chance), giving you a chance to reduce damage taken by 20%. Gain 25% Crit Chance. Damage Reduced:": "يمكنك الدفاع الحرج باستخدام فرصة ضربتك الحرجة (بحد أقصى 50%)، ما يمنحك فرصة لتقليل الضرر المتلقى بنسبة 20%. تحصل على 25% فرصة ضربة حرجة. الضرر المُقلَّص:",
  "Silver": "فضي",
  "Ionia": "أيونيا",
  "Slayer": "سفّاح",
@@ -183,5 +182,6 @@
  "Dealing and receiving champion damage grants you @StacksPerHit@ stack of Juggernauting for @Stack_Duration@ seconds. For every @Stacks_Max@ stacks of Juggernauting you gain @Calc_AF@ Adaptive Force, @Calc_Defenses@ Armor, @Calc_Defenses@ Magic Resist, @Calc_Size@ Size, and @Calc_Tenacity@ Tenacity. Stacks fall off faster the more you have. Maximum Juggernauting Level: @f1.0@": "إلحاق الضرر بالأبطال وتلقيه منهم يمنحك @StacksPerHit@ تكديسة من الجبروت لمدة @Stack_Duration@ ثانية. مقابل كل @Stacks_Max@ تكديسات من الجبروت تحصل على @Calc_AF@ قوة تكيفية و@Calc_Defenses@ دروع و@Calc_Defenses@ مقاومة سحر و@Calc_Size@ حجم و@Calc_Tenacity@ صمود. تسقط التكديسات أسرع كلما زادت. أقصى مستوى للجبروت: @f1.0@",
  "Gain @ManaToHealthCalc@ Health.": "تحصل على @ManaToHealthCalc@ صحة.",
  "Your Mana costs double. Your Ability Heals, Shields, and damage are @ManaCalc@ more effective.": "تكاليف المانا تتضاعف. علاج قدراتك ودروعها الواقية وضررها أكثر فعالية بمقدار @ManaCalc@.",
- "Immediately gain a Needlessly Large Rod. QUEST: Possess Rabadon's Deathcap and Zhonya's Hourglass. REWARD: Gain Wooglet's Witchcap.": "تحصل فورًا على قصبة عريضة بلا داع. المهمة: امتلك قبعة موت رابادون وساعة زونيا الرملية. المكافأة: تحصل على قبعة شعوذة ووغليت."
+ "Immediately gain a Needlessly Large Rod. QUEST: Possess Rabadon's Deathcap and Zhonya's Hourglass. REWARD: Gain Wooglet's Witchcap.": "تحصل فورًا على قصبة عريضة بلا داع. المهمة: امتلك قبعة موت رابادون وساعة زونيا الرملية. المكافأة: تحصل على قبعة شعوذة ووغليت.",
+ "You can Critically Defend using your Crit Chance (max 50% chance), giving you a chance to reduce damage taken by 20%. Gain 25% Crit Chance.": "يمكنك الدفاع الحرج باستخدام فرصة ضربتك الحرجة (بحد أقصى 50%)، ما يمنحك فرصة لتقليل الضرر المتلقى بنسبة 20%. تحصل على 25% فرصة ضربة حرجة."
 }

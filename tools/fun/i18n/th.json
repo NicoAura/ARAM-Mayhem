@@ -116,7 +116,6 @@
  "Gold": "ทอง",
  "Your healing and Health Regen deal 70% of the value magic damage to the nearest enemy champion.": "การฮีลและการฟื้นฟูพลังชีวิตของคุณสร้างความเสียหายเวท 70% ของค่านั้นใส่แชมเปี้ยนศัตรูที่ใกล้ที่สุด",
  "Prismatic": "ปริซึม",
- "You can Critically Defend using your Crit Chance (max 50% chance), giving you a chance to reduce damage taken by 20%. Gain 25% Crit Chance. Damage Reduced:": "คุณป้องกันแบบคริติคอลได้โดยใช้โอกาสคริติคอล (สูงสุด 50%) มีโอกาสลดความเสียหายที่ได้รับ 20% ได้รับโอกาสคริติคอล 25% ความเสียหายที่ลดได้:",
  "Silver": "เงิน",
  "Ionia": "Ionia",
  "Slayer": "สเลเยอร์",
@@ -183,5 +182,6 @@
  "Dealing and receiving champion damage grants you @StacksPerHit@ stack of Juggernauting for @Stack_Duration@ seconds. For every @Stacks_Max@ stacks of Juggernauting you gain @Calc_AF@ Adaptive Force, @Calc_Defenses@ Armor, @Calc_Defenses@ Magic Resist, @Calc_Size@ Size, and @Calc_Tenacity@ Tenacity. Stacks fall off faster the more you have. Maximum Juggernauting Level: @f1.0@": "การสร้างและได้รับความเสียหายจากแชมเปี้ยนจะให้สแต็ก Juggernauting @StacksPerHit@ สแต็ก เป็นเวลา @Stack_Duration@ วินาที ทุก @Stacks_Max@ สแต็กของ Juggernauting คุณจะได้รับ Adaptive Force @Calc_AF@ เกราะ @Calc_Defenses@ ต้านทานเวท @Calc_Defenses@ ขนาด @Calc_Size@ และ Tenacity @Calc_Tenacity@ ยิ่งมีสแต็กมากยิ่งหายเร็ว เลเวล Juggernauting สูงสุด: @f1.0@",
  "Gain @ManaToHealthCalc@ Health.": "ได้รับพลังชีวิต @ManaToHealthCalc@",
  "Your Mana costs double. Your Ability Heals, Shields, and damage are @ManaCalc@ more effective.": "มานาที่ใช้เพิ่มเป็นสองเท่า การฮีล โล่ และความเสียหายจากสกิลมีประสิทธิภาพเพิ่มขึ้น @ManaCalc@",
- "Immediately gain a Needlessly Large Rod. QUEST: Possess Rabadon's Deathcap and Zhonya's Hourglass. REWARD: Gain Wooglet's Witchcap.": "ได้รับ Needlessly Large Rod ทันที ภารกิจ: มี Rabadon's Deathcap และ Zhonya's Hourglass รางวัล: ได้รับ Wooglet's Witchcap"
+ "Immediately gain a Needlessly Large Rod. QUEST: Possess Rabadon's Deathcap and Zhonya's Hourglass. REWARD: Gain Wooglet's Witchcap.": "ได้รับ Needlessly Large Rod ทันที ภารกิจ: มี Rabadon's Deathcap และ Zhonya's Hourglass รางวัล: ได้รับ Wooglet's Witchcap",
+ "You can Critically Defend using your Crit Chance (max 50% chance), giving you a chance to reduce damage taken by 20%. Gain 25% Crit Chance.": "คุณป้องกันแบบคริติคอลได้โดยใช้โอกาสคริติคอล (สูงสุด 50%) มีโอกาสลดความเสียหายที่ได้รับ 20% ได้รับโอกาสคริติคอล 25%"
 }

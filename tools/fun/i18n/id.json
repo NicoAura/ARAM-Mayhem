@@ -116,7 +116,6 @@
  "Gold": "Gold",
  "Your healing and Health Regen deal 70% of the value magic damage to the nearest enemy champion.": "Healing dan Health Regen-mu memberikan 70% nilainya sebagai magic damage ke champion musuh terdekat.",
  "Prismatic": "Prismatic",
- "You can Critically Defend using your Crit Chance (max 50% chance), giving you a chance to reduce damage taken by 20%. Gain 25% Crit Chance. Damage Reduced:": "Kamu bisa Critical Defend memakai Crit Chance-mu (maks. 50% peluang), memberi peluang mengurangi damage yang diterima sebesar 20%. Dapatkan 25% Crit Chance. Damage Dikurangi:",
  "Silver": "Silver",
  "Ionia": "Ionia",
  "Slayer": "Slayer",
@@ -183,5 +182,6 @@
  "Dealing and receiving champion damage grants you @StacksPerHit@ stack of Juggernauting for @Stack_Duration@ seconds. For every @Stacks_Max@ stacks of Juggernauting you gain @Calc_AF@ Adaptive Force, @Calc_Defenses@ Armor, @Calc_Defenses@ Magic Resist, @Calc_Size@ Size, and @Calc_Tenacity@ Tenacity. Stacks fall off faster the more you have. Maximum Juggernauting Level: @f1.0@": "Memberi dan menerima damage champion memberimu @StacksPerHit@ stack Juggernauting selama @Stack_Duration@ detik. Untuk tiap @Stacks_Max@ stack Juggernauting kamu mendapatkan @Calc_AF@ Adaptive Force, @Calc_Defenses@ Armor, @Calc_Defenses@ Magic Resist, @Calc_Size@ Size, dan @Calc_Tenacity@ Tenacity. Makin banyak stack, makin cepat hilangnya. Level Juggernauting Maksimal: @f1.0@",
  "Gain @ManaToHealthCalc@ Health.": "Dapatkan @ManaToHealthCalc@ Health.",
  "Your Mana costs double. Your Ability Heals, Shields, and damage are @ManaCalc@ more effective.": "Biaya Mana-mu jadi dua kali lipat. Heal, Shield, dan damage Ability-mu @ManaCalc@ lebih efektif.",
- "Immediately gain a Needlessly Large Rod. QUEST: Possess Rabadon's Deathcap and Zhonya's Hourglass. REWARD: Gain Wooglet's Witchcap.": "Langsung dapatkan Needlessly Large Rod. QUEST: Miliki Rabadon's Deathcap dan Zhonya's Hourglass. REWARD: Dapatkan Wooglet's Witchcap."
+ "Immediately gain a Needlessly Large Rod. QUEST: Possess Rabadon's Deathcap and Zhonya's Hourglass. REWARD: Gain Wooglet's Witchcap.": "Langsung dapatkan Needlessly Large Rod. QUEST: Miliki Rabadon's Deathcap dan Zhonya's Hourglass. REWARD: Dapatkan Wooglet's Witchcap.",
+ "You can Critically Defend using your Crit Chance (max 50% chance), giving you a chance to reduce damage taken by 20%. Gain 25% Crit Chance.": "Kamu bisa Critical Defend memakai Crit Chance-mu (maks. 50% peluang), memberi peluang mengurangi damage yang diterima sebesar 20%. Dapatkan 25% Crit Chance."
 }

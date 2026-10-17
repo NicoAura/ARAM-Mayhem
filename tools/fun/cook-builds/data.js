@@ -56,7 +56,7 @@ window.COOK_DATA = {
      "name": "Tank It Or Leave It",
      "id": 1080,
      "rarity": "Silver",
-     "text": "You can Critically Defend using your Crit Chance (max 50% chance), giving you a chance to reduce damage taken by 20%. Gain 25% Crit Chance. Damage Reduced:",
+     "text": "You can Critically Defend using your Crit Chance (max 50% chance), giving you a chance to reduce damage taken by 20%. Gain 25% Crit Chance.",
      "core": false,
      "icon": "icons/augments/tank-it-or-leave-it.png",
      "win_rate": 0.5508,
@@ -103,24 +103,24 @@ window.COOK_DATA = {
    "core_usual": 0,
    "core_pick_rate": 0.0611,
    "sim": {
-    "dps": 178,
+    "dps": 175,
     "survival": 0.011,
-    "best_dps": 1053,
-    "best_survival": 0.04,
-    "pct_of_best": 0.169,
+    "best_dps": 1193,
+    "best_survival": 0.093,
+    "pct_of_best": 0.147,
     "best_items": [
      "Berserker's Greaves",
      "Blade of The Ruined King",
-     "The Collector",
      "Essence Reaver",
+     "Kraken Slayer",
      "Serylda's Grudge",
      "Umbral Glaive"
     ],
     "best_augments": [
      "Triggered Inferno",
      "Giant Slayer",
-     "Dashing",
-     "Fan The Hammer"
+     "Dual Wield",
+     "Vulnerability"
     ],
     "items_not_modeled": [
      "Rite of Ruin"

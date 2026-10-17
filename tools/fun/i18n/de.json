@@ -116,7 +116,6 @@
  "Gold": "Gold",
  "Your healing and Health Regen deal 70% of the value magic damage to the nearest enemy champion.": "Deine Heilung und Lebensregeneration fügen dem nächsten gegnerischen Champion 70 % des Werts als magischen Schaden zu.",
  "Prismatic": "Prismatisch",
- "You can Critically Defend using your Crit Chance (max 50% chance), giving you a chance to reduce damage taken by 20%. Gain 25% Crit Chance. Damage Reduced:": "Du kannst mit deiner kritischen Trefferchance kritisch verteidigen (max. 50 % Chance), wodurch du eine Chance hast, erlittenen Schaden um 20 % zu verringern. Erhalte 25 % kritische Trefferchance. Verringerter Schaden:",
  "Silver": "Silber",
  "Ionia": "Ionia",
  "Slayer": "Schlächter",
@@ -183,5 +182,6 @@
  "Dealing and receiving champion damage grants you @StacksPerHit@ stack of Juggernauting for @Stack_Duration@ seconds. For every @Stacks_Max@ stacks of Juggernauting you gain @Calc_AF@ Adaptive Force, @Calc_Defenses@ Armor, @Calc_Defenses@ Magic Resist, @Calc_Size@ Size, and @Calc_Tenacity@ Tenacity. Stacks fall off faster the more you have. Maximum Juggernauting Level: @f1.0@": "Champion-Schaden zu verursachen und zu erleiden gewährt dir @StacksPerHit@ Steigerung Koloss für @Stack_Duration@ Sekunden. Für je @Stacks_Max@ Steigerungen Koloss erhältst du @Calc_AF@ adaptive Kraft, @Calc_Defenses@ Rüstung, @Calc_Defenses@ Magieresistenz, @Calc_Size@ Größe und @Calc_Tenacity@ Zähigkeit. Je mehr Steigerungen du hast, desto schneller verfallen sie. Maximale Koloss-Stufe: @f1.0@",
  "Gain @ManaToHealthCalc@ Health.": "Erhalte @ManaToHealthCalc@ Leben.",
  "Your Mana costs double. Your Ability Heals, Shields, and damage are @ManaCalc@ more effective.": "Deine Manakosten verdoppeln sich. Deine Heilungen, Schilde und dein Schaden durch Fähigkeiten sind @ManaCalc@ effektiver.",
- "Immediately gain a Needlessly Large Rod. QUEST: Possess Rabadon's Deathcap and Zhonya's Hourglass. REWARD: Gain Wooglet's Witchcap.": "Erhalte sofort einen Übergroßen Stab. QUEST: Besitze Rabadons Todeshaube und Zhonyas Stundenglas. BELOHNUNG: Erhalte Wooglets Hexenhaube."
+ "Immediately gain a Needlessly Large Rod. QUEST: Possess Rabadon's Deathcap and Zhonya's Hourglass. REWARD: Gain Wooglet's Witchcap.": "Erhalte sofort einen Übergroßen Stab. QUEST: Besitze Rabadons Todeshaube und Zhonyas Stundenglas. BELOHNUNG: Erhalte Wooglets Hexenhaube.",
+ "You can Critically Defend using your Crit Chance (max 50% chance), giving you a chance to reduce damage taken by 20%. Gain 25% Crit Chance.": "Du kannst mit deiner kritischen Trefferchance kritisch verteidigen (max. 50 % Chance), wodurch du eine Chance hast, erlittenen Schaden um 20 % zu verringern. Erhalte 25 % kritische Trefferchance."
 }

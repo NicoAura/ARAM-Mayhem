@@ -116,7 +116,6 @@
  "Gold": "Arany",
  "Your healing and Health Regen deal 70% of the value magic damage to the nearest enemy champion.": "A gyógyulásod és életerő-regenerációd az érték 70%-ának megfelelő mágikus sebzést okoz a legközelebbi ellenséges hősnek.",
  "Prismatic": "Prizmatikus",
- "You can Critically Defend using your Crit Chance (max 50% chance), giving you a chance to reduce damage taken by 20%. Gain 25% Crit Chance. Damage Reduced:": "A kritikus esélyeddel kritikusan védekezhetsz (legfeljebb 50% esély), ami esélyt ad arra, hogy 20%-kal csökkentsd a kapott sebzést. 25% kritikus esélyt kapsz. Csökkentett sebzés:",
  "Silver": "Ezüst",
  "Ionia": "Ionia",
  "Slayer": "Gyilkos",
@@ -183,5 +182,6 @@
  "Dealing and receiving champion damage grants you @StacksPerHit@ stack of Juggernauting for @Stack_Duration@ seconds. For every @Stacks_Max@ stacks of Juggernauting you gain @Calc_AF@ Adaptive Force, @Calc_Defenses@ Armor, @Calc_Defenses@ Magic Resist, @Calc_Size@ Size, and @Calc_Tenacity@ Tenacity. Stacks fall off faster the more you have. Maximum Juggernauting Level: @f1.0@": "Hősök elleni sebzés okozása és elszenvedése @StacksPerHit@ Juggernaut-töltetet ad @Stack_Duration@ másodpercre. Minden @Stacks_Max@ Juggernaut-töltet után @Calc_AF@ adaptív erőt, @Calc_Defenses@ páncélt, @Calc_Defenses@ mágiaellenállást, @Calc_Size@ méretet és @Calc_Tenacity@ kitartást kapsz. Minél több töltet van rajtad, annál gyorsabban fogynak. Maximális Juggernaut-szint: @f1.0@",
  "Gain @ManaToHealthCalc@ Health.": "@ManaToHealthCalc@ életerőt kapsz.",
  "Your Mana costs double. Your Ability Heals, Shields, and damage are @ManaCalc@ more effective.": "A manaköltségeid duplázódnak. A képességeid gyógyítása, pajzsai és sebzése @ManaCalc@-kal hatékonyabb.",
- "Immediately gain a Needlessly Large Rod. QUEST: Possess Rabadon's Deathcap and Zhonya's Hourglass. REWARD: Gain Wooglet's Witchcap.": "Azonnal kapsz egy Feleslegesen nagy pálcát. KÜLDETÉS: Legyen nálad Rabadon halálsüvege és Zhonya homokórája. JUTALOM: Megkapod Wooglet boszorkánykalapját."
+ "Immediately gain a Needlessly Large Rod. QUEST: Possess Rabadon's Deathcap and Zhonya's Hourglass. REWARD: Gain Wooglet's Witchcap.": "Azonnal kapsz egy Feleslegesen nagy pálcát. KÜLDETÉS: Legyen nálad Rabadon halálsüvege és Zhonya homokórája. JUTALOM: Megkapod Wooglet boszorkánykalapját.",
+ "You can Critically Defend using your Crit Chance (max 50% chance), giving you a chance to reduce damage taken by 20%. Gain 25% Crit Chance.": "A kritikus esélyeddel kritikusan védekezhetsz (legfeljebb 50% esély), ami esélyt ad arra, hogy 20%-kal csökkentsd a kapott sebzést. 25% kritikus esélyt kapsz."
 }

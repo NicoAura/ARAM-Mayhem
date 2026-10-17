@@ -116,7 +116,6 @@
  "Gold": "黃金",
  "Your healing and Health Regen deal 70% of the value magic damage to the nearest enemy champion.": "你的治療和生命回復會對最近的敵方英雄造成相當於該數值70%的魔法傷害。",
  "Prismatic": "稜彩",
- "You can Critically Defend using your Crit Chance (max 50% chance), giving you a chance to reduce damage taken by 20%. Gain 25% Crit Chance. Damage Reduced:": "你可以用暴擊率進行暴擊防禦（最高50%機率），有機率使受到的傷害降低20%。獲得25%暴擊率。降低的傷害：",
  "Silver": "白銀",
  "Ionia": "愛歐尼亞",
  "Slayer": "刺客",
@@ -183,5 +182,6 @@
  "Dealing and receiving champion damage grants you @StacksPerHit@ stack of Juggernauting for @Stack_Duration@ seconds. For every @Stacks_Max@ stacks of Juggernauting you gain @Calc_AF@ Adaptive Force, @Calc_Defenses@ Armor, @Calc_Defenses@ Magic Resist, @Calc_Size@ Size, and @Calc_Tenacity@ Tenacity. Stacks fall off faster the more you have. Maximum Juggernauting Level: @f1.0@": "造成和受到英雄傷害時，獲得@StacksPerHit@層主宰，持續@Stack_Duration@秒。每有@Stacks_Max@層主宰，你獲得@Calc_AF@適性之力、@Calc_Defenses@物理防禦、@Calc_Defenses@魔法防禦、@Calc_Size@體型和@Calc_Tenacity@韌性。層數越多掉得越快。最大主宰等級：@f1.0@",
  "Gain @ManaToHealthCalc@ Health.": "獲得@ManaToHealthCalc@生命。",
  "Your Mana costs double. Your Ability Heals, Shields, and damage are @ManaCalc@ more effective.": "你的魔力消耗加倍。你的技能治療、護盾和傷害效果提升@ManaCalc@。",
- "Immediately gain a Needlessly Large Rod. QUEST: Possess Rabadon's Deathcap and Zhonya's Hourglass. REWARD: Gain Wooglet's Witchcap.": "立即獲得一根巨型魔棒。任務：持有死亡之帽和中婭沙漏。獎勵：獲得烏莉特的法帽。"
+ "Immediately gain a Needlessly Large Rod. QUEST: Possess Rabadon's Deathcap and Zhonya's Hourglass. REWARD: Gain Wooglet's Witchcap.": "立即獲得一根巨型魔棒。任務：持有死亡之帽和中婭沙漏。獎勵：獲得烏莉特的法帽。",
+ "You can Critically Defend using your Crit Chance (max 50% chance), giving you a chance to reduce damage taken by 20%. Gain 25% Crit Chance.": "你可以用暴擊率進行暴擊防禦（最高50%機率），有機率使受到的傷害降低20%。獲得25%暴擊率。"
 }

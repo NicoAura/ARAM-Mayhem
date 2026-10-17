@@ -116,7 +116,6 @@
  "Gold": "Vàng",
  "Your healing and Health Regen deal 70% of the value magic damage to the nearest enemy champion.": "Lượng hồi máu và Hồi Máu của bạn gây sát thương phép bằng 70% giá trị lên tướng địch gần nhất.",
  "Prismatic": "Lăng Kính",
- "You can Critically Defend using your Crit Chance (max 50% chance), giving you a chance to reduce damage taken by 20%. Gain 25% Crit Chance. Damage Reduced:": "Bạn có thể Phòng Thủ Chí Mạng dựa trên Tỉ Lệ Chí Mạng (tối đa 50%), có cơ hội giảm 20% sát thương nhận vào. Nhận 25% Tỉ Lệ Chí Mạng. Sát thương đã giảm:",
  "Silver": "Bạc",
  "Ionia": "Ionia",
  "Slayer": "Sát Thủ",
@@ -183,5 +182,6 @@
  "Dealing and receiving champion damage grants you @StacksPerHit@ stack of Juggernauting for @Stack_Duration@ seconds. For every @Stacks_Max@ stacks of Juggernauting you gain @Calc_AF@ Adaptive Force, @Calc_Defenses@ Armor, @Calc_Defenses@ Magic Resist, @Calc_Size@ Size, and @Calc_Tenacity@ Tenacity. Stacks fall off faster the more you have. Maximum Juggernauting Level: @f1.0@": "Gây và nhận sát thương từ tướng cho bạn @StacksPerHit@ cộng dồn Khổng Lồ trong @Stack_Duration@ giây. Mỗi @Stacks_Max@ cộng dồn Khổng Lồ, bạn nhận @Calc_AF@ Sức Mạnh Thích Ứng, @Calc_Defenses@ Giáp, @Calc_Defenses@ Kháng Phép, @Calc_Size@ Kích Thước và @Calc_Tenacity@ Kháng Hiệu Ứng. Càng nhiều cộng dồn thì mất càng nhanh. Cấp Khổng Lồ tối đa: @f1.0@",
  "Gain @ManaToHealthCalc@ Health.": "Nhận @ManaToHealthCalc@ Máu.",
  "Your Mana costs double. Your Ability Heals, Shields, and damage are @ManaCalc@ more effective.": "Năng Lượng tiêu hao gấp đôi. Hồi Máu, Lá Chắn và sát thương từ kỹ năng hiệu quả hơn @ManaCalc@.",
- "Immediately gain a Needlessly Large Rod. QUEST: Possess Rabadon's Deathcap and Zhonya's Hourglass. REWARD: Gain Wooglet's Witchcap.": "Nhận ngay một Gậy Quá Khổ. NHIỆM VỤ: Sở hữu Mũ Phù Thủy Rabadon và Đồng Hồ Cát Zhonya. PHẦN THƯỞNG: Nhận Mũ Phù Thủy Wooglet."
+ "Immediately gain a Needlessly Large Rod. QUEST: Possess Rabadon's Deathcap and Zhonya's Hourglass. REWARD: Gain Wooglet's Witchcap.": "Nhận ngay một Gậy Quá Khổ. NHIỆM VỤ: Sở hữu Mũ Phù Thủy Rabadon và Đồng Hồ Cát Zhonya. PHẦN THƯỞNG: Nhận Mũ Phù Thủy Wooglet.",
+ "You can Critically Defend using your Crit Chance (max 50% chance), giving you a chance to reduce damage taken by 20%. Gain 25% Crit Chance.": "Bạn có thể Phòng Thủ Chí Mạng dựa trên Tỉ Lệ Chí Mạng (tối đa 50%), có cơ hội giảm 20% sát thương nhận vào. Nhận 25% Tỉ Lệ Chí Mạng."
 }
