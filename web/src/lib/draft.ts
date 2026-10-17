@@ -4,6 +4,7 @@ import { join } from "node:path";
 import championIds from "@/data/champion-ids.json";
 import augmentNames from "@/data/augment-names.json";
 import { augmentHref } from "./augments";
+import { augmentRows } from "./augment-winrate";
 import { champList } from "./champions";
 import { readRepoJson } from "./repo-data";
 
@@ -23,7 +24,7 @@ export type DraftData = {
 
 export function draftData(): DraftData {
   const rules = readRepoJson<{ tiers?: Record<string, string> }>("guide/augment_rules.json");
-  const wr = new Map((readRepoJson<{ augments: { augment_id: number; win_rate: number }[] }>("data/cn/augments.json")?.augments ?? []).map((a) => [String(a.augment_id), a.win_rate]));
+  const wr = new Map(augmentRows().map((a) => [String(a.augment_id), a.win_rate]));
   const augs: DraftData["augs"] = {};
   for (const [id, tier] of Object.entries(rules?.tiers ?? {})) {
     if (!NAMES[id] || !existsSync(join(process.cwd(), "public", "icons", "augments", `${id}.webp`))) continue;

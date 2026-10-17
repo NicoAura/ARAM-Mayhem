@@ -3,6 +3,7 @@ import augmentNames from "@/data/augment-names.json";
 import championNames from "@/data/champion-names.json";
 import type { SearchItem } from "@/components/SearchPalette";
 import { augmentHref } from "./augments";
+import { augmentRows } from "./augment-winrate";
 import { itemPages } from "./item-pages";
 import { readRepoCsv, readRepoJson } from "./repo-data";
 import { navPages } from "./tabs";
@@ -30,10 +31,9 @@ export function topChampions(n = 6): Ranked[] {
 }
 
 export function topAugments(n = 6): Ranked[] {
-  const rows = readRepoCsv("data/cn/augments.csv") ?? [];
-  return rows
+  return augmentRows()
     .filter((r) => r.tier && AUGS[r.augment_id])
-    .map((r) => ({ id: r.augment_id, name: AUGS[r.augment_id], tier: r.tier, winRate: Number(r.win_rate), pickRate: Number(r.pick_rate) }))
+    .map((r) => ({ id: String(r.augment_id), name: AUGS[r.augment_id], tier: r.tier, winRate: r.win_rate, pickRate: r.pick_rate }))
     .sort((a, b) => b.winRate - a.winRate)
     .slice(0, n);
 }
