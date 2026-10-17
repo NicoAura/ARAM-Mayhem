@@ -1,7 +1,7 @@
 """Bad input gives a non-zero exit and an error message, not a crash (SIGABRT / uncaught exception) or a hang.
 
 Every run has a timeout (conftest.RUN_TIMEOUT); a hang fails the test. Cases that crash today
-are xfail(strict=True) with the reason; drop the marker once fixed.
+were fixed in the Simulator thread's bad-input PR.
 """
 from __future__ import annotations
 
@@ -10,7 +10,6 @@ import pytest
 FAST = ["--trials", "20", "--seed", "1"]
 JINX = ["--champ", "Jinx", "--items", "berserkers"]
 
-UNCAUGHT = "uncaught exception (std::stoi/stod/stoll on a non-number) aborts with SIGABRT instead of a usage error"
 
 
 def assert_clean_error(proc, needle=None):
@@ -70,7 +69,6 @@ def test_mayhem_sim_corrupt_data_files(run_sim, tmp_path):
     ["--champ", "Jinx", "--items", "berserkers", "--seed", "xyz"],
     ["--champ", "Jinx", "--items", "berserkers", "--threads", "abc"],
 ], ids=["trials-abc", "trials-overflow", "seed-xyz", "threads-abc"])
-@pytest.mark.xfail(strict=True, reason="mayhem_sim: " + UNCAUGHT)
 def test_mayhem_sim_non_numeric_flags(run_sim, args):
     assert_clean_error(run_sim("mayhem_sim", args, timeout=30))
 
@@ -101,8 +99,7 @@ def test_yunara_sim_corrupt_data_file(run_sim, tmp_path):
     ["--trials", "abc"], ["--seed", "abc"], ["--level", "abc"], ["--fight", "abc"], ["--target", "a,b,c"],
     ["--items", "nope", *FAST],
 ], ids=["trials", "seed", "level", "fight", "target", "unknown-item"])
-@pytest.mark.xfail(strict=True, reason="yunara_sim: " + UNCAUGHT + "; an unknown item throws inside a worker thread")
-def test_yunara_sim_crashes_on_bad_values(run_sim, args):
+def test_yunara_sim_bad_values(run_sim, args):
     assert_clean_error(run_sim("yunara_sim", args, timeout=30))
 
 
