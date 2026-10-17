@@ -122,6 +122,10 @@ def mayhem_changes(bin_, record):
     return out
 
 
+# Build stats name a few items by ids the game files don't use; map them to the game's id.
+ITEM_ALIASES = {3097: 3095}  # Stormrazor
+
+
 def load_build(cid):
     """One champion's Mayhem build stats from data/cn/builds/{id}.json (the My Stats thread refreshes them daily)."""
     path = os.path.join(REPO, "data", "cn", "builds", f"{cid}.json")
@@ -129,7 +133,8 @@ def load_build(cid):
         return None
     with open(path) as f:
         b = json.load(f)
-    rows = lambda xs, n: [{"items": x["items"], "pick": x["pick_rate"], "win": x["win_rate"]} for x in xs or []][:n]  # noqa: E731
+    rows = lambda xs, n: [{"items": [ITEM_ALIASES.get(i, i) for i in x["items"]], "pick": x["pick_rate"], "win": x["win_rate"]}  # noqa: E731
+                          for x in xs or []][:n]
     items = b.get("items") or {}
     aug = b.get("augments") or {}
     return {
