@@ -29,6 +29,7 @@ import OfflineSupport from "@/components/OfflineSupport";
 import SkipLink from "@/components/SkipLink";
 import ViewMemory from "@/components/ViewMemory";
 import { VIEW_SCRIPT } from "@/lib/url-state";
+import BackToTop from "@/components/BackToTop";
 
 const sans = Geist({ subsets: ["latin"], variable: "--font-sans" });
 const mono = Geist_Mono({ subsets: ["latin"], variable: "--font-mono" });
@@ -151,6 +152,7 @@ export default function RootLayout({
         <UpdateToast />
         <OfflineSupport />
         <ViewMemory />
+        <BackToTop />
         <MobileTabBar tabs={navPages().map(({ href, label }) => ({ href, label }))} />
       </body>
     </html>

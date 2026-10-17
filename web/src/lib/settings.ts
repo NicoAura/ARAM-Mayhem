@@ -21,13 +21,15 @@ export type Settings = {
   contrast: "standard" | "high";
   /** "colorblind" swaps green/red and the tier colours for a blue/orange set. */
   colors: "standard" | "colorblind";
+  /** Base text size; everything sized in rem follows it. */
+  text: "standard" | "large" | "larger";
   /** Reopen the Tier List, Compare, Team Builder and Build Editor the way they were left. */
   remember: boolean;
   /** The Tier List's starting patch range. */
   tierRange: "live" | "last3" | "all";
 };
 
-export const DEFAULT_SETTINGS: Settings = { motion: "system", sound: true, uiSound: false, haptics: true, graphics: "auto", contrast: "standard", colors: "standard", remember: true, tierRange: "live" };
+export const DEFAULT_SETTINGS: Settings = { motion: "system", sound: true, uiSound: false, haptics: true, graphics: "auto", contrast: "standard", colors: "standard", remember: true, text: "standard", tierRange: "live" };
 
 export function loadSettings(): Settings {
   try {
@@ -55,7 +57,9 @@ export function applySettings(s: Settings) {
   else delete root.dataset.contrast;
   if (s.colors === "colorblind") root.dataset.colors = "colorblind";
   else delete root.dataset.colors;
+  if (s.text === "large" || s.text === "larger") root.dataset.text = s.text;
+  else delete root.dataset.text;
 }
 
-/** Inline before-paint script: applies reduced motion, contrast and colour choices from saved settings. */
-export const SETTINGS_SCRIPT = `try{var s=JSON.parse(localStorage.getItem(${JSON.stringify(SETTINGS_KEY)})||"{}"),d=document.documentElement.dataset;if(s.motion==="reduce")d.motion="reduce";if(s.contrast==="high")d.contrast="high";if(s.colors==="colorblind")d.colors="colorblind"}catch(e){}`;
+/** Inline before-paint script: applies reduced motion, contrast, colour and text size choices from saved settings. */
+export const SETTINGS_SCRIPT = `try{var s=JSON.parse(localStorage.getItem(${JSON.stringify(SETTINGS_KEY)})||"{}"),d=document.documentElement.dataset;if(s.motion==="reduce")d.motion="reduce";if(s.contrast==="high")d.contrast="high";if(s.colors==="colorblind")d.colors="colorblind";if(s.text==="large"||s.text==="larger")d.text=s.text}catch(e){}`;
