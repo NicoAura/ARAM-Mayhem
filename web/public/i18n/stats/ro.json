@@ -6,7 +6,6 @@
  "Show on deeparam.com": "Afișează pe deeparam.com",
  "Import games from client": "Importă meciuri din client",
  "Champion": "Campion",
- "Skin": "Skin",
  "No games yet": "Niciun meci încă",
  "Import your games from the League client. Your games stay on your computer.": "Importă-ți meciurile din clientul League. Meciurile tale rămân pe computerul tău.",
  "You need to be connected to the Riot Client: open it on this computer and sign in first.": "Trebuie să fii conectat la Clientul Riot: deschide-l pe acest computer și conectează-te mai întâi.",
@@ -195,9 +194,6 @@
  "Removing your shared games…": "Se elimină meciurile partajate…",
  "Sharing is on. New games are shared after each import.": "Partajarea este pornită. Meciurile noi sunt partajate după fiecare import.",
  "Sharing is off and your shared games were removed.": "Partajarea este oprită, iar meciurile tale partajate au fost eliminate.",
- "Default": "Implicit",
- "Champions and skins you own": "Campionii și skinurile tale",
- "Import games to pick from the skins you own": "Importă meciuri ca să alegi dintre skinurile tale",
  "Map {id}": "Hartă {id}",
  "Not synced": "Nesincronizat",
  "Level": "Nivel",
@@ -214,5 +210,7 @@
  "Recording a game ({champion})": "Se înregistrează un meci ({champion})",
  "{n} recorded": "{n} înregistrate",
  "Your Mayhem games, in one place.": "Meciurile tale ARAM: Haos, într-un singur loc.",
- "Import your games with the button below. You need to be connected to the Riot Client: open it on this computer and sign in first. Your games stay on your computer.": "Importă-ți meciurile cu butonul de mai jos. Trebuie să fii conectat la Clientul Riot: deschide-l pe acest computer și conectează-te mai întâi. Meciurile tale rămân pe computerul tău."
+ "Import your games with the button below. You need to be connected to the Riot Client: open it on this computer and sign in first. Your games stay on your computer.": "Importă-ți meciurile cu butonul de mai jos. Trebuie să fii conectat la Clientul Riot: deschide-l pe acest computer și conectează-te mai întâi. Meciurile tale rămân pe computerul tău.",
+ "Sign in above to see your Mayhem games here: win rate, champions, augments and recent matches.": "Conectează-te mai sus ca să vezi aici meciurile tale de Haos: rata de victorii, campionii, augmentările și meciurile recente.",
+ "Champions you own": "Campionii pe care îi deții"
 }

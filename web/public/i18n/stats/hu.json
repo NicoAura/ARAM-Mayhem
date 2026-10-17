@@ -6,7 +6,6 @@
  "Show on deeparam.com": "Megjelenítés a deeparam.com-on",
  "Import games from client": "Meccsek importálása a kliensből",
  "Champion": "Hős",
- "Skin": "Skin",
  "No games yet": "Még nincsenek meccsek",
  "Import your games from the League client. Your games stay on your computer.": "Importáld a meccseidet a League kliensből. A meccseid a gépeden maradnak.",
  "You need to be connected to the Riot Client: open it on this computer and sign in first.": "Csatlakoznod kell a Riot Clienthez: előbb nyisd meg ezen a gépen, és jelentkezz be.",
@@ -195,9 +194,6 @@
  "Removing your shared games…": "Megosztott meccseid törlése…",
  "Sharing is on. New games are shared after each import.": "A megosztás be van kapcsolva. Az új meccsek minden importálás után megosztásra kerülnek.",
  "Sharing is off and your shared games were removed.": "A megosztás ki van kapcsolva, és a megosztott meccseid törlődtek.",
- "Default": "Alapértelmezett",
- "Champions and skins you own": "A saját hőseid és skinjeid",
- "Import games to pick from the skins you own": "Importálj meccseket, hogy a saját skinjeid közül választhass",
  "Map {id}": "Pálya: {id}",
  "Not synced": "Nincs szinkronizálva",
  "Level": "Szint",
@@ -214,5 +210,7 @@
  "Recording a game ({champion})": "Meccs rögzítése ({champion})",
  "{n} recorded": "{n} rögzítve",
  "Your Mayhem games, in one place.": "Az ARAM: Káosz meccseid egy helyen.",
- "Import your games with the button below. You need to be connected to the Riot Client: open it on this computer and sign in first. Your games stay on your computer.": "Importáld a meccseidet az alábbi gombbal. Csatlakoznod kell a Riot Clienthez: előbb nyisd meg ezen a gépen, és jelentkezz be. A meccseid a gépeden maradnak."
+ "Import your games with the button below. You need to be connected to the Riot Client: open it on this computer and sign in first. Your games stay on your computer.": "Importáld a meccseidet az alábbi gombbal. Csatlakoznod kell a Riot Clienthez: előbb nyisd meg ezen a gépen, és jelentkezz be. A meccseid a gépeden maradnak.",
+ "Sign in above to see your Mayhem games here: win rate, champions, augments and recent matches.": "Jelentkezz be fent, és itt láthatod a Káosz-meccseidet: győzelmi arány, hősök, bővítések és legutóbbi meccsek.",
+ "Champions you own": "Birtokolt hősök"
 }

@@ -6,7 +6,6 @@
  "Show on deeparam.com": "Показывать на deeparam.com",
  "Import games from client": "Импортировать игры из клиента",
  "Champion": "Чемпион",
- "Skin": "Образ",
  "No games yet": "Игр пока нет",
  "Import your games from the League client. Your games stay on your computer.": "Импортируйте свои игры из клиента League. Ваши игры остаются на вашем компьютере.",
  "You need to be connected to the Riot Client: open it on this computer and sign in first.": "Нужно подключение к клиенту Riot: сначала откройте его на этом компьютере и войдите в аккаунт.",
@@ -195,9 +194,6 @@
  "Removing your shared games…": "Удаление отправленных игр…",
  "Sharing is on. New games are shared after each import.": "Обмен включён. Новые игры отправляются после каждого импорта.",
  "Sharing is off and your shared games were removed.": "Обмен выключен, отправленные игры удалены.",
- "Default": "По умолчанию",
- "Champions and skins you own": "Ваши чемпионы и образы",
- "Import games to pick from the skins you own": "Импортируйте игры, чтобы выбирать из своих образов",
  "Map {id}": "Карта {id}",
  "Not synced": "Не синхронизировано",
  "Level": "Уровень",
@@ -214,5 +210,7 @@
  "Recording a game ({champion})": "Запись игры ({champion})",
  "{n} recorded": "Записано: {n}",
  "Your Mayhem games, in one place.": "Ваши игры в ARAM: Хаос в одном месте.",
- "Import your games with the button below. You need to be connected to the Riot Client: open it on this computer and sign in first. Your games stay on your computer.": "Импортируйте игры кнопкой ниже. Нужно подключение к клиенту Riot: сначала откройте его на этом компьютере и войдите в аккаунт. Ваши игры остаются на вашем компьютере."
+ "Import your games with the button below. You need to be connected to the Riot Client: open it on this computer and sign in first. Your games stay on your computer.": "Импортируйте игры кнопкой ниже. Нужно подключение к клиенту Riot: сначала откройте его на этом компьютере и войдите в аккаунт. Ваши игры остаются на вашем компьютере.",
+ "Sign in above to see your Mayhem games here: win rate, champions, augments and recent matches.": "Войдите выше, чтобы увидеть здесь свои игры в режиме «Хаос»: процент побед, чемпионов, аугменты и последние матчи.",
+ "Champions you own": "Ваши чемпионы"
 }

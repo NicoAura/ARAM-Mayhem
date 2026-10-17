@@ -46,6 +46,8 @@ const nextConfig: NextConfig = {
       // The owner's tools moved under the account page when accounts replaced the editor password.
       ["/admin", "/account/edit"],
       ["/admin/simulator", "/account/simulator"],
+      // My Stats moved onto the account page.
+      ["/stats", "/account#my-stats"],
     ]
       .map(([source, destination]) => ({ source, destination, permanent: true }))
       .concat([

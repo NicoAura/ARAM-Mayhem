@@ -6,7 +6,6 @@
  "Show on deeparam.com": "Zobrazit na deeparam.com",
  "Import games from client": "Importovat hry z klienta",
  "Champion": "Šampion",
- "Skin": "Skin",
  "No games yet": "Zatím žádné hry",
  "Import your games from the League client. Your games stay on your computer.": "Importuj své hry z klienta League. Tvoje hry zůstanou v tvém počítači.",
  "You need to be connected to the Riot Client: open it on this computer and sign in first.": "Musíš být připojen k Riot Clientu: nejdřív ho na tomto počítači otevři a přihlas se.",
@@ -195,9 +194,6 @@
  "Removing your shared games…": "Odstraňuji tvoje sdílené hry…",
  "Sharing is on. New games are shared after each import.": "Sdílení je zapnuté. Nové hry se sdílejí po každém importu.",
  "Sharing is off and your shared games were removed.": "Sdílení je vypnuté a tvoje sdílené hry byly odstraněny.",
- "Default": "Výchozí",
- "Champions and skins you own": "Šampioni a skiny, které vlastníš",
- "Import games to pick from the skins you own": "Importuj hry, abys mohl vybírat ze svých skinů",
  "Map {id}": "Mapa {id}",
  "Not synced": "Nesynchronizováno",
  "Level": "Úroveň",
@@ -214,5 +210,7 @@
  "Recording a game ({champion})": "Nahrávám hru ({champion})",
  "{n} recorded": "Zaznamenáno: {n}",
  "Your Mayhem games, in one place.": "Tvoje hry v ARAM: Mela na jednom místě.",
- "Import your games with the button below. You need to be connected to the Riot Client: open it on this computer and sign in first. Your games stay on your computer.": "Importuj své hry tlačítkem níže. Musíš být připojen k Riot Clientu: nejdřív ho na tomto počítači otevři a přihlas se. Tvoje hry zůstanou v tvém počítači."
+ "Import your games with the button below. You need to be connected to the Riot Client: open it on this computer and sign in first. Your games stay on your computer.": "Importuj své hry tlačítkem níže. Musíš být připojen k Riot Clientu: nejdřív ho na tomto počítači otevři a přihlas se. Tvoje hry zůstanou v tvém počítači.",
+ "Sign in above to see your Mayhem games here: win rate, champions, augments and recent matches.": "Přihlas se výše a uvidíš tu své zápasy v režimu Mela: procento výher, šampiony, augmenty a nedávné zápasy.",
+ "Champions you own": "Šampioni, které vlastníš"
 }

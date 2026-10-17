@@ -68,7 +68,7 @@ export function counts() {
 
 export const searchPages = (): SearchItem[] => [
   { group: "Pages", name: "Home", hint: "Page", href: "/" },
-  ...[...navPages(), { href: "/stats", label: "My Stats" }].map((t) => ({ group: "Pages", name: t.label, hint: BETA.has(t.href) ? "Page · Beta" : "Page", href: t.href })),
+  ...[...navPages(), { href: "/account#my-stats", label: "My Stats" }].map((t) => ({ group: "Pages", name: t.label, hint: BETA.has(t.href) ? "Page · Beta" : "Page", href: t.href })),
 ];
 
 export function searchItems(): SearchItem[] {

@@ -6,7 +6,6 @@
  "Show on deeparam.com": "Show on deeparam.com",
  "Import games from client": "Import games from client",
  "Champion": "Champion",
- "Skin": "Skin",
  "No games yet": "No games yet",
  "Import your games from the League client. Your games stay on your computer.": "Import your games from the League client. Your games stay on your computer.",
  "You need to be connected to the Riot Client: open it on this computer and sign in first.": "You need to be connected to the Riot Client: open it on this computer and sign in first.",
@@ -195,9 +194,6 @@
  "Removing your shared games…": "Removing your shared games…",
  "Sharing is on. New games are shared after each import.": "Sharing is on. New games are shared after each import.",
  "Sharing is off and your shared games were removed.": "Sharing is off and your shared games were removed.",
- "Default": "Default",
- "Champions and skins you own": "Champions and skins you own",
- "Import games to pick from the skins you own": "Import games to pick from the skins you own",
  "Map {id}": "Map {id}",
  "Not synced": "Not synced",
  "Level": "Level",
@@ -214,5 +210,7 @@
  "Recording a game ({champion})": "Recording a game ({champion})",
  "{n} recorded": "{n} recorded",
  "Your Mayhem games, in one place.": "Your Mayhem games, in one place.",
- "Import your games with the button below. You need to be connected to the Riot Client: open it on this computer and sign in first. Your games stay on your computer.": "Import your games with the button below. You need to be connected to the Riot Client: open it on this computer and sign in first. Your games stay on your computer."
+ "Import your games with the button below. You need to be connected to the Riot Client: open it on this computer and sign in first. Your games stay on your computer.": "Import your games with the button below. You need to be connected to the Riot Client: open it on this computer and sign in first. Your games stay on your computer.",
+ "Sign in above to see your Mayhem games here: win rate, champions, augments and recent matches.": "Sign in above to see your Mayhem games here: win rate, champions, augments and recent matches.",
+ "Champions you own": "Champions you own"
 }

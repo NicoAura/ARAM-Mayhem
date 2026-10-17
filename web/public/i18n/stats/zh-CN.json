@@ -6,7 +6,6 @@
  "Show on deeparam.com": "在 deeparam.com 上显示",
  "Import games from client": "从客户端导入对局",
  "Champion": "英雄",
- "Skin": "皮肤",
  "No games yet": "还没有对局",
  "Import your games from the League client. Your games stay on your computer.": "从英雄联盟客户端导入你的对局。对局只保存在你的电脑上。",
  "You need to be connected to the Riot Client: open it on this computer and sign in first.": "需要连接 Riot 客户端：请先在这台电脑上打开并登录。",
@@ -195,9 +194,6 @@
  "Removing your shared games…": "正在删除你分享的对局…",
  "Sharing is on. New games are shared after each import.": "分享已开启。每次导入后都会分享新对局。",
  "Sharing is off and your shared games were removed.": "分享已关闭，你分享的对局已删除。",
- "Default": "默认",
- "Champions and skins you own": "你拥有的英雄和皮肤",
- "Import games to pick from the skins you own": "导入对局后即可从你拥有的皮肤中选择",
  "Map {id}": "地图 {id}",
  "Not synced": "未同步",
  "Level": "等级",
@@ -214,5 +210,7 @@
  "Recording a game ({champion})": "正在记录对局（{champion}）",
  "{n} recorded": "已记录 {n} 场",
  "Your Mayhem games, in one place.": "你的海克斯大乱斗对局，尽在一处。",
- "Import your games with the button below. You need to be connected to the Riot Client: open it on this computer and sign in first. Your games stay on your computer.": "点击下方按钮导入你的对局。需要连接 Riot 客户端：请先在这台电脑上打开并登录。对局只保存在你的电脑上。"
+ "Import your games with the button below. You need to be connected to the Riot Client: open it on this computer and sign in first. Your games stay on your computer.": "点击下方按钮导入你的对局。需要连接 Riot 客户端：请先在这台电脑上打开并登录。对局只保存在你的电脑上。",
+ "Sign in above to see your Mayhem games here: win rate, champions, augments and recent matches.": "在上方登录，即可在此查看你的海克斯大乱斗对局：胜率、英雄、强化符文和最近对局。",
+ "Champions you own": "你拥有的英雄"
 }

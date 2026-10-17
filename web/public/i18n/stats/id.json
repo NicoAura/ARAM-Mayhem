@@ -6,7 +6,6 @@
  "Show on deeparam.com": "Tampilkan di deeparam.com",
  "Import games from client": "Impor game dari client",
  "Champion": "Champion",
- "Skin": "Skin",
  "No games yet": "Belum ada game",
  "Import your games from the League client. Your games stay on your computer.": "Impor game-mu dari League client. Game-mu tetap tersimpan di komputermu.",
  "You need to be connected to the Riot Client: open it on this computer and sign in first.": "Kamu harus terhubung ke Riot Client: buka di komputer ini dan masuk terlebih dahulu.",
@@ -195,9 +194,6 @@
  "Removing your shared games…": "Menghapus game yang kamu bagikan…",
  "Sharing is on. New games are shared after each import.": "Berbagi aktif. Game baru dibagikan setelah setiap impor.",
  "Sharing is off and your shared games were removed.": "Berbagi nonaktif dan game yang kamu bagikan telah dihapus.",
- "Default": "Default",
- "Champions and skins you own": "Champion dan skin milikmu",
- "Import games to pick from the skins you own": "Impor game untuk memilih dari skin milikmu",
  "Map {id}": "Peta {id}",
  "Not synced": "Belum disinkronkan",
  "Level": "Level",
@@ -214,5 +210,7 @@
  "Recording a game ({champion})": "Merekam game ({champion})",
  "{n} recorded": "{n} terekam",
  "Your Mayhem games, in one place.": "Game ARAM: Mayhem-mu, di satu tempat.",
- "Import your games with the button below. You need to be connected to the Riot Client: open it on this computer and sign in first. Your games stay on your computer.": "Impor game-mu dengan tombol di bawah. Kamu harus terhubung ke Riot Client: buka di komputer ini dan masuk terlebih dahulu. Game-mu tetap tersimpan di komputermu."
+ "Import your games with the button below. You need to be connected to the Riot Client: open it on this computer and sign in first. Your games stay on your computer.": "Impor game-mu dengan tombol di bawah. Kamu harus terhubung ke Riot Client: buka di komputer ini dan masuk terlebih dahulu. Game-mu tetap tersimpan di komputermu.",
+ "Sign in above to see your Mayhem games here: win rate, champions, augments and recent matches.": "Masuk di atas untuk melihat game Mayhem kamu di sini: win rate, champion, augment, dan match terbaru.",
+ "Champions you own": "Champion yang kamu miliki"
 }
