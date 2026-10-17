@@ -3629,3 +3629,115 @@ html[data-motion="reduce"] .btn:hover {
   height: 100%;
   object-fit: cover;
 }
+
+/* Win-rate chart on champion pages (components/WinRateChart.tsx) */
+.wr-chart {
+  margin-top: 1rem;
+}
+
+.wr-tools {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.wr-tools select {
+  max-width: 11rem;
+  padding: 0.3rem 0.5rem;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--bg);
+  color: var(--fg);
+  font: inherit;
+  font-size: 0.8125rem;
+}
+
+.wr-reset {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--accent);
+  font: inherit;
+  font-size: 0.8125rem;
+  cursor: pointer;
+}
+
+.wr-plot {
+  position: relative;
+  min-width: 0;
+  touch-action: pan-y;
+  user-select: none;
+  cursor: crosshair;
+}
+
+.wr-plot svg {
+  display: block;
+}
+
+.wr-grid {
+  stroke: var(--line);
+}
+
+.wr-even {
+  stroke: var(--muted);
+  stroke-dasharray: 3 4;
+  opacity: 0.6;
+}
+
+.wr-axis {
+  fill: var(--muted);
+  font: 11px var(--mono);
+}
+
+.wr-line {
+  fill: none;
+  stroke: var(--a, var(--accent));
+  stroke-width: 2.5;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+}
+
+.wr-line.other,
+.wr-dot.other {
+  stroke: var(--hue-sim);
+}
+
+.wr-line.other {
+  stroke-dasharray: 6 4;
+}
+
+.wr-dot {
+  fill: var(--surface);
+  stroke: var(--a, var(--accent));
+  stroke-width: 2.5;
+}
+
+.wr-cursor {
+  stroke: var(--muted);
+  stroke-width: 1;
+}
+
+.wr-drag {
+  fill: color-mix(in srgb, var(--a, var(--accent)) 16%, transparent);
+}
+
+.wr-tip {
+  position: absolute;
+  top: 0;
+  display: grid;
+  gap: 0.1rem;
+  padding: 0.4rem 0.6rem;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+  font-size: 0.75rem;
+  transform: translateX(-50%);
+  pointer-events: none;
+  white-space: nowrap;
+  box-shadow: 0 6px 20px rgb(0 0 0 / 0.25);
+}
+
+.wr-tip .other {
+  color: var(--hue-sim);
+}
