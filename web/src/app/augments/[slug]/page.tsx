@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Breadcrumbs } from "@/components/JsonLd";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { augmentBySlug, augmentPages } from "@/lib/augments";
@@ -36,6 +37,7 @@ export default async function AugmentPage({ params }: { params: Promise<{ slug: 
   const offer = odds(a.tier);
   return (
     <>
+      <Breadcrumbs trail={[["Augments", "/augments"], [a.name, `/augments/${a.slug}`]]} />
       <section className="champ-hero aug-hero">
         <p className="eyebrow">
           <Link href="/tier-list?tab=augments">Augments</Link> · Patch {patch}

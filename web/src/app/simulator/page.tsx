@@ -11,7 +11,7 @@ import SimReplayEmbed, { SimViewSwitch } from "@/components/SimReplayEmbed";
 import SubTabs from "@/components/SubTabs";
 import { readRepoJson, repoHas } from "@/lib/repo-data";
 
-export const metadata: Metadata = pageMeta("/simulator", "Simulator", "Simulated ARAM Mayhem teamfights, simulated builds and fight replays for every champion.");
+export const metadata: Metadata = pageMeta("/simulator", "ARAM Mayhem Teamfight Simulator", "Simulated ARAM Mayhem teamfights, simulated builds and fight replays for every champion.");
 
 type Named = Record<string, { name: string }>;
 type BestBuilds = {

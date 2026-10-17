@@ -40,20 +40,22 @@ const mono = Geist_Mono({ subsets: ["latin"], variable: "--font-mono" });
 const display = Bricolage_Grotesque({ subsets: ["latin"], weight: ["600", "700"], variable: "--font-display" });
 
 const DESCRIPTION = "ARAM Mayhem tier list, augment win rates and a teamfight simulator for the current patch.";
+// Home's title in search results; other pages set their own with pageMeta.
+const TITLE = "DeepARAM: ARAM Mayhem Tier List, Augments & Builds";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://deeparam.com"),
-  title: "DeepARAM",
+  title: TITLE,
   description: DESCRIPTION,
   alternates: { canonical: "/" },
   applicationName: "DeepARAM",
-  openGraph: { type: "website", siteName: "DeepARAM", title: "DeepARAM", description: DESCRIPTION, url: "/", images: [{ url: "/og.png", width: 1200, height: 630, alt: "DeepARAM" }] },
-  twitter: { card: "summary_large_image", title: "DeepARAM", description: DESCRIPTION, images: ["/og.png"] },
+  openGraph: { type: "website", siteName: "DeepARAM", title: TITLE, description: DESCRIPTION, url: "/", images: [{ url: "/og.png", width: 1200, height: 630, alt: "DeepARAM" }] },
+  twitter: { card: "summary_large_image", title: TITLE, description: DESCRIPTION, images: ["/og.png"] },
 };
 
 // Tells search engines the site's name and logo, so results show "DeepARAM" with the Augment Hex icon.
 const STRUCTURED_DATA = JSON.stringify([
-  { "@context": "https://schema.org", "@type": "WebSite", name: "DeepARAM", url: "https://deeparam.com/" },
+  { "@context": "https://schema.org", "@type": "WebSite", name: "DeepARAM", alternateName: ["Deep ARAM", "deeparam.com"], url: "https://deeparam.com/" },
   {
     "@context": "https://schema.org",
     "@type": "Organization",
@@ -140,7 +142,10 @@ export default function RootLayout({
         </main>
         <footer className="site-footer">
           <FeedbackBox />
-          <nav className="footer-links" aria-label="Legal">
+          <nav className="footer-links" aria-label="Site">
+            <Link href="/champions">
+              <T>Champions</T>
+            </Link>
             <Link href="/privacy">
               <T>Privacy</T>
             </Link>
