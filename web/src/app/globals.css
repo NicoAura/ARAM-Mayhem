@@ -6307,3 +6307,19 @@ img.icon,
 .table-scroll {
   border-radius: var(--r);
 }
+
+/* Simple view (Settings > Page detail, the default): fine print and expert controls step aside;
+   "Detailed" shows everything. Pages can mark more with [data-detailed]. */
+html[data-view="simple"] .eyebrow,
+html[data-view="simple"] .intro .lede,
+html[data-view="simple"] .hero .lede,
+html[data-view="simple"] .patch-timeline,
+html[data-view="simple"] .patch-chips,
+html[data-view="simple"] .patch-note,
+html[data-view="simple"] .arch-filter,
+html[data-view="simple"] .table-glossary,
+html[data-view="simple"] .deepscore-legend,
+html[data-view="simple"] .quickref-levels,
+html[data-view="simple"] [data-detailed] {
+  display: none;
+}
