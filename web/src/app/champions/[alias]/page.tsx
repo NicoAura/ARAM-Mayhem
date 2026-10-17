@@ -41,9 +41,13 @@ export default async function ChampionPage({ params }: { params: Promise<{ alias
         <p className="eyebrow">
           <Link href="/tier-list">Tier List</Link> · Patch {c.patch}
         </p>
-        <h1>
-          {c.name} <span className="champ-hero-sub">ARAM Mayhem build</span>
-        </h1>
+        <div className="champ-hero-title">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img className="champ-hero-icon" src={`/icons/champions/${c.alias}.webp`} alt="" width={72} height={72} />
+          <h1>
+            {c.name} <span className="champ-hero-sub">ARAM Mayhem build</span>
+          </h1>
+        </div>
         {c.title && <p className="lede">{c.title.charAt(0).toUpperCase() + c.title.slice(1)}</p>}
         <p className="champ-hero-links">
           <FavoriteStar id={c.alias} name={c.name} label />
