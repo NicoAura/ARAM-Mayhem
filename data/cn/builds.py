@@ -34,8 +34,13 @@ def ratio(v, basis_points=False):
     return round(v / 10000 if basis_points else v, 4)
 
 
+# Tencent's ids that differ from the game client's (3097 is Stormrazor, 3095 in the client)
+ITEM_IDS = {3097: 3095}
+
+
 def item_ids(s):
-    return [int(i) for i in str(s).replace("&", ",").split(",") if i.strip().isdigit() and int(i) > 0]
+    ids = [int(i) for i in str(s).replace("&", ",").split(",") if i.strip().isdigit() and int(i) > 0]
+    return [ITEM_IDS.get(i, i) for i in ids]
 
 
 def parse_dollar_list(s):

@@ -28,6 +28,13 @@ AUGMENTS = "https://game.gtimg.cn/images/lol/act/img/js/kiwi/kiwi_augments.json"
 HEADERS = {"Referer": "https://101.qq.com/", "User-Agent": "Mozilla/5.0"}
 OUT = os.path.dirname(os.path.abspath(__file__))
 TIERS = {"kPrismatic": "Prismatic", "kGold": "Gold", "kSilver": "Silver"}
+# Augment tiers and the live Mayhem pool come from the game client's own files
+# (rarity: absent/0 Silver, 1 Gold, 2 Prismatic); Tencent's list can lag a patch.
+CLIENT = "https://raw.communitydragon.org/latest"
+KIWI_BIN = CLIENT + "/game/maps/modespecificdata/kiwi.bin.json"
+AUGMENT_LISTS = CLIENT + "/plugins/rcp-be-lol-game-data/global/default/v1/augment-lists.json"
+CHERRY_AUGMENTS = CLIENT + "/plugins/rcp-be-lol-game-data/global/default/v1/cherry-augments.json"
+RARITY = {0: "Silver", 1: "Gold", 2: "Prismatic"}
 
 
 def get(url, params=None):
@@ -74,6 +81,24 @@ def parse_champions(payload):
             "best_partners": partners,
         })
     return rows
+
+
+def client_augments():
+    """{augment id: {tier, key, name, live}} from the live client, or {} if unreachable."""
+    try:
+        kiwi = get(KIWI_BIN)
+        pool = set(next(x["augmentList"] for x in get(AUGMENT_LISTS) if x.get("modeName") == "KIWI"))
+        names = {a["id"]: a.get("nameTRA", "") for a in get(CHERRY_AUGMENTS)}
+    except Exception as e:  # stats still publish with Tencent's tiers
+        print(f"client augment data unavailable ({e}); using Tencent tiers")
+        return {}
+    out = {}
+    for path, a in kiwi.items():
+        if isinstance(a, dict) and a.get("__type") == "AugmentData" and a.get("AugmentPlatformId"):
+            i = a["AugmentPlatformId"]
+            out[i] = {"tier": RARITY.get(a.get("rarity", 0), ""), "key": a.get("AugmentNameId", ""),
+                      "name": names.get(i, ""), "live": path in pool}
+    return out
 
 
 def parse_augments(payload):
@@ -140,11 +165,18 @@ def main():
     for c in champions:
         c["name"], c["name_cn"] = champ_name(c["champion_id"])
     augments = parse_augments(aug_payload)
+    client = client_augments()
     for a in augments:
         meta = augs.get(a["augment_id"], {})
+        mine = client.get(a["augment_id"], {})
         a["name_cn"] = meta.get("name_cn", "")
-        a["key"] = meta.get("name_en", "")
-        a["tier"] = TIERS.get(meta.get("level"), meta.get("level", ""))
+        a["key"] = mine.get("key") or meta.get("name_en", "")
+        a["tier"] = mine.get("tier") or TIERS.get(meta.get("level"), meta.get("level", ""))
+    # Live augments nobody has played enough yet: listed so pages can say "no data yet"
+    have = {a["augment_id"] for a in augments}
+    no_data = sorted(({"augment_id": i, "key": c["key"], "name": c["name"], "tier": c["tier"]}
+                      for i, c in client.items() if c["live"] and i not in have),
+                     key=lambda r: r["augment_id"])
     duos = parse_duos(duo_payload)
     for d in duos:
         d["names"] = [champ_name(c)[0] for c in d["champion_ids"]]
@@ -159,8 +191,11 @@ def main():
         with open(os.path.join(OUT, "raw", f"{name}.json"), "w", encoding="utf-8") as f:
             json.dump(raw, f, ensure_ascii=False)
     for name, rows in (("champions", champions), ("augments", augments), ("duos", duos)):
+        body = {"meta": meta, name: rows}
+        if name == "augments":
+            body["no_data"] = no_data
         with open(os.path.join(OUT, f"{name}.json"), "w", encoding="utf-8") as f:
-            json.dump({"meta": meta, name: rows}, f, ensure_ascii=False, indent=1)
+            json.dump(body, f, ensure_ascii=False, indent=1)
 
     write_csv(os.path.join(OUT, "champions.csv"), champions,
               ["rank", "champion_id", "name", "name_cn", "win_rate", "pick_rate", "rank_change",
@@ -181,7 +216,8 @@ def main():
         os.makedirs(os.path.join(OUT, "history", name), exist_ok=True)
         write_csv(os.path.join(OUT, "history", name, f"{stamp}.csv"), rows, cols)
 
-    print(f"champions: {len(champions)} (date {date})  augments: {len(augments)}  duos: {len(duos)}")
+    print(f"champions: {len(champions)} (date {date})  augments: {len(augments)} "
+          f"(+{len(no_data)} with no data yet)  duos: {len(duos)}")
 
 
 if __name__ == "__main__":
