@@ -3,6 +3,7 @@ import championIds from "@/data/champion-ids.json";
 import { augmentSlug } from "./augments";
 import { champName } from "./highlights";
 import { items, rewardItems } from "./items";
+import { tagsFor } from "./item-tags";
 import { readRepoJson } from "./repo-data";
 
 // One page per item that Mayhem players build (/items/<slug>): its stats and cost from the client's
@@ -20,6 +21,10 @@ export type ItemPage = {
   icon?: string;
   cost: number;
   stats: string[];
+  /** lib/item-tags.ts keys */
+  tags: string[];
+  /** How widely it's built: its pick rates summed over the champions who build it. */
+  popularity: number;
   builders: { id: string; name: string; pickRate: number; winRate: number | null }[];
 };
 
@@ -36,7 +41,7 @@ let cache: ItemPage[] | null = null;
 export function itemPages(): ItemPage[] {
   if (cache) return cache;
   const all = items();
-  const raw = readRepoJson<{ id: number; description?: string; priceTotal?: number }[]>(
+  const raw = readRepoJson<{ id: number; description?: string; priceTotal?: number; categories?: string[] }[]>(
     "web/public/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/items.json",
   );
   const info = new Map((raw ?? []).map((i) => [i.id, i]));
@@ -66,6 +71,8 @@ export function itemPages(): ItemPage[] {
         icon: i.icon,
         cost: info.get(i.id)?.priceTotal ?? 0,
         stats: statLines(info.get(i.id)?.description ?? ""),
+        tags: tagsFor(info.get(i.id)?.categories),
+        popularity: builders.get(i.id)!.reduce((s, b) => s + b.pickRate, 0),
         builders: builders.get(i.id)!.sort((x, y) => y.pickRate - x.pickRate).slice(0, 10),
       };
     })

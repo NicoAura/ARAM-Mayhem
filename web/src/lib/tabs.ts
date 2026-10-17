@@ -70,7 +70,7 @@ const pick = (href: string): NavItem[] => {
 
 /** The header's tabs, grouped by what a player is trying to do:
  *  Tier List · Builds (what to build, editor, compare, team) · Augments (tier list, draft practice) · Simulator ·
- *  Patches (live recaps and the PBE) · More (Info, The Lab, newer tool folders).
+ *  Patches (live recaps and the PBE) · More (Items, Info, The Lab, newer tool folders).
  *  My Stats sits behind the account button; champion, augment and item pages open from the tier lists and search. */
 export function navItems(): NavItem[] {
   const tools = discoverToolTabs().filter((t) => t.href.startsWith("/tools/"));
@@ -81,7 +81,7 @@ export function navItems(): NavItem[] {
     ...pick("/augments"),
     ...pick("/simulator"),
     ...menu("#patches", "Patches", [...pick("/pbe"), ...pick("/patches")]),
-    ...menu("#more", "More", [...pick("/info"), ...pick("/lab"), ...tools.flatMap((t) => pick(t.href))]),
+    ...menu("#more", "More", [...pick("/items"), ...pick("/info"), ...pick("/lab"), ...tools.flatMap((t) => pick(t.href))]),
   ];
 }
 
