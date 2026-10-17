@@ -34,6 +34,12 @@ export const sections = [
     pr: 0,
   },
   {
+    href: "/what-to-build",
+    label: text("tab./what-to-build.label", "Build Helper"),
+    body: text("tab./what-to-build.body", "Pick your champion and what the enemy has: the build that wins most, item swaps and augments to grab."),
+    pr: 0,
+  },
+  {
     href: "/draft",
     label: text("tab./draft.label", "Augment Draft"),
     body: text("tab./draft.body", "Practice augment picks with rerolls and see how often players on your champion take each one."),

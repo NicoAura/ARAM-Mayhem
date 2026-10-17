@@ -6024,3 +6024,95 @@ th > button[data-tip] {
   display: inline-grid;
   place-items: center;
 }
+
+/* Build Helper (/what-to-build) */
+.helper {
+  display: grid;
+  gap: 1.25rem;
+}
+.helper-pick {
+  display: grid;
+  gap: 0.9rem;
+}
+.helper-threats {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--muted);
+  font-size: 0.875rem;
+}
+.chip-toggle {
+  padding: 0.4rem 0.8rem;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--surface);
+  color: var(--fg);
+  font-size: 0.8125rem;
+  cursor: pointer;
+}
+.chip-toggle[aria-pressed="true"] {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+  color: var(--accent);
+  font-weight: 600;
+}
+.helper-items {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(5.5rem, 1fr));
+  gap: 0.75rem;
+}
+.helper-item {
+  display: grid;
+  justify-items: center;
+  gap: 0.35rem;
+  min-width: 0;
+  text-align: center;
+  font-size: 0.75rem;
+  line-height: 1.25;
+}
+.helper-item img {
+  border-radius: 8px;
+  border: 1px solid var(--line);
+}
+.helper-swaps {
+  display: grid;
+  gap: 0.6rem;
+}
+.helper-swaps > div {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+}
+.helper-swaps img {
+  border-radius: 8px;
+}
+.helper-swaps span {
+  display: grid;
+}
+.helper-swaps small {
+  color: var(--muted);
+}
+.helper-skills {
+  margin-top: 0.9rem;
+  color: var(--muted);
+}
+.helper-augs {
+  display: grid;
+  gap: 0.8rem;
+}
+.helper-augs > div {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 1rem;
+}
+.helper-aug {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 0.875rem;
+}
+.helper-aug img {
+  border-radius: 6px;
+}
