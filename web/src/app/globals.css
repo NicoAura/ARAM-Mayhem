@@ -4310,3 +4310,117 @@ html[data-motion="reduce"] .btn:hover {
 .rank-v.wr-low {
   color: var(--bad);
 }
+
+/* Loading skeletons (components/Skeleton.tsx) */
+.skel {
+  --skel: color-mix(in srgb, var(--line) 55%, transparent);
+  --skel-hi: color-mix(in srgb, var(--line) 100%, var(--fg) 6%);
+  display: grid;
+  gap: 0.75rem;
+}
+
+.skel i {
+  display: block;
+  height: 0.8rem;
+  border-radius: 6px;
+  background: linear-gradient(90deg, var(--skel) 0%, var(--skel-hi) 50%, var(--skel) 100%) 0 0 / 300% 100%;
+  animation: skel-shine 1.6s ease-in-out infinite;
+}
+
+[data-motion="reduce"] .skel i,
+[data-motion="reduce"] .skel-chart {
+  animation: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .skel i,
+  .skel-chart {
+    animation: none;
+  }
+}
+
+@keyframes skel-shine {
+  from {
+    background-position: 100% 0;
+  }
+  to {
+    background-position: 0 0;
+  }
+}
+
+.skel-table {
+  gap: 0;
+  border: 1px solid var(--line);
+  border-radius: var(--r);
+}
+
+.skel-row {
+  display: grid;
+  grid-template-columns: 28px minmax(0, 1fr) 3.5rem 3.5rem;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.7rem 0.9rem;
+}
+
+.skel-row + .skel-row {
+  border-top: 1px solid var(--line);
+}
+
+.skel .skel-dot {
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+}
+
+.skel-cards {
+  grid-template-columns: repeat(auto-fit, minmax(min(18rem, 100%), 1fr));
+}
+
+.skel-card {
+  display: grid;
+  gap: 0.6rem;
+  padding: 1.1rem;
+  border: 1px solid var(--line);
+  border-radius: var(--r);
+}
+
+.skel .skel-title {
+  width: 40%;
+  height: 1.1rem;
+}
+
+.skel-tiles {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+
+.skel-tiles i {
+  width: 4.5rem;
+  height: 4.5rem;
+  border-radius: 12px;
+}
+
+.skel-chart {
+  height: 100%;
+  min-height: 12rem;
+  border-radius: var(--r);
+  background: linear-gradient(90deg, var(--skel) 0%, var(--skel-hi) 50%, var(--skel) 100%) 0 0 / 300% 100%;
+  animation: skel-shine 1.6s ease-in-out infinite;
+  opacity: 0.6;
+}
+
+.embed {
+  position: relative;
+}
+
+.embed > .skel {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.embed[data-loading] iframe {
+  visibility: hidden;
+}

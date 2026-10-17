@@ -5,6 +5,7 @@ import Link from "next/link";
 import { type DragEvent, useEffect, useMemo, useRef, useState } from "react";
 import type { BuilderData } from "@/lib/builder";
 import { getParam, setParams } from "@/lib/url-state";
+import Skeleton from "@/components/Skeleton";
 
 // Build Editor (/builder?champ=Jinx&items=…&augs=…): drag items into six slots and pick four augments;
 // the summed stats and gold update as you go and the simulator re-runs the build in the browser
@@ -209,7 +210,7 @@ export default function BuildEditor() {
   }, [list, query, role]);
 
   if (failed) return <p className="table-note">Couldn&apos;t load the build editor. Try reloading the page.</p>;
-  if (!list || !data || !champion) return <p className="table-note">Loading the simulator…</p>;
+  if (!list || !data || !champion) return <Skeleton kind="slots" rows={6} label="Loading the simulator…" />;
 
   const icon = (k: string) => data.items[itemByKey.get(k)?.name ?? ""]?.icon;
   const augIcon = (k: string) => {

@@ -5,6 +5,7 @@ import { loadSettings } from "@/lib/settings";
 import { getParam, setParams } from "@/lib/url-state";
 import DataTable, { type Column } from "./DataTable";
 import { champStats, TIER_HELP, type PatchRow } from "@/lib/tiers";
+import Skeleton from "@/components/Skeleton";
 
 // Champion tier list over a chosen patch range: the live patch (default), any set of patches, or all time.
 // The page carries only the live and previous patch; older patches load from /data/tier-history.json when picked.
@@ -144,7 +145,7 @@ export default function ChampionTiers({ rows: initial, patches, partners }: { ro
         {showChange ? `, with the change since ${before}` : ""}. Click patches to add or remove them.
       </p>
       {missing ? (
-        <p className="table-note">Loading older patches…</p>
+        <Skeleton rows={12} label="Loading older patches…" />
       ) : (
         <DataTable
           key={sort.key}
