@@ -9,9 +9,9 @@ import championNames from "@/data/champion-names.json";
 import { LocalDate, useNames, useT } from "./I18n";
 import PlayerExtras from "./PlayerExtras";
 
-// The account page (/account): sign in or create an account, then manage it. Favorites and settings
+// The account page (/account): sign in or create an account, then manage it. Settings
 // sync on their own (lib/account-sync.ts); this page covers passkeys, the password, the connected Riot
-// account, the owner tools and deleting the account.
+// account, the profile, the email and deleting the account. The owner opens the 3D Simulator from the Simulator page.
 
 type Account = {
   signedIn: true;
@@ -22,7 +22,7 @@ type Account = {
   icon: string | null;
   hasPassword: boolean;
   owner: boolean;
-  data: { favorites: string[] };
+  data: { settings: Record<string, unknown> };
   passkeys: { id: string; label: string; created: string }[];
   riot: { name: string; platform: string | null; page: string | null } | null;
   passkeySession: boolean;
@@ -263,8 +263,8 @@ function SignIn({ onDone, rso, providers }: { onDone: () => Promise<void>; rso: 
       <p className="acct-hint">
         {signup
           ? passkeys
-            ? t("No password needed with a passkey: enter your email and create one. Your starred champions and settings follow you to every browser you sign in on.")
-            : t("Your starred champions and settings will follow you to every browser you sign in on.")
+            ? t("No password needed with a passkey: enter your email and create one. Your settings follow you to every browser you sign in on.")
+            : t("Your settings will follow you to every browser you sign in on.")
           : t("Forgot your password? Sign in with a passkey, then set a new one here.")}
       </p>
     </div>
@@ -273,7 +273,6 @@ function SignIn({ onDone, rso, providers }: { onDone: () => Promise<void>; rso: 
 
 function Manage({ account, refresh }: { account: Account; refresh: () => Promise<void> }) {
   const t = useT("account");
-  const n = account.data.favorites.length;
   const signOut = async () => {
     await call("/api/account/signout", "POST").catch(() => null);
     forgetAccount();
@@ -295,11 +294,7 @@ function Manage({ account, refresh }: { account: Account; refresh: () => Promise
           </p>
         </div>
         <p className="acct-hint">
-          {n === 0
-            ? t("Your starred champions and settings follow you to every browser you sign in on.")
-            : n === 1
-              ? t("Your starred champion and settings follow you to every browser you sign in on.")
-              : t("Your {n} starred champions and settings follow you to every browser you sign in on.", { n })}
+          {t("Your settings follow you to every browser you sign in on.")}
         </p>
         <button type="button" className="btn ghost" onClick={signOut}>
           {t("Sign out")}
@@ -311,7 +306,6 @@ function Manage({ account, refresh }: { account: Account; refresh: () => Promise
       {(account.providers.length > 0 || account.logins.length > 0) && <ProvidersCard account={account} refresh={refresh} />}
       <EmailCard account={account} refresh={refresh} />
       <PasswordCard account={account} />
-      {account.owner && <OwnerCard />}
       <DeleteCard account={account} refresh={refresh} />
       {account.riot && <PlayerExtras />}
     </div>
@@ -351,7 +345,7 @@ function ProfileCard({ account, refresh }: { account: Account; refresh: () => Pr
           {t("Display name")}
           <input type="text" name="nickname" autoComplete="nickname" maxLength={24} value={name} onChange={(e) => setName(e.target.value)} />
         </label>
-        <p className="acct-hint">{t("Only you see your name and icon, here on your account page.")}</p>
+        <p className="acct-hint">{t("Your name and icon show on your account page. Your name also appears on builds you share in The Kitchen.")}</p>
         <details className="acct-icons">
           <summary>
             {icon ? (
@@ -489,7 +483,7 @@ function RiotCard({ account, refresh }: { account: Account; refresh: () => Promi
   const steps = [t("Get a code"), t("Enter it in My Stats"), t("Connected")];
 
   return (
-    <section className="card acct-card acct-riot-card" data-accent="tier">
+    <section id="riot" className="card acct-card acct-riot-card" data-accent="tier">
       <h2>{t("Riot account")}</h2>
       <ol className="acct-progress" aria-label={t("Step {n} of 3", { n: step })}>
         {steps.map((label, i) => (
@@ -704,24 +698,6 @@ function PasswordCard({ account }: { account: Account }) {
   );
 }
 
-function OwnerCard() {
-  const t = useT("account");
-  return (
-    <section className="card acct-card" data-accent="sim">
-      <h2>{t("Site owner")}</h2>
-      <p className="acct-hint">{t("Only this account opens these.")}</p>
-      <p className="acct-links">
-        <Link className="btn" href="/account/simulator">
-          {t("3D Simulator")}
-        </Link>
-        <Link className="btn ghost" href="/account/edit">
-          {t("Edit site text")}
-        </Link>
-      </p>
-    </section>
-  );
-}
-
 function DeleteCard({ account, refresh }: { account: Account; refresh: () => Promise<void> }) {
   const [password, setPassword] = useState("");
   const [sure, setSure] = useState(false);
@@ -747,7 +723,7 @@ function DeleteCard({ account, refresh }: { account: Account; refresh: () => Pro
         <summary>{t("Delete account")}</summary>
         <form className="acct-form" method="post" action="/account" onSubmit={submit}>
           <p className="acct-hint">
-            {t("This deletes your account, passkeys and synced Favorites and settings. This browser keeps its own copy. A player page you published from My Stats stays until you remove it there.")}
+            {t("This deletes your account, passkeys and synced settings. This browser keeps its own copy. A player page you published from My Stats stays until you remove it there.")}
           </p>
           {needPassword && (
             <label>

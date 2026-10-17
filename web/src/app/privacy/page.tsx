@@ -42,7 +42,7 @@ export default function Privacy() {
         </p>
         <h2>Stored in your browser</h2>
         <p>
-          Your theme and settings are saved in your own browser&apos;s local storage. If you&apos;re signed in, your starred champions and settings are also saved to
+          Your theme and settings are saved in your own browser&apos;s local storage. If you&apos;re signed in, your settings are also saved to
           your account as described above. Clearing site data removes the browser copy.
         </p>
         <h2>My Stats</h2>

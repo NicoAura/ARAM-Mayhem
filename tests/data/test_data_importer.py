@@ -6,6 +6,7 @@ import datetime as dt
 import json
 import os
 import subprocess
+from types import SimpleNamespace
 
 import pytest
 
@@ -432,6 +433,20 @@ def test_site_asset_serves_cache(mi):
     with open(cached, "wb") as f:
         f.write(b"body{}")
     assert mi.site_asset("/assets/fonts/fonts.css") == b"body{}"
+
+
+def test_site_asset_fetches_translations_fresh_and_keeps_a_copy(mi, monkeypatch):
+    calls = []
+
+    def curl(cmd, **k):
+        calls.append(cmd[-1])
+        return SimpleNamespace(returncode=0 if len(calls) == 1 else 22, stdout=b'{"Win rate":"Taux de victoire"}')
+    monkeypatch.setattr(mi.subprocess, "run", curl)
+    assert mi.site_asset("/i18n/stats/fr.json") == b'{"Win rate":"Taux de victoire"}'
+    # offline the next time: the saved copy is used
+    assert mi.site_asset("/i18n/stats/fr.json") == b'{"Win rate":"Taux de victoire"}'
+    assert calls == ["https://deeparam.com/i18n/stats/fr.json"] * 2
+    assert mi.site_asset("/i18n/../secret") is None
 
 
 def test_platform_ids(mi):

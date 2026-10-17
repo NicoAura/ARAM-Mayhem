@@ -4,8 +4,6 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
-import { useFavorites } from "@/lib/favorites";
-import FavoriteStar from "./FavoriteStar";
 import { useNames, useT } from "./I18n";
 
 // The home page's interactive pieces: jump to a champion, the live tier snapshot,
@@ -80,38 +78,6 @@ export function ChampionJump({ champs }: { champs: Champ[] }) {
         </ul>
       )}
     </div>
-  );
-}
-
-/** Starred champions with their live numbers; hidden until a champion is starred. */
-export function Favorites({ champs }: { champs: Champ[] }) {
-  const ids = useFavorites();
-  const t = useT();
-  const names = useNames();
-  const list = ids.map((id) => champs.find((c) => c.id === id)).filter((c): c is Champ => Boolean(c));
-  if (!list.length) return null;
-  return (
-    <section className="card span-all" data-accent="gold">
-      <div className="card-head">
-        <h2>{t("Your favorites")}</h2>
-        <Link href="/tier-list">{t("On the Tier List →")}</Link>
-      </div>
-      <div className="fav-grid">
-        {list.map((c) => (
-          <div key={c.id} className="fav-card">
-            <Link href={`/champions/${c.id}`}>
-              <img src={champIcon(c.id)} alt="" width={40} height={40} loading="lazy" />
-              <span className="fav-name">
-                <b>{names("champions", c.id, c.name)}</b>
-                <span>{t("{wr} win · {pr} pick", { wr: pct(c.winRate), pr: pct(c.pickRate) })}</span>
-              </span>
-              <span className={`chip tier-${c.tier.toLowerCase()}`}>{c.tier}</span>
-            </Link>
-            <FavoriteStar id={c.id} name={c.name} />
-          </div>
-        ))}
-      </div>
-    </section>
   );
 }
 

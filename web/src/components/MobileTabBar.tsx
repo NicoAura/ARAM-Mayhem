@@ -42,6 +42,33 @@ export default function MobileTabBar({ tabs }: { tabs: Tab[] }) {
   const tr = useT();
   useEffect(() => setOpen(false), [pathname]);
 
+  // Slide the bar away while scrolling down and bring it back on any scroll up, the way Safari's own
+  // bottom bar collapses, so the two bars don't stack on top of the page while reading.
+  const [hidden, setHidden] = useState(false);
+  useEffect(() => {
+    let last = window.scrollY;
+    let frame = 0;
+    const update = () => {
+      frame = 0;
+      const y = window.scrollY;
+      const nearBottom = y + window.innerHeight >= document.documentElement.scrollHeight - 24;
+      if (y < 64 || nearBottom) setHidden(false);
+      else if (y - last > 8) setHidden(true);
+      else if (last - y > 8) setHidden(false);
+      else return;
+      last = y;
+    };
+    const onScroll = () => {
+      if (!frame) frame = requestAnimationFrame(update);
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      cancelAnimationFrame(frame);
+    };
+  }, []);
+  useEffect(() => setHidden(false), [pathname]);
+
   const isActive = (href: string) => (href === "/" ? pathname === "/" : pathname === href || pathname.startsWith(href + "/"));
   const primary = [{ href: "/", label: "Home" }, ...tabs.filter((t) => PRIMARY.includes(t.href))];
   const rest = tabs.filter((t) => !PRIMARY.includes(t.href));
@@ -61,11 +88,11 @@ export default function MobileTabBar({ tabs }: { tabs: Tab[] }) {
           </Fragment>
         ))}
       </div>
-      <nav className="tabbar" aria-label={tr("Sections")}>
+      <nav className="tabbar" aria-label={tr("Sections")} data-hidden={hidden && !open ? "" : undefined}>
         {primary.map((t) => (
           <Link key={t.href} href={t.href} data-accent={ACCENT[t.href]} aria-current={isActive(t.href) ? "page" : undefined}>
             <Icon name={t.href} />
-            <span>{tr(t.href === "/tier-list" ? "Tiers" : t.label)}</span>
+            <span>{tr(t.label)}</span>
           </Link>
         ))}
         <button

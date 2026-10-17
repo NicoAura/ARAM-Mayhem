@@ -113,11 +113,11 @@ export type RadarAxis = { key: string; label: string; hint: string; pct: number;
 
 const AXES: { key: "win_rate" | "pick_rate" | "damage" | "tank" | "kp" | "dead"; label: string; hint: string; low?: boolean; fmt: (v: number) => string }[] = [
   { key: "win_rate", label: "Win rate", hint: "Win rate", fmt: (v) => `${(v * 100).toFixed(1)}%` },
-  { key: "pick_rate", label: "Popularity", hint: "Pick rate", fmt: (v) => `${(v * 100).toFixed(1)}%` },
-  { key: "damage", label: "Damage", hint: "Share of the team's damage to champions", fmt: (v) => `${(v * 100).toFixed(1)}%` },
-  { key: "tank", label: "Frontline", hint: "Share of the team's damage taken", fmt: (v) => `${(v * 100).toFixed(1)}%` },
-  { key: "kp", label: "Teamplay", hint: "Kill participation", fmt: (v) => `${(v * 100).toFixed(1)}%` },
-  { key: "dead", label: "Survival", hint: "Time spent dead (less is better)", low: true, fmt: (v) => `${Math.floor(v / 60)}m ${String(Math.round(v % 60)).padStart(2, "0")}s dead` },
+  { key: "pick_rate", label: "Pick rate", hint: "How often this champion is picked", fmt: (v) => `${(v * 100).toFixed(1)}%` },
+  { key: "damage", label: "Damage dealt", hint: "Share of the team's damage to champions", fmt: (v) => `${(v * 100).toFixed(1)}%` },
+  { key: "tank", label: "Damage taken", hint: "Share of the team's damage taken that this champion soaked", fmt: (v) => `${(v * 100).toFixed(1)}%` },
+  { key: "kp", label: "Kill participation", hint: "Share of the team's kills this champion took part in", fmt: (v) => `${(v * 100).toFixed(1)}%` },
+  { key: "dead", label: "Time dead", hint: "Average time spent dead per game (less is better)", low: true, fmt: (v) => `${Math.floor(v / 60)}m ${String(Math.round(v % 60)).padStart(2, "0")}s dead` },
 ];
 
 function radarFor(alias: string, live: ChampStats[]): RadarAxis[] {

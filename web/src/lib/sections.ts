@@ -23,14 +23,14 @@ export const sections = [
   },
   {
     href: "/builds",
-    label: text("tab./builds.label", "Builds"),
-    body: text("tab./builds.body", "What to build against the enemy team, a build editor with simulated damage, champion comparisons and team synergy."),
+    label: text("tab./builds.label", "Build tools"),
+    body: text("tab./builds.body", "A build editor with simulated damage, champion comparisons and team synergy."),
     pr: 0,
   },
   {
     href: "/augments",
     label: text("tab./augments.label", "Augments"),
-    body: text("tab./augments.body", "Every augment ranked S to D within its rarity, plus draft practice with rerolls."),
+    body: text("tab./augments.body", "Augments grouped by icon, plus draft practice with rerolls."),
     pr: 0,
   },
   {

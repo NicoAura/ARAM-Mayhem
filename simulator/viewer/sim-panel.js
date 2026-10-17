@@ -77,8 +77,8 @@
       if (!r.ok) { status(T("The simulator couldn't load its data:") + " " + r.stderr, "err"); return false; }
       meta = JSON.parse(r.stdout);
       // Official names in the page's language.
-      for (const i of meta.items) i.name = NAME("items", i.id, i.name);
-      for (const a of meta.augments) a.name = NAME("augments", a.id, a.name);
+      for (const i of meta.items) { i.en = i.name; i.name = NAME("items", i.id, i.name); }
+      for (const a of meta.augments) { a.en = a.name; a.name = NAME("augments", a.id, a.name); }
       for (const c of meta.champions) c.name = NAME("champions", c.id, c.name);
       for (const e of meta.enemies) e.name = NAME("champions", e.id, e.name);
       enemyById.clear();
@@ -111,7 +111,7 @@
 
   window.onReplayLoad = (c, tr, isCustom) => {
     const changedChamp = !champ || champ.id !== c.id;
-    if (changedChamp) offerSubmit(null);
+    if (changedChamp) { offerSubmit(null); offerKitchen(null); }
     $("buildTitle").textContent = isCustom ? (tr.patch === "pbe" ? T("Your simulated setup (PBE patch)") : T("Your simulated setup")) : T("Simulated best build");
     champ = c; trace = tr;
     if (meta && (changedChamp || !isCustom)) fillFromTrace();
@@ -256,7 +256,7 @@
       " " + T("They stand still and don't hit back.") + " ";
     const b = document.createElement("button"); b.type = "button"; b.className = "linkish"; b.textContent = T("Change dummy stats");
     b.addEventListener("click", () => {
-      $("advBox").open = true;
+      openAdvanced();
       const f = $("set_target_hp");
       if (f) { f.scrollIntoView({ block: "center", behavior: "smooth" }); f.focus({ preventScroll: true }); }
     });
@@ -439,6 +439,34 @@
     $("advCount").textContent = n ? T("({n} changed)", { n }) : "";
   }
 
+  // Advanced settings open in a dialog and only count once applied: Cancel (or Esc) puts back what was there.
+  let advSnap = null;
+  function openAdvanced() {
+    if ($("advDialog").open) return;
+    advSnap = { fields: { ...fieldValues }, combos: { ...combos }, picks: picks && JSON.parse(JSON.stringify(picks)), emode: enemyMode() };
+    $("advDialog").showModal();
+  }
+  function closeAdvanced(apply) {
+    const snap = advSnap;
+    advSnap = null;
+    if (!apply && snap) {
+      for (const k of Object.keys(fieldValues)) delete fieldValues[k];
+      Object.assign(fieldValues, snap.fields);
+      for (const k of Object.keys(combos)) delete combos[k];
+      Object.assign(combos, snap.combos);
+      picks = snap.picks;
+      document.querySelector(`input[name="emode"][value="${snap.emode}"]`).checked = true;
+      if (meta) buildFightForm();
+    } else if (apply) status(T("Advanced settings applied. Simulate to see them."));
+    countAdvanced();
+    if ($("advDialog").open) $("advDialog").close();
+    $("advBtn").focus();
+  }
+  $("advBtn").addEventListener("click", openAdvanced);
+  $("advApply").addEventListener("click", () => closeAdvanced(true));
+  $("advCancel").addEventListener("click", () => closeAdvanced(false));
+  $("advDialog").addEventListener("cancel", (e) => { e.preventDefault(); closeAdvanced(false); });
+
   // ---------- running ----------
   function args(withBuild) {
     const a = ["--champ", champ.id, "--json", "--trace", "/trace.json", ...patchArgs()];
@@ -509,6 +537,8 @@
     // Any live-patch build can go on the leaderboard: it's simulated again on our side against the Survival
     // enemy with the default settings, so every entry is comparable whatever this run used.
     offerSubmit({ champion: champ.id, items: res.builds[0].build.items, augments: res.builds[0].build.augments, dps: best.mean_dps }, patch === "live");
+    offerKitchen({ champion: champ.id, items: res.builds[0].build.items, augments: res.builds[0].build.augments,
+      sim: { mode, mean_dps: best.mean_dps, survival_rate: best.survival_rate, time_alive: best.time_alive } }, patch === "live");
     showAlternatives(withBuild ? [] : res.builds);
     window.ReplayViewer.showTrace(tr);
     trace = tr;
@@ -558,7 +588,7 @@
       const check = await botCheck();
       const r = await fetch("/api/sim-scores", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(check ? { ...submission, check } : submission) });
       const b = await r.json().catch(() => ({}));
-      if (!r.ok) throw new Error(b.error || "");
+      if (!r.ok) throw new Error(b.error ? await kitchenText(b.error) : "");
       $("submitNote").textContent = b.status === "verified"
         ? T("This build is already on the Leaderboard at {dps} DPS.", { dps: Math.round(b.verified_dps).toLocaleString() })
         : b.status === "rejected" ? T("This build was already checked and can't go on the Leaderboard.")
@@ -567,6 +597,92 @@
     } catch (e) {
       $("submitScore").disabled = false;
       $("submitNote").textContent = e.message || T("The Leaderboard couldn't be reached. Try again in a moment.");
+    }
+  });
+
+  // ---------- The Kitchen ----------
+  // A simulated build can be sent to The Kitchen with a title and a few words, by a signed-in visitor.
+  // It goes into The Kitchen's review queue (POST /api/kitchen/submissions) and shows there once accepted.
+  let kitchen = null;
+  const entry = (list, key) => (meta && meta[list].find((e) => e.key === key)) || null;
+  function offerKitchen(build, live) {
+    kitchen = build && live ? build : null;
+    $("kitchenBtn").hidden = !kitchen;
+    $("kitchenBtn").disabled = false;
+    $("kitchenForm").hidden = true;
+    $("kitchenNote").textContent = build && !live ? T("Only live-patch builds can go to The Kitchen.") : "";
+  }
+  // The Kitchen's own messages come in English and are translated from its dictionary (/i18n/kitchen/).
+  let kitchenDict = null;
+  async function kitchenText(s) {
+    if (window.I18N.lang === "en") return s;
+    if (!kitchenDict) kitchenDict = fetch(`/i18n/kitchen/${window.I18N.lang}.json`).then((r) => (r.ok ? r.json() : {})).catch(() => ({}));
+    return (await kitchenDict)[s] || s;
+  }
+  function kitchenNote(text, link) {
+    const n = $("kitchenNote");
+    n.textContent = text;
+    if (link) {
+      const a = document.createElement("a");
+      a.href = link.href; a.target = "_top"; a.textContent = link.text;
+      n.append(" ", a);
+    }
+  }
+  $("kitchenBtn").addEventListener("click", async () => {
+    if (!kitchen) return;
+    $("kitchenBtn").disabled = true;
+    kitchenNote(T("Checking your account…"));
+    const acct = await fetch("/api/account", { cache: "no-store" }).then((r) => (r.ok ? r.json() : {})).catch(() => ({}));
+    $("kitchenBtn").disabled = false;
+    if (!acct.signedIn) {
+      kitchenNote(T("Sign in to send builds to The Kitchen."), { href: "/account", text: T("Sign in") });
+      return;
+    }
+    kitchenNote("");
+    $("kitchenBtn").hidden = true;
+    $("kitchenForm").hidden = false;
+    $("kitchenTitle").focus();
+  });
+  $("kitchenCancel").addEventListener("click", () => {
+    $("kitchenForm").hidden = true;
+    $("kitchenBtn").hidden = !kitchen;
+    kitchenNote("");
+  });
+  $("kitchenForm").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    if (!kitchen) return;
+    const title = $("kitchenTitle").value.trim(), description = $("kitchenDesc").value.trim();
+    if (title.length < 3) { kitchenNote(T("Give your build a title of at least 3 characters.")); $("kitchenTitle").focus(); return; }
+    if (description.length < 20) { kitchenNote(T("Write at least 20 characters on why it works.")); $("kitchenDesc").focus(); return; }
+    $("kitchenSend").disabled = true;
+    kitchenNote(T("Sending…"));
+    try {
+      const check = await botCheck();
+      const body = {
+        ...kitchen, title, description, lang: window.I18N.lang,
+        // Ids for the names in other languages, and the English names, both in build order.
+        item_ids: kitchen.items.map((k) => entry("items", k)?.id).filter(Boolean),
+        augment_ids: kitchen.augments.map((k) => entry("augments", k)?.id).filter(Boolean),
+        item_names: kitchen.items.map((k) => entry("items", k)?.en).filter(Boolean),
+        augment_names: kitchen.augments.map((k) => entry("augments", k)?.en).filter(Boolean),
+      };
+      if (check) body.check = check;
+      const r = await fetch("/api/kitchen/submissions", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
+      const b = await r.json().catch(() => ({}));
+      if (r.status === 401) {
+        kitchenNote(T("Sign in to send builds to The Kitchen."), { href: "/account", text: T("Sign in") });
+        return;
+      }
+      if (r.status === 404) throw new Error(T("Submissions open soon."));
+      if (!r.ok) throw new Error(b.error || "");
+      $("kitchenForm").hidden = true;
+      $("kitchenTitle").value = ""; $("kitchenDesc").value = "";
+      kitchen = null;
+      kitchenNote(T("Sent! It shows in The Kitchen once it's approved."));
+    } catch (err) {
+      kitchenNote(err.message || T("The Kitchen couldn't be reached. Try again in a moment."));
+    } finally {
+      $("kitchenSend").disabled = false;
     }
   });
 
