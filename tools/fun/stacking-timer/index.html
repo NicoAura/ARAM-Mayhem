@@ -2,85 +2,9 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Stacking Timer</title>
-  <meta name="description" content="How fast Veigar, Nasus, Senna and Smolder stack in ARAM Mayhem, and when they hit each goal.">
-  <link rel="stylesheet" href="../style.css">
+  <title>The Lab</title>
+  <meta http-equiv="refresh" content="0; url=../index.html">
+  <script>location.replace("../index.html");</script>
 </head>
-<body>
-  <main>
-    <header class="intro">
-      <img id="champ-icon" alt="" width="56" height="56">
-      <div>
-        <p class="eyebrow"><a href="../index.html">The Lab</a> · ARAM Mayhem</p>
-        <h1>Stacking Timer</h1>
-        <p class="muted">Set how often you hit, kill or collect, and see how many stacks you have at each minute and when you reach a goal. <span id="patch"></span></p>
-      </div>
-    </header>
-
-    <section class="result" aria-live="polite">
-      <div class="big">
-        <span class="label"><span id="unit-label">AP from stacks</span> at <span id="minutes-label">20</span> min</span>
-        <span id="stat" class="value">0</span>
-      </div>
-      <div class="loop">
-        <div class="loop-head">
-          <span class="label">Stacks per minute</span>
-          <span id="rate">0</span>
-        </div>
-        <p id="rate-note" class="muted small"></p>
-      </div>
-      <svg id="chart" viewBox="0 0 300 80" preserveAspectRatio="none" role="img" aria-label="Stacks over time"></svg>
-      <dl id="stats" class="stats"></dl>
-    </section>
-
-    <section>
-      <div class="row-head"><h2>Champion</h2></div>
-      <div id="champ-picker" class="picker"></div>
-    </section>
-
-    <section>
-      <div class="row-head">
-        <h2>Game length</h2>
-        <output id="minutes-out">20 min</output>
-      </div>
-      <input id="minutes" type="range" min="1" max="40" value="20" aria-label="Game length in minutes">
-    </section>
-
-    <section>
-      <h2>How often it happens</h2>
-      <div id="options" class="options"></div>
-    </section>
-
-    <section>
-      <div class="row-head">
-        <h2>Augment</h2>
-        <span class="muted small">Works on any champion</span>
-      </div>
-      <div id="aug-picker" class="picker augs"></div>
-      <div id="aug-options" class="options" style="margin-top:0.75rem"></div>
-    </section>
-
-    <section>
-      <h2>Minute by minute</h2>
-      <table id="timeline" class="table"></table>
-    </section>
-
-    <section class="actions">
-      <button id="preset" type="button">Load a fed game</button>
-      <button id="reset" type="button" class="ghost">Reset</button>
-      <button id="share" type="button" class="ghost">Copy link</button>
-    </section>
-
-    <footer class="muted small">
-      Stack values include Mayhem's ARAM changes.
-      The rates are your guess at how often each thing happens, so stacks grow in a straight line.
-      Real games are bursty: fights add a lot of stacks at once, and dead time adds none.
-    </footer>
-  </main>
-
-  <script src="data.js"></script>
-  <script src="calc.js"></script>
-  <script src="app.js"></script>
-</body>
+<body><a href="../index.html">The Lab</a></body>
 </html>

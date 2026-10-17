@@ -1,0 +1,54 @@
+{
+  "id": "janna-giant",
+  "title": "The Eye of the Storm",
+  "champion": "Janna",
+  "champion_name": "Janna",
+  "chef": "2026-10-17",
+  "tier": "Secretly strong",
+  "core_win_rate": 0.5914,
+  "champion_win_rate": 0.5229,
+  "why": "Janna is a feather that floats behind her team and throws shields. Here she eats every Health augment in the pool instead. Goliath makes her large, Tank Engine grows her with every takedown, and Steel Your Heart triples her Heartsteel stacks once they pass 300. She ends the game as the biggest thing on the bridge, and Monsoon now knocks enemies away from a wall of Health.",
+  "play": "Walk in first. Tornado the backline, then Monsoon when they finally reach you.",
+  "items": [
+    "Plated Steelcaps",
+    "Heartsteel",
+    "Warmog's Armor",
+    "Sunfire Aegis",
+    "Unending Despair",
+    "Jak'Sho, The Protean"
+  ],
+  "core_usual": 0,
+  "core": 3,
+  "champion_icon": "/embed/fun/cook-builds/icons/champions/40.png",
+  "augments": [
+    {
+      "name": "Goliath",
+      "rarity": "Prismatic",
+      "core": true,
+      "win_rate": 0.5755,
+      "icon": "/embed/fun/cook-builds/icons/augments/goliath.png"
+    },
+    {
+      "name": "Tank Engine",
+      "rarity": "Gold",
+      "core": true,
+      "win_rate": 0.6025,
+      "icon": "/embed/fun/cook-builds/icons/augments/tank-engine.png"
+    },
+    {
+      "name": "Steel Your Heart",
+      "rarity": "Gold",
+      "core": true,
+      "win_rate": 0.5962,
+      "icon": "/embed/fun/cook-builds/icons/augments/steel-your-heart.png"
+    },
+    {
+      "name": "Celestial Body",
+      "rarity": "Gold",
+      "core": false,
+      "win_rate": 0.5472,
+      "icon": "/embed/fun/cook-builds/icons/augments/celestial-body.png"
+    }
+  ],
+  "href": "/lab#chefs-special"
+}

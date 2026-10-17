@@ -1,5 +1,5 @@
 {
-  "_note": "Hand-written cook builds. Every build flips what its champion is known for (Nico, 2026-10-16: keep only builds like Melee Bomb Man Ziggs). build_data.py adds augment text, Mayhem win rates and simulator numbers and writes data.js. The first `core` augments decide the build's tier; the rest are flex picks. `augment_text` replaces the generated text for augments whose tooltip numbers the game data doesn't fill in.",
+  "_note": "Hand-written cook builds. Every build flips what its champion is known for (Nico, 2026-10-16: keep only builds like Melee Bomb Man Ziggs). build_data.py adds augment text, Mayhem win rates and simulator numbers and writes data.js. The first `core` augments decide the build's tier; the rest are flex picks. `augment_text` replaces the generated text for augments whose tooltip numbers the game data doesn't fill in. A build with a `chef` date was the Chef's Special that day; the page features the newest one (a new pick is added every day).",
   "augment_text": {
     "With Haste": "Gain Move Speed equal to a share of your Ability Haste.",
     "Overloaded": "Using another Ability resets the cooldown of the chosen ability."
@@ -92,6 +92,29 @@
       ],
       "why": "Ethereal Weapon makes Rocket Grab apply on-hit effects, so the hook lands like a fully built attack-speed carry's auto: Blade of the Ruined King takes a chunk of current health, Kraken Slayer, Wit's End, Nashor's and Juiced all proc, and Firebrand starts a burn before the target has even arrived. Mystic Punch then turns that on-hit into cooldown back on the hook. The support robot is now the team's on-hit ADC, and his best attack has 1,100 range.",
       "play": "Turn on Overdrive, hook someone, then Power Fist them as they land so they eat two rounds of on-hit. Pop Static Field to proc everything on everyone nearby, and keep auto-attacking until Mystic Punch hands the hook back."
+    },
+    {
+      "id": "janna-giant",
+      "champion": "Janna",
+      "title": "The Eye of the Storm",
+      "augments": [
+        "Goliath",
+        "Tank Engine",
+        "Steel Your Heart",
+        "Celestial Body"
+      ],
+      "core": 3,
+      "items": [
+        "Plated Steelcaps",
+        "Heartsteel",
+        "Warmog's Armor",
+        "Sunfire Aegis",
+        "Unending Despair",
+        "Jak'Sho, The Protean"
+      ],
+      "why": "Janna is a feather that floats behind her team and throws shields. Here she eats every Health augment in the pool instead. Goliath makes her large, Tank Engine grows her with every takedown, and Steel Your Heart triples her Heartsteel stacks once they pass 300. She ends the game as the biggest thing on the bridge, and Monsoon now knocks enemies away from a wall of Health.",
+      "play": "Walk in first. Tornado the backline, then Monsoon when they finally reach you.",
+      "chef": "2026-10-17"
     }
   ]
 }
