@@ -3,14 +3,12 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useMemo, useRef, useState } from "react";
-import AugmentCard from "./AugmentCard";
+import { useEffect, useMemo, useState } from "react";
 
 // The home page's interactive pieces: jump to a champion, the live tier snapshot,
 // an augment offer to roll, and a Kitchen build to reroll.
 
 type Champ = { id: string; name: string; tier: string; winRate: number; pickRate: number };
-type Augment = { id: string; name: string; tier: string; winRate: number; pickRate: number };
 type Build = { champion: string; title: string; augments: string[]; why: string };
 
 const pct = (v: number) => `${(v * 100).toFixed(1)}%`;
@@ -124,68 +122,7 @@ export function TierSnapshot({ champs }: { champs: Champ[] }) {
 }
 
 // Each offer is one rarity, like the game's; prismatic offers are the rarest.
-const RARITY: [string, number][] = [
-  ["silver", 0.4],
-  ["gold", 0.4],
-  ["prismatic", 0.2],
-];
 
-function rollOffer(pool: Augment[]): Augment[] {
-  let r = Math.random();
-  const tier = RARITY.find(([, w]) => (r -= w) < 0)?.[0] ?? "gold";
-  const of = pool.filter((a) => a.tier === tier);
-  const from = of.length >= 3 ? of : pool;
-  const picked = new Set<number>();
-  while (picked.size < Math.min(3, from.length)) picked.add(Math.floor(Math.random() * from.length));
-  return [...picked].map((i) => from[i]);
-}
-
-/** Roll a three-augment offer and see which pick wins most. */
-export function AugmentRoll({ pool }: { pool: Augment[] }) {
-  const [offer, setOffer] = useState<Augment[]>([]);
-  const [chosen, setChosen] = useState<string | null>(null);
-  const [rolls, setRolls] = useState(0);
-  const first = useRef(true);
-  useEffect(() => {
-    if (first.current) setOffer(rollOffer(pool));
-    first.current = false;
-  }, [pool]);
-  const best = offer.length ? offer.reduce((a, b) => (b.winRate > a.winRate ? b : a)) : null;
-  const roll = () => (setOffer(rollOffer(pool)), setChosen(null), setRolls((n) => n + 1));
-
-  return (
-    <div className="roll">
-      <div className="roll-cards" key={rolls}>
-        {offer.map((a, i) => (
-          <button
-            key={a.id}
-            type="button"
-            className={`roll-card${chosen ? (a.id === best?.id ? " best" : a.id === chosen ? " picked" : " dim") : ""}`}
-            style={{ animationDelay: `${i * 70}ms` }}
-            onClick={() => setChosen(a.id)}
-            disabled={Boolean(chosen)}
-          >
-            <AugmentCard name={a.name} tier={a.tier} icon={`/icons/augments/${a.id}.webp`} compact>
-              {chosen ? `${pct(a.winRate)} win · ${pct(a.pickRate)} pick` : "Pick me"}
-            </AugmentCard>
-          </button>
-        ))}
-      </div>
-      <div className="roll-foot">
-        <p aria-live="polite">
-          {!chosen
-            ? "Pick one, then see how each does on the live patch."
-            : chosen === best?.id
-              ? `Good pick: ${best.name} wins most of these three.`
-              : `${best?.name} wins more often (${pct(best?.winRate ?? 0)}).`}
-        </p>
-        <button type="button" className="btn" onClick={roll}>
-          Roll again
-        </button>
-      </div>
-    </div>
-  );
-}
 
 /** One Kitchen build at a time, with a button for another. */
 export function KitchenPick({ builds }: { builds: Build[] }) {
