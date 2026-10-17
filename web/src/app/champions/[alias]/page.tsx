@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import FavoriteStar from "@/components/FavoriteStar";
 import { notFound } from "next/navigation";
 import Embed from "@/components/Embed";
+import { augmentHref } from "@/lib/augments";
 import { championAliases, championSummary } from "@/lib/champions";
 import { pageMeta } from "@/lib/meta";
 import { discoverToolTabs } from "@/lib/tabs";
@@ -43,6 +45,12 @@ export default async function ChampionPage({ params }: { params: Promise<{ alias
           {c.name} <span className="champ-hero-sub">ARAM Mayhem build</span>
         </h1>
         {c.title && <p className="lede">{c.title.charAt(0).toUpperCase() + c.title.slice(1)}</p>}
+        <p className="champ-hero-links">
+          <FavoriteStar id={c.alias} name={c.name} label />
+          <Link className="inline-link" href={`/compare?a=${c.alias}`}>
+            Compare with another champion
+          </Link>
+        </p>
         {c.winRate !== undefined && (
           <div className="stat-row">
             <div>
@@ -79,7 +87,7 @@ export default async function ChampionPage({ params }: { params: Promise<{ alias
               </div>
               <div className="rank">
                 {c.augments.map((a, i) => (
-                  <Link key={a.id} href={`/tier-list?tab=augments&q=${encodeURIComponent(a.name)}`}>
+                  <Link key={a.id} href={augmentHref(a.id) ?? `/tier-list?tab=augments&q=${encodeURIComponent(a.name)}`}>
                     <span className="rank-i">{i + 1}</span>
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img className="icon" src={`/icons/augments/${a.id}.webp`} alt="" width={24} height={24} loading="lazy" />
@@ -93,6 +101,7 @@ export default async function ChampionPage({ params }: { params: Promise<{ alias
             <section className="card span-5" data-accent="tier">
               <div className="card-head">
                 <h2>Best teammates</h2>
+                <Link href={`/synergy?team=${c.alias}`}>Team Builder →</Link>
               </div>
               <div className="rank plain">
                 {c.partners.map((p) => (

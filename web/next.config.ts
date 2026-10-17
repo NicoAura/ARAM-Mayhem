@@ -42,7 +42,13 @@ const nextConfig: NextConfig = {
       ["/tools/cook-builds", "/lab#cook-builds"],
       ["/tools/kitchen", "/lab#cook-builds"],
       ["/kitchen", "/lab#cook-builds"],
-    ].map(([source, destination]) => ({ source, destination, permanent: true }));
+    ]
+      .map(([source, destination]) => ({ source, destination, permanent: true }))
+      // Each augment has its own page; the bare address shows them all on the Tier List.
+      .concat([
+        { source: "/augments", destination: "/tier-list?tab=augments", permanent: false },
+        { source: "/items", destination: "/", permanent: false },
+      ]);
   },
 };
 

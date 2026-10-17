@@ -13,6 +13,20 @@ function fullWidth(doc: Document) {
   doc.head.append(style);
 }
 
+// The site's search keys (/, ⌘K, Ctrl+K) work inside embedded tools too: the key is handed to the
+// page, where the header search listens for it.
+function searchKeys(doc: Document) {
+  if (doc.documentElement.dataset.searchKeys) return;
+  doc.documentElement.dataset.searchKeys = "1";
+  doc.addEventListener("keydown", (e) => {
+    const typing = /INPUT|TEXTAREA|SELECT/.test((e.target as HTMLElement)?.tagName ?? "") || (e.target as HTMLElement)?.isContentEditable;
+    const combo = (e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k";
+    if (!combo && (e.key !== "/" || typing)) return;
+    e.preventDefault();
+    window.dispatchEvent(new KeyboardEvent("keydown", { key: e.key, metaKey: e.metaKey, ctrlKey: e.ctrlKey }));
+  });
+}
+
 // Same-origin iframe that grows to fit its page, so the embedded tool scrolls with the site.
 export default function Embed({
   src,
@@ -47,6 +61,7 @@ export default function Embed({
       if (!doc?.body) return;
       themeDocument(doc, document.documentElement.dataset.theme);
       fullWidth(doc);
+      searchKeys(doc);
       const fit = () =>
         setHeight(Math.max(minHeight, doc.documentElement.scrollHeight));
       fit();

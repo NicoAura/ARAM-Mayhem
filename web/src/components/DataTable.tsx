@@ -1,8 +1,11 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useMemo, useRef, useState } from "react";
 import championNames from "@/data/champion-names.json";
+import { useFavorites } from "@/lib/favorites";
 import { setParams } from "@/lib/url-state";
+import FavoriteStar from "./FavoriteStar";
 import { useAdvanced } from "./Advanced";
 import ChampionPanel, { hasPanel } from "./ChampionPanel";
 
@@ -13,6 +16,8 @@ export type Column = {
   sortable?: boolean;
   /** For "augment" columns: the row key holding the augment id, for its icon. */
   iconKey?: string;
+  /** The row key holding a page to open from this cell (an augment's own page). */
+  hrefKey?: string;
   /** Sort by this row key instead (a tier letter sorts by its score). */
   sortKey?: string;
   /** Explains the column; shown on hover and to screen readers. */
@@ -73,13 +78,22 @@ function Named({ src, name }: { src: string; name: string }) {
   );
 }
 
-function Champion({ id, onOpen }: { id: string; onOpen: (id: string) => void }) {
-  const named = <Named src={`/icons/champions/${id}.webp`} name={NAMES[id] ?? id.replace(/([a-z])([A-Z])/g, "$1 $2")} />;
-  if (!hasPanel(id)) return named;
-  return (
+function Champion({ id, onOpen, star }: { id: string; onOpen: (id: string) => void; star?: boolean }) {
+  const name = NAMES[id] ?? id.replace(/([a-z])([A-Z])/g, "$1 $2");
+  const named = <Named src={`/icons/champions/${id}.webp`} name={name} />;
+  const body = hasPanel(id) ? (
     <button type="button" className="champ-open" onClick={() => onOpen(id)} title="Splash, pick quote and abilities">
       {named}
     </button>
+  ) : (
+    named
+  );
+  if (!star) return body;
+  return (
+    <span className="champ-fav">
+      <FavoriteStar id={id} name={name} />
+      {body}
+    </span>
   );
 }
 
@@ -92,6 +106,7 @@ export default function DataTable({
   searchKey,
   searchLabel = "Search",
   urlTab,
+  favorites: withFavorites,
 }: {
   columns: Column[];
   /** Columns for the tier list's Advanced view; the standard columns are used when absent. */
@@ -103,12 +118,16 @@ export default function DataTable({
   // Fill the search and sort from ?q= and ?sort= when the page's ?tab= names this table's tab
   // ("" = the default tab), and keep them there as they change so the address can be shared.
   urlTab?: string;
+  /** Show a star by each champion and pin starred champions to the top (lib/favorites.ts). */
+  favorites?: boolean;
 }) {
   const columns = useAdvanced() && advancedColumns ? advancedColumns : standardColumns;
   const [sort, setSort] = useState(initialSort);
   const [query, setQuery] = useState("");
   const [shown, setShown] = useState(PAGE);
   const [panel, setPanel] = useState<string | null>(null);
+  const favorites = useFavorites();
+  const champKey = withFavorites ? columns.find((c) => c.format === "champion")?.key : undefined;
 
   // Read once on load; the columns' keys say which ?sort= values are real.
   const allColumns = useRef([...standardColumns, ...(advancedColumns ?? [])]);
@@ -127,7 +146,9 @@ export default function DataTable({
     const q = query.trim().toLowerCase();
     const filtered = q && searchKey ? rows.filter((r) => searchText(r[searchKey]).includes(q)) : rows;
     const dir = sort.desc ? -1 : 1;
+    const fav = (r: Row) => (champKey && favorites.includes(String(r[champKey])) ? 0 : 1);
     return [...filtered].sort((a, b) => {
+      if (fav(a) !== fav(b)) return fav(a) - fav(b);
       const x = a[sort.key];
       const y = b[sort.key];
       // Missing values (a champion new this patch has no change) stay at the bottom either way.
@@ -136,7 +157,7 @@ export default function DataTable({
       if (typeof x === "number" && typeof y === "number") return (x - y) * dir;
       return String(x ?? "").localeCompare(String(y ?? "")) * dir;
     });
-  }, [rows, sort, query, searchKey]);
+  }, [rows, sort, query, searchKey, champKey, favorites]);
 
   const toggle = (key: string) => {
     const next = sort.key === key ? { key, desc: !sort.desc } : { key, desc: key !== searchKey };
@@ -191,14 +212,20 @@ export default function DataTable({
           </thead>
           <tbody>
             {sorted.slice(0, shown).map((r, i) => (
-              <tr key={i}>
+              <tr key={i} className={champKey && favorites.includes(String(r[champKey])) ? "fav-row" : undefined}>
                 <td className="num muted-cell">{i + 1}</td>
                 {columns.map((c) => (
                   <td key={c.key} className={cellClass(c, r[c.key])}>
                     {c.format === "champion" ? (
-                      <Champion id={String(r[c.key])} onOpen={setPanel} />
+                      <Champion id={String(r[c.key])} onOpen={setPanel} star={c.key === champKey} />
                     ) : c.format === "augment" ? (
-                      <Named src={`/icons/augments/${r[c.iconKey ?? "id"]}.webp`} name={String(r[c.key] ?? "")} />
+                      c.hrefKey && r[c.hrefKey] ? (
+                        <Link className="cell-link" href={String(r[c.hrefKey])}>
+                          <Named src={`/icons/augments/${r[c.iconKey ?? "id"]}.webp`} name={String(r[c.key] ?? "")} />
+                        </Link>
+                      ) : (
+                        <Named src={`/icons/augments/${r[c.iconKey ?? "id"]}.webp`} name={String(r[c.key] ?? "")} />
+                      )
                     ) : c.format === "tier" && r[c.key] ? (
                       <span className={`chip tier-${String(r[c.key]).toLowerCase()}`}>{r[c.key]}</span>
                     ) : (
