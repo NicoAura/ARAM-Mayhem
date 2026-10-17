@@ -54,7 +54,8 @@ function show(v: Row[string], format: Column["format"]) {
     case "num":
       return n.toFixed(1);
     case "int":
-      return Math.round(n).toLocaleString();
+      // A fixed locale: the browser's own would differ from the server render and break hydration.
+      return Math.round(n).toLocaleString("en-US");
     case "sec":
       return `${Math.round(n)}s`;
     default:
