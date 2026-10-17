@@ -105,3 +105,9 @@ def test_no_public_player_lookup():
 def test_no_queue_ids_section():
     """The Info tab doesn't list queue ids (Nico, 2026-10-17)."""
     assert 'id="queues"' not in read("guide/index.html") and '$("queues")' not in read("guide/app.js")
+
+
+def test_no_maps_or_summoner_spell_lists():
+    """The Info tab doesn't list map skins or summoner spells (Nico, 2026-10-17)."""
+    html, js = read("guide/index.html"), read("guide/app.js")
+    assert not any(x in html or x in js for x in ("map-list", "spell-list"))

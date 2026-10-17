@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Mayhem Info</title>
-  <meta name="description" content="How ARAM Mayhem works: rules, quests, challenges, items, maps and augment history.">
+  <meta name="description" content="How ARAM Mayhem works: rules, quests, challenges, items and augment history.">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -17,7 +17,7 @@
         <button type="button" role="tab" data-tab="quests" data-t>Quests</button>
         <button type="button" role="tab" data-tab="challenges" data-t>Challenges</button>
         <button type="button" role="tab" data-tab="items" data-t>Items</button>
-        <button type="button" role="tab" data-tab="maps" data-t>Maps &amp; extras</button>
+        <button type="button" role="tab" data-tab="maps" data-t>Extras</button>
         <button type="button" role="tab" data-tab="history" data-t>Augment history</button>
         <button type="button" role="tab" data-tab="archive" data-t>Archive</button>
       </div>
@@ -55,10 +55,6 @@
         <p class="muted" id="champ-select-intro"></p>
         <div class="eyebrow" style="margin:0.75rem 0 0.5rem" data-t>Augments that give keystones</div>
         <div class="grid tight" id="keystone-list"></div>
-      </div>
-      <div class="card">
-        <div class="card-head"><h2 data-t>Summoner spells</h2><span class="muted small" data-t>Allowed in Mayhem</span></div>
-        <div class="grid tight" id="spell-list"></div>
       </div>
       <div class="card">
         <div class="card-head"><h2 data-t>Augments that add a summoner spell</h2></div>
@@ -155,12 +151,6 @@
     </section>
 
     <section class="panel" id="panel-maps" hidden>
-      <div class="card">
-        <p class="eyebrow" data-t>Maps</p>
-        <h2 class="section" data-t>Howling Abyss and its skins</h2>
-        <p class="muted" style="margin-top:0.5rem" data-t>Mayhem games can load the bridge in different themes. Same layout, new look.</p>
-      </div>
-      <div class="grid tight maps" id="map-list"></div>
       <div class="card">
         <div class="card-head"><h2 data-t>Mayhem-only items</h2><span class="muted small" data-t>Quest rewards and cosmetics</span></div>
         <div class="grid tight" id="item-list"></div>

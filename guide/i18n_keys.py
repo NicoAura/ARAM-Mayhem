@@ -6,7 +6,7 @@ Usage: python3 guide/i18n_keys.py   (after build_data.py and build_history.py; a
 Where the keys come from:
   index.html          elements marked data-t (their text), attributes named in data-t-attr, the <title>
   app.js              literals passed to t(), and the capitalised English labels in its tables (tab, rule and stat names)
-  build_data.py       text written by hand: the mode's story, track notes, fast travel, units, set fallbacks, map names
+  build_data.py       text written by hand: the mode's story, track notes, fast travel, units, set fallbacks
   data.js, history.js internal value names ("BaseDamage" shown as "Base Damage")
   profile.js          region names and difficulty levels (champion pages)
 """
@@ -114,7 +114,6 @@ def guide_keys():
         keys += [f["map"], f["name"], f["text"]]
     keys += [n for n, _, _, _ in B.SUMMONS] + [t for _, _, _, t in B.SUMMONS]
     keys += [x for _, name, bonus in B.AUGMENT_SETS for x in (name, bonus) if x]
-    keys += [n for n, _, _ in B.MAP_SKINS]
     keys += ["Augment", "Emote", "Icon", "Title", "Reward", "A title", "Profile icon"]
     D = load_js(os.path.join(REPO, "guide", "data.js"))
     keys += [c["group"] for c in D["challenges"]]
