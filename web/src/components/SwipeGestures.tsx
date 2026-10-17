@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { switchTab } from "@/lib/subtab-nav";
 
 // Phone gestures. A sideways swipe switches the page's in-page tabs (SubTabs) or, on a page without
 // them, moves to the neighbouring bottom-bar tab. Pull-to-refresh is added only in the installed app
@@ -17,23 +18,6 @@ function ownsSideways(el: Element | null): boolean {
     if ((ox === "auto" || ox === "scroll") && n.scrollWidth > n.clientWidth + 1) return true;
   }
   return false;
-}
-
-function switchTab(dir: 1 | -1) {
-  const list = document.querySelector<HTMLElement>("main .subtab-list");
-  if (list && list.offsetParent) {
-    const tabs = [...list.querySelectorAll<HTMLButtonElement>("[role='tab']")];
-    const i = tabs.findIndex((t) => t.getAttribute("aria-selected") === "true");
-    const next = tabs[i + dir];
-    if (next) {
-      next.click();
-      next.scrollIntoView({ block: "nearest", inline: "nearest" });
-    }
-    return;
-  }
-  const links = [...document.querySelectorAll<HTMLAnchorElement>(".tabbar a")];
-  const i = links.findIndex((a) => a.getAttribute("aria-current") === "page");
-  if (i >= 0) links[i + dir]?.click();
 }
 
 export default function SwipeGestures() {
