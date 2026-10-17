@@ -22,18 +22,6 @@ export const sections = [
     pr: 4,
   },
   {
-    href: "/builds",
-    label: text("tab./builds.label", "Build tools"),
-    body: text("tab./builds.body", "A build editor with simulated damage, champion comparisons and team synergy."),
-    pr: 0,
-  },
-  {
-    href: "/augments",
-    label: text("tab./augments.label", "Augments"),
-    body: text("tab./augments.body", "Augments grouped by icon, plus draft practice with rerolls."),
-    pr: 0,
-  },
-  {
     href: "/items",
     label: text("tab./items.label", "Items"),
     body: text("tab./items.body", "Every item Mayhem players build, tagged by what it gives, with filters."),

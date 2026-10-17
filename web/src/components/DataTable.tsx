@@ -61,8 +61,7 @@ function show(v: Row[string], format: Column["format"]) {
 }
 
 // A tier letter. When the row carries the previous patch's tier (<key>_was) and it differs, the chip
-// slides in from the old letter, up or down (globals.css: on a new patch's first visit and during the
-// patch timeline's playback).
+// slides in from the old letter, up or down (globals.css: on a new patch's first visit).
 const ORDER = ["S", "A", "B", "C", "D"];
 function TierChip({ tier, was }: { tier: string; was: Row[string] | undefined }) {
   const old = typeof was === "string" && was !== tier && ORDER.includes(was) ? was : null;

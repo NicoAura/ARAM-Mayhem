@@ -2,12 +2,11 @@
 
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState, useTransition } from "react";
-import { switchTab } from "@/lib/subtab-nav";
 import { buzz, inApp } from "@/lib/haptics";
 
-// Phone gestures. A sideways swipe switches the page's in-page tabs (SubTabs) or, on a page without
-// them, follows the page's next/previous link (lib/subtab-nav.ts). A swipe that starts inside an element
-// marked data-swipe-target goes to that element instead, as a "deeparam-swipe" event ({detail: {dir}}).
+// Phone gestures. A sideways swipe that starts inside an element marked data-swipe-target goes to that
+// element, as a "deeparam-swipe" event ({detail: {dir}}); elsewhere sideways swipes do nothing (they no
+// longer switch tabs or pages).
 // Pulling down at the top of a page refreshes it in
 // place, with a tick when it's far enough and a buzz when the fresh page is in. It replaces the
 // browser's own pull (turned off while this is on); the DeepARAM app has its native one, so not there.
@@ -58,8 +57,8 @@ export default function SwipeGestures() {
         x: p.clientX,
         y: p.clientY,
         t: performance.now(),
-        sideways: p.clientX > EDGE && p.clientX < innerWidth - EDGE && !ownsSideways(target),
         owner: target.closest("[data-swipe-target]"),
+        sideways: p.clientX > EDGE && p.clientX < innerWidth - EDGE && !ownsSideways(target),
         top: pullable && scrollY <= 0 && !target.closest("dialog, .sheet, [data-no-swipe]"),
       };
     };
@@ -92,13 +91,11 @@ export default function SwipeGestures() {
       const p = e.changedTouches[0];
       const dx = p.clientX - s.x;
       const dy = p.clientY - s.y;
-      if (!s.sideways || performance.now() - s.t > 700 || Math.abs(dx) < MIN_X || Math.abs(dx) < Math.abs(dy) * 2) return;
+      if (!s.owner?.isConnected || !s.sideways || performance.now() - s.t > 700 || Math.abs(dx) < MIN_X || Math.abs(dx) < Math.abs(dy) * 2) return;
       if (getSelection()?.toString()) return;
       const dir = dx < 0 ? 1 : -1;
-      if (s.owner?.isConnected) {
-        buzz("step");
-        s.owner.dispatchEvent(new CustomEvent("deeparam-swipe", { detail: { dir } }));
-      } else switchTab(dir);
+      buzz("step");
+      s.owner.dispatchEvent(new CustomEvent("deeparam-swipe", { detail: { dir } }));
     };
 
     addEventListener("touchstart", down, { passive: true });
