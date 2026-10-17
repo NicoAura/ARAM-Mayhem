@@ -6,7 +6,6 @@
  "Show on deeparam.com": "Pokaż na deeparam.com",
  "Import games from client": "Importuj gry z klienta",
  "Champion": "Bohater",
- "Skin": "Skórka",
  "No games yet": "Brak gier",
  "Import your games from the League client. Your games stay on your computer.": "Zaimportuj swoje gry z klienta League. Twoje gry pozostają na twoim komputerze.",
  "You need to be connected to the Riot Client: open it on this computer and sign in first.": "Musisz być połączony z Klientem Riot: najpierw otwórz go na tym komputerze i zaloguj się.",
@@ -195,9 +194,6 @@
  "Removing your shared games…": "Usuwanie udostępnionych gier…",
  "Sharing is on. New games are shared after each import.": "Udostępnianie jest włączone. Nowe gry są udostępniane po każdym imporcie.",
  "Sharing is off and your shared games were removed.": "Udostępnianie jest wyłączone, a udostępnione gry zostały usunięte.",
- "Default": "Domyślna",
- "Champions and skins you own": "Twoi bohaterowie i skórki",
- "Import games to pick from the skins you own": "Zaimportuj gry, aby wybierać spośród swoich skórek",
  "Map {id}": "Mapa {id}",
  "Not synced": "Niezsynchronizowane",
  "Level": "Poziom",
@@ -214,5 +210,7 @@
  "Recording a game ({champion})": "Nagrywanie gry ({champion})",
  "{n} recorded": "Nagrane: {n}",
  "Your Mayhem games, in one place.": "Twoje gry w ARAM: Chaos w jednym miejscu.",
- "Import your games with the button below. You need to be connected to the Riot Client: open it on this computer and sign in first. Your games stay on your computer.": "Zaimportuj swoje gry przyciskiem poniżej. Musisz być połączony z Klientem Riot: najpierw otwórz go na tym komputerze i zaloguj się. Twoje gry pozostają na twoim komputerze."
+ "Import your games with the button below. You need to be connected to the Riot Client: open it on this computer and sign in first. Your games stay on your computer.": "Zaimportuj swoje gry przyciskiem poniżej. Musisz być połączony z Klientem Riot: najpierw otwórz go na tym komputerze i zaloguj się. Twoje gry pozostają na twoim komputerze.",
+ "Sign in above to see your Mayhem games here: win rate, champions, augments and recent matches.": "Zaloguj się powyżej, aby zobaczyć tu swoje gry w Chaosie: współczynnik zwycięstw, bohaterów, ulepszenia i ostatnie mecze.",
+ "Champions you own": "Posiadani bohaterowie"
 }

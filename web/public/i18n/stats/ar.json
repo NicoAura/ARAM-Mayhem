@@ -6,7 +6,6 @@
  "Show on deeparam.com": "اعرض على deeparam.com",
  "Import games from client": "استيراد المباريات من العميل",
  "Champion": "البطل",
- "Skin": "المظهر",
  "No games yet": "لا توجد مباريات بعد",
  "Import your games from the League client. Your games stay on your computer.": "استورد مبارياتك من عميل League. تبقى مبارياتك على حاسوبك.",
  "You need to be connected to the Riot Client: open it on this computer and sign in first.": "يجب أن تكون متصلًا بـ Riot Client: افتحه على هذا الحاسوب وسجّل الدخول أولًا.",
@@ -195,9 +194,6 @@
  "Removing your shared games…": "جارٍ إزالة مبارياتك المشاركة…",
  "Sharing is on. New games are shared after each import.": "المشاركة مفعّلة. تُشارك المباريات الجديدة بعد كل استيراد.",
  "Sharing is off and your shared games were removed.": "المشاركة متوقفة وأُزيلت مبارياتك المشاركة.",
- "Default": "الافتراضي",
- "Champions and skins you own": "الأبطال والمظاهر التي تملكها",
- "Import games to pick from the skins you own": "استورد المباريات لتختار من المظاهر التي تملكها",
  "Map {id}": "الخريطة {id}",
  "Not synced": "غير متزامن",
  "Level": "المستوى",
@@ -214,5 +210,7 @@
  "Recording a game ({champion})": "جارٍ تسجيل مباراة ({champion})",
  "{n} recorded": "المسجلة: {n}",
  "Your Mayhem games, in one place.": "مبارياتك في ARAM: الفوضى، في مكان واحد.",
- "Import your games with the button below. You need to be connected to the Riot Client: open it on this computer and sign in first. Your games stay on your computer.": "استورد مبارياتك بالزر أدناه. يجب أن تكون متصلًا بـ Riot Client: افتحه على هذا الحاسوب وسجّل الدخول أولًا. تبقى مبارياتك على حاسوبك."
+ "Import your games with the button below. You need to be connected to the Riot Client: open it on this computer and sign in first. Your games stay on your computer.": "استورد مبارياتك بالزر أدناه. يجب أن تكون متصلًا بـ Riot Client: افتحه على هذا الحاسوب وسجّل الدخول أولًا. تبقى مبارياتك على حاسوبك.",
+ "Sign in above to see your Mayhem games here: win rate, champions, augments and recent matches.": "سجّل الدخول أعلاه لترى مبارياتك في الفوضى هنا: نسبة الفوز والأبطال والتعزيزات وأحدث المباريات.",
+ "Champions you own": "الأبطال الذين تملكهم"
 }

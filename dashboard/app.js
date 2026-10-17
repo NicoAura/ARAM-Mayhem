@@ -15,7 +15,7 @@ const state = {
   boots: new Set(), // item ids that count as boots
   champAlias: {},   // championId -> alias as in /champions/<alias>
   live: [],         // game recordings from the helper, newest first
-  owned: null,      // {champions: [ids], skins: [ids]} from the client, when synced
+  owned: null,      // {champions: [ids]} from the client, when synced
 };
 
 // A page can ship name tables and an example archive ahead of time.
@@ -1002,16 +1002,16 @@ function linkRecentlyPlayed() {
 }
 
 // ---------- banner ----------
-// A splash art behind the page header: the player's pick of champion and skin (skins they own, when the
-// client sync has said which), or their most-played champion's default art.
+// A champion's splash art behind the page header: the player's pick (from the champions they own, when the
+// client sync has said which), or their most-played champion. Always the champion's default art.
 
 const BANNER_KEY = "mayhem-banner";
-const splashUrl = (b) => (b.num ? `/assets/splash/${b.champion}_${b.num}.jpg` : `/assets/dd/img/champion/splash/${b.champion}_0.jpg`);
+const splashUrl = (b) => `/assets/dd/img/champion/splash/${b.champion}_0.jpg`;
 
 function savedBanner() {
   try {
     const b = JSON.parse(localStorage.getItem(BANNER_KEY) || "null");
-    if (b && /^[A-Za-z]{2,30}$/.test(b.champion) && Number.isInteger(b.num) && b.num >= 0) return b;
+    if (b && /^[A-Za-z]{2,30}$/.test(b.champion)) return { champion: b.champion, num: 0 };
   } catch (e) { /* storage blocked */ }
   return null;
 }
@@ -1022,43 +1022,25 @@ function showBanner(b) {
   head.style.setProperty("--banner", b ? `url("${splashUrl(b)}")` : "none");
 }
 
-async function skinsFor(champId) {
-  try {
-    const c = await (await fetch(`/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champions/${champId}.json`)).json();
-    const own = state.owned && new Set(state.owned.skins);
-    return (c.skins || []).filter((k) => k.id % 1000 === 0 || !own || own.has(k.id))
-      .map((k) => ({ num: k.id % 1000, name: k.id % 1000 ? k.name : t("Default") }));
-  } catch (e) { return [{ num: 0, name: t("Default") }]; }
-}
-
-async function setupBanner() {
+function setupBanner() {
   const ids = Object.keys(state.champAlias).map(Number);
   if (!ids.length) return;
-  const byAlias = Object.fromEntries(ids.map((id) => [state.champAlias[id], id]));
   const fallback = mostPlayed(1)[0];
   let banner = savedBanner() || (fallback ? { champion: fallback, num: 0 } : null);
   showBanner(banner);
 
-  const champSel = $("banner-champ"), skinSel = $("banner-skin");
+  const champSel = $("banner-champ");
   const pool = state.owned ? state.owned.champions.filter((id) => state.champAlias[id]) : ids;
   champSel.innerHTML = pool.map((id) => [id, localName(id) || state.champNames[id] || state.champAlias[id]]).sort((a, b) => a[1].localeCompare(b[1], LANG))
     .map(([id, name]) => `<option value="${state.champAlias[id]}">${esc(name)}</option>`).join("");
-  $("banner-note").textContent = t(state.owned ? "Champions and skins you own" : "Import games to pick from the skins you own");
-
-  async function fillSkins(alias, num) {
-    const skins = await skinsFor(byAlias[alias]);
-    skinSel.innerHTML = skins.map((k) => `<option value="${k.num}">${esc(k.name)}</option>`).join("");
-    skinSel.value = String(skins.some((k) => k.num === num) ? num : 0);
-  }
-  function pick() {
-    banner = { champion: champSel.value, num: +skinSel.value || 0 };
+  $("banner-note").textContent = state.owned ? t("Champions you own") : "";
+  if (banner) champSel.value = banner.champion;
+  champSel.onchange = () => {
+    banner = { champion: champSel.value, num: 0 };
     try { localStorage.setItem(BANNER_KEY, JSON.stringify(banner)); } catch (e) { /* not remembered */ }
     showBanner(banner);
     linkRecentlyPlayed();
-  }
-  if (banner) { champSel.value = banner.champion; await fillSkins(banner.champion, banner.num); }
-  champSel.onchange = async () => { await fillSkins(champSel.value, 0); pick(); };
-  skinSel.onchange = pick;
+  };
   $("banner-btn").onclick = () => {
     const pickEl = $("banner-pick");
     pickEl.hidden = !pickEl.hidden;

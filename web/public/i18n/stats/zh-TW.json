@@ -6,7 +6,6 @@
  "Show on deeparam.com": "在 deeparam.com 上顯示",
  "Import games from client": "從用戶端匯入對戰",
  "Champion": "英雄",
- "Skin": "造型",
  "No games yet": "還沒有對戰",
  "Import your games from the League client. Your games stay on your computer.": "從英雄聯盟用戶端匯入你的對戰。對戰只會保存在你的電腦上。",
  "You need to be connected to the Riot Client: open it on this computer and sign in first.": "需要連線至 Riot 用戶端：請先在這台電腦上開啟並登入。",
@@ -195,9 +194,6 @@
  "Removing your shared games…": "正在移除你分享的對戰…",
  "Sharing is on. New games are shared after each import.": "分享已開啟。每次匯入後都會分享新對戰。",
  "Sharing is off and your shared games were removed.": "分享已關閉，你分享的對戰已移除。",
- "Default": "預設",
- "Champions and skins you own": "你擁有的英雄和造型",
- "Import games to pick from the skins you own": "匯入對戰後即可從你擁有的造型中選擇",
  "Map {id}": "地圖 {id}",
  "Not synced": "未同步",
  "Level": "等級",
@@ -214,5 +210,7 @@
  "Recording a game ({champion})": "正在記錄對戰（{champion}）",
  "{n} recorded": "已記錄 {n} 場",
  "Your Mayhem games, in one place.": "你的大混戰對戰，盡在一處。",
- "Import your games with the button below. You need to be connected to the Riot Client: open it on this computer and sign in first. Your games stay on your computer.": "點擊下方按鈕匯入你的對戰。需要連線至 Riot 用戶端：請先在這台電腦上開啟並登入。對戰只會保存在你的電腦上。"
+ "Import your games with the button below. You need to be connected to the Riot Client: open it on this computer and sign in first. Your games stay on your computer.": "點擊下方按鈕匯入你的對戰。需要連線至 Riot 用戶端：請先在這台電腦上開啟並登入。對戰只會保存在你的電腦上。",
+ "Sign in above to see your Mayhem games here: win rate, champions, augments and recent matches.": "在上方登入，即可在這裡查看你的大混戰對戰：勝率、英雄、強化與最近對戰。",
+ "Champions you own": "你擁有的英雄"
 }

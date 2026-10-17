@@ -6,7 +6,6 @@
  "Show on deeparam.com": "deeparam.com'da göster",
  "Import games from client": "Maçları istemciden içe aktar",
  "Champion": "Şampiyon",
- "Skin": "Kostüm",
  "No games yet": "Henüz maç yok",
  "Import your games from the League client. Your games stay on your computer.": "Maçlarını LoL istemcisinden içe aktar. Maçların bilgisayarında kalır.",
  "You need to be connected to the Riot Client: open it on this computer and sign in first.": "Riot İstemcisi'ne bağlı olman gerekiyor: önce bu bilgisayarda aç ve giriş yap.",
@@ -195,9 +194,6 @@
  "Removing your shared games…": "Paylaştığın maçlar kaldırılıyor…",
  "Sharing is on. New games are shared after each import.": "Paylaşım açık. Yeni maçlar her içe aktarmadan sonra paylaşılır.",
  "Sharing is off and your shared games were removed.": "Paylaşım kapalı ve paylaştığın maçlar kaldırıldı.",
- "Default": "Varsayılan",
- "Champions and skins you own": "Sahip olduğun şampiyonlar ve kostümler",
- "Import games to pick from the skins you own": "Sahip olduğun kostümlerden seçmek için maçları içe aktar",
  "Map {id}": "Harita {id}",
  "Not synced": "Senkronize değil",
  "Level": "Seviye",
@@ -214,5 +210,7 @@
  "Recording a game ({champion})": "Maç kaydediliyor ({champion})",
  "{n} recorded": "{n} kaydedildi",
  "Your Mayhem games, in one place.": "ARAM: Şamata maçların tek bir yerde.",
- "Import your games with the button below. You need to be connected to the Riot Client: open it on this computer and sign in first. Your games stay on your computer.": "Maçlarını aşağıdaki düğmeyle içe aktar. Riot İstemcisi'ne bağlı olman gerekiyor: önce bu bilgisayarda aç ve giriş yap. Maçların bilgisayarında kalır."
+ "Import your games with the button below. You need to be connected to the Riot Client: open it on this computer and sign in first. Your games stay on your computer.": "Maçlarını aşağıdaki düğmeyle içe aktar. Riot İstemcisi'ne bağlı olman gerekiyor: önce bu bilgisayarda aç ve giriş yap. Maçların bilgisayarında kalır.",
+ "Sign in above to see your Mayhem games here: win rate, champions, augments and recent matches.": "Şamata maçlarını burada görmek için yukarıdan giriş yap: kazanma oranı, şampiyonlar, güçlendirmeler ve son maçlar.",
+ "Champions you own": "Sahip olduğun şampiyonlar"
 }

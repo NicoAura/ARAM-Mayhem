@@ -6,7 +6,6 @@
  "Show on deeparam.com": "deeparam.comに表示",
  "Import games from client": "クライアントから試合をインポート",
  "Champion": "チャンピオン",
- "Skin": "スキン",
  "No games yet": "まだ試合がありません",
  "Import your games from the League client. Your games stay on your computer.": "League of Legendsクライアントから試合をインポートしましょう。試合データはお使いのコンピューターに保存されます。",
  "You need to be connected to the Riot Client: open it on this computer and sign in first.": "Riotクライアントへの接続が必要です。先にこのコンピューターでRiotクライアントを開いてログインしてください。",
@@ -195,9 +194,6 @@
  "Removing your shared games…": "共有した試合を削除中…",
  "Sharing is on. New games are shared after each import.": "共有はオンです。新しい試合はインポートのたびに共有されます。",
  "Sharing is off and your shared games were removed.": "共有をオフにし、共有した試合を削除しました。",
- "Default": "デフォルト",
- "Champions and skins you own": "所持しているチャンピオンとスキン",
- "Import games to pick from the skins you own": "試合をインポートすると所持スキンから選べます",
  "Map {id}": "マップ {id}",
  "Not synced": "未同期",
  "Level": "レベル",
@@ -214,5 +210,7 @@
  "Recording a game ({champion})": "試合を記録中({champion})",
  "{n} recorded": "{n}試合を記録済み",
  "Your Mayhem games, in one place.": "メイヘムの試合を、ひとつの場所に。",
- "Import your games with the button below. You need to be connected to the Riot Client: open it on this computer and sign in first. Your games stay on your computer.": "下のボタンで試合をインポートしましょう。Riotクライアントへの接続が必要です。先にこのコンピューターでRiotクライアントを開いてログインしてください。試合データはお使いのコンピューターに保存されます。"
+ "Import your games with the button below. You need to be connected to the Riot Client: open it on this computer and sign in first. Your games stay on your computer.": "下のボタンで試合をインポートしましょう。Riotクライアントへの接続が必要です。先にこのコンピューターでRiotクライアントを開いてログインしてください。試合データはお使いのコンピューターに保存されます。",
+ "Sign in above to see your Mayhem games here: win rate, champions, augments and recent matches.": "上でサインインすると、ここにメイヘムの試合が表示されます：勝率、チャンピオン、オーグメント、最近の試合。",
+ "Champions you own": "所持チャンピオン"
 }

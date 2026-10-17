@@ -674,7 +674,7 @@
         return;
       }
       if (r.status === 404) throw new Error(T("Submissions open soon."));
-      if (!r.ok) throw new Error(b.error || "");
+      if (!r.ok) throw new Error(b.error ? await kitchenText(b.error) : "");
       $("kitchenForm").hidden = true;
       $("kitchenTitle").value = ""; $("kitchenDesc").value = "";
       kitchen = null;

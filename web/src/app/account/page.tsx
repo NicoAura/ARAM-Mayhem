@@ -3,6 +3,7 @@ import AccountPanel from "@/components/AccountPanel";
 import KitchenSubmissions from "@/components/KitchenSubmissions";
 import { T } from "@/components/I18n";
 import Intro from "@/components/Intro";
+import MyStatsSection from "@/components/MyStatsSection";
 import { pageMeta } from "@/lib/meta";
 
 export const metadata: Metadata = {
@@ -18,6 +19,7 @@ export default function AccountPage() {
       </Intro>
       {/* Sections from other parts of the site sit inside the signed-in page, after the Riot account. */}
       <AccountPanel>
+        <MyStatsSection />
         <KitchenSubmissions />
       </AccountPanel>
     </>

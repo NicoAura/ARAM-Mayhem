@@ -48,6 +48,8 @@ const nextConfig: NextConfig = {
       ["/admin/simulator", "/simulator"],
       // The 3D Simulator opens from the owner-only switch on /simulator now.
       ["/account/simulator", "/simulator"],
+      // My Stats moved onto the account page.
+      ["/stats", "/account#my-stats"],
     ]
       .map(([source, destination]) => ({ source, destination, permanent: true }))
       .concat([

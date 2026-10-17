@@ -6,7 +6,6 @@
  "Show on deeparam.com": "Hiển thị trên deeparam.com",
  "Import games from client": "Nhập trận từ client",
  "Champion": "Tướng",
- "Skin": "Trang phục",
  "No games yet": "Chưa có trận nào",
  "Import your games from the League client. Your games stay on your computer.": "Nhập trận từ client Liên Minh Huyền Thoại. Trận của bạn được lưu trên máy tính của bạn.",
  "You need to be connected to the Riot Client: open it on this computer and sign in first.": "Bạn cần kết nối với Riot Client: hãy mở nó trên máy tính này và đăng nhập trước.",
@@ -195,9 +194,6 @@
  "Removing your shared games…": "Đang xóa các trận bạn đã chia sẻ…",
  "Sharing is on. New games are shared after each import.": "Đã bật chia sẻ. Trận mới sẽ được chia sẻ sau mỗi lần nhập.",
  "Sharing is off and your shared games were removed.": "Đã tắt chia sẻ và các trận bạn đã chia sẻ đã được xóa.",
- "Default": "Mặc định",
- "Champions and skins you own": "Tướng và trang phục bạn sở hữu",
- "Import games to pick from the skins you own": "Nhập trận để chọn từ các trang phục bạn sở hữu",
  "Map {id}": "Bản đồ {id}",
  "Not synced": "Chưa đồng bộ",
  "Level": "Cấp",
@@ -214,5 +210,7 @@
  "Recording a game ({champion})": "Đang ghi trận ({champion})",
  "{n} recorded": "Đã ghi {n} trận",
  "Your Mayhem games, in one place.": "Các trận ARAM: Hỗn Loạn của bạn, ở cùng một nơi.",
- "Import your games with the button below. You need to be connected to the Riot Client: open it on this computer and sign in first. Your games stay on your computer.": "Nhập trận của bạn bằng nút bên dưới. Bạn cần kết nối với Riot Client: hãy mở nó trên máy tính này và đăng nhập trước. Trận của bạn được lưu trên máy tính của bạn."
+ "Import your games with the button below. You need to be connected to the Riot Client: open it on this computer and sign in first. Your games stay on your computer.": "Nhập trận của bạn bằng nút bên dưới. Bạn cần kết nối với Riot Client: hãy mở nó trên máy tính này và đăng nhập trước. Trận của bạn được lưu trên máy tính của bạn.",
+ "Sign in above to see your Mayhem games here: win rate, champions, augments and recent matches.": "Đăng nhập ở trên để xem các trận Hỗn Loạn của bạn tại đây: tỉ lệ thắng, tướng, lõi nâng cấp và các trận gần đây.",
+ "Champions you own": "Tướng bạn sở hữu"
 }

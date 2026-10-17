@@ -35,26 +35,41 @@ const FADE = 0.15;               // seconds to blend from one clip into the next
 const LOOPS = /loop|channel|_idle$|hold/i;
 const loader = new GLTFLoader().setMeshoptDecoder(MeshoptDecoder);
 
-const gltfs = new Map();         // champion id (lower case) -> Promise<gltf | null>
+// Skins (owner's 3D view only): /assets/skins/skins.json lists each champion's other skins
+// ({ChampionId: [{id, name, file, scale, clips, extra, after}]}), and the pick per champion is remembered.
+const SKINS = "/assets/skins/";
+const SKIN_KEY = "deeparam-skins";
+let skins = {};
+const skinsReady = fetch(SKINS + "skins.json" + BUST).then((r) => (r.ok ? r.json() : {})).catch(() => ({}))
+  .then((m) => { for (const [k, v] of Object.entries(m || {})) skins[k.toLowerCase()] = v; });
+let picks = {};
+try { picks = JSON.parse(localStorage.getItem(SKIN_KEY)) || {}; } catch (e) { /* storage blocked */ }
+const pickedSkin = (key) => (skins[key] || []).find((s) => String(s.id) === String(picks[key])) || null;
+
+const gltfs = new Map();         // champion id (lower case) and skin -> Promise<gltf | null>
 
 function loadChampion(id) {
   const key = String(id).toLowerCase();
-  if (!gltfs.has(key)) {
-    gltfs.set(key, Promise.all([manifestReady, animsReady]).then(() => {
-      const entry = manifest[key];
+  const skin = pickedSkin(key);
+  const cacheKey = key + ":" + (skin ? skin.id : "base");
+  if (!gltfs.has(cacheKey)) {
+    gltfs.set(cacheKey, Promise.all([manifestReady, animsReady, skinsReady]).then(() => {
+      const picked = pickedSkin(key);
+      const entry = picked || manifest[key];
       if (!entry) return null;
+      const base = picked ? SKINS : modelBase;
       // A ".txt" file is the same .glb in base64, for hosts that only serve text.
       const load = entry.file.endsWith(".txt")
-        ? fetch(modelBase + entry.file + BUST).then((r) => r.text()).then((b64) => {
+        ? fetch(base + entry.file + BUST).then((r) => r.text()).then((b64) => {
           const bin = atob(b64.trim()), bytes = new Uint8Array(bin.length);
           for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
-          return loader.parseAsync(bytes.buffer, modelBase);
+          return loader.parseAsync(bytes.buffer, base);
         })
-        : loader.loadAsync(modelBase + entry.file + BUST);
+        : loader.loadAsync(base + entry.file + BUST);
       return load.then((g) => ({ gltf: g, entry, anim: anims[key] })).catch(() => null);
     }));
   }
-  return gltfs.get(key);
+  return gltfs.get(cacheKey);
 }
 
 // One posed copy of a champion model.
@@ -303,6 +318,17 @@ const api = {
     return loadChampion(champId).then((g) => !!g);
   },
   hasModel(champId) { return !!(manifest && manifest[String(champId).toLowerCase()]); },
+  // A champion's other skins ([{id, name}], empty when there are none) and the one picked ("" for the default).
+  skinsFor(champId) {
+    const key = String(champId).toLowerCase();
+    return skinsReady.then(() => ({ list: (skins[key] || []).map((s) => ({ id: s.id, name: s.name })), picked: pickedSkin(key) ? String(picks[key]) : "" }));
+  },
+  // Picks a skin for a champion ("" for the default); setFight again to show it.
+  setSkin(champId, skinId) {
+    const key = String(champId).toLowerCase();
+    if (skinId) picks[key] = skinId; else delete picks[key];
+    try { localStorage.setItem(SKIN_KEY, JSON.stringify(picks)); } catch (e) { /* storage blocked */ }
+  },
 
   // Click on an ability: your champion plays it once in the arena.
   // Clicking the same ability again plays its next cast (Riven's Q: A, B, C).

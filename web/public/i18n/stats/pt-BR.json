@@ -6,7 +6,6 @@
  "Show on deeparam.com": "Mostrar no deeparam.com",
  "Import games from client": "Importar partidas do cliente",
  "Champion": "Campeão",
- "Skin": "Skin",
  "No games yet": "Nenhuma partida ainda",
  "Import your games from the League client. Your games stay on your computer.": "Importe suas partidas do cliente do League. Suas partidas ficam no seu computador.",
  "You need to be connected to the Riot Client: open it on this computer and sign in first.": "Você precisa estar conectado ao Riot Client: abra-o neste computador e faça login primeiro.",
@@ -195,9 +194,6 @@
  "Removing your shared games…": "Removendo suas partidas compartilhadas…",
  "Sharing is on. New games are shared after each import.": "O compartilhamento está ativado. Novas partidas são compartilhadas após cada importação.",
  "Sharing is off and your shared games were removed.": "O compartilhamento está desativado e suas partidas compartilhadas foram removidas.",
- "Default": "Padrão",
- "Champions and skins you own": "Campeões e skins que você possui",
- "Import games to pick from the skins you own": "Importe partidas para escolher entre as skins que você possui",
  "Map {id}": "Mapa {id}",
  "Not synced": "Não sincronizado",
  "Level": "Nível",
@@ -214,5 +210,7 @@
  "Recording a game ({champion})": "Gravando uma partida ({champion})",
  "{n} recorded": "{n} gravadas",
  "Your Mayhem games, in one place.": "Suas partidas de ARAM: Desordem, em um só lugar.",
- "Import your games with the button below. You need to be connected to the Riot Client: open it on this computer and sign in first. Your games stay on your computer.": "Importe suas partidas com o botão abaixo. Você precisa estar conectado ao Riot Client: abra-o neste computador e faça login primeiro. Suas partidas ficam no seu computador."
+ "Import your games with the button below. You need to be connected to the Riot Client: open it on this computer and sign in first. Your games stay on your computer.": "Importe suas partidas com o botão abaixo. Você precisa estar conectado ao Riot Client: abra-o neste computador e faça login primeiro. Suas partidas ficam no seu computador.",
+ "Sign in above to see your Mayhem games here: win rate, champions, augments and recent matches.": "Entre acima para ver aqui suas partidas de Desordem: taxa de vitória, campeões, aprimoramentos e partidas recentes.",
+ "Champions you own": "Campeões que você tem"
 }

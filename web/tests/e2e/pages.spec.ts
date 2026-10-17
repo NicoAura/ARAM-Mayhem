@@ -12,7 +12,6 @@ const PAGES = [
   "/kitchen",
   "/simulator/infinite-ryze",
   "/info/region-teams",
-  "/stats",
   "/champions/Ahri",
   "/champions/Yunara",
   "/builds",
@@ -82,6 +81,7 @@ test("old addresses redirect to the current tabs", async ({ page }) => {
     ["/china", "/tier-list"],
     ["/tools/fun", "/kitchen"],
     ["/lab", "/kitchen"],
+    ["/stats", "/account"],
   ]) {
     await page.goto(from);
     expect(new URL(page.url()).pathname + new URL(page.url()).search, from).toBe(to);
