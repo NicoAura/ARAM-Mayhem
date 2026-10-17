@@ -94,26 +94,26 @@
       "play": "Turn on Overdrive, hook someone, then Power Fist them as they land so they eat two rounds of on-hit. Pop Static Field to proc everything on everyone nearby, and keep auto-attacking until Mystic Punch hands the hook back."
     },
     {
-      "id": "malphite-tap-dancer",
-      "champion": "Malphite",
-      "title": "Unstoppable Force, Literally",
+      "id": "tryndamere-battlemage",
+      "champion": "Tryndamere",
+      "title": "The Battlemage King",
       "augments": [
-        "Tap Dancer",
-        "Don't Blink",
-        "Deft",
-        "With Haste"
+        "ADAPt",
+        "Marksmage",
+        "Master of Duality",
+        "Witchful Thinking"
       ],
-      "core": 2,
+      "core": 3,
       "items": [
         "Berserker's Greaves",
+        "Kraken Slayer",
         "Guinsoo's Rageblade",
-        "Wit's End",
-        "Phantom Dancer",
-        "Trinity Force",
-        "Dead Man's Plate"
+        "Nashor's Tooth",
+        "Blade of The Ruined King",
+        "Rabadon's Deathcap"
       ],
-      "why": "Malphite is a slow rock who presses R and stands still, so this one turns him into a sprinter. Tap Dancer gives him 10 Movement Speed with every attack, stacking forever as long as he keeps swinging, and Don't Blink turns that speed into damage: 1% more for every 10 Movement Speed he has over his target. Every attack makes him faster, and every bit of speed makes everything he does hit harder, Unstoppable Force included. Deft and the attack speed items keep the swings coming.",
-      "play": "Start hitting anything, minions included, before the fight so you arrive already fast. Never stop attacking: the speed lasts 5 seconds.",
+      "why": "Tryndamere is the purest crit swordsman in the game, so this one makes him a mage. ADAPt turns all the bonus Attack Damage from Kraken Slayer and Blade of The Ruined King into Ability Power, plus 15% more, and Rabadon's Deathcap multiplies the lot. Marksmage hands it straight back: every attack deals extra physical damage equal to 75% of his Ability Power, and Master of Duality grows that Ability Power with every swing.",
+      "play": "Spin in, press Undying Rage and keep hitting. You are a mage whose only spell is right-click.",
       "chef": "2026-10-17"
     }
   ]
