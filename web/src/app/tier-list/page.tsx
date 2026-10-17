@@ -8,6 +8,8 @@ import DataTable from "@/components/DataTable";
 import DuosTable from "@/components/DuosTable";
 import { hasDuos } from "@/lib/duos";
 import { augmentHref } from "@/lib/augments";
+import { augmentTiers } from "@/lib/augment-tiers";
+import { AUGMENT_DEEPSCORE_HELP } from "@/lib/deepscore";
 import championIds from "@/data/champion-ids.json";
 import championNames from "@/data/champion-names.json";
 import type { PatchRow } from "@/lib/tiers";
@@ -75,9 +77,12 @@ export default function TierListPage() {
     },
   ];
   if (augments) {
+    const graded = new Map(augmentTiers().map((a) => [a.id, a]));
     const augName = (a: Record<string, unknown>) => names[String(a.augment_id)] ?? String(a.key).replace(/^ARAM_/, "");
     const augCols = [
+      { key: "grade", label: "Tier", format: "tier" as const, sortKey: "deepScore", hint: AUGMENT_DEEPSCORE_HELP },
       { key: "name", label: "Augment", format: "augment" as const, iconKey: "id", hrefKey: "href" },
+      { key: "deepScore", label: "DeepScore", format: "deepscore" as const, hint: AUGMENT_DEEPSCORE_HELP },
       { key: "tier", label: "Rarity", format: "tier" as const },
       { key: "win_rate", label: "Win rate", format: "pct" as const },
       { key: "pick_rate", label: "Pick rate", format: "pct" as const },
@@ -98,6 +103,7 @@ export default function TierListPage() {
             columns={augCols}
             advancedColumns={[
               ...augCols,
+              { key: "lift", label: "Win rate vs its champions", format: "pct" as const, hint: "Win rate minus what the champions who take it win anyway. Above zero means it helps them." },
               { key: "win_rank", label: "Win rank", format: "int" },
               { key: "win_change", label: "Win rank change", format: "int" },
               { key: "pick_rank", label: "Pick rank", format: "int" },
@@ -111,6 +117,9 @@ export default function TierListPage() {
                 href: augmentHref(Number(a.augment_id)),
                 name: augName(a),
                 tier: String(a.tier ?? ""),
+                grade: graded.get(Number(a.augment_id))?.tier ?? null,
+                deepScore: graded.get(Number(a.augment_id))?.deepScore ?? null,
+                lift: graded.get(Number(a.augment_id))?.lift ?? null,
                 win_rate: Number(a.win_rate),
                 pick_rate: Number(a.pick_rate),
                 win_rank: num(String(a.win_rank ?? "")),
@@ -123,7 +132,7 @@ export default function TierListPage() {
                   .filter(Boolean)
                   .join(", "),
               }))}
-            initialSort={{ key: "win_rate", desc: true }}
+            initialSort={{ key: "deepScore", desc: true }}
             searchKey="name"
             searchLabel="Find an augment"
             urlTab="augments"

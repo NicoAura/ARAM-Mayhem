@@ -11,11 +11,12 @@ import { useAdvanced } from "./Advanced";
 import ChampionPanel, { hasPanel } from "./ChampionPanel";
 import { hintFor } from "@/lib/glossary";
 import { EmptyState } from "@/components/EmptyState";
+import DeepScore from "./DeepScore";
 
 export type Column = {
   key: string;
   label: string;
-  format?: "pct" | "num" | "int" | "sec" | "text" | "champion" | "augment" | "tier";
+  format?: "pct" | "num" | "int" | "sec" | "text" | "champion" | "augment" | "tier" | "deepscore";
   sortable?: boolean;
   /** For "augment" columns: the row key holding the augment id, for its icon. */
   iconKey?: string;
@@ -235,6 +236,8 @@ export default function DataTable({
                       <a className="cell-link" href={String(r[c.hrefKey])}>
                         {show(r[c.key], c.format)}
                       </a>
+                    ) : c.format === "deepscore" && typeof r[c.key] === "number" ? (
+                      <DeepScore value={r[c.key] as number} help={c.hint} />
                     ) : c.format === "tier" && r[c.key] ? (
                       <span className={`chip tier-${String(r[c.key]).toLowerCase()}`}>{r[c.key]}</span>
                     ) : (

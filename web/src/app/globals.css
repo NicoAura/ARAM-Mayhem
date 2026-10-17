@@ -6294,3 +6294,78 @@ th > button[data-tip] {
 .chef-items { display: flex; flex-wrap: wrap; gap: 6px; }
 .chef-items .icon { width: 32px; height: 32px; border-radius: 6px; }
 .subtab-note { margin: 0 0 1rem; }
+
+/* DeepScore badge (components/DeepScore.tsx): a ring that fills to the score, its colour running from red
+   at 0 through green at the average 50 to violet at 100. Its explanation shows on hover, focus or tap. */
+.deepscore {
+  --ds-c: oklch(0.72 0.17 calc(25deg + var(--ds) * 2.4deg));
+  position: relative;
+  display: inline-grid;
+  place-items: center;
+  width: 2.1rem;
+  height: 2.1rem;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background:
+    radial-gradient(closest-side, var(--surface) 76%, transparent 78%),
+    conic-gradient(var(--ds-c) calc(var(--ds) * 1%), color-mix(in srgb, var(--ds-c) 16%, transparent) 0);
+  box-shadow: 0 0 12px -5px var(--ds-c);
+  /* Pulled toward the text colour so it reads on light and dark backgrounds alike. */
+  color: color-mix(in oklch, var(--ds-c) 65%, var(--fg));
+  font: 700 0.8125rem/1 var(--font-sans), system-ui, sans-serif;
+  font-variant-numeric: tabular-nums;
+  cursor: default;
+}
+button.deepscore {
+  cursor: help;
+}
+button.deepscore:hover::after,
+button.deepscore:focus::after {
+  content: attr(data-tip);
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  z-index: 6;
+  width: max-content;
+  max-width: min(18rem, 80vw);
+  padding: 0.55rem 0.7rem;
+  border: 1px solid color-mix(in srgb, var(--ds-c) 45%, var(--line));
+  border-radius: 8px;
+  background: var(--raised);
+  color: var(--fg);
+  box-shadow: 0 10px 24px -14px rgb(0 0 0 / 0.6);
+  font: 400 0.8125rem/1.45 var(--font-sans), system-ui, sans-serif;
+  text-align: left;
+  white-space: normal;
+  pointer-events: none;
+}
+td > button.deepscore:hover::after,
+td > button.deepscore:focus::after {
+  right: auto;
+  left: 0;
+}
+.deepscore-legend {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin: 0 0 1rem;
+  color: var(--muted);
+  font-size: 0.875rem;
+}
+.deepscore-legend button.deepscore:hover::after,
+.deepscore-legend button.deepscore:focus::after {
+  right: auto;
+  left: 0;
+}
+.atiers-aug {
+  position: relative;
+}
+.atiers-aug .deepscore {
+  position: absolute;
+  top: 0.15rem;
+  right: 0.15rem;
+  width: 1.6rem;
+  height: 1.6rem;
+  font-size: 0.6875rem;
+}
