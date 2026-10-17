@@ -194,6 +194,10 @@
     const w = $("winRate");
     w.textContent = pct(res.win_rate);
     w.className = res.win_rate >= 0.55 ? "good" : res.win_rate <= 0.45 ? "bad" : "";
+    // When embedded in the site (same origin), let it buzz and chime when your team is favoured.
+    if (res.win_rate > 0.5 && window.parent !== window) {
+      try { window.parent.postMessage({ type: "deeparam-haptic", kind: "win" }, location.origin); } catch {}
+    }
     $("fightLen").textContent = res.fight_length.toFixed(1) + " s";
     $("teamDps").textContent = Math.round(res.team_dps).toLocaleString();
     $("enemyDps").textContent = Math.round(res.enemy_dps).toLocaleString();

@@ -1431,6 +1431,11 @@
     });
   }
 
+  // When embedded in the site (same origin), let it buzz and chime when you come out of the fight alive.
+  function haptic(kind) {
+    try { if (window.parent !== window) window.parent.postMessage({ type: "deeparam-haptic", kind }, location.origin); } catch {}
+  }
+
   // ---------- main loop ----------
   function frame(now) {
     // Low quality: about 30 frames a second (skip a screen refresh when the last frame was recent).
@@ -1443,7 +1448,7 @@
       const before = t;
       if (playing && !dragging) {
         t = Math.min(fight.duration, t + dt * speed);
-        if (t >= fight.duration) { playing = false; $("play").textContent = "Play"; }
+        if (t >= fight.duration) { playing = false; $("play").textContent = "Play"; if (before < fight.duration && !fight.death) haptic("win"); }
         // Clips for casts that started during this frame.
         let latest = null;
         for (const c of fight.casts) if (c.t > before && c.t <= t) latest = !latest || c.s === "R" ? c : latest;
