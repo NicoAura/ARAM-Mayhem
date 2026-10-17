@@ -192,7 +192,6 @@
         <span class="eyebrow">${c.roles.map((r) => ROLE[r] || r).join(" · ")}</span>
         <h1>${esc(c.name)}</h1>
         <span>${esc(c.title)}</span>
-        ${c.vo ? '<button class="btn" type="button" id="vo">▶ Pick quote</button>' : ""}
       </div></div>
       ${facts.length ? `<div class="facts">${facts.map(([l, v]) => `<div class="card fact"><span class="eyebrow">${l}</span><span class="value">${v}</span></div>`).join("")}</div>` : ""}
       ${builds}
@@ -215,8 +214,6 @@
       </div>
       ${c.tier ? '<p class="small"><a href="/tier-list" target="_top">See the full Tier List →</a></p>' : ""}`;
     loadSkins(c);
-    const vo = $("vo");
-    if (vo) vo.addEventListener("click", () => new Audio(c.vo).play().catch(() => {}));
     document.title = `${c.name} · Mayhem Champions`;
   }
 

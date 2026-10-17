@@ -39,6 +39,13 @@ rewards in level order. Each level becomes an augment (matched by icon to kiwi.b
 reward. `data.js` has the track as `track`; `augment_rules.json` has `unlocks` (augment id to track level) for the
 augment pages. If the reward list stops lining up with the track, the track is left out rather than guessed.
 
+## Augment details (for augment pages)
+
+`augment_details.json`: every live augment by id with `text` (short description) and `tooltip` (full tooltip), both
+filled with the augment's own numbers; sentences whose numbers the client doesn't hold are dropped. `grants` lists
+keystone runes or abilities it gives (e.g. Symphony of War: Lethal Tempo, Conqueror), `values` its raw DataValues,
+and `unlockLevel` its progression-track level (null if it isn't on the track).
+
 ## Mode rules (attack speed cap, crits, runes)
 
 `build_data.py` writes `mode_rules.json` for the Simulator and the site:

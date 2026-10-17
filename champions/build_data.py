@@ -442,7 +442,6 @@ def main():
             "icon": asset(info.get("squarePortraitPath")),
             "splash": asset(base_skin.get("uncenteredSplashPath") or base_skin.get("splashPath")),
             "tile": asset(base_skin.get("tilePath")),
-            "vo": asset(info.get("chooseVoPath")),
             "stats": base_stats(record) if record else None,
             "abilities": abilities,
             "mayhem": mayhem_changes(bin_, record) if record else [],
