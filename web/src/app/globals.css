@@ -5000,3 +5000,66 @@ html[data-scrolled] .site-header {
 [data-motion="reduce"] .brand-mark {
   transition: none !important;
 }
+
+/* Tier List patch timeline (components/ChampionTiers.tsx) */
+.patch-timeline {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  max-width: 40rem;
+  margin: 0.25rem 0 0.75rem;
+}
+
+.timeline-play {
+  display: grid;
+  flex: none;
+  width: 2rem;
+  height: 2rem;
+  place-items: center;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  background: var(--surface);
+  color: var(--fg);
+  cursor: pointer;
+}
+
+.timeline-play[aria-pressed="true"],
+.timeline-play:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.patch-timeline input[type="range"] {
+  flex: 1;
+  min-width: 0;
+  height: 6px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--accent) var(--fill, 100%), var(--line) var(--fill, 100%));
+  appearance: none;
+  cursor: pointer;
+}
+
+.patch-timeline input[type="range"]::-webkit-slider-thumb {
+  width: 18px;
+  height: 18px;
+  border: 3px solid var(--accent);
+  border-radius: 50%;
+  background: var(--bg);
+  appearance: none;
+}
+
+.patch-timeline input[type="range"]::-moz-range-thumb {
+  width: 14px;
+  height: 14px;
+  border: 3px solid var(--accent);
+  border-radius: 50%;
+  background: var(--bg);
+}
+
+.timeline-label {
+  flex: none;
+  min-width: 6.5rem;
+  color: var(--muted);
+  font: 500 0.8125rem var(--mono);
+  text-align: right;
+}
