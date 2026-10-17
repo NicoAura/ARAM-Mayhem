@@ -86,10 +86,10 @@
      "eclipse"
     ],
     "augments": [
+     "ethereal_weapon",
+     "recursion",
      "mystic_punch",
-     "tank_engine",
-     "goliath",
-     "jeweled_gauntlet"
+     "bread_and_butter"
     ]
    }
   },
@@ -119,10 +119,10 @@
      "bloodletters"
     ],
     "augments": [
+     "warlock_juicebox",
+     "dont_change_the_channel",
      "infernal_conduit",
-     "eureka",
-     "jeweled_gauntlet",
-     "magic_missile"
+     "phenomenal_evil"
     ]
    }
   },
@@ -152,10 +152,10 @@
      "ludens"
     ],
     "augments": [
-     "magic_missile",
-     "jeweled_gauntlet",
-     "eureka",
-     "witchful_thinking"
+     "skilled_sniper",
+     "echo_cast",
+     "shrink_engine",
+     "back_to_basics"
     ]
    }
   },
@@ -185,10 +185,10 @@
      "liandrys"
     ],
     "augments": [
-     "eureka",
-     "magic_missile",
-     "infernal_conduit",
-     "witchful_thinking"
+     "shrink_engine",
+     "recursion",
+     "ethereal_weapon",
+     "purist_caster"
     ]
    }
   },
@@ -218,10 +218,10 @@
      "phantom_dancer"
     ],
     "augments": [
+     "soul_siphon",
+     "upgrade_infinity_edge",
      "mystic_punch",
-     "its_critical",
-     "deft",
-     "dual_wield"
+     "vulnerability"
     ]
    }
   },
@@ -251,10 +251,10 @@
      "collector"
     ],
     "augments": [
-     "dual_wield",
-     "deft",
-     "jeweled_gauntlet",
-     "its_critical"
+     "critical_missile",
+     "upgrade_infinity_edge",
+     "vulnerability",
+     "soul_siphon"
     ]
    }
   },
@@ -285,9 +285,9 @@
     ],
     "augments": [
      "tank_engine",
+     "ethereal_weapon",
      "goliath",
-     "heavy_hitter",
-     "jeweled_gauntlet"
+     "dropkick"
     ]
    }
   },
@@ -317,10 +317,10 @@
      "liandrys"
     ],
     "augments": [
+     "shrink_engine",
+     "skilled_sniper",
      "infernal_conduit",
-     "eureka",
-     "magic_missile",
-     "jeweled_gauntlet"
+     "recursion"
     ]
    }
   },
@@ -350,10 +350,10 @@
      "liandrys"
     ],
     "augments": [
+     "warlock_juicebox",
      "infernal_conduit",
-     "eureka",
-     "jeweled_gauntlet",
-     "erosion"
+     "shrink_engine",
+     "recursion"
     ]
    }
   },
@@ -384,9 +384,9 @@
     ],
     "augments": [
      "infernal_conduit",
-     "magic_missile",
-     "eureka",
-     "jeweled_gauntlet"
+     "warlock_juicebox",
+     "shrink_engine",
+     "recursion"
     ]
    }
   },
@@ -417,9 +417,9 @@
     ],
     "augments": [
      "mystic_punch",
-     "dual_wield",
-     "deft",
-     "its_critical"
+     "ethereal_weapon",
+     "upgrade_infinity_edge",
+     "pursuit_of_haste"
     ]
    }
   },
@@ -449,10 +449,10 @@
      "wits_end"
     ],
     "augments": [
-     "mystic_punch",
-     "deft",
-     "its_critical",
-     "dual_wield"
+     "soul_siphon",
+     "upgrade_infinity_edge",
+     "vulnerability",
+     "mystic_punch"
     ]
    }
   },
@@ -482,10 +482,10 @@
      "mortal_reminder"
     ],
     "augments": [
-     "jeweled_gauntlet",
-     "its_critical",
-     "dual_wield",
-     "mystic_punch"
+     "upgrade_infinity_edge",
+     "soul_siphon",
+     "draw_your_sword",
+     "critical_missile"
     ]
    }
   },
@@ -515,10 +515,10 @@
      "jaksho"
     ],
     "augments": [
+     "bonk",
+     "critical_missile",
      "dual_wield",
-     "deft",
-     "its_critical",
-     "mystic_punch"
+     "scopier_weapons"
     ]
    }
   },
@@ -548,10 +548,10 @@
      "rod_of_ages"
     ],
     "augments": [
-     "jeweled_gauntlet",
-     "eureka",
-     "magic_missile",
-     "goliath"
+     "warlock_juicebox",
+     "adapt",
+     "back_to_basics",
+     "phenomenal_evil"
     ]
    }
   },
@@ -581,10 +581,10 @@
      "liandrys"
     ],
     "augments": [
-     "magic_missile",
-     "jeweled_gauntlet",
-     "eureka",
-     "infernal_conduit"
+     "skilled_sniper",
+     "vulnerability",
+     "shrink_engine",
+     "archmage"
     ]
    }
   },
@@ -616,8 +616,8 @@
     "augments": [
      "tank_engine",
      "heavy_hitter",
-     "goliath",
-     "jeweled_gauntlet"
+     "dropkick",
+     "blunt_force"
     ]
    }
   },
@@ -647,10 +647,10 @@
      "heartsteel"
     ],
     "augments": [
+     "ethereal_weapon",
+     "upgrade_sheen",
      "tank_engine",
-     "deft",
-     "mystic_punch",
-     "dual_wield"
+     "warlock_juicebox"
     ]
    }
   },
@@ -680,10 +680,10 @@
      "eclipse"
     ],
     "augments": [
-     "jeweled_gauntlet",
-     "goliath",
-     "mystic_punch",
-     "erosion"
+     "recursion",
+     "tooth_fairy",
+     "dashing",
+     "bread_and_butter"
     ]
    }
   },
@@ -713,10 +713,10 @@
      "essence_reaver"
     ],
     "augments": [
+     "vulnerability",
+     "critical_missile",
      "jeweled_gauntlet",
-     "mystic_punch",
-     "magic_missile",
-     "its_critical"
+     "upgrade_infinity_edge"
     ]
    }
   },
@@ -746,10 +746,10 @@
      "collector"
     ],
     "augments": [
-     "jeweled_gauntlet",
-     "dual_wield",
-     "mystic_punch",
-     "its_critical"
+     "vulnerability",
+     "critical_missile",
+     "upgrade_infinity_edge",
+     "jeweled_gauntlet"
     ]
    }
   },
@@ -779,10 +779,10 @@
      "terminus"
     ],
     "augments": [
-     "deft",
-     "dual_wield",
-     "mystic_punch",
-     "jeweled_gauntlet"
+     "scopier_weapons",
+     "marksmage",
+     "warlock_juicebox",
+     "zealot"
     ]
    }
   },
@@ -812,10 +812,10 @@
      "collector"
     ],
     "augments": [
-     "dual_wield",
-     "deft",
-     "its_critical",
-     "jeweled_gauntlet"
+     "critical_missile",
+     "upgrade_infinity_edge",
+     "vulnerability",
+     "dual_wield"
     ]
    }
   },
@@ -845,10 +845,10 @@
      "stormsurge"
     ],
     "augments": [
-     "eureka",
-     "jeweled_gauntlet",
-     "witchful_thinking",
-     "mystic_punch"
+     "ethereal_weapon",
+     "marksmage",
+     "warlock_juicebox",
+     "tooth_fairy"
     ]
    }
   },
@@ -878,10 +878,10 @@
      "liandrys"
     ],
     "augments": [
-     "eureka",
-     "magic_missile",
-     "jeweled_gauntlet",
-     "infernal_conduit"
+     "shrink_engine",
+     "skilled_sniper",
+     "from_downtown",
+     "eureka"
     ]
    }
   },
@@ -911,10 +911,10 @@
      "mercurys"
     ],
     "augments": [
+     "ethereal_weapon",
+     "dropkick",
      "tank_engine",
-     "infernal_conduit",
-     "goliath",
-     "erosion"
+     "infernal_conduit"
     ]
    }
   },
@@ -944,10 +944,10 @@
      "mercurys"
     ],
     "augments": [
+     "ravenous_bind",
+     "bonk",
      "tank_engine",
-     "goliath",
-     "mystic_punch",
-     "heavy_hitter"
+     "dropkick"
     ]
    }
   },
@@ -978,9 +978,9 @@
     ],
     "augments": [
      "tank_engine",
-     "goliath",
-     "infernal_conduit",
-     "heavy_hitter"
+     "dropkick",
+     "warlock_juicebox",
+     "ethereal_weapon"
     ]
    }
   },
@@ -1010,10 +1010,10 @@
      "axiom_arc"
     ],
     "augments": [
-     "jeweled_gauntlet",
-     "its_critical",
-     "goliath",
-     "eureka"
+     "upgrade_infinity_edge",
+     "vulnerability",
+     "back_to_basics",
+     "critical_missile"
     ]
    }
   },
@@ -1044,9 +1044,9 @@
     ],
     "augments": [
      "tank_engine",
-     "heavy_hitter",
-     "goliath",
-     "erosion"
+     "dropkick",
+     "celestial_body",
+     "heavy_hitter"
     ]
    }
   },
@@ -1077,9 +1077,9 @@
     ],
     "augments": [
      "infernal_conduit",
-     "eureka",
-     "magic_missile",
-     "jeweled_gauntlet"
+     "shrink_engine",
+     "warlock_juicebox",
+     "eureka"
     ]
    }
   },
@@ -1111,8 +1111,8 @@
     "augments": [
      "tank_engine",
      "heavy_hitter",
-     "goliath",
-     "mystic_punch"
+     "dropkick",
+     "celestial_body"
     ]
    }
   },
@@ -1143,9 +1143,9 @@
     ],
     "augments": [
      "mystic_punch",
-     "tank_engine",
-     "goliath",
-     "heavy_hitter"
+     "recursion",
+     "pursuit_of_haste",
+     "dashing"
     ]
    }
   },
@@ -1176,9 +1176,9 @@
     ],
     "augments": [
      "infernal_conduit",
-     "magic_missile",
-     "eureka",
-     "jeweled_gauntlet"
+     "shrink_engine",
+     "warlock_juicebox",
+     "magic_missile"
     ]
    }
   },
@@ -1208,10 +1208,10 @@
      "berserkers"
     ],
     "augments": [
-     "its_critical",
-     "jeweled_gauntlet",
-     "magic_missile",
-     "poro_stampede"
+     "upgrade_infinity_edge",
+     "critical_missile",
+     "vulnerability",
+     "soul_siphon"
     ]
    }
   },
@@ -1241,10 +1241,10 @@
      "liandrys"
     ],
     "augments": [
+     "recursion",
      "eureka",
-     "magic_missile",
-     "jeweled_gauntlet",
-     "witchful_thinking"
+     "purist_caster",
+     "ult_bot"
     ]
    }
   },
@@ -1274,10 +1274,10 @@
      "ludens"
     ],
     "augments": [
+     "ethereal_weapon",
+     "warlock_juicebox",
      "eureka",
-     "jeweled_gauntlet",
-     "magic_missile",
-     "witchful_thinking"
+     "shrink_engine"
     ]
    }
   },
@@ -1307,10 +1307,10 @@
      "liandrys"
     ],
     "augments": [
+     "warlock_juicebox",
      "eureka",
-     "jeweled_gauntlet",
-     "magic_missile",
-     "witchful_thinking"
+     "shrink_engine",
+     "jeweled_gauntlet"
     ]
    }
   },
@@ -1340,10 +1340,10 @@
      "ludens"
     ],
     "augments": [
+     "shrink_engine",
      "eureka",
-     "jeweled_gauntlet",
-     "magic_missile",
-     "witchful_thinking"
+     "warlock_juicebox",
+     "phenomenal_evil"
     ]
    }
   },
@@ -1373,10 +1373,10 @@
      "collector"
     ],
     "augments": [
-     "jeweled_gauntlet",
-     "dual_wield",
-     "deft",
-     "its_critical"
+     "critical_missile",
+     "vulnerability",
+     "upgrade_infinity_edge",
+     "draw_your_sword"
     ]
    }
   },
@@ -1407,9 +1407,9 @@
     ],
     "augments": [
      "tank_engine",
-     "goliath",
-     "heavy_hitter",
-     "eureka"
+     "dropkick",
+     "celestial_body",
+     "stay_resolute"
     ]
    }
   },
@@ -1439,10 +1439,10 @@
      "kraken"
     ],
     "augments": [
+     "scopier_weapons",
+     "soul_siphon",
      "dual_wield",
-     "deft",
-     "mystic_punch",
-     "its_critical"
+     "vulnerability"
     ]
    }
   },
@@ -1472,10 +1472,10 @@
      "eclipse"
     ],
     "augments": [
-     "jeweled_gauntlet",
-     "goliath",
-     "mystic_punch",
-     "erosion"
+     "tooth_fairy",
+     "recursion",
+     "blunt_force",
+     "jeweled_gauntlet"
     ]
    }
   },
@@ -1506,9 +1506,9 @@
     ],
     "augments": [
      "tank_engine",
-     "heavy_hitter",
-     "goliath",
-     "eureka"
+     "dropkick",
+     "recursion",
+     "heavy_hitter"
     ]
    }
   },
@@ -1538,10 +1538,10 @@
      "collector"
     ],
     "augments": [
+     "critical_missile",
+     "upgrade_infinity_edge",
      "dual_wield",
-     "deft",
-     "its_critical",
-     "mystic_punch"
+     "vulnerability"
     ]
    }
   },
@@ -1572,9 +1572,9 @@
     ],
     "augments": [
      "tank_engine",
-     "heavy_hitter",
-     "goliath",
-     "eureka"
+     "dropkick",
+     "celestial_body",
+     "heavy_hitter"
     ]
    }
   },
@@ -1604,10 +1604,10 @@
      "ludens"
     ],
     "augments": [
+     "warlock_juicebox",
+     "recursion",
      "eureka",
-     "magic_missile",
-     "jeweled_gauntlet",
-     "witchful_thinking"
+     "shrink_engine"
     ]
    }
   },
@@ -1639,8 +1639,8 @@
     "augments": [
      "tank_engine",
      "heavy_hitter",
-     "goliath",
-     "erosion"
+     "celestial_body",
+     "dropkick"
     ]
    }
   },
@@ -1670,10 +1670,10 @@
      "spirit_visage"
     ],
     "augments": [
-     "mystic_punch",
-     "jeweled_gauntlet",
-     "deft",
-     "eureka"
+     "warlock_juicebox",
+     "marksmage",
+     "ethereal_weapon",
+     "zealot"
     ]
    }
   },
@@ -1704,9 +1704,9 @@
     ],
     "augments": [
      "eureka",
-     "magic_missile",
-     "jeweled_gauntlet",
-     "infernal_conduit"
+     "shrink_engine",
+     "skilled_sniper",
+     "magic_missile"
     ]
    }
   },
@@ -1736,10 +1736,10 @@
      "ludens"
     ],
     "augments": [
-     "eureka",
-     "magic_missile",
-     "witchful_thinking",
-     "jeweled_gauntlet"
+     "shrink_engine",
+     "archmage",
+     "recursion",
+     "purist_caster"
     ]
    }
   },
@@ -1769,10 +1769,10 @@
      "navori"
     ],
     "augments": [
-     "deft",
-     "mystic_punch",
-     "dual_wield",
-     "its_critical"
+     "scopier_weapons",
+     "upgrade_infinity_edge",
+     "soul_siphon",
+     "critical_rhythm"
     ]
    }
   },
@@ -1803,9 +1803,9 @@
     ],
     "augments": [
      "eureka",
-     "jeweled_gauntlet",
-     "magic_missile",
-     "witchful_thinking"
+     "shrink_engine",
+     "warlock_juicebox",
+     "recursion"
     ]
    }
   },
@@ -1835,10 +1835,10 @@
      "shadowflame"
     ],
     "augments": [
-     "eureka",
-     "jeweled_gauntlet",
-     "witchful_thinking",
-     "mystic_punch"
+     "recursion",
+     "dashing",
+     "marksmage",
+     "warlock_juicebox"
     ]
    }
   },
@@ -1868,10 +1868,10 @@
      "kraken"
     ],
     "augments": [
-     "jeweled_gauntlet",
-     "mystic_punch",
-     "dual_wield",
-     "erosion"
+     "ethereal_weapon",
+     "ultimate_unstoppable",
+     "its_killing_time",
+     "fey_magic"
     ]
    }
   },
@@ -1901,10 +1901,10 @@
      "sundered_sky"
     ],
     "augments": [
-     "jeweled_gauntlet",
-     "goliath",
-     "mystic_punch",
-     "tank_engine"
+     "outlaws_grit",
+     "tooth_fairy",
+     "recursion",
+     "back_to_basics"
     ]
    }
   },
@@ -1934,10 +1934,10 @@
      "sundered_sky"
     ],
     "augments": [
+     "bonk",
      "mystic_punch",
-     "tank_engine",
-     "deft",
-     "goliath"
+     "ethereal_weapon",
+     "upgrade_sheen"
     ]
    }
   },
@@ -1967,10 +1967,10 @@
      "collector"
     ],
     "augments": [
-     "dual_wield",
-     "deft",
-     "its_critical",
-     "jeweled_gauntlet"
+     "critical_missile",
+     "vulnerability",
+     "upgrade_infinity_edge",
+     "dual_wield"
     ]
    }
   },
@@ -2002,8 +2002,8 @@
     "augments": [
      "tank_engine",
      "heavy_hitter",
-     "goliath",
-     "mystic_punch"
+     "dropkick",
+     "celestial_body"
     ]
    }
   },
@@ -2033,10 +2033,10 @@
      "collector"
     ],
     "augments": [
-     "dual_wield",
-     "deft",
-     "its_critical",
-     "mystic_punch"
+     "critical_missile",
+     "vulnerability",
+     "upgrade_infinity_edge",
+     "scopier_weapons"
     ]
    }
   },
@@ -2066,10 +2066,10 @@
      "botrk"
     ],
     "augments": [
-     "jeweled_gauntlet",
-     "its_critical",
-     "dual_wield",
-     "deft"
+     "upgrade_infinity_edge",
+     "soul_siphon",
+     "vulnerability",
+     "tooth_fairy"
     ]
    }
   },
@@ -2099,10 +2099,10 @@
      "collector"
     ],
     "augments": [
-     "dual_wield",
-     "deft",
-     "its_critical",
-     "jeweled_gauntlet"
+     "critical_missile",
+     "upgrade_infinity_edge",
+     "soul_siphon",
+     "vulnerability"
     ]
    }
   },
@@ -2132,10 +2132,10 @@
      "liandrys"
     ],
     "augments": [
+     "warlock_juicebox",
      "infernal_conduit",
-     "jeweled_gauntlet",
-     "eureka",
-     "witchful_thinking"
+     "recursion",
+     "jeweled_gauntlet"
     ]
    }
   },
@@ -2166,9 +2166,9 @@
     ],
     "augments": [
      "tank_engine",
+     "dropkick",
      "heavy_hitter",
-     "goliath",
-     "deft"
+     "celestial_body"
     ]
    }
   },
@@ -2198,10 +2198,10 @@
      "mortal_reminder"
     ],
     "augments": [
-     "dual_wield",
-     "jeweled_gauntlet",
-     "its_critical",
-     "deft"
+     "upgrade_infinity_edge",
+     "soul_siphon",
+     "critical_missile",
+     "vulnerability"
     ]
    }
   },
@@ -2231,10 +2231,10 @@
      "collector"
     ],
     "augments": [
+     "upgrade_sheen",
      "jeweled_gauntlet",
-     "magic_missile",
-     "mystic_punch",
-     "eureka"
+     "shrink_engine",
+     "critical_missile"
     ]
    }
   },
@@ -2265,9 +2265,9 @@
     ],
     "augments": [
      "tank_engine",
-     "goliath",
-     "heavy_hitter",
-     "mystic_punch"
+     "dropkick",
+     "warlock_juicebox",
+     "bonk"
     ]
    }
   },
@@ -2297,10 +2297,10 @@
      "rabadons"
     ],
     "augments": [
-     "eureka",
-     "magic_missile",
-     "witchful_thinking",
-     "jeweled_gauntlet"
+     "first_aid_kit",
+     "shrink_engine",
+     "critical_healing",
+     "recursion"
     ]
    }
   },
@@ -2330,10 +2330,10 @@
      "sundered_sky"
     ],
     "augments": [
+     "bonk",
+     "soul_siphon",
      "mystic_punch",
-     "goliath",
-     "its_critical",
-     "deft"
+     "blunt_force"
     ]
    }
   },
@@ -2363,10 +2363,10 @@
      "stormsurge"
     ],
     "augments": [
-     "eureka",
-     "tank_engine",
-     "jeweled_gauntlet",
-     "mystic_punch"
+     "marksmage",
+     "warlock_juicebox",
+     "recursion",
+     "adapt"
     ]
    }
   },
@@ -2396,10 +2396,10 @@
      "liandrys"
     ],
     "augments": [
+     "bonk",
      "tank_engine",
-     "goliath",
-     "heavy_hitter",
-     "jeweled_gauntlet"
+     "dropkick",
+     "recursion"
     ]
    }
   },
@@ -2429,10 +2429,10 @@
      "liandrys"
     ],
     "augments": [
-     "eureka",
-     "jeweled_gauntlet",
-     "its_critical",
-     "infernal_conduit"
+     "clown_college",
+     "shrink_engine",
+     "recursion",
+     "upgrade_infinity_edge"
     ]
    }
   },
@@ -2462,10 +2462,10 @@
      "stormsurge"
     ],
     "augments": [
+     "recursion",
      "tank_engine",
-     "eureka",
-     "witchful_thinking",
-     "heavy_hitter"
+     "dropkick",
+     "ultimate_revolution"
     ]
    }
   },
@@ -2495,10 +2495,10 @@
      "ludens"
     ],
     "augments": [
+     "shrink_engine",
      "magic_missile",
-     "eureka",
-     "jeweled_gauntlet",
-     "witchful_thinking"
+     "skilled_sniper",
+     "eureka"
     ]
    }
   },
@@ -2529,9 +2529,9 @@
     ],
     "augments": [
      "infernal_conduit",
+     "shrink_engine",
      "eureka",
-     "magic_missile",
-     "jeweled_gauntlet"
+     "magic_missile"
     ]
    }
   },
@@ -2561,10 +2561,10 @@
      "ludens"
     ],
     "augments": [
-     "jeweled_gauntlet",
-     "dual_wield",
-     "magic_missile",
-     "eureka"
+     "critical_missile",
+     "marksmage",
+     "skilled_sniper",
+     "zealot"
     ]
    }
   },
@@ -2595,9 +2595,9 @@
     ],
     "augments": [
      "eureka",
-     "magic_missile",
-     "jeweled_gauntlet",
-     "infernal_conduit"
+     "skilled_sniper",
+     "shrink_engine",
+     "warlock_juicebox"
     ]
    }
   },
@@ -2628,9 +2628,9 @@
     ],
     "augments": [
      "tank_engine",
+     "dropkick",
      "heavy_hitter",
-     "goliath",
-     "eureka"
+     "goliath"
     ]
    }
   },
@@ -2660,10 +2660,10 @@
      "heartsteel"
     ],
     "augments": [
-     "tank_engine",
-     "goliath",
-     "mystic_punch",
-     "heavy_hitter"
+     "scopier_weapons",
+     "endless_decimation",
+     "blunt_force",
+     "recursion"
     ]
    }
   },
@@ -2693,10 +2693,10 @@
      "liandrys"
     ],
     "augments": [
+     "its_killing_time",
+     "ethereal_weapon",
      "jeweled_gauntlet",
-     "infernal_conduit",
-     "erosion",
-     "witchful_thinking"
+     "warlock_juicebox"
     ]
    }
   },
@@ -2726,10 +2726,10 @@
      "botrk"
     ],
     "augments": [
-     "deft",
-     "eureka",
-     "dual_wield",
-     "magic_missile"
+     "shrink_engine",
+     "recursion",
+     "critical_missile",
+     "vulnerability"
     ]
    }
   },
@@ -2762,7 +2762,7 @@
      "infernal_conduit",
      "eureka",
      "magic_missile",
-     "jeweled_gauntlet"
+     "shrink_engine"
     ]
    }
   },
@@ -2793,9 +2793,9 @@
     ],
     "augments": [
      "tank_engine",
-     "goliath",
-     "heavy_hitter",
-     "jeweled_gauntlet"
+     "dropkick",
+     "endless_decimation",
+     "bonk"
     ]
    }
   },
@@ -2825,10 +2825,10 @@
      "infinity_edge"
     ],
     "augments": [
-     "tank_engine",
-     "jeweled_gauntlet",
-     "goliath",
-     "heavy_hitter"
+     "blunt_force",
+     "back_to_basics",
+     "recursion",
+     "tank_engine"
     ]
    }
   },
@@ -2858,10 +2858,10 @@
      "rabadons"
     ],
     "augments": [
-     "eureka",
-     "magic_missile",
-     "witchful_thinking",
-     "jeweled_gauntlet"
+     "shrink_engine",
+     "recursion",
+     "first_aid_kit",
+     "bolstered"
     ]
    }
   },
@@ -2892,9 +2892,9 @@
     ],
     "augments": [
      "tank_engine",
-     "heavy_hitter",
-     "goliath",
-     "jeweled_gauntlet"
+     "blunt_force",
+     "dropkick",
+     "clown_college"
     ]
    }
   },
@@ -2924,10 +2924,10 @@
      "ludens"
     ],
     "augments": [
+     "shrink_engine",
+     "skilled_sniper",
      "eureka",
-     "magic_missile",
-     "jeweled_gauntlet",
-     "witchful_thinking"
+     "recursion"
     ]
    }
   },
@@ -2957,10 +2957,10 @@
      "ionian"
     ],
     "augments": [
-     "jeweled_gauntlet",
-     "goliath",
-     "poro_stampede",
-     "eureka"
+     "tooth_fairy",
+     "blunt_force",
+     "clown_college",
+     "thread_the_needle"
     ]
    }
   },
@@ -2991,9 +2991,9 @@
     ],
     "augments": [
      "tank_engine",
-     "heavy_hitter",
-     "goliath",
-     "erosion"
+     "celestial_body",
+     "dropkick",
+     "heavy_hitter"
     ]
    }
   },
@@ -3024,9 +3024,9 @@
     ],
     "augments": [
      "tank_engine",
-     "goliath",
-     "heavy_hitter",
-     "infernal_conduit"
+     "dropkick",
+     "stay_resolute",
+     "celestial_body"
     ]
    }
   },
@@ -3056,10 +3056,10 @@
      "morellonomicon"
     ],
     "augments": [
-     "magic_missile",
-     "witchful_thinking",
-     "eureka",
-     "jeweled_gauntlet"
+     "first_aid_kit",
+     "shrink_engine",
+     "bolstered",
+     "divine_intervention"
     ]
    }
   },
@@ -3090,9 +3090,9 @@
     ],
     "augments": [
      "tank_engine",
+     "dropkick",
      "heavy_hitter",
-     "goliath",
-     "mystic_punch"
+     "celestial_body"
     ]
    }
   },
@@ -3122,10 +3122,10 @@
      "manamune"
     ],
     "augments": [
+     "skilled_sniper",
      "jeweled_gauntlet",
-     "magic_missile",
-     "goliath",
-     "dual_wield"
+     "recursion",
+     "blunt_force"
     ]
    }
   },
@@ -3156,9 +3156,9 @@
     ],
     "augments": [
      "tank_engine",
+     "dropkick",
      "heavy_hitter",
-     "goliath",
-     "mystic_punch"
+     "celestial_body"
     ]
    }
   },
@@ -3189,9 +3189,9 @@
     ],
     "augments": [
      "tank_engine",
-     "goliath",
-     "heavy_hitter",
-     "infernal_conduit"
+     "warlock_juicebox",
+     "ethereal_weapon",
+     "dropkick"
     ]
    }
   },
@@ -3221,10 +3221,10 @@
      "mercurys"
     ],
     "augments": [
-     "its_critical",
-     "jeweled_gauntlet",
-     "goliath",
-     "mystic_punch"
+     "upgrade_infinity_edge",
+     "blunt_force",
+     "clown_college",
+     "tooth_fairy"
     ]
    }
   },
@@ -3255,9 +3255,9 @@
     ],
     "augments": [
      "tank_engine",
+     "dropkick",
      "heavy_hitter",
-     "goliath",
-     "mystic_punch"
+     "celestial_body"
     ]
    }
   },
@@ -3287,10 +3287,10 @@
      "collector"
     ],
     "augments": [
-     "dual_wield",
-     "deft",
-     "mystic_punch",
-     "its_critical"
+     "critical_missile",
+     "upgrade_infinity_edge",
+     "vulnerability",
+     "soul_siphon"
     ]
    }
   },
@@ -3320,10 +3320,10 @@
      "collector"
     ],
     "augments": [
+     "critical_missile",
+     "skilled_sniper",
      "jeweled_gauntlet",
-     "dual_wield",
-     "deft",
-     "magic_missile"
+     "dual_wield"
     ]
    }
   },
@@ -3353,10 +3353,10 @@
      "shadowflame"
     ],
     "augments": [
+     "warlock_juicebox",
+     "recursion",
      "tank_engine",
-     "eureka",
-     "goliath",
-     "witchful_thinking"
+     "eureka"
     ]
    }
   },
@@ -3386,10 +3386,10 @@
      "liandrys"
     ],
     "augments": [
+     "shrink_engine",
      "magic_missile",
      "eureka",
-     "infernal_conduit",
-     "jeweled_gauntlet"
+     "skilled_sniper"
     ]
    }
   },
@@ -3419,10 +3419,10 @@
      "heartsteel"
     ],
     "augments": [
+     "bonk",
      "tank_engine",
-     "goliath",
-     "mystic_punch",
-     "heavy_hitter"
+     "blunt_force",
+     "ethereal_weapon"
     ]
    }
   },
@@ -3452,10 +3452,10 @@
      "terminus"
     ],
     "augments": [
-     "dual_wield",
-     "deft",
-     "magic_missile",
-     "jeweled_gauntlet"
+     "critical_missile",
+     "scopier_weapons",
+     "ethereal_weapon",
+     "dual_wield"
     ]
    }
   },
@@ -3485,10 +3485,10 @@
      "liandrys"
     ],
     "augments": [
+     "first_aid_kit",
+     "rejuvenation",
      "tank_engine",
-     "goliath",
-     "witchful_thinking",
-     "eureka"
+     "critical_healing"
     ]
    }
   },
@@ -3518,10 +3518,10 @@
      "manamune"
     ],
     "augments": [
-     "jeweled_gauntlet",
-     "goliath",
-     "mystic_punch",
-     "erosion"
+     "tooth_fairy",
+     "blunt_force",
+     "recursion",
+     "thread_the_needle"
     ]
    }
   },
@@ -3551,10 +3551,10 @@
      "rod_of_ages"
     ],
     "augments": [
-     "jeweled_gauntlet",
-     "eureka",
-     "tank_engine",
-     "witchful_thinking"
+     "warlock_juicebox",
+     "adapt",
+     "marksmage",
+     "recursion"
     ]
    }
   },
@@ -3586,8 +3586,8 @@
     "augments": [
      "tank_engine",
      "heavy_hitter",
-     "goliath",
-     "erosion"
+     "dropkick",
+     "celestial_body"
     ]
    }
   },
@@ -3618,9 +3618,9 @@
     ],
     "augments": [
      "tank_engine",
-     "goliath",
-     "heavy_hitter",
-     "eureka"
+     "recursion",
+     "dropkick",
+     "pursuit_of_haste"
     ]
    }
   },
@@ -3650,10 +3650,10 @@
      "ludens"
     ],
     "augments": [
-     "jeweled_gauntlet",
-     "magic_missile",
-     "eureka",
-     "witchful_thinking"
+     "skilled_sniper",
+     "shrink_engine",
+     "spell_split",
+     "jeweled_gauntlet"
     ]
    }
   },
@@ -3683,10 +3683,10 @@
      "mercurys"
     ],
     "augments": [
-     "its_critical",
-     "jeweled_gauntlet",
-     "dual_wield",
-     "magic_missile"
+     "soul_siphon",
+     "upgrade_infinity_edge",
+     "draw_your_sword",
+     "vulnerability"
     ]
    }
   },
@@ -3716,10 +3716,10 @@
      "ludens"
     ],
     "augments": [
-     "tank_engine",
-     "eureka",
-     "jeweled_gauntlet",
-     "goliath"
+     "recursion",
+     "ravenous_bind",
+     "ethereal_weapon",
+     "adapt"
     ]
    }
   },
@@ -3749,10 +3749,10 @@
      "collector"
     ],
     "augments": [
-     "tank_engine",
-     "goliath",
-     "its_critical",
-     "jeweled_gauntlet"
+     "vulnerability",
+     "upgrade_infinity_edge",
+     "bonk",
+     "dropkick"
     ]
    }
   },
@@ -3782,10 +3782,10 @@
      "collector"
     ],
     "augments": [
-     "dual_wield",
-     "deft",
-     "mystic_punch",
-     "its_critical"
+     "critical_missile",
+     "upgrade_infinity_edge",
+     "vulnerability",
+     "dual_wield"
     ]
    }
   },
@@ -3815,10 +3815,10 @@
      "liandrys"
     ],
     "augments": [
-     "eureka",
-     "jeweled_gauntlet",
-     "magic_missile",
-     "witchful_thinking"
+     "warlock_juicebox",
+     "its_killing_time",
+     "recursion",
+     "phenomenal_evil"
     ]
    }
   },
@@ -3848,10 +3848,10 @@
      "jaksho"
     ],
     "augments": [
+     "scopier_weapons",
+     "critical_missile",
      "dual_wield",
-     "deft",
-     "its_critical",
-     "mystic_punch"
+     "critical_rhythm"
     ]
    }
   },
@@ -3881,10 +3881,10 @@
      "ludens"
     ],
     "augments": [
-     "eureka",
-     "magic_missile",
-     "jeweled_gauntlet",
-     "witchful_thinking"
+     "shrink_engine",
+     "first_aid_kit",
+     "recursion",
+     "purist_caster"
     ]
    }
   },
@@ -3914,10 +3914,10 @@
      "rabadons"
     ],
     "augments": [
-     "eureka",
-     "magic_missile",
-     "witchful_thinking",
-     "erosion"
+     "shrink_engine",
+     "recursion",
+     "purist_caster",
+     "divine_intervention"
     ]
    }
   },
@@ -3948,9 +3948,9 @@
     ],
     "augments": [
      "tank_engine",
+     "dropkick",
      "heavy_hitter",
-     "goliath",
-     "mystic_punch"
+     "bonk"
     ]
    }
   },
@@ -3982,8 +3982,8 @@
     "augments": [
      "tank_engine",
      "heavy_hitter",
-     "goliath",
-     "erosion"
+     "celestial_body",
+     "dropkick"
     ]
    }
   },
@@ -4013,10 +4013,10 @@
      "mercurys"
     ],
     "augments": [
-     "deft",
-     "its_critical",
-     "jeweled_gauntlet",
-     "mystic_punch"
+     "blunt_force",
+     "tooth_fairy",
+     "clown_college",
+     "soul_siphon"
     ]
    }
   },
@@ -4046,10 +4046,10 @@
      "ludens"
     ],
     "augments": [
+     "shrink_engine",
+     "recursion",
      "eureka",
-     "magic_missile",
-     "jeweled_gauntlet",
-     "witchful_thinking"
+     "bolstered"
     ]
    }
   },
@@ -4079,10 +4079,10 @@
      "sundered_sky"
     ],
     "augments": [
+     "blunt_force",
+     "tooth_fairy",
      "jeweled_gauntlet",
-     "tank_engine",
-     "goliath",
-     "heavy_hitter"
+     "dropkick"
     ]
    }
   },
@@ -4112,10 +4112,10 @@
      "ludens"
     ],
     "augments": [
+     "warlock_juicebox",
+     "recursion",
      "eureka",
-     "magic_missile",
-     "jeweled_gauntlet",
-     "witchful_thinking"
+     "magic_missile"
     ]
    }
   },
@@ -4145,10 +4145,10 @@
      "collector"
     ],
     "augments": [
+     "ravenous_bind",
      "tank_engine",
-     "goliath",
-     "jeweled_gauntlet",
-     "heavy_hitter"
+     "blunt_force",
+     "dropkick"
     ]
    }
   },
@@ -4178,10 +4178,10 @@
      "ionian"
     ],
     "augments": [
-     "goliath",
-     "jeweled_gauntlet",
-     "mystic_punch",
-     "erosion"
+     "shrink_engine",
+     "recursion",
+     "tooth_fairy",
+     "blunt_force"
     ]
    }
   },
@@ -4211,10 +4211,10 @@
      "collector"
     ],
     "augments": [
-     "dual_wield",
-     "deft",
-     "jeweled_gauntlet",
-     "its_critical"
+     "soul_siphon",
+     "upgrade_infinity_edge",
+     "critical_missile",
+     "vulnerability"
     ]
    }
   },
@@ -4244,10 +4244,10 @@
      "stormsurge"
     ],
     "augments": [
+     "recursion",
      "eureka",
-     "jeweled_gauntlet",
-     "witchful_thinking",
-     "magic_missile"
+     "warlock_juicebox",
+     "phenomenal_evil"
     ]
    }
   },
@@ -4277,10 +4277,10 @@
      "shadowflame"
     ],
     "augments": [
-     "eureka",
-     "witchful_thinking",
-     "magic_missile",
-     "jeweled_gauntlet"
+     "first_aid_kit",
+     "shrink_engine",
+     "recursion",
+     "critical_healing"
     ]
    }
   },
@@ -4310,10 +4310,10 @@
      "rabadons"
     ],
     "augments": [
-     "eureka",
-     "witchful_thinking",
-     "magic_missile",
-     "jeweled_gauntlet"
+     "shrink_engine",
+     "first_aid_kit",
+     "bolstered",
+     "recursion"
     ]
    }
   },
@@ -4343,10 +4343,10 @@
      "collector"
     ],
     "augments": [
-     "dual_wield",
-     "deft",
-     "mystic_punch",
-     "its_critical"
+     "critical_missile",
+     "upgrade_infinity_edge",
+     "scopier_weapons",
+     "vulnerability"
     ]
    }
   },
@@ -4376,10 +4376,10 @@
      "stormsurge"
     ],
     "augments": [
-     "tank_engine",
-     "goliath",
-     "jeweled_gauntlet",
-     "heavy_hitter"
+     "warlock_juicebox",
+     "marksmage",
+     "ethereal_weapon",
+     "tank_engine"
     ]
    }
   },
@@ -4410,9 +4410,9 @@
     ],
     "augments": [
      "tank_engine",
+     "dropkick",
      "heavy_hitter",
-     "goliath",
-     "jeweled_gauntlet"
+     "celestial_body"
     ]
    }
   },
@@ -4442,10 +4442,10 @@
      "ludens"
     ],
     "augments": [
+     "recursion",
+     "shrink_engine",
      "eureka",
-     "jeweled_gauntlet",
-     "magic_missile",
-     "witchful_thinking"
+     "warlock_juicebox"
     ]
    }
   },
@@ -4477,8 +4477,8 @@
     "augments": [
      "tank_engine",
      "heavy_hitter",
-     "goliath",
-     "mystic_punch"
+     "celestial_body",
+     "dropkick"
     ]
    }
   },
@@ -4508,10 +4508,10 @@
      "botrk"
     ],
     "augments": [
-     "eureka",
-     "magic_missile",
-     "witchful_thinking",
-     "erosion"
+     "shrink_engine",
+     "first_aid_kit",
+     "recursion",
+     "bolstered"
     ]
    }
   },
@@ -4543,8 +4543,8 @@
     "augments": [
      "tank_engine",
      "heavy_hitter",
-     "goliath",
-     "deft"
+     "dropkick",
+     "celestial_body"
     ]
    }
   },
@@ -4576,8 +4576,8 @@
     "augments": [
      "tank_engine",
      "heavy_hitter",
-     "goliath",
-     "erosion"
+     "dropkick",
+     "celestial_body"
     ]
    }
   },
@@ -4607,10 +4607,10 @@
      "collector"
     ],
     "augments": [
-     "dual_wield",
-     "deft",
-     "its_critical",
-     "jeweled_gauntlet"
+     "critical_missile",
+     "upgrade_infinity_edge",
+     "vulnerability",
+     "soul_siphon"
     ]
    }
   },
@@ -4640,10 +4640,10 @@
      "liandrys"
     ],
     "augments": [
-     "deft",
-     "magic_missile",
-     "jeweled_gauntlet",
-     "eureka"
+     "marksmage",
+     "zealot",
+     "warlock_juicebox",
+     "deft"
     ]
    }
   },
@@ -4673,10 +4673,10 @@
      "ludens"
     ],
     "augments": [
+     "back_to_basics",
+     "warlock_juicebox",
      "magic_missile",
-     "jeweled_gauntlet",
-     "eureka",
-     "witchful_thinking"
+     "recursion"
     ]
    }
   },
@@ -4706,10 +4706,10 @@
      "profane_hydra"
     ],
     "augments": [
-     "jeweled_gauntlet",
-     "goliath",
-     "mystic_punch",
-     "erosion"
+     "tooth_fairy",
+     "recursion",
+     "blunt_force",
+     "thread_the_needle"
     ]
    }
   },
@@ -4739,10 +4739,10 @@
      "runaans"
     ],
     "augments": [
-     "deft",
-     "its_critical",
-     "jeweled_gauntlet",
-     "mystic_punch"
+     "critical_missile",
+     "vulnerability",
+     "upgrade_infinity_edge",
+     "soul_siphon"
     ]
    }
   },
@@ -4773,9 +4773,9 @@
     ],
     "augments": [
      "tank_engine",
-     "heavy_hitter",
-     "goliath",
-     "erosion"
+     "celestial_body",
+     "dropkick",
+     "heavy_hitter"
     ]
    }
   },
@@ -4805,10 +4805,10 @@
      "collector"
     ],
     "augments": [
-     "dual_wield",
-     "deft",
-     "its_critical",
-     "jeweled_gauntlet"
+     "critical_missile",
+     "vulnerability",
+     "upgrade_infinity_edge",
+     "dual_wield"
     ]
    }
   },
@@ -4840,8 +4840,8 @@
     "augments": [
      "jeweled_gauntlet",
      "eureka",
-     "magic_missile",
-     "witchful_thinking"
+     "recursion",
+     "tooth_fairy"
     ]
    }
   },
@@ -4871,10 +4871,10 @@
      "collector"
     ],
     "augments": [
-     "tank_engine",
-     "jeweled_gauntlet",
-     "goliath",
-     "mystic_punch"
+     "recursion",
+     "outlaws_grit",
+     "dashing",
+     "ethereal_weapon"
     ]
    }
   },
@@ -4906,8 +4906,8 @@
     "augments": [
      "tank_engine",
      "heavy_hitter",
-     "goliath",
-     "mystic_punch"
+     "dropkick",
+     "endless_decimation"
     ]
    }
   },
@@ -4938,9 +4938,9 @@
     ],
     "augments": [
      "tank_engine",
-     "mystic_punch",
-     "goliath",
-     "deft"
+     "siphon",
+     "goredrink",
+     "dropkick"
     ]
    }
   },
@@ -4970,10 +4970,10 @@
      "eclipse"
     ],
     "augments": [
-     "jeweled_gauntlet",
-     "tank_engine",
-     "goliath",
-     "its_critical"
+     "blunt_force",
+     "soul_siphon",
+     "dropkick",
+     "upgrade_infinity_edge"
     ]
    }
   },
@@ -5004,9 +5004,9 @@
     ],
     "augments": [
      "tank_engine",
-     "goliath",
-     "jeweled_gauntlet",
-     "eureka"
+     "ravenous_bind",
+     "dropkick",
+     "dont_change_the_channel"
     ]
    }
   },
@@ -5036,10 +5036,10 @@
      "stormsurge"
     ],
     "augments": [
+     "warlock_juicebox",
+     "tooth_fairy",
      "jeweled_gauntlet",
-     "eureka",
-     "witchful_thinking",
-     "goliath"
+     "phenomenal_evil"
     ]
    }
   },
@@ -5069,10 +5069,10 @@
      "ludens"
     ],
     "augments": [
-     "jeweled_gauntlet",
-     "eureka",
-     "witchful_thinking",
-     "magic_missile"
+     "warlock_juicebox",
+     "recursion",
+     "tooth_fairy",
+     "jeweled_gauntlet"
     ]
    }
   },
@@ -5102,10 +5102,10 @@
      "liandrys"
     ],
     "augments": [
-     "magic_missile",
-     "eureka",
-     "jeweled_gauntlet",
-     "infernal_conduit"
+     "fey_magic",
+     "warlock_juicebox",
+     "phenomenal_evil",
+     "magic_missile"
     ]
    }
   },
@@ -5135,10 +5135,10 @@
      "ludens"
     ],
     "augments": [
+     "recursion",
      "magic_missile",
      "eureka",
-     "jeweled_gauntlet",
-     "witchful_thinking"
+     "warlock_juicebox"
     ]
    }
   },
@@ -5168,10 +5168,10 @@
      "mercurys"
     ],
     "augments": [
-     "jeweled_gauntlet",
-     "goliath",
-     "tank_engine",
-     "mystic_punch"
+     "tooth_fairy",
+     "blunt_force",
+     "recursion",
+     "jeweled_gauntlet"
     ]
    }
   },
@@ -5201,10 +5201,10 @@
      "shadowflame"
     ],
     "augments": [
-     "eureka",
-     "magic_missile",
-     "jeweled_gauntlet",
-     "witchful_thinking"
+     "recursion",
+     "warlock_juicebox",
+     "phenomenal_evil",
+     "eureka"
     ]
    }
   },
@@ -5234,10 +5234,10 @@
      "ludens"
     ],
     "augments": [
+     "warlock_juicebox",
+     "marksmage",
      "jeweled_gauntlet",
-     "eureka",
-     "witchful_thinking",
-     "magic_missile"
+     "adapt"
     ]
    }
   },
@@ -5267,10 +5267,10 @@
      "rod_of_ages"
     ],
     "augments": [
+     "warlock_juicebox",
      "magic_missile",
-     "infernal_conduit",
-     "jeweled_gauntlet",
-     "eureka"
+     "phenomenal_evil",
+     "infernal_conduit"
     ]
    }
   },
@@ -5300,10 +5300,10 @@
      "jaksho"
     ],
     "augments": [
+     "outlaws_grit",
+     "ethereal_weapon",
      "mystic_punch",
-     "deft",
-     "tank_engine",
-     "goliath"
+     "upgrade_sheen"
     ]
    }
   },
@@ -5333,10 +5333,10 @@
      "stormsurge"
     ],
     "augments": [
-     "jeweled_gauntlet",
-     "eureka",
-     "witchful_thinking",
-     "goliath"
+     "warlock_juicebox",
+     "marksmage",
+     "tooth_fairy",
+     "jeweled_gauntlet"
     ]
    }
   },
@@ -5367,9 +5367,9 @@
     ],
     "augments": [
      "tank_engine",
-     "goliath",
-     "heavy_hitter",
-     "jeweled_gauntlet"
+     "celestial_body",
+     "dropkick",
+     "goliath"
     ]
    }
   },
@@ -5399,10 +5399,10 @@
      "stridebreaker"
     ],
     "augments": [
-     "deft",
-     "tank_engine",
-     "mystic_punch",
-     "goliath"
+     "scopier_weapons",
+     "final_form",
+     "goredrink",
+     "get_excited"
     ]
    }
   },
@@ -5433,9 +5433,9 @@
     ],
     "augments": [
      "tank_engine",
-     "goliath",
-     "heavy_hitter",
-     "erosion"
+     "celestial_body",
+     "ravenous_bind",
+     "dropkick"
     ]
    }
   },
@@ -5465,10 +5465,10 @@
      "shadowflame"
     ],
     "augments": [
-     "jeweled_gauntlet",
-     "witchful_thinking",
-     "eureka",
-     "goliath"
+     "warlock_juicebox",
+     "marksmage",
+     "tooth_fairy",
+     "jeweled_gauntlet"
     ]
    }
   },
@@ -5499,9 +5499,9 @@
     ],
     "augments": [
      "tank_engine",
-     "goliath",
-     "heavy_hitter",
-     "mystic_punch"
+     "endless_decimation",
+     "dropkick",
+     "recursion"
     ]
    }
   },
@@ -5531,10 +5531,10 @@
      "stormsurge"
     ],
     "augments": [
-     "jeweled_gauntlet",
-     "eureka",
-     "magic_missile",
-     "witchful_thinking"
+     "its_killing_time",
+     "recursion",
+     "warlock_juicebox",
+     "ultimate_unstoppable"
     ]
    }
   },
@@ -5564,10 +5564,10 @@
      "sundered_sky"
     ],
     "augments": [
-     "goliath",
-     "tank_engine",
-     "mystic_punch",
-     "jeweled_gauntlet"
+     "upgrade_sheen",
+     "siphon",
+     "endless_decimation",
+     "blunt_force"
     ]
    }
   },
@@ -5598,9 +5598,9 @@
     ],
     "augments": [
      "tank_engine",
+     "celestial_body",
      "heavy_hitter",
-     "goliath",
-     "erosion"
+     "dropkick"
     ]
    }
   },
@@ -5631,9 +5631,9 @@
     ],
     "augments": [
      "tank_engine",
-     "heavy_hitter",
-     "goliath",
-     "erosion"
+     "dropkick",
+     "celestial_body",
+     "heavy_hitter"
     ]
    }
   },
@@ -5663,10 +5663,10 @@
      "ludens"
     ],
     "augments": [
-     "dual_wield",
-     "magic_missile",
-     "tank_engine",
-     "deft"
+     "marksmage",
+     "zealot",
+     "shrink_engine",
+     "dual_wield"
     ]
    }
   },
@@ -5697,9 +5697,9 @@
     ],
     "augments": [
      "tank_engine",
+     "dropkick",
      "heavy_hitter",
-     "goliath",
-     "mystic_punch"
+     "celestial_body"
     ]
    }
   },
@@ -5730,9 +5730,9 @@
     ],
     "augments": [
      "tank_engine",
+     "dropkick",
      "heavy_hitter",
-     "goliath",
-     "mystic_punch"
+     "ethereal_weapon"
     ]
    }
   }

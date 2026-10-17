@@ -291,6 +291,28 @@ int main(int argc, char** argv) {
         CHECK(alive(strong) < alive(weak), "you last longer against low-level enemies");
     }
 
+    {
+        // Each champion only gets the augments it can be offered in Mayhem.
+        const auto ap = lib.augmentsFor(*ahri), ad = lib.augmentsFor(*jinx);
+        CHECK(ap.size() > 40 && ap.size() < lib.augments.size(), "Ahri's augment pool is her own, not every augment");
+        CHECK(has(ap, "adapt") && !has(ad, "adapt") && has(ad, "critical_rhythm") && !has(ap, "critical_rhythm"),
+              "pools differ per champion (Adapt for Ahri, Critical Rhythm for Jinx)");
+
+        // Augment mechanics: on-attack procs, stacks, stat conversions and revives.
+        const Build ie{{"infinity_edge"}, {}};
+        const Scenario jsc = lib.scenarioFor(*jinx);
+        auto with = [](Build b, const char* aug) { b.augments.push_back(aug); return b; };
+        CHECK(meanDps(lib, *jinx, with(ie, "light_em_up"), jsc, 600) > meanDps(lib, *jinx, ie, jsc, 600),
+              "Light 'Em Up's every-fourth-attack burst adds damage");
+        CHECK(meanDps(lib, *jinx, with(ie, "critical_rhythm"), jsc, 600) > meanDps(lib, *jinx, ie, jsc, 600),
+              "Critical Rhythm's attack speed stacks add damage");
+        CHECK(meanDps(lib, *ahri, with(cap, "marksmage"), sc, 600) > meanDps(lib, *ahri, cap, sc, 600),
+              "Marksmage turns AP into attack damage");
+        CHECK(summarize(runTrials(lib, *ahri, with(cap, "hellbent"), sc, 0, 400)).meanTimeAlive >
+                  summarize(runTrials(lib, *ahri, cap, sc, 0, 400)).meanTimeAlive,
+              "Hellbent's revive keeps you fighting longer");
+    }
+
     bool threw = false;
     try { runTrials(lib, *ahri, Build{{"not_an_item"}, {}}, sc, 0, 1); } catch (...) { threw = true; }
     CHECK(threw, "unknown item ids are rejected");

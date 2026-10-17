@@ -25,7 +25,10 @@ import json
 import os
 import sys
 import time
+import re
 import urllib.request
+
+import augment_effects as AE
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 # --pbe builds the PBE (test server) patch instead, into data/pbe/, for the simulator's optional
@@ -69,10 +72,11 @@ class Spell:
         self.path = path
         self.sp = (kiwi.get(path) or {}).get("mSpell") or {}
         self.values = {}
+        self.varying = set()
         for d in self.sp.get("DataValues") or []:
             v = d.get("values") or [0.0]
-            if len(set(v)) != 1:
-                raise SystemExit(f"{path}: DataValue {d['name']} varies by level {v}; mapping needs a level")
+            if len(set(v)) != 1:  # only an error if a value source reads it
+                self.varying.add(d["name"])
             self.values[d["name"]] = v[0]
 
     def calc(self, name):
@@ -89,6 +93,8 @@ def dv(name, scale=1.0):
     def f(s):
         if name not in s.values:
             return None, f"DataValue {name} missing"
+        if name in s.varying:
+            raise SystemExit(f"{s.path}: DataValue {name} varies by level; mapping needs a level")
         return s.values[name] * scale, f"{name}" + (f" x {scale:g}" if scale != 1.0 else "")
     return f
 
@@ -209,6 +215,130 @@ NOTES = {
 }
 
 
+# --- every other augment: tools/augment_effects.py -------------------------------------------
+
+# GameCalculation stat parts: (mStat, mStatFormula) -> amount key (formula 0 total, 2 bonus).
+STAT_PARTS = {(0, 0): "ap", (0, 2): "ap", (2, 0): "ad", (2, 2): "bonus_ad", (12, 0): "own_hp", (12, 2): "bonus_hp",
+              (1, 2): "bonus_armor", (6, 2): "bonus_mr"}
+
+
+def breakpoints_at(p, level):
+    v = p.get("mLevel1Value", 0.0) + p.get("mInitialBonusPerLevel", 0.0) * (level - 1)
+    for b in p.get("mBreakpoints") or []:
+        if b.get("mLevel", 99) <= level:
+            v += b.get("mAdditionalBonusAtThisLevel", 0.0)
+    return v
+
+
+def calc_amounts(spell, name):
+    """A spell calculation as amount keys: flat, flat_l1/flat_l18 (by level), ap, ad, bonus_ad..."""
+    c = spell.calc(name)
+    if not c:
+        raise ValueError(f"calculation {name} missing")
+    if c.get("__type") == "GameCalculationModified":
+        out = calc_amounts(spell, c["mModifiedGameCalculation"])
+    else:
+        out = {}
+        for p in c.get("mFormulaParts") or []:
+            t = p.get("__type", "")
+            if t == "ByCharLevelInterpolationCalculationPart":
+                out["flat_l1"] = out.get("flat_l1", 0) + p.get("mStartValue", 0.0)
+                out["flat_l18"] = out.get("flat_l18", 0) + p.get("mEndValue", 0.0)
+            elif t == "ByCharLevelBreakpointsCalculationPart":
+                out["flat_l1"] = out.get("flat_l1", 0) + breakpoints_at(p, 1)
+                out["flat_l18"] = out.get("flat_l18", 0) + breakpoints_at(p, 18)
+            elif t == "NamedDataValueCalculationPart":
+                out["flat"] = out.get("flat", 0) + spell.values[p["mDataValue"]]
+            elif t == "NumberCalculationPart":
+                out["flat"] = out.get("flat", 0) + p.get("mNumber", 0.0)
+            elif t in ("StatByCoefficientCalculationPart", "StatByNamedDataValueCalculationPart"):
+                key = STAT_PARTS.get((p.get("mStat", 0), p.get("mStatFormula", 0)))
+                if key is None:
+                    raise ValueError(f"{name}: stat {p.get('mStat', 0)}/{p.get('mStatFormula', 0)} has no amount key")
+                coef = p["mCoefficient"] if "mCoefficient" in p else spell.values[p["mDataValue"]]
+                out[key] = out.get(key, 0) + coef
+            else:
+                raise ValueError(f"{name}: part {t} not supported")
+    mult = c.get("mMultiplier")
+    if mult:
+        if mult.get("__type") == "NumberCalculationPart":
+            f = mult.get("mNumber", 1.0)
+        elif mult.get("__type") == "NamedDataValueCalculationPart":
+            f = spell.values[mult["mDataValue"]]
+        else:
+            raise ValueError(f"{name}: multiplier {mult.get('__type')} not supported")
+        out = {k: v * f for k, v in out.items()}
+    if "flat_l1" in out and out.get("flat"):  # a constant beside a level range: fold it in
+        out["flat_l1"] += out["flat"]
+        out["flat_l18"] += out.pop("flat")
+    return out
+
+
+def resolve(spell, group):
+    """A SPEC stats/effects dict with its value sources read from the augment's spell."""
+    out = {}
+    for k, v in group.items():
+        if isinstance(v, AE.dv):
+            if v.name not in spell.values:
+                raise ValueError(f"DataValue {v.name} missing")
+            if v.name in spell.varying:
+                raise ValueError(f"DataValue {v.name} varies by level")
+            out[k] = tidy(spell.values[v.name] * v.scale)
+        elif isinstance(v, AE.calc):
+            if not k.endswith("_"):
+                raise ValueError(f"calc() on {k}: the key must end in _")
+            for part, x in calc_amounts(spell, v.name).items():
+                out[k + part] = tidy(x * v.scale)
+        elif isinstance(v, AE.lvl):
+            amounts = calc_amounts(spell, v.name)
+            if set(amounts) - {"flat", "flat_l1", "flat_l18"}:
+                raise ValueError(f"lvl({v.name}) scales with stats: {amounts}")
+            if "flat" in amounts:
+                out[k] = tidy(amounts["flat"] * v.scale)
+            else:
+                out[k + "_l1"] = tidy(amounts["flat_l1"] * v.scale)
+                out[k + "_l18"] = tidy(amounts["flat_l18"] * v.scale)
+        else:
+            out[k] = v
+    return out
+
+
+def slug(name):
+    return re.sub(r"[^a-z0-9]+", "_", name.lower().replace("'", "")).strip("_")
+
+
+NOT_MODELED_REASON = {aid: why for why, ids in AE.NOT_MODELED.items() for aid in ids}
+
+
+def other_augment(aid, entry, kiwi, names):
+    """An augment outside MAPPING: modeled from augment_effects.SPEC, or listed with no effect."""
+    a = {"id": aid, "name": names.get(aid, {}).get("nameTRA") or entry["AugmentNameId"],
+         "rarity": RARITY[entry.get("rarity", 0)]}
+    spec = AE.SPEC.get(aid)
+    if spec is None:
+        why = NOT_MODELED_REASON.get(aid, "an effect the simulator doesn't model yet")
+        a["note"] = f"No effect in the simulator: it depends on {why}"
+        return a
+    spell = Spell(kiwi, entry["RootSpell"])
+    try:
+        for g in ("stats", "effects"):
+            if spec.get(g):
+                a[g] = resolve(spell, spec[g])
+    except ValueError as e:
+        print(f"WARNING: {a['name']} ({aid}): {e}; left without an effect")
+        a.pop("stats", None)
+        a.pop("effects", None)
+        a["note"] = "No effect in the simulator: its values couldn't be read"
+        return a
+    for k in ("spell_bind", "requires_item"):
+        if k in spec:
+            a[k] = spec[k]
+    a["confidence"] = "approx" if spec.get("note") else "verified"
+    if spec.get("note"):
+        a["note"] = spec["note"][0].upper() + spec["note"][1:]
+    return a
+
+
 def poro_note(spell):
     waves = [int(spell.values[f"WaveRequirement{i}"]) for i in range(1, 11) if f"WaveRequirement{i}" in spell.values]
     cd2 = (spell.sp.get("Cooldown") or {}).get("values", [None])[0]
@@ -273,6 +403,8 @@ def main():
 
     changes, unmapped = [], []
     for key, aug in list(doc["augments"].items()):
+        if key not in MAPPING:  # rebuilt below from augment_effects.py
+            continue
         entry = by_id.get(aug["id"])
         if not entry and PBE:  # taken out on the PBE patch
             print(f"{key}: augment id {aug['id']} is not on the PBE patch, left out")
@@ -335,12 +467,30 @@ def main():
             if k in aug:
                 aug[k] = aug.pop(k)
 
+    # Every other augment on the patch (enabled ones only), from augment_effects.py.
+    mapped_ids = {a["id"] for k, a in doc["augments"].items() if k in MAPPING}
+    extra = {}
+    for aid, entry in sorted(by_id.items()):
+        if aid in mapped_ids or entry.get("Enabled") is False:
+            continue
+        a = other_augment(aid, entry, kiwi, names)
+        extra[slug(a["name"])] = a
+    for k in list(doc["augments"]):
+        if k not in MAPPING:
+            del doc["augments"][k]
+    for k, a in sorted(extra.items()):
+        if k in doc["augments"]:
+            raise SystemExit(f"augment key {k} is used twice")
+        doc["augments"][k] = a
+    modeled = sum(1 for a in doc["augments"].values() if a.get("stats") or a.get("effects"))
+    print(f"{len(doc['augments'])} augments, {modeled} with an effect in the simulator")
+
     doc["_note"] = (
-        "Mayhem augments the all-champion simulator models: the ones whose effect fits a generic kit. Ids, names, "
-        "rarities and values are the live patch's client files (kiwi.bin, each augment's spell DataValues and "
-        "calculations), filled in by tools/build_augments.py. confidence is verified when every value is read "
-        "from the client and approx when one rests on an assumption the note states. Effect keys are the same "
-        "as items (README.md).")
+        "Every enabled Mayhem augment on the patch. Ids, names, rarities and values are the client files "
+        "(kiwi.bin, each augment's spell DataValues and calculations), filled in by tools/build_augments.py "
+        "through MAPPING there and tools/augment_effects.py. An augment with no stats or effects has no effect "
+        "in the simulator (its note says why). confidence is verified when every value is read from the client "
+        "and approx when one rests on an assumption the note states. Effect keys: README.md.")
 
     print("\nhand-written values:")
     for u in unmapped:

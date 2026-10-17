@@ -24,7 +24,7 @@ def main():
     items = load(os.path.join(SIM, "data", "items.json"))["items"]
     augs = load(os.path.join(SIM, "data", "augments.json"))["augments"]
     item_key = {v["id"]: k for k, v in items.items()}
-    aug_key = {v["id"]: k for k, v in augs.items()}
+    aug_key = {v["id"]: k for k, v in augs.items() if v.get("stats") or v.get("effects")}
     boots = {k for k, v in items.items() if v.get("slot") == "boots"}
     pool = load(POOL)
     full_items = full_augs = 0

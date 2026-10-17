@@ -90,13 +90,21 @@
     s.value = value || "";
     return s;
   }
-  function rarityName(r) { return { S: "Silver", G: "Gold", P: "Prismatic" }[r] || r; }
+  function rarityName(r) { return { S: "Silver", G: "Gold", P: "Prismatic" }[r] || r.charAt(0).toUpperCase() + r.slice(1); }
+  // The augments a champion can be offered, sorted by name; ones the simulator can't model yet are marked.
+  function augmentsFor(id, keep) {
+    const c = meta.champions.find((x) => x.id.toLowerCase() === String(id).toLowerCase());
+    const pool = new Set((c && c.augments) || []);
+    for (const k of keep || []) pool.add(k);
+    return meta.augments.filter((a) => !c || pool.has(a.key))
+      .map((a) => a.modeled === false ? { ...a, name: a.name + " (no effect yet)" } : a)
+      .sort((a, b) => a.name.localeCompare(b.name));
+  }
   function fillFromTrace() {
     const box = $("buildBox");
     box.querySelectorAll(".slot-row, .sub").forEach((n) => n.remove());
     const boots = meta.items.filter((i) => i.slot === "boots").sort((a, b) => a.name.localeCompare(b.name));
     const legs = meta.items.filter((i) => i.slot !== "boots").sort((a, b) => a.name.localeCompare(b.name));
-    const augs = meta.augments.slice().sort((a, b) => a.name.localeCompare(b.name));
     const items = trace.build.items.map((i) => i.key);
     const bootKey = items.find((k) => boots.some((b) => b.key === k)) || "";
     const legKeys = items.filter((k) => k !== bootKey);
@@ -109,6 +117,7 @@
     for (let i = 0; i < 5; i++) row(String(i + 1), select(legs, legKeys[i], "Item " + (i + 1)));
     const sub = document.createElement("div"); sub.className = "sub"; sub.textContent = "Augments"; box.append(sub);
     const augKeys = trace.build.augments.map((a) => a.key);
+    const augs = augmentsFor(champ.id, augKeys);
     for (let i = 0; i < 4; i++) row(String(i + 1), select(augs, augKeys[i], "Augment " + (i + 1)));
     renderCombo();
 
@@ -211,7 +220,6 @@
     const pool = meta.enemies.filter((e) => e.id.toLowerCase() !== champ.id.toLowerCase())
       .sort((a, b) => a.name.localeCompare(b.name));
     const items = meta.items.slice().sort((a, b) => a.name.localeCompare(b.name));
-    const augs = meta.augments.slice().sort((a, b) => a.name.localeCompare(b.name));
     const cards = document.createElement("div"); cards.className = "enemy-cards";
     picks.slice(0, teamSize()).forEach((pick, idx) => {
       const card = document.createElement("div"); card.className = "enemy";
@@ -251,7 +259,7 @@
         }
         return wrap;
       };
-      card.append(s, stats, gear("Items", items, pick.items, 6), gear("Augments", augs, pick.augs, 4));
+      card.append(s, stats, gear("Items", items, pick.items, 6), gear("Augments", augmentsFor(pick.id, pick.augs), pick.augs, 4));
       cards.append(card);
       mark();
     });

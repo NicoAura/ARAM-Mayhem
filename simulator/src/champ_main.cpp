@@ -335,18 +335,20 @@ int main(int argc, char** argv) {
         std::printf("{\"champions\": [");
         for (size_t i = 0; i < lib.champions.size(); ++i) {
             const auto& c = lib.champions[i];
-            std::printf("%s{\"id\": %s, \"name\": %s, \"role\": %s, \"ranged\": %s, \"combo\": %s}", i ? ", " : "",
-                        jsonStr(c.id).c_str(), jsonStr(c.name).c_str(), jsonStr(c.role).c_str(), c.ranged ? "true" : "false",
-                        jsonStr(c.combo).c_str());
+            std::string pool;
+            for (const auto& a : lib.augmentsFor(c, false)) pool += (pool.empty() ? "" : ", ") + jsonStr(a);
+            std::printf("%s{\"id\": %s, \"name\": %s, \"role\": %s, \"ranged\": %s, \"combo\": %s, \"augments\": [%s]}",
+                        i ? ", " : "", jsonStr(c.id).c_str(), jsonStr(c.name).c_str(), jsonStr(c.role).c_str(),
+                        c.ranged ? "true" : "false", jsonStr(c.combo).c_str(), pool.c_str());
         }
         auto effects = [&](const std::map<std::string, Effect>& m) {
             bool first = true;
             for (const auto& [k, e] : m) {
                 std::string roles;
                 for (size_t i = 0; i < e.roles.size(); ++i) roles += (i ? ", " : "") + jsonStr(e.roles[i]);
-                std::printf("%s{\"key\": %s, \"name\": %s, \"slot\": %s, \"rarity\": %s, \"roles\": [%s]}",
+                std::printf("%s{\"key\": %s, \"name\": %s, \"slot\": %s, \"rarity\": %s, \"roles\": [%s], \"modeled\": %s}",
                             first ? "" : ", ", jsonStr(k).c_str(), jsonStr(e.name).c_str(), jsonStr(e.slot).c_str(),
-                            jsonStr(e.rarity).c_str(), roles.c_str());
+                            jsonStr(e.rarity).c_str(), roles.c_str(), e.stats.empty() && e.effects.empty() ? "false" : "true");
                 first = false;
             }
         };

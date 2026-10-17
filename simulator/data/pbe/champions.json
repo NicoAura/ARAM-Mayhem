@@ -1,6 +1,6 @@
 {
  "meta": {
-  "built_at": "2026-10-17T06:39:16+00:00",
+  "built_at": "2026-10-17T06:54:47+00:00",
   "game_version": "16.21",
   "cdragon": "pbe",
   "mayhem_balance_patch": "26.19",
@@ -347,8 +347,8 @@
        "type": "magic",
        "calc": "MultiFireDamage",
        "scaling": {
-        "const": 48.0,
-        "ap": 0.16
+        "const": 192.0,
+        "ap": 0.64
        },
        "target": "flat",
        "per_second": false,
@@ -356,7 +356,9 @@
       }
      ],
      "mode_overrides": [],
-     "notes": []
+     "notes": [
+      "hand override: Fox-Fire: all three fires hit a lone target; the two follow-up fires each deal the reduced amount"
+     ]
     },
     {
      "slot": "E",
@@ -420,8 +422,8 @@
        "type": "magic",
        "calc": "RCalculatedDamage",
        "scaling": {
-        "const": 175.0,
-        "ap": 0.35
+        "const": 525.0,
+        "ap": 1.05
        },
        "target": "flat",
        "per_second": false,
@@ -429,7 +431,9 @@
       }
      ],
      "mode_overrides": [],
-     "notes": []
+     "notes": [
+      "hand override: Spirit Rush is three dashes per cooldown, each firing a bolt at the target"
+     ]
     }
    ],
    "parse_quality": "good",
@@ -576,9 +580,9 @@
        "type": "magic",
        "calc": "E2DamageCalc",
        "scaling": {
-        "const": 327.67,
-        "bonus_ad": 0.7,
-        "ap": 0.77
+        "const": 655.34,
+        "bonus_ad": 1.4,
+        "ap": 1.54
        },
        "target": "flat",
        "per_second": false,
@@ -586,7 +590,9 @@
       }
      ],
      "mode_overrides": [],
-     "notes": []
+     "notes": [
+      "hand override: Shuriken Flip recast always follows the marked target; both parts land"
+     ]
     },
     {
      "slot": "R",
@@ -624,8 +630,8 @@
        "type": "magic",
        "calc": "Cast2DamageMin",
        "scaling": {
-        "const": 210.0,
-        "ap": 0.4
+        "const": 630.0,
+        "ap": 1.2
        },
        "target": "flat",
        "per_second": false,
@@ -635,8 +641,8 @@
        "type": "magic",
        "calc": "Cast2DamageMax",
        "scaling": {
-        "const": 630.0,
-        "ap": 1.2
+        "const": 0.0,
+        "ap": 0.0
        },
        "target": "flat",
        "per_second": false,
@@ -648,7 +654,8 @@
       "ARAM:R2APRatio"
      ],
      "notes": [
-      "ARAM cooldown"
+      "ARAM cooldown",
+      "hand override: Perfect Execution second cast is one hit scaling min-to-max with missing health, not both; count about 1.5x the minimum"
      ]
     }
    ],
@@ -746,8 +753,8 @@
        "type": "physical",
        "calc": "FinalDamage",
        "scaling": {
-        "const": 165.0,
-        "bonus_ad": 0.7
+        "const": 330.0,
+        "bonus_ad": 1.4
        },
        "target": "flat",
        "per_second": false,
@@ -755,7 +762,9 @@
       }
      ],
      "mode_overrides": [],
-     "notes": []
+     "notes": [
+      "hand override: Avengerang hits on the way out and on the way back"
+     ]
     },
     {
      "slot": "W",
@@ -1199,8 +1208,8 @@
        "type": "physical",
        "calc": "Calc_Damage_2_Max",
        "scaling": {
-        "const": 150.0,
-        "bonus_ad": 0.9
+        "const": 300.0,
+        "bonus_ad": 1.8
        },
        "target": "flat",
        "per_second": false,
@@ -1219,7 +1228,9 @@
       }
      ],
      "mode_overrides": [],
-     "notes": []
+     "notes": [
+      "hand override: Sundering Slam follow-up always comes after Cunning Sweep hits; count it fully"
+     ]
     },
     {
      "slot": "W",
@@ -1257,7 +1268,7 @@
        },
        "target": "flat",
        "per_second": false,
-       "alt": false
+       "alt": true
       },
       {
        "type": "physical",
@@ -1272,7 +1283,9 @@
       }
      ],
      "mode_overrides": [],
-     "notes": []
+     "notes": [
+      "hand override: Repudiation deals the low or the high number (high after blocking champion damage), not both"
+     ]
     },
     {
      "slot": "E",
@@ -1662,8 +1675,8 @@
        "type": "magic",
        "calc": "TotalExplosionDamage",
        "scaling": {
-        "const": 200.0,
-        "ap": 0.45
+        "const": 400.0,
+        "ap": 0.9
        },
        "target": "flat",
        "per_second": false,
@@ -1671,7 +1684,9 @@
       }
      ],
      "mode_overrides": [],
-     "notes": []
+     "notes": [
+      "hand override: Flash Frost passthrough and detonation both hit a single target"
+     ]
     },
     {
      "slot": "W",
@@ -1718,8 +1733,8 @@
        "type": "magic",
        "calc": "TotalDamage",
        "scaling": {
-        "const": 155.0,
-        "ap": 0.55
+        "const": 310.0,
+        "ap": 1.1
        },
        "target": "flat",
        "per_second": false,
@@ -1738,7 +1753,9 @@
       }
      ],
      "mode_overrides": [],
-     "notes": []
+     "notes": [
+      "hand override: Frostbite is doubled on chilled targets; Q/R keep the target chilled in her combo"
+     ]
     },
     {
      "slot": "R",
@@ -1753,7 +1770,7 @@
      },
      "targeting": "Area",
      "area": "aoe",
-     "duration": 1.0,
+     "duration": 2.0,
      "geometry": {
       "shape": "circle",
       "range": 750.0,
@@ -1768,8 +1785,8 @@
        "type": "magic",
        "calc": "TotalDamagePerSecond",
        "scaling": {
-        "const": 60.0,
-        "ap": 0.125
+        "const": 150.0,
+        "ap": 0.3125
        },
        "target": "flat",
        "per_second": true,
@@ -1788,7 +1805,9 @@
       }
      ],
      "mode_overrides": [],
-     "notes": []
+     "notes": [
+      "hand override: Glacial Storm is a sustained toggle that triples damage once fully formed (1.5s); was only up half the time at base damage"
+     ]
     }
    ],
    "parse_quality": "good",
@@ -2214,12 +2233,12 @@
      "area": "aoe",
      "duration": 0.0,
      "geometry": {
-      "shape": "line",
-      "range": 1500.0,
+      "shape": "cone",
+      "range": 1200,
       "radius": 0.0,
       "width": 20.0,
-      "angle": 0.0,
-      "speed": 902,
+      "angle": 45,
+      "speed": 2000,
       "on_self": false
      },
      "hits": [
@@ -2237,7 +2256,8 @@
      ],
      "mode_overrides": [],
      "notes": [
-      "ARAM cooldown"
+      "ARAM cooldown",
+      "hand override: Volley is a 9-arrow cone, not a 20-wide line; it almost never hit"
      ]
     },
     {
@@ -2502,8 +2522,8 @@
        "type": "magic",
        "calc": "R2Damage",
        "scaling": {
-        "const": 437.5,
-        "ap": 0.9375
+        "const": 0.0,
+        "ap": 0.0
        },
        "target": "flat",
        "per_second": false,
@@ -2513,8 +2533,8 @@
        "type": "magic",
        "calc": "ShockwaveDamage",
        "scaling": {
-        "const": 315.0,
-        "ap": 0.675
+        "const": 0.0,
+        "ap": 0.0
        },
        "target": "flat",
        "per_second": false,
@@ -2522,7 +2542,9 @@
       }
      ],
      "mode_overrides": [],
-     "notes": []
+     "notes": [
+      "hand override: Falling Star or Great Unraveling (with its shockwave) per cast, not all three"
+     ]
     }
    ],
    "parse_quality": "partial",
@@ -2593,8 +2615,8 @@
        "type": "magic",
        "calc": "damage",
        "scaling": {
-        "const": 145.0,
-        "ap": 0.4
+        "const": 290.0,
+        "ap": 0.8
        },
        "target": "flat",
        "per_second": false,
@@ -2613,7 +2635,9 @@
       }
      ],
      "mode_overrides": [],
-     "notes": []
+     "notes": [
+      "hand override: Twofold Hex hits going out and again when it returns"
+     ]
     },
     {
      "slot": "W",
@@ -3243,8 +3267,8 @@
        "type": "physical",
        "calc": "DamagePerStrike",
        "scaling": {
-        "const": 27.66,
-        "bonus_ad": 0.12
+        "const": 221.28,
+        "bonus_ad": 0.96
        },
        "target": "flat",
        "per_second": false,
@@ -3254,8 +3278,8 @@
        "type": "physical",
        "calc": "MaxDamagePerStrikeTooltip",
        "scaling": {
-        "const": 55.32,
-        "bonus_ad": 0.24
+        "const": 0.0,
+        "bonus_ad": 0.0
        },
        "target": "flat",
        "per_second": false,
@@ -3263,13 +3287,16 @@
       }
      ],
      "mode_overrides": [],
-     "notes": []
+     "notes": [
+      "hand override: Royal Maelstrom is a 1.5s channel of about 8 strikes; the max-per-strike number is the low-health variant"
+     ],
+     "lock": 1.5
     },
     {
      "slot": "R",
      "name": "BelvethR",
      "rank": 3,
-     "cooldown": 1.0,
+     "cooldown": 60,
      "cast_time": 1.0,
      "cc": {
       "type": "slow",
@@ -3293,8 +3320,8 @@
        "type": "true",
        "calc": "FinalOnHitDamage",
        "scaling": {
-        "const": 6.0,
-        "bonus_ad": 0.03
+        "const": 0.0,
+        "bonus_ad": 0.0
        },
        "target": "flat",
        "per_second": false,
@@ -3325,7 +3352,9 @@
      "mode_overrides": [
       "ARAM:CorpseDuration"
      ],
-     "notes": []
+     "notes": [
+      "hand override: Endless Banquet needs Void Coral from a takedown, not usable every second; the on-hit true damage is a form buff, not a cast hit"
+     ]
     }
    ],
    "parse_quality": "good",
@@ -3508,8 +3537,8 @@
        "type": "magic",
        "calc": "PassiveDamage",
        "scaling": {
-        "const": 150.0,
-        "ap": 0.5
+        "const": 0.0,
+        "ap": 0.0
        },
        "target": "flat",
        "per_second": false,
@@ -3519,8 +3548,8 @@
        "type": "magic",
        "calc": "ActiveDamage",
        "scaling": {
-        "const": 525.0,
-        "ap": 1.0
+        "const": 1050.0,
+        "ap": 2.0
        },
        "target": "flat",
        "per_second": false,
@@ -3529,7 +3558,8 @@
      ],
      "mode_overrides": [],
      "notes": [
-      "mana scaling ignored"
+      "mana scaling ignored",
+      "hand override: The cast deals the active pulse; the passive zap is only on attacks while R is off cooldown"
      ]
     }
    ],
@@ -4094,8 +4124,8 @@
        "type": "physical",
        "calc": "TotalAttackBonusDamage",
        "scaling": {
-        "const": 172.625,
-        "bonus_ad": 1.05
+        "const": 345.25,
+        "bonus_ad": 2.1
        },
        "target": "flat",
        "per_second": false,
@@ -4114,7 +4144,9 @@
       }
      ],
      "mode_overrides": [],
-     "notes": []
+     "notes": [
+      "hand override: Snack Attack recast always follows the Blood Frenzy leap; count it fully"
+     ]
     },
     {
      "slot": "E",
@@ -4162,13 +4194,15 @@
        },
        "target": "flat",
        "per_second": false,
-       "alt": false
+       "alt": true
       }
      ],
      "mode_overrides": [
       "ARAM:DRPercent"
      ],
-     "notes": []
+     "notes": [
+      "hand override: Chilling Scream wall-hit damage is the conditional empowered version; the normal hit is the main one"
+     ]
     },
     {
      "slot": "R",
@@ -4319,13 +4353,15 @@
        },
        "target": "flat",
        "per_second": false,
-       "alt": false
+       "alt": true
       }
      ],
      "mode_overrides": [
       "ARAM:tADRatio"
      ],
-     "notes": []
+     "notes": [
+      "hand override: Piercing Shot deals reduced damage only to targets after the first; a single target takes the initial damage only"
+     ]
     },
     {
      "slot": "W",
@@ -4537,8 +4573,8 @@
        "type": "physical",
        "calc": "BonusDamage",
        "scaling": {
-        "const": 53.04,
-        "bonus_ad": 0.4
+        "const": 106.08,
+        "bonus_ad": 0.8
        },
        "target": "flat",
        "per_second": false,
@@ -4558,7 +4594,7 @@
      ],
      "mode_overrides": [],
      "notes": [
-      "hand override: resets the basic attack timer"
+      "hand override: Precision Protocol resets the attack; Q1 and Q2 both land each cooldown (Q2 doubled if delayed)"
      ],
      "attack_reset": true
     },
@@ -4841,8 +4877,8 @@
        "type": "magic",
        "calc": "BonusPoisonedDamage",
        "scaling": {
-        "const": 120.0,
-        "ap": 0.45
+        "const": 240.0,
+        "ap": 0.9
        },
        "target": "flat",
        "per_second": false,
@@ -4852,7 +4888,7 @@
      "mode_overrides": [],
      "notes": [
       "cooldown unknown; assumed 8s",
-      "hand override: Twin Fang really is spammable (0.75s)"
+      "hand override: Twin Fang is spammable (0.75s) and the target is always poisoned, so the bonus always applies"
      ]
     },
     {
@@ -5043,8 +5079,8 @@
        "type": "magic",
        "calc": "FlatDamageCalc",
        "scaling": {
-        "const": 110.0,
-        "ap": 0.3
+        "const": 330.0,
+        "ap": 0.9
        },
        "target": "flat",
        "per_second": false,
@@ -5054,7 +5090,7 @@
        "type": "magic",
        "calc": "MaxHealthPercentCalc",
        "scaling": {
-        "const": 0.039
+        "const": 0.117
        },
        "target": "target_max_hp",
        "per_second": false,
@@ -5064,7 +5100,8 @@
      "mode_overrides": [],
      "notes": [
       "cooldown is the ammo recharge time",
-      "stack-based scaling ignored"
+      "stack-based scaling ignored",
+      "hand override: Vorpal Spikes empowers the next three attacks, not one"
      ]
     },
     {
@@ -5405,8 +5442,8 @@
        "type": "physical",
        "calc": "HandleDamage",
        "scaling": {
-        "const": 132.51,
-        "bonus_ad": 0.49
+        "const": 0.0,
+        "bonus_ad": 0.0
        },
        "target": "flat",
        "per_second": false,
@@ -5415,7 +5452,7 @@
      ],
      "mode_overrides": [],
      "notes": [
-      "hand override: Decimate spins for 0.75 seconds before it hits"
+      "hand override: Decimate spins 0.75s before it hits; blade and handle damage are alternatives by distance, not both"
      ]
     },
     {
@@ -5509,8 +5546,8 @@
        "type": "true",
        "calc": "Damage",
        "scaling": {
-        "const": 375.0,
-        "bonus_ad": 0.75
+        "const": 750.0,
+        "bonus_ad": 1.5
        },
        "target": "flat",
        "per_second": false,
@@ -5529,7 +5566,9 @@
       }
      ],
      "mode_overrides": [],
-     "notes": []
+     "notes": [
+      "hand override: Noxian Guillotine deals double at 5 Hemorrhage stacks, the usual state when Darius ults in a duel"
+     ]
     }
    ],
    "passives": [
@@ -5667,8 +5706,8 @@
        "type": "magic",
        "calc": "TotalDamage",
        "scaling": {
-        "const": 68.0,
-        "ap": 0.18
+        "const": 204.0,
+        "ap": 0.54
        },
        "target": "flat",
        "per_second": false,
@@ -5687,7 +5726,9 @@
       }
      ],
      "mode_overrides": [],
-     "notes": []
+     "notes": [
+      "hand override: Pale Cascade has three orbs that each hit a nearby target"
+     ]
     },
     {
      "slot": "E",
@@ -5731,8 +5772,9 @@
      "cooldown": 80.0,
      "cast_time": 0.0,
      "cc": {
-      "type": "knockup",
-      "duration": 2.0
+      "type": "slow",
+      "duration": 2.0,
+      "amount": 0.5
      },
      "targeting": "SelfAoe",
      "area": "aoe",
@@ -5762,8 +5804,8 @@
        "type": "magic",
        "calc": "RMultihitAmplification",
        "scaling": {
-        "const": 85.0,
-        "ap": 0.15
+        "const": 0.0,
+        "ap": 0.0
        },
        "target": "flat",
        "per_second": false,
@@ -5782,7 +5824,9 @@
       }
      ],
      "mode_overrides": [],
-     "notes": []
+     "notes": [
+      "hand override: Moonfall bonus is per extra champion hit; it pulls and slows rather than a 2s knockup"
+     ]
     }
    ],
    "passives": [
@@ -6093,7 +6137,10 @@
       }
      ],
      "mode_overrides": [],
-     "notes": []
+     "notes": [
+      "hand override: Spinning Axe is juggled onto every basic attack, not a 210-radius self circle a ranged champion never reaches"
+     ],
+     "onhit_every": 1
     },
     {
      "slot": "W",
@@ -6179,8 +6226,8 @@
        "type": "physical",
        "calc": "RCalculatedDamage",
        "scaling": {
-        "const": 400.0,
-        "bonus_ad": 1.5
+        "const": 800.0,
+        "bonus_ad": 3.0
        },
        "target": "flat",
        "per_second": false,
@@ -6188,7 +6235,9 @@
       }
      ],
      "mode_overrides": [],
-     "notes": []
+     "notes": [
+      "hand override: Whirling Death hits on the way out and on the way back"
+     ]
     }
    ],
    "parse_quality": "good",
@@ -6778,7 +6827,7 @@
        },
        "target": "flat",
        "per_second": false,
-       "alt": false
+       "alt": true
       },
       {
        "type": "magic",
@@ -6789,11 +6838,13 @@
        },
        "target": "target_max_hp",
        "per_second": false,
-       "alt": false
+       "alt": true
       }
      ],
      "mode_overrides": [],
-     "notes": []
+     "notes": [
+      "hand override: Whiplash deals the base or the empowered (Demonshade) damage, not both; both %HP hits were counting fully"
+     ]
     },
     {
      "slot": "R",
@@ -7337,8 +7388,9 @@
      "cooldown": 16.0,
      "cast_time": 0.25,
      "cc": {
-      "type": "stun",
-      "duration": 1.0
+      "type": "slow",
+      "duration": 1.5,
+      "amount": 0.5
      },
      "targeting": "Location",
      "area": "aoe",
@@ -7366,7 +7418,9 @@
       }
      ],
      "mode_overrides": [],
-     "notes": []
+     "notes": [
+      "hand override: Riposte only stuns if it parries an immobilizing effect; otherwise it slows 50% for 1.5s"
+     ]
     },
     {
      "slot": "E",
@@ -7541,7 +7595,7 @@
      "slot": "W",
      "name": "FizzW",
      "rank": 5,
-     "cooldown": 3.0,
+     "cooldown": 5,
      "cast_time": 0.0,
      "targeting": "Self",
      "area": "aoe",
@@ -7592,9 +7646,8 @@
      ],
      "mode_overrides": [],
      "notes": [
-      "hand override: resets the basic attack timer"
-     ],
-     "attack_reset": true
+      "hand override: Seastone Trident cooldown is 7/6.5/6/5.5/5, not 3"
+     ]
     },
     {
      "slot": "E",
@@ -7816,11 +7869,13 @@
        },
        "target": "flat",
        "per_second": false,
-       "alt": false
+       "alt": true
       }
      ],
      "mode_overrides": [],
-     "notes": []
+     "notes": [
+      "hand override: Shield of Durand deals min to max damage by charge time, not both"
+     ]
     },
     {
      "slot": "E",
@@ -7866,11 +7921,13 @@
        },
        "target": "flat",
        "per_second": false,
-       "alt": false
+       "alt": true
       }
      ],
      "mode_overrides": [],
-     "notes": []
+     "notes": [
+      "hand override: PVEDamage is the reduced damage to minions/monsters, not a second hit on champions"
+     ]
     },
     {
      "slot": "R",
@@ -8490,7 +8547,10 @@
       }
      ],
      "mode_overrides": [],
-     "notes": []
+     "notes": [
+      "hand override: Mini Gnar W (Hyper) is a passive proc on every 3rd hit, not an active on a 7s cooldown"
+     ],
+     "onhit_every": 3
     },
     {
      "slot": "E",
@@ -8673,11 +8733,13 @@
        },
        "target": "flat",
        "per_second": false,
-       "alt": false
+       "alt": true
       }
      ],
      "mode_overrides": [],
-     "notes": []
+     "notes": [
+      "hand override: Barrel Roll deals min to max damage by fermentation time, not both"
+     ]
     },
     {
      "slot": "W",
@@ -8881,8 +8943,8 @@
        "type": "physical",
        "calc": "TotalDetonationDamage",
        "scaling": {
-        "const": 260.0,
-        "bonus_ad": 1.05
+        "const": 520.0,
+        "bonus_ad": 2.1
        },
        "target": "flat",
        "per_second": false,
@@ -8890,7 +8952,9 @@
       }
      ],
      "mode_overrides": [],
-     "notes": []
+     "notes": [
+      "hand override: End of the Line's detonation lands in addition to the outbound hit and is the bigger part; offset the 0.5 secondary weight"
+     ]
     },
     {
      "slot": "W",
@@ -8996,11 +9060,13 @@
        },
        "target": "flat",
        "per_second": false,
-       "alt": false
+       "alt": true
       }
      ],
      "mode_overrides": [],
-     "notes": []
+     "notes": [
+      "hand override: Collateral Damage's cone falloff hits enemies behind the first target, not the primary target again"
+     ]
     }
    ],
    "parse_quality": "good",
@@ -9192,8 +9258,8 @@
        "type": "magic",
        "calc": "TotalDamage3",
        "scaling": {
-        "const": 210.0,
-        "ap": 0.3
+        "const": 420.0,
+        "ap": 0.6
        },
        "target": "flat",
        "per_second": false,
@@ -9203,8 +9269,8 @@
        "type": "magic",
        "calc": "TotalDamage5",
        "scaling": {
-        "const": 350.0,
-        "ap": 0.5
+        "const": 700.0,
+        "ap": 1.0
        },
        "target": "flat",
        "per_second": false,
@@ -9213,7 +9279,8 @@
      ],
      "mode_overrides": [],
      "notes": [
-      "ARAM cooldown"
+      "ARAM cooldown",
+      "hand override: Needlework's three casts (1, 3, 5 needles) all land in one use; offset the 0.5 secondary weight so 9 needles count"
      ]
     }
    ],
@@ -9546,7 +9613,7 @@
        },
        "target": "flat",
        "per_second": false,
-       "alt": false
+       "alt": true
       },
       {
        "type": "magic",
@@ -9561,7 +9628,9 @@
       }
      ],
      "mode_overrides": [],
-     "notes": []
+     "notes": [
+      "hand override: Damage is the first rocket; TotalDamage is the full 5-rocket single-target total"
+     ]
     },
     {
      "slot": "E",
@@ -9634,7 +9703,7 @@
        },
        "target": "flat",
        "per_second": false,
-       "alt": false
+       "alt": true
       },
       {
        "type": "magic",
@@ -9645,7 +9714,7 @@
        },
        "target": "flat",
        "per_second": false,
-       "alt": false
+       "alt": true
       },
       {
        "type": "magic",
@@ -9656,7 +9725,7 @@
        },
        "target": "flat",
        "per_second": false,
-       "alt": false
+       "alt": true
       },
       {
        "type": "magic",
@@ -9678,11 +9747,13 @@
        },
        "target": "flat",
        "per_second": false,
-       "alt": false
+       "alt": true
       }
      ],
      "mode_overrides": [],
-     "notes": []
+     "notes": [
+      "hand override: UPGRADE!!! empowers one ability per cast; model the usual empowered W total, not all five variants"
+     ]
     }
    ],
    "parse_quality": "good",
@@ -10548,12 +10619,13 @@
        },
        "target": "flat",
        "per_second": false,
-       "alt": false
+       "alt": true
       }
      ],
      "mode_overrides": [],
      "notes": [
-      "cooldown is the ammo recharge time"
+      "cooldown is the ammo recharge time",
+      "hand override: TotalAllyDamage is the empowered-attack bonus granted to allies, not Ivern's own hit"
      ]
     },
     {
@@ -11353,7 +11425,7 @@
      "name": "JayceStaticField",
      "rank": 5,
      "cooldown": 10.0,
-     "cast_time": 0.25,
+     "cast_time": 0,
      "targeting": "SelfAoe",
      "area": "aoe",
      "duration": 4.0,
@@ -11382,9 +11454,9 @@
      "mode_overrides": [],
      "notes": [
       "cooldown from the champion's ability list",
-      "hand override: resets the basic attack timer"
+      "hand override: Hammer W (Lightning Field) is an instant damage aura; the attack reset belongs to cannon W (Hyper Charge)"
      ],
-     "attack_reset": true
+     "attack_reset": false
     },
     {
      "slot": "E",
@@ -11636,7 +11708,7 @@
       "radius": 0.0,
       "width": 0.0,
       "angle": 28.0,
-      "speed": 828,
+      "speed": 5000,
       "on_self": false
      },
      "hits": [
@@ -11665,7 +11737,7 @@
      ],
      "mode_overrides": [],
      "notes": [
-      "hand override: Curtain Call: four shots over about 4 seconds; four shots; the maximum is the execute version of one shot"
+      "hand override: Curtain Call: four shots over about 4 seconds; the maximum is the execute version of one shot; shots travel at 5000, not 828"
      ],
      "lock": 4
     }
@@ -12175,9 +12247,9 @@
        "type": "physical",
        "calc": "TotalIndividualMissileDamage",
        "scaling": {
-        "const": 100.0,
-        "bonus_ad": 0.65,
-        "ap": 0.2
+        "const": 225.0,
+        "bonus_ad": 1.4625,
+        "ap": 0.45
        },
        "target": "flat",
        "per_second": false,
@@ -12187,7 +12259,9 @@
      "mode_overrides": [
       "ARAM:BonusADRatio"
      ],
-     "notes": []
+     "notes": [
+      "hand override: Icathian Rain fires 6 missiles at a lone target; missiles after the first deal 25%, so single-target total is 2.25x one missile"
+     ]
     },
     {
      "slot": "W",
@@ -12405,41 +12479,6 @@
      "notes": []
     },
     {
-     "slot": "W",
-     "name": "KalistaW",
-     "rank": 5,
-     "cooldown": 50.0,
-     "cast_time": 0.5,
-     "targeting": "Area",
-     "area": "aoe",
-     "duration": 4.0,
-     "geometry": {
-      "shape": "line",
-      "range": 5400.0,
-      "radius": 0.0,
-      "width": 50.0,
-      "angle": 0.0,
-      "speed": 0,
-      "on_self": false
-     },
-     "hits": [
-      {
-       "type": "magic",
-       "calc": "MaxHealthDamage",
-       "scaling": {
-        "const": 0.18
-       },
-       "target": "target_max_hp",
-       "per_second": false,
-       "alt": false
-      }
-     ],
-     "mode_overrides": [],
-     "notes": [
-      "cooldown is the ammo recharge time"
-     ]
-    },
-    {
      "slot": "E",
      "name": "KalistaExpungeWrapper",
      "rank": 5,
@@ -12479,9 +12518,9 @@
        "type": "physical",
        "calc": "AdditionalDamage",
        "scaling": {
-        "const": 103.875,
-        "bonus_ad": 0.5,
-        "ap": 0.5
+        "const": 623.25,
+        "bonus_ad": 3.0,
+        "ap": 3.0
        },
        "target": "flat",
        "per_second": false,
@@ -12490,7 +12529,8 @@
      ],
      "mode_overrides": [],
      "notes": [
-      "cooldown unknown; assumed 8s"
+      "cooldown unknown; assumed 8s",
+      "hand override: Rend adds AdditionalDamage per extra spear (several per cycle at her attack speed); 6 at the 0.5 secondary weight is about 3 extra spears, conservative"
      ]
     },
     {
@@ -12624,7 +12664,13 @@
      },
      "hits": [],
      "mode_overrides": [],
-     "notes": []
+     "notes": [
+      "hand override: Focused Resolve tether roots for 2s at max rank if the tether holds"
+     ],
+     "cc": {
+      "type": "root",
+      "duration": 2.0
+     }
     },
     {
      "slot": "E",
@@ -12655,27 +12701,23 @@
      "cooldown": 36.0,
      "cast_time": 0.0,
      "cc": {
-      "type": "root",
-      "duration": 1.25
+      "type": "slow",
+      "duration": 1.5,
+      "amount": 0.5
      },
-     "shield": {
-      "scaling": {
-       "const": 125.0,
-       "ap": 0.45
-      },
-      "duration": 2.5
-     },
+     "shield": null,
      "targeting": "Self",
      "area": "aoe",
      "duration": 1.5,
      "geometry": {
-      "shape": "circle",
-      "range": 0.0,
-      "radius": 275.0,
-      "width": 0.0,
+      "shape": "line",
+      "range": 950,
+      "radius": 0,
+      "width": 90,
       "angle": 0.0,
-      "speed": 0,
-      "on_self": true
+      "speed": 902,
+      "on_self": false,
+      "stops": true
      },
      "hits": [
       {
@@ -12704,7 +12746,9 @@
      "mode_overrides": [
       "ARAM:QBonusDamage"
      ],
-     "notes": []
+     "notes": [
+      "hand override: Mantra cast modelled as Soulflare (RQ): a Q-style missile plus field; the root (RW) and shield (RE) belong to other mantra casts"
+     ]
     }
    ],
    "parse_quality": "good",
@@ -12835,14 +12879,14 @@
      "area": "aoe",
      "duration": 0.0,
      "geometry": {
-      "shape": "single",
-      "range": 450.0,
-      "radius": 0.0,
+      "shape": "circle",
+      "range": 0,
+      "radius": 550,
       "width": 0.0,
       "angle": 0.0,
       "speed": 0,
       "on_self": true,
-      "self_buff": true
+      "self_buff": false
      },
      "hits": [
       {
@@ -12858,7 +12902,9 @@
       }
      ],
      "mode_overrides": [],
-     "notes": []
+     "notes": [
+      "hand override: Defile is a 550-radius aura; parsed as a single/self buff so the aura only reached 350"
+     ]
     },
     {
      "slot": "R",
@@ -13022,8 +13068,8 @@
        "type": "magic",
        "calc": "ActiveDamage",
        "scaling": {
-        "const": 150.0,
-        "ap": 0.8
+        "const": 300.0,
+        "ap": 1.6
        },
        "target": "flat",
        "per_second": false,
@@ -13032,7 +13078,7 @@
      ],
      "mode_overrides": [],
      "notes": [
-      "hand override: resets the basic attack timer"
+      "hand override: resets the basic attack timer; the active hit is the real damage and was only weighted 0.5 behind the small passive on-hit"
      ],
      "attack_reset": true
     },
@@ -13970,7 +14016,7 @@
      "geometry": {
       "shape": "circle",
       "range": 0.0,
-      "radius": 210.0,
+      "radius": 550,
       "width": 0.0,
       "angle": 0.0,
       "speed": 0,
@@ -13990,7 +14036,9 @@
       }
      ],
      "mode_overrides": [],
-     "notes": []
+     "notes": [
+      "hand override: Slicing Maelstrom storm radius is 550, not 210"
+     ]
     }
    ],
    "parse_quality": "good",
@@ -14463,8 +14511,9 @@
      "cooldown": 7.0,
      "cast_time": 0.25,
      "cc": {
-      "type": "knockup",
-      "duration": 2.5
+      "type": "slow",
+      "duration": 1.5,
+      "amount": 0.4
      },
      "targeting": "LocationClamped",
      "area": "aoe",
@@ -14503,7 +14552,9 @@
       }
      ],
      "mode_overrides": [],
-     "notes": []
+     "notes": [
+      "hand override: Beartrap on a Rope tethers and yanks; it is not a 2.5s knockup"
+     ]
     },
     {
      "slot": "W",
@@ -14738,7 +14789,7 @@
        "type": "magic",
        "calc": "TotalHealthDamage",
        "scaling": {
-        "const": 0.045,
+        "const": 0.0225,
         "ap": 0.0001
        },
        "target": "target_max_hp",
@@ -14749,7 +14800,10 @@
      "mode_overrides": [
       "ARAM:MaxHealthDamage"
      ],
-     "notes": []
+     "notes": [
+      "hand override: Bio-Arcane Barrage is an on-hit %max HP buff for 8s (~50% uptime), not one hit per cast"
+     ],
+     "onhit_every": 1
     },
     {
      "slot": "E",
@@ -15031,20 +15085,17 @@
      "rank": 3,
      "cooldown": 25.0,
      "cast_time": 0.425,
-     "cc": {
-      "type": "root",
-      "duration": 1.25
-     },
+     "cc": null,
      "targeting": "Location",
      "area": "aoe",
      "duration": 3.5,
      "geometry": {
-      "shape": "circle",
-      "range": 900.0,
-      "radius": 1000.0,
+      "shape": "single",
+      "range": 700,
+      "radius": 0,
       "width": 0.0,
       "angle": 0.0,
-      "speed": 0,
+      "speed": 2000,
       "on_self": false,
       "range_guessed": true
      },
@@ -15064,8 +15115,8 @@
        "type": "magic",
        "calc": "RQ2Damage",
        "scaling": {
-        "const": 460.0,
-        "ap": 0.8
+        "const": 920.0,
+        "ap": 1.6
        },
        "target": "flat",
        "per_second": false,
@@ -15075,8 +15126,8 @@
        "type": "magic",
        "calc": "RWDamage",
        "scaling": {
-        "const": 480.0,
-        "ap": 0.9
+        "const": 0.0,
+        "ap": 0.0
        },
        "target": "flat",
        "per_second": false,
@@ -15086,8 +15137,8 @@
        "type": "magic",
        "calc": "RE1Damage",
        "scaling": {
-        "const": 230.0,
-        "ap": 0.4
+        "const": 0.0,
+        "ap": 0.0
        },
        "target": "flat",
        "per_second": false,
@@ -15097,8 +15148,8 @@
        "type": "magic",
        "calc": "RE2Damage",
        "scaling": {
-        "const": 460.0,
-        "ap": 0.85
+        "const": 0.0,
+        "ap": 0.0
        },
        "target": "flat",
        "per_second": false,
@@ -15106,7 +15157,9 @@
       }
      ],
      "mode_overrides": [],
-     "notes": []
+     "notes": [
+      "hand override: Mimic copies one spell per cast; model it as RQ (hit + mark pop), not all five mimic numbers"
+     ]
     }
    ],
    "parse_quality": "good",
@@ -15300,8 +15353,8 @@
        "type": "physical",
        "calc": "Damage",
        "scaling": {
-        "const": 550.0,
-        "bonus_ad": 2.0
+        "const": 275.0,
+        "bonus_ad": 1.0
        },
        "target": "flat",
        "per_second": false,
@@ -15311,8 +15364,8 @@
        "type": "physical",
        "calc": "Damage",
        "scaling": {
-        "const": 550.0,
-        "bonus_ad": 2.0
+        "const": 275.0,
+        "bonus_ad": 1.0
        },
        "target": "flat",
        "per_second": false,
@@ -15322,7 +15375,7 @@
        "type": "physical",
        "calc": "PercentHPCarryThrough",
        "scaling": {
-        "const": 0.054
+        "const": 0.0
        },
        "target": "target_max_hp",
        "per_second": false,
@@ -15331,7 +15384,8 @@
      ],
      "mode_overrides": [],
      "notes": [
-      "target bonus health counted as 30% of max health"
+      "target bonus health counted as 30% of max health",
+      "hand override: Damage is listed twice (target + collateral) so it counted double; the %HP part only hits enemies the kicked target collides with"
      ]
     }
    ],
@@ -16088,7 +16142,7 @@
        "type": "true",
        "calc": "HealthCost",
        "scaling": {
-        "const": 0.02
+        "const": 0.0
        },
        "target": "target_current_hp",
        "per_second": true,
@@ -16096,7 +16150,9 @@
       }
      ],
      "mode_overrides": [],
-     "notes": []
+     "notes": [
+      "hand override: HealthCost is Locke's own health cost, not damage to enemies"
+     ]
     },
     {
      "slot": "E",
@@ -16552,13 +16608,7 @@
      "rank": 5,
      "cooldown": 8.0,
      "cast_time": 0.0,
-     "shield": {
-      "scaling": {
-       "const": 230.0,
-       "ap": 0.5
-      },
-      "duration": 2.5
-     },
+     "shield": null,
      "targeting": "",
      "area": "single",
      "duration": 2.5,
@@ -16585,7 +16635,9 @@
       }
      ],
      "mode_overrides": [],
-     "notes": []
+     "notes": [
+      "hand override: Help, Pix! either shields an ally or damages an enemy, not both"
+     ]
     },
     {
      "slot": "R",
@@ -17444,14 +17496,16 @@
        },
        "target": "flat",
        "per_second": false,
-       "alt": false
+       "alt": true
       }
      ],
      "mode_overrides": [
       "ARAM:BaseAPRatio",
       "ARAM:EmpoweredAPRatio"
      ],
-     "notes": []
+     "notes": [
+      "hand override: the brush-empowered sapling replaces the normal damage, it does not add to it"
+     ]
     },
     {
      "slot": "R",
@@ -17566,7 +17620,7 @@
        },
        "target": "flat",
        "per_second": false,
-       "alt": false
+       "alt": true
       },
       {
        "type": "physical",
@@ -17577,7 +17631,7 @@
        },
        "target": "flat",
        "per_second": false,
-       "alt": false
+       "alt": true
       },
       {
        "type": "physical",
@@ -17592,7 +17646,9 @@
       }
      ],
      "mode_overrides": [],
-     "notes": []
+     "notes": [
+      "hand override: against one target Alpha Strike deals SingleTotalDamage; the per-strike numbers are its parts"
+     ]
     },
     {
      "slot": "W",
@@ -17641,8 +17697,8 @@
        "type": "true",
        "calc": "TotalDamage",
        "scaling": {
-        "const": 40.0,
-        "bonus_ad": 0.35
+        "const": 16.0,
+        "bonus_ad": 0.14
        },
        "target": "flat",
        "per_second": false,
@@ -17650,7 +17706,10 @@
       }
      ],
      "mode_overrides": [],
-     "notes": []
+     "notes": [
+      "hand override: Wuju Style is on-hit true damage for 5s of a 14s cooldown, not a single hit"
+     ],
+     "onhit_every": 1
     },
     {
      "slot": "R",
@@ -18185,12 +18244,13 @@
        },
        "target": "flat",
        "per_second": false,
-       "alt": false
+       "alt": true
       }
      ],
      "mode_overrides": [],
      "notes": [
-      "unsupported stat 9"
+      "unsupported stat 9",
+      "hand override: the crit number is the bounce to a second target, not extra damage on the first"
      ]
     },
     {
@@ -18259,11 +18319,13 @@
        },
        "target": "flat",
        "per_second": false,
-       "alt": false
+       "alt": true
       }
      ],
      "mode_overrides": [],
-     "notes": []
+     "notes": [
+      "hand override: TotalDamage is the per-second damage times the 2s duration, counted on top of it"
+     ]
     },
     {
      "slot": "R",
@@ -18761,7 +18823,7 @@
      "cast_time": 0.35,
      "cc": {
       "type": "stun",
-      "duration": 2.0
+      "duration": 1.5
      },
      "targeting": "SelfAoe",
      "area": "aoe",
@@ -18800,7 +18862,9 @@
       }
      ],
      "mode_overrides": [],
-     "notes": []
+     "notes": [
+      "hand override: Soul Shackles stuns for 1.5s, not 2"
+     ]
     }
    ],
    "parse_quality": "good",
@@ -18882,8 +18946,8 @@
        "type": "physical",
        "calc": "TotalBleedDamage",
        "scaling": {
-        "const": 135.0,
-        "bonus_ad": 0.8
+        "const": 270.0,
+        "bonus_ad": 1.6
        },
        "target": "flat",
        "per_second": false,
@@ -18893,8 +18957,8 @@
        "type": "physical",
        "calc": "TotalMinDamageSecondCast",
        "scaling": {
-        "const": 80.0,
-        "bonus_ad": 0.4
+        "const": 160.0,
+        "bonus_ad": 0.8
        },
        "target": "flat",
        "per_second": false,
@@ -18904,8 +18968,8 @@
        "type": "physical",
        "calc": "TotalMaxDamageSecondCast",
        "scaling": {
-        "const": 160.0,
-        "bonus_ad": 1.4
+        "const": 0.0,
+        "bonus_ad": 0.0
        },
        "target": "flat",
        "per_second": false,
@@ -18913,13 +18977,15 @@
       }
      ],
      "mode_overrides": [],
-     "notes": []
+     "notes": [
+      "hand override: one cast = first dagger + bleed + one recast; the max second-cast number is the missing-health cap of the same hit"
+     ]
     },
     {
      "slot": "W",
      "name": "NaafiriR",
      "rank": 5,
-     "cooldown": 18.0,
+     "cooldown": 80,
      "cast_time": 0.0,
      "targeting": "Self",
      "area": "aoe",
@@ -18939,8 +19005,8 @@
        "type": "physical",
        "calc": "BonusAD",
        "scaling": {
-        "const": 17.8,
-        "bonus_ad": 0.2
+        "const": 0.0,
+        "bonus_ad": 0.0
        },
        "target": "flat",
        "per_second": false,
@@ -18948,7 +19014,9 @@
       }
      ],
      "mode_overrides": [],
-     "notes": []
+     "notes": [
+      "hand override: this slot holds the NaafiriR spell (The Call of the Hunt AD buff): ult cooldown, and bonus AD is a buff not a hit"
+     ]
     },
     {
      "slot": "E",
@@ -19000,7 +19068,7 @@
      "slot": "R",
      "name": "NaafiriW",
      "rank": 3,
-     "cooldown": 80.0,
+     "cooldown": 18,
      "cast_time": 0.0,
      "lock": 0.75,
      "cc": {
@@ -19053,7 +19121,9 @@
       }
      ],
      "mode_overrides": [],
-     "notes": []
+     "notes": [
+      "hand override: this slot holds the NaafiriW spell (Hounds' Pursuit damage dash): basic-ability cooldown"
+     ]
     }
    ],
    "passives": [
@@ -19228,8 +19298,8 @@
        "type": "magic",
        "calc": "TotalDamage",
        "scaling": {
-        "const": 80.0,
-        "ap": 0.2
+        "const": 240.0,
+        "ap": 0.6
        },
        "target": "flat",
        "per_second": false,
@@ -19237,7 +19307,9 @@
       }
      ],
      "mode_overrides": [],
-     "notes": []
+     "notes": [
+      "hand override: Tidecaller's Blessing empowers Nami's next 3 attacks, each dealing the bonus damage"
+     ]
     },
     {
      "slot": "R",
@@ -19459,8 +19531,8 @@
        "type": "magic",
        "calc": "DamageCalc",
        "scaling": {
-        "const": 0.05,
-        "ap": 0.0001
+        "const": 0.5,
+        "ap": 0.001
        },
        "target": "target_max_hp",
        "per_second": false,
@@ -19468,7 +19540,9 @@
       }
      ],
      "mode_overrides": [],
-     "notes": []
+     "notes": [
+      "hand override: Fury of the Sands burns %max HP per second for 15s; parsed as a single tick, ~10 ticks land in a typical duel"
+     ]
     }
    ],
    "parse_quality": "partial",
@@ -19676,8 +19750,8 @@
        "type": "magic",
        "calc": "SecondaryTargetDamage",
        "scaling": {
-        "const": 225.0,
-        "ap": 0.4
+        "const": 0.0,
+        "ap": 0.0
        },
        "target": "flat",
        "per_second": false,
@@ -19685,7 +19759,9 @@
       }
      ],
      "mode_overrides": [],
-     "notes": []
+     "notes": [
+      "hand override: secondary damage is for other enemies the shockwave passes; 1v1 only the primary target is hit"
+     ]
     }
    ],
    "passives": [
@@ -19880,10 +19956,10 @@
      "name": "NeekoR",
      "rank": 3,
      "cooldown": 90.0,
-     "cast_time": 0.0,
+     "cast_time": 1.25,
      "cc": {
       "type": "stun",
-      "duration": 0.75
+      "duration": 1.25
      },
      "targeting": "SelfAoe",
      "area": "aoe",
@@ -19911,7 +19987,9 @@
       }
      ],
      "mode_overrides": [],
-     "notes": []
+     "notes": [
+      "hand override: Pop Blossom has a 1.25s wind-up before the burst and stuns 1.25s"
+     ]
     }
    ],
    "parse_quality": "good",
@@ -20355,7 +20433,7 @@
        "type": "physical",
        "calc": "BonusTrailAD",
        "scaling": {
-        "const": 55.0
+        "const": 0.0
        },
        "target": "flat",
        "per_second": false,
@@ -20363,7 +20441,9 @@
       }
      ],
      "mode_overrides": [],
-     "notes": []
+     "notes": [
+      "hand override: BonusTrailAD is Nocturne's bonus AD while on the Dusk Trail, not damage"
+     ]
     },
     {
      "slot": "W",
@@ -20598,8 +20678,8 @@
        "type": "magic",
        "calc": "NoImpactSnowballDamage",
        "scaling": {
-        "const": 119.88,
-        "ap": 0.666
+        "const": 0.0,
+        "ap": 0.0
        },
        "target": "flat",
        "per_second": false,
@@ -20621,7 +20701,7 @@
       "ARAM:MaximumAPRatio"
      ],
      "notes": [
-      "hand override: the snowball rolls about 2 seconds before it hits"
+      "hand override: the snowball rolls about 2 seconds before it hits; one hit whose size is between min and max (max at half weight ~ mid size)"
      ]
     },
     {
@@ -20839,7 +20919,7 @@
      "slot": "E",
      "name": "OlafRecklessStrike",
      "rank": 5,
-     "cooldown": 7.0,
+     "cooldown": 4,
      "cast_time": 0.25,
      "targeting": "",
      "area": "single",
@@ -20867,7 +20947,9 @@
       }
      ],
      "mode_overrides": [],
-     "notes": []
+     "notes": [
+      "hand override: each Olaf basic attack reduces Reckless Strike's cooldown by 1s"
+     ]
     },
     {
      "slot": "R",
@@ -21438,7 +21520,7 @@
        },
        "target": "flat",
        "per_second": false,
-       "alt": false
+       "alt": true
       },
       {
        "type": "physical",
@@ -21460,11 +21542,13 @@
        },
        "target": "flat",
        "per_second": false,
-       "alt": false
+       "alt": true
       }
      ],
      "mode_overrides": [],
-     "notes": []
+     "notes": [
+      "hand override: tap or hold, one hit; empowered is the Mortal Will variant"
+     ]
     },
     {
      "slot": "W",
@@ -21511,11 +21595,13 @@
        },
        "target": "flat",
        "per_second": false,
-       "alt": false
+       "alt": true
       }
      ],
      "mode_overrides": [],
-     "notes": []
+     "notes": [
+      "hand override: empowered W is the Mortal Will variant, not an extra hit"
+     ]
     },
     {
      "slot": "E",
@@ -21842,11 +21928,13 @@
        },
        "target": "flat",
        "per_second": false,
-       "alt": false
+       "alt": true
       }
      ],
      "mode_overrides": [],
-     "notes": []
+     "notes": [
+      "hand override: Keeper's Verdict deals half damage on a quick tap or full when charged; one hit"
+     ]
     }
    ],
    "passives": [
@@ -21946,8 +22034,8 @@
        "type": "physical",
        "calc": "TotalDamage",
        "scaling": {
-        "const": 300.0,
-        "bonus_ad": 0.75
+        "const": 150.0,
+        "bonus_ad": 0.375
        },
        "target": "flat",
        "per_second": false,
@@ -21957,8 +22045,8 @@
        "type": "physical",
        "calc": "TotalDamage",
        "scaling": {
-        "const": 300.0,
-        "bonus_ad": 0.75
+        "const": 150.0,
+        "bonus_ad": 0.375
        },
        "target": "flat",
        "per_second": false,
@@ -21966,7 +22054,9 @@
       }
      ],
      "mode_overrides": [],
-     "notes": []
+     "notes": [
+      "hand override: Bone Skewer is either a stab or a hook, one hit, but the calc is listed twice"
+     ]
     },
     {
      "slot": "W",
@@ -22147,8 +22237,8 @@
        "type": "physical",
        "calc": "TremorDamage",
        "scaling": {
-        "const": 114.0,
-        "bonus_ad": 0.54
+        "const": 0.0,
+        "bonus_ad": 0.0
        },
        "target": "flat",
        "per_second": false,
@@ -22156,7 +22246,9 @@
       }
      ],
      "mode_overrides": [],
-     "notes": []
+     "notes": [
+      "hand override: rock (tremor bonus) and water (root) are different elements; one Q has one element, keeping water's root"
+     ]
     },
     {
      "slot": "W",
@@ -22414,7 +22506,7 @@
      "cast_time": 0.25,
      "cc": {
       "type": "knockup",
-      "duration": 1.5
+      "duration": 0.3
      },
      "targeting": "",
      "area": "single",
@@ -22443,41 +22535,9 @@
       }
      ],
      "mode_overrides": [],
-     "notes": []
-    },
-    {
-     "slot": "R",
-     "name": "QuinnR",
-     "rank": 3,
-     "cooldown": 3.0,
-     "cast_time": 0.0,
-     "targeting": "Self",
-     "area": "aoe",
-     "duration": 3.0,
-     "geometry": {
-      "shape": "circle",
-      "range": 0.0,
-      "radius": 300.0,
-      "width": 0.0,
-      "angle": 0.0,
-      "speed": 0,
-      "on_self": true
-     },
-     "hits": [
-      {
-       "type": "physical",
-       "calc": "Damage",
-       "scaling": {
-        "const": 120.0,
-        "bonus_ad": 0.35
-       },
-       "target": "flat",
-       "per_second": false,
-       "alt": false
-      }
-     ],
-     "mode_overrides": [],
-     "notes": []
+     "notes": [
+      "hand override: Vault is a short knockback (plus a decaying slow), not a 1.5s airborne"
+     ]
     }
    ],
    "passives": [
@@ -22621,38 +22681,6 @@
      ],
      "mode_overrides": [],
      "notes": []
-    },
-    {
-     "slot": "E",
-     "name": "RakanE",
-     "rank": 5,
-     "cooldown": 12.0,
-     "cast_time": 0.25,
-     "shield": {
-      "scaling": {
-       "const": 150.0,
-       "ap": 0.7
-      },
-      "duration": 3.0
-     },
-     "targeting": "TargetOrLocation",
-     "area": "aoe",
-     "duration": 3.0,
-     "geometry": {
-      "shape": "circle",
-      "range": 650.0,
-      "radius": 175.0,
-      "width": 0.0,
-      "angle": 0.0,
-      "speed": 0,
-      "on_self": false,
-      "move": "dash"
-     },
-     "hits": [],
-     "mode_overrides": [],
-     "notes": [
-      "cooldown is the ammo recharge time"
-     ]
     },
     {
      "slot": "R",
@@ -22984,7 +23012,13 @@
      },
      "hits": [],
      "mode_overrides": [],
-     "notes": []
+     "notes": [
+      "hand override: Unburrow knocks up the target"
+     ],
+     "cc": {
+      "type": "knockup",
+      "duration": 1.0
+     }
     },
     {
      "slot": "E",
@@ -23066,7 +23100,7 @@
        "type": "physical",
        "calc": "PercentHealthDamage",
        "scaling": {
-        "const": 0.25
+        "const": 0.125
        },
        "target": "target_max_hp",
        "per_second": false,
@@ -23074,7 +23108,9 @@
       }
      ],
      "mode_overrides": [],
-     "notes": []
+     "notes": [
+      "hand override: Void Rush's percent part is of missing health, not max health; about half at typical cast time"
+     ]
     }
    ],
    "parse_quality": "good",
@@ -23207,40 +23243,6 @@
      "notes": [
       "cooldown from the champion's ability list"
      ]
-    },
-    {
-     "slot": "E",
-     "name": "RellE",
-     "rank": 5,
-     "cooldown": 10.0,
-     "cast_time": 0.25,
-     "targeting": "",
-     "area": "single",
-     "duration": 3.0,
-     "geometry": {
-      "shape": "single",
-      "range": 1200.0,
-      "radius": 0.0,
-      "width": 0.0,
-      "angle": 0.0,
-      "speed": 0,
-      "on_self": false
-     },
-     "hits": [
-      {
-       "type": "magic",
-       "calc": "MaxHealthDamageCalc",
-       "scaling": {
-        "const": 0.07,
-        "ap": 0.0003
-       },
-       "target": "target_max_hp",
-       "per_second": false,
-       "alt": false
-      }
-     ],
-     "mode_overrides": [],
-     "notes": []
     },
     {
      "slot": "R",
@@ -23379,8 +23381,8 @@
        "type": "magic",
        "calc": "TotalDamage",
        "scaling": {
-        "const": 260.0,
-        "ap": 0.8
+        "const": 130.0,
+        "ap": 0.4
        },
        "target": "flat",
        "per_second": false,
@@ -23390,8 +23392,8 @@
        "type": "magic",
        "calc": "TotalDamage",
        "scaling": {
-        "const": 260.0,
-        "ap": 0.8
+        "const": 130.0,
+        "ap": 0.4
        },
        "target": "flat",
        "per_second": false,
@@ -23399,7 +23401,9 @@
       }
      ],
      "mode_overrides": [],
-     "notes": []
+     "notes": [
+      "hand override: Handshake damages the hooked target once; the throw only damages other enemies it lands on"
+     ]
     },
     {
      "slot": "W",
@@ -23650,12 +23654,12 @@
        },
        "target": "flat",
        "per_second": false,
-       "alt": false
+       "alt": true
       }
      ],
      "mode_overrides": [],
      "notes": [
-      "hand override: resets the basic attack timer"
+      "hand override: resets the basic attack timer; empowered (Fury) version replaces the normal one"
      ],
      "attack_reset": true
     },
@@ -23683,8 +23687,8 @@
        "type": "physical",
        "calc": "BasicDamage",
        "scaling": {
-        "const": 160.0,
-        "bonus_ad": 0.9
+        "const": 320.0,
+        "bonus_ad": 1.8
        },
        "target": "flat",
        "per_second": false,
@@ -23703,7 +23707,9 @@
       }
      ],
      "mode_overrides": [],
-     "notes": []
+     "notes": [
+      "hand override: Slice and Dice is two dashes, each dealing the damage"
+     ]
     },
     {
      "slot": "R",
@@ -23825,7 +23831,7 @@
        },
        "target": "flat",
        "per_second": false,
-       "alt": false
+       "alt": true
       }
      ],
      "mode_overrides": [
@@ -23837,7 +23843,7 @@
      ],
      "notes": [
       "cooldown is the ammo recharge time",
-      "hand override: resets the basic attack timer"
+      "hand override: resets the basic attack timer; empowered (Ferocity) version replaces the normal one"
      ],
      "attack_reset": true
     },
@@ -23880,12 +23886,13 @@
        },
        "target": "flat",
        "per_second": false,
-       "alt": false
+       "alt": true
       }
      ],
      "mode_overrides": [],
      "notes": [
-      "cooldown is the ammo recharge time"
+      "cooldown is the ammo recharge time",
+      "hand override: empowered (Ferocity) version replaces the normal one"
      ]
     },
     {
@@ -23931,14 +23938,15 @@
        },
        "target": "flat",
        "per_second": false,
-       "alt": false
+       "alt": true
       }
      ],
      "mode_overrides": [
       "ARAM:BonusADRatio"
      ],
      "notes": [
-      "cooldown is the ammo recharge time"
+      "cooldown is the ammo recharge time",
+      "hand override: empowered (Ferocity) version replaces the normal one"
      ]
     },
     {
@@ -24041,7 +24049,7 @@
      "geometry": {
       "shape": "circle",
       "range": 275.0,
-      "radius": 20.0,
+      "radius": 150,
       "width": 0.0,
       "angle": 0.0,
       "speed": 0,
@@ -24053,8 +24061,8 @@
        "type": "physical",
        "calc": "FirstSlashDamage",
        "scaling": {
-        "const": 165.0,
-        "bonus_ad": 0.8
+        "const": 247.5,
+        "bonus_ad": 1.2
        },
        "target": "flat",
        "per_second": false,
@@ -24064,8 +24072,8 @@
        "type": "physical",
        "calc": "FirstSlashDamage",
        "scaling": {
-        "const": 165.0,
-        "bonus_ad": 0.8
+        "const": 247.5,
+        "bonus_ad": 1.2
        },
        "target": "flat",
        "per_second": false,
@@ -24074,7 +24082,7 @@
      ],
      "mode_overrides": [],
      "notes": [
-      "hand override: resets the basic attack timer"
+      "hand override: resets the basic attack timer; Broken Wings is three casts per cooldown (listed twice, so x1.5); real AoE radius ~150"
      ],
      "attack_reset": true
     },
@@ -24170,8 +24178,8 @@
        "type": "physical",
        "calc": "BonusAD",
        "scaling": {
-        "const": 23.0,
-        "bonus_ad": 0.2
+        "const": 0.0,
+        "bonus_ad": 0.0
        },
        "target": "flat",
        "per_second": false,
@@ -24181,8 +24189,8 @@
        "type": "physical",
        "calc": "MinDamage",
        "scaling": {
-        "const": 200.0,
-        "bonus_ad": 0.55
+        "const": 400.0,
+        "bonus_ad": 1.1
        },
        "target": "flat",
        "per_second": false,
@@ -24197,11 +24205,13 @@
        },
        "target": "flat",
        "per_second": false,
-       "alt": false
+       "alt": true
       }
      ],
      "mode_overrides": [],
-     "notes": []
+     "notes": [
+      "hand override: bonus AD is a buff not a hit; Wind Slash is one hit (min..max by missing health)"
+     ]
     }
    ],
    "passives": [
@@ -24510,7 +24520,7 @@
      "slot": "Q",
      "name": "RyzeQWrapper",
      "rank": 5,
-     "cooldown": 5.0,
+     "cooldown": 2.5,
      "cast_time": 0.25,
      "targeting": "Direction",
      "area": "line",
@@ -24539,7 +24549,8 @@
      ],
      "mode_overrides": [],
      "notes": [
-      "mana scaling ignored"
+      "mana scaling ignored",
+      "hand override: Ryze's passive refunds Overload's cooldown whenever he casts W or E"
      ]
     },
     {
@@ -24710,8 +24721,8 @@
        "type": "physical",
        "calc": "DamageCalc",
        "scaling": {
-        "const": 138.8,
-        "bonus_ad": 1.1
+        "const": 69.4,
+        "bonus_ad": 0.55
        },
        "target": "flat",
        "per_second": false,
@@ -24721,8 +24732,8 @@
        "type": "physical",
        "calc": "DamageCalc",
        "scaling": {
-        "const": 138.8,
-        "bonus_ad": 1.1
+        "const": 69.4,
+        "bonus_ad": 0.55
        },
        "target": "flat",
        "per_second": false,
@@ -24730,7 +24741,9 @@
       }
      ],
      "mode_overrides": [],
-     "notes": []
+     "notes": [
+      "hand override: Flair is one shot or one slash; the calc is listed twice"
+     ]
     },
     {
      "slot": "W",
@@ -24755,8 +24768,8 @@
        "type": "physical",
        "calc": "DamageCalc",
        "scaling": {
-        "const": 80.0,
-        "bonus_ad": 0.5
+        "const": 160.0,
+        "bonus_ad": 1.0
        },
        "target": "flat",
        "per_second": false,
@@ -24764,7 +24777,9 @@
       }
      ],
      "mode_overrides": [],
-     "notes": []
+     "notes": [
+      "hand override: Blade Whirl slashes twice"
+     ]
     },
     {
      "slot": "E",
@@ -24954,8 +24969,9 @@
      "cooldown": 5.0,
      "cast_time": 0.25,
      "cc": {
-      "type": "knockup",
-      "duration": 0.75
+      "type": "slow",
+      "duration": 1.0,
+      "amount": 0.5
      },
      "targeting": "Direction",
      "area": "line",
@@ -24996,13 +25012,15 @@
       }
      ],
      "mode_overrides": [],
-     "notes": []
+     "notes": [
+      "hand override: Winter's Wrath slows champions; only minions/monsters are knocked back"
+     ]
     },
     {
      "slot": "E",
      "name": "SejuaniE",
      "rank": 5,
-     "cooldown": 1.5,
+     "cooldown": 6,
      "cast_time": 0.0,
      "cc": {
       "type": "stun",
@@ -25034,7 +25052,9 @@
       }
      ],
      "mode_overrides": [],
-     "notes": []
+     "notes": [
+      "hand override: Permafrost is gated by 4 Frost stacks, not its 1.5s cooldown; about every 6s in a duel"
+     ]
     },
     {
      "slot": "R",
@@ -25454,8 +25474,9 @@
      "cooldown": 9.0,
      "cast_time": 0.0,
      "cc": {
-      "type": "stun",
-      "duration": 1.0
+      "type": "slow",
+      "duration": 1.5,
+      "amount": 0.6
      },
      "targeting": "Direction",
      "area": "line",
@@ -25483,7 +25504,9 @@
       }
      ],
      "mode_overrides": [],
-     "notes": []
+     "notes": [
+      "hand override: Beat Drop only slows a fresh target; root/stun need an existing slow/immobilize"
+     ]
     },
     {
      "slot": "R",
@@ -25593,7 +25616,7 @@
        "type": "physical",
        "calc": "BaseDamage",
        "scaling": {
-        "const": 50.0
+        "const": 100.0
        },
        "target": "flat",
        "per_second": false,
@@ -25603,8 +25626,8 @@
        "type": "physical",
        "calc": "MaxHealthDamageCalc",
        "scaling": {
-        "const": 0.0484,
-        "bonus_ad": 0.0003
+        "const": 0.0968,
+        "bonus_ad": 0.0006
        },
        "target": "target_max_hp",
        "per_second": false,
@@ -25612,7 +25635,9 @@
       }
      ],
      "mode_overrides": [],
-     "notes": []
+     "notes": [
+      "hand override: Knuckle Down empowers the next two attacks"
+     ]
     },
     {
      "slot": "W",
@@ -25637,7 +25662,7 @@
        "type": "true",
        "calc": "DamageCalc",
        "scaling": {
-        "const": 160.0
+        "const": 240.0
        },
        "target": "flat",
        "per_second": false,
@@ -25649,8 +25674,15 @@
       "ARAM:DamageConversionBase"
      ],
      "notes": [
-      "ARAM cooldown"
-     ]
+      "ARAM cooldown",
+      "hand override: Haymaker adds 25-50% of spent Grit as damage and shields for the Grit spent (approximate)"
+     ],
+     "shield": {
+      "scaling": {
+       "const": 300
+      },
+      "duration": 3.0
+     }
     },
     {
      "slot": "E",
@@ -25659,8 +25691,9 @@
      "cooldown": 10.0,
      "cast_time": 0.25,
      "cc": {
-      "type": "stun",
-      "duration": 1.0
+      "type": "slow",
+      "duration": 0.5,
+      "amount": 0.5
      },
      "targeting": "Location",
      "area": "aoe",
@@ -25688,7 +25721,9 @@
       }
      ],
      "mode_overrides": [],
-     "notes": []
+     "notes": [
+      "hand override: Facebreaker only stuns with enemies on both sides; one target is just slowed"
+     ]
     },
     {
      "slot": "R",
@@ -25883,14 +25918,14 @@
        },
        "target": "flat",
        "per_second": false,
-       "alt": false
+       "alt": true
       },
       {
        "type": "magic",
        "calc": "STDamage",
        "scaling": {
-        "const": 85.0,
-        "ap": 0.18
+        "const": 255.0,
+        "ap": 0.54
        },
        "target": "flat",
        "per_second": false,
@@ -25900,7 +25935,9 @@
      "mode_overrides": [
       "ARAM:MaxTraps"
      ],
-     "notes": []
+     "notes": [
+      "hand override: Box fires repeatedly at a lone target with the single-target number; AoE number is the multi-target variant"
+     ]
     },
     {
      "slot": "E",
@@ -26114,7 +26151,7 @@
        "type": "magic",
        "calc": "BaseFlatDamage",
        "scaling": {
-        "const": 40.0
+        "const": 120.0
        },
        "target": "flat",
        "per_second": false,
@@ -26124,8 +26161,8 @@
        "type": "magic",
        "calc": "BasePercentHealth",
        "scaling": {
-        "const": 0.04,
-        "ap": 0.0001
+        "const": 0.12,
+        "ap": 0.0003
        },
        "target": "target_max_hp",
        "per_second": false,
@@ -26135,7 +26172,7 @@
        "type": "magic",
        "calc": "BaseFlatDamage",
        "scaling": {
-        "const": 40.0
+        "const": 120.0
        },
        "target": "flat",
        "per_second": false,
@@ -26150,11 +26187,13 @@
        },
        "target": "target_max_hp",
        "per_second": false,
-       "alt": false
+       "alt": true
       }
      ],
      "mode_overrides": [],
-     "notes": []
+     "notes": [
+      "hand override: Base and empowered %HP are alternatives; Twilight Assault empowers 3 attacks"
+     ]
     },
     {
      "slot": "W",
@@ -26214,39 +26253,6 @@
        "alt": false
       }
      ],
-     "mode_overrides": [],
-     "notes": []
-    },
-    {
-     "slot": "R",
-     "name": "ShenR",
-     "rank": 3,
-     "cooldown": 160.0,
-     "cast_time": 0.0,
-     "lock": 3.0,
-     "shield": {
-      "scaling": {
-       "const": 320.0,
-       "bonus_hp": 0.15,
-       "ap": 1.35
-      },
-      "duration": 5.0
-     },
-     "targeting": "",
-     "area": "single",
-     "duration": 5.0,
-     "geometry": {
-      "shape": "single",
-      "range": 175.0,
-      "radius": 0.0,
-      "width": 0.0,
-      "angle": 0.0,
-      "speed": 0,
-      "on_self": false,
-      "range_guessed": true,
-      "move": "blink"
-     },
-     "hits": [],
      "mode_overrides": [],
      "notes": []
     }
@@ -26348,12 +26354,12 @@
        },
        "target": "flat",
        "per_second": false,
-       "alt": false
+       "alt": true
       }
      ],
      "mode_overrides": [],
      "notes": [
-      "hand override: resets the basic attack timer"
+      "hand override: resets the basic attack timer; dragon-form damage replaces human-form damage"
      ],
      "attack_reset": true
     },
@@ -26452,7 +26458,7 @@
        },
        "target": "flat",
        "per_second": false,
-       "alt": false
+       "alt": true
       },
       {
        "type": "magic",
@@ -26462,7 +26468,7 @@
        },
        "target": "target_max_hp",
        "per_second": false,
-       "alt": false
+       "alt": true
       },
       {
        "type": "magic",
@@ -26477,7 +26483,9 @@
       }
      ],
      "mode_overrides": [],
-     "notes": []
+     "notes": [
+      "hand override: dragon-form numbers replace the human-form ones"
+     ]
     },
     {
      "slot": "R",
@@ -26636,17 +26644,17 @@
      "cooldown": 8.0,
      "cast_time": 0.25,
      "cc": {
-      "type": "root",
-      "duration": 2.0
+      "type": "knockup",
+      "duration": 0.5
      },
      "targeting": "",
      "area": "single",
      "duration": 2.0,
      "geometry": {
-      "shape": "line",
-      "range": 650.0,
+      "shape": "single",
+      "range": 125,
       "radius": 0.0,
-      "width": 30.0,
+      "width": 0,
       "angle": 0.0,
       "speed": 0,
       "on_self": false
@@ -26675,7 +26683,9 @@
       }
      ],
      "mode_overrides": [],
-     "notes": []
+     "notes": [
+      "hand override: Fling is a melee targeted toss; root only when landing in Mega Adhesive"
+     ]
     },
     {
      "slot": "R",
@@ -26848,8 +26858,9 @@
      "cooldown": 8.0,
      "cast_time": 0.25,
      "cc": {
-      "type": "knockup",
-      "duration": 0.75
+      "type": "slow",
+      "duration": 2.5,
+      "amount": 0.5
      },
      "targeting": "Location",
      "area": "aoe",
@@ -26877,7 +26888,9 @@
       }
      ],
      "mode_overrides": [],
-     "notes": []
+     "notes": [
+      "hand override: Roar of the Slayer slows champions; knockup only from a knocked-back minion"
+     ]
     },
     {
      "slot": "R",
@@ -26991,9 +27004,9 @@
        "type": "physical",
        "calc": "TotalDamage",
        "scaling": {
-        "const": 160.0,
-        "bonus_ad": 0.7,
-        "ap": 0.6
+        "const": 320.0,
+        "bonus_ad": 1.4,
+        "ap": 1.2
        },
        "target": "flat",
        "per_second": false,
@@ -27003,7 +27016,8 @@
      "mode_overrides": [],
      "notes": [
       "ARAM cooldown",
-      "unsupported stat 9"
+      "unsupported stat 9",
+      "hand override: Boomerang Blade hits on the way out and back"
      ]
     },
     {
@@ -27448,7 +27462,7 @@
        "type": "true",
        "calc": "Tier3_ExecuteThreshold",
        "scaling": {
-        "const": 0.065
+        "const": 0.0
        },
        "target": "target_max_hp",
        "per_second": false,
@@ -27458,7 +27472,8 @@
      "mode_overrides": [],
      "notes": [
       "stack-based scaling ignored",
-      "unsupported stat 9"
+      "unsupported stat 9",
+      "hand override: the execute threshold is a %HP threshold, not damage"
      ]
     },
     {
@@ -27524,7 +27539,7 @@
      "geometry": {
       "shape": "circle",
       "range": 0.0,
-      "radius": 175.0,
+      "radius": 500,
       "width": 0.0,
       "angle": 0.0,
       "speed": 0,
@@ -27535,8 +27550,8 @@
        "type": "physical",
        "calc": "DamagePerHit",
        "scaling": {
-        "const": 59.13,
-        "bonus_ad": 0.3
+        "const": 354.78,
+        "bonus_ad": 1.8
        },
        "target": "flat",
        "per_second": false,
@@ -27544,7 +27559,9 @@
       }
      ],
      "mode_overrides": [],
-     "notes": []
+     "notes": [
+      "hand override: Flap fires ~6 shots at the lowest-health nearby enemy"
+     ]
     },
     {
      "slot": "R",
@@ -27689,8 +27706,8 @@
        "type": "magic",
        "calc": "TotalStaccatoDamage",
        "scaling": {
-        "const": 360.0,
-        "ap": 0.3
+        "const": 0.0,
+        "ap": 0.0
        },
        "target": "flat",
        "per_second": false,
@@ -27699,7 +27716,8 @@
      ],
      "mode_overrides": [],
      "notes": [
-      "ARAM cooldown"
+      "ARAM cooldown",
+      "hand override: Staccato is a Power Chord variant already covered by the passive"
      ]
     },
     {
@@ -28105,11 +28123,13 @@
        },
        "target": "flat",
        "per_second": false,
-       "alt": false
+       "alt": true
       }
      ],
      "mode_overrides": [],
-     "notes": []
+     "notes": [
+      "hand override: MaxDamage is the all-bolts total, not an extra hit"
+     ]
     },
     {
      "slot": "W",
@@ -28217,8 +28237,8 @@
        "type": "magic",
        "calc": "DamageCalc",
        "scaling": {
-        "const": 35.0,
-        "ap": 0.04
+        "const": 210.0,
+        "ap": 0.24
        },
        "target": "flat",
        "per_second": false,
@@ -28237,7 +28257,9 @@
       }
      ],
      "mode_overrides": [],
-     "notes": []
+     "notes": [
+      "hand override: Demonic Ascension drains every second; parsed as one tick (~6s in a duel)"
+     ]
     }
    ],
    "parse_quality": "good",
@@ -28324,8 +28346,8 @@
        "type": "magic",
        "calc": "ExplosionDamage",
        "scaling": {
-        "const": 280.0,
-        "ap": 0.8
+        "const": 560.0,
+        "ap": 1.6
        },
        "target": "flat",
        "per_second": false,
@@ -28333,7 +28355,9 @@
       }
      ],
      "mode_overrides": [],
-     "notes": []
+     "notes": [
+      "hand override: chains and explosion both hit the same target; explosion was half-weighted"
+     ]
     },
     {
      "slot": "W",
@@ -28607,8 +28631,8 @@
        "type": "magic",
        "calc": "TotalDamage",
        "scaling": {
-        "const": 200.0,
-        "ap": 0.6
+        "const": 100.0,
+        "ap": 0.3
        },
        "target": "flat",
        "per_second": false,
@@ -28618,8 +28642,8 @@
        "type": "magic",
        "calc": "TotalDamage",
        "scaling": {
-        "const": 200.0,
-        "ap": 0.6
+        "const": 100.0,
+        "ap": 0.3
        },
        "target": "flat",
        "per_second": false,
@@ -28627,7 +28651,9 @@
       }
      ],
      "mode_overrides": [],
-     "notes": []
+     "notes": [
+      "hand override: Scatter the Weak damages a target once; the calc is listed twice"
+     ]
     },
     {
      "slot": "R",
@@ -28652,8 +28678,8 @@
        "type": "magic",
        "calc": "DamageCalc",
        "scaling": {
-        "const": 160.0,
-        "ap": 0.2
+        "const": 640.0,
+        "ap": 0.8
        },
        "target": "flat",
        "per_second": false,
@@ -28668,11 +28694,13 @@
        },
        "target": "flat",
        "per_second": false,
-       "alt": false
+       "alt": true
       }
      ],
      "mode_overrides": [],
-     "notes": []
+     "notes": [
+      "hand override: per-sphere damage times ~4 spheres; MaxDamageCalc is the 7-sphere total"
+     ]
     }
    ],
    "parse_quality": "good",
@@ -28727,8 +28755,9 @@
      "cooldown": 5.0,
      "cast_time": 0.25,
      "cc": {
-      "type": "stun",
-      "duration": 1.5
+      "type": "slow",
+      "duration": 2.0,
+      "amount": 0.4
      },
      "targeting": "LocationClamped",
      "area": "aoe",
@@ -28756,7 +28785,9 @@
       }
      ],
      "mode_overrides": [],
-     "notes": []
+     "notes": [
+      "hand override: Tongue Lash only stuns at 3 An Acquired Taste stacks; otherwise slows"
+     ]
     },
     {
      "slot": "W",
@@ -28956,10 +28987,7 @@
      "rank": 5,
      "cooldown": 3.0,
      "cast_time": 0.25,
-     "cc": {
-      "type": "stun",
-      "duration": 3.0
-     },
+     "cc": null,
      "targeting": "Direction",
      "area": "line",
      "duration": 1.5,
@@ -28997,7 +29025,9 @@
       }
      ],
      "mode_overrides": [],
-     "notes": []
+     "notes": [
+      "hand override: Threaded Volley has no stun"
+     ]
     },
     {
      "slot": "W",
@@ -29182,14 +29212,15 @@
        },
        "target": "flat",
        "per_second": false,
-       "alt": false
+       "alt": true
       }
      ],
      "mode_overrides": [
       "ARAM:BonusADRatio"
      ],
      "notes": [
-      "unsupported stat 9"
+      "unsupported stat 9",
+      "hand override: melee crit version replaces the leap damage"
      ]
     },
     {
@@ -29665,9 +29696,9 @@
        "type": "magic",
        "calc": "TotalDotDamage",
        "scaling": {
-        "const": 120.0,
-        "ap": 0.4,
-        "bonus_ad": 0.1
+        "const": 60.0,
+        "ap": 0.2,
+        "bonus_ad": 0.05
        },
        "target": "flat",
        "per_second": false,
@@ -29677,7 +29708,7 @@
      "mode_overrides": [],
      "notes": [
       "cooldown unknown; assumed 8s",
-      "hand override: Toxic Shot is on-hit"
+      "hand override: Toxic Shot is on-hit; the poison refreshes rather than stacks, so each attack adds only part of it"
      ],
      "onhit_every": 1
     },
@@ -29872,7 +29903,7 @@
        "scaling": {},
        "target": "flat",
        "per_second": false,
-       "alt": false
+       "alt": true
       },
       {
        "type": "magic",
@@ -29883,7 +29914,7 @@
        },
        "target": "flat",
        "per_second": false,
-       "alt": false
+       "alt": true
       },
       {
        "type": "magic",
@@ -29899,7 +29930,8 @@
      ],
      "mode_overrides": [],
      "notes": [
-      "stack-based scaling ignored"
+      "stack-based scaling ignored",
+      "hand override: passive charged-attack numbers are not Flay damage; TotalDamage was half-weighted"
      ]
     },
     {
@@ -30079,7 +30111,7 @@
        },
        "target": "flat",
        "per_second": false,
-       "alt": false
+       "alt": true
       },
       {
        "type": "physical",
@@ -30091,7 +30123,7 @@
        },
        "target": "flat",
        "per_second": false,
-       "alt": false
+       "alt": true
       },
       {
        "type": "physical",
@@ -30108,7 +30140,8 @@
      ],
      "mode_overrides": [],
      "notes": [
-      "unsupported stat 9"
+      "unsupported stat 9",
+      "hand override: passive is the on-kill explosion; charge usually detonates at full 4 stacks"
      ]
     },
     {
@@ -30235,7 +30268,7 @@
        "type": "physical",
        "calc": "BonusAD",
        "scaling": {
-        "const": 40.0
+        "const": 0.0
        },
        "target": "flat",
        "per_second": false,
@@ -30245,7 +30278,7 @@
        "type": "physical",
        "calc": "SappedAD",
        "scaling": {
-        "const": 20.0
+        "const": 0.0
        },
        "target": "flat",
        "per_second": false,
@@ -30254,7 +30287,7 @@
      ],
      "mode_overrides": [],
      "notes": [
-      "hand override: resets the basic attack timer"
+      "hand override: resets the basic attack timer; BonusAD/SappedAD are AD steal values, not damage"
      ],
      "attack_reset": true
     },
@@ -30594,13 +30627,13 @@
      "area": "aoe",
      "duration": 0.0,
      "geometry": {
-      "shape": "circle",
-      "range": 0.0,
+      "shape": "single",
+      "range": 600,
       "radius": 1000.0,
       "width": 0.0,
       "angle": 0.0,
       "speed": 0,
-      "on_self": true
+      "on_self": false
      },
      "hits": [
       {
@@ -30614,7 +30647,7 @@
        },
        "target": "flat",
        "per_second": false,
-       "alt": false
+       "alt": true
       },
       {
        "type": "magic",
@@ -30627,7 +30660,7 @@
        },
        "target": "flat",
        "per_second": false,
-       "alt": false
+       "alt": true
       },
       {
        "type": "magic",
@@ -30644,7 +30677,9 @@
       }
      ],
      "mode_overrides": [],
-     "notes": []
+     "notes": [
+      "hand override: one card per cast (Gold, matching the stun); the card is a single-target empowered attack"
+     ]
     },
     {
      "slot": "E",
@@ -30830,7 +30865,7 @@
        },
        "target": "flat",
        "per_second": false,
-       "alt": false
+       "alt": true
       },
       {
        "type": "physical",
@@ -30841,7 +30876,7 @@
        },
        "target": "flat",
        "per_second": false,
-       "alt": false
+       "alt": true
       },
       {
        "type": "magic",
@@ -30851,7 +30886,7 @@
        },
        "target": "flat",
        "per_second": false,
-       "alt": false
+       "alt": true
       },
       {
        "type": "physical",
@@ -30868,7 +30903,7 @@
        "type": "magic",
        "calc": "MaxMagicDamage",
        "scaling": {
-        "ap": 2.1
+        "ap": 4.2
        },
        "target": "flat",
        "per_second": false,
@@ -30876,7 +30911,9 @@
       }
      ],
      "mode_overrides": [],
-     "notes": []
+     "notes": [
+      "hand override: Max numbers are base + 6 stacks; count them once at full weight"
+     ]
     },
     {
      "slot": "R",
@@ -30995,9 +31032,9 @@
        "type": "physical",
        "calc": "OnHitDamage",
        "scaling": {
-        "const": 30.0,
-        "bonus_ad": 0.2,
-        "bonus_hp": 0.018
+        "const": 60.0,
+        "bonus_ad": 0.4,
+        "bonus_hp": 0.036
        },
        "target": "flat",
        "per_second": false,
@@ -31007,8 +31044,8 @@
        "type": "physical",
        "calc": "MaxHPOnHit1",
        "scaling": {
-        "const": 0.07,
-        "bonus_ad": 0.0003
+        "const": 0.14,
+        "bonus_ad": 0.0006
        },
        "target": "target_max_hp",
        "per_second": false,
@@ -31018,7 +31055,7 @@
        "type": "magic",
        "calc": "EmpoweredLightningBonusMax",
        "scaling": {
-        "ap": 0.0004
+        "ap": 0.0002
        },
        "target": "target_max_hp",
        "per_second": false,
@@ -31027,7 +31064,8 @@
      ],
      "mode_overrides": [],
      "notes": [
-      "unsupported part {ee18a47b}"
+      "unsupported part {ee18a47b}",
+      "hand override: Wilding Claw empowers 2 attacks; awakened bonus only every other cast"
      ]
     },
     {
@@ -31139,8 +31177,8 @@
        "type": "magic",
        "calc": "PercentHPBlast",
        "scaling": {
-        "const": 0.14,
-        "ap": 0.0003
+        "const": 0.07,
+        "ap": 0.0001
        },
        "target": "target_max_hp",
        "per_second": false,
@@ -31148,7 +31186,9 @@
       }
      ],
      "mode_overrides": [],
-     "notes": []
+     "notes": [
+      "hand override: awakened %HP blast only every other cast"
+     ]
     }
    ],
    "parse_quality": "partial",
@@ -31484,7 +31524,8 @@
       "Kiwi:tADRatioMin"
      ],
      "notes": [
-      "missing value {0508ccce}"
+      "missing value {0508ccce}",
+      "hand override: Piercing Arrow: min and max charge are alternatives; max was being added at half weight"
      ]
     },
     {
@@ -31522,8 +31563,8 @@
        "type": "magic",
        "calc": "PercentHPPerStack",
        "scaling": {
-        "const": 0.045,
-        "ap": 0.0001
+        "const": 0.0,
+        "ap": 0.0
        },
        "target": "target_max_hp",
        "per_second": false,
@@ -31562,7 +31603,9 @@
       }
      ],
      "mode_overrides": [],
-     "notes": []
+     "notes": [
+      "hand override: Blight detonation listed as both 1-stack and 3-stack values; keep the 3-stack detonation only"
+     ]
     },
     {
      "slot": "E",
@@ -31806,11 +31849,13 @@
        },
        "target": "flat",
        "per_second": false,
-       "alt": false
+       "alt": true
       }
      ],
      "mode_overrides": [],
-     "notes": []
+     "notes": [
+      "hand override: Condemn wall-collision damage is the alternative (bonus) value, not an extra hit"
+     ]
     },
     {
      "slot": "R",
@@ -31940,7 +31985,7 @@
       "radius": 225.0,
       "width": 0.0,
       "angle": 0.0,
-      "speed": 0,
+      "speed": 750,
       "on_self": false
      },
      "hits": [
@@ -31959,7 +32004,7 @@
      "mode_overrides": [],
      "notes": [
       "cooldown unknown; assumed 8s",
-      "hand override: Dark Matter's cooldown is not in the spell record"
+      "hand override: Dark Matter cooldown not in spell record; lands after a 1.2s delay, modelled as flight time so it can be dodged"
      ]
     },
     {
@@ -32143,8 +32188,8 @@
        "type": "magic",
        "calc": "SecondaryDamage",
        "scaling": {
-        "const": 165.0,
-        "ap": 0.25
+        "const": 330.0,
+        "ap": 0.5
        },
        "target": "flat",
        "per_second": false,
@@ -32153,7 +32198,8 @@
      ],
      "mode_overrides": [],
      "notes": [
-      "cooldown is the ammo recharge time"
+      "cooldown is the ammo recharge time",
+      "hand override: Void Rift always deals both the initial tear and the detonation; second hit was at half weight"
      ]
     },
     {
@@ -32453,8 +32499,8 @@
        "type": "magic",
        "calc": "RecastDamageCalc",
        "scaling": {
-        "const": 350.0,
-        "ap": 0.5
+        "const": 700.0,
+        "ap": 1.0
        },
        "target": "flat",
        "per_second": false,
@@ -32462,7 +32508,9 @@
       }
      ],
      "mode_overrides": [],
-     "notes": []
+     "notes": [
+      "hand override: Shadow Surge recast dash damage always follows the marked missile; was at half weight"
+     ]
     }
    ],
    "parse_quality": "good",
@@ -32634,8 +32682,8 @@
      "cooldown": 90.0,
      "cast_time": 0.25,
      "cc": {
-      "type": "stun",
-      "duration": 0.75
+      "type": "knockup",
+      "duration": 1.25
      },
      "targeting": "",
      "area": "single",
@@ -32664,7 +32712,9 @@
       }
      ],
      "mode_overrides": [],
-     "notes": []
+     "notes": [
+      "hand override: Cease and Desist knocks the primary target up for about 1.25s, not a 0.75s stun"
+     ]
     }
    ],
    "parse_quality": "good",
@@ -32861,8 +32911,8 @@
        "type": "physical",
        "calc": "TotalDamage",
        "scaling": {
-        "const": 150.0,
-        "bonus_ad": 1.2
+        "const": 75.0,
+        "bonus_ad": 0.6
        },
        "target": "flat",
        "per_second": false,
@@ -32883,8 +32933,8 @@
        "type": "physical",
        "calc": "TotalDamage",
        "scaling": {
-        "const": 150.0,
-        "bonus_ad": 1.2
+        "const": 75.0,
+        "bonus_ad": 0.6
        },
        "target": "flat",
        "per_second": false,
@@ -32893,7 +32943,8 @@
      ],
      "mode_overrides": [],
      "notes": [
-      "unsupported stat 9"
+      "unsupported stat 9",
+      "hand override: Heartbreaker's AD-ratio hit is listed twice and counted twice; it lands once"
      ]
     }
    ],
@@ -32982,9 +33033,9 @@
        "type": "magic",
        "calc": "AttackTotalDMG",
        "scaling": {
-        "const": 224.0,
-        "ap": 0.5,
-        "bonus_ad": 1.0
+        "const": 448.0,
+        "ap": 1.0,
+        "bonus_ad": 2.0
        },
        "target": "flat",
        "per_second": false,
@@ -32992,7 +33043,9 @@
       }
      ],
      "mode_overrides": [],
-     "notes": []
+     "notes": [
+      "hand override: Siphon Power's empowered follow-up attack is part of every Q trade; was at half weight"
+     ]
     },
     {
      "slot": "W",
@@ -33249,7 +33302,7 @@
      "rank": 5,
      "cooldown": 5.0,
      "cast_time": 0.0,
-     "lock": 0.5,
+     "lock": 1.0,
      "cc": {
       "type": "slow",
       "duration": 1.5,
@@ -33278,7 +33331,7 @@
        },
        "target": "flat",
        "per_second": false,
-       "alt": false
+       "alt": true
       },
       {
        "type": "magic",
@@ -33294,7 +33347,9 @@
       }
      ],
      "mode_overrides": [],
-     "notes": []
+     "notes": [
+      "hand override: Tides of Blood: min and max charge are alternatives; model the standard full 1s charge"
+     ]
     },
     {
      "slot": "R",
@@ -34046,7 +34101,7 @@
       "radius": 0.0,
       "width": 50.0,
       "angle": 0.0,
-      "speed": 700,
+      "speed": 2400,
       "on_self": false
      },
      "hits": [
@@ -34054,8 +34109,8 @@
        "type": "physical",
        "calc": "TotalDamage",
        "scaling": {
-        "const": 105.0,
-        "bonus_ad": 0.5
+        "const": 210.0,
+        "bonus_ad": 1.0
        },
        "target": "flat",
        "per_second": false,
@@ -34065,8 +34120,8 @@
        "type": "physical",
        "calc": "MultiHitDamage",
        "scaling": {
-        "const": 52.5,
-        "bonus_ad": 0.25
+        "const": 0.0,
+        "bonus_ad": 0.0
        },
        "target": "flat",
        "per_second": false,
@@ -34074,7 +34129,9 @@
       }
      ],
      "mode_overrides": [],
-     "notes": []
+     "notes": [
+      "hand override: Double Daggers: two daggers each deal full damage to a champion; reduced value is for later targets; daggers are fast"
+     ]
     },
     {
      "slot": "W",
@@ -34125,8 +34182,8 @@
        "type": "physical",
        "calc": "FeatherDamage",
        "scaling": {
-        "const": 110.0,
-        "bonus_ad": 0.4
+        "const": 330.0,
+        "bonus_ad": 1.2
        },
        "target": "flat",
        "per_second": false,
@@ -34135,7 +34192,8 @@
      ],
      "mode_overrides": [],
      "notes": [
-      "unsupported stat 9"
+      "unsupported stat 9",
+      "hand override: Bladecaller recalls several feathers (2 from Q plus W/attack feathers); about 3 per cast"
      ]
     },
     {
@@ -34235,7 +34293,7 @@
      "duration": 0.0,
      "geometry": {
       "shape": "line",
-      "range": 700.0,
+      "range": 1450,
       "radius": 0.0,
       "width": 90.0,
       "angle": 0.0,
@@ -34256,7 +34314,9 @@
       }
      ],
      "mode_overrides": [],
-     "notes": []
+     "notes": [
+      "hand override: Arcanopulse reaches 1450 range at full charge (lock 1.5s), not 700"
+     ]
     },
     {
      "slot": "W",
@@ -34275,7 +34335,7 @@
      "geometry": {
       "shape": "circle",
       "range": 1000.0,
-      "radius": 100.0,
+      "radius": 250,
       "width": 0.0,
       "angle": 0.0,
       "speed": 0,
@@ -34306,7 +34366,9 @@
       }
      ],
      "mode_overrides": [],
-     "notes": []
+     "notes": [
+      "hand override: Eye of Destruction outer radius is about 250-275, not 100 (that is the sweet spot)"
+     ]
     },
     {
      "slot": "E",
@@ -34468,8 +34530,8 @@
        "type": "physical",
        "calc": "BonusDamage",
        "scaling": {
-        "const": 75.0,
-        "bonus_ad": 0.45
+        "const": 225.0,
+        "bonus_ad": 1.35
        },
        "target": "flat",
        "per_second": false,
@@ -34477,7 +34539,9 @@
       }
      ],
      "mode_overrides": [],
-     "notes": []
+     "notes": [
+      "hand override: Three Talon Strike empowers the next three attacks"
+     ]
     },
     {
      "slot": "W",
@@ -34518,9 +34582,9 @@
        "type": "physical",
        "calc": "ThrustDamage",
        "scaling": {
-        "const": 292.6,
-        "bonus_ad": 0.9,
-        "ap": 0.65
+        "const": 585.2,
+        "bonus_ad": 1.8,
+        "ap": 1.3
        },
        "target": "flat",
        "per_second": false,
@@ -34528,7 +34592,9 @@
       }
      ],
      "mode_overrides": [],
-     "notes": []
+     "notes": [
+      "hand override: Wind Becomes Lightning: slash and thrust both hit a target in front; thrust was at half weight"
+     ]
     },
     {
      "slot": "E",
@@ -34758,7 +34824,7 @@
      "slot": "E",
      "name": "YasuoE",
      "rank": 5,
-     "cooldown": 2,
+     "cooldown": 6,
      "cast_time": 0.25,
      "targeting": "",
      "area": "single",
@@ -34802,7 +34868,7 @@
      "mode_overrides": [],
      "notes": [
       "cooldown unknown; assumed 8s",
-      "hand override: Sweeping Blade can't hit the same target again for a few seconds"
+      "hand override: Sweeping Blade can't dash through the same target for 6s at rank 5; in a duel that is its effective cooldown"
      ]
     },
     {
@@ -34918,8 +34984,8 @@
        "type": "physical",
        "calc": "QDamage",
        "scaling": {
-        "const": 225.8,
-        "bonus_ad": 1.05
+        "const": 112.9,
+        "bonus_ad": 0.525
        },
        "target": "flat",
        "per_second": false,
@@ -34929,8 +34995,8 @@
        "type": "physical",
        "calc": "QDamage",
        "scaling": {
-        "const": 225.8,
-        "bonus_ad": 1.05
+        "const": 112.9,
+        "bonus_ad": 0.525
        },
        "target": "flat",
        "per_second": false,
@@ -34938,7 +35004,9 @@
       }
      ],
      "mode_overrides": [],
-     "notes": []
+     "notes": [
+      "hand override: Mortal Steel's single strike is listed twice and counted twice"
+     ]
     },
     {
      "slot": "W",
@@ -35574,7 +35642,7 @@
        },
        "target": "flat",
        "per_second": false,
-       "alt": false
+       "alt": true
       },
       {
        "type": "magic",
@@ -35589,7 +35657,9 @@
       }
      ],
      "mode_overrides": [],
-     "notes": []
+     "notes": [
+      "hand override: Prowling Projectile's empowered value is the long-flight alternative, not an extra hit"
+     ]
     },
     {
      "slot": "W",
@@ -36157,8 +36227,8 @@
        "type": "magic",
        "calc": "DamagePerSubsequentBounce",
        "scaling": {
-        "const": 130.0,
-        "ap": 0.2
+        "const": 780.0,
+        "ap": 1.2
        },
        "target": "flat",
        "per_second": false,
@@ -36166,7 +36236,9 @@
       }
      ],
      "mode_overrides": [],
-     "notes": []
+     "notes": [
+      "hand override: Let's Bounce: first bounce full, then about 3 more bounces at 50% on the same target"
+     ]
     }
    ],
    "parse_quality": "good",
@@ -36233,7 +36305,7 @@
       "radius": 0.0,
       "width": 45.0,
       "angle": 0.0,
-      "speed": 902,
+      "speed": 1700,
       "on_self": false
      },
      "hits": [
@@ -36261,7 +36333,9 @@
       }
      ],
      "mode_overrides": [],
-     "notes": []
+     "notes": [
+      "hand override: Razor Shuriken missile speed is 1700, not 902"
+     ]
     },
     {
      "slot": "W",
@@ -36452,8 +36526,8 @@
        "type": "physical",
        "calc": "ActiveDamageThatCanCrit",
        "scaling": {
-        "const": 137.0,
-        "bonus_ad": 1.1
+        "const": 13.7,
+        "bonus_ad": 0.11
        },
        "target": "flat",
        "per_second": false,
@@ -36463,7 +36537,7 @@
      "mode_overrides": [],
      "notes": [
       "cooldown unknown; assumed 8s",
-      "hand override: Burst Fire replaces her attacks"
+      "hand override: Burst Fire replaces her attacks: the attack already counts, Q only adds its small extra over an attack"
      ],
      "onhit_every": 1
     },
@@ -36513,12 +36587,13 @@
        },
        "target": "flat",
        "per_second": false,
-       "alt": false
+       "alt": true
       }
      ],
      "mode_overrides": [],
      "notes": [
-      "unsupported stat 9"
+      "unsupported stat 9",
+      "hand override: Ultrashock Laser through-wall damage is an alternative path, not an extra hit"
      ]
     },
     {
@@ -36808,11 +36883,13 @@
        },
        "target": "flat",
        "per_second": false,
-       "alt": false
+       "alt": true
       }
      ],
      "mode_overrides": [],
-     "notes": []
+     "notes": [
+      "hand override: Mega Inferno Bomb: center and outer-ring damage are alternatives"
+     ]
     }
    ],
    "passives": [
@@ -37148,8 +37225,8 @@
        "type": "magic",
        "calc": "TotalDamageTooltip",
        "scaling": {
-        "const": 230.0,
-        "ap": 0.45
+        "const": 460.0,
+        "ap": 0.9
        },
        "target": "flat",
        "per_second": false,
@@ -37168,7 +37245,9 @@
       }
      ],
      "mode_overrides": [],
-     "notes": []
+     "notes": [
+      "hand override: Sleepy Trouble Bubble: the next hit on the sleeping target deals E's damage again (true); combo E->Q always pops it"
+     ]
     },
     {
      "slot": "R",
