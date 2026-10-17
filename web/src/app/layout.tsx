@@ -26,6 +26,7 @@ import { THEME_COLORS, THEME_KEY } from "@/lib/theme";
 import { navItems, navPages } from "@/lib/tabs";
 import "./globals.css";
 import OfflineSupport from "@/components/OfflineSupport";
+import SkipLink from "@/components/SkipLink";
 
 const sans = Geist({ subsets: ["latin"], variable: "--font-sans" });
 const mono = Geist_Mono({ subsets: ["latin"], variable: "--font-mono" });
@@ -96,6 +97,7 @@ export default function RootLayout({
       </head>
       <body>
         <ErrorReporter />
+        <SkipLink />
         <header className="site-header">
           <div className="site-header-inner">
             <Link href="/" className="brand">
@@ -122,7 +124,9 @@ export default function RootLayout({
           </div>
         </header>
         {text("banner") && <p className="site-banner">{text("banner")}</p>}
-        <main>{children}</main>
+        <main id="main" tabIndex={-1}>
+          {children}
+        </main>
         <footer className="site-footer">
           <FeedbackBox />
           <nav className="footer-links" aria-label="Legal">

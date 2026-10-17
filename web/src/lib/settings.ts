@@ -17,11 +17,15 @@ export type Settings = {
   uiSound: boolean;
   /** Short vibrations on phone taps and swipes, where the phone supports them. */
   haptics: boolean;
+  /** "high" strengthens muted text, borders and focus rings. */
+  contrast: "standard" | "high";
+  /** "colorblind" swaps green/red and the tier colours for a blue/orange set. */
+  colors: "standard" | "colorblind";
   /** The Tier List's starting patch range. */
   tierRange: "live" | "last3" | "all";
 };
 
-export const DEFAULT_SETTINGS: Settings = { motion: "system", sound: true, uiSound: false, haptics: true, graphics: "auto", tierRange: "live" };
+export const DEFAULT_SETTINGS: Settings = { motion: "system", sound: true, uiSound: false, haptics: true, graphics: "auto", contrast: "standard", colors: "standard", tierRange: "live" };
 
 export function loadSettings(): Settings {
   try {
@@ -45,7 +49,11 @@ export function applySettings(s: Settings) {
   const root = document.documentElement;
   if (s.motion === "reduce") root.dataset.motion = "reduce";
   else delete root.dataset.motion;
+  if (s.contrast === "high") root.dataset.contrast = "high";
+  else delete root.dataset.contrast;
+  if (s.colors === "colorblind") root.dataset.colors = "colorblind";
+  else delete root.dataset.colors;
 }
 
-/** Inline before-paint script: applies reduced motion from saved settings. */
-export const SETTINGS_SCRIPT = `try{var s=JSON.parse(localStorage.getItem(${JSON.stringify(SETTINGS_KEY)})||"{}");if(s.motion==="reduce")document.documentElement.dataset.motion="reduce"}catch(e){}`;
+/** Inline before-paint script: applies reduced motion, contrast and colour choices from saved settings. */
+export const SETTINGS_SCRIPT = `try{var s=JSON.parse(localStorage.getItem(${JSON.stringify(SETTINGS_KEY)})||"{}"),d=document.documentElement.dataset;if(s.motion==="reduce")d.motion="reduce";if(s.contrast==="high")d.contrast="high";if(s.colors==="colorblind")d.colors="colorblind"}catch(e){}`;

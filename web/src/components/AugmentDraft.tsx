@@ -173,7 +173,7 @@ export default function AugmentDraft() {
               </>
             ) : (
               <>
-                {lead} Their favourite of those three: <b>{data.augs[top][0]}</b>
+                {lead} Their favorite of those three: <b>{data.augs[top][0]}</b>
                 {rate(top) ? ` (${pct(rate(top))})` : ""}.
               </>
             );

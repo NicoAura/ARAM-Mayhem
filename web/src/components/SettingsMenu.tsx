@@ -71,6 +71,8 @@ export default function SettingsMenu() {
             <ThemeToggle labels />
           </div>
           <Choice label="Motion" value={s.motion} options={[["system", "Match system"], ["reduce", "Reduce"]]} onChange={(motion) => set({ motion })} />
+          <Choice label="Contrast" value={s.contrast} options={[["standard", "Standard"], ["high", "High"]]} onChange={(contrast) => set({ contrast })} />
+          <Choice label="Win/loss colors" value={s.colors} options={[["standard", "Green / red"], ["colorblind", "Blue / orange"]]} onChange={(colors) => set({ colors })} />
           <Choice label="Sound and voice lines" value={s.sound ? "on" : "off"} options={[["on", "On"], ["off", "Off"]]} onChange={(v) => set({ sound: v === "on" })} />
           {s.sound && (
             <Choice label="Interface sounds" value={s.uiSound ? "on" : "off"} options={[["on", "On"], ["off", "Off"]]} onChange={(v) => {
