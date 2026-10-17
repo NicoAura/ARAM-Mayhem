@@ -461,19 +461,16 @@ PLATFORM_BY_REGION = {
 }
 
 
-def site_profile(action, data=None, lockfile=None):
-    """Publish, remove or check this account's public page on the site.
-
-    The signed-in client's token goes with the request so the site can tell whose page it is; it's
-    sent on stdin so it never shows up in the process list."""
-    lcu = find_client(lockfile)
+def site_post(lcu, path, payload):
+    """POST to the site with the signed-in client's token, which tells the site whose request it is.
+    The body goes on stdin so the token never shows up in the process list."""
     region = str((lcu.get("/riotclient/region-locale") or {}).get("region", "")).upper()
     platform = PLATFORM_BY_REGION.get(region)
     if not platform:
-        raise ImportFailed(f"Public pages aren't available for the {region or 'unknown'} region yet.")
-    body = json.dumps({"action": action, "token": sgp_token(lcu), "platform": platform, "data": data})
-    res = subprocess.run(["curl", "-sS", "--max-time", "30", "-X", "POST", "-H", "Content-Type: application/json",
-                          "--data-binary", "@-", "-w", "\n%{http_code}", f"{SITE}/api/profile"],
+        raise ImportFailed(f"This isn't available for the {region or 'unknown'} region yet.")
+    body = json.dumps({**payload, "token": sgp_token(lcu), "platform": platform})
+    res = subprocess.run(["curl", "-sS", "--max-time", "60", "-X", "POST", "-H", "Content-Type: application/json",
+                          "--data-binary", "@-", "-w", "\n%{http_code}", f"{SITE}{path}"],
                          input=body, capture_output=True, text=True)
     if res.returncode != 0:
         raise ImportFailed("Couldn't reach the site. Check your connection and try again.")
@@ -484,10 +481,108 @@ def site_profile(action, data=None, lockfile=None):
         reply = {}
     if not 200 <= int(status or 0) < 300:
         raise ImportFailed(reply.get("error") or f"The site answered {status}.")
+    return reply
+
+
+def site_profile(action, data=None, lockfile=None):
+    """Publish, remove or check this account's public page on the site."""
+    reply = site_post(find_client(lockfile), "/api/profile", {"action": action, "data": data})
     if reply.get("path"):
         reply["url"] = SITE + reply["path"]
     return reply
 
+
+# ---------- sharing games ----------
+# Off unless the player turns it on in My Stats. Shared games carry no names or account ids: just
+# champions, items, augments, runes, spells and results, so the site can build stats across players.
+
+SHARING_FILE = os.path.expanduser("~/Library/Application Support/Mayhem Stats/sharing.json")
+SHARE_BATCH = 50
+
+
+def sharing_settings():
+    try:
+        with open(SHARING_FILE) as f:
+            s = json.load(f)
+        return {"enabled": bool(s.get("enabled")), "shared": list(s.get("shared") or [])}
+    except (OSError, ValueError):
+        return {"enabled": False, "shared": []}
+
+
+def save_sharing(settings):
+    os.makedirs(os.path.dirname(SHARING_FILE), exist_ok=True)
+    with open(SHARING_FILE, "w") as f:
+        json.dump(settings, f)
+
+
+def anonymise(game):
+    """A game without names, account ids or the player's own place in it; None if it isn't usable."""
+    version = str(game.get("gameVersion") or "").split(".")
+    created = game.get("gameCreation") or 0
+    if len(version) < 2 or not created or not game.get("gameId"):
+        return None
+    players = []
+    for p in game.get("participants") or []:
+        s = p.get("stats") or {}
+        players.append({
+            "team": p.get("teamId"), "champ": p.get("championId"), "win": bool(s.get("win")),
+            "k": s.get("kills"), "d": s.get("deaths"), "a": s.get("assists"),
+            "dmg": s.get("totalDamageDealtToChampions"), "taken": s.get("totalDamageTaken"), "heal": s.get("totalHeal"),
+            "gold": s.get("goldEarned"), "cs": (s.get("totalMinionsKilled") or 0) + (s.get("neutralMinionsKilled") or 0),
+            "level": s.get("champLevel"),
+            "multi": [s.get(k) or 0 for k in ("doubleKills", "tripleKills", "quadraKills", "pentaKills")],
+            "spree": s.get("largestKillingSpree"),
+            "augs": [s.get(f"playerAugment{i}") for i in range(1, 7) if s.get(f"playerAugment{i}")],
+            "items": [s.get(f"item{i}") for i in range(7) if s.get(f"item{i}")],
+            "spells": [p.get("spell1Id"), p.get("spell2Id")],
+            "styles": [s.get("perkPrimaryStyle"), s.get("perkSubStyle")],
+            "perks": [s.get(f"perk{i}") for i in range(6) if s.get(f"perk{i}")],
+        })
+    # Players in a fixed order so the uploader can't be picked out by position
+    players.sort(key=lambda x: (x["team"] or 0, x["champ"] or 0))
+    teams = [{"id": t.get("teamId"), "win": t.get("win") in ("Win", True), "towers": t.get("towerKills"),
+              "inhibs": t.get("inhibitorKills"), "firstBlood": bool(t.get("firstBlood")),
+              "firstTower": bool(t.get("firstTower"))} for t in game.get("teams") or []]
+    return {
+        "id": str(game["gameId"]), "platform": str(game.get("platformId") or "").lower(),
+        "patch": ".".join(version[:2]), "queue": game.get("queueId"),
+        "played": datetime.datetime.fromtimestamp(created / 1000, datetime.timezone.utc).strftime("%Y-%m-%d"),
+        "duration": round(game["gameDuration"] / 1000) if (game.get("gameDuration") or 0) > 20000 else game.get("gameDuration"),
+        "teams": teams, "players": players,
+    }
+
+
+def share_new_games(out, lockfile=None, progress=log):
+    """Sends archive games not shared yet. Returns how many this account has shared in all."""
+    settings = sharing_settings()
+    if not settings["enabled"]:
+        return None
+    _, games = load_archive(out)
+    done = set(settings["shared"])
+    todo = [g for g in games if str(g.get("gameId")) not in done]
+    lcu = find_client(lockfile)
+    total = None
+    for i in range(0, len(todo), SHARE_BATCH):
+        batch = todo[i:i + SHARE_BATCH]
+        clean = [a for a in map(anonymise, batch) if a]
+        total = site_post(lcu, "/api/games", {"action": "share", "games": clean}).get("shared")
+        done.update(str(g.get("gameId")) for g in batch)
+        settings["shared"] = sorted(done)
+        save_sharing(settings)
+        progress(f"Shared {min(i + SHARE_BATCH, len(todo))} of {len(todo)} games.")
+    if total is None:
+        total = site_post(lcu, "/api/games", {"action": "status"}).get("shared")
+    return total
+
+
+def set_sharing(enabled, out, lockfile=None):
+    settings = sharing_settings()
+    if enabled:
+        save_sharing({**settings, "enabled": True})
+        return {"enabled": True, "shared": share_new_games(out, lockfile)}
+    reply = site_post(find_client(lockfile), "/api/games", {"action": "remove"})
+    save_sharing({"enabled": False, "shared": []})
+    return {"enabled": False, "shared": reply.get("shared", 0)}
 
 
 def serve(out, port, lockfile=None, sgp_host=None, open_browser=True):
@@ -505,6 +600,12 @@ def serve(out, port, lockfile=None, sgp_host=None, open_browser=True):
                 state["log"] = (state["log"] + [msg.strip()])[-50:]
         try:
             result = run_import(out, full, lockfile, sgp_host, progress)
+            try:
+                shared = share_new_games(out, lockfile, progress)
+                if shared is not None:
+                    result["shared"] = shared
+            except (ImportFailed, HttpError, ConnectionError) as e:
+                result["notes"] = result.get("notes", []) + [f"Sharing will retry next import: {e}"]
             with lock:
                 state["result"] = result
         except (ImportFailed, HttpError, ConnectionError) as e:
@@ -570,6 +671,17 @@ def serve(out, port, lockfile=None, sgp_host=None, open_browser=True):
             if not self.local_host() or self.headers.get("X-Mayhem") != "1":
                 return self.send_json({"error": "forbidden"}, 403)
             path, _, query = self.path.partition("?")
+            if path == "/api/share":
+                try:
+                    req = json.loads(self.rfile.read(min(int(self.headers.get("Content-Length") or 0), 4000)) or b"{}")
+                    if "enabled" in req:
+                        return self.send_json(set_sharing(bool(req["enabled"]), out, lockfile))
+                    return self.send_json({"enabled": sharing_settings()["enabled"],
+                                           "shared": len(sharing_settings()["shared"])})
+                except ImportFailed as e:
+                    return self.send_json({"error": str(e)}, 502)
+                except Exception:
+                    return self.send_json({"error": "Couldn't reach the League client. Open it, sign in, and try again."}, 502)
             if path == "/api/profile":
                 try:
                     req = json.loads(self.rfile.read(min(int(self.headers.get("Content-Length") or 0), 64000)) or b"{}")

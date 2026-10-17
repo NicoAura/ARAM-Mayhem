@@ -671,7 +671,9 @@ async function watchSync() {
       const summary = added
         ? `Added ${added} new game${added === 1 ? "" : "s"}. ${total} in your archive.`
         : `Up to date. ${total} games in your archive.`;
-      setSyncStatus(summary + (failed ? ` ${failed} couldn't be fetched; import again to retry them.` : ""));
+      setSyncStatus(summary + (failed ? ` ${failed} couldn't be fetched; import again to retry them.` : "")
+        + ((s.result.notes || []).filter((n) => n.startsWith("Sharing")).map((n) => " " + n).join("")));
+      if (s.result.shared !== undefined) showShare({ enabled: true, shared: s.result.shared });
     }
   } catch (e) {
     setSyncStatus("Lost contact with the sync helper. Is it still running?", true);
@@ -717,6 +719,7 @@ async function setupSync() {
   }
   await setupSync();
   setupProfile();
+  setupShare();
 })();
 
 // ---------- public page ----------
@@ -786,4 +789,47 @@ async function setupProfile() {
   profileCard.hidden = false;
   showProfile(null);
   try { showProfile(await profileCall("status")); } catch (e) { /* stays "Off" until they try */ }
+}
+
+// ---------- sharing ----------
+// Off unless the player ticks the box; the helper sends games without names or account ids.
+
+const shareBox = $("share-on");
+
+function showShare(st) {
+  shareBox.checked = !!st.enabled;
+  $("share-count").textContent = st.enabled && st.shared ? `${st.shared.toLocaleString()} games shared` : "";
+}
+
+async function shareCall(body) {
+  const res = await fetch("api/share", {
+    method: "POST", headers: { "X-Mayhem": "1", "Content-Type": "application/json" }, body: JSON.stringify(body || {}),
+  });
+  const j = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error(j.error || "Something went wrong. Try again.");
+  return j;
+}
+
+shareBox.addEventListener("change", async () => {
+  const on = shareBox.checked;
+  if (!on && !confirm("Stop sharing and remove the games you've shared?")) { shareBox.checked = true; return; }
+  const note = $("share-status");
+  shareBox.disabled = true;
+  note.hidden = false;
+  note.textContent = on ? "Sharing your games…" : "Removing your shared games…";
+  try {
+    showShare(await shareCall({ enabled: on }));
+    note.textContent = on ? "Sharing is on. New games are shared after each import." : "Sharing is off and your shared games were removed.";
+  } catch (e) {
+    shareBox.checked = !on;
+    note.textContent = e.message;
+  } finally {
+    shareBox.disabled = false;
+  }
+});
+
+async function setupShare() {
+  if (!helperOnline || state.sample || !(state.games || []).length) return;
+  $("share-card").hidden = false;
+  try { showShare(await shareCall()); } catch (e) { /* stays off */ }
 }
