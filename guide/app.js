@@ -201,43 +201,6 @@ I18N.ready.then(() => {
       <td>${esc(words(c.name))}</td><td class="num">${c.rift == null ? "–" : exact(c.rift)}</td><td class="num"><b>${c.mayhem == null ? "–" : exact(c.mayhem)}</b>${delta(c.name, c.rift, c.mayhem)}</td></tr>`))
     .join("");
 
-  // ---- Archive
-  $("set-list").innerHTML = D.augmentSets
-    .map((x) => `<div><div class="title">${esc(t(x.name))}</div><div class="muted small">${esc(t(x.bonus))}</div></div>`)
-    .join("");
-
-  // ---- Augment history
-  const H = window.GUIDE_HISTORY;
-  if (H) {
-    const names = I18N.data.augmentNames || {};
-    $("history-intro").textContent = t("From patch {from} to {to}, the augment pool went from {start} to {pool}. Newest patch first; each change shows the old value and the new one.",
-      { from: H.from, to: H.to, start: H.startPool, pool: H.pool });
-    const val = (v) => (v == null ? "–" : Array.isArray(v) ? v.map(exact).join(" / ") : typeof v === "number" ? exact(v) : esc(v));
-    const aug = (id) => { const a = H.augments[id] || { name: id }; return names[id] ? { ...a, name: names[id] } : a; };
-    const augRow = (id, more = "") => {
-      const a = aug(id);
-      return `<div class="row" style="align-items:flex-start">${img(a.icon)}<div><div class="title">${esc(a.name)} ${tierChip(a.tier)}</div>${more}</div></div>`;
-    };
-    function renderHistory() {
-      const q = $("history-search").value.trim().toLowerCase();
-      const hit = (id) => !q || String(aug(id).name).toLowerCase().includes(q) || String((H.augments[id] || {}).name || "").toLowerCase().includes(q);
-      const blocks = H.patches.map((p) => {
-        const added = p.added.filter(hit), removed = p.removed.filter(hit), changed = p.changed.filter((c) => hit(c.id));
-        if (!added.length && !removed.length && !changed.length) return "";
-        const group = (title, ids) => (ids.length ? `<div><div class="eyebrow" style="margin-bottom:0.5rem">${esc(t(title))} (${ids.length})</div>
-          <div class="grid tight">${ids.map((id) => augRow(id)).join("")}</div></div>` : "");
-        return `<div class="card"><div class="card-head"><h2>${esc(t("Patch {v}", { v: p.patch }))}</h2></div><div class="panel">
-          ${changed.length ? `<div class="grid">${changed.map((c) => augRow(c.id, c.changes.map((r) =>
-            `<div class="small"><span class="muted">${esc(words(r.name))}:</span> ${val(r.old)} → <b>${val(r.new)}</b>${delta(r.name, r.old, r.new)}</div>`).join(""))).join("")}</div>` : ""}
-          ${group("Added to the pool", added)}${group("Removed from the pool", removed)}</div></div>`;
-      }).join("");
-      $("history-list").innerHTML = blocks;
-      $("history-empty").hidden = !!blocks;
-    }
-    $("history-search").addEventListener("input", renderHistory);
-    renderHistory();
-  }
-
   // ---- Quests
   $("quest-list").innerHTML = D.quests
     .map((q) => `

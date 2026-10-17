@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Mayhem Info</title>
-  <meta name="description" content="How ARAM Mayhem works: rules, quests, challenges, items and augment history.">
+  <meta name="description" content="How ARAM Mayhem works: rules, quests, challenges and items.">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -18,8 +18,6 @@
         <button type="button" role="tab" data-tab="challenges" data-t>Challenges</button>
         <button type="button" role="tab" data-tab="items" data-t>Items</button>
         <button type="button" role="tab" data-tab="maps" data-t>Extras</button>
-        <button type="button" role="tab" data-tab="history" data-t>Augment history</button>
-        <button type="button" role="tab" data-tab="archive" data-t>Archive</button>
       </div>
       <span id="patch" class="eyebrow"></span>
     </div>
@@ -106,32 +104,6 @@
       </div>
     </section>
 
-    <section class="panel" id="panel-history" hidden>
-      <div class="card">
-        <p class="eyebrow" data-t>Augment history</p>
-        <h2 class="section" data-t>Every augment change, patch by patch</h2>
-        <p class="muted" style="margin-top:0.5rem" id="history-intro"></p>
-        <div class="lookup" style="margin-top:0.85rem">
-          <input id="history-search" type="search" placeholder="Find an augment" autocomplete="off" aria-label="Find an augment" data-t-attr="placeholder,aria-label">
-        </div>
-      </div>
-      <div class="panel" id="history-list"></div>
-      <p class="muted small" id="history-empty" hidden data-t>No changes for that augment.</p>
-    </section>
-
-    <section class="panel" id="panel-archive" hidden>
-      <div class="card">
-        <p class="eyebrow" data-t>Archive</p>
-        <h2 class="section" data-t>Features from past Mayhem seasons</h2>
-        <p class="muted" style="margin-top:0.5rem" data-t>Things Mayhem used to have.</p>
-      </div>
-      <div class="card">
-        <div class="card-head"><h2 data-t>Augment Sets</h2><span class="muted small" data-t>Bonuses for taking augments that share a theme</span></div>
-        <p class="muted small" style="margin-bottom:0.85rem" data-t>Each set's name and bonus. Which augments belonged to each set and the exact numbers per tier aren't known, so they aren't shown.</p>
-        <div class="grid tight" id="set-list"></div>
-      </div>
-    </section>
-
     <section class="panel" id="panel-quests" hidden>
       <div class="card">
         <p class="eyebrow" data-t>Quest augments</p>
@@ -164,7 +136,6 @@
       </main>
   <script src="i18n.js"></script>
   <script src="data.js"></script>
-  <script src="history.js"></script>
   <script src="app.js"></script>
 </body>
 </html>
