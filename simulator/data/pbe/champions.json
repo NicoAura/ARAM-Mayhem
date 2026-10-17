@@ -1,6 +1,6 @@
 {
  "meta": {
-  "built_at": "2026-10-17T02:48:40+00:00",
+  "built_at": "2026-10-17T03:04:49+00:00",
   "game_version": "16.21",
   "cdragon": "pbe",
   "mayhem_balance_patch": "26.19",
@@ -1129,6 +1129,13 @@
      "rank": 5,
      "cooldown": 14.0,
      "cast_time": 0.0,
+     "shield": {
+      "scaling": {
+       "const": 320.0,
+       "bonus_ad": 1.5
+      },
+      "duration": 1.5
+     },
      "targeting": "Self",
      "area": "aoe",
      "duration": 0.5,
@@ -1785,6 +1792,13 @@
      "rank": 5,
      "cooldown": 10.0,
      "cast_time": 0.0,
+     "shield": {
+      "scaling": {
+       "const": 200.0,
+       "ap": 0.4
+      },
+      "duration": 3.0
+     },
      "targeting": "TargetOrLocation",
      "area": "aoe",
      "duration": 3.0,
@@ -2705,6 +2719,13 @@
      "rank": 5,
      "cooldown": 16.0,
      "cast_time": 0.0,
+     "shield": {
+      "scaling": {
+       "const": 230.0,
+       "ap": 0.6
+      },
+      "duration": 1.5
+     },
      "targeting": "Area",
      "area": "aoe",
      "duration": 1.5,
@@ -5302,6 +5323,14 @@
      "rank": 5,
      "cooldown": 9.0,
      "cast_time": 0.0,
+     "shield": {
+      "scaling": {
+       "const": 105.0,
+       "ap": 0.3,
+       "bonus_hp": 0.14
+      },
+      "duration": 2.5
+     },
      "targeting": "Self",
      "area": "aoe",
      "duration": 5.0,
@@ -5922,6 +5951,13 @@
      "cc": {
       "type": "stun",
       "duration": 2.25
+     },
+     "shield": {
+      "scaling": {
+       "const": 180.0,
+       "ap": 1.5
+      },
+      "duration": 2.5
      },
      "targeting": "Area",
      "area": "aoe",
@@ -7346,6 +7382,13 @@
       "type": "taunt",
       "duration": 0.5
      },
+     "shield": {
+      "scaling": {
+       "const": 370.17,
+       "bonus_hp": 0.135
+      },
+      "duration": 8.0
+     },
      "targeting": "SelfAoe",
      "area": "aoe",
      "duration": 2.0,
@@ -7763,6 +7806,13 @@
      "rank": 5,
      "cooldown": 12.0,
      "cast_time": 0.0,
+     "shield": {
+      "scaling": {
+       "const": 145.0,
+       "bonus_hp": 0.2
+      },
+      "duration": 0.75
+     },
      "targeting": "Self",
      "area": "aoe",
      "duration": 4.0,
@@ -9308,6 +9358,13 @@
      "rank": 5,
      "cooldown": 16.0,
      "cast_time": 0.0,
+     "shield": {
+      "scaling": {
+       "const": 260.0,
+       "ap": 0.6
+      },
+      "duration": 2.5
+     },
      "targeting": "Self",
      "area": "aoe",
      "duration": 6.0,
@@ -9986,6 +10043,13 @@
       "duration": 2.0,
       "amount": 0.3
      },
+     "shield": {
+      "scaling": {
+       "const": 235.0,
+       "ap": 0.5
+      },
+      "duration": 2.5
+     },
      "targeting": "",
      "area": "single",
      "duration": 2.0,
@@ -10184,6 +10248,13 @@
      "rank": 5,
      "cooldown": 12.0,
      "cast_time": 0.25,
+     "shield": {
+      "scaling": {
+       "const": 240.0,
+       "ap": 0.55
+      },
+      "duration": 4.0
+     },
      "targeting": "",
      "area": "single",
      "duration": 5.0,
@@ -10320,6 +10391,13 @@
       "type": "slow",
       "duration": 1.5,
       "amount": 0.3
+     },
+     "shield": {
+      "scaling": {
+       "const": 140.0,
+       "bonus_ad": 0.7
+      },
+      "duration": 2.5
      },
      "targeting": "SelfAoe",
      "area": "aoe",
@@ -11356,6 +11434,13 @@
      "rank": 5,
      "cooldown": 8.0,
      "cast_time": 0.4,
+     "shield": {
+      "scaling": {
+       "const": 240.0,
+       "bonus_hp": 0.15
+      },
+      "duration": 2.0
+     },
      "targeting": "TargetOrLocation",
      "area": "aoe",
      "duration": 2.0,
@@ -11571,6 +11656,14 @@
      "rank": 3,
      "cooldown": 70.0,
      "cast_time": 0.25,
+     "shield": {
+      "scaling": {
+       "const": 385.76,
+       "bonus_ad": 1.8,
+       "ap": 1.2
+      },
+      "duration": 2.0
+     },
      "targeting": "Location",
      "area": "aoe",
      "duration": 2.0,
@@ -11921,6 +12014,13 @@
       "type": "root",
       "duration": 1.25
      },
+     "shield": {
+      "scaling": {
+       "const": 125.0,
+       "ap": 0.45
+      },
+      "duration": 2.5
+     },
      "targeting": "Self",
      "area": "aoe",
      "duration": 1.5,
@@ -12208,6 +12308,13 @@
      "rank": 5,
      "cooldown": 7.0,
      "cast_time": 0.25,
+     "shield": {
+      "scaling": {
+       "const": 200.0,
+       "ap": 0.3
+      },
+      "duration": 2.5
+     },
      "targeting": "",
      "area": "single",
      "duration": 1.5,
@@ -13768,6 +13875,13 @@
       "type": "knockup",
       "duration": 0.75
      },
+     "shield": {
+      "scaling": {
+       "const": 400.0,
+       "bonus_ad": 3.0
+      },
+      "duration": 2.5
+     },
      "targeting": "Location",
      "area": "aoe",
      "duration": 0.0,
@@ -14373,6 +14487,13 @@
      "rank": 5,
      "cooldown": 7.0,
      "cast_time": 0.0,
+     "shield": {
+      "scaling": {
+       "const": 80.0,
+       "ap": 0.8
+      },
+      "duration": 2.0
+     },
      "targeting": "TargetOrLocation",
      "area": "aoe",
      "duration": 2.0,
@@ -15636,6 +15757,13 @@
      "rank": 5,
      "cooldown": 8.0,
      "cast_time": 0.0,
+     "shield": {
+      "scaling": {
+       "const": 230.0,
+       "ap": 0.5
+      },
+      "duration": 2.5
+     },
      "targeting": "",
      "area": "single",
      "duration": 2.5,
@@ -15782,6 +15910,13 @@
      "rank": 5,
      "cooldown": 10.0,
      "cast_time": 0.25,
+     "shield": {
+      "scaling": {
+       "const": 100.0,
+       "ap": 0.4
+      },
+      "duration": 2.5
+     },
      "targeting": "Location",
      "area": "aoe",
      "duration": 2.5,
@@ -16807,6 +16942,13 @@
      "rank": 5,
      "cooldown": 41.0,
      "cast_time": 0.0,
+     "shield": {
+      "scaling": {
+       "const": 200.0,
+       "ap": 0.7
+      },
+      "duration": 0.75
+     },
      "targeting": "Self",
      "area": "aoe",
      "duration": 0.75,
@@ -17034,6 +17176,13 @@
      "rank": 5,
      "cooldown": 13.0,
      "cast_time": 0.0,
+     "shield": {
+      "scaling": {
+       "const": 165.0,
+       "ap": 0.45
+      },
+      "duration": 2.5
+     },
      "targeting": "",
      "area": "single",
      "duration": 2.5,
@@ -17408,6 +17557,13 @@
      "rank": 5,
      "cooldown": 8.0,
      "cast_time": 0.0,
+     "shield": {
+      "scaling": {
+       "const": 120.65,
+       "bonus_hp": 0.05
+      },
+      "duration": 2.5
+     },
      "targeting": "Self",
      "area": "aoe",
      "duration": 5.0,
@@ -17621,6 +17777,13 @@
      "cc": {
       "type": "root",
       "duration": 1.25
+     },
+     "shield": {
+      "scaling": {
+       "const": 320.0,
+       "ap": 0.7
+      },
+      "duration": 5.0
      },
      "targeting": "",
      "area": "single",
@@ -17892,6 +18055,13 @@
       "type": "slow",
       "duration": 1.5,
       "amount": 0.3
+     },
+     "shield": {
+      "scaling": {
+       "const": 200.0,
+       "bonus_ad": 1.5
+      },
+      "duration": 3.0
      },
      "targeting": "",
      "area": "single",
@@ -18414,6 +18584,13 @@
      "rank": 5,
      "cooldown": 12.0,
      "cast_time": 0.0,
+     "shield": {
+      "scaling": {
+       "const": 371.52,
+       "bonus_hp": 0.12
+      },
+      "duration": 6.0
+     },
      "targeting": "Self",
      "area": "aoe",
      "duration": 6.0,
@@ -19481,6 +19658,14 @@
       "duration": 1.5,
       "amount": 0.3
      },
+     "shield": {
+      "scaling": {
+       "const": 85.0,
+       "bonus_hp": 0.5,
+       "ap": 1.5
+      },
+      "duration": 3.0
+     },
      "targeting": "SelfAoe",
      "area": "aoe",
      "duration": 3.0,
@@ -19600,6 +19785,12 @@
      "rank": 5,
      "cooldown": 12.0,
      "cast_time": 0.0,
+     "shield": {
+      "scaling": {
+       "const": 130.0
+      },
+      "duration": 2.5
+     },
      "targeting": "Self",
      "area": "aoe",
      "duration": 5.0,
@@ -19803,6 +19994,13 @@
      "rank": 5,
      "cooldown": 9.0,
      "cast_time": 0.25,
+     "shield": {
+      "scaling": {
+       "const": 195.0,
+       "ap": 0.45
+      },
+      "duration": 2.5
+     },
      "targeting": "",
      "area": "single",
      "duration": 2.5,
@@ -21292,6 +21490,13 @@
      "rank": 5,
      "cooldown": 12.0,
      "cast_time": 0.25,
+     "shield": {
+      "scaling": {
+       "const": 150.0,
+       "ap": 0.7
+      },
+      "duration": 3.0
+     },
      "targeting": "TargetOrLocation",
      "area": "aoe",
      "duration": 3.0,
@@ -21827,6 +22032,13 @@
       "type": "knockup",
       "duration": 0.75
      },
+     "shield": {
+      "scaling": {
+       "const": 362.68,
+       "bonus_hp": 0.11
+      },
+      "duration": 2.5
+     },
      "targeting": "AreaClamped",
      "area": "aoe",
      "duration": 0.4,
@@ -22057,6 +22269,13 @@
       "type": "slow",
       "duration": 2.0,
       "amount": 0.3
+     },
+     "shield": {
+      "scaling": {
+       "const": 110.0,
+       "ap": 0.5
+      },
+      "duration": 3.0
      },
      "targeting": "LocationClamped",
      "area": "aoe",
@@ -22714,6 +22933,13 @@
      "rank": 5,
      "cooldown": 6.0,
      "cast_time": 0.0,
+     "shield": {
+      "scaling": {
+       "const": 170.0,
+       "bonus_ad": 1.1
+      },
+      "duration": 2.5
+     },
      "targeting": "TargetOrLocation",
      "area": "aoe",
      "duration": 1.5,
@@ -22905,6 +23131,14 @@
      "rank": 5,
      "cooldown": 6.0,
      "cast_time": 0.0,
+     "shield": {
+      "scaling": {
+       "const": 242.0,
+       "ap": 0.3,
+       "bonus_hp": 0.04
+      },
+      "duration": 1.0
+     },
      "targeting": "Self",
      "area": "aoe",
      "duration": 1.5,
@@ -23767,6 +24001,13 @@
      "rank": 3,
      "cooldown": 100.0,
      "cast_time": 1.0,
+     "shield": {
+      "scaling": {
+       "const": 200.0,
+       "ap": 0.5
+      },
+      "duration": 3.0
+     },
      "targeting": "Location",
      "area": "aoe",
      "duration": 3.0,
@@ -23795,10 +24036,12 @@
       }
      ],
      "mode_overrides": [],
-     "notes": []
+     "notes": [
+      "stack-based scaling ignored"
+     ]
     }
    ],
-   "parse_quality": "good",
+   "parse_quality": "partial",
    "notes": []
   },
   {
@@ -23894,6 +24137,13 @@
      "rank": 5,
      "cooldown": 22.0,
      "cast_time": 0.0,
+     "shield": {
+      "scaling": {
+       "const": 140.0,
+       "ap": 0.2
+      },
+      "duration": 2.5
+     },
      "targeting": "Self",
      "area": "aoe",
      "duration": 2.5,
@@ -24637,6 +24887,14 @@
      "cooldown": 160.0,
      "cast_time": 0.0,
      "lock": 3.0,
+     "shield": {
+      "scaling": {
+       "const": 320.0,
+       "bonus_hp": 0.15,
+       "ap": 1.35
+      },
+      "duration": 5.0
+     },
      "targeting": "",
      "area": "single",
      "duration": 5.0,
@@ -24768,6 +25026,13 @@
      "rank": 5,
      "cooldown": 10.0,
      "cast_time": 0.0,
+     "shield": {
+      "scaling": {
+       "const": 140.0,
+       "bonus_hp": 0.12
+      },
+      "duration": 2.5
+     },
      "targeting": "Self",
      "area": "aoe",
      "duration": 2.5,
@@ -25188,6 +25453,14 @@
      "rank": 5,
      "cooldown": 11.0,
      "cast_time": 0.0,
+     "shield": {
+      "scaling": {
+       "const": 347.0,
+       "ap": 0.4,
+       "bonus_hp": 0.1
+      },
+      "duration": 2.5
+     },
      "targeting": "Self",
      "area": "aoe",
      "duration": 6.0,
@@ -25608,6 +25881,13 @@
       "type": "slow",
       "duration": 1.0,
       "amount": 0.3
+     },
+     "shield": {
+      "scaling": {
+       "const": 200.0,
+       "bonus_hp": 0.08
+      },
+      "duration": 2.5
      },
      "targeting": "Direction",
      "area": "line",
@@ -26067,6 +26347,13 @@
      "rank": 5,
      "cooldown": 13.0,
      "cast_time": 0.25,
+     "shield": {
+      "scaling": {
+       "const": 105.0,
+       "ap": 0.25
+      },
+      "duration": 1.5
+     },
      "targeting": "SelfAoe",
      "area": "aoe",
      "duration": 3.0,
@@ -27132,6 +27419,13 @@
       "duration": 1.5,
       "amount": 0.3
      },
+     "shield": {
+      "scaling": {
+       "const": 950.0,
+       "ap": 1.0
+      },
+      "duration": 2.5
+     },
      "targeting": "TargetOrLocation",
      "area": "aoe",
      "duration": 3.0,
@@ -28037,6 +28331,12 @@
      "rank": 5,
      "cooldown": 15.0,
      "cast_time": 0.0,
+     "shield": {
+      "scaling": {
+       "const": 130.0
+      },
+      "duration": 4.0
+     },
      "targeting": "Area",
      "area": "aoe",
      "duration": 6.0,
@@ -28052,7 +28352,8 @@
      "hits": [],
      "mode_overrides": [],
      "notes": [
-      "Kiwi cooldown"
+      "Kiwi cooldown",
+      "stack-based scaling ignored"
      ]
     },
     {
@@ -29223,6 +29524,15 @@
      "rank": 5,
      "cooldown": 6.0,
      "cast_time": 0.0,
+     "shield": {
+      "scaling": {
+       "const": 196.296,
+       "bonus_hp": 0.032,
+       "ap": 0.4,
+       "bonus_ad": 0.5
+      },
+      "duration": 4.0
+     },
      "targeting": "Self",
      "area": "aoe",
      "duration": 4.0,
@@ -29464,6 +29774,14 @@
      "cc": {
       "type": "stun",
       "duration": 1.5
+     },
+     "shield": {
+      "scaling": {
+       "const": 135.0,
+       "bonus_ad": 1.35,
+       "bonus_hp": 0.135
+      },
+      "duration": 4.0
      },
      "targeting": "Location",
      "area": "aoe",
@@ -30454,6 +30772,13 @@
      "rank": 5,
      "cooldown": 12.0,
      "cast_time": 0.25,
+     "shield": {
+      "scaling": {
+       "const": 150.0,
+       "ap": 0.75
+      },
+      "duration": 2.5
+     },
      "targeting": "SelfAoe",
      "area": "aoe",
      "duration": 2.5,
@@ -31050,6 +31375,13 @@
      "rank": 5,
      "cooldown": 5.0,
      "cast_time": 0.25,
+     "shield": {
+      "scaling": {
+       "const": 130.0,
+       "ap": 0.2
+      },
+      "duration": 2.5
+     },
      "targeting": "",
      "area": "single",
      "duration": 2.5,
@@ -31567,6 +31899,12 @@
       "type": "slow",
       "duration": 2.0,
       "amount": 0.3
+     },
+     "shield": {
+      "scaling": {
+       "ap": 0.75
+      },
+      "duration": 3.0
      },
      "targeting": "Location",
      "area": "aoe",
@@ -32958,6 +33296,13 @@
      "rank": 5,
      "cooldown": 14.0,
      "cast_time": 0.5,
+     "shield": {
+      "scaling": {
+       "const": 90.0,
+       "bonus_ad": 0.65
+      },
+      "duration": 1.5
+     },
      "targeting": "Location",
      "area": "aoe",
      "duration": 1.5,
@@ -33631,6 +33976,13 @@
      "rank": 5,
      "cooldown": 14.0,
      "cast_time": 0.0,
+     "shield": {
+      "scaling": {
+       "const": 165.0,
+       "ap": 0.4
+      },
+      "duration": 3.0
+     },
      "targeting": "Self",
      "area": "aoe",
      "duration": 3.0,

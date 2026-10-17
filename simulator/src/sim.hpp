@@ -56,6 +56,9 @@ struct EnemyProfile {
     double reach = 550;        // all-champion sim: how far their damage reaches
     // all-champion sim: the enemy's build (its most popular items and augments)
     std::vector<std::string> items, augments;
+    // all-champion sim: how hard its build hits at the fight's level compared with the
+    // mid-game state real games' damage numbers average over (1 = the same), and its penetration
+    double power = 1.0, lethality = 0, armorPen = 0, magicPen = 0, magicPenPct = 0;
 };
 
 struct Scenario {

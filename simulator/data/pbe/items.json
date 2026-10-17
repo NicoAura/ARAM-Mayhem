@@ -637,8 +637,14 @@
    "stats": {
     "hp": 400
    },
-   "effects": {},
-   "confidence": "verified"
+   "effects": {
+    "base_ad_pct": 0.5,
+    "lifeline_bonus_hp": 0.7,
+    "lifeline_duration": 4.5,
+    "lifeline_threshold": 0.3,
+    "shield_ranged": 0.6
+   },
+   "confidence": "approx"
   },
   "shojin": {
    "id": 3161,
@@ -673,7 +679,11 @@
    },
    "effects": {
     "maxhp_proc": 0.06,
-    "maxhp_proc_cd": 6
+    "maxhp_proc_cd": 6,
+    "proc_shield_flat": 150,
+    "proc_shield_bonus_ad": 0.5,
+    "proc_shield_duration": 2,
+    "shield_ranged": 0.5
    },
    "confidence": "approx"
   },
@@ -736,8 +746,10 @@
     "ad": 30,
     "hp": 550
    },
-   "effects": {},
-   "confidence": "verified"
+   "effects": {
+    "ad_per_bonus_hp": 0.025
+   },
+   "confidence": "approx"
   },
   "maw": {
    "id": 3156,
@@ -753,8 +765,15 @@
     "mr": 40,
     "ah": 15
    },
-   "effects": {},
-   "confidence": "verified"
+   "effects": {
+    "lifeline_flat": 200,
+    "lifeline_bonus_ad": 1.5,
+    "lifeline_magic": 1,
+    "lifeline_duration": 3,
+    "lifeline_threshold": 0.3,
+    "shield_ranged": 0.75
+   },
+   "confidence": "approx"
   },
   "youmuus": {
    "id": 3142,
@@ -1325,8 +1344,12 @@
    "stats": {
     "hp": 1300
    },
-   "effects": {},
-   "confidence": "verified",
+   "effects": {
+    "heartsteel_flat": 70,
+    "heartsteel_own_hp": 0.06,
+    "heartsteel_cd": 30
+   },
+   "confidence": "approx",
    "note": "extra HP stands in for stacks gained by the late game"
   },
   "warmogs": {
@@ -1463,8 +1486,12 @@
     "armor": 50,
     "ah": 15
    },
-   "effects": {},
-   "confidence": "verified"
+   "effects": {
+    "drain_bonus_hp": 0.03,
+    "drain_cd": 4,
+    "drain_range": 650
+   },
+   "confidence": "approx"
   },
   "iceborn": {
    "id": 6662,

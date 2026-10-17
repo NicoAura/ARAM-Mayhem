@@ -117,7 +117,7 @@
     const end = ev.find((e) => e.k === "end");
     const f = { duration: Math.max(tr.fight.duration, end ? end.t : 0), length: tr.fight.duration, engage: tr.fight.engage_at, maxHp: tr.fight.max_hp, events: ev,
       casts: [], attacks: [], procs: [], cc: [], kills: [], self: [], spawns: new Map(), focus: [], numbers: [],
-      ecc: [], heals: [],
+      ecc: [], heals: [], shields: [],
       damage: [], death: null, pos: [], geo: {}, poros: [] };
     for (const a of tr.abilities || []) f.geo[a.slot] = a;
     let lastNum = null;
@@ -135,6 +135,7 @@
           if (last && e.t - last.t < 0.5) last.a += e.a || 0; else f.heals.push({ t: e.t, a: e.a || 0 });
           break;
         }
+        case "shield": f.shields.push(e); break;
         case "self": f.self.push(e); break;
         case "death": f.death = e; f.self.push(e); break;
         case "defy": case "revive": f.self.push(e); break;
@@ -290,10 +291,17 @@
     for (const e of fight.self) { if (e.t <= time) prev = e; else { next = e; break; } }
     if (prev) {
       s.selfHp = prev.hp;
-      if (next && next.t > prev.t) s.selfHp = prev.hp + (next.hp - prev.hp) * (time - prev.t) / (next.t - prev.t);
+      s.shield = prev.sh || 0;
+      if (next && next.t > prev.t) {
+        const k = (time - prev.t) / (next.t - prev.t);
+        s.selfHp = prev.hp + (next.hp - prev.hp) * k;
+        s.shield = (prev.sh || 0) + ((next.sh || 0) - (prev.sh || 0)) * k;
+      }
+      // Shields end on their own between samples.
+      if (s.shield > 0 && !fight.shields.some((sh) => sh.t <= time && time < sh.t + (sh.l || 0))) s.shield = 0;
     }
     s.dead = !!(fight.death && fight.death.t <= time);
-    if (s.dead) s.selfHp = 0;
+    if (s.dead) { s.selfHp = 0; s.shield = 0; }
     const myCc = fight.cc.find((c) => c.t <= time && time < c.a);
     s.cc = !!myCc;
     s.ccOn = myCc || null;
@@ -402,9 +410,13 @@
     }
     g.restore();
   }
-  function hpBar(g, x, y, w, frac, color) {
+  // shieldFrac: shields as a share of max Health, drawn in white after the Health (the bar
+  // shrinks to fit when Health plus shields is more than max Health).
+  function hpBar(g, x, y, w, frac, color, shieldFrac) {
     g.fillStyle = "rgba(0,0,0,.6)"; g.fillRect(x - 1, y - 1, w + 2, 8);
-    g.fillStyle = color; g.fillRect(x, y, Math.max(0, w * Math.min(1, frac)), 6);
+    const sh = Math.max(0, shieldFrac || 0), hp = Math.max(0, Math.min(1, frac)), k = Math.max(1, hp + sh);
+    g.fillStyle = color; g.fillRect(x, y, w * hp / k, 6);
+    if (sh > 0) { g.fillStyle = "#eef3f8"; g.fillRect(x + w * hp / k, y, w * sh / k, 6); }
   }
   const ease = (x) => 1 - Math.pow(1 - Math.min(1, Math.max(0, x)), 3);
 
@@ -777,7 +789,7 @@
     if (myHead) {
       g.strokeStyle = s.dead ? "rgba(120,120,120,.6)" : "#8fd3ff"; g.lineWidth = 3 * u;
       g.beginPath(); g.ellipse(meX, meY, R * 1.2, R * 0.5, 0, 0, Math.PI * 2); g.stroke();
-      hpBar(og, myHead.x - R, myHead.y - 4 * u, R * 2, frac, frac < 0.3 ? "#f0605a" : "#5fd38a");
+      hpBar(og, myHead.x - R, myHead.y - 4 * u, R * 2, frac, frac < 0.3 ? "#f0605a" : "#5fd38a", (s.shield || 0) / fight.maxHp);
       labelY = meY + R * 0.5 + 26 * u;
     } else {
       g.fillStyle = s.dead ? "rgba(120,120,120,.2)" : "rgba(143,211,255,.18)";
@@ -787,7 +799,7 @@
       g.filter = "none";
       g.strokeStyle = "#8fd3ff"; g.lineWidth = 3 * u;
       g.beginPath(); g.arc(meX, meY, R, 0, Math.PI * 2); g.stroke();
-      hpBar(og, meX - R, meY - R - 16 * u, R * 2, frac, frac < 0.3 ? "#f0605a" : "#5fd38a");
+      hpBar(og, meX - R, meY - R - 16 * u, R * 2, frac, frac < 0.3 ? "#f0605a" : "#5fd38a", (s.shield || 0) / fight.maxHp);
     }
     if (s.cc && !s.dead) {
       const cy = myHead ? myHead.y - 18 * u : meY - R - 30 * u;
@@ -849,6 +861,20 @@
       if (age < 0 || age > 1 || h.a < 5) continue;
       const top = myHead ? myHead.y - 30 * u : meY - R - 40 * u;
       floatText(og, "+" + Math.round(h.a), meX + 40 * u, top - age * 50 * u, 1 - age, "#5fd38a", 15 * u);
+    }
+
+    // Shields on you: a white number and, outside Low graphics, a ring that fades as it ends.
+    for (const sh of fight.shields) {
+      const age = time - sh.t;
+      if (age < 0 || age > (sh.l || 1)) continue;
+      const top = myHead ? myHead.y - 30 * u : meY - R - 40 * u;
+      if (age < 1) floatText(og, "+" + Math.round(sh.a) + " shield", meX - 40 * u, top - age * 50 * u, 1 - age, "#eef3f8", 14 * u);
+    }
+    if ((s.shield || 0) > 1 && !s.dead && !lowQuality()) {
+      og.globalAlpha = 0.35 + 0.15 * Math.sin(time * 6);
+      og.strokeStyle = "#dbe8ff"; og.lineWidth = 3 * u;
+      og.beginPath(); og.ellipse(meX, myHead ? meY : meY, R * 1.35, myHead ? R * 0.6 : R * 1.35, 0, 0, Math.PI * 2); og.stroke();
+      og.globalAlpha = 1;
     }
 
     // Kills: a burst where the enemy falls; executes say so.

@@ -446,6 +446,7 @@ def parse_spell(slot, spell_obj, strings, base_stats, attack_range=125):
         "cooldown": round(cd, 3),
         **cast_timing(spell, rank, targeting),
         **({"cc": cc} if (cc := parse_cc(text, ev)) else {}),
+        **({"shield": sh} if (sh := parse_shield(body, ev)) else {}),
         "targeting": targeting,
         "area": area,
         "duration": round(duration, 3),
@@ -488,6 +489,32 @@ def parse_cc(text, ev):
             amt = lin.const() if lin is not None and lin.is_const() else 30.0
             out["amount"] = round(min(0.9, amt / 100.0 if amt > 1 else amt), 3)
         return out
+    return None
+
+
+SHIELD_TAG = re.compile(r"<shield>(.*?)</shield>", re.S | re.I)
+
+
+def parse_shield(body, ev):
+    """The shield an ability gives (its first <shield> amount) and how long it lasts."""
+    for m in SHIELD_TAG.finditer(body):
+        ref = REF.search(m.group(1))
+        if not ref:
+            continue
+        lin, is_pct = ev.calc(ref.group(1))
+        if lin is None or is_pct or ref.group(2) or "%" in m.group(1)[ref.end():ref.end() + 2]:
+            continue
+        if lin.const() <= 0 and not any(k != "const" for k in round_lin(lin)):
+            continue
+        dur = 2.5
+        sentence = body[m.end():m.end() + 160].split(". ")[0]
+        for d in REF.finditer(sentence):
+            if re.search(r"duration|time|length", d.group(1), re.I) and not re.search(r"cooldown|recharge", d.group(1), re.I):
+                dl, _ = ev.calc(d.group(1))
+                if dl is not None and dl.is_const() and 0.5 <= dl.const() <= 8:
+                    dur = dl.const()
+                    break
+        return {"scaling": round_lin(lin), "duration": round(dur, 3)}
     return None
 
 

@@ -171,6 +171,10 @@ ChampionKit loadChampion(const json::Value& c, const Rules& rules) {
             ab.ccSlow = cc["amount"].asNumber(0.3);
             if (ab.cc != "slow" && ab.cc != "silence" && ab.cc != "root") k.hardCc.push_back({ab.slot, ab.cc});
         }
+        if (a["shield"].isObject()) {
+            ab.shield = bagOf(a["shield"]["scaling"]);
+            ab.shieldDuration = a["shield"]["duration"].asNumber(2.5);
+        }
         ab.duration = a["duration"].asNumber(0);
         ab.area = areaOf(a["area"].asString());
         ab.geo = geometryOf(a["geometry"], ab.area, k.attackRange);
@@ -214,14 +218,19 @@ ChampionKit loadChampion(const json::Value& c, const Rules& rules) {
             k.apRatios += get(hit.scaling, "ap") * hit.weight;
             k.adRatios += get(hit.scaling, "bonus_ad") * hit.weight;
         }
-        if (!ab.hits.empty()) k.abilities.push_back(ab);
+        // Shield-only abilities (Lux W, Janna E) are cast on yourself.
+        if (ab.hits.empty() && !ab.shield.empty() && ab.geo.move == Move::None) {
+            ab.geo.selfBuff = true;
+            ab.geo.range = k.attackRange;
+        }
+        if (!ab.hits.empty() || !ab.shield.empty()) k.abilities.push_back(ab);
     }
     // How far its damage reaches, as an enemy: the middle of its basic abilities' reach
     // (capped at 800), or its attack range. Ultimates and dashes don't count: a dash
     // brings it close, and long-range ultimates aren't what it fights with.
     std::vector<double> reaches;
     for (const auto& a : k.abilities) {
-        if (a.onhitEvery > 0 || a.slot == 'R' || a.geo.move != Move::None) continue;
+        if (a.hits.empty() || a.onhitEvery > 0 || a.slot == 'R' || a.geo.move != Move::None) continue;
         const Geometry& g = a.geo;
         double r = g.shape == Shape::Circle ? (g.onSelf ? g.radius : g.range + 0.5 * g.radius) : g.range;
         reaches.push_back(std::clamp(r, k.attackRange, 800.0));
@@ -237,7 +246,7 @@ const std::vector<std::pair<std::string, std::string>>& Library::settingKeys() {
     static const std::vector<std::pair<std::string, std::string>> keys = {
         // fight
         {"level", "your champion's level (1-18)"},
-        {"enemy_level", "the enemies' level (1-18); their stats come from it plus their build"},
+        {"enemy_level", "the enemies' level (1-18); their Health, resists and damage come from it plus their build"},
         {"fight_mean", "average fight length, seconds"},
         {"fight_sd", "spread of fight length, seconds"},
         {"fight_min", "shortest fight, seconds"},
@@ -367,23 +376,60 @@ static double statGrowth(int level) {
     return n * (0.7025 + 0.0175 * n);
 }
 
+// How hard a champion hits at a level with some items and augments: attacks for its physical
+// damage (attack damage, crit, attack speed), abilities for its magic damage (base damage that
+// grows with level, plus AP). Only ratios of it are used.
+static double offense(const ChampionKit& k, int level, const std::vector<const Effect*>& gear, double physShare) {
+    const double g = statGrowth(level);
+    double ad = 0, ap = 0, as = 0, crit = 0, critDamage = 0, adaptive = 0, apAmp = 0, amp = 0;
+    auto stat = [](const Bag& b, const char* key) { auto f = b.find(key); return f == b.end() ? 0.0 : f->second; };
+    for (const Effect* e : gear) {
+        ad += stat(e->stats, "ad"); ap += stat(e->stats, "ap"); as += stat(e->stats, "as");
+        crit += stat(e->stats, "crit"); critDamage += stat(e->stats, "crit_damage");
+        adaptive += stat(e->effects, "adaptive_amp"); apAmp += stat(e->effects, "ap_amp");
+        amp += stat(e->effects, "damage_amp");
+    }
+    if (ap >= ad) ap *= 1.0 + adaptive; else ad *= 1.0 + adaptive;
+    ap *= 1.0 + apAmp;
+    crit = std::min(1.0, crit);
+    const double phys = (k.ad + k.adG * g + ad) * (1.0 + crit * (0.75 + critDamage)) * (1.0 + 0.35 * (k.asG * g + as));
+    const double magic = 40.0 + 8.0 * (level - 1) + 0.7 * ap;
+    return (physShare * phys / (k.ad + k.adG * 12) + (1.0 - physShare) * magic / 170.0) * (1.0 + amp);
+}
+
 void Library::equipEnemy(EnemyProfile& p, int level, bool listed) const {
     const ChampionKit* k = find(std::to_string(p.championId));
-    if (!k || (!listed && p.items.empty() && p.augments.empty())) return;
-    const double g = statGrowth(level);
-    double hp = k->hp + k->hpG * g, armor = k->armor + k->armorG * g, mr = k->mr + k->mrG * g, hpPct = 0;
-    auto stat = [](const Bag& b, const char* key) { auto f = b.find(key); return f == b.end() ? 0.0 : f->second; };
+    if (!k) return;
+    std::vector<const Effect*> gear;
     for (int pass = 0; pass < 2; ++pass)
         for (const auto& name : pass ? p.augments : p.items) {
             const auto& table = pass ? augments : items;
             auto fx = table.find(name);
             if (fx == table.end())
                 throw std::runtime_error("unknown " + std::string(pass ? "augment" : "item") + " '" + name + "' for enemy " + p.name);
-            hp += stat(fx->second.stats, "hp");
-            armor += stat(fx->second.stats, "armor");
-            mr += stat(fx->second.stats, "mr");
-            hpPct += stat(fx->second.effects, "hp_pct");
+            gear.push_back(&fx->second);
         }
+    // Real games' damage is a whole game's average: taken as level 15 with the first four
+    // items and three augments. The fight's level and full build scale it from there (at most 3x).
+    std::vector<const Effect*> early;
+    for (size_t i = 0; i < gear.size(); ++i)
+        if (i < std::min<size_t>(4, p.items.size()) || (i >= p.items.size() && i < p.items.size() + 3)) early.push_back(gear[i]);
+    p.power = std::min(3.0, offense(*k, level, gear, p.physShare) / offense(*k, 15, early, p.physShare));
+    if (!listed && gear.empty()) return;
+    const double g = statGrowth(level);
+    double hp = k->hp + k->hpG * g, armor = k->armor + k->armorG * g, mr = k->mr + k->mrG * g, hpPct = 0;
+    p.lethality = p.armorPen = p.magicPen = p.magicPenPct = 0;
+    auto stat = [](const Bag& b, const char* key) { auto f = b.find(key); return f == b.end() ? 0.0 : f->second; };
+    for (const Effect* e : gear) {
+        hp += stat(e->stats, "hp");
+        armor += stat(e->stats, "armor");
+        mr += stat(e->stats, "mr");
+        hpPct += stat(e->effects, "hp_pct");
+        p.lethality += stat(e->stats, "lethality");
+        p.armorPen = 1.0 - (1.0 - p.armorPen) * (1.0 - stat(e->stats, "armor_pen"));
+        p.magicPen += stat(e->stats, "magic_pen");
+        p.magicPenPct = 1.0 - (1.0 - p.magicPenPct) * (1.0 - stat(e->stats, "magic_pen_pct"));
+    }
     p.hp = hp * (1.0 + hpPct);
     p.armor = armor;
     p.mr = mr;
@@ -489,9 +535,6 @@ Scenario Library::scenarioFor(const ChampionKit& c) const {
     set("r_ready_chance", sc.rReadyChance);
     set("retarget_delay", sc.retargetDelay);
     if (auto it = fight.find("enemy_damage_scale"); it != fight.end()) sc.damageTakenFactor *= std::max(0.0, it->second);
-    // Real games' enemy damage is late-game damage; lower-level enemies hit softer (an estimate:
-    // 35% at level 1 up to all of it at 18).
-    sc.damageTakenFactor *= 0.35 + 0.65 * (sc.enemyLevel - 1) / 17.0;
     if (auto it = fight.find("cc_scale"); it != fight.end()) {
         const double k = std::max(0.0, it->second);
         sc.ccRatePerPoint *= k; sc.ccRateMin *= k; sc.ccRateMax *= k;
@@ -601,7 +644,7 @@ private:
         if (!trace_ || (t - lastSelfAt_ < 0.1 && kind[0] == 's')) return;
         lastSelfAt_ = t;
         TraceEvent e;
-        e.t = t; e.kind = kind; e.hp = myHp_; e.maxHp = maxHp_;
+        e.t = t; e.kind = kind; e.hp = myHp_; e.maxHp = maxHp_; e.shield = shieldLeft(t);
         record(e);
     }
     void recordFocus() {
@@ -624,6 +667,13 @@ private:
     const Bag* poro_ = nullptr;  // Poro Stampede: the Poro Charge summoner spell
     double poroReady_ = 0;
     bool hasMissile_ = false, hasKraken_ = false, hasStorm_ = false, hasEclipse_ = false;
+    // Shields on you: what's left of each and when it ends. Lifeline items (Sterak's Gage, Maw)
+    // shield you once a fight when you drop low; they share one trigger, the strongest wins.
+    struct ShieldUp { double amount, until; };
+    std::vector<ShieldUp> shields_;
+    std::vector<const Bag*> lifelines_;
+    bool lifelineUsed_ = false;
+    double magicShare_ = 0.5;
 
     // fight
     double t_ = 0, duration_ = 0, nextAttack_ = 0, primaryRespawnAt_ = 0, spellbladeReady_ = 0;
@@ -684,6 +734,7 @@ private:
             if (get(f, "kraken_every") > 0) { hasKraken_ = true; kraken_.fx = &f; }
             if (get(f, "storm_every") > 0) { hasStorm_ = true; storm_.fx = &f; }
             if (get(f, "maxhp_proc_cd") > 0) { hasEclipse_ = true; eclipse_.fx = &f; }
+            if (get(f, "lifeline_duration") > 0) lifelines_.push_back(&f);
             if (get(f, "poro_cd") > 0) poro_ = &f;
         }
         const double g = levelScale(sc_.level);
@@ -827,15 +878,36 @@ private:
         ccLeft_ = std::clamp(1.0 - std::max<size_t>(1, team_.size()) / 5.0, 0.0, 1.0);
         targetRng_ = Rng(targetSeed_, 1);
         moveRng_ = Rng(targetSeed_, 2);
-        double physShare = sc_.enemyPhysShare, teamDamage = 1.0, share = 0;
+        double teamDamage = 1.0, share = 0;
         if (sc_.teamDrivenDamage && !team_.empty()) {
-            double phys = 0;
-            for (const auto* e : team_) { share += e->damageShare; phys += e->damageShare * e->physShare; }
-            if (share > 0) physShare = phys / share;
+            for (const auto* e : team_) share += e->damageShare;
             teamDamage = share / (0.2 * static_cast<double>(team_.size()));
         }
-        const double mitigation = physShare * 100.0 / (100.0 + armor_) + (1.0 - physShare) * 100.0 / (100.0 + mr_);
+        // Each enemy's damage after your Armor and MR (less its penetration), scaled by how hard
+        // its build hits at this level.
+        auto through = [&](const EnemyProfile* p) {
+            if (!p) {
+                const double ps = sc_.enemyPhysShare;
+                return ps * 100.0 / (100.0 + armor_) + (1.0 - ps) * 100.0 / (100.0 + mr_);
+            }
+            const double armor = std::max(0.0, armor_ * (1.0 - p->armorPen) - p->lethality);
+            const double mr = std::max(0.0, mr_ * (1.0 - p->magicPenPct) - p->magicPen);
+            return (p->physShare * 100.0 / (100.0 + armor) + (1.0 - p->physShare) * 100.0 / (100.0 + mr)) * p->power;
+        };
+        double mitigation = 0;
+        if (sc_.teamDrivenDamage && !team_.empty() && share > 0)
+            for (const auto* e : team_) mitigation += e->damageShare / share * through(e);
+        else if (!team_.empty())
+            for (const auto* e : team_) mitigation += through(e) / static_cast<double>(team_.size());
+        else
+            mitigation = through(nullptr);
         incomingDps_ = incomingRoll_ * sc_.damageTakenFactor * teamDamage * mitigation * rules_.inRangeBoost;
+        magicShare_ = 1.0 - sc_.enemyPhysShare;
+        if (!team_.empty()) {
+            double phys = 0, w = 0;
+            for (const auto* e : team_) { phys += e->damageShare * e->physShare; w += e->damageShare; }
+            if (w > 0) magicShare_ = 1.0 - phys / w;
+        }
         // Always-on damage (Sunfire-style auras and damage toggles).
         auraDps_ = get(fx_, "aura_flat") + get(fx_, "aura_bonus_hp") * bonusHp_;
 
@@ -853,7 +925,7 @@ private:
                       std::clamp(moveRng_.normal(0, sc_.enemySpread), -rules_.laneHalfWidth, rules_.laneHalfWidth)};
             e.pos = e.home;
             const double w = p && share > 0 ? p->damageShare / share : 1.0 / static_cast<double>(n);
-            e.damageWeight = w;
+            e.damageWeight = p && mitigation > 0 ? w * through(p) / mitigation : w;
         }
         primary_ = nearestAlive(me_);
     }
@@ -965,7 +1037,7 @@ private:
             posClock_ = now;
             if (dps > 0 && now < invulnUntil_) dps = 0;
             if (dps > 0) {
-                const double lost = dps * dt;
+                const double lost = absorb(dps * dt, now);
                 if (lost >= myHp_) {
                     const double at = now - dt + myHp_ / dps;
                     res_.damageTaken += myHp_;
@@ -976,6 +1048,7 @@ private:
                 }
                 myHp_ -= lost;
                 res_.damageTaken += lost;
+                lifeline(now);
                 recordSelf(now);
             }
             recordPositions(now, false);
@@ -1067,6 +1140,58 @@ private:
         for (const auto& e : enemies_)
             if (e.alive) { ev.pos.push_back(e.uid); ev.pos.push_back(e.pos.x); ev.pos.push_back(e.pos.y); }
         record(ev);
+    }
+
+    double shieldLeft(double now) const {
+        double left = 0;
+        for (const auto& sh : shields_)
+            if (now < sh.until) left += sh.amount;
+        return left;
+    }
+    // Damage reaching you: shields take it first, the one ending soonest first.
+    double absorb(double dmg, double now) {
+        if (shields_.empty()) return dmg;
+        std::sort(shields_.begin(), shields_.end(), [](const ShieldUp& a, const ShieldUp& b) { return a.until < b.until; });
+        for (auto& sh : shields_) {
+            if (now >= sh.until || sh.amount <= 0) continue;
+            const double take = std::min(sh.amount, dmg);
+            sh.amount -= take;
+            res_.shielded += take;
+            dmg -= take;
+            if (dmg <= 0) break;
+        }
+        shields_.erase(std::remove_if(shields_.begin(), shields_.end(),
+                                      [&](const ShieldUp& sh) { return now >= sh.until || sh.amount <= 1e-9; }),
+                       shields_.end());
+        return dmg;
+    }
+    void addShield(double amount, double duration, char slot) {
+        if (dead_ || amount <= 0 || duration <= 0) return;
+        shields_.push_back({amount, t_ + duration});
+        if (trace_) {
+            TraceEvent ev;
+            ev.t = t_; ev.kind = "shield"; ev.amount = amount; ev.slot = slot; ev.lock = duration;
+            record(ev);
+        }
+        lastSelfAt_ = -1;
+        recordSelf(t_);
+    }
+    void lifeline(double now) {
+        if (lifelineUsed_ || lifelines_.empty()) return;
+        double best = 0, dur = 0;
+        for (const Bag* f : lifelines_) {
+            if (myHp_ >= get(*f, "lifeline_threshold") * maxHp_) continue;
+            double amt = get(*f, "lifeline_flat") + get(*f, "lifeline_bonus_hp") * bonusHp_ + get(*f, "lifeline_bonus_ad") * bonusAd_;
+            if (ch_.ranged && get(*f, "shield_ranged") > 0) amt *= get(*f, "shield_ranged");
+            if (get(*f, "lifeline_magic") > 0) amt *= magicShare_;  // stops magic damage only
+            if (amt > best) { best = amt; dur = get(*f, "lifeline_duration"); }
+        }
+        if (best <= 0) return;
+        lifelineUsed_ = true;
+        const double keep = t_;
+        t_ = now;
+        addShield(best, dur, 'I');
+        t_ = keep;
     }
 
     void heal(double amount) {
@@ -1329,6 +1454,7 @@ private:
             ev.x = shot.aim.x; ev.y = shot.aim.y; ev.flight = shot.flight;
             record(ev);
         }
+        if (!a.shield.empty()) addShield(scaled(a.shield), a.shieldDuration, a.slot);
         const auto& targets = shot.hits;
         bool first = true;
         for (Enemy* e : targets) {
@@ -1481,6 +1607,10 @@ private:
         if (hasEclipse_ && t_ >= eclipse_.readyAt && e->alive) {
             eclipse_.readyAt = t_ + get(*eclipse_.fx, "maxhp_proc_cd");
             deal(e, get(*eclipse_.fx, "maxhp_proc") * e->maxHp, DamageType::Physical, SrcItems);
+            const Bag& f = *eclipse_.fx;
+            addShield((get(f, "proc_shield_flat") + get(f, "proc_shield_bonus_ad") * bonusAd_) *
+                          (ch_.ranged && get(f, "shield_ranged") > 0 ? get(f, "shield_ranged") : 1.0),
+                      get(f, "proc_shield_duration"), 'I');
         }
         if (spellbladeArmed_ && t_ - spellbladeArmedAt_ <= rules_.spellbladeWindow && e->alive) {
             const Bag& f = *spellblade_;
