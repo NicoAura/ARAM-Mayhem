@@ -101,6 +101,7 @@ function normalize(g, owner) {
   if (!me) return null;
   const p = me.participant;
   const s = p.stats || p;
+  const allies = (info.participants || []).filter((o) => o !== p && o.teamId === p.teamId && o.championId > 0).map((o) => o.championId);
   const augs = [1, 2, 3, 4, 5, 6].map((i) => s["playerAugment" + i]).filter((a) => a && a > 0);
   let time = info.gameCreation || Date.parse(info.gameCreationDate || "") || 0;
   // gameDuration is seconds in newer archives, milliseconds in older ones
@@ -130,6 +131,7 @@ function normalize(g, owner) {
     heal: s.totalHeal || 0,
     taken: s.totalDamageTaken || 0,
     items: [0, 1, 2, 3, 4, 5, 6].map((i) => s["item" + i]).filter((x) => x > 0),
+    allies,
   };
 }
 
@@ -195,7 +197,7 @@ function setupFilters() {
   $("account").textContent = `${name ? name + " · " : ""}${state.games.length} games, ${fmtDate(first)} to ${fmtDate(last)}`;
   if (filtersReady) return;
   filtersReady = true;
-  for (const id of ["f-patch", "f-queue", "f-from", "f-to", "f-champ", "f-minaug", "f-minpair"]) $(id).addEventListener("input", render);
+  for (const id of ["f-patch", "f-queue", "f-from", "f-to", "f-champ", "f-minaug", "f-minpair", "f-minally"]) $(id).addEventListener("input", render);
   $("f-reset").addEventListener("click", () => {
     for (const id of ["f-queue", "f-from", "f-to", "f-champ"]) $(id).value = "";
     $("f-patch").value = latestPatch;
@@ -234,6 +236,7 @@ function render() {
   renderRecords(state.games);
   renderCurve(state.games);
   renderPairs(games);
+  renderAllies(games);
   renderGames(games);
   if (state.live.length) renderLive();
 }
@@ -618,6 +621,24 @@ function renderPairs(games) {
   const rows = [...map.values()].filter((r) => r.n >= min).sort((x, y) => y.w / y.n - x.w / x.n || y.n - x.n).slice(0, 100);
   table("t-pairs", [
     { label: "Augments", get: (r) => augName(r.a) + augName(r.b), fmt: (r) => `${esc(augName(r.a))} + ${esc(augName(r.b))}` },
+    { label: "Games", get: (r) => r.n },
+    { label: "Win rate", get: (r) => r.w / r.n + r.n / 1e6, fmt: (r) => pct(r.w / r.n), cls: (r) => wrClass(r.w / r.n) },
+  ], rows, 2);
+}
+
+// Allied champions you win most with. Ties go to the champion seen in more games.
+function renderAllies(games) {
+  const min = +$("f-minally").value || 1;
+  const map = new Map();
+  for (const g of games) for (const id of new Set(g.allies)) {
+    const r = map.get(id) || { id, n: 0, w: 0 };
+    r.n++; r.w += g.win ? 1 : 0;
+    map.set(id, r);
+  }
+  const name = (id) => state.champNames[id] || `Champion ${id}`;
+  const rows = [...map.values()].filter((r) => r.n >= min).sort((x, y) => y.w / y.n - x.w / x.n || y.n - x.n).slice(0, 100);
+  table("t-allies", [
+    { label: "Teammate", get: (r) => name(r.id), fmt: (r) => esc(name(r.id)) },
     { label: "Games", get: (r) => r.n },
     { label: "Win rate", get: (r) => r.w / r.n + r.n / 1e6, fmt: (r) => pct(r.w / r.n), cls: (r) => wrClass(r.w / r.n) },
   ], rows, 2);
