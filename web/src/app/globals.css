@@ -2385,6 +2385,9 @@ html[data-device="mobile"] .site-header-inner {
   gap: 0.8rem;
   padding: 0.85rem;
   width: min(320px, calc(100vw - 2rem));
+  max-height: calc(100dvh - 88px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
 }
 
 .setting {
@@ -5820,3 +5823,56 @@ html[data-colors="colorblind"] .snap-tiers button:nth-child(1)[aria-pressed="tru
 html[data-colors="colorblind"] .snap-tiers button:nth-child(2)[aria-pressed="true"] { background: #4a90d9; color: #04121c; }
 html[data-colors="colorblind"] .snap-tiers button:nth-child(3)[aria-pressed="true"] { background: #f2c14e; color: #1d1602; }
 html[data-colors="colorblind"] .snap-tiers button:nth-child(4)[aria-pressed="true"] { background: #d9731a; color: #1a0b00; }
+
+/* Back to top */
+.back-to-top {
+  position: fixed;
+  right: max(1rem, env(safe-area-inset-right, 0px));
+  bottom: calc(1rem + env(safe-area-inset-bottom, 0px));
+  z-index: 39;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  background: var(--surface);
+  color: var(--fg);
+  box-shadow: 0 8px 24px -12px rgb(0 0 0 / 0.5);
+  cursor: pointer;
+  animation: btt-in 0.2s ease both;
+}
+.back-to-top:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+@keyframes btt-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}
+html[data-device="mobile"] .back-to-top {
+  bottom: calc(var(--tabbar-h) + var(--tabbar-gap) + 0.75rem);
+}
+/* Clear of the compare tray when it is open. */
+body:has(.cmp-tray) .back-to-top {
+  bottom: calc(5.5rem + env(safe-area-inset-bottom, 0px));
+}
+html[data-device="mobile"] body:has(.cmp-tray) .back-to-top {
+  bottom: calc(var(--tabbar-h) + var(--tabbar-gap) + 5.5rem);
+}
+html[data-motion="reduce"] .back-to-top {
+  animation: none;
+}
+
+/* Text size (Settings > Text size): everything sized in rem grows with it. */
+html[data-text="large"] {
+  font-size: 112.5%;
+}
+html[data-text="larger"] {
+  font-size: 125%;
+}
+html[data-device="mobile"] .settings-menu {
+  max-height: calc(100dvh - 100px - var(--tabbar-h) - var(--tabbar-gap));
+}
