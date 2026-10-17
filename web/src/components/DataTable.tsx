@@ -6,6 +6,7 @@ import championNames from "@/data/champion-names.json";
 import { useFavorites } from "@/lib/favorites";
 import { setParams } from "@/lib/url-state";
 import FavoriteStar from "./FavoriteStar";
+import CompareToggle from "./CompareToggle";
 import { useAdvanced } from "./Advanced";
 import ChampionPanel, { hasPanel } from "./ChampionPanel";
 
@@ -16,7 +17,7 @@ export type Column = {
   sortable?: boolean;
   /** For "augment" columns: the row key holding the augment id, for its icon. */
   iconKey?: string;
-  /** The row key holding a page to open from this cell (an augment's own page). */
+  /** The row key holding a page to open from this cell (an augment's own page, a build's replay). */
   hrefKey?: string;
   /** Sort by this row key instead (a tier letter sorts by its score). */
   sortKey?: string;
@@ -93,6 +94,7 @@ function Champion({ id, onOpen, star }: { id: string; onOpen: (id: string) => vo
     <span className="champ-fav">
       <FavoriteStar id={id} name={name} />
       {body}
+      <CompareToggle id={id} name={name} />
     </span>
   );
 }
@@ -226,6 +228,10 @@ export default function DataTable({
                       ) : (
                         <Named src={`/icons/augments/${r[c.iconKey ?? "id"]}.webp`} name={String(r[c.key] ?? "")} />
                       )
+                    ) : c.hrefKey && r[c.hrefKey] ? (
+                      <a className="cell-link" href={String(r[c.hrefKey])}>
+                        {show(r[c.key], c.format)}
+                      </a>
                     ) : c.format === "tier" && r[c.key] ? (
                       <span className={`chip tier-${String(r[c.key]).toLowerCase()}`}>{r[c.key]}</span>
                     ) : (

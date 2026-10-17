@@ -221,6 +221,45 @@ def main():
             item_changes.append({"id": int(iid), "name": it["name"], "icon": asset(it["iconPath"]), "changes": diffs})
     item_changes.sort(key=lambda x: x["name"])
 
+    # ---- Items that live augments hand out. "reward" items (quest rewards, combined items) can't be bought, so
+    # build stats should leave them out; "free" items are given at once but are also sold in the shop.
+    names = {}
+    for it in items_by_id.values():
+        n = re.sub(r"<[^>]+>", "", it["name"]).strip()
+        if len(n) > 3:
+            names.setdefault(n, []).append(it["id"])
+    granted = {}
+    for path in sorted(in_pool):
+        a = kiwi.get(path)
+        if not a or a.get("Enabled") is False:
+            continue
+        text = " ".join(clean(s(a.get("DescriptionTra")) + " . " + s(a.get("AugmentTooltipTra"))).split())
+        for n, ids in names.items():
+            name = re.escape(n) + r"(?![\w'])"
+            if re.search(r"(?:REWARD|Reward):\s*(?:Gain\s+(?:an?\s+)?)?" + name + r"|combine into\s+" + name, text):
+                how = "reward"
+            elif re.search(r"(?<!QUEST: )\b[Gg]ain\s+an?\s+" + name, text):
+                how = "free"
+            else:
+                continue
+            for iid in ids:
+                if granted.get(iid, {}).get("how") != "reward":
+                    granted[iid] = {"id": iid, "name": n, "how": how, "icon": asset(items_by_id[iid]["iconPath"]),
+                                    "augmentId": a.get("AugmentPlatformId"), "augment": s(a["NameTra"], a["AugmentNameId"]),
+                                    "augmentTier": TIERS[a.get("rarity", 0)]}
+    granted = sorted(granted.values(), key=lambda g: (g["how"] != "reward", g["name"], g["id"]))
+
+    # ---- Augment selections: when they come, what one shows, and the chance a given augment is in it
+    cards = 3  # each selection shows three augments of one rarity, and each slot can be rerolled
+    rerolls = int(rules["rerolls"] or 0)
+    odds = {t: {"pool": n, "offer": round(min(1, cards / n), 4) if n else 0,
+                "withRerolls": round(min(1, cards * (1 + rerolls) / n), 4) if n else 0}
+            for t, n in tier_counts.items()}
+    tier_of = {a["AugmentPlatformId"]: TIERS[a.get("rarity", 0)] for p, a in augments.items()
+               if p in in_pool and a.get("Enabled") is not False}
+    augment_rules = {"patch": version, "levels": rules["augmentLevels"], "cards": cards, "rerollsPerSlot": rerolls,
+                     "odds": odds, "tiers": {str(k): v for k, v in sorted(tier_of.items())}, "grantedItems": granted}
+
     # ---- Archive: Augment Sets
     sets = []
     for stem, fallback, fallback_bonus in AUGMENT_SETS:
@@ -238,7 +277,12 @@ def main():
         "augmentCounts": tier_counts, "maps": maps, "summons": summons, "items": items,
         "quests": quests, "challenges": challenges, "rules": rules, "spells": allowed,
         "spellAugments": spell_augments, "itemChanges": item_changes, "augmentSets": sets,
+        "augmentRules": {k: v for k, v in augment_rules.items() if k != "tiers"},
     }
+    # the same rules plus each augment's rarity, for the site's augment pages and build tables
+    with open(os.path.join(HERE, "augment_rules.json"), "w") as f:
+        json.dump(augment_rules, f, indent=1, ensure_ascii=False)
+        f.write("\n")
     with open(os.path.join(HERE, "data.js"), "w") as f:
         # no header comment: the file ships to the site, and pages don't say where data comes from
         f.write("window.GUIDE_DATA = " + site_paths(json.dumps(out, indent=1, ensure_ascii=False)) + ";\n")

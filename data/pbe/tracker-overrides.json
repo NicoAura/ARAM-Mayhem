@@ -1,0 +1,4 @@
+{
+ "_note": "Tag fixes for the change tracker (tools/datamine/tracker.py). Key: an exact change line, or kind:name for a whole entry. Value: buff, nerf, mixed, neutral, unclear, new or removed.",
+ "champion:Varus": "nerf"
+}

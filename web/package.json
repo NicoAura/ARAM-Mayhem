@@ -3,9 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "predev": "node scripts/sync-embeds.mjs",
+    "predev": "node scripts/sync-embeds.mjs && node scripts/build-status.mjs",
     "dev": "next dev",
-    "prebuild": "node scripts/sync-embeds.mjs",
+    "prebuild": "node scripts/sync-embeds.mjs && node scripts/build-status.mjs",
     "build": "next build",
     "start": "next start",
     "lint": "eslint",

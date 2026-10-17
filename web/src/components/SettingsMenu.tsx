@@ -4,6 +4,10 @@ import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { loadSettings, saveSettings, SETTINGS_EVENT, type Settings } from "@/lib/settings";
 import ThemeToggle from "./ThemeToggle";
+import Link from "next/link";
+import { TOUR_EVENT } from "./FirstVisitTour";
+import { canVibrate } from "@/lib/haptics";
+import { chime } from "@/lib/ui-sound";
 
 // Gear button at the top right: theme plus the site's other per-browser settings.
 
@@ -68,9 +72,30 @@ export default function SettingsMenu() {
           </div>
           <Choice label="Motion" value={s.motion} options={[["system", "Match system"], ["reduce", "Reduce"]]} onChange={(motion) => set({ motion })} />
           <Choice label="Sound and voice lines" value={s.sound ? "on" : "off"} options={[["on", "On"], ["off", "Off"]]} onChange={(v) => set({ sound: v === "on" })} />
+          {s.sound && (
+            <Choice label="Interface sounds" value={s.uiSound ? "on" : "off"} options={[["on", "On"], ["off", "Off"]]} onChange={(v) => {
+                set({ uiSound: v === "on" });
+                if (v === "on") chime("done");
+              }} />
+          )}
+          {canVibrate() && (
+            <Choice label="Vibration" value={s.haptics ? "on" : "off"} options={[["on", "On"], ["off", "Off"]]} onChange={(v) => set({ haptics: v === "on" })} />
+          )}
           <Choice label="Simulator graphics" value={s.graphics} options={[["auto", "Auto"], ["low", "Low"], ["high", "High"]]} onChange={(graphics) => set({ graphics })} />
           <Choice label="Tier List starts on" value={s.tierRange} options={[["live", "Live patch"], ["last3", "Last 3"], ["all", "All time"]]} onChange={(tierRange) => set({ tierRange })} />
-          <p className="account-note">Saved in this browser.</p>
+          <p className="account-note">
+            Saved in this browser.{" "}
+            <Link
+              className="inline-link"
+              href="/"
+              onClick={() => {
+                setOpen(false);
+                dispatchEvent(new Event(TOUR_EVENT));
+              }}
+            >
+              Take the tour
+            </Link>
+          </p>
         </div>
       )}
     </div>

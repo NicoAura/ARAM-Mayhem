@@ -5,6 +5,7 @@ import Embed from "@/components/Embed";
 import Intro from "@/components/Intro";
 import { text } from "@/lib/content";
 import Pending from "@/components/Pending";
+import SimLeaderboard from "@/components/SimLeaderboard";
 import SubTabs from "@/components/SubTabs";
 import { readRepoJson, repoHas } from "@/lib/repo-data";
 
@@ -20,6 +21,12 @@ type BestBuilds = {
     build: { items: string[]; augments: string[] };
     summary: { mean_dps: number; median: number; survival_rate: number; time_alive: number };
   }[];
+};
+
+type FightLength = {
+  short_seconds: number;
+  long_seconds: number;
+  champions: { champion: string; name: string; role: string; dps_short: number; dps_long: number; edge: number }[];
 };
 
 const VIEWER = "simulator/viewer";
@@ -84,6 +91,54 @@ export default function SimulatorPage() {
           searchLabel="Find a champion"
         />
       ),
+    });
+  }
+
+  const fights = readRepoJson<FightLength>(`${VIEWER}/replay-data/fight-length.json`);
+  if (fights) {
+    tabs.push({
+      id: "fight-length",
+      label: "Short vs long fights",
+      content: (
+        <>
+          <p className="table-note">
+            Simulated: each champion&apos;s damage per second over the first {fights.short_seconds} seconds of a fight
+            and over the first {fights.long_seconds}, with its simulated best build. Going down early counts against
+            both. Long-fight edge compares how much of its damage rate a champion keeps in long fights with the
+            typical champion: positive means it does better the longer the fight goes, negative means it wants
+            fights short.
+          </p>
+          <DataTable
+            columns={[
+              { key: "name", label: "Champion", format: "champion" },
+              { key: "role", label: "Role", format: "text" },
+              { key: "short", label: `First ${fights.short_seconds}s DPS`, format: "int" },
+              { key: "long", label: `First ${fights.long_seconds}s DPS`, format: "int" },
+              { key: "edge", label: "Long-fight edge", format: "pct" },
+            ]}
+            rows={fights.champions.map((c) => ({
+              name: c.champion,
+              role: c.role,
+              short: c.dps_short,
+              long: c.dps_long,
+              edge: c.edge,
+            }))}
+            initialSort={{ key: "edge", desc: true }}
+            searchKey="name"
+            searchLabel="Find a champion"
+          />
+        </>
+      ),
+    });
+  }
+
+  if (hasReplays) {
+    const names = (m: Named) => Object.fromEntries(Object.entries(m).map(([k, v]) => [k, v.name]));
+    tabs.push({
+      id: "leaderboard",
+      label: "Leaderboard",
+      lazy: true,
+      content: <SimLeaderboard items={names(items)} augments={names(augments)} />,
     });
   }
 

@@ -1919,5 +1919,134 @@ window.GUIDE_DATA = {
    "name": "Archmage",
    "bonus": "Whenever you cast a spell, refund another random spell by a percentage of the cast spell's Cooldown."
   }
- ]
+ ],
+ "augmentRules": {
+  "patch": "16.20.8248524",
+  "levels": [
+   3,
+   7,
+   11,
+   15
+  ],
+  "cards": 3,
+  "rerollsPerSlot": 1,
+  "odds": {
+   "Silver": {
+    "pool": 61,
+    "offer": 0.0492,
+    "withRerolls": 0.0984
+   },
+   "Gold": {
+    "pool": 82,
+    "offer": 0.0366,
+    "withRerolls": 0.0732
+   },
+   "Prismatic": {
+    "pool": 73,
+    "offer": 0.0411,
+    "withRerolls": 0.0822
+   }
+  },
+  "grantedItems": [
+   {
+    "id": 994403,
+    "name": "Golden Spatula",
+    "how": "reward",
+    "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/4403_goldenspatula.png",
+    "augmentId": 1154,
+    "augment": "Urf's Champion",
+    "augmentTier": "Prismatic"
+   },
+   {
+    "id": 1111,
+    "name": "Jarvan I's",
+    "how": "reward",
+    "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/1111_jarvanis.png",
+    "augmentId": 1343,
+    "augment": "Sneakerhead",
+    "augmentTier": "Prismatic"
+   },
+   {
+    "id": 226668,
+    "name": "Ultra Hydra",
+    "how": "reward",
+    "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/kiwi/aram_ultimatehydra_64.png",
+    "augmentId": 2141,
+    "augment": "Ultra Hydra",
+    "augmentTier": "Prismatic"
+   },
+   {
+    "id": 223069,
+    "name": "Void Immolation",
+    "how": "reward",
+    "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/223069_kiwi_voidimmolation.png",
+    "augmentId": 1361,
+    "augment": "Icathia's Fall",
+    "augmentTier": "Prismatic"
+   },
+   {
+    "id": 228002,
+    "name": "Wooglet's Witchcap",
+    "how": "reward",
+    "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3385_forge_wooglets_witchcap.png",
+    "augmentId": 1156,
+    "augment": "Wooglet's Witchcap",
+    "augmentTier": "Prismatic"
+   },
+   {
+    "id": 6660,
+    "name": "Bami's Cinder",
+    "how": "free",
+    "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/6660_tank_t2_bamiscinder.png",
+    "augmentId": 1361,
+    "augment": "Icathia's Fall",
+    "augmentTier": "Prismatic"
+   },
+   {
+    "id": 1058,
+    "name": "Needlessly Large Rod",
+    "how": "free",
+    "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/1058_mage_t1_largerod.png",
+    "augmentId": 1156,
+    "augment": "Wooglet's Witchcap",
+    "augmentTier": "Prismatic"
+   },
+   {
+    "id": 221058,
+    "name": "Needlessly Large Rod",
+    "how": "free",
+    "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/1058_mage_t1_largerod.png",
+    "augmentId": 1156,
+    "augment": "Wooglet's Witchcap",
+    "augmentTier": "Prismatic"
+   },
+   {
+    "id": 771058,
+    "name": "Needlessly Large Rod",
+    "how": "free",
+    "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/771058_needlessly_large_rod.png",
+    "augmentId": 1156,
+    "augment": "Wooglet's Witchcap",
+    "augmentTier": "Prismatic"
+   },
+   {
+    "id": 3077,
+    "name": "Tiamat",
+    "how": "free",
+    "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3077_fighter_t2_tiamat.png",
+    "augmentId": 2141,
+    "augment": "Ultra Hydra",
+    "augmentTier": "Prismatic"
+   },
+   {
+    "id": 773077,
+    "name": "Tiamat",
+    "how": "free",
+    "icon": "/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/3077_tiamat.project_jade.png",
+    "augmentId": 2141,
+    "augment": "Ultra Hydra",
+    "augmentTier": "Prismatic"
+   }
+  ]
+ }
 };

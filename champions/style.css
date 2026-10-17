@@ -241,3 +241,11 @@ tbody tr:hover, .build-row:hover, .aug-row:hover, .ability:hover { background: v
 .tier-label-prismatic { color: #a98bff; }
 .tier-label-gold { color: var(--hue-gold); }
 .style-head h3 { color: var(--a-ink); }
+
+/* Skins: a grid of tiles with names */
+.skins { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 0.75rem; }
+.skin { margin: 0; border-radius: var(--r); overflow: hidden; background: var(--a-soft); transition: transform 0.15s ease; }
+.skin:hover { transform: translateY(-2px); }
+.skin img { display: block; width: 100%; aspect-ratio: 1; object-fit: cover; }
+.skin figcaption { padding: 0.4rem 0.5rem; font-size: 0.8rem; line-height: 1.25; }
+table.stats td:first-child { white-space: nowrap; }

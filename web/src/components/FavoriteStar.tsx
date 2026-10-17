@@ -1,6 +1,7 @@
 "use client";
 
 import { toggleFavorite, useFavorites } from "@/lib/favorites";
+import { buzz } from "@/lib/haptics";
 
 /** A star that adds or removes a champion from this browser's favorites. */
 export default function FavoriteStar({ id, name, label = false }: { id: string; name: string; label?: boolean }) {
@@ -15,6 +16,7 @@ export default function FavoriteStar({ id, name, label = false }: { id: string; 
       onClick={(e) => {
         e.preventDefault();
         e.stopPropagation();
+        buzz();
         toggleFavorite(id);
       }}
     >

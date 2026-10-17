@@ -2,6 +2,8 @@
 
 import { useEffect, useRef, useState } from "react";
 import { THEME_EVENT, themeDocument } from "@/lib/theme";
+import Skeleton from "@/components/Skeleton";
+import { replayPip } from "@/lib/replay-pip";
 
 // The site fills the window, so embedded pages' own width caps are lifted too.
 const FULL_WIDTH = "body,main,.wrap{max-width:none!important}";
@@ -42,6 +44,7 @@ export default function Embed({
 }) {
   const ref = useRef<HTMLIFrameElement>(null);
   const [height, setHeight] = useState(minHeight);
+  const [loaded, setLoaded] = useState(false);
   // Pass the page's #hash to the tool, so links to a tool can name what it opens.
   const [frameSrc, setFrameSrc] = useState(hash ? `${src}#${hash}` : src);
   useEffect(() => {
@@ -59,9 +62,11 @@ export default function Embed({
     const attach = () => {
       const doc = frame.contentDocument;
       if (!doc?.body) return;
+      if (doc.readyState === "complete" || doc.body.childElementCount) setLoaded(true);
       themeDocument(doc, document.documentElement.dataset.theme);
       fullWidth(doc);
       searchKeys(doc);
+      replayPip(doc);
       const fit = () =>
         setHeight(Math.max(minHeight, doc.documentElement.scrollHeight));
       fit();
@@ -75,18 +80,22 @@ export default function Embed({
         frame.contentDocument,
         document.documentElement.dataset.theme,
       );
+    const done = () => setLoaded(true);
     frame.addEventListener("load", attach);
+    frame.addEventListener("load", done);
     window.addEventListener(THEME_EVENT, retheme);
     attach();
     return () => {
       frame.removeEventListener("load", attach);
+      frame.removeEventListener("load", done);
       window.removeEventListener(THEME_EVENT, retheme);
       observer?.disconnect();
     };
   }, [minHeight]);
 
   return (
-    <div className="embed">
+    <div className="embed" data-loading={loaded ? undefined : ""}>
+      {!loaded && <Skeleton kind="chart" label={`Loading ${title}…`} />}
       <iframe ref={ref} src={frameSrc} title={title} style={{ height }} />
     </div>
   );

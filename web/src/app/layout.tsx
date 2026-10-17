@@ -4,6 +4,14 @@ import Link from "next/link";
 import FeedbackBox from "@/components/FeedbackBox";
 import PageTransitions from "@/components/PageTransitions";
 import TiltEffects from "@/components/TiltEffects";
+import SwipeGestures from "@/components/SwipeGestures";
+import CompareTray from "@/components/CompareTray";
+import HoverPreview from "@/components/HoverPreview";
+import CountUp from "@/components/CountUp";
+import KeyboardShortcuts from "@/components/KeyboardShortcuts";
+import HeaderScroll from "@/components/HeaderScroll";
+import FirstVisitTour from "@/components/FirstVisitTour";
+import UpdateToast from "@/components/UpdateToast";
 import AccountButton from "@/components/AccountButton";
 import BrandMark from "@/components/BrandMark";
 import MobileTabBar from "@/components/MobileTabBar";
@@ -17,6 +25,7 @@ import { SETTINGS_SCRIPT } from "@/lib/settings";
 import { THEME_COLORS, THEME_KEY } from "@/lib/theme";
 import { navItems, navPages } from "@/lib/tabs";
 import "./globals.css";
+import OfflineSupport from "@/components/OfflineSupport";
 
 const sans = Geist({ subsets: ["latin"], variable: "--font-sans" });
 const mono = Geist_Mono({ subsets: ["latin"], variable: "--font-mono" });
@@ -119,12 +128,22 @@ export default function RootLayout({
           <nav className="footer-links" aria-label="Legal">
             <Link href="/privacy">Privacy</Link>
             <Link href="/terms">Terms</Link>
+            <Link href="/status">Status</Link>
             <a href="mailto:admin@deeparam.com">Contact</a>
           </nav>
           <p>{text("footer")}</p>
         </footer>
         <PageTransitions />
         <TiltEffects />
+        <SwipeGestures />
+        <CompareTray />
+        <HoverPreview />
+        <CountUp />
+        <KeyboardShortcuts />
+        <HeaderScroll />
+        <FirstVisitTour />
+        <UpdateToast />
+        <OfflineSupport />
         <MobileTabBar tabs={navPages().map(({ href, label }) => ({ href, label }))} />
       </body>
     </html>

@@ -49,3 +49,7 @@ next-env.d.ts
 /.wrangler/
 .dev.vars*
 !.dev.vars.example
+
+# stray test screenshots
+/*.png
+/src/data/status.json

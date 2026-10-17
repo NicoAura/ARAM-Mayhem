@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import type { SynergyData } from "@/lib/synergy";
 import { getParam, setParams } from "@/lib/url-state";
+import Skeleton from "@/components/Skeleton";
 
 // Team Builder (/synergy?team=Jinx,Lulu): pick up to five champions to see how each pair does together
 // and which champions fit the team best (handy for picking from the ARAM bench). Data: /data/synergy.json.
@@ -59,7 +60,7 @@ export default function TeamBuilder() {
   }, [team, data]);
 
   if (failed) return <p className="table-note">Couldn&apos;t load pair data. Try reloading the page.</p>;
-  if (!data) return <p className="table-note">Loading…</p>;
+  if (!data) return <Skeleton kind="slots" rows={5} label="Loading pair data…" />;
 
   return (
     <div className="team">

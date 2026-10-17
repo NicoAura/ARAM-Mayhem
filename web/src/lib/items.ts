@@ -2,6 +2,7 @@ import "server-only";
 import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { localAsset } from "./assets";
+import { readRepoJson } from "./repo-data";
 
 // Item names and icons from the client's item list, mirrored in public/assets/.
 const GAME_DATA = "plugins/rcp-be-lol-game-data/global/default";
@@ -27,3 +28,14 @@ export function items(): Map<number, Item> {
 }
 
 export const item = (id: number) => items().get(id);
+
+/** Items only an augment hands out as a quest reward; they're left out of build lists (guide/augment_rules.json). */
+let rewards: Set<number> | null = null;
+export function rewardItems(): Set<number> {
+  rewards ??= new Set(
+    (readRepoJson<{ grantedItems?: { id: number; how: string }[] }>("guide/augment_rules.json")?.grantedItems ?? [])
+      .filter((g) => g.how === "reward")
+      .map((g) => g.id),
+  );
+  return rewards;
+}

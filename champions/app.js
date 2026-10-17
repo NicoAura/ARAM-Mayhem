@@ -59,6 +59,56 @@
     return it ? `<img src="${esc(it.icon)}" alt="${esc(it.name)}" title="${esc(it.name)}" loading="lazy">` : "";
   };
 
+  // Base stats at level 1 and 18. Growth per level follows the game's curve, so 17 levels add 17 times the growth.
+  const STATS = [["hp", "Health"], ["hp5", "Health regen (per 5s)"], ["resource"], ["ad", "Attack damage"], ["as", "Attack speed"],
+    ["armor", "Armor"], ["mr", "Magic resist"]];
+  function statsCard(s) {
+    if (!s) return "";
+    const rows = [];
+    for (const [k, label] of STATS) {
+      if (k === "resource") {
+        if (s.resource) {
+          const r = s.resource;
+          rows.push([r.kind, r.base[0], r.base[1], r.base[0] + 17 * r.base[1]]);
+          rows.push([`${r.kind} regen (per 5s)`, r.regen[0], r.regen[1], r.regen[0] + 17 * r.regen[1]]);
+        }
+        continue;
+      }
+      const [base, per] = s[k];
+      if (k === "as") rows.push([label, base, `${num(per, 2)}%`, base * (1 + (17 * per) / 100)]);
+      else rows.push([label, base, per, base + 17 * per]);
+    }
+    rows.push(["Attack range", s.range, "", s.range], ["Move speed", s.ms, "", s.ms]);
+    const cell = (v, d) => (typeof v === "number" ? num(v, d) : esc(v));
+    return `<div class="card"><div class="card-head"><h2>Base stats</h2><span class="muted small">Before items, augments and Mayhem's bonuses</span></div>
+      <div class="table-wrap"><table class="stats"><thead><tr><th>Stat</th><th class="num">Level 1</th><th class="num">Per level</th><th class="num">Level 18</th></tr></thead>
+      <tbody>${rows.map(([l, a, b, z]) => `<tr><td>${esc(l)}</td><td class="num">${cell(a, 3)}</td><td class="num">${b === "" ? "–" : cell(b, 3)}</td><td class="num"><b>${cell(z, l === "Attack speed" ? 3 : 1)}</b></td></tr>`).join("")}</tbody></table></div></div>`;
+  }
+
+  // Skins live in skins.js, loaded the first time a champion page's skins section comes into view
+  let skinsReady = null;
+  function loadSkins(c) {
+    const box = $("skins");
+    const render = () => {
+      const list = (window.CHAMPS_SKINS || {})[c.id] || [];
+      $("skins-count").textContent = list.length ? `${list.length} skin${list.length > 1 ? "s" : ""}` : "";
+      box.innerHTML = list.map((s) => `<figure class="skin">${img(s.tile, "", s.name)}<figcaption>${esc(s.name)}</figcaption></figure>`).join("")
+        || '<p class="muted">No skins to show.</p>';
+    };
+    const start = () => {
+      skinsReady ||= new Promise((ok) => {
+        const sc = document.createElement("script");
+        sc.src = "skins.js";
+        sc.onload = sc.onerror = ok;
+        document.head.appendChild(sc);
+      });
+      skinsReady.then(() => { if (box.isConnected) render(); });
+    };
+    if (window.CHAMPS_SKINS || !("IntersectionObserver" in window)) return start();
+    const io = new IntersectionObserver((es) => { if (es.some((e) => e.isIntersecting)) { io.disconnect(); start(); } }, { rootMargin: "400px" });
+    io.observe($("skins-card"));
+  }
+
   function renderPage(c) {
     const ab = Object.fromEntries(c.abilities.map((a) => [a.slot, a]));
     const facts = c.tier
@@ -132,6 +182,7 @@
         ${styles}
         <div class="grid">${block("Starting items", B.start, "")}${block("Boots", B.boots, "")}</div>
         ${block("Most-built items", B.first, "", "Share of games with the item")}
+        <p class="muted small">Items that only augments give, like quest rewards, are left out of these builds.</p>
         <div class="grid">${skills}${mates}</div>`
       : '<p class="muted">No build stats for this champion yet.</p>';
 
@@ -157,7 +208,13 @@
           ${a.cooldown && a.cooldown.some((x) => x) ? `<span class="muted small">${values("Cooldown", a.cooldown)}s</span>` : ""}</div>
           <div class="muted small" style="white-space:pre-line;margin-top:0.2rem">${esc(a.text)}</div></div></div>`).join("")}</div>
       </div>
+      ${statsCard(c.stats)}
+      <div class="card" id="skins-card">
+        <div class="card-head"><h2>Skins</h2><span class="muted small" id="skins-count"></span></div>
+        <div class="skins" id="skins"></div>
+      </div>
       ${c.tier ? '<p class="small"><a href="/tier-list" target="_top">See the full Tier List →</a></p>' : ""}`;
+    loadSkins(c);
     const vo = $("vo");
     if (vo) vo.addEventListener("click", () => new Audio(c.vo).play().catch(() => {}));
     document.title = `${c.name} · Mayhem Champions`;
