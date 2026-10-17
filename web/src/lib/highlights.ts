@@ -128,6 +128,7 @@ export const kitchenBuilds = () => readRepoJson<Builds>("data/cook-builds/builds
 // The Lab's Chef's Special: one unusual build a day (data/cook-builds/chefs-special.json, null on days without one).
 type RawSpecial = {
   title: string;
+  chef?: string;
   champion: string;
   champion_name: string;
   tier?: string;
@@ -145,6 +146,7 @@ export function chefsSpecial() {
   const pages = new Map(itemPages().map((i) => [i.name, i]));
   return {
     title: s.title,
+    date: /^\d{4}-\d{2}-\d{2}$/.test(s.chef ?? "") ? s.chef! : null,
     champion: s.champion,
     name: s.champion_name || champName(s.champion),
     tier: s.tier ?? "",

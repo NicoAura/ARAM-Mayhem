@@ -5893,7 +5893,7 @@ html[data-device="mobile"] .settings-menu {
   max-height: calc(100dvh - 100px - var(--tabbar-h) - var(--tabbar-gap));
 }
 
-/* Recently viewed (Home) */
+/* Recently played (Home) */
 .recent .team-clear {
   margin: 0;
 }
