@@ -51,7 +51,6 @@ I18N.ready.then(() => {
     ["ARAM challenges that count", D.challenges.filter((c) => c.mayhem).length],
   ];
   $("facts").innerHTML = facts.map(([l, v]) => `<div class="card fact"><span class="eyebrow">${esc(t(l))}</span><span class="value">${fmt(v)}</span></div>`).join("");
-  $("queues").innerHTML = D.queues.map((q) => `<span class="chip">${q.id} · ${esc(q.name.replace("ARAM: ", ""))}</span>`).join("");
 
   $("story").innerHTML = (D.story || [])
     .map((e) => `<div class="row" style="align-items:flex-start"><span class="chip">${esc(t(e.date))}</span><p class="muted small" style="margin:0">${esc(t(e.text))}</p></div>`)
