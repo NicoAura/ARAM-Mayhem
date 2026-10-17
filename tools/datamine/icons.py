@@ -14,7 +14,7 @@ from strings import StringTable
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ASSETS = os.path.normpath(os.path.join(HERE, "..", "..", "web", "public", "assets"))
-UA = {"User-Agent": "aram-mayhem-datamine/1.0"}
+UA = {"User-Agent": "deeparam-datamine/1.0"}
 
 CDRAGON = "https://raw.communitydragon.org/{channel}/{root}/{path}"
 # New icons often reach the client's game-data plugin before the game WAD export.

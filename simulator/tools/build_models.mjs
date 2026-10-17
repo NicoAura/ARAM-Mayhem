@@ -9,7 +9,7 @@
 //   npm install --prefix /tmp/gltf @gltf-transform/cli@4 @gltf-transform/core@4 \
 //       @gltf-transform/extensions@4 meshoptimizer
 //   NODE_PATH=/tmp/gltf/node_modules node tools/build_models.mjs --index viewer/replay-data/index.json \
-//       --out viewer/replay-data/models [--only Yunara,Ahri] [--cache ~/.cache/aram-mayhem-sim/models]
+//       --out viewer/replay-data/models [--only Yunara,Ahri] [--cache ~/.cache/deeparam-sim/models]
 //
 // Writes <out>/<ChampionId>.glb and <out>/models.json ({id: {file, scale, clips, extra, after}}: the clips as
 // pickClips returns them, scale the game's size for the champion against the model's units).
@@ -35,7 +35,7 @@ const args = Object.fromEntries(process.argv.slice(2).reduce((acc, a, i, all) =>
   if (a.startsWith("--")) acc.push([a.slice(2), all[i + 1] && !all[i + 1].startsWith("--") ? all[i + 1] : true]);
   return acc;
 }, []));
-const cache = (args.cache || path.join(os.homedir(), ".cache/aram-mayhem-sim/models")).replace(/^~/, os.homedir());
+const cache = (args.cache || path.join(os.homedir(), ".cache/deeparam-sim/models")).replace(/^~/, os.homedir());
 const out = args.out || "viewer/replay-data/models";
 const index = JSON.parse(fs.readFileSync(args.index || "viewer/replay-data/index.json", "utf8"));
 const only = args.only ? new Set(String(args.only).toLowerCase().split(",")) : null;
@@ -60,7 +60,7 @@ async function fetchModel(champ) {
   const url = `${SOURCE}/${champ.id.toLowerCase()}/${champ.key * 1000}/model.glb`;
   // curl rather than fetch so HTTPS_PROXY is honoured.
   try {
-    execFileSync("curl", ["-sfL", "-A", "aram-mayhem-sim", "-o", file + ".part", url]);
+    execFileSync("curl", ["-sfL", "-A", "deeparam-sim", "-o", file + ".part", url]);
   } catch (e) {
     fs.rmSync(file + ".part", { force: true });
     throw new Error(`${url}: download failed`);
@@ -77,7 +77,7 @@ function skinScale(champ) {
   const file = path.join(cache, `${champ.id}.skin0.json`);
   if (!fs.existsSync(file)) {
     try {
-      execFileSync("curl", ["-sfL", "-A", "aram-mayhem-sim", "-o", file, `${SKINS}/${champ.id.toLowerCase()}/skins/skin0.bin.json`]);
+      execFileSync("curl", ["-sfL", "-A", "deeparam-sim", "-o", file, `${SKINS}/${champ.id.toLowerCase()}/skins/skin0.bin.json`]);
     } catch (e) {
       fs.rmSync(file, { force: true });
       return 1;

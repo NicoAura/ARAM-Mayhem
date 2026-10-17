@@ -17,7 +17,7 @@ shape) stay hand-written with a note. Every value that changes is printed.
 
     python3 simulator/tools/build_augments.py [--dry-run]
 
-Python 3 standard library only. Downloads are cached in ~/.cache/aram-mayhem-sim.
+Python 3 standard library only. Downloads are cached in ~/.cache/deeparam-sim.
 """
 
 import argparse
@@ -39,7 +39,7 @@ if PBE:
 OUT = os.path.join(HERE, "..", "data", "pbe" if PBE else "", "augments.json")
 # The PBE file starts from the live one (same augments and hand-written values) the first time.
 SOURCE = OUT if os.path.exists(OUT) else os.path.join(HERE, "..", "data", "augments.json")
-DEFAULT_CACHE = os.path.join(os.path.expanduser("~"), ".cache", "aram-mayhem-sim", "pbe" if PBE else "")
+DEFAULT_CACHE = os.path.join(os.path.expanduser("~"), ".cache", "deeparam-sim", "pbe" if PBE else "")
 
 CDRAGON = "https://raw.communitydragon.org/" + ("pbe" if PBE else "latest")
 CONTENT_METADATA = CDRAGON + "/content-metadata.json"
@@ -362,7 +362,7 @@ def fetch(url, cache_dir, name, refresh):
     if not refresh and os.path.exists(path) and time.time() - os.path.getmtime(path) < 6 * 3600:
         with open(path) as f:
             return json.load(f)
-    req = urllib.request.Request(url, headers={"User-Agent": "aram-mayhem-sim"})
+    req = urllib.request.Request(url, headers={"User-Agent": "deeparam-sim"})
     with urllib.request.urlopen(req, timeout=300) as r:
         data = r.read()
     os.makedirs(cache_dir, exist_ok=True)

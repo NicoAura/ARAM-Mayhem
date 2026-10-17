@@ -29,7 +29,7 @@ FONTS = ('/assets/fonts/fonts.css', "https://fonts.googleapis.com/css2?family=Br
 
 
 def fetch(url):
-    req = urllib.request.Request(url.replace("/assets/cd/", "https://raw.communitydragon.org/", 1), headers={"User-Agent": "aram-mayhem-fun-tools"})
+    req = urllib.request.Request(url.replace("/assets/cd/", "https://raw.communitydragon.org/", 1), headers={"User-Agent": "deeparam-fun-tools"})
     for attempt in range(3):
         try:
             with urllib.request.urlopen(req, timeout=120) as r:

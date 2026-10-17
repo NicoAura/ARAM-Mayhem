@@ -92,7 +92,7 @@ def pack(index, cache, out, rate=32000, gap=0.25):
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--index", default="viewer/replay-data/index.json")
-    ap.add_argument("--cache", default=str(Path.home() / ".cache/aram-mayhem-sim"))
+    ap.add_argument("--cache", default=str(Path.home() / ".cache/deeparam-sim"))
     ap.add_argument("--out", help="also write sounds.mp3 and sounds.json here")
     ap.add_argument("--only", help="comma-separated champion ids")
     ap.add_argument("--jobs", type=int, default=8)

@@ -1,5 +1,7 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
+  // The Worker keeps its first name: renaming it would make a new Worker without the site's domains,
+  // databases or secrets. The repo and site are DeepARAM.
   "name": "aram-mayhem",
   "main": ".open-next/worker.js",
   "compatibility_date": "2026-09-01",

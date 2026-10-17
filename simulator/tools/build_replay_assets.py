@@ -47,7 +47,7 @@ def fetch(url, path):
     if path.exists() and path.stat().st_size > 0:
         return path
     path.parent.mkdir(parents=True, exist_ok=True)
-    req = urllib.request.Request(url, headers={"User-Agent": "aram-mayhem-sim"})
+    req = urllib.request.Request(url, headers={"User-Agent": "deeparam-sim"})
     try:
         with urllib.request.urlopen(req, timeout=60) as r:
             data = r.read()
@@ -147,7 +147,7 @@ def main():
     ap.add_argument("--traces", required=True, help="directory written by mayhem_sim --trace-dir")
     ap.add_argument("--out", required=True)
     ap.add_argument("--champions", default=str(Path(__file__).resolve().parent.parent / "data" / "champions.json"))
-    ap.add_argument("--cache", default=os.path.expanduser("~/.cache/aram-mayhem-sim"))
+    ap.add_argument("--cache", default=os.path.expanduser("~/.cache/deeparam-sim"))
     ap.add_argument("--clips", action="store_true", help="download and join Riot's ability clips")
     ap.add_argument("--width", type=int, default=320, help="clip width in pixels")
     ap.add_argument("--jobs", type=int, default=6)

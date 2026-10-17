@@ -10,7 +10,7 @@ permissions:
 
 jobs:
   auto-merge:
-    if: github.event.pull_request.user.login == 'dependabot[bot]' && github.repository == 'NicoAura/ARAM-Mayhem'
+    if: github.event.pull_request.user.login == 'dependabot[bot]' && github.repository_owner == 'NicoAura'
     runs-on: ubuntu-latest
     steps:
       - id: meta

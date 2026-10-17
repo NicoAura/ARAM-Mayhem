@@ -5,10 +5,10 @@ import bundled from "@/content/site.json";
 
 // Backs the /admin editor. Two Cloudflare secrets:
 //   ADMIN_PASSWORD  what Nico types to unlock the editor
-//   GITHUB_TOKEN    fine-grained token with Contents read/write on NicoAura/ARAM-Mayhem only
+//   GITHUB_TOKEN    fine-grained token with Contents read/write on NicoAura/DeepARAM only
 // A save commits src/content/site.json to main; Workers Builds then redeploys the site.
 
-const REPO = "NicoAura/ARAM-Mayhem";
+const REPO = "NicoAura/DeepARAM";
 const FILE = "web/src/content/site.json";
 const BRANCH = "main";
 

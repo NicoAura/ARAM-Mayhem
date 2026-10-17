@@ -19,7 +19,7 @@ FILES = [f"{GAME_DATA}/{n}.json" for n in (
 ]
 
 # CommunityDragon refuses urllib's default User-Agent
-HEADERS = {"User-Agent": "aram-mayhem-datamine/1.0"}
+HEADERS = {"User-Agent": "deeparam-datamine/1.0"}
 
 def get(url, dest):
     os.makedirs(os.path.dirname(dest), exist_ok=True)
