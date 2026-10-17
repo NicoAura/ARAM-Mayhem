@@ -16,6 +16,16 @@ Needs only macOS's built-in python3 and curl. League must be running and
 signed in. Usage:
 
     python3 mayhem_import.py -o ~/Downloads/mayhem-backup.json
+
+Riot documents the League client's local API as "not officially supported for
+use with third party applications". It's the only way to read Mayhem games
+(Riot's public match API leaves them out), so this keeps using it, but any
+client patch can change or remove an endpoint without warning. If an import
+suddenly fails after a League update, check the endpoints below first.
+
+With --serve, the helper also records the Live Client Data API that League
+runs on 127.0.0.1:2999 during a game (see LIVE_FORMAT). It only reads and
+saves what the game reports; it never shows anything during the game.
 """
 
 import argparse
@@ -31,7 +41,22 @@ import sys
 import tempfile
 import time
 
-MAYHEM_QUEUE_IDS = (2400, 2450)
+CONSTANTS_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "data", "constants")
+
+
+def mayhem_queue_ids():
+    """Mayhem queues from Riot's official queue list (data/constants/queues.json).
+    2450 also serves Mayhem games but isn't on the list yet, so it's always included."""
+    ids = {2400, 2450}
+    try:
+        with open(os.path.join(CONSTANTS_DIR, "queues.json")) as f:
+            ids |= {q["queueId"] for q in json.load(f) if "mayhem" in (q.get("description") or "").lower()}
+    except (OSError, ValueError, KeyError, TypeError):
+        pass
+    return tuple(sorted(ids))
+
+
+MAYHEM_QUEUE_IDS = mayhem_queue_ids()
 
 LOCKFILE_CANDIDATES = [
     "/Applications/League of Legends.app/Contents/LoL/lockfile",
@@ -106,8 +131,8 @@ def log(msg):
 # of Python don't. Secrets go in through stdin, never on the command line where
 # other processes could see them.
 
-def curl_json(url, *, auth_header, cacert=None, timeout=30):
-    config = f'url = "{url}"\nheader = "Authorization: {auth_header}"\n'
+def curl_json(url, *, auth_header=None, cacert=None, timeout=30):
+    config = f'url = "{url}"\n' + (f'header = "Authorization: {auth_header}"\n' if auth_header else "")
     cmd = ["curl", "-sS", "--max-time", str(timeout), "-w", "\n%{http_code}", "-K", "-"]
     if cacert:
         cmd += ["--cacert", cacert]
@@ -121,6 +146,23 @@ def curl_json(url, *, auth_header, cacert=None, timeout=30):
     return json.loads(body) if body.strip() else None
 
 
+_riot_ca = None
+
+
+def riot_ca():
+    """A file holding Riot's root certificate, which signs the client's and the game's local APIs."""
+    global _riot_ca
+    ca = os.environ.get("MAYHEM_LCU_CA")  # tests point this at their own CA
+    if ca:
+        return ca
+    if not _riot_ca:
+        fd, _riot_ca = tempfile.mkstemp(suffix=".pem")
+        with os.fdopen(fd, "w") as f:
+            f.write(RIOT_ROOT_CA)
+        atexit.register(os.unlink, _riot_ca)
+    return _riot_ca
+
+
 class Lcu:
     """The League client's local API, read-only, on 127.0.0.1."""
 
@@ -128,13 +170,7 @@ class Lcu:
         self.base = f"https://127.0.0.1:{port}"
         token = base64.b64encode(f"riot:{password}".encode()).decode()
         self.auth = f"Basic {token}"
-        ca = os.environ.get("MAYHEM_LCU_CA")  # tests point this at their own CA
-        if not ca:
-            fd, ca = tempfile.mkstemp(suffix=".pem")
-            with os.fdopen(fd, "w") as f:
-                f.write(RIOT_ROOT_CA)
-            atexit.register(os.unlink, ca)
-        self.cacert = ca
+        self.cacert = riot_ca()
 
     def get(self, path):
         return curl_json(self.base + path, auth_header=self.auth, cacert=self.cacert)
@@ -585,13 +621,204 @@ def set_sharing(enabled, out, lockfile=None):
     return {"enabled": False, "shared": reply.get("shared", 0)}
 
 
-def serve(out, port, lockfile=None, sgp_host=None, open_browser=True):
+# ---------- live game recording (Live Client Data API) ----------
+# League serves the game in progress on 127.0.0.1:2999 while a match runs. The
+# helper polls it and saves one file per game under LIVE_DIR. Record only: it
+# never shows anything while the game is running.
+
+LIVE_URL = "https://127.0.0.1:2999/liveclientdata/allgamedata"
+LIVE_DIR = os.path.expanduser("~/Library/Application Support/Mayhem Stats/live")
+LIVE_EVERY = 10   # seconds between snapshots during a game
+LIVE_IDLE = 15    # seconds between checks for a game starting
+LIVE_KEEP = 200   # recordings kept on disk, newest first
+LIVE_FORMAT = 1
+
+# One recording file (version 1):
+# {
+#   "version": 1, "complete": true,          # complete once the game ended or closed
+#   "startedAt": 1760000000000,              # epoch ms, wall clock at game time 0
+#   "gameMode": "KIWI", "map": 12, "mapTerrain": "Default",  # official map id; terrain names the map skin
+#   "gameTime": 1104.2,                      # seconds, last seen
+#   "player": {"riotId": "Name#TAG", "champion": "Ahri", "team": "ORDER"},
+#   "snapshots": [{                          # the recording player, every LIVE_EVERY s
+#     "t": 610.1, "level": 14, "gold": 1325.4,
+#     "stats": {...championStats as reported: abilityPower, attackDamage, armor,
+#               magicResist, maxHealth, currentHealth, attackSpeed, abilityHaste,
+#               critChance, critDamage, lifeSteal, omnivamp, physicalLethality,
+#               magicPenetrationFlat, magicPenetrationPercent, armorPenetrationPercent,
+#               moveSpeed, tenacity, healShieldPower, resourceMax, ...},
+#     "abilities": {"Q": 5, "W": 3, "E": 2, "R": 2},
+#     "items": [[slot, itemId, count], ...], "augments": [...]  # augments when the game reports them
+#     "scores": {"kills": 4, "deaths": 2, "assists": 11, "creepScore": 30, "wardScore": 0}}],
+#   "players": [{                            # everyone, as of the last snapshot
+#     "riotId": "...", "champion": "Ahri", "team": "ORDER", "level": 18, "bot": false,
+#     "items": [[slot, itemId, count]], "augments": [...], "spells": ["SummonerFlash", ...],
+#     "keystone": 8112, "scores": {...}}],
+#   "events": [{"t": 95.3, "name": "ChampionKill", "killer": "...", "victim": "...", "assisters": [...]}]
+# }
+# Damage dealt isn't in the live data; the synced match supplies it, matched by
+# champion and start time.
+
+
+def _items(p):
+    return [[i.get("slot"), i.get("itemID"), i.get("count", 1)] for i in p.get("items") or []]
+
+
+def _augments(p):
+    out = []
+    for k, v in p.items():
+        if "augment" in k.lower() and v:
+            out += v if isinstance(v, list) else [v]
+    return out
+
+
+def _abilities(a):
+    return {k: v.get("abilityLevel", 0) for k, v in (a or {}).items() if k in ("Q", "W", "E", "R")}
+
+
+def _spell(s):
+    # "GeneratedTip_SummonerSpell_SummonerFlash_DisplayName" -> "SummonerFlash"
+    raw = (s.get("rawDisplayName") or "").split("_")
+    return raw[-2] if len(raw) >= 3 else s.get("displayName")
+
+
+def _riot_id(p):
+    return p.get("riotId") or p.get("summonerName") or ""
+
+
+def live_players(data):
+    out = []
+    for p in data.get("allPlayers") or []:
+        spells = p.get("summonerSpells") or {}
+        out.append({
+            "riotId": _riot_id(p), "champion": p.get("championName"), "team": p.get("team"),
+            "level": p.get("level"), "bot": bool(p.get("isBot")), "items": _items(p), "augments": _augments(p),
+            "spells": [_spell(s) for s in (spells.get("summonerSpellOne"), spells.get("summonerSpellTwo")) if s],
+            "keystone": ((p.get("runes") or {}).get("keystone") or {}).get("id"),
+            "scores": p.get("scores") or {},
+        })
+    return out
+
+
+def live_snapshot(data):
+    """The recording player's state at this moment, from one allgamedata response."""
+    me = data.get("activePlayer") or {}
+    me_id = _riot_id(me)
+    row = next((p for p in data.get("allPlayers") or [] if _riot_id(p) == me_id), {})
+    return {
+        "t": round((data.get("gameData") or {}).get("gameTime", 0), 1),
+        "level": me.get("level"), "gold": round(me.get("currentGold", 0), 1),
+        "stats": me.get("championStats") or {}, "abilities": _abilities(me.get("abilities")),
+        "items": _items(row), "augments": _augments(me) or _augments(row), "scores": row.get("scores") or {},
+    }
+
+
+def live_events(data):
+    out = []
+    for e in (data.get("events") or {}).get("Events") or []:
+        ev = {"t": round(e.get("EventTime", 0), 1), "name": e.get("EventName")}
+        for src, dst in (("KillerName", "killer"), ("VictimName", "victim"), ("Assisters", "assisters"),
+                         ("Result", "result"), ("DragonType", "dragon")):
+            if src in e:
+                ev[dst] = e[src]
+        out.append(ev)
+    return out
+
+
+def live_update(rec, data, now_ms):
+    """Folds one allgamedata response into a recording (a new one when rec is None)."""
+    game = data.get("gameData") or {}
+    t = game.get("gameTime", 0)
+    me = data.get("activePlayer") or {}
+    if rec is None:
+        mine = next((p for p in data.get("allPlayers") or [] if _riot_id(p) == _riot_id(me)), {})
+        rec = {"version": LIVE_FORMAT, "complete": False, "startedAt": int(now_ms - t * 1000),
+               "gameMode": game.get("gameMode"), "map": game.get("mapNumber"), "mapTerrain": game.get("mapTerrain"),
+               "gameTime": 0,
+               "player": {"riotId": _riot_id(me), "champion": mine.get("championName"), "team": mine.get("team")},
+               "snapshots": [], "players": [], "events": []}
+    rec["gameTime"] = round(t, 1)
+    rec["snapshots"].append(live_snapshot(data))
+    rec["players"] = live_players(data)
+    rec["events"] = live_events(data)
+    if any(e["name"] == "GameEnd" for e in rec["events"]):
+        rec["complete"] = True
+    return rec
+
+
+def save_live(rec, folder=None):
+    folder = folder or LIVE_DIR
+    os.makedirs(folder, exist_ok=True)
+    path = os.path.join(folder, f"{rec['startedAt']}.json")
+    with open(path + ".tmp", "w") as f:
+        json.dump(rec, f, separators=(",", ":"))
+    os.replace(path + ".tmp", path)
+    names = sorted((n for n in os.listdir(folder) if n.endswith(".json")), reverse=True)
+    for old in names[LIVE_KEEP:]:
+        os.remove(os.path.join(folder, old))
+    return path
+
+
+def live_recordings(folder=None):
+    """Every saved recording, newest first."""
+    folder = folder or LIVE_DIR
+    out = []
+    try:
+        names = sorted((n for n in os.listdir(folder) if n.endswith(".json")), reverse=True)
+    except OSError:
+        return out
+    for n in names:
+        try:
+            with open(os.path.join(folder, n)) as f:
+                out.append(json.load(f))
+        except (OSError, ValueError):
+            continue
+    return out
+
+
+def live_recorder(stop, status, fetch=None, folder=None, progress=log):
+    """Runs until stop is set: waits for a game, snapshots it, saves it when it ends."""
+    fetch = fetch or (lambda: curl_json(LIVE_URL, cacert=riot_ca(), timeout=5))
+    rec = None
+    while not stop.is_set():
+        try:
+            data = fetch()
+        except (ConnectionError, HttpError, ValueError):
+            data = None
+        # The API answers with an empty game while loading; wait for a player to appear.
+        if data and (data.get("activePlayer") or {}).get("championStats"):
+            started = rec is None
+            rec = live_update(rec, data, time.time() * 1000)
+            save_live(rec, folder)
+            status["recording"] = rec["player"]["champion"]
+            if started:
+                progress(f"Recording live game ({rec['player']['champion']}).")
+            if rec["complete"]:
+                progress("Live game saved.")
+                rec = None
+                status["recording"] = None
+                stop.wait(60)  # the end screen keeps answering for a while
+                continue
+        elif rec is not None:
+            rec["complete"] = True  # the game closed before reporting its end
+            save_live(rec, folder)
+            progress("Live game saved.")
+            rec = None
+            status["recording"] = None
+        stop.wait(LIVE_EVERY if rec else LIVE_IDLE)
+
+
+def serve(out, port, lockfile=None, sgp_host=None, open_browser=True, record_live=True):
     import http.server
     import threading
     import webbrowser
 
     state = {"running": False, "log": [], "result": None, "error": None}
     lock = threading.Lock()
+    live = {"recording": None, "enabled": record_live}
+    stop_live = threading.Event()
+    if record_live:
+        threading.Thread(target=live_recorder, args=(stop_live, live), daemon=True).start()
 
     def sync_worker(full):
         def progress(msg):
@@ -645,6 +872,8 @@ def serve(out, port, lockfile=None, sgp_host=None, open_browser=True):
             if path == "/api/sync":
                 with lock:
                     return self.send_json(dict(state))
+            if path == "/api/live":
+                return self.send_json({**live, "games": live_recordings()})
             if path.startswith("/assets/"):
                 body = site_asset(path)
                 if body is None:
@@ -711,6 +940,8 @@ def serve(out, port, lockfile=None, sgp_host=None, open_browser=True):
         server.serve_forever()
     except KeyboardInterrupt:
         pass
+    finally:
+        stop_live.set()
 
 
 # ---------- main ----------
@@ -725,13 +956,14 @@ def main():
     ap.add_argument("--serve", action="store_true",
                     help="open the stats dashboard with a Sync button instead of importing once")
     ap.add_argument("--port", type=int, default=8787, help="port for --serve (default 8787)")
+    ap.add_argument("--no-live", action="store_true", help="with --serve, don't record games while they're played")
     ap.add_argument("--no-browser", action="store_true", help=argparse.SUPPRESS)
     ap.add_argument("--sgp-host", help=argparse.SUPPRESS)  # for testing
     args = ap.parse_args()
     out = os.path.expanduser(args.out)
 
     if args.serve:
-        return serve(out, args.port, args.lockfile, args.sgp_host, not args.no_browser)
+        return serve(out, args.port, args.lockfile, args.sgp_host, not args.no_browser, not args.no_live)
     try:
         run_import(out, args.full, args.lockfile, args.sgp_host)
     except ImportFailed as e:

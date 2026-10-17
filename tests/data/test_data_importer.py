@@ -443,3 +443,71 @@ def test_platform_ids(mi):
 def test_site_post_refuses_unknown_region(mi):
     with pytest.raises(mi.ImportFailed, match="region"):
         mi.site_post(FakeLcu(mi, region="XX"), "/api/games", {})
+
+
+# ---------- live game recording ----------
+
+def live_frame(t, augments=None, end=False):
+    me = {"riotId": "Me#1", "level": 3, "currentGold": 500.0,
+          "championStats": {"attackDamage": 70, "abilityPower": 10, "maxHealth": 900},
+          "abilities": {"Q": {"abilityLevel": 2}, "Passive": {}}}
+    if augments:
+        me["augments"] = augments
+    events = [{"EventName": "GameStart", "EventTime": 0.0}]
+    if end:
+        events.append({"EventName": "GameEnd", "EventTime": t, "Result": "Win"})
+    return {"activePlayer": me, "events": {"Events": events},
+            "gameData": {"gameTime": t, "gameMode": "KIWI", "mapNumber": 12, "mapTerrain": "Default"},
+            "allPlayers": [{"riotId": "Me#1", "championName": "Ahri", "team": "ORDER", "level": 3,
+                            "items": [{"slot": 0, "itemID": 1056, "count": 1}], "scores": {"kills": 1},
+                            "summonerSpells": {"summonerSpellOne": {
+                                "rawDisplayName": "GeneratedTip_SummonerSpell_SummonerFlash_DisplayName"}},
+                            "runes": {"keystone": {"id": 8112}}}]}
+
+
+def test_live_recorder_saves_one_file_per_game(mi, tmp_path):
+    import threading
+    frames = iter([None, {"activePlayer": {}}, live_frame(5), live_frame(15, [101]),
+                   live_frame(25, [101, 202]), live_frame(35, [101, 202], end=True)])
+    stop = threading.Event()
+    stop.wait = lambda s: None
+
+    def fetch():
+        f = next(frames, "done")
+        if f == "done":
+            stop.set()
+            return None
+        if f is None:
+            raise ConnectionError("no game")
+        return f
+
+    status = {}
+    mi.live_recorder(stop, status, fetch=fetch, folder=str(tmp_path / "live"), progress=lambda m: None)
+    recs = mi.live_recordings(str(tmp_path / "live"))
+    assert len(recs) == 1 and status["recording"] is None
+    r = recs[0]
+    assert r["complete"] and r["version"] == mi.LIVE_FORMAT and r["gameTime"] == 35
+    assert r["player"] == {"riotId": "Me#1", "champion": "Ahri", "team": "ORDER"}
+    assert [s["augments"] for s in r["snapshots"]] == [[], [101], [101, 202], [101, 202]]
+    assert r["snapshots"][0]["abilities"] == {"Q": 2} and r["snapshots"][0]["items"] == [[0, 1056, 1]]
+    assert r["players"][0]["spells"] == ["SummonerFlash"] and r["players"][0]["keystone"] == 8112
+    assert r["events"][-1] == {"t": 35, "name": "GameEnd", "result": "Win"}
+
+
+def test_live_recording_closed_mid_game_is_kept(mi, tmp_path):
+    import threading
+    frames = iter([live_frame(5), live_frame(15), None])
+    stop = threading.Event()
+    stop.wait = lambda s: None
+
+    def fetch():
+        f = next(frames, "done")
+        if f == "done":
+            stop.set()
+        if not isinstance(f, dict):
+            raise ConnectionError("closed")
+        return f
+
+    mi.live_recorder(stop, {}, fetch=fetch, folder=str(tmp_path), progress=lambda m: None)
+    (r,) = mi.live_recordings(str(tmp_path))
+    assert r["complete"] and len(r["snapshots"]) == 2

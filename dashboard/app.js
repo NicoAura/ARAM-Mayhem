@@ -1,7 +1,9 @@
 // ARAM Mayhem stats dashboard. Reads a match archive entirely in the browser.
 "use strict";
 
+// Queue and map names, filled in from constants.json; these cover a page without it.
 const QUEUE_NAMES = { 2400: "ARAM Mayhem", 2450: "ARAM Mayhem (2450)", 450: "ARAM" };
+const MAP_NAMES = { 12: "Howling Abyss" };
 
 const state = {
   games: [],        // normalized rows for the archive owner, one per game
@@ -12,6 +14,7 @@ const state = {
   sample: false,
   boots: new Set(), // item ids that count as boots
   champAlias: {},   // championId -> alias as in /champions/<alias>
+  live: [],         // game recordings from the helper, newest first
 };
 
 // A page can ship name tables and an example archive ahead of time.
@@ -138,6 +141,11 @@ async function loadItems() {
 
 async function loadNames() {
   try {
+    const c = await (await fetch("constants.json")).json();
+    for (const [id, name] of Object.entries(c.queues || {})) if (!QUEUE_NAMES[id]) QUEUE_NAMES[id] = name;
+    Object.assign(MAP_NAMES, c.maps || {});
+  } catch (e) { console.warn("queue names unavailable", e); }
+  try {
     const champs = await (await fetch("/assets/cd/latest/plugins/rcp-be-lol-game-data/global/default/v1/champion-summary.json")).json();
     for (const c of champs) if (c.id > 0) { state.champNames[c.id] = c.name; state.champAlias[c.id] = c.alias; }
   } catch (e) { console.warn("champion names unavailable", e); }
@@ -225,6 +233,7 @@ function render() {
   renderCurve(state.games);
   renderPairs(games);
   renderGames(games);
+  if (state.live.length) renderLive();
 }
 
 function sum(games, f) { return games.reduce((t, g) => t + f(g), 0); }
@@ -721,6 +730,7 @@ async function setupSync() {
   await setupSync();
   setupProfile();
   setupShare();
+  setupLive();
 })();
 
 // ---------- public page ----------
@@ -845,4 +855,85 @@ function linkRecentlyPlayed() {
     .map((g) => ({ champion: state.champAlias[g.champId], win: g.win, at: g.time + g.duration * 1000 }));
   link.hidden = !recent.length;
   link.href = "https://deeparam.com/embed/dashboard/played.html#" + encodeURIComponent(JSON.stringify(recent));
+}
+
+// ---------- recorded games ----------
+// The helper records each game while it's played. A recording is
+// matched to its synced game by champion and start time, which supplies the result and damage.
+
+const MATCH_WINDOW_MS = 5 * 60 * 1000;
+const terrainName = (r) => (r.mapTerrain && r.mapTerrain !== "Default" ? r.mapTerrain.replace(/([a-z])([A-Z])/g, "$1 $2") : MAP_NAMES[r.map] || `Map ${r.map}`);
+const lastSnap = (r) => r.snapshots[r.snapshots.length - 1] || { stats: {}, items: [], augments: [] };
+
+function matchGame(r) {
+  const champ = r.player.champion;
+  let best = null;
+  for (const g of state.games) {
+    const dt = Math.abs(g.time - r.startedAt);
+    if (dt < MATCH_WINDOW_MS && (champName(g) === champ || g.champNameRaw === champ) && (!best || dt < best.dt)) best = { g, dt };
+  }
+  return best && best.g;
+}
+
+// Augments in the order the game first reported them, with the game time each appeared.
+function pickOrder(r) {
+  const seen = new Map();
+  for (const s of r.snapshots) for (const a of s.augments || []) {
+    const id = typeof a === "object" ? a.id : a;
+    if (id && !seen.has(id)) seen.set(id, s.t);
+  }
+  return [...seen.entries()].map(([id, t]) => ({ id, t }));
+}
+
+const augLabel = (id) => (typeof id === "number" || /^\d+$/.test(id) ? augName(id) : String(id));
+
+function renderLive() {
+  const recs = state.live.map((r) => ({ r, g: matchGame(r), last: lastSnap(r), picks: pickOrder(r) }));
+  const st = (x, k) => Math.round(x.last.stats[k] || 0);
+  table("t-live", [
+    { label: "Date", get: (x) => x.r.startedAt, fmt: (x) => fmtDate(new Date(x.r.startedAt)) },
+    { label: "Champion", get: (x) => x.r.player.champion || "", fmt: (x) => esc(x.r.player.champion || "") },
+    { label: "Map", get: (x) => terrainName(x.r), fmt: (x) => esc(terrainName(x.r)) },
+    { label: "Result", get: (x) => (x.g ? +x.g.win : -1), fmt: (x) => (x.g ? (x.g.win ? "Win" : "Loss") : "Not synced"), cls: (x) => (x.g ? (x.g.win ? "win" : "loss") : "") },
+    { label: "Length", get: (x) => x.r.gameTime, fmt: (x) => mmss(x.r.gameTime) },
+    { label: "Level", get: (x) => x.last.level || 0 },
+    { label: "AD", get: (x) => st(x, "attackDamage") },
+    { label: "AP", get: (x) => st(x, "abilityPower") },
+    { label: "Health", get: (x) => st(x, "maxHealth") },
+    { label: "Armor / MR", get: (x) => st(x, "armor"), fmt: (x) => `${st(x, "armor")} / ${st(x, "magicResist")}` },
+    { label: "Damage", get: (x) => (x.g ? x.g.damage : 0), fmt: (x) => (x.g ? x.g.damage.toLocaleString() : "") },
+    { label: "Augments in order", get: (x) => x.picks.length, cls: () => "augs",
+      fmt: (x) => esc(x.picks.map((p) => `${augLabel(p.id)} (${mmss(p.t)})`).join(", ")) },
+  ], recs, 0);
+
+  const picks = new Map();
+  for (const x of recs) if (x.g) x.picks.forEach((p, i) => {
+    const k = p.id + "|" + i;
+    const row = picks.get(k) || { id: p.id, pick: i + 1, n: 0, w: 0 };
+    row.n++; row.w += x.g.win ? 1 : 0;
+    picks.set(k, row);
+  });
+  table("t-picks", [
+    { label: "Augment", get: (r) => augLabel(r.id), fmt: (r) => esc(augLabel(r.id)) },
+    { label: "Pick", get: (r) => r.pick, fmt: (r) => ["1st", "2nd", "3rd"][r.pick - 1] || r.pick + "th" },
+    { label: "Games", get: (r) => r.n },
+    { label: "Win rate", get: (r) => r.w / r.n + r.n / 1e6, fmt: (r) => pct(r.w / r.n), cls: (r) => wrClass(r.w / r.n) },
+  ], [...picks.values()], 3);
+
+  const maps = group(recs.filter((x) => x.g).map((x) => ({ ...x.g, mapLabel: terrainName(x.r) })), (g) => g.mapLabel);
+  wrBars("wr-map", maps.map((m) => ({ label: m.key, n: m.n, w: m.w })));
+}
+
+async function setupLive() {
+  if (!helperOnline || state.sample) return;
+  try {
+    const res = await fetch("api/live", { cache: "no-store" });
+    if (!res.ok) return;
+    const live = await res.json();
+    if (!live.enabled) return;
+    state.live = (live.games || []).filter((r) => r && r.player && Array.isArray(r.snapshots));
+    $("live-card").hidden = false;
+    $("live-status").textContent = live.recording ? `Recording a game (${live.recording})` : `${state.live.length} recorded`;
+    renderLive();
+  } catch (e) { /* older helper without recording */ }
 }

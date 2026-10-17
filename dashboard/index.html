@@ -127,6 +127,24 @@
       <div class="tbl-wrap"><table id="t-games"></table></div>
     </section>
 
+    <section class="card" id="live-card" hidden>
+      <div class="card-h"><h3>Recorded games</h3><span class="foot" id="live-status"></span></div>
+      <p class="sub">While this page's helper is open, each game you play is recorded: your stats, gold, items and augments as the game goes. Nothing is shown during the game. Recordings stay on this computer.</p>
+      <div class="tbl-wrap"><table id="t-live"></table></div>
+      <div class="two-col">
+        <div>
+          <h4>Augment pick order</h4>
+          <p class="foot">Win rate of each augment by when you took it, in recorded games</p>
+          <div class="tbl-wrap"><table id="t-picks"></table></div>
+        </div>
+        <div>
+          <h4>Win rate by map</h4>
+          <p class="foot">Recorded games only</p>
+          <div id="wr-map" class="wrbars"></div>
+        </div>
+      </div>
+    </section>
+
     <section class="card" id="share-card" hidden>
       <div class="card-h"><h3>Share games anonymously</h3><span class="foot" id="share-count"></span></div>
       <p class="sub">Off unless you turn it on. When on, each import also sends your games to help build stats across all players, such as matchups, augment combos and team comps. Shared games carry champions, items, augments, runes, spells and results, never names or account ids. Turning it off removes everything you shared.</p>
