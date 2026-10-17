@@ -10,7 +10,11 @@ import { clone as cloneSkinned } from "three/addons/utils/SkeletonUtils.js";
 
 const DATA = "replay-data/models/";
 const BUST = "?v=" + (window.REPLAY_VERSION || "0");
-const HEIGHT = 2.6;              // world units for a champion of average size
+// Models are in hundredths of game units; the game draws each champion at its skin's scale
+// (models.json "scale"). The page passes how many px a game unit takes on screen (f.unit);
+// without it, a champion 200 game units tall (about average) stands this many world units.
+const GAME_UNITS = 100;
+const HEIGHT = 2.6;
 const FALLBACK = { Q: ["attack"], W: ["attack"], E: ["attack"], R: ["attack"], crit: ["attack"],
   stunned: ["idle"], death: ["idle"], attack: ["idle"], run: ["idle"], dance: ["idle"] };
 
@@ -111,8 +115,8 @@ class Actor {
       }
       if (o.userData && o.userData.submeshVisibilityEvents) this.events = o.userData.submeshVisibilityEvents;
     });
-    // Scale to a common height with the feet on the ground, measured on the visible parts
-    // in the idle pose.
+    // In game units at the champion's in-game size, feet on the ground, measured on the
+    // visible parts in the idle pose.
     this.pose("idle", 0, true);
     // Some clips carry root motion (Teemo's Q runs forward, Garen's Q starts in the air);
     // the arena places each fighter itself, so the root bone stays where idle has it.
@@ -122,7 +126,7 @@ class Actor {
     for (const m of this.meshes) if (m.shown) box.union(new THREE.Box3().setFromObject(m.mesh, true));
     if (box.isEmpty()) box.setFromObject(this.root, true);
     const h = Math.max(1e-6, box.max.y - box.min.y);
-    const s = HEIGHT / h;
+    const s = GAME_UNITS * (entry.scale || 1);
     this.root.scale.multiplyScalar(s);
     this.root.position.y = -box.min.y * s;
     this.root.position.x = -((box.max.x + box.min.x) / 2) * s;
@@ -335,7 +339,9 @@ const api = {
       a.group.position.copy(this.toWorld(f.x, f.y, W, H));
       // Facing: toward a screen direction when given (screen down is toward the camera), else left or right.
       a.group.rotation.y = f.dir && (f.dir.x || f.dir.y) ? Math.atan2(f.dir.x, f.dir.y) : f.face > 0 ? Math.PI / 2 : -Math.PI / 2;
-      a.group.scale.setScalar(f.scale || 1);
+      // World units per game unit: the camera spans 16 world units across W px.
+      const g = (f.unit ? (f.unit * 16) / W : HEIGHT / 200) * (f.scale || 1);
+      a.group.scale.setScalar(g);
       let { role, t, loop, n } = f;
       if (f.key === "me" && this.preview) {
         const pt = (performance.now() - this.preview.start) / 1000;
@@ -344,7 +350,7 @@ const api = {
         else this.preview = null;
       }
       a.pose(role, t, loop, n);
-      const head = this.toScreen(a.group.position.clone().add(new THREE.Vector3(0, a.height * (f.scale || 1) * 1.12, 0)), W, H);
+      const head = this.toScreen(a.group.position.clone().add(new THREE.Vector3(0, a.height * g * 1.12, 0)), W, H);
       out[f.key] = head;
     }
     for (const [key, entry] of this.actors) if (!seen.has(key)) { scene.remove(entry.actor.group); this.actors.delete(key); }

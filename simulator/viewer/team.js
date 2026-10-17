@@ -54,8 +54,10 @@
       for (const e of meta.enemies) popular.set(e.id.toLowerCase(), { items: e.items, augments: e.augments });
       if (!teams.allies.length) {
         const want = new URLSearchParams(location.search).get("champ");
-        const you = (want && champ(want)) || champ("Jinx") || meta.champions[0];
-        const picks = [you.id, "Lulu", "Leona", "Ahri", "Darius"].map((n) => champ(n) || meta.champions[0]);
+        // The champion named in the link, else a random one each visit.
+        const you = (want && champ(want)) || meta.champions[Math.floor(Math.random() * meta.champions.length)];
+        const picks = [you.id, ...["Lulu", "Leona", "Ahri", "Darius", "Jinx"].filter((n) => n.toLowerCase() !== you.id.toLowerCase()).slice(0, 4)]
+          .map((n) => champ(n) || meta.champions[0]);
         const seen = new Set();
         teams.allies = picks.filter((c) => !seen.has(c.id) && seen.add(c.id)).map((c) => slotFor(c.id));
         teams.foes = likelyFoes(new Set(teams.allies.map((s) => s.id.toLowerCase())));
