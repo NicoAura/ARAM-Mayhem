@@ -118,7 +118,7 @@ function deviceLabel() {
   return /iPhone|iPad|Mac/.test(ua) ? "Apple device" : /Android/.test(ua) ? "Android phone" : /Windows/.test(ua) ? "Windows PC" : "Passkey";
 }
 
-export default function AccountPanel() {
+export default function AccountPanel({ children }: { children?: React.ReactNode }) {
   const t = useT("account");
   const [account, setAccount] = useState<Account | null | undefined>(undefined);
   const [rso, setRso] = useState(false);
@@ -154,7 +154,16 @@ export default function AccountPanel() {
   return (
     <>
       <Note msg={riotMsg} />
-      {account ? <Manage account={account} refresh={refresh} /> : <SignIn onDone={signedIn} rso={rso} providers={providers} />}
+      {account ? (
+        <Manage account={account} refresh={refresh}>
+          {children}
+        </Manage>
+      ) : (
+        <>
+          <SignIn onDone={signedIn} rso={rso} providers={providers} />
+          {children}
+        </>
+      )}
     </>
   );
 }
@@ -271,43 +280,124 @@ function SignIn({ onDone, rso, providers }: { onDone: () => Promise<void>; rso: 
   );
 }
 
-function Manage({ account, refresh }: { account: Account; refresh: () => Promise<void> }) {
+/** The name to greet: the display name, else the part of the email before the @, else the Riot name. */
+function greetName(account: Account) {
+  return account.name ?? account.email?.split("@")[0] ?? account.riot?.name.split("#")[0] ?? null;
+}
+
+// The page's sections in order. My Stats and Kitchen builds come from other components (passed in as
+// children), so their links only show once those sections are on the page.
+const SECTIONS = [
+  { id: "riot", label: "Riot account" },
+  { id: "my-stats", label: "My Stats" },
+  { id: "kitchen", label: "Kitchen builds" },
+  { id: "profile", label: "Profile" },
+  { id: "security", label: "Sign-in and security" },
+  { id: "delete", label: "Delete account" },
+];
+
+function SectionNav() {
+  const t = useT("account");
+  const [present, setPresent] = useState<string[]>([]);
+  useEffect(() => {
+    const look = () => {
+      const ids = SECTIONS.filter((x) => document.getElementById(x.id)).map((x) => x.id);
+      setPresent((old) => (old.join() === ids.join() ? old : ids));
+    };
+    look();
+    const watch = new MutationObserver(look);
+    watch.observe(document.querySelector("main") ?? document.body, { childList: true, subtree: true });
+    return () => watch.disconnect();
+  }, []);
+  if (present.length < 2) return null;
+  return (
+    <nav className="acct-nav" aria-label={t("Jump to")}>
+      {SECTIONS.filter((x) => present.includes(x.id)).map((x) => (
+        <a key={x.id} href={`#${x.id}`} className={x.id === "delete" ? "danger" : undefined}>
+          {t(x.label)}
+        </a>
+      ))}
+    </nav>
+  );
+}
+
+function Manage({ account, refresh, children }: { account: Account; refresh: () => Promise<void>; children?: React.ReactNode }) {
   const t = useT("account");
   const signOut = async () => {
     await call("/api/account/signout", "POST").catch(() => null);
     forgetAccount();
     await refresh();
   };
+  const name = greetName(account);
+  const showSignIns = account.providers.length > 0 || account.logins.length > 0;
 
   return (
-    <div className="acct-grid">
-      <section className="card acct-card" data-accent="gold">
-        <h2>{t("Signed in")}</h2>
-        <div className="acct-me">
-          {account.icon && (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img src={`/icons/champions/${account.icon}.webp`} alt="" width={48} height={48} />
-          )}
-          <p className="acct-who">
-            {account.name ?? account.email ?? account.riot?.name ?? t("Your account")}
-            {account.name && account.email && <small>{account.email}</small>}
-          </p>
+    <div className="acct-page">
+      <section className="card acct-welcome" data-accent="gold">
+        {account.icon ? (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img src={`/icons/champions/${account.icon}.webp`} alt="" width={72} height={72} />
+        ) : (
+          <span className="acct-avatar" aria-hidden="true">
+            {(name ?? "?").slice(0, 1).toUpperCase()}
+          </span>
+        )}
+        <div className="acct-welcome-text">
+          <h2>{name ? t("Welcome, {name}!", { name }) : t("Welcome!")}</h2>
+          {account.email && <p className="acct-hint">{account.email}</p>}
+          <ul className="acct-status">
+            <li className={account.riot ? "ok" : "todo"}>
+              {account.riot ? (
+                t("Riot account: {name}", { name: account.riot.name })
+              ) : (
+                <a href="#riot">{t("Connect your Riot account")}</a>
+              )}
+            </li>
+            {!account.name && (
+              <li className="todo">
+                <a href="#profile">{t("Add a display name and icon")}</a>
+              </li>
+            )}
+            <li className="ok">{t("Settings sync to every browser you sign in on")}</li>
+          </ul>
         </div>
-        <p className="acct-hint">
-          {t("Your settings follow you to every browser you sign in on.")}
-        </p>
         <button type="button" className="btn ghost" onClick={signOut}>
           {t("Sign out")}
         </button>
       </section>
-      <RiotCard account={account} refresh={refresh} />
-      <ProfileCard account={account} refresh={refresh} />
-      <PasskeyCard account={account} refresh={refresh} />
-      {(account.providers.length > 0 || account.logins.length > 0) && <ProvidersCard account={account} refresh={refresh} />}
-      <EmailCard account={account} refresh={refresh} />
-      <PasswordCard account={account} />
-      <DeleteCard account={account} refresh={refresh} />
-      {account.riot && <PlayerExtras />}
+
+      <SectionNav />
+
+      <section id="riot" className="acct-group">
+        <h2>{t("Riot account")}</h2>
+        <div className="acct-grid">
+          <RiotCard account={account} refresh={refresh} />
+          {account.riot && <PlayerExtras />}
+        </div>
+      </section>
+
+      {children}
+
+      <section id="profile" className="acct-group">
+        <h2>{t("Profile")}</h2>
+        <div className="acct-grid">
+          <ProfileCard account={account} refresh={refresh} />
+        </div>
+      </section>
+
+      <section id="security" className="acct-group">
+        <h2>{t("Sign-in and security")}</h2>
+        <div className="acct-grid">
+          <PasskeyCard account={account} refresh={refresh} />
+          {showSignIns && <ProvidersCard account={account} refresh={refresh} />}
+          <EmailCard account={account} refresh={refresh} />
+          <PasswordCard account={account} />
+        </div>
+      </section>
+
+      <section id="delete" className="acct-group">
+        <DeleteCard account={account} refresh={refresh} />
+      </section>
     </div>
   );
 }
@@ -339,7 +429,7 @@ function ProfileCard({ account, refresh }: { account: Account; refresh: () => Pr
 
   return (
     <section className="card acct-card" data-accent="lab">
-      <h2>{t("Profile")}</h2>
+      <h3>{t("Name and icon")}</h3>
       <form className="acct-form" method="post" action="/account" onSubmit={save}>
         <label>
           {t("Display name")}
@@ -400,7 +490,7 @@ function EmailCard({ account, refresh }: { account: Account; refresh: () => Prom
 
   return (
     <section className="card acct-card" data-accent="info">
-      <h2>{account.email ? t("Change email") : t("Add an email")}</h2>
+      <h3>{account.email ? t("Change email") : t("Add an email")}</h3>
       {account.email && <p className="acct-who">{account.email}</p>}
       <form className="acct-form" method="post" action="/account" onSubmit={submit}>
         <label>
@@ -483,8 +573,8 @@ function RiotCard({ account, refresh }: { account: Account; refresh: () => Promi
   const steps = [t("Get a code"), t("Enter it in My Stats"), t("Connected")];
 
   return (
-    <section id="riot" className="card acct-card acct-riot-card" data-accent="tier">
-      <h2>{t("Riot account")}</h2>
+    <section className="card acct-card acct-riot-card" data-accent="tier">
+      <h3>{account.riot ? t("Connected") : t("Connect your Riot account")}</h3>
       <ol className="acct-progress" aria-label={t("Step {n} of 3", { n: step })}>
         {steps.map((label, i) => (
           <li key={label} className={i + 1 < step || step === 3 ? "done" : i + 1 === step ? "now" : ""} aria-current={i + 1 === step ? "step" : undefined}>
@@ -539,7 +629,7 @@ function RiotCard({ account, refresh }: { account: Account; refresh: () => Promi
       ) : (
         <>
           {expired && <p className="acct-note error">{t("That code expired. Get a new one.")}</p>}
-          <p className="acct-hint">{t("Connect the Riot account you play on to see your rank, mastery and Clash team here. Only you can connect yours: My Stats checks it with the Riot Client on your computer.")}</p>
+          <p className="acct-hint">{t("Connect the Riot account you play on to see your mastery and Clash team here. Only you can connect yours: My Stats checks it with the Riot Client on your computer.")}</p>
           {account.rso && (
             <a className="btn" href="/api/account/rso/start?mode=connect">
               {t("Connect with Riot sign-in")}
@@ -572,7 +662,7 @@ function ProvidersCard({ account, refresh }: { account: Account; refresh: () => 
 
   return (
     <section className="card acct-card" data-accent="info">
-      <h2>{t("Other ways to sign in")}</h2>
+      <h3>{t("Other ways to sign in")}</h3>
       <p className="acct-hint">{t("Sign in to this account with another service you use, instead of a password.")}</p>
       {account.logins.length > 0 && (
         <ul className="acct-list">
@@ -625,7 +715,7 @@ function PasskeyCard({ account, refresh }: { account: Account; refresh: () => Pr
 
   return (
     <section className="card acct-card" data-accent="pbe">
-      <h2>{t("Passkeys")}</h2>
+      <h3>{t("Passkeys")}</h3>
       <p className="acct-hint">{t("Sign in with your fingerprint, face or device PIN instead of a password. A passkey is also how you get back in if you forget your password.")}</p>
       {account.passkeys.length > 0 && (
         <ul className="acct-list">
@@ -676,7 +766,7 @@ function PasswordCard({ account }: { account: Account }) {
 
   return (
     <section className="card acct-card" data-accent="sim">
-      <h2>{account.hasPassword ? t("Change password") : t("Set a password")}</h2>
+      <h3>{account.hasPassword ? t("Change password") : t("Set a password")}</h3>
       <form className="acct-form" method="post" action="/account" onSubmit={submit}>
         <input type="text" name="username" autoComplete="username" value={account.email ?? ""} readOnly tabIndex={-1} aria-hidden="true" className="visually-hidden" />
         {needCurrent && (

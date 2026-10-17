@@ -73,7 +73,7 @@ export default function KitchenSubmissions() {
   const status: Record<string, string> = { pending: t("Waiting for review"), approved: t("In The Kitchen"), rejected: t("Not picked") };
 
   return (
-    <div className="acct-grid kitchen-subs">
+    <div id="kitchen" className="acct-grid kitchen-subs">
       {data.queue && (
         <section className="card acct-card" data-accent="lab">
           <h2>{t("Kitchen review queue")}</h2>
