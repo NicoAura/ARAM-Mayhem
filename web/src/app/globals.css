@@ -6094,6 +6094,8 @@ th > button[data-tip] {
   font-size: 0.8125rem;
 }
 .acct-form input[type="email"],
+.acct-form input[type="text"]:not(.visually-hidden),
+.acct-icons input[type="search"],
 .acct-form input[type="password"] {
   height: 40px;
   padding: 0 0.7rem;
@@ -6174,6 +6176,31 @@ th > button[data-tip] {
 .acct-links { display: flex; flex-wrap: wrap; gap: 0.5rem; }
 .acct-links .btn { display: inline-flex; align-items: center; text-decoration: none; }
 .acct-danger summary { color: var(--bad); }
+/* Colour: each card wears a site hue (data-accent) as a top stripe, a tinted heading and buttons. */
+.acct-card[data-accent], .acct-signin[data-accent] { border-top: 3px solid var(--a); }
+.acct-card[data-accent] h2 { color: var(--a); color: var(--a-ink); }
+.acct-card[data-accent] .btn:not(.ghost):not(.danger) { background: var(--a); border-color: var(--a); color: #fff; }
+.acct-card[data-accent] .btn.ghost { border-color: var(--a); }
+.acct-signin[data-accent] .acct-tabs .active { color: var(--a); color: var(--a-ink); box-shadow: inset 0 -2px 0 var(--a); }
+.acct-me img { box-shadow: 0 0 0 2px var(--a); }
+.acct-danger { border-top: 3px solid var(--bad); }
+
+/* Connecting a Riot account: three steps with progress, the code with a copy button, then waiting. */
+.acct-progress { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.35rem; margin: 0; padding: 0; list-style: none; font-size: 0.75rem; }
+.acct-progress li { display: grid; justify-items: center; gap: 0.25rem; text-align: center; color: var(--muted); position: relative; }
+.acct-progress li + li::before { content: ""; position: absolute; top: 0.8rem; right: 50%; width: 100%; height: 2px; background: var(--line); z-index: 0; }
+.acct-progress li.done + li::before { background: var(--a); }
+.acct-progress .dot { position: relative; z-index: 1; display: grid; place-items: center; width: 1.6rem; height: 1.6rem; border-radius: 50%; border: 2px solid var(--line); background: var(--bg); font-weight: 700; }
+.acct-progress .now { color: var(--fg); font-weight: 600; }
+.acct-progress .now .dot { border-color: var(--a); color: var(--a); }
+.acct-progress .done .dot { border-color: var(--a); background: var(--a); color: #fff; }
+.acct-code-row { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0.5rem; }
+.acct-code-row .acct-code { margin: 0; color: var(--a); }
+.acct-waiting { display: flex; align-items: center; gap: 0.5rem; font-size: 0.8rem; color: var(--muted); }
+.acct-waiting .pulse { flex: none; width: 0.6rem; height: 0.6rem; border-radius: 50%; background: var(--a); animation: acct-pulse 1.4s ease-in-out infinite; }
+@keyframes acct-pulse { 50% { opacity: 0.3; transform: scale(0.7); } }
+html[data-motion="reduce"] .acct-waiting .pulse { animation: none; }
+@media (prefers-reduced-motion: reduce) { .acct-waiting .pulse { animation: none; } }
 .btn.danger { background: var(--bad); color: #fff; }
 
 /* Augments by icon (/augments?tab=groups) */
